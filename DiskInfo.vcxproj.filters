@@ -1,0 +1,860 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Temperature Icons">
+      <UniqueIdentifier>{dca5264c-4f31-4543-a986-b4248350cdcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library Files">
+      <UniqueIdentifier>{ccf9d115-ef58-4a15-a3f1-d031a8749b44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AboutDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiskInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiskInfoDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiskInfoDlgCopy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiskInfoDlgInit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiskInfoDlgMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiskInfoDlgTray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiskInfoDlgUpdate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtaSmart.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugPrint.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DHtmlDialogEx.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DHtmlMainDialog.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventLog.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GetFileVersion.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GetOsInfo.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IsCurrentUserLocalAdministrator.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ListCtrlEx.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FontComboBox.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FontSelection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSettingDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainDialog.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogCx.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonCx.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticCx.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gradation.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComboBoxCx.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AboutDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiskInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiskInfoDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtaSmart.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugPrint.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DHtmlDialogEx.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DHtmlMainDialog.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DnpService.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventLog.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GetFileVersion.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GetOsInfo.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IsCurrentUserLocalAdministrator.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ListCtrlEx.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPTIUtil.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FontComboBox.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FontSelection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resourceS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSettingDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainDialog.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogCx.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonCx.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticCX.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gradation.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComboBoxCx.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\bad.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\caution.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\DiskInfo.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\dummy.html">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\good.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\unknown.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\00.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\01.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\02.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\03.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\04.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\05.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\06.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\07.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\08.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\09.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\10.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\11.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\12.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\13.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\14.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\15.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\16.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\17.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\18.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\19.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\20.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\21.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\22.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\23.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\24.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\25.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\26.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\27.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\28.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\29.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\30.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\31.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\32.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\33.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\34.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\35.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\36.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\37.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\38.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\39.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\40.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\41.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\42.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\43.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\44.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\45.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\46.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\47.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\48.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\49.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\50.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\51.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\52.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\53.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\54.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\55.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\56.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\57.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\58.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\59.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\60.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\61.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\62.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\63.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\64.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\65.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\66.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\67.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\68.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\69.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\70.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\71.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\72.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\73.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\74.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\75.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\76.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\77.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\78.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\79.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\80.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\81.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\82.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\83.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\84.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\85.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\86.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\87.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\88.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\89.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\90.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\91.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\92.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\93.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\94.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\95.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\96.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\97.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\98.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\99.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F00.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F01.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F02.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F03.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F04.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F05.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F06.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F07.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F08.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F09.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F10.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F11.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F12.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F13.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F14.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F15.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F16.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F17.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F18.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F19.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F20.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F21.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F22.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F23.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F24.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F25.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F26.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F27.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F28.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F29.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F30.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F31.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F32.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F33.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F34.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F35.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F36.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F37.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F38.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F39.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F40.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F41.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F42.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F43.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F44.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F45.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F46.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F47.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F48.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F49.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F50.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F51.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F52.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F53.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F54.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F55.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F56.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F57.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F58.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F59.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F60.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F61.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F62.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F63.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F64.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F65.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F66.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F67.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F68.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F69.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F70.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F71.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F72.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F73.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F74.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F75.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F76.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F77.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F78.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F79.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F80.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F81.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F82.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F83.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F84.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F85.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F86.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F87.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F88.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F89.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F90.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F91.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F92.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F93.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F94.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F95.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F96.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F97.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F98.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\F99.ico">
+      <Filter>Resource Files\Temperature Icons</Filter>
+    </None>
+    <None Include="res\goodGreen.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resS\DiskInfo.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resS\DiskInfo16.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resN\DiskInfo.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resN\DiskInfo16.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\001soundkenjin.opus" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DiskInfo.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="EventMessage.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="Shizuku.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="Normal.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

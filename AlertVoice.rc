@@ -1,0 +1,18 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// MP3
+//
+
+IDR_MP3_CRYSTAL_DISK_INFO   MP3                 "res\\CrystalDiskInfo.mp3"
+IDR_MP3_601                 MP3                 "res\\601.mp3"
+IDR_MP3_602                 MP3                 "res\\602.mp3"
+IDR_MP3_603                 MP3                 "res\\603.mp3"
+IDR_MP3_604                 MP3                 "res\\604.mp3"
+IDR_MP3_605                 MP3                 "res\\605.mp3"
+IDR_MP3_606                 MP3                 "res\\606.mp3"
+IDR_MP3_701                 MP3                 "res\\701.mp3"
+IDR_MP3_702                 MP3                 "res\\702.mp3"
+IDR_MP3_703                 MP3                 "res\\703.mp3"
+IDR_MP3_704                 MP3                 "res\\704.mp3"
+IDR_MP3_705                 MP3                 "res\\705.mp3"
+
