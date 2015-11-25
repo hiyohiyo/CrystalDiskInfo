@@ -3735,6 +3735,11 @@ BOOL CAtaSmart::IsSsdOcz(ATA_SMART_INFO &asi)
 	CString modelUpper = asi.Model;
 	modelUpper.MakeUpper();
 
+	// OCZ-TRION100 2015/11/25
+	if (modelUpper.Find(_T("OCZ-TRION")) == 0)
+	{
+		flagSmartType = TRUE;
+	}
 	// 2012/3/11
 	// OCZ-PETROL - http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=553;id=diskinfo#553
 	// OCZ-OCTANE S2 - http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=577;id=diskinfo#577
