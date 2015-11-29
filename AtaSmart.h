@@ -134,6 +134,8 @@ public:
 		SSD_VENDOR_OCZ_VECTOR = 14,
 		HDD_SSD_VENDOR_TOSHIBA= 15,
 		SSD_VENDOR_CORSAIR    = 16,
+		SSD_VENDOR_KINGSTON   = 17,
+		SSD_VENDOR_MICRON_MU02= 18,
 		SSD_VENDOR_MAX        = 99,
 
 		VENDOR_UNKNOWN      = 0x0000,
@@ -1504,10 +1506,12 @@ protected:
 	BOOL IsSsdIntel(ATA_SMART_INFO &asi);
 	BOOL IsSsdSamsung(ATA_SMART_INFO &asi);
 	BOOL IsSsdSandForce(ATA_SMART_INFO &asi);
+	BOOL IsSsdMicronMU02(ATA_SMART_INFO &asi);
 	BOOL IsSsdMicron(ATA_SMART_INFO &asi);
 	BOOL IsSsdOcz(ATA_SMART_INFO &asi);
 	BOOL IsSsdPlextor(ATA_SMART_INFO &asi);
 	BOOL IsSsdSanDisk(ATA_SMART_INFO &asi);
+	BOOL IsSsdKingston(ATA_SMART_INFO &asi);
 	BOOL IsSsdOczVector(ATA_SMART_INFO &asi);
 	BOOL IsSsdToshiba(ATA_SMART_INFO &asi);
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
