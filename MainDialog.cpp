@@ -27,7 +27,7 @@ CMainDialog::CMainDialog(UINT dlgResouce,
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	m_DefaultTheme = L"Shizuku";
-	m_RecommendTheme = L"ShizukuHotaru";
+	m_RecommendTheme = L"ShizukuWebRadio";
 #else
 	m_DefaultTheme = L"default";
 #endif

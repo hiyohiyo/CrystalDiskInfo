@@ -573,32 +573,25 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			for(DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
 			{
 				TCHAR str[256];
-				TCHAR unknown[256];
 				TCHAR vendorSpecific[256];
 				cstr.Format(_T("%02X"), m_Ata.vars[i].Attribute[j].Id);
 
-				CString langPath;
-				if(m_FlagSmartEnglish)
+				if (m_FlagSmartEnglish)
 				{
-					langPath = m_DefaultLangPath;
+					GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_DefaultLangPath);
 				}
 				else
 				{
-					langPath = m_CurrentLangPath;
-				}
-
-//				GetPrivateProfileString(_T("Smart"), _T("UNKNOWN"), _T("Unknown"), unknown, 256, langPath);
-				GetPrivateProfileString(_T("Smart"), _T("VENDOR_SPECIFIC"), _T("Vendor Specific"), vendorSpecific, 256, langPath);
-
-				BYTE id = m_Ata.vars[i].Attribute[j].Id;
-
-				if(id == 0xFF)
-				{
-					wsprintf(str, unknown);
-				}
-				else
-				{
-					GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256,	langPath);
+					GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, L"", str, 256, m_DefaultLangPath);
+					CString en = str;
+					if (en.IsEmpty())
+					{
+						GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_CurrentLangPath);
+					}
+					else
+					{
+						GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, en, str, 256, m_CurrentLangPath);
+					}
 				}
 
 				if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)

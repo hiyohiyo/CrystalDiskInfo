@@ -393,7 +393,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				||  (m_Ata.vars[i].Attribute[j].Id == 0xBB && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
 				||  ((m_Ata.vars[i].Attribute[j].Id == 0xB4 || m_Ata.vars[i].Attribute[j].Id == 0xB3) && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 				||  (m_Ata.vars[i].Attribute[j].Id == 0xD1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
-				||  (m_Ata.vars[i].Attribute[j].Id == 0xE7 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
+				||  (m_Ata.vars[i].Attribute[j].Id == 0xE7 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON))
 				||  (m_Ata.vars[i].Attribute[j].Id == 0xAA && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && ! m_Ata.vars[i].IsRawValues8)
 				||  (m_Ata.vars[i].Attribute[j].Id == 0xCA && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON)
 				||  (m_Ata.vars[i].Attribute[j].Id == 0xE9 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR))
@@ -546,7 +546,16 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 		}
 		else
 		{
-			GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_CurrentLangPath);
+			GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, L"", str, 256, m_DefaultLangPath);
+			CString en = str;
+			if (en.IsEmpty())
+			{
+				GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_CurrentLangPath);
+			}
+			else
+			{
+				GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, en, str, 256, m_CurrentLangPath);
+			}
 		}
 
 		m_List.SetItemText(k, 2, str);

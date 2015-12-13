@@ -1194,7 +1194,27 @@ void CDiskInfoDlg::UpdateDialogSize()
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	m_CtrlShizukuVoice.InitControl(0, 48, OFFSET_X, m_SizeY - 24 - 48, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::OwnerDrawTransparent);
 	m_CtrlShizukuVoice.SetHandCursor();
-	m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuCopyright"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
+
+	if (m_CurrentLang.Find(L"Japanese") == 0)
+	{
+		SYSTEMTIME systime;
+		GetLocalTime(&systime);
+		if ((systime.wYear == 2015 && systime.wMonth == 12 && systime.wDay <= 17)
+			|| (systime.wYear == 2015 && systime.wMonth == 12 && systime.wDay == 18 && systime.wHour < 20))
+		{
+			m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuAkibaMoe"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
+		}
+		else 
+		{
+			m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuCopyright"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
+		}
+	}
+	else
+	{
+		m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuCopyright"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
+	}
+	
+	
 	m_CtrlShizukuCopyright.SetHandCursor();
 #else
 	m_CtrlShizukuVoice.ShowWindow(SW_HIDE);
@@ -2335,6 +2355,18 @@ void CDiskInfoDlg::OnBnClickedButtonShizukuVoice()
 void CDiskInfoDlg::OnBnClickedButtonShizukuCopyright()
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
+
+	if (m_CurrentLang.Find(L"Japanese") == 0)
+	{
+		SYSTEMTIME systime;
+		GetLocalTime(&systime);
+		if ((systime.wYear == 2015 && systime.wMonth == 12 && systime.wDay <= 17)
+			|| (systime.wYear == 2015 && systime.wMonth == 12 && systime.wDay == 18 && systime.wHour < 20))
+		{
+			OpenUrl(L"http://akiba-pc.watch.impress.co.jp/docs/sp/20151207_733688.html");
+		}
+	}
+
 	UINT themeIndex = rand() % (UINT)m_MenuArrayTheme.GetSize();
 	SendMessage(WM_COMMAND, WM_THEME_ID + themeIndex);
 #endif
