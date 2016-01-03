@@ -61,9 +61,9 @@
 #define PRODUCT_NAME			_T("CrystalDiskInfo")
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-#define PRODUCT_SHORT_NAME		_T("CDI 6 SE")
+#define PRODUCT_SHORT_NAME		_T("CDI 7 SE")
 #else
-#define PRODUCT_SHORT_NAME		_T("CDI 6")
+#define PRODUCT_SHORT_NAME		_T("CDI 7")
 #endif
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
@@ -80,10 +80,10 @@
 	#endif
 #endif
 
-#define PRODUCT_VERSION			_T("6.6.0")
-#define PRODUCT_RELEASE			_T("2015/12/09")
-#define PRODUCT_COPY_YEAR		_T("2008-2015")
-#define PRODUCT_COPYRIGHT		_T("© 2008-2015 hiyohiyo")
+#define PRODUCT_VERSION			_T("7 Dev3")
+#define PRODUCT_RELEASE			_T("2016/01/03")
+#define PRODUCT_COPY_YEAR		_T("2008-2016")
+#define PRODUCT_COPYRIGHT		_T("© 2008-2016 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
 
 #define URL_CRYSTAL_DEW_WORLD_JA	_T("http://crystalmark.info/")

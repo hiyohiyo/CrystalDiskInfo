@@ -898,20 +898,16 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	className.Replace(L"Green", L"");
-	if(m_Ata.vars[i].Life == 100)
+	if(m_Ata.vars[i].DiskStatus == CAtaSmart::DISK_STATUS_GOOD && m_Ata.vars[i].Life == 100)
 	{
 		className += L"100";
 	}
 	m_CtrlLife.ReloadImage(IP(L"SD" + className), 1);
 #endif
 
-	if(m_Ata.vars[i].IsSmartCorrect)
+	if(m_Ata.vars[i].Temperature > 0)
 	{
 		className = GetTemperatureClass(m_Ata.vars[i].Temperature);
-	}
-	else
-	{
-		className = _T("temperatureUnknown");
 	}
 
 	if(preTemperatureStatus.Compare(className) != 0)
@@ -1114,6 +1110,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	if(m_Ata.vars[i].HostReads >= 0)
 	{
 		cstr = L"";
+		/*
 		if(m_Ata.vars[i].HostReads > 1024 * 1024)
 		{
 			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
@@ -1122,6 +1119,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		{
 			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostReads / 1024.0);
 		}
+		*/
 		m_BufferSize.Format(_T("%d GB"), m_Ata.vars[i].HostReads);
 		m_LabelBufferSize = i18n(_T("Dialog"), _T("TOTAL_HOST_READS"));
 		m_CtrlBufferSize.SetToolTipText(cstr);
@@ -1152,6 +1150,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	if(m_Ata.vars[i].HostWrites >= 0)
 	{
 		cstr = L"";
+		/*
 		if(m_Ata.vars[i].HostWrites > 1024 * 1024)
 		{
 			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
@@ -1160,6 +1159,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		{
 			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostWrites / 1024.0);
 		}
+		*/
 		m_NvCacheSize.Format(_T("%d GB"), m_Ata.vars[i].HostWrites);
 		m_LabelNvCacheSize = i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES"));
 		m_CtrlNvCacheSize.SetToolTipText(cstr);
@@ -1183,6 +1183,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	if(m_Ata.vars[i].NandWrites >= 0)
 	{
 		cstr = L"";
+		/*
 		if(m_Ata.vars[i].NandWrites > 1024 * 1024)
 		{
 			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].NandWrites / 1024.0 / 1024.0);
@@ -1191,6 +1192,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		{
 			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].NandWrites / 1024.0);
 		}
+		*/
 		m_RotationRate.Format(_T("%d GB"), m_Ata.vars[i].NandWrites);
 		/*
 		if (m_Ata.vars[i].PlextorNandWritesUnit)
@@ -1207,6 +1209,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	else if(m_Ata.vars[i].GBytesErased >= 0)
 	{
 		cstr = L"";
+		/*
 		if(m_Ata.vars[i].GBytesErased > 1024 * 1024)
 		{
 			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].GBytesErased / 1024.0 / 1024.0);
@@ -1215,6 +1218,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		{
 			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].GBytesErased / 1024.0);
 		}
+		*/
 		m_RotationRate.Format(_T("%d GB"), m_Ata.vars[i].GBytesErased);
 		m_LabelRotationRate = i18n(_T("SmartSandForce"), _T("64"));
 		m_CtrlRotationRate.SetToolTipText(cstr);

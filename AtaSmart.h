@@ -85,7 +85,8 @@ public:
 
 	enum COMMAND_TYPE
 	{
-		CMD_TYPE_PHYSICAL_DRIVE = 0,
+		CMD_TYPE_UNKNOWN = 0,
+		CMD_TYPE_PHYSICAL_DRIVE,
 		CMD_TYPE_SCSI_MINIPORT,
 		CMD_TYPE_SILICON_IMAGE,
 		CMD_TYPE_SAT,				// SAT = SCSI_ATA_TRANSLATION
@@ -98,6 +99,8 @@ public:
 		CMD_TYPE_CSMI,				// CSMI = Common Storage Management Interface
 		CMD_TYPE_CSMI_PHYSICAL_DRIVE, // CSMI = Common Storage Management Interface 
 		CMD_TYPE_WMI,
+		CMD_TYPE_NVME_SAMSUNG,
+		CMD_TYPE_NVME_INTEL,
 		CMD_TYPE_DEBUG
 	};
 
@@ -159,6 +162,8 @@ public:
 		INTERFACE_TYPE_USB,
 		INTERFACE_TYPE_IEEE1394,
 		INTERFACE_TYPE_UASP,
+		INTERFACE_TYPE_SCSI, 
+		INTERFACE_TYPE_NVME,
 	};
 
 protected:
@@ -267,7 +272,21 @@ protected:
 		WORD id_data[256] ;
 	} SilIdentDev ;
 
-	struct IDENTIFY_DEVICE
+	struct BIN_IDENTIFY_DEVICE
+	{
+		BYTE		Bin[512];
+	};
+
+	struct NVME_IDENTIFY_DEVICE
+	{
+		CHAR		Reserved1[4];
+		CHAR		SerialNumber[20];
+		CHAR		Model[40];
+		CHAR		FirmwareRev[8];
+		CHAR		Reserved2[440];
+	};
+
+	struct ATA_IDENTIFY_DEVICE
 	{
 		WORD		GeneralConfiguration;					//0
 		WORD		LogicalCylinders;						//1	Obsolete
@@ -368,6 +387,49 @@ protected:
 		WORD		IntegrityWord;							//255
 	};
 #pragma	pack(pop)
+
+
+///////////////////////////////////////////////////
+// from http://naraeon.net/en/archives/1126
+///////////////////////////////////////////////////
+
+#define NVME_STORPORT_DRIVER 0xE000
+#define NVME_PASS_THROUGH_SRB_IO_CODE \
+	CTL_CODE( NVME_STORPORT_DRIVER, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
+
+#define NVME_SIG_STR "NvmeMini"
+#define NVME_SIG_STR_LEN 8
+#define NVME_FROM_DEV_TO_HOST 2
+#define NVME_IOCTL_VENDOR_SPECIFIC_DW_SIZE 6
+#define NVME_IOCTL_CMD_DW_SIZE 16
+#define NVME_IOCTL_COMPLETE_DW_SIZE 4
+#define NVME_PT_TIMEOUT 40
+
+#define IOCTL_SCSI_GET_ADDRESS \
+	CTL_CODE(IOCTL_SCSI_BASE, 0x0406, METHOD_BUFFERED, FILE_ANY_ACCESS)
+
+
+
+	typedef struct _SCSI_ADDRESS {
+		ULONG Length;
+		UCHAR PortNumber;
+		UCHAR PathId;
+		UCHAR TargetId;
+		UCHAR Lun;
+	} SCSI_ADDRESS, *PSCSI_ADDRESS;
+
+	struct NVME_PASS_THROUGH_IOCTL {
+		SRB_IO_CONTROL SrbIoCtrl;
+		DWORD          VendorSpecific[NVME_IOCTL_VENDOR_SPECIFIC_DW_SIZE];
+		DWORD          NVMeCmd[NVME_IOCTL_CMD_DW_SIZE];
+		DWORD          CplEntry[NVME_IOCTL_COMPLETE_DW_SIZE];
+		DWORD          Direction;
+		DWORD          QueueId;
+		DWORD          DataBufferLen;
+		DWORD          MetaDataLen;
+		DWORD          ReturnBufferLen;
+		UCHAR          DataBuffer[4096];
+	};
 
 ///////////////////
 // from csmisas.h
@@ -1264,6 +1326,13 @@ public:
 		CSMI_SAS_PHY_ENTITY sasPhyEntity;
 	};
 
+	union IDENTIFY_DEVICE
+	{
+		ATA_IDENTIFY_DEVICE	 A;
+		NVME_IDENTIFY_DEVICE N;
+		BIN_IDENTIFY_DEVICE	 B;
+	};
+
 	struct ATA_SMART_INFO
 	{
 		IDENTIFY_DEVICE		IdentifyDevice;
@@ -1436,7 +1505,7 @@ protected:
 	BOOL m_FlagAtaPassThrough;
 	BOOL m_FlagAtaPassThroughSmart;
 
-	BOOL GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INTERFACE_TYPE interfaceType, VENDOR_ID vendorId, DWORD productId = 0, INT scsiBus = -1, DWORD siliconImageId = 0, BOOL FlagNvidiaController = 0, BOOL FlagMarvellController = 0, CString pnpDeviceId = _T(""));
+	BOOL GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INTERFACE_TYPE interfaceType, COMMAND_TYPE commandType, VENDOR_ID vendorId, DWORD productId = 0, INT scsiBus = -1, DWORD siliconImageId = 0, BOOL FlagNvidiaController = 0, BOOL FlagMarvellController = 0, CString pnpDeviceId = _T(""));
 	BOOL AddDisk(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, INT siliconImageType = -1, PCSMI_SAS_PHY_ENTITY sasPhyEntity = NULL, CString pnpDeviceId = _T(""));
 	DWORD CheckSmartAttributeUpdate(DWORD index, SMART_ATTRIBUTE* pre, SMART_ATTRIBUTE* cur);
 
@@ -1458,6 +1527,15 @@ protected:
 	BOOL GetSmartThresholdPd(INT physicalDriveId, BYTE target, ATA_SMART_INFO* asi);
 	BOOL ControlSmartStatusPd(INT physicalDriveId, BYTE target, BYTE command);
 	BOOL SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize);
+
+	BOOL AddDiskNVMe(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, CString pnpDeviceId = _T(""));
+
+	BOOL DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
+	BOOL GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+
+	CString GetScsiPath(const TCHAR* Path);
+	BOOL DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
+	BOOL GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	BOOL DoIdentifyDeviceScsi(INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);

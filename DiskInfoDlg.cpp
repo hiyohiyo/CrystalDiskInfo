@@ -1197,6 +1197,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 
 	if (m_CurrentLang.Find(L"Japanese") == 0)
 	{
+		/* 
 		SYSTEMTIME systime;
 		GetLocalTime(&systime);
 		if ((systime.wYear == 2015 && systime.wMonth == 12 && systime.wDay <= 17)
@@ -1205,9 +1206,9 @@ void CDiskInfoDlg::UpdateDialogSize()
 			m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuAkibaMoe"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
 		}
 		else 
-		{
-			m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuCopyright"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
-		}
+		{		}
+		*/
+		m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuCopyright"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
 	}
 	else
 	{
@@ -1294,7 +1295,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 #endif
 	m_CtrlDiskStatus.SetHandCursor(TRUE);
 
-	if (m_Ata.vars.GetCount() && m_Ata.vars[m_SelectDisk].IsSmartCorrect)
+	if (m_Ata.vars.GetCount() && (m_Ata.vars[m_SelectDisk].IsSmartCorrect || m_Ata.vars[m_SelectDisk].InterfaceType == m_Ata.INTERFACE_TYPE_NVME))
 	{
 		className = GetTemperatureClass(m_Ata.vars[m_SelectDisk].Temperature);
 	}
@@ -2355,7 +2356,7 @@ void CDiskInfoDlg::OnBnClickedButtonShizukuVoice()
 void CDiskInfoDlg::OnBnClickedButtonShizukuCopyright()
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
-
+	/*
 	if (m_CurrentLang.Find(L"Japanese") == 0)
 	{
 		SYSTEMTIME systime;
@@ -2366,6 +2367,7 @@ void CDiskInfoDlg::OnBnClickedButtonShizukuCopyright()
 			OpenUrl(L"http://akiba-pc.watch.impress.co.jp/docs/sp/20151207_733688.html");
 		}
 	}
+	*/
 
 	UINT themeIndex = rand() % (UINT)m_MenuArrayTheme.GetSize();
 	SendMessage(WM_COMMAND, WM_THEME_ID + themeIndex);

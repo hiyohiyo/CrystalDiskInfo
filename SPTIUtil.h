@@ -42,3 +42,9 @@ ULONG             Filler;      // realign buffers to double word boundary
 UCHAR             SenseBuf[32];
 UCHAR             DataBuf[512];
 } SCSI_PASS_THROUGH_WITH_BUFFERS, *PSCSI_PASS_THROUGH_WITH_BUFFERS;
+
+typedef struct _SCSI_PASS_THROUGH_WITH_BUFFERS24 {
+	SCSI_PASS_THROUGH Spt;
+	UCHAR             SenseBuf[24];
+	UCHAR             DataBuf[512];
+} SCSI_PASS_THROUGH_WITH_BUFFERS24, *PSCSI_PASS_THROUGH_WITH_BUFFERS24;

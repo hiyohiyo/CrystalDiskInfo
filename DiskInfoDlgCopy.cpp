@@ -441,9 +441,9 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		drive.Replace(_T("%BUFFER_SIZE%"), cstr);
 
 
-		if(0 <= m_Ata.vars[i].IdentifyDevice.QueueDepth && m_Ata.vars[i].IdentifyDevice.QueueDepth < 32)
+		if(0 <= m_Ata.vars[i].IdentifyDevice.A.QueueDepth && m_Ata.vars[i].IdentifyDevice.A.QueueDepth < 32)
 		{
-			cstr.Format(_T("%d"), m_Ata.vars[i].IdentifyDevice.QueueDepth + 1);
+			cstr.Format(_T("%d"), m_Ata.vars[i].IdentifyDevice.A.QueueDepth + 1);
 		}
 		else
 		{
@@ -516,7 +516,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 
 		if(m_Ata.vars[i].IsAamSupported)
 		{
-			cstr.Format(_T("%04Xh"), m_Ata.vars[i].IdentifyDevice.AcoustricManagement);
+			cstr.Format(_T("%04Xh"), m_Ata.vars[i].IdentifyDevice.A.AcoustricManagement);
 			if(m_Ata.vars[i].IsAamEnabled)
 			{
 				cstr += _T(" [ON]");
@@ -534,7 +534,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 
 		if(m_Ata.vars[i].IsApmSupported)
 		{
-			cstr.Format(_T("%04Xh"), m_Ata.vars[i].IdentifyDevice.CurrentPowerManagement);
+			cstr.Format(_T("%04Xh"), m_Ata.vars[i].IdentifyDevice.A.CurrentPowerManagement);
 			if(m_Ata.vars[i].IsApmEnabled)
 			{
 				cstr += _T(" [ON]");

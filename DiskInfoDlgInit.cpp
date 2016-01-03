@@ -50,7 +50,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	BOOL hasMeiryo = FALSE;
     ZeroMemory(&logfont, sizeof(LOGFONT)); 
     logfont.lfCharSet = ANSI_CHARSET;
-    ::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)EnumFontFamExProcMeiryo, (long)(INT_PTR)(&hasMeiryo), 0);
+    ::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)EnumFontFamExProcMeiryo, (INT_PTR)(&hasMeiryo), 0);
 	
 	if(hasMeiryo)
 	{
@@ -625,7 +625,20 @@ void CDiskInfoDlg::InitDriveList()
 		{
 			CString targetDisk;
 			targetDisk.Format(_T("Disk%d"), i % 8);
-			if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > 0)
+			if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME && m_Ata.vars[i].Temperature > 0)
+			{
+				if (m_FlagFahrenheit)
+				{
+					m_LiDisk[i % 8].Format(_T("%s%s%d ‹F%s%s"),
+						diskStatus, delimiter, m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter, driveLetter);
+				}
+				else
+				{
+					m_LiDisk[i % 8].Format(_T("%s%s%d ‹C%s%s"),
+						diskStatus, delimiter, m_Ata.vars[i].Temperature, delimiter, driveLetter);
+				}
+			}
+			else if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > 0)
 			{
 				if(m_FlagFahrenheit)
 				{
