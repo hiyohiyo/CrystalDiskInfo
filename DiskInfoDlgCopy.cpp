@@ -161,7 +161,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
        Disk Size : %TOTAL_DISK_SIZE%\r\n\
      Buffer Size : %BUFFER_SIZE%\r\n\
 %NV_CACHE_SIZE%\
-     Queue Depth : %QUEUE_DEPTH%\r\n\
+%QUEUE_DEPTH%\
     # of Sectors : %NUMBER_OF_SECTORS%\r\n\
    Rotation Rate : %ROTATION_RATE%\r\n\
        Interface : %INTERFACE%\r\n\
@@ -222,10 +222,29 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		drive.Replace(_T("%INTERFACE%"), m_Ata.vars[i].Interface);
 		drive.Replace(_T("%MAJOR_VERSION%"), m_Ata.vars[i].MajorVersion);
 		drive.Replace(_T("%MINOR_VERSION%"), m_Ata.vars[i].MinorVersion);
-		temp.Format(_T("%s | %s"), m_Ata.vars[i].CurrentTransferMode, m_Ata.vars[i].MaxTransferMode);
-		drive.Replace(_T("%TRANSFER_MODE%"), temp);
-		temp.Format(_T("%I64d"), m_Ata.vars[i].NumberOfSectors);
+
+		// Temporary ///////////////////////
+		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+		{
+			drive.Replace(_T("%TRANSFER_MODE%"), L"");
+		}
+		else
+		{
+			temp.Format(_T("%s | %s"), m_Ata.vars[i].CurrentTransferMode, m_Ata.vars[i].MaxTransferMode);
+			drive.Replace(_T("%TRANSFER_MODE%"), temp);
+		}
+		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+		{
+			temp = L"";
+		}
+		else
+		{
+			temp.Format(_T("%I64d"), m_Ata.vars[i].NumberOfSectors);
+		}
 		drive.Replace(_T("%NUMBER_OF_SECTORS%"), temp);
+		// Temporary ///////////////////////
+
+
 		CString diskStatus;
 		diskStatus = GetDiskStatus(m_Ata.vars[i].DiskStatus);
 		if(m_Ata.vars[i].Life >= 0)
@@ -441,9 +460,13 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		drive.Replace(_T("%BUFFER_SIZE%"), cstr);
 
 
-		if(0 <= m_Ata.vars[i].IdentifyDevice.A.QueueDepth && m_Ata.vars[i].IdentifyDevice.A.QueueDepth < 32)
+		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
 		{
-			cstr.Format(_T("%d"), m_Ata.vars[i].IdentifyDevice.A.QueueDepth + 1);
+			cstr = _T("");
+		}
+		else if(0 <= m_Ata.vars[i].IdentifyDevice.A.QueueDepth && m_Ata.vars[i].IdentifyDevice.A.QueueDepth < 32)
+		{
+			cstr.Format(_T("     Queue Depth : %d"), m_Ata.vars[i].IdentifyDevice.A.QueueDepth + 1);
 		}
 		else
 		{
@@ -748,7 +771,15 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		if(m_FlagDumpSmartReadData)
 		{
 			memcpy(data, &(m_Ata.vars[i].SmartReadData), 512);
-			cstr.Format(_T("-- SMART_READ_DATA ---------------------------------------------------------\r\n"));
+			if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+			{
+				cstr.Format(_T("-- SMART_NVME --------------------------------------------------------------\r\n"));
+			}
+			else
+			{
+				cstr.Format(_T("-- SMART_READ_DATA ---------------------------------------------------------\r\n"));
+			}
+
 			line = cstr;
 			line += _T("     +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F\r\n");
 			for(int k = 0; k < 32; k++)
@@ -786,7 +817,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			clip += _T("\r\n");
 		}
 
-		if(m_FlagDumpSmartReadData)
+		if(m_FlagDumpSmartReadData && (m_Ata.vars[i].InterfaceType != m_Ata.INTERFACE_TYPE_NVME))
 		{
 			memcpy(data, &(m_Ata.vars[i].SmartReadThreshold), 512);
 			cstr.Format(_T("-- SMART_READ_THRESHOLD ----------------------------------------------------\r\n"));

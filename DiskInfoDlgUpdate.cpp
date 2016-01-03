@@ -1284,13 +1284,27 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	{
 		m_Capacity = i18n(_T("Dialog"), _T("UNKNOWN"));
 	}
-	m_TransferMode = m_Ata.vars[i].CurrentTransferMode + _T(" | ") + m_Ata.vars[i].MaxTransferMode;
+	
+	if (m_Ata.vars[i].CurrentTransferMode.IsEmpty() && m_Ata.vars[i].MaxTransferMode.IsEmpty())
+	{
+		m_TransferMode = L"";
+	}
+	else
+	{
+		m_TransferMode = m_Ata.vars[i].CurrentTransferMode + _T(" | ") + m_Ata.vars[i].MaxTransferMode;
+	}
 	m_CtrlTransferMode.SetToolTipText(i18n(_T("Dialog"), _T("CURRENT_MODE_SUPPORTED_MODE")));
+
 	m_Interface = m_Ata.vars[i].Interface;
 	if (!m_Ata.vars[i].MinorVersion.IsEmpty())
+	{
 		m_AtaAtapi = m_Ata.vars[i].MajorVersion + _T(" | ") + m_Ata.vars[i].MinorVersion;
+	}
 	else
+	{
 		m_AtaAtapi = m_Ata.vars[i].MajorVersion;
+	}
+
 	m_CtrlAtaAtapi.SetToolTipText(i18n(_T("Dialog"), _T("MAJOR_VERSION_MINOR_VERSION")));
 	m_Feature = _T("");
 	cstr = L"\

@@ -150,7 +150,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 					+ ((ULONG64)vars[i].SmartReadData[0x31] << 8)
 					+ ((ULONG64)vars[i].SmartReadData[0x30])) * 512 / 1024 / 1024;
 
-			vars[i].MeasuredPowerOnHours = vars[i].DetectedPowerOnHours = (ULONG64)
+			vars[i].PowerOnCount = (ULONG64)
 				(((ULONG64)vars[i].SmartReadData[0x77] << 56)
 					+ ((ULONG64)vars[i].SmartReadData[0x76] << 48)
 					+ ((ULONG64)vars[i].SmartReadData[0x75] << 40)
@@ -160,7 +160,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 					+ ((ULONG64)vars[i].SmartReadData[0x71] << 8)
 					+ ((ULONG64)vars[i].SmartReadData[0x70]));
 
-			vars[i].PowerOnCount = (ULONG64)
+			vars[i].MeasuredPowerOnHours = vars[i].DetectedPowerOnHours = (ULONG64)
 				(((ULONG64)vars[i].SmartReadData[0x87] << 56)
 					+ ((ULONG64)vars[i].SmartReadData[0x86] << 48)
 					+ ((ULONG64)vars[i].SmartReadData[0x85] << 40)
@@ -2978,7 +2978,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.PowerOnCount = 0;
 	asi.Temperature = 0;
 	asi.TemperatureMultiplier = 1.0;
-	asi.NominalMediaRotationRate = 0;
+	asi.NominalMediaRotationRate = 1;
 	//	asi.Speed = 0.0;
 	asi.Life = -1;
 	asi.HostWrites = -1;
@@ -3046,6 +3046,17 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		+ (ULONG64)(asi.IdentifyDevice.B.Bin[ 0]))
 		* 512 / 1000;
 	*/
+	/*	
+	asi.NumberOfSectors = (ULONG64)
+	          ((ULONG64)(asi.IdentifyDevice.B.Bin[17]) << 56)
+			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[16]) << 48)
+			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[15]) << 40)
+			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[14]) << 32)
+			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[13]) << 24)
+			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[12]) << 16)
+			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[11]) << 8)
+			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[10]));
+	*/
 
 	if (
 		(commandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &asi))
@@ -3076,7 +3087,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x31] << 8)
 				+ ((ULONG64)asi.SmartReadData[0x30])) * 512 / 1024 / 1024;
 
-		asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (ULONG64)
+		asi.PowerOnCount = (ULONG64)
 			     (((ULONG64)asi.SmartReadData[0x77] << 56)
 				+ ((ULONG64)asi.SmartReadData[0x76] << 48)
 				+ ((ULONG64)asi.SmartReadData[0x75] << 40)
@@ -3086,7 +3097,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x71] << 8)
 				+ ((ULONG64)asi.SmartReadData[0x70]));
 
-		asi.PowerOnCount = (ULONG64)
+		asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (ULONG64)
 				 (((ULONG64)asi.SmartReadData[0x87] << 56)
 				+ ((ULONG64)asi.SmartReadData[0x86] << 48)
 				+ ((ULONG64)asi.SmartReadData[0x85] << 40)
