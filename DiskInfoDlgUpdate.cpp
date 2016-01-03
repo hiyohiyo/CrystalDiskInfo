@@ -17,13 +17,13 @@ void CDiskInfoDlg::Refresh(DWORD flagForceUpdate)
 {
 	CWaitCursor wait;
 	BOOL flagUpdate = FALSE;
-	DWORD smartUpdate[CAtaSmart::MAX_DISK] = {0};
-	
-	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+	DWORD smartUpdate[CAtaSmart::MAX_DISK] = { 0 };
+
+	for (int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
-		if(flagForceUpdate || m_FlagAutoRefreshTarget[i])
+		if (flagForceUpdate || m_FlagAutoRefreshTarget[i])
 		{
-			switch(m_Ata.UpdateSmartInfo(i))
+			switch (m_Ata.UpdateSmartInfo(i))
 			{
 			case CAtaSmart::SMART_STATUS_MAJOR_CHANGE:
 				flagUpdate = TRUE;
@@ -40,22 +40,22 @@ void CDiskInfoDlg::Refresh(DWORD flagForceUpdate)
 		}
 	}
 	AlertSound(0, AS_PLAY_SOUND);
-	if(flagForceUpdate || smartUpdate[m_SelectDisk] == CAtaSmart::SMART_STATUS_MAJOR_CHANGE)
+	if (flagForceUpdate || smartUpdate[m_SelectDisk] == CAtaSmart::SMART_STATUS_MAJOR_CHANGE)
 	{
 		ChangeDisk(m_SelectDisk);
 		UpdateListCtrl(m_SelectDisk);
 	}
-	else if(smartUpdate[m_SelectDisk] == CAtaSmart::SMART_STATUS_MINOR_CHANGE)
+	else if (smartUpdate[m_SelectDisk] == CAtaSmart::SMART_STATUS_MINOR_CHANGE)
 	{
 		UpdateListCtrl(m_SelectDisk);
 	}
 
-	if(flagForceUpdate || flagUpdate)
+	if (flagForceUpdate || flagUpdate)
 	{
 		InitDriveList();
 		UpdateToolTip();
 
-		if(m_FlagResident)
+		if (m_FlagResident)
 		{
 			AlarmOverheat();
 			UpdateTrayTemperatureIcon(TRUE);
@@ -66,9 +66,9 @@ void CDiskInfoDlg::Refresh(DWORD flagForceUpdate)
 
 void CDiskInfoDlg::UpdateShareInfo()
 {
-	if(! m_FlagGadget || m_Ata.vars.GetCount() == 0)
+	if (!m_FlagGadget || m_Ata.vars.GetCount() == 0)
 	{
-		return ;
+		return;
 	}
 
 	HKEY hKey, hSubKey;
@@ -81,30 +81,30 @@ void CDiskInfoDlg::UpdateShareInfo()
 	result = RegCreateKeyEx(HKEY_CURRENT_USER, REGISTRY_PATH, 0, _T(""),
 		REG_OPTION_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL);
 
-	if(result != ERROR_SUCCESS)
+	if (result != ERROR_SUCCESS)
 	{
-		return ;
+		return;
 	}
 
 	value = 1;
-	RegSetValueEx(hKey, _T("Version"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD)); 
+	RegSetValueEx(hKey, _T("Version"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD));
 	value = GetTickCount();
-	RegSetValueEx(hKey, _T("LastUpdate"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD)); 
+	RegSetValueEx(hKey, _T("LastUpdate"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD));
 	value = (DWORD)m_Ata.vars.GetCount();
-	RegSetValueEx(hKey, _T("DiskCount"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD)); 
+	RegSetValueEx(hKey, _T("DiskCount"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD));
 
-	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+	for (int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
 		result = RegCreateKeyEx(hKey, m_Ata.vars[i].ModelSerial, 0, NULL,
 			REG_OPTION_VOLATILE, KEY_ALL_ACCESS, NULL, &hSubKey, NULL);
-		if(result != ERROR_SUCCESS)
+		if (result != ERROR_SUCCESS)
 		{
 			continue;
 		}
 
 		key.Format(_T("Disk%d"), i);
 		wsprintf(str, m_Ata.vars[i].ModelSerial);
-		RegSetValueEx(hKey, key, 0, REG_SZ, 
+		RegSetValueEx(hKey, key, 0, REG_SZ,
 			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
 
 
@@ -112,10 +112,10 @@ void CDiskInfoDlg::UpdateShareInfo()
 		RegSetValueEx(hSubKey, _T("DriveLetter"), 0, REG_SZ,
 			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
 		wsprintf(str, m_Ata.vars[i].Model);
-		RegSetValueEx(hSubKey, _T("Model"), 0, REG_SZ, 
+		RegSetValueEx(hSubKey, _T("Model"), 0, REG_SZ,
 			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
 
-		if(m_Ata.vars[i].TotalDiskSize >= 1000)
+		if (m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
 			_stprintf_s(str, 256, _T("%.1f GB"), m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
@@ -125,35 +125,35 @@ void CDiskInfoDlg::UpdateShareInfo()
 		}
 		RegSetValueEx(hSubKey, _T("DiskSize"), 0, REG_SZ,
 			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
-		
-		if(m_FlagFahrenheit)
+
+		if (m_FlagFahrenheit)
 		{
-			if(m_Ata.vars[i].Temperature > 0)
+			if (m_Ata.vars[i].Temperature > 0)
 			{
 				DWORD f = m_Ata.vars[i].Temperature * 9 / 5 + 32;
-				if(f > 100)
+				if (f > 100)
 				{
-					_stprintf_s(str, 256, _T("%d‹F"), f);
+					_stprintf_s(str, 256, _T("%d¡ÆF"), f);
 				}
 				else
 				{
-					_stprintf_s(str, 256, _T("%d ‹F"), f);
+					_stprintf_s(str, 256, _T("%d ¡ÆF"), f);
 				}
 			}
 			else
 			{
-				_stprintf_s(str, 256, _T("-- ‹F"));
+				_stprintf_s(str, 256, _T("-- ¡ÆF"));
 			}
 		}
 		else
 		{
-			if(m_Ata.vars[i].Temperature > 0)
+			if (m_Ata.vars[i].Temperature > 0)
 			{
-				_stprintf_s(str, 256, _T("%d ‹C"), m_Ata.vars[i].Temperature);
+				_stprintf_s(str, 256, _T("%d ¡ÆC"), m_Ata.vars[i].Temperature);
 			}
 			else
 			{
-				_stprintf_s(str, 256, _T("-- ‹C"));
+				_stprintf_s(str, 256, _T("-- ¡ÆC"));
 			}
 		}
 		RegSetValueEx(hSubKey, _T("Temperature"), 0, REG_SZ,
@@ -182,21 +182,21 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 	DWORD width = 0;
 	width = (DWORD)(652 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL));
 
-	if(m_Ata.vars.GetCount() == 0)
+	if (m_Ata.vars.GetCount() == 0)
 	{
-		return ;
+		return;
 	}
 
 	m_List.DeleteAllItems();
 
-	if(preVendorId == m_Ata.vars[i].DiskVendorId && ! forceUpdate)
+	if (preVendorId == m_Ata.vars[i].DiskVendorId && !forceUpdate)
 	{
-		return ;
+		return;
 	}
 
-	while(m_List.DeleteColumn(0)){}
+	while (m_List.DeleteColumn(0)) {}
 
-	if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
+	if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
 		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
@@ -208,7 +208,7 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 		preVendorId = m_Ata.SSD_VENDOR_SANDFORCE;
 	}
 	// JMicron 60x
-	else if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && m_Ata.vars[i].IsRawValues8)
+	else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && m_Ata.vars[i].IsRawValues8)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
 		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
@@ -219,7 +219,7 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_FlagSmartEnglish), LVCFMT_LEFT, (int)(width - 244 * m_ZoomRatio - 25), 0);
 		preVendorId = m_Ata.SSD_VENDOR_JMICRON;
 	}
-	else if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
+	else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
 		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
@@ -247,14 +247,14 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 {
 	static DWORD preSelectDisk = 0;
 
-	if(m_Ata.vars.GetCount() == 0)
+	if (m_Ata.vars.GetCount() == 0)
 	{
 		m_List.DeleteAllItems();
 		return FALSE;
 	}
 
 	BOOL flag = FALSE;
-	if(i == preSelectDisk && m_List.GetItemCount() > 0)
+	if (i == preSelectDisk && m_List.GetItemCount() > 0)
 	{
 		flag = TRUE;
 	}
@@ -265,7 +265,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 		preSelectDisk = i;
 	}
 
-	if(m_Ata.vars[i].IsSmartCorrect)
+	if (m_Ata.vars[i].IsSmartCorrect)
 	{
 		m_List.SetTextColor1(RGB(0, 0, 0));
 		m_List.SetTextColor2(RGB(0, 0, 0));
@@ -286,27 +286,27 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 	CString unknown;
 	CString vendorSpecific;
 
-//	unknown = i18n(_T("Smart"), _T("UNKNOWN"), m_FlagSmartEnglish);
+	//	unknown = i18n(_T("Smart"), _T("UNKNOWN"), m_FlagSmartEnglish);
 	vendorSpecific = i18n(_T("Smart"), _T("VENDOR_SPECIFIC"), m_FlagSmartEnglish);
 
-	for(DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
+	for (DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
 	{
-		if(m_Ata.vars[i].Attribute[j].Id == 0x00 || m_Ata.vars[i].Attribute[j].Id == 0xFF)
+		if (m_Ata.vars[i].Attribute[j].Id == 0x00 || m_Ata.vars[i].Attribute[j].Id == 0xFF)
 		{
 			continue;
 		}
-		
-		if(m_Ata.vars[i].IsSmartCorrect && m_Ata.vars[i].IsThresholdCorrect && ! m_Ata.vars[i].IsThresholdBug)
+
+		if (m_Ata.vars[i].IsSmartCorrect && m_Ata.vars[i].IsThresholdCorrect && !m_Ata.vars[i].IsThresholdBug)
 		{
-			if(! m_Ata.vars[i].IsSsd &&
-			(  m_Ata.vars[i].Attribute[j].Id == 0x05 // Reallocated Sectors Count
-			|| m_Ata.vars[i].Attribute[j].Id == 0xC5 // Current Pending Sector Count
-			|| m_Ata.vars[i].Attribute[j].Id == 0xC6 // Off-Line Scan Uncorrectable Sector Count
-			))
+			if (!m_Ata.vars[i].IsSsd &&
+				(m_Ata.vars[i].Attribute[j].Id == 0x05 // Reallocated Sectors Count
+					|| m_Ata.vars[i].Attribute[j].Id == 0xC5 // Current Pending Sector Count
+					|| m_Ata.vars[i].Attribute[j].Id == 0xC6 // Off-Line Scan Uncorrectable Sector Count
+					))
 			{
 				WORD raw = MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]);
-				WORD threshold; 
-				switch(m_Ata.vars[i].Attribute[j].Id)
+				WORD threshold;
+				switch (m_Ata.vars[i].Attribute[j].Id)
 				{
 				case 0x05:
 					threshold = m_Ata.vars[i].Threshold05;
@@ -318,7 +318,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					threshold = m_Ata.vars[i].ThresholdC6;
 					break;
 				}
-				if(threshold > 0 && raw >= threshold)
+				if (threshold > 0 && raw >= threshold)
 				{
 					caution = 1;
 				}
@@ -327,10 +327,10 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					caution = 0;
 				}
 
-				if(m_Ata.vars[i].Threshold[j].ThresholdValue != 0 
-				&& m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
+				if (m_Ata.vars[i].Threshold[j].ThresholdValue != 0
+					&& m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_BAD, 0, 0, 0, 0);
 					}
@@ -339,9 +339,9 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 						m_List.InsertItem(k, _T(""), ICON_BAD);
 					}
 				}
-				else if(caution > 0)
+				else if (caution > 0)
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_CAUTION, 0, 0, 0, 0);
 					}
@@ -352,7 +352,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				}
 				else
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
 					}
@@ -363,46 +363,46 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				}
 			}
 			// Temperature
-			else if(m_Ata.vars[i].Attribute[j].Id == 0xC2)
+			else if (m_Ata.vars[i].Attribute[j].Id == 0xC2)
 			{
-					if(flag)
-					{
-						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
-					}
-					else
-					{
-						m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
-					}
+				if (flag)
+				{
+					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+				}
+				else
+				{
+					m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+				}
 			}
 			// End-to-End Error
 			// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1090;id=diskinfo#1090
 			// http://h20000.www2.hp.com/bc/docs/support/SupportManual/c01159621/c01159621.pdf
-			else if(m_Ata.vars[i].Attribute[j].Id == 0xB8)
+			else if (m_Ata.vars[i].Attribute[j].Id == 0xB8)
 			{
-					if(flag)
-					{
-						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
-					}
-					else
-					{
-						m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
-					}
+				if (flag)
+				{
+					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+				}
+				else
+				{
+					m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+				}
 			}
 			// Life
-			else if((m_Ata.vars[i].Attribute[j].Id == 0xE8 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK))
-				||  (m_Ata.vars[i].Attribute[j].Id == 0xBB && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
-				||  ((m_Ata.vars[i].Attribute[j].Id == 0xB4 || m_Ata.vars[i].Attribute[j].Id == 0xB3) && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
-				||  (m_Ata.vars[i].Attribute[j].Id == 0xD1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
-				||  (m_Ata.vars[i].Attribute[j].Id == 0xE7 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON))
-				||  (m_Ata.vars[i].Attribute[j].Id == 0xAA && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && ! m_Ata.vars[i].IsRawValues8)
-				||  (m_Ata.vars[i].Attribute[j].Id == 0xCA && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON)
-				||  (m_Ata.vars[i].Attribute[j].Id == 0xE9 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR))
+			else if ((m_Ata.vars[i].Attribute[j].Id == 0xE8 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK))
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xBB && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
+				|| ((m_Ata.vars[i].Attribute[j].Id == 0xB4 || m_Ata.vars[i].Attribute[j].Id == 0xB3) && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xD1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xE7 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON))
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xAA && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && !m_Ata.vars[i].IsRawValues8)
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xCA && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON)
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xE9 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR))
 				)
 			{
-				if(m_Ata.vars[i].Attribute[j].CurrentValue == 0
-				|| m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
+				if (m_Ata.vars[i].Attribute[j].CurrentValue == 0
+					|| m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_BAD, 0, 0, 0, 0);
 					}
@@ -411,9 +411,9 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 						m_List.InsertItem(k, _T(""), ICON_BAD);
 					}
 				}
-				else if(m_Ata.vars[i].Attribute[j].CurrentValue <= m_Ata.vars[i].ThresholdFF)
+				else if (m_Ata.vars[i].Attribute[j].CurrentValue <= m_Ata.vars[i].ThresholdFF)
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_CAUTION, 0, 0, 0, 0);
 					}
@@ -424,7 +424,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				}
 				else
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
 					}
@@ -434,14 +434,14 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					}
 				}
 			}
-			else if(m_Ata.vars[i].Attribute[j].Id == 0x01 // Read Error Rate for SandForce Bug
+			else if (m_Ata.vars[i].Attribute[j].Id == 0x01 // Read Error Rate for SandForce Bug
 				&& m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
 			{
-				if(m_Ata.vars[i].Attribute[j].CurrentValue == 0 
-				&& m_Ata.vars[i].Attribute[j].RawValue[0] == 0
-				&& m_Ata.vars[i].Attribute[j].RawValue[1] == 0)
+				if (m_Ata.vars[i].Attribute[j].CurrentValue == 0
+					&& m_Ata.vars[i].Attribute[j].RawValue[0] == 0
+					&& m_Ata.vars[i].Attribute[j].RawValue[1] == 0)
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
 					}
@@ -450,10 +450,10 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 						m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
 					}
 				}
-				else if(m_Ata.vars[i].Threshold[j].ThresholdValue != 0
-					 && m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
+				else if (m_Ata.vars[i].Threshold[j].ThresholdValue != 0
+					&& m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_BAD, 0, 0, 0, 0);
 					}
@@ -464,7 +464,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				}
 				else
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
 					}
@@ -474,23 +474,23 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					}
 				}
 			}
-			else if((m_Ata.vars[i].IsSsd && ! m_Ata.vars[i].IsRawValues8)
-				||	((0x01 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0x0D)
-//				||	m_Ata.vars[i].Attribute[j].Id == 0xB8
-				||	(0xBB <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xC1)
-				||	(0xC3 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xD1)
-				||	(0xD3 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xD4)
-				||	(0xDC <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xE4)
-				||	(0xE6 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xE7)
-				||	m_Ata.vars[i].Attribute[j].Id == 0xF0
-				||	m_Ata.vars[i].Attribute[j].Id == 0xFA
-				||	m_Ata.vars[i].Attribute[j].Id == 0xFE
-				))
+			else if ((m_Ata.vars[i].IsSsd && !m_Ata.vars[i].IsRawValues8)
+				|| ((0x01 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0x0D)
+					//				||	m_Ata.vars[i].Attribute[j].Id == 0xB8
+					|| (0xBB <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xC1)
+					|| (0xC3 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xD1)
+					|| (0xD3 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xD4)
+					|| (0xDC <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xE4)
+					|| (0xE6 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xE7)
+					|| m_Ata.vars[i].Attribute[j].Id == 0xF0
+					|| m_Ata.vars[i].Attribute[j].Id == 0xFA
+					|| m_Ata.vars[i].Attribute[j].Id == 0xFE
+					))
 			{
-				if(m_Ata.vars[i].Threshold[j].ThresholdValue != 0 
-				&& m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
+				if (m_Ata.vars[i].Threshold[j].ThresholdValue != 0
+					&& m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_BAD, 0, 0, 0, 0);
 					}
@@ -501,7 +501,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				}
 				else
 				{
-					if(flag)
+					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
 					}
@@ -513,7 +513,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			}
 			else
 			{
-				if(flag)
+				if (flag)
 				{
 					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
 				}
@@ -525,7 +525,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 		}
 		else
 		{
-			if(flag)
+			if (flag)
 			{
 				m_List.SetItem(k, 0, mask, _T(""), ICON_UNKNOWN, 0, 0, 0, 0);
 			}
@@ -540,7 +540,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 
 		BYTE id = m_Ata.vars[i].Attribute[j].Id;
 
-		if(m_FlagSmartEnglish)
+		if (m_FlagSmartEnglish)
 		{
 			GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_DefaultLangPath);
 		}
@@ -560,14 +560,14 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 
 		m_List.SetItemText(k, 2, str);
 
-		if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
+		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
 		{
-			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].CurrentValue);							
-			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].CurrentValue);							
+			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].CurrentValue);
+			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].CurrentValue);
 			m_List.SetItemText(k, 3, cstr);
-			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].WorstValue);							
+			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].WorstValue);
 			m_List.SetItemText(k, 4, cstr);
-			if(m_Ata.vars[i].IsThresholdCorrect)
+			if (m_Ata.vars[i].IsThresholdCorrect)
 			{
 				cstr.Format(_T("%d"), m_Ata.vars[i].Threshold[j].ThresholdValue);
 			}
@@ -576,11 +576,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				cstr = _T("---");
 			}
 			m_List.SetItemText(k, 5, cstr);
-			
-			switch(m_RawValues)
+
+			switch (m_RawValues)
 			{
 			case 3:
-				cstr.Format(_T("%d %d %d %d %d %d %d"), 
+				cstr.Format(_T("%d %d %d %d %d %d %d"),
 					m_Ata.vars[i].Attribute[j].Reserved,
 					m_Ata.vars[i].Attribute[j].RawValue[5],
 					m_Ata.vars[i].Attribute[j].RawValue[4],
@@ -590,47 +590,47 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					m_Ata.vars[i].Attribute[j].RawValue[0]);
 				break;
 			case 2:
-				cstr.Format(_T("%d %d %d %d"),  
+				cstr.Format(_T("%d %d %d %d"),
 					m_Ata.vars[i].Attribute[j].Reserved,
-					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[4], m_Ata.vars[i].Attribute[j].RawValue[5] ),
+					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[4], m_Ata.vars[i].Attribute[j].RawValue[5]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[2], m_Ata.vars[i].Attribute[j].RawValue[3]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]));
 				break;
 			case 1:
-				cstr.Format(_T("%I64u"),  
+				cstr.Format(_T("%I64u"),
 					((UINT64)m_Ata.vars[i].Attribute[j].Reserved << 48) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[5] << 40) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[4] << 32) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[3] << 24) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[2] << 16) +
-					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[1]  << 8) +
+					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[1] << 8) +
 					(UINT64)m_Ata.vars[i].Attribute[j].RawValue[0]);
 				break;
 			case 0:
 			default:
-				cstr.Format(_T("%02X%02X%02X%02X%02X%02X%02X"), 
+				cstr.Format(_T("%02X%02X%02X%02X%02X%02X%02X"),
 					m_Ata.vars[i].Attribute[j].Reserved,
 					m_Ata.vars[i].Attribute[j].RawValue[5],
 					m_Ata.vars[i].Attribute[j].RawValue[4],
 					m_Ata.vars[i].Attribute[j].RawValue[3],
 					m_Ata.vars[i].Attribute[j].RawValue[2],
 					m_Ata.vars[i].Attribute[j].RawValue[1],
-					m_Ata.vars[i].Attribute[j].RawValue[0]);					
+					m_Ata.vars[i].Attribute[j].RawValue[0]);
 				break;
 			}
-		//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDDDD"));
+			//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDDDD"));
 			m_List.SetItemText(k, 6, cstr);
 		}
-		else if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && m_Ata.vars[i].IsRawValues8)
+		else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && m_Ata.vars[i].IsRawValues8)
 		{
-			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].CurrentValue);							
+			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].CurrentValue);
 			m_List.SetItemText(k, 3, cstr);
 			m_List.SetItemText(k, 4, _T("---"));
 			m_List.SetItemText(k, 5, _T("---"));
-			switch(m_RawValues)
+			switch (m_RawValues)
 			{
 			case 3:
-				cstr.Format(_T("%d %d %d %d %d %d %d %d"),  
+				cstr.Format(_T("%d %d %d %d %d %d %d %d"),
 					m_Ata.vars[i].Attribute[j].Reserved,
 					m_Ata.vars[i].Attribute[j].RawValue[5],
 					m_Ata.vars[i].Attribute[j].RawValue[4],
@@ -641,15 +641,15 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					m_Ata.vars[i].Attribute[j].WorstValue);
 				break;
 			case 2:
-				cstr.Format(_T("%d %d %d %d"),  
+				cstr.Format(_T("%d %d %d %d"),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[5], m_Ata.vars[i].Attribute[j].Reserved),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[3], m_Ata.vars[i].Attribute[j].RawValue[4]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[1], m_Ata.vars[i].Attribute[j].RawValue[2]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].WorstValue, m_Ata.vars[i].Attribute[j].RawValue[0]));
 				break;
 			case 1:
-				cstr.Format(_T("%I64u"),  
-					((UINT64)m_Ata.vars[i].Attribute[j].Reserved    << 56) + 
+				cstr.Format(_T("%I64u"),
+					((UINT64)m_Ata.vars[i].Attribute[j].Reserved << 56) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[5] << 48) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[4] << 40) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[3] << 32) +
@@ -660,7 +660,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				break;
 			case 0:
 			default:
-				cstr.Format(_T("%02X%02X%02X%02X%02X%02X%02X%02X"), 
+				cstr.Format(_T("%02X%02X%02X%02X%02X%02X%02X%02X"),
 					m_Ata.vars[i].Attribute[j].Reserved,
 					m_Ata.vars[i].Attribute[j].RawValue[5],
 					m_Ata.vars[i].Attribute[j].RawValue[4],
@@ -672,17 +672,17 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				break;
 			}
 			m_List.SetItemText(k, 6, cstr);
-		//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDDDDDD"));
+			//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDDDDDD"));
 		}
-		else if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
+		else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
 		{
 			m_List.SetItemText(k, 3, _T("---"));
 			m_List.SetItemText(k, 4, _T("---"));
 			m_List.SetItemText(k, 5, _T("---"));
-			switch(m_RawValues)
+			switch (m_RawValues)
 			{
 			case 3:
-				cstr.Format(_T("%d %d %d %d %d %d %d %d"),  
+				cstr.Format(_T("%d %d %d %d %d %d %d %d"),
 					m_Ata.vars[i].Attribute[j].RawValue[5],
 					m_Ata.vars[i].Attribute[j].RawValue[4],
 					m_Ata.vars[i].Attribute[j].RawValue[3],
@@ -693,26 +693,26 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					m_Ata.vars[i].Attribute[j].CurrentValue);
 				break;
 			case 2:
-				cstr.Format(_T("%d %d %d %d"),  
-					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[4], m_Ata.vars[i].Attribute[j].RawValue[5] ),
+				cstr.Format(_T("%d %d %d %d"),
+					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[4], m_Ata.vars[i].Attribute[j].RawValue[5]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[2], m_Ata.vars[i].Attribute[j].RawValue[3]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].CurrentValue, m_Ata.vars[i].Attribute[j].WorstValue));
 				break;
 			case 1:
-				cstr.Format(_T("%I64u"),  
-					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[5] << 56) + 
+				cstr.Format(_T("%I64u"),
+					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[5] << 56) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[4] << 48) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[3] << 40) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[2] << 32) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[1] << 24) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[0] << 16) +
-					((UINT64)m_Ata.vars[i].Attribute[j].WorstValue  << 8) +
+					((UINT64)m_Ata.vars[i].Attribute[j].WorstValue << 8) +
 					(UINT64)m_Ata.vars[i].Attribute[j].CurrentValue);
 				break;
 			case 0:
 			default:
-				cstr.Format(_T("%02X%02X%02X%02X%02X%02X%02X%02X"), 
+				cstr.Format(_T("%02X%02X%02X%02X%02X%02X%02X%02X"),
 					m_Ata.vars[i].Attribute[j].RawValue[5],
 					m_Ata.vars[i].Attribute[j].RawValue[4],
 					m_Ata.vars[i].Attribute[j].RawValue[3],
@@ -720,19 +720,19 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					m_Ata.vars[i].Attribute[j].RawValue[1],
 					m_Ata.vars[i].Attribute[j].RawValue[0],
 					m_Ata.vars[i].Attribute[j].WorstValue,
-					m_Ata.vars[i].Attribute[j].CurrentValue);							
+					m_Ata.vars[i].Attribute[j].CurrentValue);
 				break;
 			}
 			m_List.SetItemText(k, 6, cstr);
-		//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDDDDDD"));
+			//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDDDDDD"));
 		}
 		else
 		{
-			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].CurrentValue);							
+			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].CurrentValue);
 			m_List.SetItemText(k, 3, cstr);
-			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].WorstValue);							
+			cstr.Format(_T("%d"), m_Ata.vars[i].Attribute[j].WorstValue);
 			m_List.SetItemText(k, 4, cstr);
-			if(m_Ata.vars[i].IsThresholdCorrect)
+			if (m_Ata.vars[i].IsThresholdCorrect)
 			{
 				cstr.Format(_T("%d"), m_Ata.vars[i].Threshold[j].ThresholdValue);
 			}
@@ -741,11 +741,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				cstr = _T("---");
 			}
 			m_List.SetItemText(k, 5, cstr);
-			
-			switch(m_RawValues)
+
+			switch (m_RawValues)
 			{
 			case 3:
-				cstr.Format(_T("%d %d %d %d %d %d"),  
+				cstr.Format(_T("%d %d %d %d %d %d"),
 					m_Ata.vars[i].Attribute[j].RawValue[5],
 					m_Ata.vars[i].Attribute[j].RawValue[4],
 					m_Ata.vars[i].Attribute[j].RawValue[3],
@@ -754,39 +754,39 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					m_Ata.vars[i].Attribute[j].RawValue[0]);
 				break;
 			case 2:
-				cstr.Format(_T("%d %d %d"),  
-					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[4], m_Ata.vars[i].Attribute[j].RawValue[5] ),
+				cstr.Format(_T("%d %d %d"),
+					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[4], m_Ata.vars[i].Attribute[j].RawValue[5]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[2], m_Ata.vars[i].Attribute[j].RawValue[3]),
 					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]));
 				break;
 			case 1:
-				cstr.Format(_T("%I64u"),  
+				cstr.Format(_T("%I64u"),
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[5] << 40) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[4] << 32) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[3] << 24) +
 					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[2] << 16) +
-					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[1]  << 8) +
+					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[1] << 8) +
 					(UINT64)m_Ata.vars[i].Attribute[j].RawValue[0]);
 				break;
 			case 0:
 			default:
-				cstr.Format(_T("%02X%02X%02X%02X%02X%02X"), 
+				cstr.Format(_T("%02X%02X%02X%02X%02X%02X"),
 					m_Ata.vars[i].Attribute[j].RawValue[5],
 					m_Ata.vars[i].Attribute[j].RawValue[4],
 					m_Ata.vars[i].Attribute[j].RawValue[3],
 					m_Ata.vars[i].Attribute[j].RawValue[2],
 					m_Ata.vars[i].Attribute[j].RawValue[1],
-					m_Ata.vars[i].Attribute[j].RawValue[0]);					
+					m_Ata.vars[i].Attribute[j].RawValue[0]);
 				break;
 			}
-		//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDD"));
+			//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDD"));
 			m_List.SetItemText(k, 6, cstr);
 		}
 
 		k++;
 	}
 
-	if(! flag)
+	if (!flag)
 	{
 		m_List.SetRedraw(TRUE);
 	}
@@ -798,7 +798,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 {
 	BOOL flagUpdate = FALSE;
 
-//	m_CtrlDiskStatus.SetToolTipText(L"");
+	//	m_CtrlDiskStatus.SetToolTipText(L"");
 	m_CtrlDriveMap.SetToolTipText(L"");
 	m_CtrlModel.SetToolTipText(L"");
 	m_CtrlPowerOnHours.SetToolTipText(L"");
@@ -809,7 +809,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	m_CtrlTransferMode.SetToolTipText(L"");
 	m_CtrlAtaAtapi.SetToolTipText(L"");
 
-	if(m_Ata.vars.GetCount() == 0)
+	if (m_Ata.vars.GetCount() == 0)
 	{
 		m_Model = _T("");
 		m_ModelCapacity = i18n(_T("Message"), _T("DISK_NOT_FOUND"));
@@ -840,21 +840,21 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	}
 
 	static int preSelectedDisk = -1;
-	if(preSelectedDisk != i)
+	if (preSelectedDisk != i)
 	{
 		flagUpdate = TRUE;
 		preSelectedDisk = i;
 	}
 
 	static int preFlagFahrenheit = -1;
-	if(preFlagFahrenheit != m_FlagFahrenheit)
+	if (preFlagFahrenheit != m_FlagFahrenheit)
 	{
 		flagUpdate = TRUE;
-		preFlagFahrenheit = m_FlagFahrenheit;		
+		preFlagFahrenheit = m_FlagFahrenheit;
 	}
 
 	static CString preLang = _T("");
-	if(preLang.Compare(m_CurrentLang) != 0)
+	if (preLang.Compare(m_CurrentLang) != 0)
 	{
 		flagUpdate = TRUE;
 		preLang = m_CurrentLang;
@@ -871,16 +871,16 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	className = GetDiskStatusClass(m_Ata.vars[i].DiskStatus);
 	diskStatusReason = GetDiskStatusReason(i);
 
-	if(preDiskStatus.Compare(className) != 0)
+	if (preDiskStatus.Compare(className) != 0)
 	{
 		preDiskStatus = className;
 	}
-	if(preDiskStatusReason.Compare(diskStatusReason) != 0)
+	if (preDiskStatusReason.Compare(diskStatusReason) != 0)
 	{
 		preDiskStatusReason = diskStatusReason;
 	}
 
-	if(m_Ata.vars[i].Life >= 0)
+	if (m_Ata.vars[i].Life >= 0)
 	{
 #ifdef SUISHO_SHIZUKU_SUPPORT
 		cstr.Format(_T(" (%d %%)"), m_Ata.vars[i].Life);
@@ -898,19 +898,19 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	className.Replace(L"Green", L"");
-	if(m_Ata.vars[i].DiskStatus == CAtaSmart::DISK_STATUS_GOOD && m_Ata.vars[i].Life == 100)
+	if (m_Ata.vars[i].DiskStatus == CAtaSmart::DISK_STATUS_GOOD && m_Ata.vars[i].Life == 100)
 	{
 		className += L"100";
 	}
 	m_CtrlLife.ReloadImage(IP(L"SD" + className), 1);
 #endif
 
-	if(m_Ata.vars[i].Temperature > 0)
+	if (m_Ata.vars[i].Temperature > 0)
 	{
 		className = GetTemperatureClass(m_Ata.vars[i].Temperature);
 	}
 
-	if(preTemperatureStatus.Compare(className) != 0)
+	if (preTemperatureStatus.Compare(className) != 0)
 	{
 		preTemperatureStatus = className;
 	}
@@ -918,9 +918,9 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	// static int preTemperature = -1;
 	// if(preTemperature != m_Ata.vars[i].Temperature || flagUpdate)
 	{
-		if(m_Ata.vars[i].Temperature > 0)
+		if (m_Ata.vars[i].Temperature > 0)
 		{
-			if(m_FlagFahrenheit)
+			if (m_FlagFahrenheit)
 			{
 				m_Temperature.Format(_T("%d ‹F"), m_Ata.vars[i].Temperature * 9 / 5 + 32);
 			}
@@ -931,7 +931,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		}
 		else
 		{
-			if(m_FlagFahrenheit)
+			if (m_FlagFahrenheit)
 			{
 				m_Temperature.Format(_T("-- ‹F"));
 			}
@@ -944,7 +944,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	m_CtrlTemperature.ReloadImage(IP(className), 1);
 
 	logicalDriveInfo = GetLogicalDriveInfo(i);
-//	if(preLogicalDriveInfo.Compare(logicalDriveInfo) != 0)
+	//	if(preLogicalDriveInfo.Compare(logicalDriveInfo) != 0)
 	{
 		preLogicalDriveInfo = logicalDriveInfo;
 		m_CtrlDriveMap.SetToolTipText(logicalDriveInfo);
@@ -953,34 +953,34 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	/*
 	if(m_Ata.vars[i].Sector48 >= m_Ata.vars[i].Sector28)
 	{
-		cstr.Format(_T("%I64d"), m_Ata.vars[i].Sector48);
+	cstr.Format(_T("%I64d"), m_Ata.vars[i].Sector48);
 	//	SetElementPropertyEx(_T("LbaSize"), DISPID_IHTMLELEMENT_TITLE, cstr);
 	//	m_LabelLbaSize = _T("48bit LBA");
 	}
 	else if(m_Ata.vars[i].Sector28 > 0)
 	{
-		cstr.Format(_T("%d"), m_Ata.vars[i].Sector28);
+	cstr.Format(_T("%d"), m_Ata.vars[i].Sector28);
 	//	SetElementPropertyEx(_T("LbaSize"), DISPID_IHTMLELEMENT_TITLE, cstr);
 	//	m_LabelLbaSize = _T("28bit LBA");
 	}
 	else
 	{
-		cstr = _T("");
+	cstr = _T("");
 	//	SetElementPropertyEx(_T("LbaSize"), DISPID_IHTMLELEMENT_TITLE, cstr);
 	//	m_LabelLbaSize = _T("CHS");
 	}
 	*/
 
-	if(preFlagHideSerialNumber != m_FlagHideSerialNumber)
+	if (preFlagHideSerialNumber != m_FlagHideSerialNumber)
 	{
 		preFlagHideSerialNumber = m_FlagHideSerialNumber;
 		flagUpdate = TRUE;
 	}
 
-	if(m_FlagHideSerialNumber)
+	if (m_FlagHideSerialNumber)
 	{
 		m_SerialNumber = _T("");
-		for(int j = 0; j < m_Ata.vars[i].SerialNumber.GetLength(); j++)
+		for (int j = 0; j < m_Ata.vars[i].SerialNumber.GetLength(); j++)
 		{
 			m_SerialNumber += _T("*");
 		}
@@ -989,15 +989,15 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	{
 		m_SerialNumber = m_Ata.vars[i].SerialNumber;
 	}
-	
+
 	m_Model = m_Ata.vars[i].Model;
 	m_CtrlModel.SetToolTipText(m_Ata.vars[i].Enclosure);
 	m_Firmware = m_Ata.vars[i].FirmwareRev;
 
 	static int prePowerOnCount = -1;
-	if(flagUpdate || prePowerOnCount != m_Ata.vars[i].PowerOnCount)
+	if (flagUpdate || prePowerOnCount != m_Ata.vars[i].PowerOnCount)
 	{
-		if(m_Ata.vars[i].PowerOnCount > 0)
+		if (m_Ata.vars[i].PowerOnCount > 0)
 		{
 			m_PowerOnCount.Format(_T("%d %s"), m_Ata.vars[i].PowerOnCount, i18n(_T("Dialog"), _T("POWER_ON_COUNT_UNIT")));
 		}
@@ -1012,13 +1012,13 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	CString IsMinutes;
 	CString IsMinutesT;
 	CString title;	static int prePowerOnHours = -1;
-	if(m_Ata.vars[i].MeasuredPowerOnHours > 0)
+	if (m_Ata.vars[i].MeasuredPowerOnHours > 0)
 	{
-	//	if(flagUpdate || prePowerOnHours != m_Ata.vars[i].MeasuredPowerOnHours)
+		//	if(flagUpdate || prePowerOnHours != m_Ata.vars[i].MeasuredPowerOnHours)
 		{
-			if(m_Ata.vars[i].MeasuredTimeUnitType == CAtaSmart::POWER_ON_MINUTES)
+			if (m_Ata.vars[i].MeasuredTimeUnitType == CAtaSmart::POWER_ON_MINUTES)
 			{
-				if(m_Ata.vars[i].IsMaxtorMinute)
+				if (m_Ata.vars[i].IsMaxtorMinute)
 				{
 					IsMinutes = _T("?");
 					IsMinutesT = _T(" (?)");
@@ -1030,18 +1030,18 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 				IsMinutesT = _T("");
 			}
 
-			if(m_NowDetectingUnitPowerOnHours)
+			if (m_NowDetectingUnitPowerOnHours)
 			{
 				title.Format(_T("%d %s %d %s%s\r\n%s"),
 					m_Ata.vars[i].MeasuredPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[i].MeasuredPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")), 
+					m_Ata.vars[i].MeasuredPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
 					IsMinutesT, i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")));
 			}
 			else
 			{
 				title.Format(_T("%d %s %d %s%s"),
 					m_Ata.vars[i].MeasuredPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[i].MeasuredPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")), 
+					m_Ata.vars[i].MeasuredPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
 					IsMinutesT);
 			}
 
@@ -1054,13 +1054,13 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 			flagUpdate = TRUE;
 		}
 	}
-	else if(m_Ata.vars[i].DetectedPowerOnHours >= 0)
+	else if (m_Ata.vars[i].DetectedPowerOnHours >= 0)
 	{
-	//	if(flagUpdate || prePowerOnHours != m_Ata.vars[i].DetectedPowerOnHours)
+		//	if(flagUpdate || prePowerOnHours != m_Ata.vars[i].DetectedPowerOnHours)
 		{
-			if(m_Ata.vars[i].DetectedTimeUnitType == CAtaSmart::POWER_ON_MINUTES)
+			if (m_Ata.vars[i].DetectedTimeUnitType == CAtaSmart::POWER_ON_MINUTES)
 			{
-				if(m_Ata.vars[i].IsMaxtorMinute)
+				if (m_Ata.vars[i].IsMaxtorMinute)
 				{
 					IsMinutes = _T("?");
 					IsMinutesT = _T(" (?)");
@@ -1071,19 +1071,19 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 				IsMinutes = _T(" ");
 				IsMinutesT = _T("");
 			}
-			
-			if(m_NowDetectingUnitPowerOnHours)
+
+			if (m_NowDetectingUnitPowerOnHours)
 			{
 				title.Format(_T("%d %s %d %s%s\r\n%s"),
 					m_Ata.vars[i].DetectedPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[i].DetectedPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")), 
+					m_Ata.vars[i].DetectedPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
 					IsMinutesT, i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")));
 			}
 			else
 			{
 				title.Format(_T("%d %s %d %s%s"),
 					m_Ata.vars[i].DetectedPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[i].DetectedPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")), 
+					m_Ata.vars[i].DetectedPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
 					IsMinutesT);
 			}
 
@@ -1098,7 +1098,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	}
 	else
 	{
-		if(flagUpdate || prePowerOnHours != 0)
+		if (flagUpdate || prePowerOnHours != 0)
 		{
 			m_PowerOnHours = i18n(_T("Dialog"), _T("UNKNOWN"));
 			prePowerOnHours = 0;
@@ -1106,18 +1106,18 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 			m_CtrlPowerOnHours.SetToolTipText(L"");
 		}
 	}
-	
-	if(m_Ata.vars[i].HostReads >= 0)
+
+	if (m_Ata.vars[i].HostReads >= 0)
 	{
 		cstr = L"";
 		/*
 		if(m_Ata.vars[i].HostReads > 1024 * 1024)
 		{
-			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
+		cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].HostReads > 1024)
 		{
-			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostReads / 1024.0);
+		cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostReads / 1024.0);
 		}
 		*/
 		m_BufferSize.Format(_T("%d GB"), m_Ata.vars[i].HostReads);
@@ -1125,14 +1125,14 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		m_CtrlBufferSize.SetToolTipText(cstr);
 		m_CtrlLabelBufferSize.SetToolTipText(i18n(_T("Dialog"), _T("TOTAL_HOST_READS")));
 	}
-	else if(m_Ata.vars[i].BufferSize == 0xFFFF * 512)
+	else if (m_Ata.vars[i].BufferSize == 0xFFFF * 512)
 	{
 		m_BufferSize.Format(_T(">= 32 MB"));
 		m_LabelBufferSize = i18n(_T("Dialog"), _T("BUFFER_SIZE"));
 		m_CtrlBufferSize.SetToolTipText(L"");
 		m_CtrlLabelBufferSize.SetToolTipText(i18n(_T("Dialog"), _T("BUFFER_SIZE")));
 	}
-	else if(m_Ata.vars[i].BufferSize > 0)
+	else if (m_Ata.vars[i].BufferSize > 0)
 	{
 		m_BufferSize.Format(_T("%d KB"), m_Ata.vars[i].BufferSize / 1024);
 		m_LabelBufferSize = i18n(_T("Dialog"), _T("BUFFER_SIZE"));
@@ -1147,17 +1147,17 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		m_CtrlLabelBufferSize.SetToolTipText(L"");
 	}
 
-	if(m_Ata.vars[i].HostWrites >= 0)
+	if (m_Ata.vars[i].HostWrites >= 0)
 	{
 		cstr = L"";
 		/*
 		if(m_Ata.vars[i].HostWrites > 1024 * 1024)
 		{
-			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
+		cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].HostWrites > 1024)
 		{
-			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostWrites / 1024.0);
+		cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostWrites / 1024.0);
 		}
 		*/
 		m_NvCacheSize.Format(_T("%d GB"), m_Ata.vars[i].HostWrites);
@@ -1165,7 +1165,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		m_CtrlNvCacheSize.SetToolTipText(cstr);
 		m_CtrlLabelNvCacheSize.SetToolTipText(i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES")));
 	}
-	else if(m_Ata.vars[i].NvCacheSize > 0)
+	else if (m_Ata.vars[i].NvCacheSize > 0)
 	{
 		m_NvCacheSize.Format(_T("%d MB"), (DWORD)(m_Ata.vars[i].NvCacheSize / 1024 / 1024));
 		m_LabelNvCacheSize = i18n(_T("Dialog"), _T("NV_CACHE_SIZE"));
@@ -1180,25 +1180,25 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		m_CtrlLabelNvCacheSize.SetToolTipText(L"");
 	}
 
-	if(m_Ata.vars[i].NandWrites >= 0)
+	if (m_Ata.vars[i].NandWrites >= 0)
 	{
 		cstr = L"";
 		/*
 		if(m_Ata.vars[i].NandWrites > 1024 * 1024)
 		{
-			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].NandWrites / 1024.0 / 1024.0);
+		cstr.Format(_T("%.3f PB"), m_Ata.vars[i].NandWrites / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].NandWrites > 1024)
 		{
-			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].NandWrites / 1024.0);
+		cstr.Format(_T("%.3f TB"), m_Ata.vars[i].NandWrites / 1024.0);
 		}
 		*/
 		m_RotationRate.Format(_T("%d GB"), m_Ata.vars[i].NandWrites);
 		/*
 		if (m_Ata.vars[i].PlextorNandWritesUnit)
 		{
-			m_RotationRate += L" (?)";
-			cstr += L" (?)";
+		m_RotationRate += L" (?)";
+		cstr += L" (?)";
 		}
 		*/
 
@@ -1206,17 +1206,17 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		m_CtrlRotationRate.SetToolTipText(cstr);
 		m_CtrlLabelRotationRate.SetToolTipText(i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES")));
 	}
-	else if(m_Ata.vars[i].GBytesErased >= 0)
+	else if (m_Ata.vars[i].GBytesErased >= 0)
 	{
 		cstr = L"";
 		/*
 		if(m_Ata.vars[i].GBytesErased > 1024 * 1024)
 		{
-			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].GBytesErased / 1024.0 / 1024.0);
+		cstr.Format(_T("%.3f PB"), m_Ata.vars[i].GBytesErased / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].GBytesErased > 1024)
 		{
-			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].GBytesErased / 1024.0);
+		cstr.Format(_T("%.3f TB"), m_Ata.vars[i].GBytesErased / 1024.0);
 		}
 		*/
 		m_RotationRate.Format(_T("%d GB"), m_Ata.vars[i].GBytesErased);
@@ -1227,20 +1227,20 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	/*
 	else if(m_Ata.vars[i].WearLevelingCount >= 0)
 	{
-		m_RotationRate.Format(_T("%d %s"), m_Ata.vars[i].WearLevelingCount, i18n(_T("Dialog"), _T("POWER_ON_COUNT_UNIT")));		
+	m_RotationRate.Format(_T("%d %s"), m_Ata.vars[i].WearLevelingCount, i18n(_T("Dialog"), _T("POWER_ON_COUNT_UNIT")));
 	//	m_LabelRotationRate = i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT"));
-		SetLabel(m_LabelRotationRate, _T("RotationRate"),i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT")));
+	SetLabel(m_LabelRotationRate, _T("RotationRate"),i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT")));
 	//	SetElementPropertyEx(_T("RotationRate"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
 	}
 	*/
-	else if(m_Ata.vars[i].NominalMediaRotationRate == 1) // SSD
+	else if (m_Ata.vars[i].NominalMediaRotationRate == 1) // SSD
 	{
 		m_RotationRate = _T("---- (SSD)");
 		m_LabelRotationRate = i18n(_T("Dialog"), _T("ROTATION_RATE"));
 		m_CtrlRotationRate.SetToolTipText(L"");
 		m_CtrlLabelRotationRate.SetToolTipText(i18n(_T("Dialog"), _T("ROTATION_RATE")));
 	}
-	else if(m_Ata.vars[i].NominalMediaRotationRate > 0)
+	else if (m_Ata.vars[i].NominalMediaRotationRate > 0)
 	{
 		m_RotationRate.Format(_T("%d RPM"), m_Ata.vars[i].NominalMediaRotationRate);
 		m_LabelRotationRate = i18n(_T("Dialog"), _T("ROTATION_RATE"));
@@ -1254,15 +1254,15 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		m_CtrlLabelRotationRate.SetToolTipText(L"");
 	}
 
-	if(m_Ata.vars[i].DiskSizeLba48 >= m_Ata.vars[i].DiskSizeLba28)
+	if (m_Ata.vars[i].DiskSizeLba48 >= m_Ata.vars[i].DiskSizeLba28)
 	{
 		m_LbaSize.Format(_T("%.1f GB"), m_Ata.vars[i].DiskSizeLba48 / 1000.0);
 	}
-	else if(m_Ata.vars[i].DiskSizeLba28 > 0)
+	else if (m_Ata.vars[i].DiskSizeLba28 > 0)
 	{
 		m_LbaSize.Format(_T("%.1f GB"), m_Ata.vars[i].DiskSizeLba28 / 1000.0);
 	}
-	else if(m_Ata.vars[i].DiskSizeChs > 0)
+	else if (m_Ata.vars[i].DiskSizeChs > 0)
 	{
 		m_LbaSize.Format(_T("%.1f GB"), m_Ata.vars[i].DiskSizeChs / 1000.0);
 	}
@@ -1272,11 +1272,11 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	}
 
 	m_DriveMap = m_Ata.vars[i].DriveMap;
-	if(m_Ata.vars[i].TotalDiskSize >= 1000)
+	if (m_Ata.vars[i].TotalDiskSize >= 1000)
 	{
 		m_Capacity.Format(_T("%.1f GB"), m_Ata.vars[i].TotalDiskSize / 1000.0);
 	}
-	else if(m_Ata.vars[i].TotalDiskSize > 0)
+	else if (m_Ata.vars[i].TotalDiskSize > 0)
 	{
 		m_Capacity.Format(_T("%d MB"), m_Ata.vars[i].TotalDiskSize);
 	}
@@ -1287,7 +1287,10 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	m_TransferMode = m_Ata.vars[i].CurrentTransferMode + _T(" | ") + m_Ata.vars[i].MaxTransferMode;
 	m_CtrlTransferMode.SetToolTipText(i18n(_T("Dialog"), _T("CURRENT_MODE_SUPPORTED_MODE")));
 	m_Interface = m_Ata.vars[i].Interface;
-	m_AtaAtapi = m_Ata.vars[i].MajorVersion + _T(" | ") + m_Ata.vars[i].MinorVersion;
+	if (!m_Ata.vars[i].MinorVersion.IsEmpty())
+		m_AtaAtapi = m_Ata.vars[i].MajorVersion + _T(" | ") + m_Ata.vars[i].MinorVersion;
+	else
+		m_AtaAtapi = m_Ata.vars[i].MajorVersion;
 	m_CtrlAtaAtapi.SetToolTipText(i18n(_T("Dialog"), _T("MAJOR_VERSION_MINOR_VERSION")));
 	m_Feature = _T("");
 	cstr = L"\
@@ -1300,17 +1303,17 @@ DevSleep: Device Sleep\
 ";
 	m_CtrlFeature.SetToolTipText(cstr);
 
-	if(m_Ata.vars[i].IsSmartSupported)
+	if (m_Ata.vars[i].IsSmartSupported)
 	{
 		m_Feature += _T("S.M.A.R.T., ");
 	}
 
-	if(m_Ata.vars[i].IsApmSupported)
+	if (m_Ata.vars[i].IsApmSupported)
 	{
 		m_Feature += _T("APM, ");
 	}
 
-	if(m_Ata.vars[i].IsAamSupported)
+	if (m_Ata.vars[i].IsAamSupported)
 	{
 		m_Feature += _T("AAM, ");
 	}
@@ -1318,51 +1321,51 @@ DevSleep: Device Sleep\
 	/*
 	if(m_Ata.vars[i].IsLba48Supported)
 	{
-		m_Feature += _T("48bit LBA, ");
-		SetElementPropertyEx(_T("Feature48Lba"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
+	m_Feature += _T("48bit LBA, ");
+	SetElementPropertyEx(_T("Feature48Lba"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
 	}
 	else
 	{
-		SetElementPropertyEx(_T("Feature48Lba"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
+	SetElementPropertyEx(_T("Feature48Lba"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
 	}
 	*/
 
-	if(m_Ata.vars[i].IsNcqSupported)
+	if (m_Ata.vars[i].IsNcqSupported)
 	{
 		m_Feature += _T("NCQ, ");
 	}
 
-	if(m_Ata.vars[i].IsTrimSupported)
+	if (m_Ata.vars[i].IsTrimSupported)
 	{
 		m_Feature += _T("TRIM, ");
 	}
 
-	if(m_Ata.vars[i].IsDeviceSleepSupported)
+	if (m_Ata.vars[i].IsDeviceSleepSupported)
 	{
 		m_Feature += _T("DevSleep, ");
 	}
-/*
+	/*
 	if(m_Ata.vars[i].IsNvCacheSupported)
 	{
-		m_Feature += _T("NV Cache, ");
-		SetElementPropertyEx(_T("FeatureNvc"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
+	m_Feature += _T("NV Cache, ");
+	SetElementPropertyEx(_T("FeatureNvc"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
 	}
 	else
 	{
-		SetElementPropertyEx(_T("FeatureNvc"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
+	SetElementPropertyEx(_T("FeatureNvc"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
 	}
 
 	if(m_Ata.vars[i].IsSsd)
 	{
-		m_Feature += _T("SSD, ");
-		SetElementPropertyEx(_T("FeatureSsd"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
+	m_Feature += _T("SSD, ");
+	SetElementPropertyEx(_T("FeatureSsd"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
 	}
 	else
 	{
-		SetElementPropertyEx(_T("FeatureSsd"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
+	SetElementPropertyEx(_T("FeatureSsd"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
 	}
-*/
-	if(! m_Feature.IsEmpty())
+	*/
+	if (!m_Feature.IsEmpty())
 	{
 		m_Feature.Delete(m_Feature.GetLength() - 2, 2);
 	}
@@ -1372,11 +1375,11 @@ DevSleep: Device Sleep\
 	/*
 	if(m_Ata.vars[i].Life >= 0)
 	{
-		m_Life.Format(L"%d %%", m_Ata.vars[i].Life);
+	m_Life.Format(L"%d %%", m_Ata.vars[i].Life);
 	}
 	else
 	{
-		m_Life = L"";
+	m_Life = L"";
 	}
 	*/
 
@@ -1387,7 +1390,7 @@ DevSleep: Device Sleep\
 
 void CDiskInfoDlg::ChangeLang(CString LangName)
 {
-	if(m_SelectDisk >= (DWORD)m_Ata.vars.GetCount())
+	if (m_SelectDisk >= (DWORD)m_Ata.vars.GetCount())
 	{
 		m_SelectDisk = 0;
 	}
@@ -1413,7 +1416,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	menu->ModifyMenu(5, MF_BYPOSITION | MF_STRING, 5, cstr);
 	cstr = i18n(_T("Menu"), _T("LANGUAGE"));
 
-	if(cstr.Find(_T("Language")) >= 0)
+	if (cstr.Find(_T("Language")) >= 0)
 	{
 		cstr = _T("&Language");
 		menu->ModifyMenu(6, MF_BYPOSITION | MF_STRING, 6, cstr);
@@ -1483,7 +1486,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	menu->ModifyMenu(ID_CSMI_ENABLE_ALL, MF_STRING, ID_CSMI_ENABLE_ALL, cstr);
 	cstr = i18n(_T("Menu"), _T("INSTALL_GADGET"));
 	menu->ModifyMenu(ID_INSTALL_GADGET, MF_STRING, ID_INSTALL_GADGET, cstr);
-	if(IsSidebar())
+	if (IsSidebar())
 	{
 		menu->EnableMenuItem(ID_INSTALL_GADGET, MF_ENABLED);
 	}
@@ -1492,14 +1495,14 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->EnableMenuItem(ID_INSTALL_GADGET, MF_GRAYED);
 	}
 
-	if(IsDotNet4() || IsDotNet2())
+	if (IsDotNet4() || IsDotNet2())
 	{
 		cstr = i18n(_T("Menu"), _T("ALERT_MAIL"));
 		menu->ModifyMenu(ID_ALERT_MAIL, MF_STRING, ID_ALERT_MAIL, cstr);
-		menu->EnableMenuItem(ID_ALERT_MAIL,  MF_ENABLED);
+		menu->EnableMenuItem(ID_ALERT_MAIL, MF_ENABLED);
 		cstr = i18n(_T("Menu"), _T("MAIL_SETTINGS"));
 		menu->ModifyMenu(ID_MAIL_SETTINGS, MF_STRING, ID_MAIL_SETTINGS, cstr);
-		menu->EnableMenuItem(ID_MAIL_SETTINGS,  MF_ENABLED);
+		menu->EnableMenuItem(ID_MAIL_SETTINGS, MF_ENABLED);
 	}
 	else
 	{
@@ -1521,13 +1524,13 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	/*
 	if(m_Ata.vars.GetCount() && menuState != MF_GRAYED)
 	{
-		menu->EnableMenuItem(ID_AAM_APM, MF_ENABLED);
-		menu->EnableMenuItem(ID_HEALTH_STATUS, MF_ENABLED);
+	menu->EnableMenuItem(ID_AAM_APM, MF_ENABLED);
+	menu->EnableMenuItem(ID_HEALTH_STATUS, MF_ENABLED);
 	}
 	else
 	{
-		menu->EnableMenuItem(ID_AAM_APM, MF_GRAYED);
-		menu->EnableMenuItem(ID_HEALTH_STATUS, MF_GRAYED);
+	menu->EnableMenuItem(ID_AAM_APM, MF_GRAYED);
+	menu->EnableMenuItem(ID_HEALTH_STATUS, MF_GRAYED);
 	}
 	*/
 
@@ -1630,7 +1633,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	cstr = i18n(_T("Menu"), _T("FAHRENHEIT"));
 	menu->ModifyMenu(ID_FAHRENHEIT, MF_STRING, ID_FAHRENHEIT, cstr);
 
-	if(m_FlagFahrenheit)
+	if (m_FlagFahrenheit)
 	{
 		OnFahrenheit();
 	}
@@ -1644,7 +1647,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	cstr = i18n(_T("Menu"), _T("MINIMIZE"));
 	menu->ModifyMenu(ID_RESIDENT_MINIMIZE, MF_STRING, ID_RESIDENT_MINIMIZE, cstr);
 
-	if(m_FlagResidentMinimize)
+	if (m_FlagResidentMinimize)
 	{
 		OnResidentMinimize();
 	}
@@ -1674,7 +1677,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 	// Check Status
 
-	if(m_FlagDumpIdentifyDevice)
+	if (m_FlagDumpIdentifyDevice)
 	{
 		menu->CheckMenuItem(ID_DUMP_IDENTIFY_DEVICE, MF_CHECKED);
 	}
@@ -1683,7 +1686,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_DUMP_IDENTIFY_DEVICE, MF_UNCHECKED);
 	}
 
-	if(m_FlagDumpSmartReadData)
+	if (m_FlagDumpSmartReadData)
 	{
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_DATA, MF_CHECKED);
 	}
@@ -1692,7 +1695,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_DATA, MF_UNCHECKED);
 	}
 
-	if(m_FlagDumpSmartReadThreshold)
+	if (m_FlagDumpSmartReadThreshold)
 	{
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_THRESHOLD, MF_CHECKED);
 	}
@@ -1701,7 +1704,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_THRESHOLD, MF_UNCHECKED);
 	}
 
-	if(m_FlagAsciiView)
+	if (m_FlagAsciiView)
 	{
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_CHECKED);
 	}
@@ -1710,7 +1713,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_UNCHECKED);
 	}
 
-	if(m_FlagSmartEnglish)
+	if (m_FlagSmartEnglish)
 	{
 		menu->CheckMenuItem(ID_SMART_ENGLISH, MF_CHECKED);
 	}
@@ -1719,7 +1722,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_SMART_ENGLISH, MF_UNCHECKED);
 	}
 
-	if(m_FlagHideSerialNumber)
+	if (m_FlagHideSerialNumber)
 	{
 		menu->CheckMenuItem(ID_HIDE_SERIAL_NUMBER, MF_CHECKED);
 	}
@@ -1728,7 +1731,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_HIDE_SERIAL_NUMBER, MF_UNCHECKED);
 	}
 
-	if(m_FlagHideSmartInfo)
+	if (m_FlagHideSmartInfo)
 	{
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_CHECKED);
 	}
@@ -1737,7 +1740,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_UNCHECKED);
 	}
 
-	if(m_FlagHideNoSmartDisk)
+	if (m_FlagHideNoSmartDisk)
 	{
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_CHECKED);
 	}
@@ -1746,7 +1749,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_UNCHECKED);
 	}
 
-	if(m_FlagAdvancedDiskSearch)
+	if (m_FlagAdvancedDiskSearch)
 	{
 		menu->CheckMenuItem(ID_ADVANCED_DISK_SEARCH, MF_CHECKED);
 	}
@@ -1755,7 +1758,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ADVANCED_DISK_SEARCH, MF_UNCHECKED);
 	}
 
-	if(m_FlagWorkaroundHD204UI)
+	if (m_FlagWorkaroundHD204UI)
 	{
 		menu->CheckMenuItem(ID_WORKAROUND_HD204UI, MF_CHECKED);
 	}
@@ -1764,7 +1767,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_WORKAROUND_HD204UI, MF_UNCHECKED);
 	}
 
-	if(m_FlagWorkaroundIE8MODE)
+	if (m_FlagWorkaroundIE8MODE)
 	{
 		menu->CheckMenuItem(ID_WORKAROUND_IE8MODE, MF_CHECKED);
 	}
@@ -1782,7 +1785,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_WORKAROUND_IGNORE_C4, MF_UNCHECKED);
 	}
 
-	if(GetIeVersion() >= 900)
+	if (GetIeVersion() >= 900)
 	{
 		menu->EnableMenuItem(ID_WORKAROUND_IE8MODE, MF_ENABLED);
 	}
@@ -1790,8 +1793,8 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	{
 		menu->EnableMenuItem(ID_WORKAROUND_IE8MODE, MF_GRAYED);
 	}
-	
-	if(GetIeVersion() >= 600)
+
+	if (GetIeVersion() >= 600)
 	{
 		menu->EnableMenuItem(ID_GRAPH, MF_ENABLED);
 	}
@@ -1800,7 +1803,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->EnableMenuItem(ID_GRAPH, MF_GRAYED);
 	}
 
-	if(m_FlagEventLog)
+	if (m_FlagEventLog)
 	{
 		menu->CheckMenuItem(ID_EVENT_LOG, MF_CHECKED);
 	}
@@ -1809,7 +1812,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_EVENT_LOG, MF_UNCHECKED);
 	}
 
-	if(m_FlagAlertMail)
+	if (m_FlagAlertMail)
 	{
 		menu->CheckMenuItem(ID_ALERT_MAIL, MF_CHECKED);
 	}
@@ -1818,7 +1821,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ALERT_MAIL, MF_UNCHECKED);
 	}
 
-	if(m_FlagAtaPassThroughSmart)
+	if (m_FlagAtaPassThroughSmart)
 	{
 		menu->CheckMenuItem(ID_ATA_PASS_THROUGH_SMART, MF_CHECKED);
 	}
@@ -1827,7 +1830,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ATA_PASS_THROUGH_SMART, MF_UNCHECKED);
 	}
 
-	if(m_FlagGadget)
+	if (m_FlagGadget)
 	{
 		menu->CheckMenuItem(ID_GADGET_SUPPORT, MF_CHECKED);
 	}
@@ -1836,7 +1839,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_GADGET_SUPPORT, MF_UNCHECKED);
 	}
 
-	if(m_FlagAutoAamApm)
+	if (m_FlagAutoAamApm)
 	{
 		menu->CheckMenuItem(ID_AUTO_AAM_APM, MF_CHECKED);
 	}
@@ -1845,7 +1848,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_AUTO_AAM_APM, MF_UNCHECKED);
 	}
 
-	if(m_FlagResident)
+	if (m_FlagResident)
 	{
 		menu->CheckMenuItem(ID_RESIDENT, MF_CHECKED);
 	}
@@ -1854,7 +1857,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_RESIDENT, MF_UNCHECKED);
 	}
 
-	if(m_FlagStartup)
+	if (m_FlagStartup)
 	{
 		menu->CheckMenuItem(ID_STARTUP, MF_CHECKED);
 	}
@@ -1863,7 +1866,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_STARTUP, MF_UNCHECKED);
 	}
 
-	if(m_FlagAlertSound)
+	if (m_FlagAlertSound)
 	{
 		menu->CheckMenuItem(ID_ALERT_SOUND, MF_CHECKED);
 	}
@@ -1872,9 +1875,9 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ALERT_SOUND, MF_UNCHECKED);
 	}
 
-//	menu->EnableMenuItem(ID_ALARM_HISTORY, MF_GRAYED);
-//	menu->EnableMenuItem(ID_ALERT_SOUND, MF_GRAYED);
-//	menu->EnableMenuItem(ID_SOUND_SETTINGS, MF_GRAYED);
+	//	menu->EnableMenuItem(ID_ALARM_HISTORY, MF_GRAYED);
+	//	menu->EnableMenuItem(ID_ALERT_SOUND, MF_GRAYED);
+	//	menu->EnableMenuItem(ID_SOUND_SETTINGS, MF_GRAYED);
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// Theme
@@ -1905,21 +1908,21 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	// Disk
 	//////////////////////////////////////////////////////////////////////////////////
 	subMenu.Attach(menu->GetSubMenu(MENU_DRIVE_INDEX)->GetSafeHmenu());
-	while(subMenu.RemoveMenu(0, MF_BYPOSITION));
+	while (subMenu.RemoveMenu(0, MF_BYPOSITION));
 
 	MENUITEMINFO subMenuInfo;
 	ZeroMemory(&subMenuInfo, sizeof(MENUITEMINFO));
 	subMenuInfo.cbSize = sizeof(MENUITEMINFO);
-	subMenuInfo.fMask = MIIM_CHECKMARKS|MIIM_TYPE|MIIM_STATE|MIIM_ID|MIIM_SUBMENU;
+	subMenuInfo.fMask = MIIM_CHECKMARKS | MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_SUBMENU;
 	subMenuInfo.fType = MFT_RADIOCHECK;
 	subMenuInfo.hbmpChecked = NULL;
 	subMenuInfo.fState = MFS_UNCHECKED;
 	subMenuInfo.hSubMenu = NULL;
 
-	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+	for (int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
 		CString cstr;
-		if(m_Ata.vars[i].TotalDiskSize >= 1000)
+		if (m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
 			cstr.Format(_T("(%d) %s %.1f GB"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
@@ -1931,23 +1934,23 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		subMenuInfo.dwTypeData = (LPWSTR)cstr.GetString();
 		subMenu.InsertMenuItem(-1, &subMenuInfo);
 
-		if(i % 8 == 7 && i + 1 != m_Ata.vars.GetCount())
+		if (i % 8 == 7 && i + 1 != m_Ata.vars.GetCount())
 		{
 			subMenu.AppendMenu(MF_SEPARATOR);
 		}
 	}
 	subMenu.CheckMenuRadioItem(SELECT_DISK_BASE, SELECT_DISK_BASE + (INT)m_Ata.vars.GetCount(),
-								SELECT_DISK_BASE + m_SelectDisk, MF_BYCOMMAND);
+		SELECT_DISK_BASE + m_SelectDisk, MF_BYCOMMAND);
 	subMenu.Detach();
 
 	// Auto Refresh Target
 	subSubMenu.Attach(menu->GetSubMenu(2)->GetSubMenu(2)->GetSafeHmenu());
-	while(subSubMenu.RemoveMenu(0, MF_BYPOSITION));
+	while (subSubMenu.RemoveMenu(0, MF_BYPOSITION));
 
 	MENUITEMINFO subSubMenuInfo;
 	ZeroMemory(&subSubMenuInfo, sizeof(MENUITEMINFO));
 	subSubMenuInfo.cbSize = sizeof(MENUITEMINFO);
-	subSubMenuInfo.fMask = MIIM_CHECKMARKS|MIIM_TYPE|MIIM_STATE|MIIM_ID;
+	subSubMenuInfo.fMask = MIIM_CHECKMARKS | MIIM_TYPE | MIIM_STATE | MIIM_ID;
 	subSubMenuInfo.fType = NULL;
 	subSubMenuInfo.hbmpChecked = NULL;
 
@@ -1962,9 +1965,9 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	subSubMenu.InsertMenuItem(-1, &subSubMenuInfo);
 
 	subSubMenu.AppendMenu(MF_SEPARATOR);
-	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+	for (int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
-		if(m_Ata.vars[i].TotalDiskSize >= 1000)
+		if (m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
 			cstr.Format(_T("(%d) %s %.1f GB"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
@@ -1974,7 +1977,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		}
 		subSubMenuInfo.wID = AUTO_REFRESH_TARGET_BASE + i;
 		subSubMenuInfo.dwTypeData = (LPWSTR)cstr.GetString();
-		if(m_FlagAutoRefreshTarget[i])
+		if (m_FlagAutoRefreshTarget[i])
 		{
 			subSubMenuInfo.fState = MFS_CHECKED;
 		}
@@ -1985,7 +1988,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 		subSubMenu.InsertMenuItem(-1, &subSubMenuInfo);
 
-		if(i % 8 == 7 && i + 1 != m_Ata.vars.GetCount())
+		if (i % 8 == 7 && i + 1 != m_Ata.vars.GetCount())
 		{
 			subSubMenu.AppendMenu(MF_SEPARATOR);
 		}
@@ -2012,24 +2015,24 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	SetLabel(m_CtrlLabelBufferSize, m_LabelBufferSize, i18n(_T("Dialog"), _T("BUFFER_SIZE")));
 	SetLabel(m_CtrlLabelNvCacheSize, m_LabelNvCacheSize, i18n(_T("Dialog"), _T("NV_CACHE_SIZE")));
 	SetLabel(m_CtrlLabelRotationRate, m_LabelRotationRate, i18n(_T("Dialog"), _T("ROTATION_RATE")));
-	
-	if(m_Ata.vars.GetCount() > 0)
+
+	if (m_Ata.vars.GetCount() > 0)
 	{
-		if(m_Ata.vars[m_SelectDisk].HostReads >= 0)
+		if (m_Ata.vars[m_SelectDisk].HostReads >= 0)
 		{
 			SetLabel(m_CtrlLabelBufferSize, m_LabelBufferSize, i18n(_T("Dialog"), _T("TOTAL_HOST_READS")));
 		}
 
-		if(m_Ata.vars[m_SelectDisk].HostWrites >= 0)
+		if (m_Ata.vars[m_SelectDisk].HostWrites >= 0)
 		{
 			SetLabel(m_CtrlLabelNvCacheSize, m_LabelNvCacheSize, i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES")));
 		}
 
-		if(m_Ata.vars[m_SelectDisk].NandWrites >= 0)
+		if (m_Ata.vars[m_SelectDisk].NandWrites >= 0)
 		{
 			SetLabel(m_CtrlLabelRotationRate, m_LabelRotationRate, i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES")));
 		}
-		else if(m_Ata.vars[m_SelectDisk].GBytesErased >= 0)
+		else if (m_Ata.vars[m_SelectDisk].GBytesErased >= 0)
 		{
 			SetLabel(m_CtrlLabelRotationRate, m_LabelRotationRate, i18n(_T("SmartSandForce"), _T("64")));
 		}
@@ -2037,13 +2040,13 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		else if(m_Ata.vars[m_SelectDisk].WearLevelingCount >= 0)
 		{
 		//	m_LabelRotationRate = i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT"));
-			SetLabel(m_LabelRotationRate, _T("LabelRotationRate"), i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT")));
+		SetLabel(m_LabelRotationRate, _T("LabelRotationRate"), i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT")));
 		}
 		*/
 	}
 
 	UpdateData(FALSE);
-	
+
 	RebuildListHeader(m_SelectDisk, TRUE);
 	ChangeDisk(m_SelectDisk);
 	InitDriveList();
@@ -2051,7 +2054,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	InitListCtrl();
 	UpdateListCtrl(m_SelectDisk);
 
-	if(m_FlagResident)
+	if (m_FlagResident)
 	{
 		UpdateTrayTemperatureIcon(TRUE);
 	}
@@ -2061,30 +2064,30 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	WritePrivateProfileString(_T("Setting"), _T("Language"), LangName, m_Ini);
 }
 
-void CDiskInfoDlg::OnDiskStatus(){OnHealthStatus();}
-void CDiskInfoDlg::OnPreDisk(){SelectDrive(m_SelectDisk - 1);}
-void CDiskInfoDlg::OnNextDisk(){SelectDrive(m_SelectDisk + 1);}
+void CDiskInfoDlg::OnDiskStatus() { OnHealthStatus(); }
+void CDiskInfoDlg::OnPreDisk() { SelectDrive(m_SelectDisk - 1); }
+void CDiskInfoDlg::OnNextDisk() { SelectDrive(m_SelectDisk + 1); }
 
-void CDiskInfoDlg::OnDisk0(){SelectDrive(0 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnDisk1(){SelectDrive(1 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnDisk2(){SelectDrive(2 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnDisk3(){SelectDrive(3 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnDisk4(){SelectDrive(4 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnDisk5(){SelectDrive(5 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnDisk6(){SelectDrive(6 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnDisk7(){SelectDrive(7 + m_DriveMenuPage * 8);}
+void CDiskInfoDlg::OnDisk0() { SelectDrive(0 + m_DriveMenuPage * 8); }
+void CDiskInfoDlg::OnDisk1() { SelectDrive(1 + m_DriveMenuPage * 8); }
+void CDiskInfoDlg::OnDisk2() { SelectDrive(2 + m_DriveMenuPage * 8); }
+void CDiskInfoDlg::OnDisk3() { SelectDrive(3 + m_DriveMenuPage * 8); }
+void CDiskInfoDlg::OnDisk4() { SelectDrive(4 + m_DriveMenuPage * 8); }
+void CDiskInfoDlg::OnDisk5() { SelectDrive(5 + m_DriveMenuPage * 8); }
+void CDiskInfoDlg::OnDisk6() { SelectDrive(6 + m_DriveMenuPage * 8); }
+void CDiskInfoDlg::OnDisk7() { SelectDrive(7 + m_DriveMenuPage * 8); }
 
 void CDiskInfoDlg::SelectDrive(DWORD i)
 {
-	if(i >= (DWORD)m_Ata.vars.GetCount())
+	if (i >= (DWORD)m_Ata.vars.GetCount())
 	{
-		return ;
+		return;
 	}
 
 	CWaitCursor wait;
 	static int preFlagFahrenheit = -1;
 
-	switch(m_Ata.UpdateSmartInfo(i))
+	switch (m_Ata.UpdateSmartInfo(i))
 	{
 	case CAtaSmart::SMART_STATUS_MAJOR_CHANGE:
 	case CAtaSmart::SMART_STATUS_MINOR_CHANGE:
@@ -2093,11 +2096,11 @@ void CDiskInfoDlg::SelectDrive(DWORD i)
 		UpdateShareInfo();
 		break;
 	default:
-		if(m_SelectDisk == i)
+		if (m_SelectDisk == i)
 		{
-			if(preFlagFahrenheit == m_FlagFahrenheit)
+			if (preFlagFahrenheit == m_FlagFahrenheit)
 			{
-			//	return ;
+				//	return ;
 			}
 			else
 			{
@@ -2114,14 +2117,14 @@ void CDiskInfoDlg::SelectDrive(DWORD i)
 	InitDriveList();
 	UpdateToolTip();
 
-	CMenu *menu = GetMenu();	
+	CMenu *menu = GetMenu();
 	menu->CheckMenuRadioItem(SELECT_DISK_BASE, SELECT_DISK_BASE + (INT)m_Ata.vars.GetCount(),
-								SELECT_DISK_BASE + m_SelectDisk, MF_BYCOMMAND);
+		SELECT_DISK_BASE + m_SelectDisk, MF_BYCOMMAND);
 	SetMenu(menu);
 	DrawMenuBar();
 	CheckPage();
 
-	if(m_FlagResident)
+	if (m_FlagResident)
 	{
 		UpdateTrayTemperatureIcon(FALSE);
 	}
@@ -2130,9 +2133,9 @@ void CDiskInfoDlg::SelectDrive(DWORD i)
 void CDiskInfoDlg::CheckPage()
 {
 	CString cstr;
-	if(m_Ata.vars.GetCount() > 1)
+	if (m_Ata.vars.GetCount() > 1)
 	{
-		if(0 < m_SelectDisk)
+		if (0 < m_SelectDisk)
 		{
 			m_CtrlButtonPreDisk.ShowWindow(SW_SHOW);
 		}
@@ -2141,7 +2144,7 @@ void CDiskInfoDlg::CheckPage()
 			m_CtrlButtonPreDisk.ShowWindow(SW_HIDE);
 		}
 
-		if(m_SelectDisk < (DWORD)m_Ata.vars.GetCount() - 1)
+		if (m_SelectDisk < (DWORD)m_Ata.vars.GetCount() - 1)
 		{
 			m_CtrlButtonNextDisk.ShowWindow(SW_SHOW);
 		}
@@ -2159,17 +2162,17 @@ void CDiskInfoDlg::CheckPage()
 
 void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 {
-	if(! m_Ata.vars[i].IsSmartCorrect)
+	if (!m_Ata.vars[i].IsSmartCorrect)
 	{
 		return;
 	}
 
-	static CTime preTime[CAtaSmart::MAX_DISK] = {0};
+	static CTime preTime[CAtaSmart::MAX_DISK] = { 0 };
 	CTime time = CTime::GetTickCount();
 
-	if(time - preTime[i] < SAVE_SMART_PERIOD)
+	if (time - preTime[i] < SAVE_SMART_PERIOD)
 	{
-		return ;
+		return;
 	}
 	else
 	{
@@ -2203,7 +2206,7 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 
 	GetPrivateProfileString(disk, _T("Date"), _T(""), str, 256, dir + _T("\\") + SMART_INI);
 	cstr = str;
-	if(cstr.IsEmpty())
+	if (cstr.IsEmpty())
 	{
 		flagFirst = TRUE;
 		_stprintf_s(str, 256, _T("%s"), time.Format(_T("%Y/%m/%d %H:%M:%S")).GetBuffer());
@@ -2216,69 +2219,69 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 	// Check Threshold of Reallocated Sectors Count
 	GetPrivateProfileString(disk + _T("THRESHOLD"), _T("05"), _T(""), str, 256, dir + _T("\\") + SMART_INI);
 	cstr = str;
-	if(cstr.IsEmpty())
+	if (cstr.IsEmpty())
 	{
 		flagFirst = TRUE;
 	}
 
 	_stprintf_s(str, 256, _T("%s"), time.Format(_T("%Y/%m/%d %H:%M:%S")).GetBuffer());
 	WritePrivateProfileString(disk, _T("Date"), str, dir + _T("\\") + SMART_INI);
-	
+
 	_stprintf_s(str, 256, _T("%d"), m_Ata.vars[i].DiskStatus);
 	WritePrivateProfileString(disk, _T("HealthStatus"), str, dir + _T("\\") + SMART_INI);
 
-	if(m_Ata.vars[i].Temperature > 0)
+	if (m_Ata.vars[i].Temperature > 0)
 	{
 		AppendLog(dir, disk, _T("Temperature"), time, m_Ata.vars[i].Temperature, flagFirst);
 	}
 
-	if(m_Ata.vars[i].MeasuredPowerOnHours > 0 && m_NowDetectingUnitPowerOnHours == FALSE)
+	if (m_Ata.vars[i].MeasuredPowerOnHours > 0 && m_NowDetectingUnitPowerOnHours == FALSE)
 	{
 		AppendLog(dir, disk, _T("PowerOnHours"), time, m_Ata.vars[i].MeasuredPowerOnHours, flagFirst);
 	}
 
-	if(m_Ata.vars[i].PowerOnCount >= 0)
+	if (m_Ata.vars[i].PowerOnCount >= 0)
 	{
 		AppendLog(dir, disk, _T("PowerOnCount"), time, m_Ata.vars[i].PowerOnCount, flagFirst);
 	}
 
-	if(m_Ata.vars[i].Life >= 0)
+	if (m_Ata.vars[i].Life >= 0)
 	{
 		AppendLog(dir, disk, _T("Life"), time, m_Ata.vars[i].Life, flagFirst);
 	}
 
-	if(m_Ata.vars[i].HostWrites >= 0)
+	if (m_Ata.vars[i].HostWrites >= 0)
 	{
 		AppendLog(dir, disk, _T("HostWrites"), time, m_Ata.vars[i].HostWrites, flagFirst);
 	}
 
-	if(m_Ata.vars[i].HostReads >= 0)
+	if (m_Ata.vars[i].HostReads >= 0)
 	{
 		AppendLog(dir, disk, _T("HostReads"), time, m_Ata.vars[i].HostReads, flagFirst);
 	}
 
-	if(m_Ata.vars[i].NandWrites >= 0)
+	if (m_Ata.vars[i].NandWrites >= 0)
 	{
 		AppendLog(dir, disk, _T("NandWrites"), time, m_Ata.vars[i].NandWrites, flagFirst);
 	}
 
-	if(m_Ata.vars[i].GBytesErased >= 0)
+	if (m_Ata.vars[i].GBytesErased >= 0)
 	{
 		AppendLog(dir, disk, _T("GBytesErased"), time, m_Ata.vars[i].GBytesErased, flagFirst);
 	}
 
-	if(m_Ata.vars[i].WearLevelingCount >= 0)
+	if (m_Ata.vars[i].WearLevelingCount >= 0)
 	{
 		AppendLog(dir, disk, _T("WearLevelingCount"), time, m_Ata.vars[i].WearLevelingCount, flagFirst);
 	}
-	
-	for(DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
+
+	for (DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
 	{
 		cstr.Format(_T("%02X"), m_Ata.vars[i].Attribute[j].Id);
-		AppendLog(dir, disk, cstr, time, m_Ata.vars[i].Attribute[j].CurrentValue, 
+		AppendLog(dir, disk, cstr, time, m_Ata.vars[i].Attribute[j].CurrentValue,
 			flagFirst, m_Ata.vars[i].Threshold[j].ThresholdValue);
 
-		switch(m_Ata.vars[i].Attribute[j].Id)
+		switch (m_Ata.vars[i].Attribute[j].Id)
 		{
 		case 0x05: // Reallocated Sectors Count
 			AppendLog(dir, disk, _T("ReallocatedSectorsCount"), time,
@@ -2307,12 +2310,12 @@ BOOL CDiskInfoDlg::AppendLog(CString dir, CString disk, CString file, CTime time
 	TCHAR str[256];
 
 	// First Time
-	if(flagFirst)
+	if (flagFirst)
 	{
 		wsprintf(str, _T("%d"), value);
 		WritePrivateProfileString(disk + _T("FIRST"), file, str, dir + _T("\\") + SMART_INI);
 
-		if(file.GetLength() == 2)
+		if (file.GetLength() == 2)
 		{
 			wsprintf(str, _T("%d"), threshold);
 			WritePrivateProfileString(disk + _T("THRESHOLD"), file, str, dir + _T("\\") + SMART_INI);
@@ -2322,7 +2325,7 @@ BOOL CDiskInfoDlg::AppendLog(CString dir, CString disk, CString file, CTime time
 	GetPrivateProfileString(disk, file, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
 	int pre = _tstoi(str);
 
-	if(pre != value)
+	if (pre != value)
 	{
 		// Update
 		wsprintf(str, _T("%d"), value);
@@ -2332,7 +2335,7 @@ BOOL CDiskInfoDlg::AppendLog(CString dir, CString disk, CString file, CTime time
 		line.Format(_T("%s,%d\n"), time.Format(_T("%Y/%m/%d %H:%M:%S")), value);
 
 		CStdioFile outFile;
-		if(outFile.Open(dir + _T("\\") + file + _T(".csv"),
+		if (outFile.Open(dir + _T("\\") + file + _T(".csv"),
 			CFile::modeCreate | CFile::modeNoTruncate | CFile::modeReadWrite | CFile::typeText))
 		{
 			ULONGLONG fileLength = outFile.GetLength();
@@ -2341,9 +2344,9 @@ BOOL CDiskInfoDlg::AppendLog(CString dir, CString disk, CString file, CTime time
 				if (outFile.SeekToEnd() == fileLength)
 				{
 					outFile.WriteString(line);
-				}				
+				}
 			}
-			catch (CFileException * e)			
+			catch (CFileException * e)
 			{
 				DebugPrint(L"CFileException");
 				e->Delete();

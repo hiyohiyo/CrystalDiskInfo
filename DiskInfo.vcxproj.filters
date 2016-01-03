@@ -206,6 +206,12 @@
     <ClInclude Include="ComboBoxCx.h">
       <Filter>Library Files</Filter>
     </ClInclude>
+    <ClInclude Include="NVMeInterpreter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\bad.ico">

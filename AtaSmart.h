@@ -10,6 +10,7 @@
 
 #include "winioctl.h"
 #include "SPTIUtil.h"
+#include "NVMeInterpreter.h"
 
 typedef struct _VOLUME_DISK_EXTENTS_LX {
     DWORD       NumberOfDiskExtents;
@@ -139,6 +140,7 @@ public:
 		SSD_VENDOR_CORSAIR    = 16,
 		SSD_VENDOR_KINGSTON   = 17,
 		SSD_VENDOR_MICRON_MU02= 18,
+		SSD_VENDOR_NVME		  = 19,
 		SSD_VENDOR_MAX        = 99,
 
 		VENDOR_UNKNOWN      = 0x0000,
@@ -229,16 +231,6 @@ protected:
 		BYTE  Buf[512];
 	} ATA_PASS_THROUGH_EX_WITH_BUFFERS;
 
-	typedef	struct _SMART_ATTRIBUTE
-	{
-		BYTE	Id;
-		WORD	StatusFlags;
-		BYTE	CurrentValue;
-		BYTE	WorstValue;
-		BYTE	RawValue[6];
-		BYTE	Reserved;
-	 } SMART_ATTRIBUTE;
-
 	typedef	struct _SMART_THRESHOLD
 	{
 		BYTE	Id;
@@ -283,7 +275,10 @@ protected:
 		CHAR		SerialNumber[20];
 		CHAR		Model[40];
 		CHAR		FirmwareRev[8];
-		CHAR		Reserved2[440];
+		CHAR		Reserved2[9];
+		CHAR		MinorVersion;
+		SHORT		MajorVersion;
+		CHAR		Reserved3[428];
 	};
 
 	struct ATA_IDENTIFY_DEVICE

@@ -56,6 +56,7 @@ static const TCHAR *ssdVendorString[] =
 	_T("co"), // Corsair
 	_T("ki"), // Kingston
 	_T("m2"), // Micron MU02
+	_T("nv"), // NVMe
 };
 
 static const TCHAR *deviceFormFactorString[] = 
@@ -2928,10 +2929,10 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.SsdVendorString = _T("");
 	asi.CommandTypeString = commandTypeString[commandType];
 
-	asi.IsSmartEnabled = FALSE;
+	asi.IsSmartEnabled = TRUE;
 	asi.IsIdInfoIncorrect = FALSE;
-	asi.IsSmartCorrect = FALSE;
-	asi.IsThresholdCorrect = FALSE;
+	asi.IsSmartCorrect = TRUE;
+	asi.IsThresholdCorrect = TRUE;
 	asi.IsWord88 = FALSE;
 	asi.IsWord64_76 = FALSE;
 	asi.IsCheckSumError = FALSE;
@@ -2940,7 +2941,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.Is9126MB = FALSE;
 	asi.IsThresholdBug = FALSE;
 
-	asi.IsSmartSupported = FALSE;
+	asi.IsSmartSupported = TRUE;
 	asi.IsLba48Supported = FALSE;
 	asi.IsNcqSupported = FALSE;
 	asi.IsAamSupported = FALSE;
@@ -3055,10 +3056,6 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.Temperature = asi.SmartReadData[0x2] * 256 + asi.SmartReadData[0x1] - 273;
 		asi.Life = asi.SmartReadData[0x03];
 
-		asi.SmartReadData[0x20] = 0x1F;
-		asi.SmartReadData[0x21] = 0x44;
-		asi.SmartReadData[0x22] = 0xC0;
-
 		asi.HostReads = (ULONG64)
 		         (((ULONG64)asi.SmartReadData[0x27] << 56)
 				+ ((ULONG64)asi.SmartReadData[0x26] << 48)
@@ -3098,6 +3095,23 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x82] << 16)
 				+ ((ULONG64)asi.SmartReadData[0x81] << 8)
 				+ ((ULONG64)asi.SmartReadData[0x80]));
+
+		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
+		asi.AttributeCount = NVME_ATTRIBUTE;
+
+		asi.SmartKeyName = _T("SmartNVMe");
+		asi.DiskVendorId = SSD_VENDOR_NVME;
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+		asi.IsSmartSupported = TRUE;
+		asi.Interface = _T("NVM Express"); 
+		if (asi.IdentifyDevice.N.MajorVersion == 0)
+		{
+			asi.MajorVersion = _T("< NVM Express 1.2");
+		}
+		else
+		{
+			asi.MajorVersion.Format(_T("NVM Express %d.%d"), asi.IdentifyDevice.N.MajorVersion, asi.IdentifyDevice.N.MinorVersion);
+		}
 	}
 
 	vars.Add(asi);
