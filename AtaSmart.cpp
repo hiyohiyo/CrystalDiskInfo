@@ -3033,6 +3033,8 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.FirmwareRev = asi.FirmwareRev.Mid(0, 8);
 	asi.FirmwareRev.TrimRight();
 
+	asi.ModelSerial = GetModelSerial(asi.Model, asi.SerialNumber);
+
 	/*
 	ULONG64 totalDiskSizeByte = 
 		(ULONG64)
