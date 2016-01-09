@@ -3063,6 +3063,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	if (
 		(commandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(physicalDriveId, scsiPort, scsiTargetId, &asi))
+	||  (commandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung951(physicalDriveId, scsiPort, scsiTargetId, &asi))
 		)
 	{
 		asi.IsSmartSupported = TRUE;
@@ -5161,6 +5162,60 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, 
 	return TRUE;
 }
 
+BOOL CAtaSmart::GetSmartAttributeNVMeSamsung951(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
+{
+	CString path;
+	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
+
+	HANDLE hIoCtrl = CreateFile(GetScsiPath((TCHAR*)path.GetString()), GENERIC_READ | GENERIC_WRITE,
+		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	BOOL bRet = 0;
+	NVME_PASS_THROUGH_IOCTL nptwb;
+	DWORD length = sizeof(nptwb);
+	DWORD dwReturned;
+
+	ZeroMemory(&nptwb, sizeof(NVME_PASS_THROUGH_IOCTL));
+
+	nptwb.SrbIoCtrl.ControlCode = NVME_PASS_THROUGH_SRB_IO_CODE;
+	nptwb.SrbIoCtrl.HeaderLength = sizeof(SRB_IO_CONTROL);
+	memcpy((UCHAR*)(&nptwb.SrbIoCtrl.Signature[0]), NVME_SIG_STR, NVME_SIG_STR_LEN);
+	nptwb.SrbIoCtrl.Timeout = NVME_PT_TIMEOUT;
+	nptwb.SrbIoCtrl.Length = length - sizeof(SRB_IO_CONTROL);
+	nptwb.DataBufferLen = sizeof(nptwb.DataBuffer);
+	nptwb.ReturnBufferLen = sizeof(nptwb);
+	nptwb.Direction = NVME_FROM_DEV_TO_HOST;
+
+	nptwb.NVMeCmd[0] = 2;  // GetLogPage
+	nptwb.NVMeCmd[1] = 0xFFFFFFFF;  // GetLogPage
+	nptwb.NVMeCmd[10] = 0x00000002; // S,M.A.R.T.
+
+	bRet = DeviceIoControl(hIoCtrl, IOCTL_SCSI_MINIPORT,
+		&nptwb, length, &nptwb, length, &dwReturned, NULL);
+
+	if (bRet == FALSE)
+	{
+		::CloseHandle(hIoCtrl);
+		return	FALSE;
+	}
+
+	DWORD count = 0;
+	for (int i = 0; i < 512; i++)
+	{
+		count += nptwb.DataBuffer[i];
+	}
+	if (count == 0)
+	{
+		::CloseHandle(hIoCtrl);
+		return	FALSE;
+	}
+
+	memcpy_s(&(asi->SmartReadData), 512, nptwb.DataBuffer, 512);
+
+	CloseHandle(hIoCtrl);
+	return bRet;
+}
+
+
 /*---------------------------------------------------------------------------*/
 // NVMe Intel 
 // Reference: http://naraeon.net/en/archives/1126
@@ -5261,7 +5316,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, IN
 
 	nptwb.NVMeCmd[0] = 2;  // GetLogPage
 	nptwb.NVMeCmd[1] = 0xFFFFFFFF;  // GetLogPage
-	nptwb.NVMeCmd[10] = 0x00FF0002; // 
+	nptwb.NVMeCmd[10] = 0x007f0002; // 
 
 	bRet = DeviceIoControl(hIoCtrl, IOCTL_SCSI_MINIPORT,
 		&nptwb, length, &nptwb, length, &dwReturned, NULL);

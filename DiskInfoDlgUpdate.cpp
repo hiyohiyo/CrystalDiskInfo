@@ -905,10 +905,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	m_CtrlLife.ReloadImage(IP(L"SD" + className), 1);
 #endif
 
-	if (m_Ata.vars[i].Temperature > 0)
-	{
-		className = GetTemperatureClass(m_Ata.vars[i].Temperature);
-	}
+	className = GetTemperatureClass(m_Ata.vars[i].Temperature);
 
 	if (preTemperatureStatus.Compare(className) != 0)
 	{
