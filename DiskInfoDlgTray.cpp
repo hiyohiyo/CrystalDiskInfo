@@ -658,7 +658,7 @@ void CDiskInfoDlg::CheckTrayTemperatureIcon()
 	{
 		if(GetPrivateProfileInt(_T("TemperatureIcon"), m_Ata.vars[i].ModelSerial, 1, m_Ini))
 		{
-			if(m_Ata.vars[i].Temperature > 0)
+			if(m_Ata.vars[i].Temperature > -300)
 			{
 				AddTemperatureIcon(i);
 			}
@@ -676,7 +676,7 @@ void CDiskInfoDlg::UpdateTrayTemperatureIcon(BOOL flagForce)
 	}
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
-		if(m_Ata.vars[i].Temperature > 0 && (flagForce || m_Ata.vars[i].Temperature != m_PreTemp[i]))
+		if(m_Ata.vars[i].Temperature > -300 && (flagForce || m_Ata.vars[i].Temperature != m_PreTemp[i]))
 		{
 			m_PreTemp[i] = m_Ata.vars[i].Temperature;
 			ModifyTemperatureIcon(i);
@@ -696,7 +696,7 @@ void CDiskInfoDlg::UpdateToolTip()
 			diskStatus = GetDiskStatus(m_Ata.vars[i].DiskStatus);
 
 			// Tooltip
-			if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > 0)
+			if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > -300)
 			{
 				if(m_FlagFahrenheit)
 				{

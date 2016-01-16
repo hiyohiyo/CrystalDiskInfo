@@ -114,6 +114,9 @@
     <ClCompile Include="ComboBoxCx.cpp">
       <Filter>Library Files</Filter>
     </ClCompile>
+    <ClCompile Include="NVMeInterpreter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h">

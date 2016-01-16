@@ -128,7 +128,7 @@ void CDiskInfoDlg::UpdateShareInfo()
 
 		if (m_FlagFahrenheit)
 		{
-			if (m_Ata.vars[i].Temperature > 0)
+			if (m_Ata.vars[i].Temperature > -300)
 			{
 				DWORD f = m_Ata.vars[i].Temperature * 9 / 5 + 32;
 				if (f > 100)
@@ -147,7 +147,7 @@ void CDiskInfoDlg::UpdateShareInfo()
 		}
 		else
 		{
-			if (m_Ata.vars[i].Temperature > 0)
+			if (m_Ata.vars[i].Temperature > -300)
 			{
 				_stprintf_s(str, 256, _T("%d ¡ÆC"), m_Ata.vars[i].Temperature);
 			}
@@ -915,7 +915,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	// static int preTemperature = -1;
 	// if(preTemperature != m_Ata.vars[i].Temperature || flagUpdate)
 	{
-		if (m_Ata.vars[i].Temperature > 0)
+		if (m_Ata.vars[i].Temperature > -300)
 		{
 			if (m_FlagFahrenheit)
 			{
@@ -2241,7 +2241,7 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 	_stprintf_s(str, 256, _T("%d"), m_Ata.vars[i].DiskStatus);
 	WritePrivateProfileString(disk, _T("HealthStatus"), str, dir + _T("\\") + SMART_INI);
 
-	if (m_Ata.vars[i].Temperature > 0)
+	if (m_Ata.vars[i].Temperature > -300)
 	{
 		AppendLog(dir, disk, _T("Temperature"), time, m_Ata.vars[i].Temperature, flagFirst);
 	}

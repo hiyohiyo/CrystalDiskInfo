@@ -625,7 +625,7 @@ void CDiskInfoDlg::InitDriveList()
 		{
 			CString targetDisk;
 			targetDisk.Format(_T("Disk%d"), i % 8);
-			if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME && m_Ata.vars[i].Temperature > 0)
+			if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME && m_Ata.vars[i].Temperature > -300)
 			{
 				if (m_FlagFahrenheit)
 				{
@@ -638,7 +638,7 @@ void CDiskInfoDlg::InitDriveList()
 						diskStatus, delimiter, m_Ata.vars[i].Temperature, delimiter, driveLetter);
 				}
 			}
-			else if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > 0)
+			else if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > -300)
 			{
 				if(m_FlagFahrenheit)
 				{

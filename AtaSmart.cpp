@@ -1670,31 +1670,6 @@ safeRelease:
 		//	CoUninitialize();
 		//  DebugPrint(_T("OK:CoUninitialize()"));
 		}
-		/*
-		for(int i = 0; i < vars.GetCount(); i++)
-		{
-			if(vars[i].PhysicalDriveId < 0)
-			{
-				continue;
-			}
-
-			CString driveLetter = _T("");
-			for(int j = 0; j < 26; j++)
-			{
-				if(driveLetterMap[vars[i].PhysicalDriveId] & (1 << j))
-				{
-					CString cstr;
-					cstr.Format(_T("%C"), j + 'A'); 
-					driveLetter += cstr + _T(": ");
-					vars[i].DriveLetterMap += (1 << j);
-					DebugPrint(cstr);
-				}
-			}
-			vars[i].DriveMap.Append(driveLetter);
-			vars[i].DriveMap.TrimRight();
-		}
-		*/
-		// Drive Letter Mapping End
 	}
 	else
 	{
@@ -2169,7 +2144,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.PowerOnRawValue = -1;
 	asi.PowerOnStartRawValue = -1;
 	asi.PowerOnCount = 0;
-	asi.Temperature = 0;
+	asi.Temperature = -999;
 	asi.TemperatureMultiplier = 1.0;
 	asi.NominalMediaRotationRate = 0;
 //	asi.Speed = 0.0;
@@ -2873,7 +2848,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.PowerOnRawValue = -1;
 		asi.PowerOnStartRawValue = -1;
 		asi.PowerOnCount = 0;
-		asi.Temperature = 0;
+		asi.Temperature = -1000;
 		asi.DiskStatus = DISK_STATUS_UNKNOWN;
 	}
 
@@ -2976,7 +2951,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.PowerOnRawValue = -1;
 	asi.PowerOnStartRawValue = -1;
 	asi.PowerOnCount = 0;
-	asi.Temperature = 0;
+	asi.Temperature = -1000;
 	asi.TemperatureMultiplier = 1.0;
 	asi.NominalMediaRotationRate = 1;
 	//	asi.Speed = 0.0;

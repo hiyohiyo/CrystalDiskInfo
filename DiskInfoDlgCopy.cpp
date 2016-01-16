@@ -381,7 +381,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			drive.Replace(_T("%WEAR_LEVELING_COUNT%"), cstr);
 		}
 
-		if(m_Ata.vars[i].Temperature > 0)
+		if(m_Ata.vars[i].Temperature > -300)
 		{
 			cstr.Format(_T("%d C (%d F)"), m_Ata.vars[i].Temperature, m_Ata.vars[i].Temperature * 9 / 5 + 32);
 		}
@@ -575,6 +575,9 @@ void CDiskInfoDlg::CopySave(CString fileName)
 
 		clip += drive;
 
+		CString vendorSpecific;
+		vendorSpecific = i18n(_T("Smart"), _T("VENDOR_SPECIFIC"), m_FlagSmartEnglish);
+
 		if(m_Ata.vars[i].AttributeCount > 0)
 		{
 			cstr.Format(_T("-- S.M.A.R.T. --------------------------------------------------------------\r\n"));
@@ -596,7 +599,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			for(DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
 			{
 				TCHAR str[256];
-				TCHAR vendorSpecific[256];
+
 				cstr.Format(_T("%02X"), m_Ata.vars[i].Attribute[j].Id);
 
 				if (m_FlagSmartEnglish)

@@ -1390,7 +1390,7 @@ public:
 		INT					PowerOnRawValue;
 		INT					PowerOnStartRawValue;
 		DWORD				PowerOnCount;
-		DWORD				Temperature;
+		INT					Temperature;
 		double				TemperatureMultiplier;
 		DWORD				NominalMediaRotationRate;
 //		double				Speed;
@@ -1410,7 +1410,7 @@ public:
 		DWORD				DiskStatus;
 		DWORD				DriveLetterMap;
 		// 
-		DWORD				AlarmTemperature;
+		INT 				AlarmTemperature;
 		BOOL				AlarmHealthStatus;
 
 		INTERFACE_TYPE		InterfaceType;
