@@ -372,7 +372,7 @@ CString CDiskInfoDlg::GetDiskStatusClass(DWORD statusCode)
 	}
 }
 
-CString CDiskInfoDlg::GetTemperatureClass(DWORD temperature)
+CString CDiskInfoDlg::GetTemperatureClass(INT temperature)
 {
 	if(temperature >= 55)
 	{
@@ -382,7 +382,7 @@ CString CDiskInfoDlg::GetTemperatureClass(DWORD temperature)
 	{
 		return _T("temperatureCaution");
 	}
-	else if(temperature <= 0)
+	else if(temperature == -1000)
 	{
 		return _T("temperatureUnknown");
 	}

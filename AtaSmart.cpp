@@ -1909,7 +1909,7 @@ safeRelease:
 			DebugPrint(_T("Drive Letter Mapping - != DRIVE_FIXED"));
 			continue;
 		}
-
+		
 		wsprintf(szPath, _T("\\\\.\\%c:"), c);
 		cstr = szPath;
 		DebugPrint(cstr);
@@ -2144,7 +2144,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.PowerOnRawValue = -1;
 	asi.PowerOnStartRawValue = -1;
 	asi.PowerOnCount = 0;
-	asi.Temperature = -999;
+	asi.Temperature = -1000;
 	asi.TemperatureMultiplier = 1.0;
 	asi.NominalMediaRotationRate = 0;
 //	asi.Speed = 0.0;
@@ -3086,6 +3086,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x80]));
 
 		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
+		GetTransferModeNVMe(asi.CurrentTransferMode, asi.MaxTransferMode, GetPCIeSlotSpeed(physicalDriveId, true));
 		asi.AttributeCount = NVME_ATTRIBUTE;
 
 		asi.SmartKeyName = _T("SmartNVMe");
@@ -3095,7 +3096,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.Interface = _T("NVM Express"); 
 		if (asi.IdentifyDevice.N.MajorVersion == 0)
 		{
-			asi.MajorVersion = _T("< NVM Express 1.2");
+			asi.MajorVersion = _T("NVM Express 1.0/1.1");
 		}
 		else
 		{
@@ -6916,7 +6917,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 
 				if(asi->Temperature >= 100)
 				{
-					asi->Temperature = 0;
+					asi->Temperature = -1000;
 				}
 				break;
 			case 0xBB:
@@ -7735,6 +7736,12 @@ DWORD CAtaSmart::GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString
 	else if(((w77 & 0x000E) >> 1) == 1){current = _T("SATA/150");}
 
 	return tm;
+}
+
+VOID CAtaSmart::GetTransferModeNVMe(CString &current, CString &max, SlotMaxCurrSpeed slotspeed)
+{
+	max = SlotSpeedToString(slotspeed.Maximum);
+	current = SlotSpeedToString(slotspeed.Current);
 }
 
 DWORD CAtaSmart::GetTimeUnitType(CString model, CString firmware, DWORD major, DWORD transferMode)

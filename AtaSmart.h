@@ -10,6 +10,7 @@
 
 #include "winioctl.h"
 #include "SPTIUtil.h"
+#include "SlotSpeedGetter.h"
 #include "NVMeInterpreter.h"
 
 typedef struct _VOLUME_DISK_EXTENTS_LX {
@@ -1563,6 +1564,7 @@ protected:
 	BOOL SendAtaCommandCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEntity, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize);
 
 	DWORD GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &currentTransferMode, CString &maxTransferMode, CString &Interface, INTERFACE_TYPE *interfaceType);
+	VOID GetTransferModeNVMe(CString & current, CString & max, SlotMaxCurrSpeed slotspeed);
 	DWORD GetTimeUnitType(CString model, CString firmware, DWORD major, DWORD transferMode);
 	DWORD GetAtaMajorVersion(WORD w80, CString &majorVersion);
 	VOID  GetAtaMinorVersion(WORD w81, CString &minor);

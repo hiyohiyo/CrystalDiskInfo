@@ -411,6 +411,7 @@
     <ClCompile Include="NVMeInterpreter.cpp" />
     <ClCompile Include="OptionDlg.cpp" />
     <ClCompile Include="SettingDlg.cpp" />
+    <ClCompile Include="SlotSpeedGetter.cpp" />
     <ClCompile Include="SoundSettingDlg.cpp" />
     <ClCompile Include="StaticCx.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -449,6 +450,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="resourceS.h" />
     <ClInclude Include="SettingDlg.h" />
+    <ClInclude Include="SlotSpeedGetter.h" />
     <ClInclude Include="SoundSettingDlg.h" />
     <ClInclude Include="StaticCX.h" />
     <ClInclude Include="stdafx.h" />

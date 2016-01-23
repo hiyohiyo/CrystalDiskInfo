@@ -133,27 +133,27 @@ void CDiskInfoDlg::UpdateShareInfo()
 				DWORD f = m_Ata.vars[i].Temperature * 9 / 5 + 32;
 				if (f > 100)
 				{
-					_stprintf_s(str, 256, _T("%d°∆F"), f);
+					_stprintf_s(str, 256, _T("%d ÅãF"), f);
 				}
 				else
 				{
-					_stprintf_s(str, 256, _T("%d °∆F"), f);
+					_stprintf_s(str, 256, _T("%d  ÅãF"), f);
 				}
 			}
 			else
 			{
-				_stprintf_s(str, 256, _T("-- °∆F"));
+				_stprintf_s(str, 256, _T("-- ÅãF"));
 			}
 		}
 		else
 		{
 			if (m_Ata.vars[i].Temperature > -300)
 			{
-				_stprintf_s(str, 256, _T("%d °∆C"), m_Ata.vars[i].Temperature);
+				_stprintf_s(str, 256, _T("%d ÅãC"), m_Ata.vars[i].Temperature);
 			}
 			else
 			{
-				_stprintf_s(str, 256, _T("-- °∆C"));
+				_stprintf_s(str, 256, _T("-- ÅãC"));
 			}
 		}
 		RegSetValueEx(hSubKey, _T("Temperature"), 0, REG_SZ,
@@ -195,8 +195,18 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 	}
 
 	while (m_List.DeleteColumn(0)) {}
-
-	if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
+	if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+	{
+		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
+		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
+		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(140 * m_ZoomRatio), 0);
+		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_FlagSmartEnglish), LVCFMT_LEFT, (int)(width - 172 * m_ZoomRatio - 25), 0);
+		preVendorId = m_Ata.SSD_VENDOR_NVME;
+	}
+	else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
 		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
@@ -725,6 +735,21 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			}
 			m_List.SetItemText(k, 6, cstr);
 			//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDDDDDD"));
+		}
+		else if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+		{
+			cstr = _T("---");
+			m_List.SetItemText(k, 3, cstr);
+			m_List.SetItemText(k, 4, cstr);
+			m_List.SetItemText(k, 5, cstr);
+			cstr.Format(_T("%02X%02X%02X%02X%02X%02X"),
+				m_Ata.vars[i].Attribute[j].RawValue[5],
+				m_Ata.vars[i].Attribute[j].RawValue[4],
+				m_Ata.vars[i].Attribute[j].RawValue[3],
+				m_Ata.vars[i].Attribute[j].RawValue[2],
+				m_Ata.vars[i].Attribute[j].RawValue[1],
+				m_Ata.vars[i].Attribute[j].RawValue[0]);
+			m_List.SetItemText(k, 6, cstr);
 		}
 		else
 		{

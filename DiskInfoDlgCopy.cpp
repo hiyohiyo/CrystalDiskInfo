@@ -223,16 +223,9 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		drive.Replace(_T("%MAJOR_VERSION%"), m_Ata.vars[i].MajorVersion);
 		drive.Replace(_T("%MINOR_VERSION%"), m_Ata.vars[i].MinorVersion);
 
-		// Temporary ///////////////////////
-		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
-		{
-			drive.Replace(_T("%TRANSFER_MODE%"), L"");
-		}
-		else
-		{
-			temp.Format(_T("%s | %s"), m_Ata.vars[i].CurrentTransferMode, m_Ata.vars[i].MaxTransferMode);
-			drive.Replace(_T("%TRANSFER_MODE%"), temp);
-		}
+		temp.Format(_T("%s | %s"), m_Ata.vars[i].CurrentTransferMode, m_Ata.vars[i].MaxTransferMode);
+		drive.Replace(_T("%TRANSFER_MODE%"), temp);
+
 		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
 		{
 			temp = L"";
@@ -466,11 +459,11 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		}
 		else if(0 <= m_Ata.vars[i].IdentifyDevice.A.QueueDepth && m_Ata.vars[i].IdentifyDevice.A.QueueDepth < 32)
 		{
-			cstr.Format(_T("     Queue Depth : %d"), m_Ata.vars[i].IdentifyDevice.A.QueueDepth + 1);
+			cstr.Format(_T("     Queue Depth : %d\r\n"), m_Ata.vars[i].IdentifyDevice.A.QueueDepth + 1);
 		}
 		else
 		{
-			cstr = _T("1");
+			cstr.Format(_T("     Queue Depth : 1\n"));
 		}
 		drive.Replace(_T("%QUEUE_DEPTH%"), cstr);
 
