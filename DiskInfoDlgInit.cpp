@@ -72,6 +72,11 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	case 10: OnAutoRefresh10Min(); break;
 	case 30: OnAutoRefresh30Min(); break;
 	case 60: OnAutoRefresh60Min(); break;
+	case 120:OnAutoRefresh120Min(); break;
+	case 180:OnAutoRefresh180Min(); break;
+	case 360:OnAutoRefresh360Min(); break;
+	case 720:OnAutoRefresh720Min(); break;
+	case 144:OnAutoRefresh1440Min(); break;
 	default: OnAutoRefreshDisable(); break;
 	}
 

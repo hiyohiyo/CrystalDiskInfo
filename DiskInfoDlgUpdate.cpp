@@ -742,13 +742,47 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			m_List.SetItemText(k, 3, cstr);
 			m_List.SetItemText(k, 4, cstr);
 			m_List.SetItemText(k, 5, cstr);
-			cstr.Format(_T("%02X%02X%02X%02X%02X%02X"),
-				m_Ata.vars[i].Attribute[j].RawValue[5],
-				m_Ata.vars[i].Attribute[j].RawValue[4],
-				m_Ata.vars[i].Attribute[j].RawValue[3],
-				m_Ata.vars[i].Attribute[j].RawValue[2],
-				m_Ata.vars[i].Attribute[j].RawValue[1],
-				m_Ata.vars[i].Attribute[j].RawValue[0]);
+			switch (m_RawValues)
+			{
+			case 3:
+				cstr.Format(_T("%d %d %d %d %d %d %d"),
+					m_Ata.vars[i].Attribute[j].Reserved,
+					m_Ata.vars[i].Attribute[j].RawValue[5],
+					m_Ata.vars[i].Attribute[j].RawValue[4],
+					m_Ata.vars[i].Attribute[j].RawValue[3],
+					m_Ata.vars[i].Attribute[j].RawValue[2],
+					m_Ata.vars[i].Attribute[j].RawValue[1],
+					m_Ata.vars[i].Attribute[j].RawValue[0]);
+				break;
+			case 2:
+				cstr.Format(_T("%d %d %d %d"),
+					m_Ata.vars[i].Attribute[j].Reserved,
+					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[4], m_Ata.vars[i].Attribute[j].RawValue[5]),
+					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[2], m_Ata.vars[i].Attribute[j].RawValue[3]),
+					MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]));
+				break;
+			case 1:
+				cstr.Format(_T("%I64u"),
+					((UINT64)m_Ata.vars[i].Attribute[j].Reserved << 48) +
+					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[5] << 40) +
+					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[4] << 32) +
+					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[3] << 24) +
+					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[2] << 16) +
+					((UINT64)m_Ata.vars[i].Attribute[j].RawValue[1] << 8) +
+					(UINT64)m_Ata.vars[i].Attribute[j].RawValue[0]);
+				break;
+			case 0:
+			default:
+				cstr.Format(_T("%02X%02X%02X%02X%02X%02X%02X"),
+					m_Ata.vars[i].Attribute[j].Reserved,
+					m_Ata.vars[i].Attribute[j].RawValue[5],
+					m_Ata.vars[i].Attribute[j].RawValue[4],
+					m_Ata.vars[i].Attribute[j].RawValue[3],
+					m_Ata.vars[i].Attribute[j].RawValue[2],
+					m_Ata.vars[i].Attribute[j].RawValue[1],
+					m_Ata.vars[i].Attribute[j].RawValue[0]);
+				break;
+			}
 			m_List.SetItemText(k, 6, cstr);
 		}
 		else
@@ -1132,16 +1166,16 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	if (m_Ata.vars[i].HostReads >= 0)
 	{
 		cstr = L"";
-		/*
+
 		if(m_Ata.vars[i].HostReads > 1024 * 1024)
 		{
-		cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
+			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].HostReads > 1024)
 		{
-		cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostReads / 1024.0);
+			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostReads / 1024.0);
 		}
-		*/
+
 		m_BufferSize.Format(_T("%d GB"), m_Ata.vars[i].HostReads);
 		m_LabelBufferSize = i18n(_T("Dialog"), _T("TOTAL_HOST_READS"));
 		m_CtrlBufferSize.SetToolTipText(cstr);
@@ -1172,16 +1206,16 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	if (m_Ata.vars[i].HostWrites >= 0)
 	{
 		cstr = L"";
-		/*
+
 		if(m_Ata.vars[i].HostWrites > 1024 * 1024)
 		{
-		cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
+			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].HostWrites > 1024)
 		{
-		cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostWrites / 1024.0);
+			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostWrites / 1024.0);
 		}
-		*/
+
 		m_NvCacheSize.Format(_T("%d GB"), m_Ata.vars[i].HostWrites);
 		m_LabelNvCacheSize = i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES"));
 		m_CtrlNvCacheSize.SetToolTipText(cstr);
