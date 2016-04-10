@@ -348,7 +348,7 @@ void CDiskInfoDlg::CheckRadioAutoRefresh()
 	}
 
 	CMenu *menu = GetMenu();
-	menu->CheckMenuRadioItem(ID_AUTO_REFRESH_DISABLE, ID_AUTO_REFRESH_60_MIN, id, MF_BYCOMMAND);
+	menu->CheckMenuRadioItem(ID_AUTO_REFRESH_DISABLE, ID_AUTO_REFRESH_1440_MIN, id, MF_BYCOMMAND);
 	SetMenu(menu);
 	DrawMenuBar();
 }

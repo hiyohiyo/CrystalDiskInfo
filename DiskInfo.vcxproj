@@ -465,6 +465,7 @@
     <ClInclude Include="IsCurrentUserLocalAdministrator.h" />
     <ClInclude Include="ListCtrlEx.h" />
     <ClInclude Include="SPTIUtil.h" />
+    <ClInclude Include="StorageQuery.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resN\DiskInfo.ico" />

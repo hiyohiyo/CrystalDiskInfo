@@ -11,6 +11,7 @@
 #include <wbemcli.h>
 
 #include "DnpService.h"
+#include "GetOsInfo.h"
 
 #pragma comment(lib, "wbemuuid.lib")
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
@@ -33,6 +34,7 @@ static const TCHAR *commandTypeString[] =
 	_T("wm"),
 	_T("ns"), // NVMe Samsung
 	_T("ni"), // NVMe Intel
+	_T("sq"), // NVMe Storage Query
 };
 
 static const TCHAR *ssdVendorString[] = 
@@ -82,7 +84,15 @@ CAtaSmart::CAtaSmart()
 
 	m_FlagAtaPassThrough = FALSE;
 	m_FlagAtaPassThroughSmart = FALSE;
-	if(m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2))
+	m_FlagNVMeStorageQuery = FALSE;
+
+	if (m_Os.dwMajorVersion >= 10)
+	{
+		m_FlagAtaPassThrough = TRUE;
+		m_FlagAtaPassThroughSmart = TRUE;
+		m_FlagNVMeStorageQuery = TRUE;
+	}
+	else if(m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2))
 	{
 		m_FlagAtaPassThrough = TRUE;
 		m_FlagAtaPassThroughSmart = TRUE;
@@ -122,9 +132,10 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 
 	if (vars[i].InterfaceType == INTERFACE_TYPE_NVME)
 	{
-		if (
-			(vars[i].CommandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		if ((m_FlagNVMeStorageQuery && vars[i].CommandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung951(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 			)
 		{
 			vars[i].Temperature = vars[i].SmartReadData[0x2] * 256 + vars[i].SmartReadData[0x1] - 273;
@@ -2303,6 +2314,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 						identify->A.SerialAtaAdditionalCapabilities,
 						identify->A.UltraDmaMode, asi.CurrentTransferMode, asi.MaxTransferMode,
 						asi.Interface, &asi.InterfaceType);
+	
 	asi.DetectedTimeUnitType = GetTimeUnitType(asi.Model, asi.FirmwareRev, asi.Major, asi.TransferModeType);
 
 	if(asi.DetectedTimeUnitType == POWER_ON_MILLI_SECONDS)
@@ -3036,7 +3048,8 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	*/
 
 	if (
-		(commandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &asi))
+		(m_FlagNVMeStorageQuery && commandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &asi))
+	||  (commandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung951(physicalDriveId, scsiPort, scsiTargetId, &asi))
 		)
@@ -3086,7 +3099,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x80]));
 
 		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
-		GetTransferModeNVMe(asi.CurrentTransferMode, asi.MaxTransferMode, GetPCIeSlotSpeed(physicalDriveId, true));
+		GetTransferModePCIe(asi.CurrentTransferMode, asi.MaxTransferMode, GetPCIeSlotSpeed(physicalDriveId, true));
 		asi.AttributeCount = NVME_ATTRIBUTE;
 
 		asi.SmartKeyName = _T("SmartNVMe");
@@ -4406,6 +4419,16 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	}
 	else if (interfaceType == INTERFACE_TYPE_NVME)
 	{
+
+		debug.Format(_T("DoIdentifyDeviceNVMeStorageQuery"));
+		DebugPrint(debug);
+		if (m_FlagNVMeStorageQuery && DoIdentifyDeviceNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &identify))
+		{
+			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_STORAGE_QUERY"));
+			DebugPrint(debug);
+			return AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify);
+		}
+
 		debug.Format(_T("DoIdentifyDeviceNVMeSamsung"));
 		DebugPrint(debug);
 		if (DoIdentifyDeviceNVMeSamsung(physicalDriveId, scsiPort, scsiTargetId, &identify))
@@ -5317,6 +5340,70 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, IN
 	memcpy_s(&(asi->SmartReadData), 512, nptwb.DataBuffer, 512);
 
 	CloseHandle(hIoCtrl);
+	return bRet;
+}
+
+/*---------------------------------------------------------------------------*/
+// NVMe Storage Query
+// Reference: http://naraeon.net/en/archives/1338
+/*---------------------------------------------------------------------------*/
+
+BOOL CAtaSmart::DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
+{
+	CString path;
+	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
+
+	HANDLE hIoCtrl = CreateFile(path, GENERIC_READ | GENERIC_WRITE,
+		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	StorageQuery::TStorageQueryWithBuffer nptwb;
+	BOOL bRet = 0;
+	ZeroMemory(&nptwb, sizeof(nptwb));
+
+	nptwb.ProtocolSpecific.ProtocolType = StorageQuery::ProtocolTypeNvme;
+	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeIdentify;
+	nptwb.ProtocolSpecific.ProtocolDataOffset = sizeof(StorageQuery::TStorageProtocolSpecificData);
+	nptwb.ProtocolSpecific.ProtocolDataLength = 4096;
+	nptwb.Query.PropertyId = StorageQuery::StorageAdapterProtocolSpecificProperty;
+	nptwb.Query.QueryType = StorageQuery::PropertyStandardQuery;
+	DWORD dwReturned = 0;
+
+	bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
+		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
+	CloseHandle(hIoCtrl);
+
+	memcpy_s(data, sizeof(IDENTIFY_DEVICE), nptwb.Buffer, sizeof(IDENTIFY_DEVICE));
+
+	return bRet;
+}
+
+BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
+{
+	CString path;
+	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
+
+	HANDLE hIoCtrl = CreateFile(GetScsiPath((TCHAR*)path.GetString()), GENERIC_READ | GENERIC_WRITE,
+		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	BOOL bRet = 0;
+
+	StorageQuery::TStorageQueryWithBuffer nptwb;
+	ZeroMemory(&nptwb, sizeof(nptwb));
+
+	nptwb.ProtocolSpecific.ProtocolType = StorageQuery::ProtocolTypeNvme;
+	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeLogPage;
+	nptwb.ProtocolSpecific.ProtocolDataRequestValue = 2; // SMART Health Information
+	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0xFFFFFFFF;
+	nptwb.ProtocolSpecific.ProtocolDataOffset = sizeof(StorageQuery::TStorageProtocolSpecificData);
+	nptwb.ProtocolSpecific.ProtocolDataLength = 4096;
+	nptwb.Query.PropertyId = StorageQuery::StorageAdapterProtocolSpecificProperty;
+	nptwb.Query.QueryType = StorageQuery::PropertyStandardQuery;
+	DWORD dwReturned = 0;
+
+	bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
+		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
+	CloseHandle(hIoCtrl);
+
+	memcpy_s(&(asi->SmartReadData), 512, nptwb.Buffer, 512);
+
 	return bRet;
 }
 
@@ -6849,8 +6936,8 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 		memcpy(	&(asi->Attribute[j]), 
 			&(asi->SmartReadData[i * sizeof(SMART_ATTRIBUTE) + 2]), sizeof(SMART_ATTRIBUTE));
 
-		if(asi->Attribute[j].Id != 0)
-		{
+		// if(asi->Attribute[j].Id != 0)
+		//{
 			switch(asi->Attribute[j].Id)
 			{
 			case 0x09: // Power on Hours
@@ -7356,7 +7443,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				break;
 			}
 			j++;
-		}
+	//	}
 	}
 	asi->AttributeCount = j;
 
@@ -7464,7 +7551,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		// Check overlap
 		for(DWORD k = 0; k < j; k++)
 		{
-			if(vars[i].Attribute[j].Id == vars[i].Attribute[k].Id)
+			if(vars[i].Attribute[j].Id != 0 && vars[i].Attribute[j].Id == vars[i].Attribute[k].Id)
 			{
 				return DISK_STATUS_UNKNOWN;
 			}
@@ -7738,7 +7825,7 @@ DWORD CAtaSmart::GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString
 	return tm;
 }
 
-VOID CAtaSmart::GetTransferModeNVMe(CString &current, CString &max, SlotMaxCurrSpeed slotspeed)
+VOID CAtaSmart::GetTransferModePCIe(CString &current, CString &max, SlotMaxCurrSpeed slotspeed)
 {
 	max = SlotSpeedToString(slotspeed.Maximum);
 	current = SlotSpeedToString(slotspeed.Current);

@@ -12,6 +12,7 @@
 #include "SPTIUtil.h"
 #include "SlotSpeedGetter.h"
 #include "NVMeInterpreter.h"
+#include "StorageQuery.h"
 
 typedef struct _VOLUME_DISK_EXTENTS_LX {
     DWORD       NumberOfDiskExtents;
@@ -103,6 +104,7 @@ public:
 		CMD_TYPE_WMI,
 		CMD_TYPE_NVME_SAMSUNG,
 		CMD_TYPE_NVME_INTEL,
+		CMD_TYPE_NVME_STORAGE_QUERY,
 		CMD_TYPE_DEBUG
 	};
 
@@ -1500,6 +1502,7 @@ protected:
 	CString m_SerialNumberA_Z[26];
 	BOOL m_FlagAtaPassThrough;
 	BOOL m_FlagAtaPassThroughSmart;
+	BOOL m_FlagNVMeStorageQuery;
 
 	BOOL GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INTERFACE_TYPE interfaceType, COMMAND_TYPE commandType, VENDOR_ID vendorId, DWORD productId = 0, INT scsiBus = -1, DWORD siliconImageId = 0, BOOL FlagNvidiaController = 0, BOOL FlagMarvellController = 0, CString pnpDeviceId = _T(""));
 	BOOL AddDisk(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, INT siliconImageType = -1, PCSMI_SAS_PHY_ENTITY sasPhyEntity = NULL, CString pnpDeviceId = _T(""));
@@ -1534,6 +1537,9 @@ protected:
 	BOOL DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
 	BOOL GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
+	BOOL DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
+	BOOL GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+
 	BOOL DoIdentifyDeviceScsi(INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 	BOOL GetSmartThresholdScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
@@ -1564,7 +1570,7 @@ protected:
 	BOOL SendAtaCommandCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEntity, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize);
 
 	DWORD GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &currentTransferMode, CString &maxTransferMode, CString &Interface, INTERFACE_TYPE *interfaceType);
-	VOID GetTransferModeNVMe(CString & current, CString & max, SlotMaxCurrSpeed slotspeed);
+	VOID GetTransferModePCIe(CString & current, CString & max, SlotMaxCurrSpeed slotspeed);
 	DWORD GetTimeUnitType(CString model, CString firmware, DWORD major, DWORD transferMode);
 	DWORD GetAtaMajorVersion(WORD w80, CString &majorVersion);
 	VOID  GetAtaMinorVersion(WORD w81, CString &minor);
