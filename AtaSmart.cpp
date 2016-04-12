@@ -6936,8 +6936,8 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 		memcpy(	&(asi->Attribute[j]), 
 			&(asi->SmartReadData[i * sizeof(SMART_ATTRIBUTE) + 2]), sizeof(SMART_ATTRIBUTE));
 
-		// if(asi->Attribute[j].Id != 0)
-		//{
+		if(asi->Attribute[j].Id != 0)
+		{
 			switch(asi->Attribute[j].Id)
 			{
 			case 0x09: // Power on Hours
@@ -7443,7 +7443,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				break;
 			}
 			j++;
-	//	}
+		}
 	}
 	asi->AttributeCount = j;
 
@@ -7551,7 +7551,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		// Check overlap
 		for(DWORD k = 0; k < j; k++)
 		{
-			if(vars[i].Attribute[j].Id != 0 && vars[i].Attribute[j].Id == vars[i].Attribute[k].Id)
+			if(vars[i].Attribute[k].Id != 0 && vars[i].Attribute[j].Id == vars[i].Attribute[k].Id)
 			{
 				return DISK_STATUS_UNKNOWN;
 			}

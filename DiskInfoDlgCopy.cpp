@@ -592,6 +592,10 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			for(DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
 			{
 				TCHAR str[256];
+				if (m_Ata.vars[i].Attribute[j].Id == 0)
+				{
+					continue;
+				}
 
 				cstr.Format(_T("%02X"), m_Ata.vars[i].Attribute[j].Id);
 
