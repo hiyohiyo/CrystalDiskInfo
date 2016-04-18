@@ -468,6 +468,8 @@
     <ClInclude Include="StorageQuery.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
     <None Include="resN\DiskInfo.ico" />
     <None Include="resN\DiskInfo16.ico" />
     <None Include="resS\DiskInfo.ico" />

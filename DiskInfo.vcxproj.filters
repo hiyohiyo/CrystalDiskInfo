@@ -860,6 +860,8 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\001soundkenjin.opus" />
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DiskInfo.rc">
