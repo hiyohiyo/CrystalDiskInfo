@@ -1,6 +1,13 @@
 # Overview
 CrystalDiskInfo is a disk information tool.
 
+CrystalDiskInfo supports
+- PATA drives
+- SATA drives
+- A part of USB drives
+- A part of RAID controllers (IRST)
+- A part of NVMe drives
+
 # Notification
 This repository does not include resource files, so please download them from below.
 - http://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc
