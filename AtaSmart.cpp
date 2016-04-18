@@ -7459,14 +7459,22 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 
 BOOL CAtaSmart::FillSmartThreshold(ATA_SMART_INFO* asi)
 {
+	// 2016/04/18
+	// https://github.com/hiyohiyo/CrystalDiskInfo/issues/1
 	int count = 0;
-	for(int i = 0; i < MAX_ATTRIBUTE; i++)
+	for (int i = 0; i < MAX_ATTRIBUTE; i++)
 	{
-		memcpy(&(asi->Threshold[count]), &(asi->SmartReadThreshold[i * sizeof(SMART_THRESHOLD) + 2]), sizeof(SMART_THRESHOLD));
-
-		if (asi->Threshold[count].Id != 0)
+		SMART_THRESHOLD* pst = (SMART_THRESHOLD*)&(asi->SmartReadThreshold[i * sizeof(SMART_THRESHOLD) + 2]);
+		if (pst->Id != 0)
 		{
-			count++;
+			for (DWORD j = 0; j < asi->AttributeCount; j++)
+			{
+				if (pst->Id == asi->Attribute[j].Id)
+				{
+					memcpy(&(asi->Threshold[j]), pst, sizeof(SMART_THRESHOLD));
+					count++;
+				}
+			}
 		}
 	}
 
