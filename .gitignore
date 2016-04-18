@@ -23,3 +23,6 @@ DiskInfo.VC.opendb
 DiskInfo.VC.db
 AtaSmart.cpp.rej
 DiskInfo.VC.VC.opendb
+*.aps
+*.user
+.vs/
