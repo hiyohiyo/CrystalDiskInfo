@@ -180,6 +180,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
         Features : %SUPPORTED_FEATURE%\r\n\
        APM Level : %APM_LEVEL%\r\n\
        AAM Level : %AAM_LEVEL%\r\n\
+    Drive Letter : %DRIVE_LETTER%\r\n\
 ");
 	driveTemplate += _T("\r\n");
 
@@ -384,7 +385,11 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		}
 		drive.Replace(_T("%TEMPERATURE%"), cstr);
 
-		if(m_Ata.vars[i].DiskSizeWmi > 0)
+		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+		{
+			cstr.Format(_T("%.1f GB"), m_Ata.vars[i].TotalDiskSize / 1000.0);
+		}
+		else if (m_Ata.vars[i].DiskSizeWmi > 0)
 		{
 			if(m_Ata.vars[i].TotalDiskSize < 1000)
 			{
@@ -566,6 +571,10 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		}
 		drive.Replace(_T("%APM_LEVEL%"), cstr);
 
+
+		drive.Replace(_T("%DRIVE_LETTER%"), m_Ata.vars[i].DriveMap);
+
+
 		clip += drive;
 
 		CString vendorSpecific;
@@ -575,8 +584,12 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		{
 			cstr.Format(_T("-- S.M.A.R.T. --------------------------------------------------------------\r\n"));
 			line = cstr;
-
-			if(m_Ata.vars[i].IsRawValues8)
+			
+			if(m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+			{
+				line += _T("ID RawValues(6) Attribute Name\r\n");
+			}
+			else if(m_Ata.vars[i].IsRawValues8)
 			{
 				line += _T("ID Raw Values (8)   Attribute Name\r\n");
 			}
@@ -617,7 +630,21 @@ void CDiskInfoDlg::CopySave(CString fileName)
 					}
 				}
 
-				if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
+
+				if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+				{
+					cstr.Format(_T("%02X %02X%02X%02X%02X%02X%02X %s\r\n"),
+						m_Ata.vars[i].Attribute[j].Id,
+						m_Ata.vars[i].Attribute[j].RawValue[5],
+						m_Ata.vars[i].Attribute[j].RawValue[4],
+						m_Ata.vars[i].Attribute[j].RawValue[3],
+						m_Ata.vars[i].Attribute[j].RawValue[2],
+						m_Ata.vars[i].Attribute[j].RawValue[1],
+						m_Ata.vars[i].Attribute[j].RawValue[0],
+						str
+					);
+				}
+				else if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
 				{
 					cstr.Format(_T("%02X %s %s %s %02X%02X%02X%02X%02X%02X%02X %s\r\n"),
 						m_Ata.vars[i].Attribute[j].Id,
