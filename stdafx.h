@@ -61,9 +61,9 @@
 #define PRODUCT_NAME			_T("CrystalDiskInfo")
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-#define PRODUCT_SHORT_NAME		_T("CDI 6 SE")
+#define PRODUCT_SHORT_NAME		_T("CDI 7 SE")
 #else
-#define PRODUCT_SHORT_NAME		_T("CDI 6")
+#define PRODUCT_SHORT_NAME		_T("CDI 7")
 #endif
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
@@ -80,8 +80,8 @@
 	#endif
 #endif
 
-#define PRODUCT_VERSION			_T("6.8.2")
-#define PRODUCT_RELEASE			_T("2016/04/28")
+#define PRODUCT_VERSION			_T("7 Dev01")
+#define PRODUCT_RELEASE			_T("2016/04/29")
 #define PRODUCT_COPY_YEAR		_T("2008-2016")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2016 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
