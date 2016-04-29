@@ -35,7 +35,6 @@
 #include "StaticCx.h"
 #include <atlimage.h>
 #include <mmsystem.h>
-#include "Gradation.h"
 
 #pragma comment(lib, "winmm.lib")
 
@@ -922,7 +921,6 @@ BOOL CStaticCx::InitControl(int x, int y, int width, int height, double zoomRati
 		rect.right = m_CtrlSize.cx;
 		rect.bottom = m_CtrlSize.cy;
 		CDC* pDC = CDC::FromHandle(m_CtrlImage.GetDC());
-		GlossyGradient(pDC->m_hDC, &rect, RGB(192, 192, 192), RGB(255, 255, 255));
 		pDC->SetDCPenColor(RGB(128, 128, 128));
 		pDC->SelectObject(GetStockObject(DC_PEN));
 		pDC->Rectangle(&rect);

@@ -108,30 +108,36 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\Freesia\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\Marguerite\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Build\$(Configuration)$(Platform)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\Freesia\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\Marguerite\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Build\$(Configuration)$(Platform)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\Freesia\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">..\Freesia\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\Marguerite\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">..\Marguerite\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Build\$(Configuration)$(Platform)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">Build\$(Configuration)$(Platform)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\Freesia\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">..\Freesia\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\Marguerite\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">..\Marguerite\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Build\$(Configuration)$(Platform)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">Build\$(Configuration)$(Platform)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">false</LinkIncremental>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">$(ProjectName)S</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">$(ProjectName)32S</TargetName>
     <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">true</EmbedManifest>
     <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EmbedManifest>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)X64</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">$(ProjectName)Sx64</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)X64</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)64</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">$(ProjectName)S64</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)D64</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)D32</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>$(ProjectName)32</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -162,6 +168,7 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <DelayLoadDLLs>oledlg.dll</DelayLoadDLLs>
+      <OutputFile>$(OutDir)$(ProjectName)D32.exe</OutputFile>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -194,7 +201,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName)X64.exe</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)D64.exe</OutputFile>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -249,6 +256,7 @@
       </IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>oledlg.dll</DelayLoadDLLs>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,5.01 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)$(ProjectName)32.exe</OutputFile>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -295,6 +303,7 @@
       </IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>oledlg.dll</DelayLoadDLLs>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,5.01 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)$(ProjectName)32S.exe</OutputFile>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -326,7 +335,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName)X64.exe</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)64.exe</OutputFile>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -369,7 +378,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName)Sx64.exe</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)64S.exe</OutputFile>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -404,7 +413,6 @@
     <ClCompile Include="DiskInfoDlgUpdate.cpp" />
     <ClCompile Include="FontComboBox.cpp" />
     <ClCompile Include="FontSelection.cpp" />
-    <ClCompile Include="Gradation.cpp" />
     <ClCompile Include="GraphDlg.cpp" />
     <ClCompile Include="HealthDlg.cpp" />
     <ClCompile Include="MainDialog.cpp" />
@@ -441,7 +449,6 @@
     <ClInclude Include="DiskInfoDlg.h" />
     <ClInclude Include="FontComboBox.h" />
     <ClInclude Include="FontSelection.h" />
-    <ClInclude Include="Gradation.h" />
     <ClInclude Include="GraphDlg.h" />
     <ClInclude Include="HealthDlg.h" />
     <ClInclude Include="MainDialog.h" />
