@@ -6464,19 +6464,19 @@ BOOL CAtaSmart::SendAtaCommandSat(INT physicalDriveId, BYTE target, BYTE main, B
 		sptwb.Spt.CdbLength = 16;
 		sptwb.Spt.Cdb[0] = 0xD8;
 		sptwb.Spt.Cdb[1] = 0x15;
-		sptwb.Spt.Cdb[2] = sub;
-		sptwb.Spt.Cdb[3] = param;
+		sptwb.Spt.Cdb[2] = 0x00;
+		sptwb.Spt.Cdb[3] = sub;
 		sptwb.Spt.Cdb[4] = 0x06;
 		sptwb.Spt.Cdb[5] = 0x7B;
 		sptwb.Spt.Cdb[6] = 0x00;
 		sptwb.Spt.Cdb[7] = 0x00;
-		sptwb.Spt.Cdb[8] = 0x02;
+		sptwb.Spt.Cdb[8] = 0x00;
 		sptwb.Spt.Cdb[9] = 0x00;
-		sptwb.Spt.Cdb[10] = 0x01;
-		sptwb.Spt.Cdb[11] = 0x01;
-		sptwb.Spt.Cdb[12] = 0x4F; // SMART_CYL_LOW
-		sptwb.Spt.Cdb[13] = 0xC2; // SMART_CYL_HIGH
-		sptwb.Spt.Cdb[14] = target; // 
+		sptwb.Spt.Cdb[10] = param;
+		sptwb.Spt.Cdb[11] = 0x00;
+		sptwb.Spt.Cdb[12] = 0x00;
+		sptwb.Spt.Cdb[13] = 0x00;
+		sptwb.Spt.Cdb[14] = target;
 		sptwb.Spt.Cdb[15] = main;
 	}
 	else if(type == CMD_TYPE_JMICRON)
