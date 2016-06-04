@@ -686,7 +686,8 @@ BEGIN
                 MENUITEM "SCSI_ATA_TRANSLATION (SAT)",  ID_USB_SAT
                 MENUITEM "I-O DATA",                    ID_USB_IODATA
                 MENUITEM "Sunplus",                     ID_USB_SUNPLUS
-                MENUITEM "Logitec",                     ID_USB_LOGITEC
+                MENUITEM "Logitec1",                    ID_USB_LOGITEC1
+				MENUITEM "Logitec2",                    ID_USB_LOGITEC2
                 MENUITEM "JMicron",                     ID_USB_JMICRON
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
@@ -820,6 +821,7 @@ BEGIN
             MENUITEM "SSD - Plextor",               ID_SSD_PLEXTOR
             MENUITEM "SSD - SanDisk",               ID_SSD_SANDISK
             MENUITEM "SSD - OCZ VECTOR",            ID_SSD_OCZ_VECTOR
+			MENUITEM "SSD - NVMe",                  ID_SSD_NVME
         END
         MENUITEM "Paint Weekend",               ID_PAINT_WEEKEND
     END

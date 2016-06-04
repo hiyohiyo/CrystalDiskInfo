@@ -95,7 +95,8 @@ public:
 		CMD_TYPE_SAT,				// SAT = SCSI_ATA_TRANSLATION
 		CMD_TYPE_SUNPLUS,
 		CMD_TYPE_IO_DATA,
-		CMD_TYPE_LOGITEC,
+		CMD_TYPE_LOGITEC1,
+		CMD_TYPE_LOGITEC2,
 		CMD_TYPE_JMICRON,
 		CMD_TYPE_CYPRESS,
 		CMD_TYPE_PROLIFIC,			// Not imprement
@@ -1489,7 +1490,8 @@ public:
 	BOOL FlagUsbSat;
 	BOOL FlagUsbSunplus;
 	BOOL FlagUsbIodata;
-	BOOL FlagUsbLogitec;
+	BOOL FlagUsbLogitec1;
+	BOOL FlagUsbLogitec2;
 	BOOL FlagUsbJmicron;
 	BOOL FlagUsbCypress;
 	BOOL FlagUsbMemory;

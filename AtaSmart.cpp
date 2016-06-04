@@ -25,7 +25,8 @@ static const TCHAR *commandTypeString[] =
 	_T("sa"),
 	_T("sp"),
 	_T("io"),
-	_T("un"), // Logitec ??? 
+	_T("l1"), // Logitec 1
+	_T("l2"), // Logitec 2
 	_T("jm"),
 	_T("cy"),
 	_T("pr"),
@@ -244,7 +245,8 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 		case CMD_TYPE_SAT:
 		case CMD_TYPE_SUNPLUS:
 		case CMD_TYPE_IO_DATA:
-		case CMD_TYPE_LOGITEC:
+		case CMD_TYPE_LOGITEC1:
+		case CMD_TYPE_LOGITEC2:
 		case CMD_TYPE_JMICRON:
 		case CMD_TYPE_CYPRESS:
 			WakeUp(vars[i].PhysicalDriveId);
@@ -293,7 +295,8 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 	case CMD_TYPE_SAT:
 	case CMD_TYPE_SUNPLUS:
 	case CMD_TYPE_IO_DATA:
-	case CMD_TYPE_LOGITEC:
+	case CMD_TYPE_LOGITEC1:
+	case CMD_TYPE_LOGITEC2:
 	case CMD_TYPE_JMICRON:
 	case CMD_TYPE_CYPRESS:
 		flag = DoIdentifyDeviceSat(vars[i].PhysicalDriveId, vars[i].Target, &(vars[i].IdentifyDevice), vars[i].CommandType);
@@ -408,7 +411,8 @@ BOOL CAtaSmart::SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param)
 	case CMD_TYPE_SAT:
 	case CMD_TYPE_SUNPLUS:
 	case CMD_TYPE_IO_DATA:
-	case CMD_TYPE_LOGITEC:
+	case CMD_TYPE_LOGITEC1:
+	case CMD_TYPE_LOGITEC2:
 	case CMD_TYPE_JMICRON:
 	case CMD_TYPE_CYPRESS:
 		return SendAtaCommandSat(vars[i].PhysicalDriveId, vars[i].Target, main, sub, param, vars[i].CommandType);
@@ -2771,7 +2775,8 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		case CMD_TYPE_SAT:
 		case CMD_TYPE_SUNPLUS:
 		case CMD_TYPE_IO_DATA:
-		case CMD_TYPE_LOGITEC:
+		case CMD_TYPE_LOGITEC1:
+		case CMD_TYPE_LOGITEC2:
 		case CMD_TYPE_JMICRON:
 		case CMD_TYPE_CYPRESS:
 			debug.Format(_T("GetSmartAttributeSat(%d) - 1 [%s]"), physicalDriveId, commandTypeString[asi.CommandType]);
@@ -4597,10 +4602,15 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(_T("AddDisk - USB13"));
 				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_CYPRESS, &identify, siliconImageType, NULL, pnpDeviceId);
 			}
-			else if(FlagUsbLogitec && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_LOGITEC))
+			else if(FlagUsbLogitec1 && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_LOGITEC1))
 			{
 				DebugPrint(_T("AddDisk - USB14"));
-				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_LOGITEC, &identify, siliconImageType, NULL, pnpDeviceId);
+				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_LOGITEC1, &identify, siliconImageType, NULL, pnpDeviceId);
+			}
+			else if (FlagUsbLogitec2 && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_LOGITEC2))
+			{
+				DebugPrint(_T("AddDisk - USB14"));
+				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_LOGITEC2, &identify, siliconImageType, NULL, pnpDeviceId);
 			}
 			else if(FlagUsbSat && DoIdentifyDeviceSat(physicalDriveId, 0xB0, &identify, CMD_TYPE_SAT))
 			{
@@ -4622,10 +4632,15 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(_T("AddDisk - USB18"));
 				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_CYPRESS, &identify, siliconImageType, NULL, pnpDeviceId);
 			}
-			else if(FlagUsbLogitec && DoIdentifyDeviceSat(physicalDriveId, 0xB0, &identify, CMD_TYPE_LOGITEC))
+			else if(FlagUsbLogitec1 && DoIdentifyDeviceSat(physicalDriveId, 0xB0, &identify, CMD_TYPE_LOGITEC1))
 			{
 				DebugPrint(_T("AddDisk - USB19"));
-				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_LOGITEC, &identify, siliconImageType, NULL, pnpDeviceId);
+				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_LOGITEC1, &identify, siliconImageType, NULL, pnpDeviceId);
+			}
+			else if (FlagUsbLogitec2 && DoIdentifyDeviceSat(physicalDriveId, 0xB0, &identify, CMD_TYPE_LOGITEC2))
+			{
+				DebugPrint(_T("AddDisk - USB20"));
+				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_LOGITEC2, &identify, siliconImageType, NULL, pnpDeviceId);
 			}
 		}
 	}
@@ -5727,7 +5742,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 		sptwb.Spt.Cdb[10] = 0x00;
 		sptwb.Spt.Cdb[11] = 0x00;
 	}
-	else if (type == CMD_TYPE_LOGITEC)
+	else if (type == CMD_TYPE_LOGITEC1)
 	{
 		sptwb.Spt.CdbLength = 10;
 		sptwb.Spt.Cdb[0] = 0xE0;
@@ -5740,6 +5755,26 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 		sptwb.Spt.Cdb[7] = target;
 		sptwb.Spt.Cdb[8] = 0xEC;  // ID_CMD
 		sptwb.Spt.Cdb[9] = 0x4C;
+	}
+	else if (type == CMD_TYPE_LOGITEC2)
+	{
+		sptwb.Spt.CdbLength = 16;
+		sptwb.Spt.Cdb[0] = 0xD8;
+		sptwb.Spt.Cdb[1] = 0x15;
+		sptwb.Spt.Cdb[2] = 0x00;
+		sptwb.Spt.Cdb[3] = 0x00;
+		sptwb.Spt.Cdb[4] = 0x06;
+		sptwb.Spt.Cdb[5] = 0x7B;
+		sptwb.Spt.Cdb[6] = 0x00;
+		sptwb.Spt.Cdb[7] = 0x00;
+		sptwb.Spt.Cdb[8] = 0x02;
+		sptwb.Spt.Cdb[9] = 0x00;
+		sptwb.Spt.Cdb[10] = 0x01;
+		sptwb.Spt.Cdb[11] = 0x00;
+		sptwb.Spt.Cdb[12] = 0x00;
+		sptwb.Spt.Cdb[13] = 0x00;
+		sptwb.Spt.Cdb[14] = target; // 
+		sptwb.Spt.Cdb[15] = 0xEC; // ID_CMD
 	}
 	else if (type == CMD_TYPE_JMICRON)
 	{
@@ -5917,7 +5952,7 @@ BOOL CAtaSmart::GetSmartAttributeSat(INT PhysicalDriveId, BYTE target, ATA_SMART
 		sptwb.Spt.Cdb[10] = 0x00; 
 		sptwb.Spt.Cdb[11] = 0x00;
 	}
-	else if(type == CMD_TYPE_LOGITEC)
+	else if(type == CMD_TYPE_LOGITEC1)
 	{
 		sptwb.Spt.CdbLength = 10;
 		sptwb.Spt.Cdb[0] = 0xE0;
@@ -5930,6 +5965,26 @@ BOOL CAtaSmart::GetSmartAttributeSat(INT PhysicalDriveId, BYTE target, ATA_SMART
 		sptwb.Spt.Cdb[7] = target; 
 		sptwb.Spt.Cdb[8] = 0xB0; // SMART_CMD
 		sptwb.Spt.Cdb[9] = 0x4C;
+	}
+	else if (type == CMD_TYPE_LOGITEC2)
+	{
+		sptwb.Spt.CdbLength = 16;
+		sptwb.Spt.Cdb[0] = 0xD8;
+		sptwb.Spt.Cdb[1] = 0x15;
+		sptwb.Spt.Cdb[2] = 0x00;
+		sptwb.Spt.Cdb[3] = 0xD0; // READ_ATTRIBUTES
+		sptwb.Spt.Cdb[4] = 0x06;
+		sptwb.Spt.Cdb[5] = 0x7B;
+		sptwb.Spt.Cdb[6] = 0x00;
+		sptwb.Spt.Cdb[7] = 0x00;
+		sptwb.Spt.Cdb[8] = 0x02;
+		sptwb.Spt.Cdb[9] = 0x00;
+		sptwb.Spt.Cdb[10] = 0x01;
+		sptwb.Spt.Cdb[11] = 0x00;
+		sptwb.Spt.Cdb[12] = 0x4F; // SMART_CYL_LOW
+		sptwb.Spt.Cdb[13] = 0xC2; // SMART_CYL_HIGH
+		sptwb.Spt.Cdb[14] = target; // 
+		sptwb.Spt.Cdb[15] = 0xB0;// SMART_CMD
 	}
 	else if(type == CMD_TYPE_JMICRON)
 	{
@@ -6068,7 +6123,7 @@ BOOL CAtaSmart::GetSmartThresholdSat(INT physicalDriveId, BYTE target, ATA_SMART
 		sptwb.Spt.Cdb[10] = 0x00; 
 		sptwb.Spt.Cdb[11] = 0x00;
 	}
-	else if(type == CMD_TYPE_LOGITEC)
+	else if(type == CMD_TYPE_LOGITEC1)
 	{
 		sptwb.Spt.CdbLength = 10;
 		sptwb.Spt.Cdb[0] = 0xE0;
@@ -6081,6 +6136,26 @@ BOOL CAtaSmart::GetSmartThresholdSat(INT physicalDriveId, BYTE target, ATA_SMART
 		sptwb.Spt.Cdb[7] = target; 
 		sptwb.Spt.Cdb[8] = 0xB0; // SMART_CMD
 		sptwb.Spt.Cdb[9] = 0x4C;
+	}
+	else if (type == CMD_TYPE_LOGITEC2)
+	{
+		sptwb.Spt.CdbLength = 16;
+		sptwb.Spt.Cdb[0] = 0xD8;
+		sptwb.Spt.Cdb[1] = 0x15;
+		sptwb.Spt.Cdb[2] = 0x00;
+		sptwb.Spt.Cdb[3] = 0xD1; // READ_THRESHOLD
+		sptwb.Spt.Cdb[4] = 0x06;
+		sptwb.Spt.Cdb[5] = 0x7B;
+		sptwb.Spt.Cdb[6] = 0x00;
+		sptwb.Spt.Cdb[7] = 0x00;
+		sptwb.Spt.Cdb[8] = 0x02;
+		sptwb.Spt.Cdb[9] = 0x00;
+		sptwb.Spt.Cdb[10]= 0x01;
+		sptwb.Spt.Cdb[11]= 0x01;
+		sptwb.Spt.Cdb[12]= 0x4F; // SMART_CYL_LOW
+		sptwb.Spt.Cdb[13]= 0xC2; // SMART_CYL_HIGH
+		sptwb.Spt.Cdb[14]= target; // 
+		sptwb.Spt.Cdb[15]= 0xB0;// SMART_CMD
 	}
 	else if(type == CMD_TYPE_JMICRON)
 	{
@@ -6211,7 +6286,7 @@ BOOL CAtaSmart::ControlSmartStatusSat(INT physicalDriveId, BYTE target, BYTE com
 		sptwb.Spt.Cdb[10] = 0x00; 
 		sptwb.Spt.Cdb[11] = 0x00;
 	}
-	else if(type == CMD_TYPE_LOGITEC)
+	else if(type == CMD_TYPE_LOGITEC1)
 	{
 		sptwb.Spt.CdbLength = 10;
 		sptwb.Spt.Cdb[0] = 0xE0;
@@ -6224,6 +6299,26 @@ BOOL CAtaSmart::ControlSmartStatusSat(INT physicalDriveId, BYTE target, BYTE com
 		sptwb.Spt.Cdb[7] = target; 
 		sptwb.Spt.Cdb[8] = 0xB0; // SMART_CMD
 		sptwb.Spt.Cdb[9] = 0x4C;
+	}
+	else if (type == CMD_TYPE_LOGITEC2) // ??????????????
+	{
+		sptwb.Spt.CdbLength = 16;
+		sptwb.Spt.Cdb[0] = 0xD8;
+		sptwb.Spt.Cdb[1] = 0x15;
+		sptwb.Spt.Cdb[2] = 0x00;
+		sptwb.Spt.Cdb[3] = command;
+		sptwb.Spt.Cdb[4] = 0x06;
+		sptwb.Spt.Cdb[5] = 0x7B;
+		sptwb.Spt.Cdb[6] = 0x00;
+		sptwb.Spt.Cdb[7] = 0x00;
+		sptwb.Spt.Cdb[8] = 0x02;
+		sptwb.Spt.Cdb[9] = 0x00;
+		sptwb.Spt.Cdb[10] = 0x01;
+		sptwb.Spt.Cdb[11] = 0x00;
+		sptwb.Spt.Cdb[12] = 0x4F; // SMART_CYL_LOW
+		sptwb.Spt.Cdb[13] = 0xC2; // SMART_CYL_HIGH
+		sptwb.Spt.Cdb[14] = target; // 
+		sptwb.Spt.Cdb[15] = 0xB0;// SMART_CMD
 	}
 	else if(type == CMD_TYPE_JMICRON)
 	{
@@ -6350,7 +6445,7 @@ BOOL CAtaSmart::SendAtaCommandSat(INT physicalDriveId, BYTE target, BYTE main, B
 		sptwb.Spt.Cdb[10] = 0x00; 
 		sptwb.Spt.Cdb[11] = 0x00;
 	}
-	else if(type == CMD_TYPE_LOGITEC)
+	else if(type == CMD_TYPE_LOGITEC1)
 	{
 		sptwb.Spt.CdbLength = 10;
 		sptwb.Spt.Cdb[0] = 0xE0;
@@ -6363,6 +6458,26 @@ BOOL CAtaSmart::SendAtaCommandSat(INT physicalDriveId, BYTE target, BYTE main, B
 		sptwb.Spt.Cdb[7] = target; 
 		sptwb.Spt.Cdb[8] = main;
 		sptwb.Spt.Cdb[9] = 0x4C;		// ?
+	}
+	else if (type == CMD_TYPE_LOGITEC2) // ????????????????
+	{
+		sptwb.Spt.CdbLength = 16;
+		sptwb.Spt.Cdb[0] = 0xD8;
+		sptwb.Spt.Cdb[1] = 0x15;
+		sptwb.Spt.Cdb[2] = sub;
+		sptwb.Spt.Cdb[3] = param;
+		sptwb.Spt.Cdb[4] = 0x06;
+		sptwb.Spt.Cdb[5] = 0x7B;
+		sptwb.Spt.Cdb[6] = 0x00;
+		sptwb.Spt.Cdb[7] = 0x00;
+		sptwb.Spt.Cdb[8] = 0x02;
+		sptwb.Spt.Cdb[9] = 0x00;
+		sptwb.Spt.Cdb[10] = 0x01;
+		sptwb.Spt.Cdb[11] = 0x01;
+		sptwb.Spt.Cdb[12] = 0x4F; // SMART_CYL_LOW
+		sptwb.Spt.Cdb[13] = 0xC2; // SMART_CYL_HIGH
+		sptwb.Spt.Cdb[14] = target; // 
+		sptwb.Spt.Cdb[15] = main;
 	}
 	else if(type == CMD_TYPE_JMICRON)
 	{

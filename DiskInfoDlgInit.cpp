@@ -127,7 +127,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagUsbSat     = ! GetPrivateProfileInt(_T("USB"), _T("SAT"), 1, m_Ini);
 	m_Ata.FlagUsbIodata  = ! GetPrivateProfileInt(_T("USB"), _T("IODATA"), 1, m_Ini);
 	m_Ata.FlagUsbSunplus = ! GetPrivateProfileInt(_T("USB"), _T("Sunplus"), 1, m_Ini);
-	m_Ata.FlagUsbLogitec = ! GetPrivateProfileInt(_T("USB"), _T("Logitec"), 1, m_Ini);
+	m_Ata.FlagUsbLogitec1 = ! GetPrivateProfileInt(_T("USB"), _T("Logitec"), 1, m_Ini);
+	m_Ata.FlagUsbLogitec2 = !GetPrivateProfileInt(_T("USB"), _T("Logitec2"), 1, m_Ini);
 	m_Ata.FlagUsbJmicron = ! GetPrivateProfileInt(_T("USB"), _T("JMicron"), 1, m_Ini);
 	m_Ata.FlagUsbCypress = ! GetPrivateProfileInt(_T("USB"), _T("Cypress"), 1, m_Ini);
 	m_Ata.FlagUsbMemory  = ! GetPrivateProfileInt(_T("USB"), _T("UsbMemory"), 0, m_Ini);
@@ -135,7 +136,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnUsbSat();
 	OnUsbIodata();
 	OnUsbSunplus();
-	OnUsbLogitec();
+	OnUsbLogitec1();
+	OnUsbLogitec2();
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();

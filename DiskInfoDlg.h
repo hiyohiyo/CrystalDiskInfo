@@ -521,7 +521,8 @@ public:
 	afx_msg void OnUsbSat();
 	afx_msg void OnUsbIodata();
 	afx_msg void OnUsbSunplus();
-	afx_msg void OnUsbLogitec();
+	afx_msg void OnUsbLogitec1();
+	afx_msg void OnUsbLogitec2();
 	afx_msg void OnUsbJmicron();
 	afx_msg void OnUsbCypress();
 	afx_msg void OnUsbMemory();

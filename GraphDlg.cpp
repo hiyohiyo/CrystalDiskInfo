@@ -28,6 +28,7 @@ static const TCHAR *attributeString[] =
 	_T("SmartPlextor"),
 	_T("SmartSanDisk"),
 	_T("SmartOczVector"),
+	_T("SmartNVMe"),
 };
 
 #define SMART_TEMPERATURE                  300
@@ -221,6 +222,8 @@ BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_COMMAND(ID_SSD_PLEXTOR, &CGraphDlg::OnSsdPlextor)
 	ON_COMMAND(ID_SSD_SANDISK, &CGraphDlg::OnSsdSanDisk)
 	ON_COMMAND(ID_SSD_OCZ_VECTOR, &CGraphDlg::OnSsdOczVector)
+	ON_COMMAND(ID_SSD_NVME, &CGraphDlg::OnSsdNVMe)
+
 END_MESSAGE_MAP()
 
 BEGIN_DHTML_EVENT_MAP(CGraphDlg)
@@ -792,9 +795,12 @@ void CGraphDlg::InitMenuBar()
 		}
 	}
 
-	// Reallocated Sectors Count
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[05] %s</option>"), SMART_REALLOCATED_SECTORS_COUNT, i18n(_T("Smart"), _T("05"), m_FlagSmartEnglish));
-	select += cstr;if(SelectedAttributeId == SMART_REALLOCATED_SECTORS_COUNT){index = counter;}counter++;
+	if (m_Attribute != CAtaSmart::SSD_VENDOR_NVME)
+	{
+		// Reallocated Sectors Count
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[05] %s</option>"), SMART_REALLOCATED_SECTORS_COUNT, i18n(_T("Smart"), _T("05"), m_FlagSmartEnglish));
+		select += cstr; if (SelectedAttributeId == SMART_REALLOCATED_SECTORS_COUNT) { index = counter; }counter++;
+	}
 
 	// PowerOnHours
 	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[09] %s</option>"), SMART_POWER_ON_HOURS, i18n(_T("Smart"), _T("09"), m_FlagSmartEnglish));
@@ -815,80 +821,89 @@ void CGraphDlg::InitMenuBar()
 	}
 	select += cstr;if(SelectedAttributeId == SMART_TEMPERATURE){index = counter;}counter++;
 	
-	// Reallocation Event Count
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C4] %s</option>"), SMART_REALLOCATED_EVENT_COUNT, i18n(_T("Smart"), _T("C4"), m_FlagSmartEnglish));
-	select += cstr;if(SelectedAttributeId == SMART_REALLOCATED_EVENT_COUNT){index = counter;}counter++;
+	if (m_Attribute != CAtaSmart::SSD_VENDOR_NVME)
+	{
+		// Reallocation Event Count
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C4] %s</option>"), SMART_REALLOCATED_EVENT_COUNT, i18n(_T("Smart"), _T("C4"), m_FlagSmartEnglish));
+		select += cstr; if (SelectedAttributeId == SMART_REALLOCATED_EVENT_COUNT) { index = counter; }counter++;
 
-	// Current Pending Sector Count
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C5] %s</option>"), SMART_CURRENT_PENDING_SECTOR_COUNT, i18n(_T("Smart"), _T("C5"), m_FlagSmartEnglish));
-	select += cstr;if(SelectedAttributeId == SMART_CURRENT_PENDING_SECTOR_COUNT){index = counter;}counter++;
+		// Current Pending Sector Count
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C5] %s</option>"), SMART_CURRENT_PENDING_SECTOR_COUNT, i18n(_T("Smart"), _T("C5"), m_FlagSmartEnglish));
+		select += cstr; if (SelectedAttributeId == SMART_CURRENT_PENDING_SECTOR_COUNT) { index = counter; }counter++;
 
-	// Off-Line Scan Uncorrectable Sector Count
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C6] %s</option>"), SMART_UNCORRECTABLE_SECTOR_COUNT, i18n(_T("Smart"), _T("C6"), m_FlagSmartEnglish));
-	select += cstr;if(SelectedAttributeId == SMART_UNCORRECTABLE_SECTOR_COUNT){index = counter;}counter++;
+		// Off-Line Scan Uncorrectable Sector Count
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C6] %s</option>"), SMART_UNCORRECTABLE_SECTOR_COUNT, i18n(_T("Smart"), _T("C6"), m_FlagSmartEnglish));
+		select += cstr; if (SelectedAttributeId == SMART_UNCORRECTABLE_SECTOR_COUNT) { index = counter; }counter++;
+	}
 
 	// Life
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[FF] %s</option>"), SMART_LIFE, i18n(_T("SmartSsd"), _T("FF"), m_FlagSmartEnglish));
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s</option>"), SMART_LIFE, i18n(_T("SmartSsd"), _T("FF"), m_FlagSmartEnglish));
 	select += cstr;if(SelectedAttributeId == SMART_LIFE){index = counter;}counter++;
 	
 	// HostWrites
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[F1] %s (GB)</option>"), SMART_HOST_WRITES, i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES"), m_FlagSmartEnglish));
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_HOST_WRITES, i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES"), m_FlagSmartEnglish));
 	select += cstr;if(SelectedAttributeId == SMART_HOST_WRITES){index = counter;}counter++;
 	
 	// HostReads
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[F2] %s (GB)</option>"), SMART_HOST_READS, i18n(_T("Dialog"), _T("TOTAL_HOST_READS"), m_FlagSmartEnglish));
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_HOST_READS, i18n(_T("Dialog"), _T("TOTAL_HOST_READS"), m_FlagSmartEnglish));
 	select += cstr;if(SelectedAttributeId == SMART_HOST_READS){index = counter;}counter++;
 
-	// NandWrites
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_NAND_WRITES, i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES"), m_FlagSmartEnglish));
-	select += cstr;if(SelectedAttributeId == SMART_NAND_WRITES){index = counter;}counter++;
-
-
-	// GBytes Erased
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_NAND_ERASED, i18n(_T("SmartSandForce"), _T("64"), m_FlagSmartEnglish));
-	select += cstr;if(SelectedAttributeId == SMART_NAND_ERASED){index = counter;}counter++;
-
-	// Wear Leveling Count for Micron
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s</option>"), SMART_WEAR_LEVELING_COUNT, i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT"), m_FlagSmartEnglish));
-	select += cstr;if(SelectedAttributeId == SMART_WEAR_LEVELING_COUNT){index = counter;}counter++;
-
-	if(m_IeVersion >= 700)
+	if (m_Attribute != CAtaSmart::SSD_VENDOR_NVME)
 	{
-		cstr.Format(_T("<optgroup label=\"%s\">"), i18n(_T("Graph"), _T("NORMALIZED_VALUE"), m_FlagSmartEnglish));
-		select += cstr;
+		// NandWrites
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_NAND_WRITES, i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES"), m_FlagSmartEnglish));
+		select += cstr; if (SelectedAttributeId == SMART_NAND_WRITES) { index = counter; }counter++;
+
+
+		// GBytes Erased
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_NAND_ERASED, i18n(_T("SmartSandForce"), _T("64"), m_FlagSmartEnglish));
+		select += cstr; if (SelectedAttributeId == SMART_NAND_ERASED) { index = counter; }counter++;
+
+		// Wear Leveling Count for Micron
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s</option>"), SMART_WEAR_LEVELING_COUNT, i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT"), m_FlagSmartEnglish));
+		select += cstr; if (SelectedAttributeId == SMART_WEAR_LEVELING_COUNT) { index = counter; }counter++;
 	}
-	else
+
+	if (m_Attribute != CAtaSmart::SSD_VENDOR_NVME)
 	{
-		cstr.Format(_T("<option value=\"514\">%s</option>"), i18n(_T("Graph"), _T("NORMALIZED_VALUE"), m_FlagSmartEnglish));
-		select += cstr;
-		if(SelectedAttributeId == 514)
+		if (m_IeVersion >= 700)
 		{
-			index = counter;
+			cstr.Format(_T("<optgroup label=\"%s\">"), i18n(_T("Graph"), _T("NORMALIZED_VALUE"), m_FlagSmartEnglish));
+			select += cstr;
 		}
-		counter++;
-	}
-
-	CString sectionName = attributeString[m_Attribute];
-
-	for(int i = 1; i < 255; i++)
-	{
-		if(flagAttribute[i])
+		else
 		{
-			cstr.Format(_T("%02X"), i);
-			if(i18n(sectionName, cstr).IsEmpty())
-			{
-				cstr.Format(_T("<option value=\"%d\">%s(%02X) %s</option>"), i, space, i, i18n(_T("Smart"), _T("UNKNOWN"), m_FlagSmartEnglish));
-			}
-			else
-			{
-				cstr.Format(_T("<option value=\"%d\">%s(%02X) %s</option>"), i, space, i, i18n(sectionName, cstr, m_FlagSmartEnglish));
-			}
-			if(SelectedAttributeId == i)
+			cstr.Format(_T("<option value=\"514\">%s</option>"), i18n(_T("Graph"), _T("NORMALIZED_VALUE"), m_FlagSmartEnglish));
+			select += cstr;
+			if (SelectedAttributeId == 514)
 			{
 				index = counter;
 			}
-			select += cstr;
 			counter++;
+		}
+
+		CString sectionName = attributeString[m_Attribute];
+
+		for (int i = 1; i < 255; i++)
+		{
+			if (flagAttribute[i])
+			{
+				cstr.Format(_T("%02X"), i);
+				if (i18n(sectionName, cstr).IsEmpty())
+				{
+					cstr.Format(_T("<option value=\"%d\">%s(%02X) %s</option>"), i, space, i, i18n(_T("Smart"), _T("UNKNOWN"), m_FlagSmartEnglish));
+				}
+				else
+				{
+					cstr.Format(_T("<option value=\"%d\">%s(%02X) %s</option>"), i, space, i, i18n(sectionName, cstr, m_FlagSmartEnglish));
+				}
+				if (SelectedAttributeId == i)
+				{
+					index = counter;
+				}
+				select += cstr;
+				counter++;
+			}
 		}
 	}
 
@@ -1390,6 +1405,7 @@ void CGraphDlg::InitMenu()
 	case CAtaSmart::SSD_VENDOR_PLEXTOR: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_PLEXTOR, MF_BYCOMMAND);break;
 	case CAtaSmart::SSD_VENDOR_SANDISK: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SANDISK, MF_BYCOMMAND);break;
 	case CAtaSmart::SSD_VENDOR_OCZ_VECTOR: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_OCZ_VECTOR, MF_BYCOMMAND);break;
+	case CAtaSmart::SSD_VENDOR_NVME: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_NVME, MF_BYCOMMAND); break;
 
 	default:
 		m_Attribute = CAtaSmart::HDD_GENERAL;
@@ -1697,6 +1713,11 @@ void CGraphDlg::OnSsdSanDisk()
 void CGraphDlg::OnSsdOczVector()
 {
 	SetAttribute(ID_SSD_OCZ_VECTOR, CAtaSmart::SSD_VENDOR_OCZ_VECTOR);
+}
+
+void CGraphDlg::OnSsdNVMe()
+{
+	SetAttribute(ID_SSD_NVME, CAtaSmart::SSD_VENDOR_NVME);
 }
 
 void CGraphDlg::SetAttribute(DWORD id, DWORD type)
