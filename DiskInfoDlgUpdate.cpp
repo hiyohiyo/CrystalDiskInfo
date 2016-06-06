@@ -72,7 +72,7 @@ void CDiskInfoDlg::UpdateShareInfo()
 	}
 
 	HKEY hKey, hSubKey;
-	CString key;
+	CString key, cstr;
 	DWORD result;
 	DWORD value;
 	TCHAR str[256];
@@ -159,7 +159,9 @@ void CDiskInfoDlg::UpdateShareInfo()
 		RegSetValueEx(hSubKey, _T("Temperature"), 0, REG_SZ,
 			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
 
-		_stprintf_s(str, 256, _T("%s"), (LPCTSTR)GetTemperatureClass(m_Ata.vars[i].Temperature));
+		cstr = GetTemperatureClass(m_Ata.vars[i].Temperature);
+		cstr.Replace(L"Green", L"");
+		_stprintf_s(str, 256, _T("%s"), (LPCTSTR)cstr);
 		RegSetValueEx(hSubKey, _T("TemperatureClass"), 0, REG_SZ,
 			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
 
