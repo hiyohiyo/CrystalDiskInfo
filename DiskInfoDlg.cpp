@@ -1406,7 +1406,7 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 	if(flag)
 	{
 #ifdef SUISHO_SHIZUKU_SUPPORT
-		m_List.SetWindowPos(NULL, (int)((328 + 8) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio),
+		m_List.SetWindowPos(NULL, (int)((8 + OFFSET_X) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio),
 		(int)((672 - 16) * m_ZoomRatio), (int)(cy - SIZE_Y * m_ZoomRatio - 8 * m_ZoomRatio), SWP_SHOWWINDOW);
 		m_CtrlShizukuVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X  * m_ZoomRatio), (int)(cy - ((24 + 48) * m_ZoomRatio)));
 		m_CtrlShizukuCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
