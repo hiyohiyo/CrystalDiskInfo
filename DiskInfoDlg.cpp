@@ -1182,6 +1182,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 		{
 			m_SizeY = SIZE_SMART_Y;
 		}
+
 		SetClientRect((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
 		m_FlagHideSmartInfo = FALSE;
 		CMenu *menu = GetMenu();

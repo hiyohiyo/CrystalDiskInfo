@@ -87,10 +87,10 @@ BOOL CDiskInfoApp::InitInstance()
 	TCHAR *ptrEnd;
 	TCHAR ini[MAX_PATH];
 	::GetModuleFileName(NULL, ini, MAX_PATH);
-	if((ptrEnd = _tcsrchr(ini, '.')) != NULL)
+	if((ptrEnd = _tcsrchr(ini, '\\')) != NULL)
 	{
 		*ptrEnd = '\0';
-		_tcscat_s(ini, MAX_PATH, _T(".ini"));
+		_tcscat_s(ini, MAX_PATH, _T("\\DiskInfo.ini"));
 	}
 	m_Ini = ini;
 

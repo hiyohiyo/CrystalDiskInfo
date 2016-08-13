@@ -1407,7 +1407,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 							DebugPrint(_T("INTERFACE_TYPE_UASP"));
 							interfaceType = INTERFACE_TYPE_UASP;
 						}
-						else if (model.Find(_T("NVMe")) >= 0)
+						else if (model.Find(_T("NVMe")) >= 0 || pnpDeviceId.Find(_T("NVME")) >= 0)
 						{
 							DebugPrint(_T("INTERFACE_TYPE_NVME"));
 							interfaceType = INTERFACE_TYPE_NVME;
@@ -5182,7 +5182,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung951(INT physicalDriveId, INT scsiPor
 	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
 
 	HANDLE hIoCtrl = CreateFile(GetScsiPath((TCHAR*)path.GetString()), GENERIC_READ | GENERIC_WRITE,
-		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	BOOL bRet = 0;
 	NVME_PASS_THROUGH_IOCTL nptwb;
 	DWORD length = sizeof(nptwb);
@@ -5238,7 +5238,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung951(INT physicalDriveId, INT scsiPor
 CString CAtaSmart::GetScsiPath(const TCHAR* Path)
 {
 	HANDLE hIoCtrl = CreateFile(Path, GENERIC_READ | GENERIC_WRITE,
-		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	SCSI_ADDRESS sadr;
 	BOOL bRet = 0;
 	DWORD dwReturned;
@@ -5259,7 +5259,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT
 	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
 
 	HANDLE hIoCtrl = CreateFile(GetScsiPath((TCHAR*)path.GetString()), GENERIC_READ | GENERIC_WRITE,
-		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	BOOL bRet = 0;
 	NVME_PASS_THROUGH_IOCTL nptwb;
 	DWORD length = sizeof(nptwb);
@@ -5311,7 +5311,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, IN
 	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
 
 	HANDLE hIoCtrl = CreateFile(GetScsiPath((TCHAR*)path.GetString()), GENERIC_READ | GENERIC_WRITE,
-		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	BOOL bRet = 0;
 	NVME_PASS_THROUGH_IOCTL nptwb;
 	DWORD length = sizeof(nptwb);
@@ -5369,7 +5369,8 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPo
 	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
 
 	HANDLE hIoCtrl = CreateFile(path, GENERIC_READ | GENERIC_WRITE,
-		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
 	StorageQuery::TStorageQueryWithBuffer nptwb;
 	BOOL bRet = 0;
 	ZeroMemory(&nptwb, sizeof(nptwb));
@@ -5396,8 +5397,8 @@ BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiP
 	CString path;
 	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
 
-	HANDLE hIoCtrl = CreateFile(GetScsiPath((TCHAR*)path.GetString()), GENERIC_READ | GENERIC_WRITE,
-		0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hIoCtrl = CreateFile(path, GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	BOOL bRet = 0;
 
 	StorageQuery::TStorageQueryWithBuffer nptwb;

@@ -739,10 +739,21 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			memcpy(data, &(m_Ata.vars[i].IdentifyDevice), 512);
 			if(m_FlagHideSerialNumber)
 			{
-				for(int j = 10; j < 19; j++) // Serial Number : WORD[10-19]
+				if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
 				{
-					data[j] = 0xFFFF;
+					for (int j = 2; j <= 11; j++) // Serial Number : WORD[2-11]
+					{
+						data[j] = 0xFFFF;
+					}
 				}
+				else
+				{
+					for(int j = 10; j <= 19; j++) // Serial Number : WORD[10-19]
+					{
+						data[j] = 0xFFFF;
+					}	
+				}
+
 			}
 			cstr.Format(_T("-- IDENTIFY_DEVICE ---------------------------------------------------------\r\n"));
 			line = cstr;
