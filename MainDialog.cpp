@@ -409,7 +409,7 @@ BOOL CMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
 {
 	if(m_FlagResident)
 	{
-		NOTIFYICONDATA nidata;
+		NOTIFYICONDATA nidata = {0};
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
@@ -442,7 +442,7 @@ BOOL CMainDialog::ModifyTaskTrayIcon(UINT id, HICON icon)
 {
 	if(m_FlagResident)
 	{
-		NOTIFYICONDATA nidata;
+		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
@@ -465,7 +465,7 @@ BOOL CMainDialog::ModifyTaskTrayTip(UINT id, CString tip)
 {
 	if(m_FlagResident)
 	{
-		NOTIFYICONDATA nidata;
+		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
@@ -490,7 +490,7 @@ BOOL CMainDialog::ModifyTaskTray(UINT id, HICON icon, CString tip)
 {
 	if(m_FlagResident)
 	{
-		NOTIFYICONDATA nidata;
+		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
@@ -515,7 +515,7 @@ BOOL CMainDialog::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, CStrin
 {
 	if(m_FlagResident)
 	{
-		NOTIFYICONDATA nidata;
+		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
@@ -542,7 +542,7 @@ BOOL CMainDialog::RemoveTaskTray(UINT id)
 {
 	if(m_FlagResident)
 	{
-		NOTIFYICONDATA nidata;
+		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
