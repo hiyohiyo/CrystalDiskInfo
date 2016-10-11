@@ -458,7 +458,7 @@ void CDHtmlDialogEx::OpenUrl(CString url)
 		if(result <= 32)
 		{
 			CString args;
-			args.Format(_T("url.dll,FileProtocolHandler %s"), url);
+			args.Format(_T("url.dll,FileProtocolHandler %s"), url.GetString());
 			ShellExecuteW(NULL, _T("open"), _T("rundll32.exe"), args, NULL, SW_SHOWNORMAL);
 		}
 	}

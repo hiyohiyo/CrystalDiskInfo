@@ -473,9 +473,9 @@ void CButtonCx::DrawControl(CDC *drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 							int a = m_Alpha;
 							int na = 255 - a;
 							// 背景と合成する。
-							DstBuffer[dn + 0] = (CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255;
-							DstBuffer[dn + 1] = (CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255;
-							DstBuffer[dn + 2] = (CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255;
+							DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+							DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+							DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
 							// 次のデータ。
 							dn += (DstBmpInfo.bmBitsPixel / 8);
 							cn += (CtlBmpInfo.bmBitsPixel / 8);
@@ -516,8 +516,8 @@ void CButtonCx::DrawControl(CDC *drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 
 				// バッファの解放。
-				delete DstBuffer;
-				delete CtlBuffer;
+				delete [] DstBuffer;
+				delete [] CtlBuffer;
 			}
 			else
 			{
@@ -579,8 +579,11 @@ BOOL CButtonCx::LoadBitmap(UINT nIDResource, LPCTSTR pResourceType)
 	DWORD dwResourceSize = SizeofResource(NULL, hResource);
 	if(dwResourceSize == 0){return FALSE;}
 
+	HGLOBAL hGlobal = LoadResource(NULL, hResource);
+	if (hGlobal == NULL) { return FALSE; }
+
 	// リソースデータのポインタを得る。
-	const void* pResourceData = LockResource(LoadResource(NULL, hResource));
+	const void* pResourceData = LockResource(hGlobal);
 	if(pResourceData == NULL){return FALSE;}
 
 	// リソースのバッファを作成する。
@@ -970,11 +973,11 @@ BOOL CButtonCx::InitControl(int x, int y, int width, int height, double zoomRati
 			//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = 255;
 			//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = 255;
 			//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = 255;
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = 128;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = (BYTE)128;
 			}
 		}
 		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
-		delete bitmapBits;
+		delete [] bitmapBits;
 	}
 	else if(renderMode & OwnerDrawImage)
 	{

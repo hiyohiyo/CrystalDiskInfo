@@ -58,12 +58,16 @@ BOOL CDialogCx::OnInitDialog()
 	m_Dpi = GetDeviceCaps(pDC->m_hDC, LOGPIXELSY);
 	ReleaseDC(pDC);
 
-	FuncGetDpiForMonitor pGetDpiForMonitor = (FuncGetDpiForMonitor) GetProcAddress(GetModuleHandle(_T("Shcore.dll")), "GetDpiForMonitor");
-	if (pGetDpiForMonitor != NULL)
+	HMODULE hModule = GetModuleHandle(_T("Shcore.dll"));
+	if (hModule != NULL)
 	{
-		UINT dpiX, dpiY;
-		pGetDpiForMonitor(MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), 0, &dpiX, &dpiY);
-		m_Dpi = dpiY;
+		FuncGetDpiForMonitor pGetDpiForMonitor = (FuncGetDpiForMonitor)GetProcAddress(hModule, "GetDpiForMonitor");
+		if (pGetDpiForMonitor != NULL)
+		{
+			UINT dpiX, dpiY;
+			pGetDpiForMonitor(MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), 0, &dpiX, &dpiY);
+			m_Dpi = dpiY;
+		}
 	}
 
 	m_hAccelerator = ::LoadAccelerators(AfxGetInstanceHandle(),
@@ -265,7 +269,7 @@ void CDialogCx::OpenUrl(CString url)
 		if(result <= 32)
 		{
 			CString args;
-			args.Format(_T("url.dll,FileProtocolHandler %s"), url);
+			args.Format(_T("url.dll,FileProtocolHandler %s"), url.GetString());
 			ShellExecuteW(NULL, _T("open"), _T("rundll32.exe"), args, NULL, SW_SHOWNORMAL);
 		}
 	}
@@ -350,6 +354,7 @@ void CDialogCx::UpdateDialogSize()
 void CDialogCx::UpdateBackground()
 {
 	HRESULT hr;
+	BOOL    br = FALSE;
 
 	m_ImageBg.Destroy();
 	hr = m_ImageBg.Load(IP(m_BackgroundName));
@@ -357,8 +362,8 @@ void CDialogCx::UpdateBackground()
 	if(SUCCEEDED(hr))
 	{
 		m_BitmapBg.Detach();
-		hr = m_BitmapBg.Attach((HBITMAP)m_ImageBg);
-		if(SUCCEEDED(hr))
+		br = m_BitmapBg.Attach((HBITMAP)m_ImageBg);
+		if(br)
 		{
 			m_BrushDlg.DeleteObject();
 			m_BrushDlg.CreatePatternBrush(&m_BitmapBg);
@@ -374,12 +379,12 @@ void CDialogCx::UpdateBackground()
 CString CDialogCx::IP(CString imageName)
 {
 	CString imagePath;
-	imagePath.Format(L"%s%s\\%s-%3d.png", m_CxThemeDir, m_CxCurrentTheme, imageName, (DWORD)(m_ZoomRatio * 100));
+	imagePath.Format(L"%s%s\\%s-%3d.png", m_CxThemeDir.GetString(), m_CxCurrentTheme.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
 	if(IsFileExist(imagePath))
 	{
 		return imagePath;
 	}
-	imagePath.Format(L"%s%s\\%s-%3d.png", m_CxThemeDir, m_CxDefaultTheme, imageName, (DWORD)(m_ZoomRatio * 100));
+	imagePath.Format(L"%s%s\\%s-%3d.png", m_CxThemeDir.GetString(), m_CxDefaultTheme.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
 	if(IsFileExist(imagePath))
 	{
 		return imagePath;

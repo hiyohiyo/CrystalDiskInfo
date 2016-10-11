@@ -486,8 +486,8 @@ void CStaticCx::DrawControl(CDC *drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 
 				// バッファの解放。
-				delete DstBuffer;
-				delete CtlBuffer;
+				delete [] DstBuffer;
+				delete [] CtlBuffer;
 			}
 			else
 			{
@@ -944,7 +944,7 @@ BOOL CStaticCx::InitControl(int x, int y, int width, int height, double zoomRati
 			}
 		}
 		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
-		delete bitmapBits;
+		delete [] bitmapBits;
 	}
 	else if(renderMode & OwnerDrawImage)
 	{

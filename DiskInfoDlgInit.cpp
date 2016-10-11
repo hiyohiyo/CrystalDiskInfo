@@ -14,6 +14,8 @@
 #define new DEBUG_NEW
 #endif
 
+typedef BOOL(WINAPI *FuncEnableNonClientDpiScaling) (HWND hWnd);
+
 extern const GUID StrageGUID;
 
 int CALLBACK EnumFontFamExProcMeiryo(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX *lpntme, int FontType, LPARAM lParam)
@@ -166,6 +168,18 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_hDevNotify = RegisterDeviceNotification(m_hWnd, &filter, DEVICE_NOTIFY_WINDOW_HANDLE);
 
 	InitDialogComplete();
+
+
+	BOOL result = FALSE;
+	HMODULE hModule = GetModuleHandle(_T("User32.dll"));
+	if (hModule != NULL)
+	{
+		FuncEnableNonClientDpiScaling pEnableNonClientDpiScaling = (FuncEnableNonClientDpiScaling)GetProcAddress(hModule, "EnableNonClientDpiScaling");
+		if (pEnableNonClientDpiScaling != NULL)
+		{
+			result = pEnableNonClientDpiScaling(m_hWnd);
+		}
+	}
 
 	return TRUE; 
 }

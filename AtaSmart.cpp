@@ -1766,7 +1766,7 @@ safeRelease:
 		bRet = ::DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY, &sQuery, sizeof(STORAGE_PROPERTY_QUERY), pcbData,dwLen,&dwRet,NULL);
 		if(bRet == FALSE)
 		{
-			delete	pcbData;
+			delete [] pcbData;
 			::CloseHandle(hIoCtrl);
 			continue;
 		}
@@ -1781,7 +1781,7 @@ safeRelease:
 			firmware	= (char*)pDescriptor + pDescriptor->ProductRevisionOffset;
 		}
 
-		delete	pcbData;
+		delete [] pcbData;
 
 		if((model.Find(_T("SAMSUNG HD155UI")) == 0 || model.Find(_T("SAMSUNG HD204UI")) == 0) && firmware.Find(_T("1AQ10003")) != 0 && IsWorkaroundHD204UI)
 		{
@@ -2729,7 +2729,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 
 			if(! asi.IsSmartEnabled || ! asi.IsSmartCorrect || ! asi.IsThresholdCorrect)
 			{
-				debug.Format(_T("GetSmartAttributeCsmi - 1 CSMI"), physicalDriveId);
+				debug.Format(_T("GetSmartAttributeCsmi - 1 CSMI"));
 				DebugPrint(debug);
 				if(GetSmartAttributeCsmi(scsiPort, sasPhyEntity, &asi))
 				{
@@ -4205,7 +4205,7 @@ BOOL CAtaSmart::IsSsdPlextor(ATA_SMART_INFO &asi)
 	}
 
 	// Added CFD's SSD
-	return 	asi.Model.Find(_T("PLEXTOR")) == 0 || asi.Model.Find(_T("CSSD-S6T128NM3PQ")) == 0 || asi.Model.Find(_T("CSSD-S6T256NM3PQ")) == 0 || asi.Model.Find(_T("CSSD-S6T256NM3PQ")) == 0
+	return 	asi.Model.Find(_T("PLEXTOR")) == 0 || asi.Model.Find(_T("CSSD-S6T128NM3PQ")) == 0 || asi.Model.Find(_T("CSSD-S6T256NM3PQ")) == 0
 		|| flagSmartType;
 }
 
@@ -6609,7 +6609,7 @@ BOOL CAtaSmart::GetSmartAttributeSi(INT physicalDriveId, ATA_SMART_INFO* asi)
 
 	hScsiDriveIOCTL = GetIoCtrlHandle(physicalDriveId);
 
-	STORAGE_PREDICT_FAILURE spf;
+	STORAGE_PREDICT_FAILURE spf = {0};
 	DWORD dwRetBytes;
 
 	if(hScsiDriveIOCTL != INVALID_HANDLE_VALUE)

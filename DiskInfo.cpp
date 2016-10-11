@@ -94,11 +94,6 @@ BOOL CDiskInfoApp::InitInstance()
 	}
 	m_Ini = ini;
 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	m_Ini.Replace(_T("DiskInfoS.ini"), _T("DiskInfo.ini"));
-	m_Ini.Replace(_T("DiskInfoSx64.ini"), _T("DiskInfoX64.ini"));
-#endif
-
 	CString cstr;
 	DWORD debugMode = GetPrivateProfileInt(_T("Setting"), _T("DebugMode"), 0, m_Ini);
 	SetDebugMode(debugMode);

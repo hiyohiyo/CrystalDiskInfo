@@ -147,7 +147,7 @@ void GetOsName(CString& OsFullName)
 		osVersion.Format(_T("%d.%d"), osvi.dwMajorVersion, osvi.dwMinorVersion);
 		osBuild.Format(_T("%d"), LOWORD(osvi.dwBuildNumber));
 
-		OsFullName.Format(_T("%s [%s Build %s]"), osName, osVersion, osBuild);
+		OsFullName.Format(_T("%s [%s Build %s]"), osName.GetString(), osVersion, osBuild);
 		break;
 
 	case VER_PLATFORM_WIN32_NT:
