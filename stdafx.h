@@ -80,10 +80,10 @@
 	#endif
 #endif
 
-#define PRODUCT_VERSION			_T("7.0.4")
-#define PRODUCT_RELEASE			_T("2016/10/10")
+#define PRODUCT_VERSION			_T("7.0.5")
+#define PRODUCT_RELEASE			_T("2017/1/1")
 #define PRODUCT_COPY_YEAR		_T("2008-2016")
-#define PRODUCT_COPYRIGHT		_T("© 2008-2016 hiyohiyo")
+#define PRODUCT_COPYRIGHT		_T("© 2008-2017 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
 
 #define URL_CRYSTAL_DEW_WORLD_JA	_T("http://crystalmark.info/")
@@ -92,7 +92,7 @@
 #define	URL_PROJECT_SHIZUKU_JA		_T("http://suishoshizuku.com/")
 #define	URL_PROJECT_SHIZUKU_EN		_T("http://suishoshizuku.com/en/")
 
-#define	URL_KIRINOKASUMU		L"http://kirino.moo.jp/"
+#define	URL_KIRINOKASUMU		L"http://kirinokasumu.com/"
 #define URL_LINUXHAJAPAN		L"http://linux-ha.sourceforge.jp/wp/"
 #define URL_OPENSOURCECHANNEL	L"http://ch.nicovideo.jp/oss"
 #define URL_BELLCHE				L"http://www.bellche.com/"

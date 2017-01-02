@@ -455,8 +455,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 7,0,4,2016
- PRODUCTVERSION 7,0,4,2016
+ FILEVERSION 7,0,5,2016
+ PRODUCTVERSION 7,0,5,2016
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -473,9 +473,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "http://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "7.0.4.2016"
-            VALUE "LegalCopyright", "(C) 2008-2016 hiyohiyo"
-            VALUE "ProductVersion", "7.0.4.2016"
+            VALUE "FileVersion", "7.0.5.2017"
+            VALUE "LegalCopyright", "(C) 2008-2017 hiyohiyo"
+            VALUE "ProductVersion", "7.0.5.2017"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"

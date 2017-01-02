@@ -133,6 +133,8 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 
 	if (vars[i].InterfaceType == INTERFACE_TYPE_NVME)
 	{
+		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
+
 		if ((m_FlagNVMeStorageQuery && vars[i].CommandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
@@ -8146,8 +8148,11 @@ VOID CAtaSmart::GetAtaMinorVersion(WORD w81, CString &minor)
 	case 0x0039:	minor = _T("ATA8-ACS version 4c");							break;
 	case 0x0042:	minor = _T("ATA8-ACS version 3f");							break;
 	case 0x0052:	minor = _T("ATA8-ACS version 3b");							break;
+	case 0x005E:	minor = _T("ACS-4 Revision 5");								break;
+	case 0x006D:	minor = _T("ACS-3 Revision 4");								break;
 	case 0x0082:	minor = _T("ACS-2 published, ANSI INCITS 482-2012");		break;
 	case 0x0107:	minor = _T("ATA8-ACS version 2d");							break;
+	case 0x010A:	minor = _T("ACS-3 published, ANSI INCITS 522-2014");		break;
 	case 0x0110:	minor = _T("ACS-2 Revision 3");								break;
 	case 0x011B:	minor = _T("ACS-3 Revision 4");								break;
 	default:	//	minor.Format(_T("Reserved [%04Xh]"), w81);					break;
