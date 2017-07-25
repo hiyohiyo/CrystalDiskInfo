@@ -193,7 +193,10 @@ BOOL CDiskInfoApp::InitInstance()
 	m_OpusDecPath.Format(_T("%s\\%s"), tmp, OPUS_DEC_PATH);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_ShizukuVoicePath.Format(_T("%s\\%s"), tmp, SHIZUKU_VOICE_PATH);
+	m_VoicePath.Format(_T("%s\\%s"), tmp, SHIZUKU_VOICE_PATH);
+	#ifdef KUREI_KEI_SUPPORT
+		m_VoicePath.Format(_T("%s\\%s"), tmp, KUREI_KEI_VOICE_PATH);
+	#endif
 #endif
 	
 	m_ThemeIndex = MENU_THEME_INDEX;

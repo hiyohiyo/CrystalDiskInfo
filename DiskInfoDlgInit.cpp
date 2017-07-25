@@ -30,6 +30,8 @@ int CALLBACK EnumFontFamExProcMeiryo(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX *lpn
 
 BOOL CDiskInfoDlg::OnInitDialog()
 {
+	BOOL result = FALSE;
+
 	CMainDialog::OnInitDialog();
 
 	SetIcon(m_hIcon, TRUE);			// Set big icon
@@ -170,16 +172,6 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	InitDialogComplete();
 
 
-	BOOL result = FALSE;
-	HMODULE hModule = GetModuleHandle(_T("User32.dll"));
-	if (hModule != NULL)
-	{
-		FuncEnableNonClientDpiScaling pEnableNonClientDpiScaling = (FuncEnableNonClientDpiScaling)GetProcAddress(hModule, "EnableNonClientDpiScaling");
-		if (pEnableNonClientDpiScaling != NULL)
-		{
-			result = pEnableNonClientDpiScaling(m_hWnd);
-		}
-	}
 
 	return TRUE; 
 }

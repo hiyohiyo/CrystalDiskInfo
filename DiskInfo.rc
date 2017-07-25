@@ -63,8 +63,13 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 #ifdef SUISHO_SHIZUKU_SUPPORT
-IDR_MAINFRAME           ICON                    "resS\\DiskInfo.ico"
-IDI_MINI_ICON           ICON                    "resS\\DiskInfo16.ico"
+	#ifdef KUREI_KEI_SUPPORT
+	IDR_MAINFRAME           ICON                    "resK\\DiskInfo.ico"
+	IDI_MINI_ICON           ICON                    "resK\\DiskInfo16.ico"
+	#else
+	IDR_MAINFRAME           ICON                    "resS\\DiskInfo.ico"
+	IDI_MINI_ICON           ICON                    "resS\\DiskInfo16.ico"
+	#endif
 #else
 IDR_MAINFRAME           ICON                    "resN\\DiskInfo.ico"
 IDI_MINI_ICON           ICON                    "resN\\DiskInfo16.ico"
@@ -300,8 +305,8 @@ BEGIN
     CONTROL         "Life",IDC_BUTTON_LIFE,"Button",BS_OWNERDRAW | BS_CENTER | BS_MULTILINE | BS_NOTIFY | WS_TABSTOP,8,199,88,23
     PUSHBUTTON      "Good",IDC_BUTTON_HEALTH_STATUS,8,94,89,34,BS_CENTER | BS_MULTILINE | BS_NOTIFY
     PUSHBUTTON      "99 °C",IDC_BUTTON_TEMPERATURE,7,159,89,34,BS_CENTER | BS_MULTILINE | BS_NOTIFY
-    PUSHBUTTON      "",IDC_BUTTON_SHIZUKU_VOICE,338,202,50,14
-    PUSHBUTTON      "",IDC_BUTTON_SHIZUKU_COPYRIGHT,406,202,50,14
+    PUSHBUTTON      "",IDC_BUTTON_VOICE,338,202,50,14
+    PUSHBUTTON      "",IDC_BUTTON_COPYRIGHT,406,202,50,14
     CONTROL         "",IDC_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,0,257,501,89
     LTEXT           "Model",IDC_VALUE_MODEL,81,52,340,16,SS_NOTIFY
     LTEXT           "Firmware",IDC_LABEL_FIRMWARE,107,82,67,12,SS_NOTIFY
@@ -338,10 +343,11 @@ CAPTION "CrystalDiskInfo"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     PUSHBUTTON      "",IDC_LOGO,26,17,156,107
-    PUSHBUTTON      "",IDC_PROJECT_SHIZUKU_KIRINOKASUMU,77,144,228,21
-    PUSHBUTTON      "",IDC_PROJECT_SHIZUKU_LINUXHAJAPAN,77,194,232,22
-    PUSHBUTTON      "",IDC_PROJECT_SHIZUKU_OPENSOURCECHANNEL,196,229,270,31
-    PUSHBUTTON      "",IDC_PROJECT_SHIZUKU_BELLCHE,196,267,270,31
+    PUSHBUTTON      "",IDC_PROJECT_SITE_1,77,144,228,21
+    PUSHBUTTON      "",IDC_PROJECT_SITE_2,77,194,232,22
+    PUSHBUTTON      "",IDC_PROJECT_SITE_3,196,229,270,31
+    PUSHBUTTON      "",IDC_PROJECT_SITE_4,196,267,270,31
+	PUSHBUTTON      "",IDC_PROJECT_SITE_5, 196, 267, 270, 31
     PUSHBUTTON      "",IDC_SECRET_VOICE,44,226,83,22
     LTEXT           "スタティック",IDC_VERSION,240,18,193,8
     LTEXT           "スタティック",IDC_EDITION,241,38,33,8

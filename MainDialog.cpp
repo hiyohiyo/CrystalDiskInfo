@@ -26,8 +26,13 @@ CMainDialog::CMainDialog(UINT dlgResouce,
 	m_LangIndex = LangIndex;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_DefaultTheme = L"Shizuku";
-	m_RecommendTheme = L"ShizukuWebRadio";
+	#ifdef KUREI_KEI_SUPPORT
+		m_DefaultTheme = L"KureiKei";
+		m_RecommendTheme = L"KureiKei";
+	#else
+		m_DefaultTheme = L"Shizuku";
+		m_RecommendTheme = L"Shizuku5thAnniversary";
+	#endif
 #else
 	m_DefaultTheme = L"default";
 #endif
@@ -82,13 +87,29 @@ void CMainDialog::InitThemeLang()
 		CString defaultTheme = m_DefaultTheme;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
+	#ifdef KUREI_KEI_SUPPORT
+		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\KureiKeiBackground-100.png"))
+		{
+			defaultTheme = m_RecommendTheme;
+		}
+	#else
 		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\ShizukuBackground-100.png"))
 		{
 			defaultTheme = m_RecommendTheme;
 		}
+	#endif
 #endif
 
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	#ifdef KUREI_KEI_SUPPORT
+			GetPrivateProfileString(_T("Setting"), _T("ThemeKureiKei"), defaultTheme, str, 256, m_Ini);
+	#else
+			GetPrivateProfileString(_T("Setting"), _T("ThemeShizuku"), defaultTheme, str, 256, m_Ini);
+	#endif
+#else
 		GetPrivateProfileString(_T("Setting"), _T("Theme"), defaultTheme, str, 256, m_Ini);
+#endif
+
 		m_CurrentTheme = str;
 	}
 
@@ -187,9 +208,13 @@ void CMainDialog::InitMenu()
 			{
 				CString name = findData.cFileName;
 #ifdef SUISHO_SHIZUKU_SUPPORT
+	#ifdef KUREI_KEI_SUPPORT
+				if(name.Find(L"KureiKei") == 0)
+	#else
 				if(name.Find(L"Shizuku") == 0)
+	#endif
 #else
-				if(name.Find(L"Shizuku") != 0 && name.Find(L".") != 0)
+				if(name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0  && name.Find(L".") != 0)
 #endif
 				{
 					// Add Theme
@@ -343,7 +368,16 @@ BOOL CMainDialog::OnInitDialog()
 void CMainDialog::ChangeTheme(CString ThemeName)
 {
 	UpdateDialogSize();
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	#ifdef KUREI_KEI_SUPPORT
+		WritePrivateProfileString(_T("Setting"), _T("ThemeKureiKei"), ThemeName, m_Ini);
+	#else
+		WritePrivateProfileString(_T("Setting"), _T("ThemeShizuku"), ThemeName, m_Ini);
+	#endif
+#else
 	WritePrivateProfileString(_T("Setting"), _T("Theme"), ThemeName, m_Ini);
+#endif
+
 }
 
 BOOL CMainDialog::OnCommand(WPARAM wParam, LPARAM lParam) 

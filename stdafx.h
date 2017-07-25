@@ -61,16 +61,28 @@
 #define PRODUCT_NAME			_T("CrystalDiskInfo")
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-#define PRODUCT_SHORT_NAME		_T("CDI 7 SE")
+	#ifdef KUREI_KEI_SUPPORT
+		#define PRODUCT_SHORT_NAME		_T("CDI 7 SE")
+	#else
+		#define PRODUCT_SHORT_NAME		_T("CDI 7 KKE")
+	#endif
 #else
 #define PRODUCT_SHORT_NAME		_T("CDI 7")
 #endif
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef _M_X64
-	#define PRODUCT_EDITION			_T("Shizuku Edition x64")
+	#ifdef KUREI_KEI_SUPPORT
+		#ifdef _M_X64
+			#define PRODUCT_EDITION			_T("Kurei Kei Edition x64")
+		#else
+			#define PRODUCT_EDITION			_T("Kurei Kei Edition")
+		#endif
 	#else
-	#define PRODUCT_EDITION			_T("Shizuku Edition")
+		#ifdef _M_X64
+			#define PRODUCT_EDITION			_T("Shizuku Edition x64")
+		#else
+			#define PRODUCT_EDITION			_T("Shizuku Edition")
+		#endif
 	#endif
 #else
 	#ifdef _M_X64
@@ -80,8 +92,8 @@
 	#endif
 #endif
 
-#define PRODUCT_VERSION			_T("7.0.5")
-#define PRODUCT_RELEASE			_T("2017/1/1")
+#define PRODUCT_VERSION			_T("7.1.0")
+#define PRODUCT_RELEASE			_T("2017/7/28")
 #define PRODUCT_COPY_YEAR		_T("2008-2016")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2017 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
@@ -92,10 +104,28 @@
 #define	URL_PROJECT_SHIZUKU_JA		_T("http://suishoshizuku.com/")
 #define	URL_PROJECT_SHIZUKU_EN		_T("http://suishoshizuku.com/en/")
 
-#define	URL_KIRINOKASUMU		L"http://kirinokasumu.com/"
-#define URL_LINUXHAJAPAN		L"http://linux-ha.sourceforge.jp/wp/"
-#define URL_OPENSOURCECHANNEL	L"http://ch.nicovideo.jp/oss"
-#define URL_BELLCHE				L"http://www.bellche.com/"
+#define URL_PRONAMA	                _T("http://pronama.jp/crystaldiskinfo")
+
+
+#ifdef SUISHO_SHIZUKU_SUPPORT
+
+	#ifdef KUREI_KEI_SUPPORT
+	#define	URL_PROJECT_SITE_1		    L"http://pronama.jp/crystaldiskinfo"
+	#define URL_PROJECT_SITE_2		    L"http://pronama.jp/ixy"
+	#define URL_PROJECT_SITE_3	        L"http://pronama.jp/uesakasumire"
+	#define URL_PROJECT_SITE_4			L"http://pronama.jp/crystaldiskinfo"
+	#define URL_PROJECT_SITE_5			L""
+	#else if
+	#define	URL_PROJECT_SITE_1		    L"http://kirinokasumu.com/"
+	#define URL_PROJECT_SITE_2		    L"http://linux-ha.sourceforge.jp/wp/"
+	#define URL_PROJECT_SITE_3	        L"http://ch.nicovideo.jp/oss"
+	#define URL_PROJECT_SITE_4			L"http://www.bellche.com/"
+	#define URL_PROJECT_SITE_5			L"http://suishoshizuku.com/"
+
+	#endif
+
+#endif
+
 
 
 #define URL_HTML_HELP_JA		_T("http://crystalmark.info/software/CrystalDiskInfo/manual-ja/")

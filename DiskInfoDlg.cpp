@@ -119,7 +119,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_OpusDecPath = ((CDiskInfoApp*)AfxGetApp())->m_OpusDecPath;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_ShizukuVoicePath = ((CDiskInfoApp*) AfxGetApp())->m_ShizukuVoicePath;
+	m_VoicePath = ((CDiskInfoApp*) AfxGetApp())->m_VoicePath;
 #endif
 
 	_tcscpy_s(m_Ini, MAX_PATH, ((CDiskInfoApp*)AfxGetApp())->m_Ini);
@@ -313,7 +313,11 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 //	m_BrushDlg.CreateHatchBrush(HS_BDIAGONAL, RGB(0xF0, 0xF0, 0xF0));
 //	m_BrushDlg.CreatePatternBrush(&m_BitmapBg);
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_BackgroundName = L"ShizukuBackground";
+	#ifdef KUREI_KEI_SUPPORT
+		m_BackgroundName = L"KureiKeiBackground";
+	#else
+		m_BackgroundName = L"ShizukuBackground";
+	#endif
 #else
 	m_BackgroundName = L"mainBackground";
 #endif
@@ -339,14 +343,14 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 		m_LayeredListCtrl = FALSE;
 	}
 
-	m_hShizukuVoice = LoadLibrary(m_ShizukuVoicePath);
-	if (m_hShizukuVoice != NULL)
+	m_hVoice = LoadLibrary(m_VoicePath);
+	if (m_hVoice != NULL)
 	{
-		DebugPrint(L"m_hShizukuVoice != NULL");
+		DebugPrint(L"m_hVoice != NULL");
 	}
 	else
 	{
-		DebugPrint(L"m_hShizukuVoice == NULL");
+		DebugPrint(L"m_hVoice == NULL");
 	}
 #endif
 }
@@ -362,9 +366,9 @@ CDiskInfoDlg::~CDiskInfoDlg()
 	DeleteShareInfo();
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	if (m_hShizukuVoice)
+	if (m_hVoice)
 	{
-		FreeLibrary(m_hShizukuVoice);
+		FreeLibrary(m_hVoice);
 	}
 #endif
 }
@@ -535,8 +539,8 @@ void CDiskInfoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_BUTTON_TEMPERATURE, m_Temperature);
 	DDX_Text(pDX, IDC_BUTTON_LIFE, m_Life);
 
-	DDX_Control(pDX, IDC_BUTTON_SHIZUKU_VOICE, m_CtrlShizukuVoice);
-	DDX_Control(pDX, IDC_BUTTON_SHIZUKU_COPYRIGHT, m_CtrlShizukuCopyright);
+	DDX_Control(pDX, IDC_BUTTON_VOICE, m_CtrlVoice);
+	DDX_Control(pDX, IDC_BUTTON_COPYRIGHT, m_CtrlCopyright);
 
 }
 
@@ -737,11 +741,12 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialog)
 	ON_BN_CLICKED(IDC_BUTTON_PRE_DISK, &CDiskInfoDlg::OnBnClickedButtonPreDisk)
 	ON_BN_CLICKED(IDC_BUTTON_NEXT_DISK, &CDiskInfoDlg::OnBnClickedButtonNextDisk)
 	ON_BN_CLICKED(IDC_BUTTON_HEALTH_STATUS, &CDiskInfoDlg::OnBnClickedButtonHealthStatus)
-	ON_BN_CLICKED(IDC_BUTTON_SHIZUKU_VOICE, &CDiskInfoDlg::OnBnClickedButtonShizukuVoice)
-	ON_BN_CLICKED(IDC_BUTTON_SHIZUKU_COPYRIGHT, &CDiskInfoDlg::OnBnClickedButtonShizukuCopyright)
+	ON_BN_CLICKED(IDC_BUTTON_VOICE, &CDiskInfoDlg::OnBnClickedButtonVoice)
+	ON_BN_CLICKED(IDC_BUTTON_COPYRIGHT, &CDiskInfoDlg::OnBnClickedButtonCopyright)
 	ON_BN_CLICKED(IDC_BUTTON_LIFE, &CDiskInfoDlg::OnBnClickedButtonLife)
 	ON_WM_SHOWWINDOW()
-	END_MESSAGE_MAP()
+		ON_WM_NCCREATE()
+		END_MESSAGE_MAP()
 
 LRESULT CDiskInfoDlg::OnPlayAlertSound(WPARAM wParam, LPARAM lParam)
 {
@@ -1194,8 +1199,8 @@ void CDiskInfoDlg::UpdateDialogSize()
 	SetControlFont();
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_CtrlShizukuVoice.InitControl(0, 48, OFFSET_X, m_SizeY - 24 - 48, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::OwnerDrawTransparent);
-	m_CtrlShizukuVoice.SetHandCursor();
+	m_CtrlVoice.InitControl(0, 48, OFFSET_X, m_SizeY - 24 - 48, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::OwnerDrawTransparent);
+	m_CtrlVoice.SetHandCursor();
 
 	if (m_CurrentLang.Find(L"Japanese") == 0)
 	{
@@ -1205,23 +1210,26 @@ void CDiskInfoDlg::UpdateDialogSize()
 		if ((systime.wYear == 2015 && systime.wMonth == 12 && systime.wDay <= 17)
 			|| (systime.wYear == 2015 && systime.wMonth == 12 && systime.wDay == 18 && systime.wHour < 20))
 		{
-			m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuAkibaMoe"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
+			m_CtrlCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuAkibaMoe"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
 		}
 		else 
 		{		}
 		*/
-		m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuCopyright"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
+
+
+
+		m_CtrlCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(PROJECT_COPYRIGHT), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
 	}
 	else
 	{
-		m_CtrlShizukuCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(L"ShizukuCopyright"), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
+		m_CtrlCopyright.InitControl(0, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, IP(PROJECT_COPYRIGHT), 1, SS_CENTER, CButtonCx::OwnerDrawImage);
 	}
 	
 	
-	m_CtrlShizukuCopyright.SetHandCursor();
+	m_CtrlCopyright.SetHandCursor();
 #else
-	m_CtrlShizukuVoice.ShowWindow(SW_HIDE);
-	m_CtrlShizukuCopyright.ShowWindow(SW_HIDE);
+	m_CtrlVoice.ShowWindow(SW_HIDE);
+	m_CtrlCopyright.ShowWindow(SW_HIDE);
 #endif
 
 	int buttonDiskHeight = 48;
@@ -1409,11 +1417,11 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 #ifdef SUISHO_SHIZUKU_SUPPORT
 		m_List.SetWindowPos(NULL, (int)((8 + OFFSET_X) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio),
 		(int)((672 - 16) * m_ZoomRatio), (int)(cy - SIZE_Y * m_ZoomRatio - 8 * m_ZoomRatio), SWP_SHOWWINDOW);
-		m_CtrlShizukuVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X  * m_ZoomRatio), (int)(cy - ((24 + 48) * m_ZoomRatio)));
-		m_CtrlShizukuCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
-		m_CtrlShizukuCopyright.ShowWindow(SW_HIDE);
-		m_CtrlShizukuCopyright.SetBgReload();
-		m_CtrlShizukuCopyright.ShowWindow(SW_SHOW);
+		m_CtrlVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X  * m_ZoomRatio), (int)(cy - ((24 + 48) * m_ZoomRatio)));
+		m_CtrlCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
+		m_CtrlCopyright.ShowWindow(SW_HIDE);
+		m_CtrlCopyright.SetBgReload();
+		m_CtrlCopyright.ShowWindow(SW_SHOW);
 #else
 		m_List.SetWindowPos(NULL, (int)(8 * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio),
 		(int)((672 - 16) * m_ZoomRatio), (int)(cy - SIZE_Y * m_ZoomRatio - 8 * m_ZoomRatio), SWP_SHOWWINDOW);
@@ -1846,9 +1854,9 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 		// For Japanese
 		if (m_CurrentLang.Find(_T("Japanese")) == 0 || GetUserDefaultLCID() == 0x0411)
 		{
-			if (m_hShizukuVoice != NULL)
+			if (m_hVoice != NULL)
 			{
-				hModule = m_hShizukuVoice;
+				hModule = m_hVoice;
 			}
 			else
 			{
@@ -2337,7 +2345,7 @@ void CDiskInfoDlg::OnBnClickedButtonHealthStatus()
 }
 
 
-void CDiskInfoDlg::OnBnClickedButtonShizukuVoice()
+void CDiskInfoDlg::OnBnClickedButtonVoice()
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	DWORD id;
@@ -2355,7 +2363,7 @@ void CDiskInfoDlg::OnBnClickedButtonShizukuVoice()
 }
 
 
-void CDiskInfoDlg::OnBnClickedButtonShizukuCopyright()
+void CDiskInfoDlg::OnBnClickedButtonCopyright()
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	/*
@@ -2370,9 +2378,16 @@ void CDiskInfoDlg::OnBnClickedButtonShizukuCopyright()
 		}
 	}
 	*/
+#ifdef KUREI_KEI_SUPPORT
 
+	CString url;
+	url.Format(L"pronama.jp/crystaldiskinfo_themes/?%s", m_CurrentTheme);
+	OpenUrl(url);
+#else if
 	UINT themeIndex = rand() % (UINT)m_MenuArrayTheme.GetSize();
 	SendMessage(WM_COMMAND, WM_THEME_ID + themeIndex);
+#endif
+
 #endif
 }
 
@@ -2438,3 +2453,20 @@ void CDiskInfoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	}
 #endif
 }
+/*
+typedef BOOL(WINAPI *FuncEnableNonClientDpiScaling) (HWND hwnd);
+
+BOOL CDiskInfoDlg::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (!CMainDialog::OnNcCreate(lpCreateStruct))
+		return FALSE;
+
+	FuncEnableNonClientDpiScaling pEnableNonClientDpiScaling = (FuncEnableNonClientDpiScaling)GetProcAddress(GetModuleHandle(_T("User32.dll")), "EnableNonClientDpiScaling");
+
+	if (pEnableNonClientDpiScaling != NULL)
+	{
+		pEnableNonClientDpiScaling(m_hWnd);
+	}
+	return FALSE;
+}
+*/

@@ -24,7 +24,7 @@
 #define ALERT_MAIL_4_PATH			_T("CdiResource\\AlertMail4.exe")
 #define OPUS_DEC_PATH				_T("CdiResource\\opus\\opusdec.exe")
 #define SHIZUKU_VOICE_PATH			_T("CdiResource\\voice\\ShizukuVoice.dll")
-
+#define KUREI_KEI_VOICE_PATH		_T("CdiResource\\voice\\KureiKeiVoice.dll")
 
 #define MENU_THEME_INDEX			3
 #define MENU_LANG_INDEX				6
@@ -35,7 +35,13 @@
 #define OPTION_DIALOG				_T("Option.html")
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-#define DEFAULT_THEME				THEME_DIR _T("Shizuku")
+	#ifdef KUREI_KEI_SUPPORT
+		#define DEFAULT_THEME		THEME_DIR _T("KureiKei")
+		#define PROJECT_COPYRIGHT   L"KureiKeiCopyright"
+	#else
+		#define DEFAULT_THEME		THEME_DIR _T("Shizuku")
+		#define PROJECT_COPYRIGHT   L"ShizukuCopyright"
+	#endif
 #else
 #define DEFAULT_THEME				THEME_DIR _T("default")
 #endif
@@ -55,7 +61,7 @@ public:
 	CString m_AlertMailPath;
 	CString m_OpusDecPath;
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	CString m_ShizukuVoicePath;
+	CString m_VoicePath;
 #endif
 	CString m_Ini;
 	CString m_SaveAsText;

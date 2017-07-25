@@ -37,24 +37,28 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnCrystalDewWorld();
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	afx_msg void OnSecretVoice();
-	afx_msg void OnBnClickedProjectShizukuKirinokasumu();
-	afx_msg void OnBnClickedProjectShizukuLinuxhajapan();
-	afx_msg void OnBnClickedProjectShizukuOpensourcechannel();
-	afx_msg void OnBnClickedProjectShizukuBellche();
-#endif
+	afx_msg void OnBnClickedProjectSite1();
+	afx_msg void OnBnClickedProjectSite2();
+	afx_msg void OnBnClickedProjectSite3();
+	afx_msg void OnBnClickedProjectSite4();
+	afx_msg void OnBnClickedProjectSite5();
+
 	CButtonCx m_CtrlCrystalDewWorld;
-	CButtonCx m_CtrlProjectShizukuKirinokasumu;
-	CButtonCx m_CtrlProjectShizukuLinuxhajapan;
-	CButtonCx m_CtrlProjectShizukuOpensourcechannel;
-	CButtonCx m_CtrlProjectShizukuBellche;
 	CButtonCx m_CtrlSecretVoice;
+	CButtonCx m_CtrlProjectSite1;
+	CButtonCx m_CtrlProjectSite2;
+	CButtonCx m_CtrlProjectSite3;
+	CButtonCx m_CtrlProjectSite4;
+	CButtonCx m_CtrlProjectSite5;
 
 	CStaticCx m_CtrlVersion;
 	CStaticCx m_CtrlEdition;
 	CStaticCx m_CtrlRelease;
 	CStaticCx m_CtrlCopyright;
 	CStaticCx m_CtrlLicense;
+
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	afx_msg void OnSecretVoice();
+#endif
 
 };

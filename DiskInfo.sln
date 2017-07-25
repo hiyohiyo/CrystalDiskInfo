@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiskInfo", "DiskInfo.vcxproj", "{5496C268-D510-449C-8471-DE2B34898C28}"
 EndProject
@@ -17,8 +17,8 @@ Global
 		{5496C268-D510-449C-8471-DE2B34898C28}.Debug|Win32.Build.0 = Debug|Win32
 		{5496C268-D510-449C-8471-DE2B34898C28}.Debug|x64.ActiveCfg = Debug|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.Debug|x64.Build.0 = Debug|x64
-		{5496C268-D510-449C-8471-DE2B34898C28}.Release|Win32.ActiveCfg = ReleaseShizuku|Win32
-		{5496C268-D510-449C-8471-DE2B34898C28}.Release|Win32.Build.0 = ReleaseShizuku|Win32
+		{5496C268-D510-449C-8471-DE2B34898C28}.Release|Win32.ActiveCfg = ReleaseKureiKei|Win32
+		{5496C268-D510-449C-8471-DE2B34898C28}.Release|Win32.Build.0 = ReleaseKureiKei|Win32
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|x64.ActiveCfg = ReleaseShizuku|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|x64.Build.0 = ReleaseShizuku|x64
 	EndGlobalSection

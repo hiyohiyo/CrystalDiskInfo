@@ -26,7 +26,11 @@ CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
 	m_CxDefaultTheme = ((CMainDialog*)pParent)->m_DefaultTheme;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_BackgroundName = L"ShizukuAbout";
+	#ifdef KUREI_KEI_SUPPORT
+		m_BackgroundName = L"KureiKeiAbout";
+	#else
+		m_BackgroundName = L"ShizukuAbout";
+	#endif
 #else
 	m_BackgroundName = L"background";
 #endif
@@ -41,10 +45,12 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogCx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_CRYSTAL_DEW_WORLD, m_CtrlCrystalDewWorld);
 
-	DDX_Control(pDX, IDC_PROJECT_SHIZUKU_KIRINOKASUMU, m_CtrlProjectShizukuKirinokasumu);
-	DDX_Control(pDX, IDC_PROJECT_SHIZUKU_LINUXHAJAPAN, m_CtrlProjectShizukuLinuxhajapan);
-	DDX_Control(pDX, IDC_PROJECT_SHIZUKU_OPENSOURCECHANNEL, m_CtrlProjectShizukuOpensourcechannel);
-	DDX_Control(pDX, IDC_PROJECT_SHIZUKU_BELLCHE, m_CtrlProjectShizukuBellche);
+	DDX_Control(pDX, IDC_PROJECT_SITE_1, m_CtrlProjectSite1);
+	DDX_Control(pDX, IDC_PROJECT_SITE_2, m_CtrlProjectSite2);
+	DDX_Control(pDX, IDC_PROJECT_SITE_3, m_CtrlProjectSite3);
+	DDX_Control(pDX, IDC_PROJECT_SITE_4, m_CtrlProjectSite4);
+	DDX_Control(pDX, IDC_PROJECT_SITE_5, m_CtrlProjectSite5);
+
 	DDX_Control(pDX, IDC_SECRET_VOICE, m_CtrlSecretVoice);
 
 	DDX_Control(pDX, IDC_VERSION, m_CtrlVersion);
@@ -68,10 +74,11 @@ BOOL CAboutDlg::OnInitDialog()
 	m_CtrlLicense.SetWindowTextW(PRODUCT_LICENSE);
 
 #ifndef SUISHO_SHIZUKU_SUPPORT
-	m_CtrlProjectShizukuKirinokasumu.ShowWindow(SW_HIDE);
-	m_CtrlProjectShizukuLinuxhajapan.ShowWindow(SW_HIDE);
-	m_CtrlProjectShizukuOpensourcechannel.ShowWindow(SW_HIDE);
-	m_CtrlProjectShizukuBellche.ShowWindow(SW_HIDE);
+	m_CtrlProjectSite1.ShowWindow(SW_HIDE);
+	m_CtrlProjectSite2.ShowWindow(SW_HIDE);
+	m_CtrlProjectSite3.ShowWindow(SW_HIDE);
+	m_CtrlProjectSite4.ShowWindow(SW_HIDE);
+	m_CtrlProjectSite5.ShowWindow(SW_HIDE);
 	m_CtrlSecretVoice.ShowWindow(SW_HIDE);
 #endif
 	
@@ -86,10 +93,11 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogCx)
 	ON_BN_CLICKED(IDC_CRYSTAL_DEW_WORLD, &CAboutDlg::OnCrystalDewWorld)
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	ON_BN_CLICKED(IDC_SECRET_VOICE, &CAboutDlg::OnSecretVoice)
-	ON_BN_CLICKED(IDC_PROJECT_SHIZUKU_KIRINOKASUMU, &CAboutDlg::OnBnClickedProjectShizukuKirinokasumu)
-	ON_BN_CLICKED(IDC_PROJECT_SHIZUKU_LINUXHAJAPAN, &CAboutDlg::OnBnClickedProjectShizukuLinuxhajapan)
-	ON_BN_CLICKED(IDC_PROJECT_SHIZUKU_OPENSOURCECHANNEL, &CAboutDlg::OnBnClickedProjectShizukuOpensourcechannel)
-	ON_BN_CLICKED(IDC_PROJECT_SHIZUKU_BELLCHE, &CAboutDlg::OnBnClickedProjectShizukuBellche)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_1, &CAboutDlg::OnBnClickedProjectSite1)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_2, &CAboutDlg::OnBnClickedProjectSite2)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_3, &CAboutDlg::OnBnClickedProjectSite3)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_4, &CAboutDlg::OnBnClickedProjectSite4)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_5, &CAboutDlg::OnBnClickedProjectSite5)
 #endif
 END_MESSAGE_MAP()
 
@@ -111,15 +119,29 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlCrystalDewWorld.SetHandCursor();
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_CtrlProjectShizukuKirinokasumu.InitControl(340, 324, 292, 20, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
-	m_CtrlProjectShizukuLinuxhajapan.InitControl(340, 368, 292, 20, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
-	m_CtrlProjectShizukuOpensourcechannel.InitControl(340, 392, 292, 20, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
-	m_CtrlProjectShizukuBellche.InitControl(340, 416, 292, 20, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+
+	#ifdef KUREI_KEI_SUPPORT
+	m_CtrlProjectSite1.InitControl(340, 232, 268, 100, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite2.InitControl(386, 376, 48, 40, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite3.InitControl(492, 376, 108, 40, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite4.InitControl(386, 600, 224, 60, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite5.InitControl(0, 0, 0, 0, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite5.ShowWindow(SW_HIDE);
+	m_CtrlSecretVoice.InitControl(132, 324, 48, 28, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	#else
+	m_CtrlProjectSite1.InitControl(340, 324, 292, 20, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite2.InitControl(340, 368, 292, 20, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite3.InitControl(340, 392, 292, 20, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite4.InitControl(340, 416, 292, 20, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
+	m_CtrlProjectSite5.InitControl(320, 192, 292, 92, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
 	m_CtrlSecretVoice.InitControl(200, 412, 40, 40, m_ZoomRatio, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_IsHighContrast);
-	m_CtrlProjectShizukuKirinokasumu.SetHandCursor();
-	m_CtrlProjectShizukuLinuxhajapan.SetHandCursor();
-	m_CtrlProjectShizukuOpensourcechannel.SetHandCursor();
-	m_CtrlProjectShizukuBellche.SetHandCursor();
+	#endif
+	
+	m_CtrlProjectSite1.SetHandCursor();
+	m_CtrlProjectSite2.SetHandCursor();
+	m_CtrlProjectSite3.SetHandCursor();
+	m_CtrlProjectSite4.SetHandCursor();
+	m_CtrlProjectSite5.SetHandCursor();
 	m_CtrlSecretVoice.SetHandCursor();
 #endif
 
@@ -141,7 +163,11 @@ void CAboutDlg::UpdateDialogSize()
 
 void CAboutDlg::OnCrystalDewWorld()
 {
-	if(GetUserDefaultLCID() == 0x0411)// Japanese
+
+#ifdef KUREI_KEI_SUPPORT
+	OpenUrl(URL_PRONAMA);
+#else if
+	if (GetUserDefaultLCID() == 0x0411)// Japanese
 	{
 		OpenUrl(URL_CRYSTAL_DEW_WORLD_JA);
 	}
@@ -149,6 +175,7 @@ void CAboutDlg::OnCrystalDewWorld()
 	{
 		OpenUrl(URL_CRYSTAL_DEW_WORLD_EN);
 	}
+#endif
 }
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
@@ -157,23 +184,28 @@ void CAboutDlg::OnSecretVoice()
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_PLAY_ALERT_SOUND, 901, NULL);
 }
 
-void CAboutDlg::OnBnClickedProjectShizukuKirinokasumu()
+void CAboutDlg::OnBnClickedProjectSite1()
 {
-	OpenUrl(URL_KIRINOKASUMU);
+	OpenUrl(URL_PROJECT_SITE_1);
 }
 
-void CAboutDlg::OnBnClickedProjectShizukuLinuxhajapan()
+void CAboutDlg::OnBnClickedProjectSite2()
 {
-	OpenUrl(URL_LINUXHAJAPAN);
+	OpenUrl(URL_PROJECT_SITE_2);
 }
 
-void CAboutDlg::OnBnClickedProjectShizukuOpensourcechannel()
+void CAboutDlg::OnBnClickedProjectSite3()
 {
-	OpenUrl(URL_OPENSOURCECHANNEL);
+	OpenUrl(URL_PROJECT_SITE_3);
 }
 
-void CAboutDlg::OnBnClickedProjectShizukuBellche()
+void CAboutDlg::OnBnClickedProjectSite4()
 {
-	OpenUrl(URL_BELLCHE);
+	OpenUrl(URL_PROJECT_SITE_4);
+}
+
+void CAboutDlg::OnBnClickedProjectSite5()
+{
+	OpenUrl(URL_PROJECT_SITE_5);
 }
 #endif

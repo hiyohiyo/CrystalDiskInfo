@@ -56,7 +56,7 @@ public:
 	static const int SIZE_SMART_Y = 640;
 	static const int SIZE_MIN_Y = 500;
 	static const int SIZE_Y = 288;
-	static const int SIZE_MAX_Y = 960;
+	static const int SIZE_MAX_Y = 1000;
 	static const int OFFSET_X = 328;
 	static const int IMAGE_ALPHA = 192;
 	static const int TEXT_ALPHA = 255;
@@ -67,14 +67,14 @@ public:
 	static const int SIZE_SMART_Y = 480;
 	static const int SIZE_MIN_Y = 260;
 	static const int SIZE_Y = 260;
-	static const int SIZE_MAX_Y = 960;
+	static const int SIZE_MAX_Y = 1000;
 	static const int OFFSET_X = 0;
 #endif
 
 public:
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	HMODULE m_hShizukuVoice;
+	HMODULE m_hVoice;
 #endif
 
 	// Timer
@@ -164,8 +164,8 @@ protected:
 	CButtonCx			m_CtrlDiskStatus;
 	CButtonCx			m_CtrlTemperature;
 	CButtonCx			m_CtrlLife;
-	CButtonCx			m_CtrlShizukuVoice;
-	CButtonCx			m_CtrlShizukuCopyright;
+	CButtonCx			m_CtrlVoice;
+	CButtonCx			m_CtrlCopyright;
 
 	HDEVNOTIFY m_hDevNotify;
 
@@ -177,7 +177,7 @@ protected:
 	CString		m_AlertSoundPath;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	CString		m_ShizukuVoicePath;
+	CString		m_VoicePath;
 #endif
 
 	DWORD m_SelectDisk;
@@ -571,9 +571,10 @@ public:
 	afx_msg void OnBnClickedButtonPreDisk();
 	afx_msg void OnBnClickedButtonNextDisk();
 	afx_msg void OnBnClickedButtonHealthStatus();
-	afx_msg void OnBnClickedButtonShizukuVoice();
-	afx_msg void OnBnClickedButtonShizukuCopyright();
+	afx_msg void OnBnClickedButtonVoice();
+	afx_msg void OnBnClickedButtonCopyright();
 
 	afx_msg void OnBnClickedButtonLife();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+//	afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct);
 };

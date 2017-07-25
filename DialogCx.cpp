@@ -428,3 +428,19 @@ HBRUSH CDialogCx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	// TODO:  既定値を使用したくない場合は別のブラシを返します。
 	return hbr;
 }
+
+typedef BOOL(WINAPI *FuncEnableNonClientDpiScaling) (HWND hwnd);
+
+BOOL CDialogCx::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (!CDialogEx::OnNcCreate(lpCreateStruct))
+		return FALSE;
+
+	FuncEnableNonClientDpiScaling pEnableNonClientDpiScaling = (FuncEnableNonClientDpiScaling)GetProcAddress(GetModuleHandle(_T("User32.dll")), "EnableNonClientDpiScaling");
+
+	if (pEnableNonClientDpiScaling != NULL)
+	{
+		pEnableNonClientDpiScaling(m_hWnd);
+	}
+	return TRUE;
+}

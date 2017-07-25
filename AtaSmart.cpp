@@ -6810,6 +6810,7 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 		{
 			CloseHandle(hHandle);
 			DebugPrint(_T("FAILED: CC_CSMI_SAS_GET_RAID_CONFIG"));
+			VirtualFree(buf, 0, MEM_RELEASE);
 			return FALSE;
 		}
 		else
