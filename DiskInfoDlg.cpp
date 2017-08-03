@@ -122,6 +122,13 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_VoicePath = ((CDiskInfoApp*) AfxGetApp())->m_VoicePath;
 #endif
 
+	TCHAR tempPath[MAX_PATH];
+	GetTempPath(MAX_PATH, tempPath);
+	m_TempFilePathOpus = tempPath;
+	m_TempFilePathOpus += _T("CrystalDiskInfo.opus");
+	m_TempFilePathWave = tempPath;
+	m_TempFilePathWave += _T("CrystalDiskInfo.wav");
+
 	_tcscpy_s(m_Ini, MAX_PATH, ((CDiskInfoApp*)AfxGetApp())->m_Ini);
 
 	m_FlagStartupExit = flagStartupExit;
@@ -364,6 +371,9 @@ CDiskInfoDlg::~CDiskInfoDlg()
 
 	AlertSound(-1, AS_DEINIT);
 	DeleteShareInfo();
+
+	DeleteFile(m_TempFilePathOpus);
+	DeleteFile(m_TempFilePathWave);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	if (m_hVoice)
@@ -1738,7 +1748,6 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 	static MCI_GENERIC_PARMS mgp = {0};
 	static DWORD soundId = 0;
 	MCIERROR error = 0;
-	TCHAR tempPath[MAX_PATH];
 
 	if(mode == AS_SET_SOUND_ID)
 	{
@@ -1814,20 +1823,14 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 		}
 		else if (ext.Find(_T(".OPUS")) == 0)
 		{
-			GetTempPath(MAX_PATH, tempPath);
-			CString tempFilePathWave = tempPath;
-			tempFilePathWave += _T("CrystalDiskInfo.wav");
-
 			PlaySound(NULL, NULL, SND_NODEFAULT);
 
 			// Convert Opus to WAV
 			CString option;
-			option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath, m_AlertSoundPath, tempFilePathWave);
+			option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath, m_AlertSoundPath, m_TempFilePathWave);
 
 			ExecAndWait((TCHAR*)(option.GetString()), TRUE);
-			PlaySound(tempFilePathWave, NULL, SND_SYNC | SND_FILENAME | SND_NODEFAULT);
-
-			DeleteFile(tempFilePathWave);
+			PlaySound(m_TempFilePathWave, NULL, SND_SYNC | SND_FILENAME | SND_NODEFAULT);
 		}
 		else if (ext.Find(_T(".WAV")) == 0)
 		{
@@ -1837,12 +1840,6 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 	else if (mop.lpstrDeviceType == NULL)
 	{
 		// mode == AS_PLAY_SOUND
-		GetTempPath(MAX_PATH, tempPath);
-		CString tempFilePathOpus = tempPath;
-		tempFilePathOpus += _T("CrystalDiskInfo.opus");
-		CString tempFilePathWave = tempPath;
-		tempFilePathWave += _T("CrystalDiskInfo.wav");
-
 		PlaySound(NULL, NULL, SND_NODEFAULT);
 
 		HRSRC hrs;
@@ -1881,7 +1878,7 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 		LPBYTE lpOpus = (LPBYTE)LockResource(hOpus);
 		DWORD dwWrite = 0;
 
-		HANDLE hFile = CreateFile(tempFilePathOpus, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
+		HANDLE hFile = CreateFile(m_TempFilePathOpus, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
 		if (hFile != INVALID_HANDLE_VALUE)
 		{
 			if (WriteFile(hFile, lpOpus, SizeofResource(hModule, hrs), &dwWrite, NULL) == 0)
@@ -1894,15 +1891,9 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 
 		// Convert Opus to WAV
 		CString option;
-		option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath, tempFilePathOpus, tempFilePathWave);
-
+		option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath, m_TempFilePathOpus, m_TempFilePathWave);
 		ExecAndWait((TCHAR*)(option.GetString()), TRUE);
-
-		CWaitCursor wait;
-		PlaySound(tempFilePathWave, NULL, SND_SYNC | SND_FILENAME | SND_NODEFAULT);
-
-		DeleteFile(tempFilePathOpus);
-		DeleteFile(tempFilePathWave);
+		PlaySound(m_TempFilePathWave, NULL, SND_ASYNC | SND_FILENAME | SND_NODEFAULT);
 	}
 	soundId = 0;
 

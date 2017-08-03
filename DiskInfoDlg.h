@@ -373,6 +373,8 @@ protected:
 #define AS_PLAY_SOUND   2
 #define AS_DEINIT       3
 	BOOL AlertSound(DWORD eventId, DWORD mode);
+	CString m_TempFilePathWave;
+	CString m_TempFilePathOpus;
 
 	void RebuildListHeader(DWORD index, BOOL forceUpdate = FALSE);
 
