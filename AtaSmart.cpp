@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
-//          Web : http://crystalmark.info/
+//          Web : https://crystalmark.info/
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
 // Reference : http://www.usefullcode.net/2007/02/hddsmart.html (ja)
@@ -952,13 +952,13 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 							cstr.Replace(_T("Silicon Image SiI "), _T(""));
 							siliconImageType = _tstoi(cstr);
 						}
-						// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=836;id=diskinfo#836
+						// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=836;id=diskinfo#836
 						else if(name1.Find(_T("BUFFALO IFC-PCI2ES")) == 0)
 						{
 							flagSiliconImage = TRUE;
 							siliconImageType = 3112;
 						}
-						// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1270;id=diskinfo#1270
+						// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1270;id=diskinfo#1270
 						// http://dream-drive.net/archives/2010/01/ifc-pcie2sawo.html
 						else if(name1.Find(_T("BUFFALO IFC-PCIE2SA")) == 0)
 						{
@@ -1310,13 +1310,13 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 						mediaType.MakeLower();
 						VariantClear(&pVal);
 
-						// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=994;id=diskinfo#994
+						// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=994;id=diskinfo#994
 						if(model.Find(_T("SanDisk Extreme")) == 0)
 						{
 							flagTarget = TRUE;
 							detectUSBMemory = TRUE;
 						}
-						// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1198;id=diskinfo#1198
+						// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1198;id=diskinfo#1198
 						else if(model.Find(_T("Kingston DT Ultimate")) == 0)
 						{
 							flagTarget = TRUE;
@@ -1957,7 +1957,7 @@ safeRelease:
 			PDISK_EXTENT pDiskExtent = &volumeDiskExtents.Extents[n];
 
 			// Workaround for RamPhantom EX 1.1
-			// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1178;id=diskinfo#1178
+			// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1178;id=diskinfo#1178
 			if(pDiskExtent->ExtentLength.QuadPart == 0)
 			{
 				continue;
@@ -2556,8 +2556,8 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				}
 			}
 
-			// 2012/9/12 - http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=821;id=diskinfo#821
-			// 2013/12/2 - http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1330;id=diskinfo#1330
+			// 2012/9/12 - https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=821;id=diskinfo#821
+			// 2013/12/2 - https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1330;id=diskinfo#1330
 			if (memcmp(asi.SmartReadData, asi.SmartReadThreshold, 512) == 0 && asi.DiskVendorId != SSD_VENDOR_INDILINX)
 			{
 				DebugPrint(_T("asi.SmartReadData == asi.SmartReadThreshold"));
@@ -2837,7 +2837,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	}
 
 	// OCZ-VERTEX3 2.02 Firmware Bug
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=303;id=diskinfo#303
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=303;id=diskinfo#303
 	// http://www.ocztechnologyforum.com/forum/showthread.php?88540-Vertex-3-Issues-Errors-and-Slow-speeds.
 	// OCZ-VERTEX2 1.27 Firmware Bug
 	// http://sourceforge.jp/ticket/browse.php?group_id=4394&tid=28153
@@ -3988,8 +3988,8 @@ BOOL CAtaSmart::IsSsdSandForce(ATA_SMART_INFO &asi)
 	}
 
 	// TOSHIBA + SandForce
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1116;id=diskinfo#1116
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1136;id=diskinfo#1136
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1116;id=diskinfo#1116
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1136;id=diskinfo#1136
 	if(asi.Attribute[ 0].Id == 0x01
 	&& asi.Attribute[ 1].Id == 0x02
 	&& asi.Attribute[ 2].Id == 0x03
@@ -4106,8 +4106,8 @@ BOOL CAtaSmart::IsSsdOcz(ATA_SMART_INFO &asi)
 		flagSmartType = TRUE;
 	}
 	// 2012/3/11
-	// OCZ-PETROL - http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=553;id=diskinfo#553
-	// OCZ-OCTANE S2 - http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=577;id=diskinfo#577
+	// OCZ-PETROL - https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=553;id=diskinfo#553
+	// OCZ-OCTANE S2 - https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=577;id=diskinfo#577
 	// OCZ-VERTEX 4 - http://imageshack.us/a/img269/7506/ocz2.png
 	if(asi.Attribute[ 0].Id == 0x01
 	&& asi.Attribute[ 1].Id == 0x03
@@ -4133,7 +4133,7 @@ BOOL CAtaSmart::IsSsdOczVector(ATA_SMART_INFO &asi)
 
 	/*
 	// 2013/1/19
-	// OCZ-VECTOR - http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1031;id=diskinfo#1031
+	// OCZ-VECTOR - https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1031;id=diskinfo#1031
 	if (asi.Attribute[0].Id == 0x05
 		&& asi.Attribute[1].Id == 0x09
 		&& asi.Attribute[2].Id == 0x0C
@@ -4148,7 +4148,7 @@ BOOL CAtaSmart::IsSsdOczVector(ATA_SMART_INFO &asi)
 	}
 	// 2013/3/24
 	// OCZ-VECTOR - FW 2.0
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1185;id=diskinfo#1185
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1185;id=diskinfo#1185
 	if (asi.Attribute[0].Id == 0x05
 		&& asi.Attribute[1].Id == 0x09
 		&& asi.Attribute[2].Id == 0x0C
@@ -4164,7 +4164,7 @@ BOOL CAtaSmart::IsSsdOczVector(ATA_SMART_INFO &asi)
 
 	// 2015/11/25
 	// PANASONIC RP-SSB240GAK
-	// http://crystalmark.info/board/c-board.cgi?cmd=one;no=500;id=#500
+	// https://crystalmark.info/board/c-board.cgi?cmd=one;no=500;id=#500
 	if (asi.Attribute[0].Id == 0x05
 		&& asi.Attribute[1].Id == 0x09
 		&& asi.Attribute[2].Id == 0x0C
@@ -4191,8 +4191,8 @@ BOOL CAtaSmart::IsSsdPlextor(ATA_SMART_INFO &asi)
 	BOOL flagSmartType = FALSE;
 
 	// 2012/10/10
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=739;id=diskinfo#739
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=829;id=diskinfo#829
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=739;id=diskinfo#739
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=829;id=diskinfo#829
 	if(asi.Attribute[ 0].Id == 0x01
 	&& asi.Attribute[ 1].Id == 0x05
 	&& asi.Attribute[ 2].Id == 0x09
@@ -4216,7 +4216,7 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 	BOOL flagSmartType = FALSE;
 
 	// 2013/10/7
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1425;id=diskinfo#1425
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1425;id=diskinfo#1425
 	if (asi.Model.Find(_T("SanDisk")) >= 0)
 	{
 		flagSmartType = TRUE;
@@ -4269,7 +4269,7 @@ BOOL CAtaSmart::IsSsdToshiba(ATA_SMART_INFO &asi)
 		if (asi.Model.Find(_T("THNSNC")) >= 0)
 		{
 			// TOSHIBA HG3
-			// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1106;id=diskinfo#1106
+			// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1106;id=diskinfo#1106
 		}
 		else
 		{
@@ -4475,9 +4475,9 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		}
 
 		// 2009/7/30, 2009/8/21
-		// IO-DATA HDPS-U  http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2918;id=report#2918
-		//                 http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2978;id=report#2978
-		//                 http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2985;id=report#2985
+		// IO-DATA HDPS-U  https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2918;id=report#2918
+		//                 https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2978;id=report#2978
+		//                 https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2985;id=report#2985
 		// 2012/3/20
 		// StoreJet         http://btmn.jp/2012/02/25/storejet-320gb-crystal-diskinfo/
 		if(interfaceType == INTERFACE_TYPE_USB && ((usbVendorId == USB_VENDOR_IO_DATA && productId == 0x0122) || usbVendorId == USB_VENDOR_JMICRON))
@@ -7079,7 +7079,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					int value = 0; 
 					rawValue = value = asi->Attribute[j].RawValue[2] * 256 * 256
 									 + asi->Attribute[j].RawValue[1] * 256
-									 + asi->Attribute[j].RawValue[0] - 0x0DA753; // http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=560;id=diskinfo#560
+									 + asi->Attribute[j].RawValue[0] - 0x0DA753; // https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=560;id=diskinfo#560
 					if(value < 0)
 					{
 						rawValue = 0;
@@ -8017,7 +8017,7 @@ DWORD CAtaSmart::GetTimeUnitType(CString model, CString firmware, DWORD major, D
 		}
 	}
 	// 2012/1/15
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=504;id=diskinfo#504
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=504;id=diskinfo#504
 	// http://sourceforge.jp/ticket/browse.php?group_id=4394&tid=27443
 	else if(
 	   ((model.Find(_T("CFD_CSSD-S6TM128NMPQ")) == 0 || model.Find(_T("CFD_CSSD-S6TM256NMPQ")) == 0) && (firmware.Find(_T("VM21")) == 0 || firmware.Find(_T("VN21")) == 0))
@@ -8027,7 +8027,7 @@ DWORD CAtaSmart::GetTimeUnitType(CString model, CString firmware, DWORD major, D
 	{
 		return POWER_ON_10_MINUTES;
 	}
-	// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1174;id=diskinfo#1174
+	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1174;id=diskinfo#1174
 	else if(
 		   (model.Find(_T("INTEL SSDSC2CW")) == 0 && model.Find(_T("A3")) > 0) // Intel SSD 520 Series
 		|| (model.Find(_T("INTEL SSDSC2BW")) == 0 && model.Find(_T("A3")) > 0) // Intel SSD 520 Series

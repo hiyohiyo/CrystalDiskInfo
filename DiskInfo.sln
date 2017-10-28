@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.0
+VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiskInfo", "DiskInfo.vcxproj", "{5496C268-D510-449C-8471-DE2B34898C28}"
 EndProject
@@ -11,6 +11,8 @@ Global
 		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
+		ReleaseUWP|Win32 = ReleaseUWP|Win32
+		ReleaseUWP|x64 = ReleaseUWP|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5496C268-D510-449C-8471-DE2B34898C28}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -21,8 +23,15 @@ Global
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|Win32.Build.0 = ReleaseKureiKei|Win32
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|x64.ActiveCfg = ReleaseShizuku|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|x64.Build.0 = ReleaseShizuku|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseUWP|Win32.ActiveCfg = ReleaseUWP|Win32
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseUWP|Win32.Build.0 = ReleaseUWP|Win32
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseUWP|x64.ActiveCfg = ReleaseUWP|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseUWP|x64.Build.0 = ReleaseUWP|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18B3B99F-8681-43CD-96B4-A079ECE1D445}
 	EndGlobalSection
 EndGlobal

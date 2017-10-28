@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
-//          Web : http://crystalmark.info/
+//          Web : https://crystalmark.info/
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
 #include "stdafx.h"
@@ -28,10 +28,10 @@ CMainDialog::CMainDialog(UINT dlgResouce,
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef KUREI_KEI_SUPPORT
 		m_DefaultTheme = L"KureiKei";
-		m_RecommendTheme = L"KureiKei";
+		m_RecommendTheme = L"KureiKei~kohakumuro";
 	#else
 		m_DefaultTheme = L"Shizuku";
-		m_RecommendTheme = L"Shizuku5thAnniversary";
+		m_RecommendTheme = L"ShizukuLiteratureGirlwithGlasses";
 	#endif
 #else
 	m_DefaultTheme = L"default";

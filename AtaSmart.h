@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
-//          Web : http://crystalmark.info/
+//          Web : https://crystalmark.info/
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
 // Reference : http://www.usefullcode.net/2007/02/hddsmart.html (ja)

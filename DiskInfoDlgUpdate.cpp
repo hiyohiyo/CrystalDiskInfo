@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
-//          Web : http://crystalmark.info/
+//          Web : https://crystalmark.info/
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
 
@@ -387,7 +387,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				}
 			}
 			// End-to-End Error
-			// http://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1090;id=diskinfo#1090
+			// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1090;id=diskinfo#1090
 			// http://h20000.www2.hp.com/bc/docs/support/SupportManual/c01159621/c01159621.pdf
 			else if (m_Ata.vars[i].Attribute[j].Id == 0xB8)
 			{
@@ -1610,6 +1610,11 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	menu->ModifyMenu(ID_AUTO_AAM_APM, MF_STRING, ID_AUTO_AAM_APM, cstr);
 	cstr = i18n(_T("Menu"), _T("STARTUP"));
 	menu->ModifyMenu(ID_STARTUP, MF_STRING, ID_STARTUP, cstr);
+
+#ifdef UWP
+	menu->EnableMenuItem(ID_STARTUP, MF_GRAYED);
+#endif
+
 	cstr = i18n(_T("Menu"), _T("GRAPH"));
 	menu->ModifyMenu(ID_GRAPH, MF_STRING, ID_GRAPH, cstr);
 	cstr = i18n(_T("Menu"), _T("REFRESH"));
@@ -1686,6 +1691,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	subMenu.ModifyMenu(8, MF_BYPOSITION, 8, cstr);
 	cstr = i18n(_T("Menu"), _T("WAIT_TIME_AT_STARTUP"));
 	subMenu.ModifyMenu(7, MF_BYPOSITION, 7, cstr);
+	subMenu.EnableMenuItem(7, MF_GRAYED);
 	subMenu.Detach();
 
 	cstr = i18n(_T("Menu"), _T("SECOND"));
