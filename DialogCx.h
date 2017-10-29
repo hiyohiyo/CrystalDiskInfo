@@ -66,6 +66,7 @@ protected:
 
 	CString m_BackgroundName;
 	CBitmap m_BitmapBg;
+	CDC		m_BgDC;
 	CImage m_ImageBg;
 	CBrush m_BrushDlg;
 
@@ -79,7 +80,7 @@ protected:
 
 	virtual void SetupControl(int nIDDlgItem , int x, int y, int width, int height);
 	virtual void UpdateDialogSize();
-	virtual void UpdateBackground();
+	virtual void UpdateBackground(bool resize = false);
 	virtual CString IP(CString imageName);
 
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
