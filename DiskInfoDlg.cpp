@@ -2372,7 +2372,7 @@ void CDiskInfoDlg::OnBnClickedButtonCopyright()
 #ifdef KUREI_KEI_SUPPORT
 
 	CString url;
-	url.Format(L"pronama.jp/crystaldiskinfo_themes/?%s", m_CurrentTheme);
+	url.Format(L"http://pronama.jp/crystaldiskinfo_themes/?%s", m_CurrentTheme);
 	OpenUrl(url);
 #else if
 	UINT themeIndex = rand() % (UINT)m_MenuArrayTheme.GetSize();
