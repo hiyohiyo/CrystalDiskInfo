@@ -1172,7 +1172,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	}
 #endif
 
-	UpdateBackground();
+	UpdateBackground(true);
 
 	if (GetPrivateProfileInt(_T("Setting"), _T("HideSmartInfo"), 0, m_Ini))
 	{

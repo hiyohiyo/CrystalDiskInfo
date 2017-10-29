@@ -113,7 +113,7 @@ void CAboutDlg::UpdateDialogSize()
 		SetClientRect((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
 	}
 
-	UpdateBackground();
+	UpdateBackground(true);
 
 	m_CtrlCrystalDewWorld.InitControl( 24,  24, 128, 128, m_ZoomRatio, IP(L"logo"), 1, 0, CButtonCx::OwnerDrawImage);
 	m_CtrlCrystalDewWorld.SetHandCursor();

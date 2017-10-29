@@ -14,6 +14,9 @@
 
 #include <strsafe.h>
 
+using namespace Gdiplus;
+#pragma	comment(lib,"Gdiplus.lib")
+
 // defined by Windows 8.1/Windows 2012 R2
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0
@@ -351,25 +354,57 @@ void CDialogCx::UpdateDialogSize()
 
 }
 
-void CDialogCx::UpdateBackground()
+void CDialogCx::UpdateBackground(bool resize)
 {
 	HRESULT hr;
 	BOOL    br = FALSE;
+	CImage srcBitmap;
+	double ratio = m_ZoomRatio;
 
-	m_ImageBg.Destroy();
-	hr = m_ImageBg.Load(IP(m_BackgroundName));
+	if (resize) m_ZoomRatio = 3.0;
+
+	hr = srcBitmap.Load(IP(m_BackgroundName));
+
+	if (resize) m_ZoomRatio = ratio;
 
 	if(SUCCEEDED(hr))
 	{
-		m_BitmapBg.Detach();
-		br = m_BitmapBg.Attach((HBITMAP)m_ImageBg);
-		if(br)
-		{
-			m_BrushDlg.DeleteObject();
-			m_BrushDlg.CreatePatternBrush(&m_BitmapBg);
+		CBitmap	baseBitmap;
+		CDC		baseDC;
+		CDC*	pWndDC = GetDC();
 
-			return ;
-		}
+		int w = (int)(m_ZoomRatio / 3.0 * srcBitmap.GetWidth());
+		int h = (int)(m_ZoomRatio / 3.0 * srcBitmap.GetHeight());
+
+		baseBitmap.CreateCompatibleBitmap(pWndDC, srcBitmap.GetWidth(), srcBitmap.GetHeight());
+		baseDC.CreateCompatibleDC(pWndDC);
+		
+		m_BitmapBg.DeleteObject();
+		m_BgDC.DeleteDC();
+		m_BitmapBg.CreateCompatibleBitmap(pWndDC, w, h);
+		m_BgDC.CreateCompatibleDC(pWndDC);
+
+		ReleaseDC(pWndDC);
+
+		baseDC.SelectObject(&baseBitmap);
+		m_BgDC.SelectObject(&m_BitmapBg);
+
+		srcBitmap.BitBlt(baseDC.GetSafeHdc(), 0, 0, SRCCOPY);
+		srcBitmap.Destroy();
+
+		Bitmap*	pBitmap = Bitmap::FromHBITMAP((HBITMAP)baseBitmap.GetSafeHandle(), NULL);
+		Graphics	g(m_BgDC.GetSafeHdc());
+		g.SetInterpolationMode(InterpolationModeHighQualityBicubic);
+		g.DrawImage(pBitmap, 0, 0, w, h);
+
+		delete	pBitmap;
+		baseBitmap.DeleteObject();
+		baseDC.DeleteDC();
+
+		m_BrushDlg.DeleteObject();
+		m_BrushDlg.CreatePatternBrush(&m_BitmapBg);
+
+		return;
 	}
 	
 	m_BrushDlg.DeleteObject();
