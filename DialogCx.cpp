@@ -464,6 +464,7 @@ HBRUSH CDialogCx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	return hbr;
 }
 
+/*
 typedef BOOL(WINAPI *FuncEnableNonClientDpiScaling) (HWND hwnd);
 
 BOOL CDialogCx::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
@@ -479,3 +480,4 @@ BOOL CDialogCx::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	return TRUE;
 }
+*/

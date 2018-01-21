@@ -91,5 +91,5 @@ protected:
 	afx_msg LRESULT OnSysColorChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnDisplayChange(WPARAM wParam, LPARAM lParam);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct);
+//	afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct);
 };

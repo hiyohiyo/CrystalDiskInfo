@@ -1691,7 +1691,9 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	subMenu.ModifyMenu(8, MF_BYPOSITION, 8, cstr);
 	cstr = i18n(_T("Menu"), _T("WAIT_TIME_AT_STARTUP"));
 	subMenu.ModifyMenu(7, MF_BYPOSITION, 7, cstr);
+#ifdef UWP
 	subMenu.EnableMenuItem(7, MF_GRAYED);
+#endif
 	subMenu.Detach();
 
 	cstr = i18n(_T("Menu"), _T("SECOND"));

@@ -132,10 +132,10 @@
 #endif
 
 
-#define PRODUCT_VERSION			_T("7.2.0")
-#define PRODUCT_RELEASE			_T("2017/10/28")
-#define PRODUCT_COPY_YEAR		_T("2008-2017")
-#define PRODUCT_COPYRIGHT		_T("© 2008-2017 hiyohiyo")
+#define PRODUCT_VERSION			_T("7.5.1")
+#define PRODUCT_RELEASE			_T("2018/01/01")
+#define PRODUCT_COPY_YEAR		_T("2008-2018")
+#define PRODUCT_COPYRIGHT		_T("© 2008-2018 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
 
 #define URL_CRYSTAL_DEW_WORLD_JA	_T("https://crystalmark.info/")
