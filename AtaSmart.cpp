@@ -4090,6 +4090,7 @@ BOOL CAtaSmart::IsSsdMicron(ATA_SMART_INFO &asi)
 		|| modelUpper.Find(_T("M4-")) == 0 || modelUpper.Find(_T("M400")) == 0
 		|| modelUpper.Find(_T("P300")) == 0 || modelUpper.Find(_T("C300")) == 0
 		|| modelUpper.Find(_T("M3-")) == 0 || modelUpper.Find(_T("M300")) == 0
+		|| (modelUpper.Find(_T("CT")) == 0 && modelUpper.Right(4) == _T("SSD1"))
 		|| modelUpper.Find(_T("CRUCIAL")) == 0 || modelUpper.Find(_T("MICRON")) == 0
 		|| flagSmartType;
 }
