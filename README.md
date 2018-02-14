@@ -10,12 +10,12 @@ CrystalDiskInfo supports
 
 # Notification
 This repository does not include resource files, so please download them from below.
-- http://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc
+- https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc
 
 # Project Page 
-- http://crystalmark.info/?lang=auto
+- https://crystalmark.info/
 
 # License
 The MIT License
-- http://crystalmark.info/software/CrystalDiskInfo/manual-ja/License.html (Japanese)
-- http://crystalmark.info/software/CrystalDiskInfo/manual-en/License.html (English)
+- https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-license/ (Japanese)
+- https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-license/ (English)
