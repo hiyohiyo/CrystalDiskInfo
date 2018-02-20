@@ -132,8 +132,8 @@
 #endif
 
 
-#define PRODUCT_VERSION			_T("7.5.1")
-#define PRODUCT_RELEASE			_T("2018/01/01")
+#define PRODUCT_VERSION			_T("7.5.2")
+#define PRODUCT_RELEASE			_T("2018/02/21")
 #define PRODUCT_COPY_YEAR		_T("2008-2018")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2018 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
@@ -168,8 +168,8 @@
 
 
 
-#define URL_HTML_HELP_JA		_T("https://crystalmark.info/software/CrystalDiskInfo/manual-ja/")
-#define URL_HTML_HELP_EN 		_T("https://crystalmark.info/software/CrystalDiskInfo/manual-en/")
+#define URL_HTML_HELP_JA		_T("https://crystalmark.info/ja/software/crystaldiskinfo/")
+#define URL_HTML_HELP_EN 		_T("https://crystalmark.info/en/software/crystaldiskinfo/")
 
 // Command
 static const int TRAY_TEMPERATURE_ICON_BASE			= WM_APP + 0x1200;
