@@ -138,10 +138,10 @@
 #define PRODUCT_COPYRIGHT		_T("© 2008-2018 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
 
-#define URL_CRYSTAL_DEW_WORLD_JA	_T("https://crystalmark.info/")
-#define URL_CRYSTAL_DEW_WORLD_EN 	_T("https://crystalmark.info/?lang=en")
+#define URL_CRYSTAL_DEW_WORLD_JA	_T("https://crystalmark.info/ja/")
+#define URL_CRYSTAL_DEW_WORLD_EN 	_T("https://crystalmark.info/en/")
 
-#define	URL_PROJECT_SHIZUKU_JA		_T("https://suishoshizuku.com/")
+#define	URL_PROJECT_SHIZUKU_JA		_T("https://suishoshizuku.com/ja/")
 #define	URL_PROJECT_SHIZUKU_EN		_T("https://suishoshizuku.com/en/")
 
 #define URL_PRONAMA	                _T("http://pronama.jp/crystaldiskinfo")

@@ -142,6 +142,10 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			)
 		{
 			vars[i].Temperature = vars[i].SmartReadData[0x2] * 256 + vars[i].SmartReadData[0x1] - 273;
+			if (vars[i].Temperature == -273)
+			{
+				vars[i].Temperature = -1000;
+			}
 			vars[i].Life = vars[i].SmartReadData[0x03];
 
 			vars[i].HostReads = (ULONG64)
@@ -3063,6 +3067,10 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	{
 		asi.IsSmartSupported = TRUE;
 		asi.Temperature = asi.SmartReadData[0x2] * 256 + asi.SmartReadData[0x1] - 273;
+		if (asi.Temperature == -273)
+		{
+			asi.Temperature = -1000;
+		}
 		asi.Life = asi.SmartReadData[0x03];
 
 		asi.HostReads = (ULONG64)
