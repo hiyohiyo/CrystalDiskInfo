@@ -28,10 +28,10 @@ CMainDialog::CMainDialog(UINT dlgResouce,
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef KUREI_KEI_SUPPORT
 		m_DefaultTheme = L"KureiKei";
-		m_RecommendTheme = L"KureiKei~kohakumuro";
+		m_RecommendTheme = L"KureiKeiRecoding";
 	#else
 		m_DefaultTheme = L"Shizuku";
-		m_RecommendTheme = L"ShizukuLiteratureGirlwithGlasses";
+		m_RecommendTheme = L"ShizukuHotaru";
 	#endif
 #else
 	m_DefaultTheme = L"default";
@@ -88,12 +88,12 @@ void CMainDialog::InitThemeLang()
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef KUREI_KEI_SUPPORT
-		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\KureiKeiBackground-100.png"))
+		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\KureiKeiBackground-300.png"))
 		{
 			defaultTheme = m_RecommendTheme;
 		}
 	#else
-		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\ShizukuBackground-100.png"))
+		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\ShizukuBackground-300.png"))
 		{
 			defaultTheme = m_RecommendTheme;
 		}
