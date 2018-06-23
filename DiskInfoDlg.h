@@ -362,6 +362,7 @@ protected:
 #endif
 	LRESULT OnPowerBroadcast(WPARAM wParam, LPARAM lParam);
 	LRESULT OnDeviceChange(WPARAM wParam, LPARAM lParam);
+	LRESULT OnQueryEndSession(WPARAM wParam, LPARAM lParam);
 
 	void Refresh(DWORD flagForceUpdate);
 	BOOL AppendLog(CString dir, CString disk, CString file, CTime time, int value, BOOL firstTime = FALSE, int threshold = 0);

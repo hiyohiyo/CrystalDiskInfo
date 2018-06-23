@@ -594,6 +594,9 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialog)
 	ON_MESSAGE(WM_POWERBROADCAST, &CDiskInfoDlg::OnPowerBroadcast)
 	ON_MESSAGE(WM_DEVICECHANGE, &CDiskInfoDlg::OnDeviceChange)
 
+	ON_MESSAGE(WM_QUERYENDSESSION, &CDiskInfoDlg::OnQueryEndSession)
+
+
 	// Task Tray
 	ON_REGISTERED_MESSAGE(gRegMessageId, OnRegMessage)
 	ON_REGISTERED_MESSAGE(wmTaskbarCreated, OnTaskbarCreated)
@@ -2057,6 +2060,11 @@ LRESULT CDiskInfoDlg::OnPowerBroadcast(WPARAM wParam, LPARAM lParam)
 		break;
 	}
 
+	return TRUE;
+}
+
+LRESULT CDiskInfoDlg::OnQueryEndSession(WPARAM wParam, LPARAM lParam)
+{
 	return TRUE;
 }
 

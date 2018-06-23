@@ -86,13 +86,17 @@ BOOL CDiskInfoApp::InitInstance()
 	// Init m_Ini
 	TCHAR *ptrEnd;
 	TCHAR ini[MAX_PATH];
+
 	::GetModuleFileName(NULL, ini, MAX_PATH);
 	if((ptrEnd = _tcsrchr(ini, '\\')) != NULL)
 	{
 		*ptrEnd = '\0';
-		_tcscat_s(ini, MAX_PATH, _T("\\DiskInfo.ini"));
+		m_Ini = ini;
+		m_Txt = ini;
+		// _tcscat_s(ini, MAX_PATH, _T("\\DiskInfo.ini"));
 	}
-	m_Ini = ini;
+	m_Ini += _T("\\DiskInfo.ini");
+	m_Txt += _T("\\DiskInfo.txt");
 
 	CString cstr;
 	DWORD debugMode = GetPrivateProfileInt(_T("Setting"), _T("DebugMode"), 0, m_Ini);
@@ -136,13 +140,11 @@ BOOL CDiskInfoApp::InitInstance()
 		}		
 		if(cstr.CompareNoCase(_T("/Copy")) == 0)
 		{
-			m_SaveAsText = m_Ini;
-			m_SaveAsText.Replace(_T("ini"), _T("txt"));
+			m_SaveAsText = m_Txt;
 		}
 		if(cstr.CompareNoCase(_T("/CopyExit")) == 0)
 		{
-			m_SaveAsText = m_Ini;
-			m_SaveAsText.Replace(_T("ini"), _T("txt"));
+			m_SaveAsText = m_Txt;
 			m_FlagCopyExit = TRUE;
 		}
 

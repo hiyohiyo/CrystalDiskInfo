@@ -54,86 +54,58 @@
 
 
 #include "DebugPrint.h"
-#include <afxcontrolbars.h>
+
+#include <afxcontrolbars.h>     // MFC support for ribbons and control bars
+/*
+#include "afxdialogex.h"
+#include "atlimage.h"
+#include "comutil.h"
+class CMFCRibbonBar {}; // block CMFCRibbonBar
+static void ControlBarCleanUp() {}
+*/
 
 // Version Information
 #define PROJECT_NAME			_T("CrystalDiskInfo")
 #define PRODUCT_NAME			_T("CrystalDiskInfo")
 
+#if KUREI_KEI_SUPPORT
+#define PRODUCT_SHORT_NAME		_T("CDI 7 KKE")
 
-#ifdef UWP
-
-	#ifdef SUISHO_SHIZUKU_SUPPORT
-		#ifdef KUREI_KEI_SUPPORT
-			#define PRODUCT_SHORT_NAME		_T("CDI 7 SE")
-		#else
-			#define PRODUCT_SHORT_NAME		_T("CDI 7 KKE")
-		#endif
-	#else
-	#define PRODUCT_SHORT_NAME		_T("CDI 7")
-	#endif
-
-	#ifdef SUISHO_SHIZUKU_SUPPORT
-		#ifdef KUREI_KEI_SUPPORT
-			#ifdef _M_X64
-				#define PRODUCT_EDITION			_T("Kurei Kei Edition x64 (UWP)")
-			#else
-				#define PRODUCT_EDITION			_T("Kurei Kei Edition (UWP)")
-			#endif
-		#else
-			#ifdef _M_X64
-				#define PRODUCT_EDITION			_T("Shizuku Edition x64 (UWP)")
-			#else
-				#define PRODUCT_EDITION			_T("Shizuku Edition (UWP)")
-			#endif
-		#endif
-	#else
-		#ifdef _M_X64
-		#define PRODUCT_EDITION			_T("x64 (UWP)")
-		#else
-		#define PRODUCT_EDITION			_T(" (UWP)")
-		#endif
-	#endif
-
+#ifdef _M_ARM
+#define PRODUCT_EDITION			_T("Kurei Kei Edition ARM32")
+#elif _M_ARM64
+#define PRODUCT_EDITION			_T("Kurei Kei Edition ARM64")
+#elif _M_X64
+#define PRODUCT_EDITION			_T("Kurei Kei Edition x64")
 #else
-
-	#ifdef SUISHO_SHIZUKU_SUPPORT
-		#ifdef KUREI_KEI_SUPPORT
-			#define PRODUCT_SHORT_NAME		_T("CDI 7 SE")
-		#else
-			#define PRODUCT_SHORT_NAME		_T("CDI 7 KKE")
-		#endif
-	#else
-		#define PRODUCT_SHORT_NAME		_T("CDI 7")
-	#endif
-
-	#ifdef SUISHO_SHIZUKU_SUPPORT
-		#ifdef KUREI_KEI_SUPPORT
-			#ifdef _M_X64
-				#define PRODUCT_EDITION			_T("Kurei Kei Edition x64")
-			#else
-				#define PRODUCT_EDITION			_T("Kurei Kei Edition")
-			#endif
-		#else
-			#ifdef _M_X64
-				#define PRODUCT_EDITION			_T("Shizuku Edition x64")
-			#else
-				#define PRODUCT_EDITION			_T("Shizuku Edition")
-			#endif
-		#endif
-	#else
-		#ifdef _M_X64
-			#define PRODUCT_EDITION			_T("x64")
-		#else
-			#define PRODUCT_EDITION			_T("")
-		#endif
-	#endif
-
+#define PRODUCT_EDITION			_T("Kurei Kei Edition")
+#endif
+#elif SUISHO_SHIZUKU_SUPPORT
+#define PRODUCT_SHORT_NAME		_T("CDI 7 SE")
+#ifdef _M_ARM32
+#define PRODUCT_EDITION			_T("Shizuku Edition ARM32")
+#elif _M_ARM64
+#define PRODUCT_EDITION			_T("Shizuku Edition ARM64")
+#elif _M_X64
+#define PRODUCT_EDITION			_T("Shizuku Edition x64")
+#else
+#define PRODUCT_EDITION			_T("Shizuku Edition")
+#endif
+#else
+#define PRODUCT_SHORT_NAME		_T("CDI 7")
+#ifdef _M_ARM
+#define PRODUCT_EDITION			_T("ARM32")
+#elif _M_ARM64
+#define PRODUCT_EDITION			_T("ARM64")
+#elif _M_X64
+#define PRODUCT_EDITION			_T("x64")
+#else
+#define PRODUCT_EDITION			_T("")
+#endif
 #endif
 
-
-#define PRODUCT_VERSION			_T("7.6.0")
-#define PRODUCT_RELEASE			_T("2018/03/22")
+#define PRODUCT_VERSION			_T("7.6.1")
+#define PRODUCT_RELEASE			_T("2018/06/14")
 #define PRODUCT_COPY_YEAR		_T("2008-2018")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2018 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")

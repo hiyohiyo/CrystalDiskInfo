@@ -64,6 +64,7 @@ public:
 	CString m_VoicePath;
 #endif
 	CString m_Ini;
+	CString m_Txt;
 	CString m_SaveAsText;
 	BOOL m_FlagCopyExit;
 

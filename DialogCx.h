@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "atlimage.h"
+
 class CDialogCx : public CDialogEx
 {
 public:
