@@ -1,4 +1,4 @@
-//
+﻿//
 //  Values are 32 bit values layed out as follows:
 //
 //   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1

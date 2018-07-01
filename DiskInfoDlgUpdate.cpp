@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------*/
+癤�/*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
@@ -133,27 +133,27 @@ void CDiskInfoDlg::UpdateShareInfo()
 				DWORD f = m_Ata.vars[i].Temperature * 9 / 5 + 32;
 				if (f > 100)
 				{
-					_stprintf_s(str, 256, _T("%d 걢F"), f);
+					_stprintf_s(str, 256, _T("%d 째F"), f);
 				}
 				else
 				{
-					_stprintf_s(str, 256, _T("%d  걢F"), f);
+					_stprintf_s(str, 256, _T("%d  째F"), f);
 				}
 			}
 			else
 			{
-				_stprintf_s(str, 256, _T("-- 걢F"));
+				_stprintf_s(str, 256, _T("-- 째F"));
 			}
 		}
 		else
 		{
 			if (m_Ata.vars[i].Temperature > -300)
 			{
-				_stprintf_s(str, 256, _T("%d 걢C"), m_Ata.vars[i].Temperature);
+				_stprintf_s(str, 256, _T("%d 째C"), m_Ata.vars[i].Temperature);
 			}
 			else
 			{
-				_stprintf_s(str, 256, _T("-- 걢C"));
+				_stprintf_s(str, 256, _T("-- 째C"));
 			}
 		}
 		RegSetValueEx(hSubKey, _T("Temperature"), 0, REG_SZ,
@@ -980,22 +980,22 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		{
 			if (m_FlagFahrenheit)
 			{
-				m_Temperature.Format(_T("%d 걢F"), m_Ata.vars[i].Temperature * 9 / 5 + 32);
+				m_Temperature.Format(_T("%d 째F"), m_Ata.vars[i].Temperature * 9 / 5 + 32);
 			}
 			else
 			{
-				m_Temperature.Format(_T("%d 걢C"), m_Ata.vars[i].Temperature);
+				m_Temperature.Format(_T("%d 째C"), m_Ata.vars[i].Temperature);
 			}
 		}
 		else
 		{
 			if (m_FlagFahrenheit)
 			{
-				m_Temperature.Format(_T("-- 걢F"));
+				m_Temperature.Format(_T("-- 째F"));
 			}
 			else
 			{
-				m_Temperature.Format(_T("-- 걢C"));
+				m_Temperature.Format(_T("-- 째C"));
 			}
 		}
 	}

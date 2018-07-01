@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------*/
+﻿/*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
@@ -236,7 +236,6 @@ void CDiskInfoDlg::OnCrystalDewWorld()
 
 void CDiskInfoDlg::OnHelp()
 {
-	CString cstr;
 	if(GetUserDefaultLCID() == 0x0411) // Japanese
 	{
 		OpenUrl(URL_HTML_HELP_JA);

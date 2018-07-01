@@ -1,4 +1,4 @@
-//From DDK
+﻿//From DDK
 
 #define	FILE_DEVICE_SCSI							0x0000001b
 #define	IOCTL_SCSI_MINIPORT_IDENTIFY				((FILE_DEVICE_SCSI << 16) + 0x0501)

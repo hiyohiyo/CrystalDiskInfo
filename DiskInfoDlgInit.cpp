@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------*/
+ï»¿/*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
@@ -20,7 +20,7 @@ extern const GUID StrageGUID;
 
 int CALLBACK EnumFontFamExProcMeiryo(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX *lpntme, int FontType, LPARAM lParam)
 {
-	if(_tcscmp(lpelfe->elfLogFont.lfFaceName, _T("ƒƒCƒŠƒI")) == 0)
+	if(_tcscmp(lpelfe->elfLogFont.lfFaceName, _T("ãƒ¡ã‚¤ãƒªã‚ª")) == 0)
 	{
 		BOOL *flag = (BOOL*)lParam;
 		*flag = TRUE;
@@ -40,7 +40,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	InitThemeLang();
 	InitMenu();
 
-	// ƒƒCƒ“‰æ–Ê‚ğƒŒƒCƒ„[ƒhƒEƒBƒ“ƒhƒE‚É‚·‚éB
+	// ãƒ¡ã‚¤ãƒ³ç”»é¢ã‚’ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ‰ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ã™ã‚‹ã€‚
 	::SetWindowLong(m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
 	::SetLayeredWindowAttributes(m_hWnd, 0, 255, LWA_ALPHA);
 
@@ -58,7 +58,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	
 	if(hasMeiryo)
 	{
-		defaultFontFace = _T("ƒƒCƒŠƒI");
+		defaultFontFace = _T("ãƒ¡ã‚¤ãƒªã‚ª");
 	}
 	else
 	{
@@ -319,7 +319,7 @@ void CDiskInfoDlg::InitListCtrl()
 	style |= LVS_EX_FULLROWSELECT | /*LVS_EX_GRIDLINES |*/ LVS_EX_LABELTIP ;
 	ListView_SetExtendedListViewStyle(m_List.m_hWnd, style);
 
-	// ‚±‚ÌƒEƒBƒ“ƒhƒE‚É WS_EX_LAYERED ‚ğİ’è‚·‚é 
+	// ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã« WS_EX_LAYERED ã‚’è¨­å®šã™ã‚‹ 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	if (m_LayeredListCtrl)
 	{
@@ -642,12 +642,12 @@ void CDiskInfoDlg::InitDriveList()
 			{
 				if (m_FlagFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s%d ‹F%s%s"),
+					m_LiDisk[i % 8].Format(_T("%s%s%d Â°F%s%s"),
 						diskStatus, delimiter, m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter, driveLetter);
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s%d ‹C%s%s"),
+					m_LiDisk[i % 8].Format(_T("%s%s%d Â°C%s%s"),
 						diskStatus, delimiter, m_Ata.vars[i].Temperature, delimiter, driveLetter);
 				}
 			}
@@ -655,12 +655,12 @@ void CDiskInfoDlg::InitDriveList()
 			{
 				if(m_FlagFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s%d ‹F%s%s"), 
+					m_LiDisk[i % 8].Format(_T("%s%s%d Â°F%s%s"), 
 								diskStatus, delimiter, m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter, driveLetter);
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s%d ‹C%s%s"), 
+					m_LiDisk[i % 8].Format(_T("%s%s%d Â°C%s%s"), 
 								diskStatus, delimiter, m_Ata.vars[i].Temperature, delimiter, driveLetter);
 				}
 			}
@@ -668,22 +668,22 @@ void CDiskInfoDlg::InitDriveList()
 			{
 				if(m_FlagFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s-- ‹F%s%s"), diskStatus, delimiter, delimiter, driveLetter);
+					m_LiDisk[i % 8].Format(_T("%s%s-- Â°F%s%s"), diskStatus, delimiter, delimiter, driveLetter);
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s-- ‹C%s%s"), diskStatus, delimiter, delimiter, driveLetter);
+					m_LiDisk[i % 8].Format(_T("%s%s-- Â°C%s%s"), diskStatus, delimiter, delimiter, driveLetter);
 				}
 			}
 			else
 			{
 				if(m_FlagFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("----%s-- ‹F%s%s"), delimiter, delimiter, driveLetter);
+					m_LiDisk[i % 8].Format(_T("----%s-- Â°F%s%s"), delimiter, delimiter, driveLetter);
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("----%s-- ‹C%s%s"), delimiter, delimiter, driveLetter);
+					m_LiDisk[i % 8].Format(_T("----%s-- Â°C%s%s"), delimiter, delimiter, driveLetter);
 				}
 			}
 

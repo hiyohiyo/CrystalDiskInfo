@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "SlotSpeedGetter.h"
 #include <wbemcli.h>
 #include <comutil.h>

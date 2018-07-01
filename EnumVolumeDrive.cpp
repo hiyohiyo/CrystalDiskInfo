@@ -1,4 +1,4 @@
-
+ï»¿
 #include "stdafx.h"
 #include <windows.h>
 #include <tchar.h>
@@ -15,16 +15,16 @@
 
 struct DiskDriveInfo
 {
-    CString		DriveLetter;	// ƒhƒ‰ƒCƒuƒŒƒ^[
-	CString		DevicePath;		// ƒfƒoƒCƒXƒpƒX
-	CString		VolumeName;		// ƒ{ƒŠƒ…[ƒ€–¼
-	CString		ParentDevId;	// eŠK‘wƒfƒoƒCƒX‚ÌƒfƒoƒCƒXID
+    CString		DriveLetter;	// ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ¬ã‚¿ãƒ¼
+	CString		DevicePath;		// ãƒ‡ãƒã‚¤ã‚¹ãƒ‘ã‚¹
+	CString		VolumeName;		// ãƒœãƒªãƒ¥ãƒ¼ãƒ å
+	CString		ParentDevId;	// è¦ªéšŽå±¤ãƒ‡ãƒã‚¤ã‚¹ã®ãƒ‡ãƒã‚¤ã‚¹ID
 };
 
 
 /////////////////////////////////////////////////////////////////////////////
 
-// ƒfƒBƒXƒNƒhƒ‰ƒCƒuî•ñ
+// ãƒ‡ã‚£ã‚¹ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–æƒ…å ±
 CAtlArray< DiskDriveInfo >	gDriveInfos;
 
 
@@ -40,13 +40,13 @@ BOOL GetVolumeNameFromDriveLetter()
 	{
 		szDriveLetter[0] = _T('A') + i;
 
-		// ƒhƒ‰ƒCƒuƒŒƒ^[‚©‚çƒ{ƒŠƒ…[ƒ€–¼‚ðŽæ“¾
+		// ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ¬ã‚¿ãƒ¼ã‹ã‚‰ãƒœãƒªãƒ¥ãƒ¼ãƒ åã‚’å–å¾—
 		bRet = GetVolumeNameForVolumeMountPoint(
 						szDriveLetter,
 						szVolumeName,
 						sizeof( szVolumeName ) / sizeof( TCHAR ) );
 
-		// Žæ“¾¬Œ÷
+		// å–å¾—æˆåŠŸ
 		if ( bRet )
 		{
 			DiskDriveInfo info;
@@ -92,7 +92,7 @@ BOOL GetVolumeNameFromDiskDevicePath()
 
 	sDevIfData.cbSize = sizeof( SP_DEVICE_INTERFACE_DATA );
 
-	// ƒfƒBƒXƒNƒfƒoƒCƒX‚ð—ñ‹“‚µAƒfƒoƒCƒXƒpƒX‚©‚çƒ{ƒŠƒ…[ƒ€–¼‚ðŽæ“¾‚·‚éB
+	// ãƒ‡ã‚£ã‚¹ã‚¯ãƒ‡ãƒã‚¤ã‚¹ã‚’åˆ—æŒ™ã—ã€ãƒ‡ãƒã‚¤ã‚¹ãƒ‘ã‚¹ã‹ã‚‰ãƒœãƒªãƒ¥ãƒ¼ãƒ åã‚’å–å¾—ã™ã‚‹ã€‚
 	for (ULONG nIndex = 0; ; nIndex++)
 	{
 		bRet = SetupDiEnumDeviceInterfaces(
@@ -104,14 +104,14 @@ BOOL GetVolumeNameFromDiskDevicePath()
 
 		if ( !bRet )
 		{
-			break;	// —ñ‹“I—¹
+			break;	// åˆ—æŒ™çµ‚äº†
 		}
 
 		ZeroMemory( &sDevInfoData, sizeof( SP_DEVINFO_DATA ) );
 
 		sDevInfoData.cbSize = sizeof( SP_DEVINFO_DATA );
 
-		// ƒfƒoƒCƒXÚ×î•ñ‚Ì’·‚³‚ðŽæ“¾
+		// ãƒ‡ãƒã‚¤ã‚¹è©³ç´°æƒ…å ±ã®é•·ã•ã‚’å–å¾—
 		SetupDiGetDeviceInterfaceDetail(
 							hDevInfo,
 							&sDevIfData,
@@ -120,14 +120,14 @@ BOOL GetVolumeNameFromDiskDevicePath()
 							&ulLength,
 							&sDevInfoData );
 
-		// ƒfƒoƒCƒXÚ×î•ñ—pƒƒ‚ƒŠŠm•Û
+		// ãƒ‡ãƒã‚¤ã‚¹è©³ç´°æƒ…å ±ç”¨ãƒ¡ãƒ¢ãƒªç¢ºä¿
 		pDevIfDetail = (PSP_DEVICE_INTERFACE_DETAIL_DATA) malloc( ulLength );
 
 		assert( pDevIfDetail != NULL );
 
 		pDevIfDetail->cbSize = sizeof( SP_DEVICE_INTERFACE_DETAIL_DATA );
 
-		// ƒfƒoƒCƒXÚ×î•ñŽæ“¾
+		// ãƒ‡ãƒã‚¤ã‚¹è©³ç´°æƒ…å ±å–å¾—
 		bRet = SetupDiGetDeviceInterfaceDetail(
 							hDevInfo,
 							&sDevIfData,
@@ -136,35 +136,35 @@ BOOL GetVolumeNameFromDiskDevicePath()
 							&ulLength,
 							&sDevInfoData );
 
-		// ƒfƒoƒCƒXÚ×î•ñŽæ“¾¬Œ÷
+		// ãƒ‡ãƒã‚¤ã‚¹è©³ç´°æƒ…å ±å–å¾—æˆåŠŸ
 		if ( bRet )
 		{
-			// ƒfƒoƒCƒXƒpƒXi––”ö‚É'\'‚ð•t‚¯‚éj
+			// ãƒ‡ãƒã‚¤ã‚¹ãƒ‘ã‚¹ï¼ˆæœ«å°¾ã«'\'ã‚’ä»˜ã‘ã‚‹ï¼‰
 			_tcscpy( szDevicePath, pDevIfDetail->DevicePath );
 			_tcscat( szDevicePath, _T("\\") );
 
-			// ƒfƒoƒCƒXƒpƒX‚©‚çƒ{ƒŠƒ…[ƒ€–¼‚ðŽæ“¾
+			// ãƒ‡ãƒã‚¤ã‚¹ãƒ‘ã‚¹ã‹ã‚‰ãƒœãƒªãƒ¥ãƒ¼ãƒ åã‚’å–å¾—
 			bRet = GetVolumeNameForVolumeMountPoint(
 								szDevicePath,
 								szVolumeName,
 								sizeof( szVolumeName ) / sizeof( TCHAR ) );
 
-			// ƒ{ƒŠƒ…[ƒ€–¼Žæ“¾¬Œ÷
+			// ãƒœãƒªãƒ¥ãƒ¼ãƒ åå–å¾—æˆåŠŸ
 			if ( bRet )
 			{
-				// šƒhƒ‰ƒCƒuƒŒƒ^[‚©‚çŽæ“¾‚µ‚½ƒ{ƒŠƒ…[ƒ€–¼‚Æ”äŠr‚µ
-				//   ƒhƒ‰ƒCƒuƒŒƒ^[‚ÆŠÖ˜A•t‚¯‚éB
+				// â˜…ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ¬ã‚¿ãƒ¼ã‹ã‚‰å–å¾—ã—ãŸãƒœãƒªãƒ¥ãƒ¼ãƒ åã¨æ¯”è¼ƒã—
+				//   ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ¬ã‚¿ãƒ¼ã¨é–¢é€£ä»˜ã‘ã‚‹ã€‚
 				for ( size_t i = 0; i < gDriveInfos.GetCount(); i++ )
 				{
 					DiskDriveInfo& rInfo = gDriveInfos[i];
 
-					// ƒ{ƒŠƒ…[ƒ€–¼‚ªˆê’v
+					// ãƒœãƒªãƒ¥ãƒ¼ãƒ åãŒä¸€è‡´
 					if ( rInfo.VolumeName.CompareNoCase( szVolumeName ) == 0 )
 					{
 						rInfo.DevicePath = szDevicePath;
 
-						// šƒ{ƒŠƒ…[ƒ€ƒfƒoƒCƒX‚ÌeŠK‘w(ƒfƒBƒXƒNƒfƒoƒCƒX?)‚Ì
-						// @ƒfƒoƒCƒXID‚ðŽæ“¾‚·‚éB
+						// â˜…ãƒœãƒªãƒ¥ãƒ¼ãƒ ãƒ‡ãƒã‚¤ã‚¹ã®è¦ªéšŽå±¤(ãƒ‡ã‚£ã‚¹ã‚¯ãƒ‡ãƒã‚¤ã‚¹?)ã®
+						// ã€€ãƒ‡ãƒã‚¤ã‚¹IDã‚’å–å¾—ã™ã‚‹ã€‚
 						{
 							DEVINST hDevInst = sDevInfoData.DevInst;
 							DEVINST hParentDev;
@@ -177,7 +177,7 @@ BOOL GetVolumeNameFromDiskDevicePath()
 							if ( cRet == CR_SUCCESS )
 							{
 								CM_Get_Device_ID_Size( &ulParentDevIdLen, hParentDev, 0 );
-								++ulParentDevIdLen; // ƒkƒ‹•¶Žš•ª
+								++ulParentDevIdLen; // ãƒŒãƒ«æ–‡å­—åˆ†
 
 								pParentDevId = (LPTSTR)malloc( ulParentDevIdLen * sizeof( TCHAR ) );
 

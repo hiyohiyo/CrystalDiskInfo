@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------*/
+ï»¿/*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
@@ -441,7 +441,7 @@ HBRUSH CDialogCx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 			return nullb;
 		}
 		break;
-	case CTLCOLOR_BTN:	//	¡“§‰ßƒ{ƒ^ƒ“‚É•K—v‚Èˆ—B
+	case CTLCOLOR_BTN:	//	â– é€éãƒœã‚¿ãƒ³ã«å¿…è¦ãªå‡¦ç†ã€‚
 		if (!m_IsHighContrast)
 		{
 			nullb.CreateStockObject(NULL_BRUSH);
@@ -460,7 +460,7 @@ HBRUSH CDialogCx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 		break;
 	}
 
-	// TODO:  Šù’è’l‚ğg—p‚µ‚½‚­‚È‚¢ê‡‚Í•Ê‚Ìƒuƒ‰ƒV‚ğ•Ô‚µ‚Ü‚·B
+	// TODO:  æ—¢å®šå€¤ã‚’ä½¿ç”¨ã—ãŸããªã„å ´åˆã¯åˆ¥ã®ãƒ–ãƒ©ã‚·ã‚’è¿”ã—ã¾ã™ã€‚
 	return hbr;
 }
 

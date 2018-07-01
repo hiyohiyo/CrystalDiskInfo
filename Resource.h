@@ -1,6 +1,6 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ �Ő������ꂽ�C���N���[�h �t�@�C���B
-// DiskInfo.rc �Ŏg�p
+﻿//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ で生成されたインクルード ファイル。
+// DiskInfo.rc で使用
 //
 #define IDD_DISKINFO_DIALOG             102
 #define IDR_HTML_DUMMY                  103

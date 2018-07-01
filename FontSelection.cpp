@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------*/
+ï»¿/*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
@@ -71,7 +71,7 @@ BOOL CFontSelection::OnInitDialog()
 	}
 	else
 	{
-		no = m_FontComboBox.FindStringExact(0, _T("ƒƒCƒŠƒI"));
+		no = m_FontComboBox.FindStringExact(0, _T("ãƒ¡ã‚¤ãƒªã‚ª"));
 		if(no >= 0)
 		{
 			m_FontComboBox.SetCurSel(no);

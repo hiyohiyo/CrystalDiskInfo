@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------*/
+Ôªø/*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
@@ -813,11 +813,11 @@ void CGraphDlg::InitMenuBar()
 	// Temperature
 	if(m_FlagFahrenheit)
 	{
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (ÅãF)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_FlagSmartEnglish));
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (¬∞F)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_FlagSmartEnglish));
 	}
 	else
 	{
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (ÅãC)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_FlagSmartEnglish));
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (¬∞C)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_FlagSmartEnglish));
 	}
 	select += cstr;if(SelectedAttributeId == SMART_TEMPERATURE){index = counter;}counter++;
 	
