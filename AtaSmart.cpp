@@ -5053,8 +5053,11 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.Cdb[10]= 0;
 	sptwb.Spt.Cdb[11]= 0;
 	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_OUT;
-	sptwb.DataBuf[0] = 1;
-
+	sptwb.DataBuf[0] = 'E';
+	sptwb.DataBuf[1] = 'M';
+	sptwb.DataBuf[2] = 'V';
+	sptwb.DataBuf[3] = 'N';
+	sptwb.DataBuf[8] = 0x06; // Identify
 
 	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf) + sptwb.Spt.DataTransferLength;
 
@@ -5070,7 +5073,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 
 	sptwb.Spt.CdbLength = 12;
 	sptwb.Spt.Cdb[0] = 0xA1; // NVME PASS THROUGH
-	sptwb.Spt.Cdb[1] = 0x80; // ADMIN
+	sptwb.Spt.Cdb[1] = 0x82; // ADMIN + DMA-IN
 	sptwb.Spt.Cdb[2] = 0;
 	sptwb.Spt.Cdb[3] = 0;
 	sptwb.Spt.Cdb[4] = 0;
@@ -5082,7 +5085,6 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.Cdb[10]= 0;
 	sptwb.Spt.Cdb[11]= 0;
 	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_IN;
-	sptwb.DataBuf[0] = 0;
 
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
@@ -5214,6 +5216,21 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 
 	return TRUE;
 }
+
+/*---------------------------------------------------------------------------*/
+//  NVMe ASMedia <DOES NOT WORK>
+/*---------------------------------------------------------------------------*/
+
+BOOL CAtaSmart::DoIdentifyDeviceNVMeASMedia(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
+{
+	return FALSE;
+}
+
+BOOL CAtaSmart::GetSmartAttributeNVMeASMedia(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
+{
+	return FALSE;
+}
+
 
 /*---------------------------------------------------------------------------*/
 //  NVMe SAMSUNG
