@@ -69,7 +69,7 @@ static void ControlBarCleanUp() {}
 #define PRODUCT_NAME			_T("CrystalDiskInfo")
 
 #if KUREI_KEI_SUPPORT
-#define PRODUCT_SHORT_NAME		_T("CDI 7 KKE")
+#define PRODUCT_SHORT_NAME		_T("CDI 8 KKE")
 
 #ifdef _M_ARM
 #define PRODUCT_EDITION			_T("Kurei Kei Edition ARM32")
@@ -81,7 +81,7 @@ static void ControlBarCleanUp() {}
 #define PRODUCT_EDITION			_T("Kurei Kei Edition")
 #endif
 #elif SUISHO_SHIZUKU_SUPPORT
-#define PRODUCT_SHORT_NAME		_T("CDI 7 SE")
+#define PRODUCT_SHORT_NAME		_T("CDI 8 SE")
 #ifdef _M_ARM32
 #define PRODUCT_EDITION			_T("Shizuku Edition ARM32")
 #elif _M_ARM64
@@ -92,7 +92,7 @@ static void ControlBarCleanUp() {}
 #define PRODUCT_EDITION			_T("Shizuku Edition")
 #endif
 #else
-#define PRODUCT_SHORT_NAME		_T("CDI 7")
+#define PRODUCT_SHORT_NAME		_T("CDI 8")
 #ifdef _M_ARM
 #define PRODUCT_EDITION			_T("ARM32")
 #elif _M_ARM64
@@ -104,8 +104,8 @@ static void ControlBarCleanUp() {}
 #endif
 #endif
 
-#define PRODUCT_VERSION			_T("7.6.1")
-#define PRODUCT_RELEASE			_T("2018/06/14")
+#define PRODUCT_VERSION			_T("8 -Marginality-")
+#define PRODUCT_RELEASE			_T("2018/07/24")
 #define PRODUCT_COPY_YEAR		_T("2008-2018")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2018 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")

@@ -188,6 +188,7 @@
     <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
+    <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -266,26 +267,26 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|x64'">Build\$(Configuration)$(Platform)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM'">Build\$(Configuration)$(Platform)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM64'">Build\$(Configuration)$(Platform)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|ARM'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|ARM64'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|Win32'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|x64'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM'">..\Marguerite\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM64'">..\Marguerite\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|ARM'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|ARM64'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|Win32'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|x64'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM'">..\Marginality\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM64'">..\Marginality\</OutDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|Win32'">false</LinkIncremental>
@@ -329,7 +330,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
@@ -350,7 +351,7 @@
       <ProgramDatabaseFile>Build\$(Configuration)$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
       <ManifestFile>Build\$(Configuration)$(Platform)\$(TargetExt).intermediate.manifest</ManifestFile>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -396,7 +397,7 @@
       <ProfileGuidedDatabase>Build\$(Configuration)$(Platform)\$(TargetName).pgd</ProfileGuidedDatabase>
       <ProgramDatabaseFile>Build\$(Configuration)$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
       <ManifestFile>Build\$(Configuration)$(Platform)\$(TargetExt).intermediate.manifest</ManifestFile>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -429,18 +430,18 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName)64D.exe</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)A64D.exe</OutputFile>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <DelayLoadDLLs>oledlg.dll</DelayLoadDLLs>
       <ProfileGuidedDatabase>Build\$(Configuration)$(Platform)\$(TargetName).pgd</ProfileGuidedDatabase>
       <ProgramDatabaseFile>Build\$(Configuration)$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
       <ManifestFile>Build\$(Configuration)$(Platform)\$(TargetExt).intermediate.manifest</ManifestFile>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -473,18 +474,18 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName)64D.exe</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)A32D.exe</OutputFile>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <DelayLoadDLLs>oledlg.dll</DelayLoadDLLs>
       <ProfileGuidedDatabase>Build\$(Configuration)$(Platform)\$(TargetName).pgd</ProfileGuidedDatabase>
       <ProgramDatabaseFile>Build\$(Configuration)$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
       <ManifestFile>Build\$(Configuration)$(Platform)\$(TargetExt).intermediate.manifest</ManifestFile>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
