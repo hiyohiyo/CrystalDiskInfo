@@ -106,6 +106,7 @@ public:
 		CMD_TYPE_NVME_SAMSUNG,
 		CMD_TYPE_NVME_INTEL,
 		CMD_TYPE_NVME_STORAGE_QUERY,
+		CMD_TYPE_NVME_JMICRON,
 		CMD_TYPE_DEBUG
 	};
 
@@ -170,6 +171,7 @@ public:
 		INTERFACE_TYPE_UASP,
 		INTERFACE_TYPE_SCSI, 
 		INTERFACE_TYPE_NVME,
+		INTERFACE_TYPE_UASP_NVME,
 	};
 
 protected:
@@ -1530,6 +1532,9 @@ protected:
 	BOOL SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize);
 
 	BOOL AddDiskNVMe(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, CString pnpDeviceId = _T(""));
+
+	BOOL DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
+	BOOL GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	BOOL DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
