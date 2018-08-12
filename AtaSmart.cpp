@@ -5069,7 +5069,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.DataBuf[1] = 'V';
 	sptwb.DataBuf[2] = 'M';
 	sptwb.DataBuf[3] = 'E';
-	sptwb.DataBuf[8] = 0x00; // Identify
+	sptwb.DataBuf[8] = 0x06; // Identify
 	sptwb.DataBuf[0x21] = 0x40;
 	sptwb.DataBuf[0x22] = 0x7A;
 	sptwb.DataBuf[0x30] = 0x02;
