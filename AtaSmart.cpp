@@ -5070,10 +5070,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.DataBuf[2] = 'M';
 	sptwb.DataBuf[3] = 'E';
 	sptwb.DataBuf[8] = 0x06; // Identify
-	sptwb.DataBuf[0x21] = 0x40;
-	sptwb.DataBuf[0x22] = 0x7A;
-	sptwb.DataBuf[0x30] = 0x02;
-	sptwb.DataBuf[0x32] = 0x7F;
+	sptwb.DataBuf[0x30] = 0x01;
 
 	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf) + sptwb.Spt.DataTransferLength;
 
@@ -5087,14 +5084,13 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 		return	FALSE;
 	}
 
-	::ZeroMemory(&sptwb, sizeof(SCSI_PASS_THROUGH_WITH_BUFFERS24));
+//	::ZeroMemory(&sptwb, sizeof(SCSI_PASS_THROUGH_WITH_BUFFERS24));
 	sptwb.Spt.Length = sizeof(SCSI_PASS_THROUGH);
 	sptwb.Spt.PathId = 0;
 	sptwb.Spt.TargetId = 0;
 	sptwb.Spt.Lun = 0;
 	sptwb.Spt.SenseInfoLength = 24;
-	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_OUT;
-	sptwb.Spt.DataTransferLength = IDENTIFY_BUFFER_SIZE;
+	sptwb.Spt.DataTransferLength = 512;
 	sptwb.Spt.TimeOutValue = 2;
 	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf);
 	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, SenseBuf);
@@ -5113,6 +5109,9 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.Cdb[10]= 0;
 	sptwb.Spt.Cdb[11]= 0;
 	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_IN;
+
+	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf) + sptwb.Spt.DataTransferLength;
+
 
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
