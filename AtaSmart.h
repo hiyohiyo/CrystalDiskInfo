@@ -1498,6 +1498,8 @@ public:
 	BOOL FlagUsbJmicron;
 	BOOL FlagUsbCypress;
 	BOOL FlagUsbMemory;
+	BOOL FlagUsbNVMeJMicron;
+	BOOL FlagUsbNVMeASMedia;
 	DWORD CsmiType;
 
 	DWORD CheckDiskStatus(DWORD index);

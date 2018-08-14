@@ -136,6 +136,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagUsbJmicron = ! GetPrivateProfileInt(_T("USB"), _T("JMicron"), 1, m_Ini);
 	m_Ata.FlagUsbCypress = ! GetPrivateProfileInt(_T("USB"), _T("Cypress"), 1, m_Ini);
 	m_Ata.FlagUsbMemory  = ! GetPrivateProfileInt(_T("USB"), _T("UsbMemory"), 0, m_Ini);
+	m_Ata.FlagUsbNVMeJMicron = !GetPrivateProfileInt(_T("USB"), _T("NVMeJMicron"), 1, m_Ini);
+	m_Ata.FlagUsbNVMeASMedia = !GetPrivateProfileInt(_T("USB"), _T("NVMeASMedia"), 1, m_Ini);
 
 	OnUsbSat();
 	OnUsbIodata();
@@ -145,6 +147,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();
+	OnUsbNVMeJMicron();
+	OnUsbNVMeASMedia();
 
 	DebugPrint(_T("InitAta"));
 	InitAta((BOOL)GetPrivateProfileInt(_T("Setting"), _T("UseWMI"), 1, m_Ini), m_FlagAdvancedDiskSearch, NULL, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
@@ -638,7 +642,7 @@ void CDiskInfoDlg::InitDriveList()
 		{
 			CString targetDisk;
 			targetDisk.Format(_T("Disk%d"), i % 8);
-			if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME && m_Ata.vars[i].Temperature > -300)
+			if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME && m_Ata.vars[i].Temperature > -300)
 			{
 				if (m_FlagFahrenheit)
 				{

@@ -197,7 +197,7 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 	}
 
 	while (m_List.DeleteColumn(0)) {}
-	if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+	if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
 		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
@@ -738,7 +738,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			m_List.SetItemText(k, 6, cstr);
 			//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDDDDDD"));
 		}
-		else if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+		else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 		{
 			cstr = _T("---");
 			m_List.SetItemText(k, 3, cstr);

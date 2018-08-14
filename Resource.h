@@ -455,8 +455,10 @@
 #define ID_USB_JMICRON                  32973
 #define ID_USB_CYPRESS                  32974
 #define ID_USB_MEMORY                   32975
-#define ID_USB_ALLON                    32976
-#define ID_USB_ALLOFF                   32977
+#define ID_USB_NVME_JMICRON             32976
+#define ID_USB_NVME_ASMEDIA             32977
+#define ID_USB_ALLON                    32978
+#define ID_USB_ALLOFF                   32979
 #define ID_USB_ENABLE_ALL               32980
 #define ID_USB_DISABLE_ALL              32981
 #define ID_HEALTH_STATUS                32982

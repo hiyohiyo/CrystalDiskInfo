@@ -36,6 +36,8 @@ static const TCHAR *commandTypeString[] =
 	_T("ns"), // NVMe Samsung
 	_T("ni"), // NVMe Intel
 	_T("sq"), // NVMe Storage Query
+	_T("nj"), // NVMe JMicron
+	_T("na"), // NVMe ASMedia
 };
 
 static const TCHAR *ssdVendorString[] = 
@@ -131,7 +133,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 
 	static SMART_ATTRIBUTE attribute[MAX_DISK][MAX_ATTRIBUTE] = {0};
 
-	if (vars[i].InterfaceType == INTERFACE_TYPE_NVME)
+	if (vars[i].DiskVendorId == SSD_VENDOR_NVME)
 	{
 		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
 
@@ -139,6 +141,9 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung951(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		
 			)
 		{
 			vars[i].Temperature = vars[i].SmartReadData[0x2] * 256 + vars[i].SmartReadData[0x1] - 273;
@@ -1502,16 +1507,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 							model.Replace(_T(" ATA Device"), _T(""));
 							model.Replace(_T("NVMe "), _T(""));
 
-							if (interfaceType == INTERFACE_TYPE_USB_NVME)
-							{
-								flagSkipModelCheck = TRUE;
-								cstr.Format(_T("USB (%s)"), vars[index].Interface);
-								vars[index].Interface = cstr;
-								vars[index].InterfaceType = INTERFACE_TYPE_USB_NVME;
-
-								detectUASPdisks = TRUE;
-							}
-							else if(interfaceType == INTERFACE_TYPE_UASP)
+							if(interfaceType == INTERFACE_TYPE_UASP)
 							{
 								flagSkipModelCheck = TRUE;
 								cstr.Format(_T("UASP (%s)"), vars[index].Interface);
@@ -1519,6 +1515,15 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 								vars[index].InterfaceType = INTERFACE_TYPE_UASP;
 								
 								detectUASPdisks = TRUE;
+								for (int i = 0; i < externals.GetCount(); i++)
+								{
+									if (externals.GetAt(i).Enclosure.Find(vars[index].ModelWmi) == 0)
+									{
+										vars[index].Enclosure = externals.GetAt(i).Enclosure;
+										vars[index].UsbVendorId = externals.GetAt(i).UsbVendorId;
+										vars[index].UsbProductId = externals.GetAt(i).UsbProductId;
+									}
+								}
 							}
 							else if(model.Replace(_T(" USB Device"), _T("")) > 0 || interfaceTypeWmi.Find(_T("USB")) >= 0)
 							{
@@ -2930,7 +2935,6 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	{
 		return FALSE;
 	}
-
 	ATA_SMART_INFO asi = { 0 };
 
 	memcpy(&(asi.IdentifyDevice), identify, sizeof(IDENTIFY_DEVICE));
@@ -3072,7 +3076,6 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[11]) << 8)
 			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[10]));
 	*/
-
 	if (
 		(m_FlagNVMeStorageQuery && commandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &asi))
@@ -3148,7 +3151,6 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			asi.MajorVersion.Format(_T("NVM Express %d.%d"), asi.IdentifyDevice.N.MajorVersion, asi.IdentifyDevice.N.MinorVersion);
 		}
 	}
-
 	vars.Add(asi);
 
 	return TRUE;
@@ -4511,15 +4513,53 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			return FALSE;
 		}
 
+		if (interfaceType == INTERFACE_TYPE_USB && usbVendorId == USB_VENDOR_JMICRON)
+		{
+			DebugPrint(_T("usbVendorId == USB_VENDOR_JMICRON"));
+			if (FlagUsbJmicron && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_JMICRON))
+			{
+				DebugPrint(_T("AddDisk - USB0A"));
+				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_JMICRON, &identify, siliconImageType, NULL, pnpDeviceId);
+			}
+			else if (FlagUsbSat && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT))
+			{
+				DebugPrint(_T("AddDisk - USB1A"));
+				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT, &identify, siliconImageType, NULL, pnpDeviceId);
+			}
+			if (FlagUsbJmicron && DoIdentifyDeviceSat(physicalDriveId, 0xB0, &identify, CMD_TYPE_JMICRON))
+			{
+				DebugPrint(_T("AddDisk - USB0B"));
+				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_JMICRON, &identify, siliconImageType, NULL, pnpDeviceId);
+			}
+			else if (FlagUsbSat && DoIdentifyDeviceSat(physicalDriveId, 0xB0, &identify, CMD_TYPE_SAT))
+			{
+				DebugPrint(_T("AddDisk - USB1B"));
+				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_SAT, &identify, siliconImageType, NULL, pnpDeviceId);
+			}
+			else if (FlagUsbNVMeJMicron && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify))
+			{
+				debug.Format(_T("DoIdentifyDeviceNVMeJMicron"));
+				DebugPrint(debug);
+				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
+				DebugPrint(debug);
+				return AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify);
+			}
+			else
+			{
+				DebugPrint(_T("FALSE - USB0"));
+				return FALSE;
+			}
+		}
+
 		// 2009/7/30, 2009/8/21
 		// IO-DATA HDPS-U  https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2918;id=report#2918
 		//                 https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2978;id=report#2978
 		//                 https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=2985;id=report#2985
 		// 2012/3/20
 		// StoreJet         http://btmn.jp/2012/02/25/storejet-320gb-crystal-diskinfo/
-		if(interfaceType == INTERFACE_TYPE_USB && ((usbVendorId == USB_VENDOR_IO_DATA && productId == 0x0122) || usbVendorId == USB_VENDOR_JMICRON))
+		if(interfaceType == INTERFACE_TYPE_USB && (usbVendorId == USB_VENDOR_IO_DATA && productId == 0x0122))
 		{
-			DebugPrint(_T("(usbVendorId == USB_VENDOR_IO_DATA && productId == 0x0122) || usbVendorId == USB_VENDOR_JMICRON"));
+			DebugPrint(_T("(usbVendorId == USB_VENDOR_IO_DATA && productId == 0x0122)"));
 			if(FlagUsbJmicron && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify,  CMD_TYPE_JMICRON))
 			{
 				DebugPrint(_T("AddDisk - USB0A"));
@@ -5012,7 +5052,7 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 
 
 /*---------------------------------------------------------------------------*/
-//  NVMe JMicron <DOES NOT WORK>
+//  NVMe JMicron
 /*---------------------------------------------------------------------------*/
 
 BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
@@ -5152,7 +5192,6 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
-
 	if (hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
@@ -5240,7 +5279,6 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 	sptwb.Spt.Cdb[10] = 0;
 	sptwb.Spt.Cdb[11] = 0;
 
-
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
@@ -5263,7 +5301,6 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 	}
 
 	memcpy_s(&(asi->SmartReadData), 512, sptwb.DataBuf, 512);
-
 	::CloseHandle(hIoCtrl);
 
 	return TRUE;
@@ -7954,7 +7991,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 	}
 
 	// NVMe
-	if (vars[i].InterfaceType == INTERFACE_TYPE_NVME)
+	if (vars[i].DiskVendorId == SSD_VENDOR_NVME)
 	{
 		if (vars[i].Life > 10)
 		{

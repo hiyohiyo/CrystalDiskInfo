@@ -175,6 +175,13 @@ SlotMaxCurrSpeed GetPCIeSlotSpeed(const INT physicalDriveId, const BOOL IsKernel
 CString SlotSpeedToString(SlotSpeed speedtoconv)
 {
 	CString result = L"";
-	result.Format(L"PCIe %d.0 x%d", speedtoconv.SpecVersion, speedtoconv.LinkWidth);
+	if (speedtoconv.SpecVersion == 0 || speedtoconv.LinkWidth == 0)
+	{
+		result.Format(L"----");
+	}
+	else
+	{
+		result.Format(L"PCIe %d.0 x%d", speedtoconv.SpecVersion, speedtoconv.LinkWidth);
+	}
 	return result;
 }

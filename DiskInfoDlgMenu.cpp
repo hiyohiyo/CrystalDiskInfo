@@ -1206,6 +1206,44 @@ void CDiskInfoDlg::OnUsbMemory()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::OnUsbNVMeJMicron()
+{
+	CMenu *menu = GetMenu();
+	if (m_Ata.FlagUsbNVMeJMicron)
+	{
+		m_Ata.FlagUsbNVMeJMicron = FALSE;
+		menu->CheckMenuItem(ID_USB_NVME_JMICRON, MF_UNCHECKED);
+		WritePrivateProfileString(_T("USB"), _T("NVMeJMicron"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagUsbNVMeJMicron = TRUE;
+		menu->CheckMenuItem(ID_USB_NVME_JMICRON, MF_CHECKED);
+		WritePrivateProfileString(_T("USB"), _T("NVMeJMicron"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
+void CDiskInfoDlg::OnUsbNVMeASMedia()
+{
+	CMenu *menu = GetMenu();
+	if (m_Ata.FlagUsbNVMeASMedia)
+	{
+		m_Ata.FlagUsbNVMeASMedia = FALSE;
+		menu->CheckMenuItem(ID_USB_NVME_ASMEDIA, MF_UNCHECKED);
+		WritePrivateProfileString(_T("USB"), _T("NVMeASMedia"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagUsbNVMeASMedia = TRUE;
+		menu->CheckMenuItem(ID_USB_NVME_ASMEDIA, MF_CHECKED);
+		WritePrivateProfileString(_T("USB"), _T("NVMeASMedia"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
 void CDiskInfoDlg::OnUsbEnableAll()
 {
 	m_Ata.FlagUsbSat     = FALSE;
@@ -1216,6 +1254,8 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbJmicron = FALSE;
 	m_Ata.FlagUsbCypress = FALSE;
 	m_Ata.FlagUsbMemory  = FALSE;
+	m_Ata.FlagUsbNVMeJMicron = FALSE;
+	m_Ata.FlagUsbNVMeASMedia = FALSE;
 
 	OnUsbSat();
 	OnUsbIodata();
@@ -1225,6 +1265,8 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();
+	OnUsbNVMeJMicron();
+	OnUsbNVMeASMedia();
 }
 
 void CDiskInfoDlg::OnUsbDisableAll()
@@ -1237,6 +1279,8 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbJmicron = TRUE;
 	m_Ata.FlagUsbCypress = TRUE;
 	m_Ata.FlagUsbMemory  = TRUE;
+	m_Ata.FlagUsbNVMeJMicron = TRUE;
+	m_Ata.FlagUsbNVMeASMedia = TRUE;
 
 	OnUsbSat();
 	OnUsbIodata();
@@ -1246,6 +1290,8 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();
+	OnUsbNVMeJMicron();
+	OnUsbNVMeASMedia();
 }
 
 void CDiskInfoDlg::OnDumpIdentifyDevice()

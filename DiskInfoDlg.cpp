@@ -1318,7 +1318,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 #endif
 	m_CtrlDiskStatus.SetHandCursor(TRUE);
 
-	if (m_Ata.vars.GetCount() && (m_Ata.vars[m_SelectDisk].IsSmartCorrect || m_Ata.vars[m_SelectDisk].InterfaceType == m_Ata.INTERFACE_TYPE_NVME))
+	if (m_Ata.vars.GetCount() && (m_Ata.vars[m_SelectDisk].IsSmartCorrect || m_Ata.vars[m_SelectDisk].DiskVendorId == m_Ata.SSD_VENDOR_NVME))
 	{
 		className = GetTemperatureClass(m_Ata.vars[m_SelectDisk].Temperature);
 	}

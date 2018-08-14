@@ -227,7 +227,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		temp.Format(_T("%s | %s"), m_Ata.vars[i].CurrentTransferMode, m_Ata.vars[i].MaxTransferMode);
 		drive.Replace(_T("%TRANSFER_MODE%"), temp);
 
-		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 		{
 			temp = L"";
 		}
@@ -385,7 +385,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		}
 		drive.Replace(_T("%TEMPERATURE%"), cstr);
 
-		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 		{
 			cstr.Format(_T("%.1f GB"), m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
@@ -458,7 +458,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		drive.Replace(_T("%BUFFER_SIZE%"), cstr);
 
 
-		if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 		{
 			cstr = _T("");
 		}
@@ -585,7 +585,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			cstr.Format(_T("-- S.M.A.R.T. --------------------------------------------------------------\r\n"));
 			line = cstr;
 			
-			if(m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+			if(m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 			{
 				line += _T("ID RawValues(6) Attribute Name\r\n");
 			}
@@ -631,7 +631,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 				}
 
 
-				if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+				if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 				{
 					cstr.Format(_T("%02X %02X%02X%02X%02X%02X%02X %s\r\n"),
 						m_Ata.vars[i].Attribute[j].Id,
@@ -739,7 +739,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			memcpy(data, &(m_Ata.vars[i].IdentifyDevice), 512);
 			if(m_FlagHideSerialNumber)
 			{
-				if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+				if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 				{
 					for (int j = 2; j <= 11; j++) // Serial Number : WORD[2-11]
 					{
@@ -809,7 +809,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		if(m_FlagDumpSmartReadData)
 		{
 			memcpy(data, &(m_Ata.vars[i].SmartReadData), 512);
-			if (m_Ata.vars[i].InterfaceType == m_Ata.INTERFACE_TYPE_NVME)
+			if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 			{
 				cstr.Format(_T("-- SMART_NVME --------------------------------------------------------------\r\n"));
 			}
@@ -855,7 +855,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			clip += _T("\r\n");
 		}
 
-		if(m_FlagDumpSmartReadData && (m_Ata.vars[i].InterfaceType != m_Ata.INTERFACE_TYPE_NVME))
+		if(m_FlagDumpSmartReadData && (m_Ata.vars[i].DiskVendorId != m_Ata.SSD_VENDOR_NVME))
 		{
 			memcpy(data, &(m_Ata.vars[i].SmartReadThreshold), 512);
 			cstr.Format(_T("-- SMART_READ_THRESHOLD ----------------------------------------------------\r\n"));
