@@ -403,7 +403,6 @@
       <ProgramDatabaseFile>Build\$(Configuration)$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
       <ManifestFile>Build\$(Configuration)$(Platform)\$(TargetExt).intermediate.manifest</ManifestFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
-      <AdditionalOptions>/SUBSYSTEM:WINDOWS,5.02 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>

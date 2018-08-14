@@ -175,8 +175,6 @@ BOOL CDiskInfoDlg::OnInitDialog()
 
 	InitDialogComplete();
 
-
-
 	return TRUE; 
 }
 

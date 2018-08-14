@@ -1458,13 +1458,13 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 
 void CDiskInfoDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
-	lpMMI->ptMinTrackSize.x = (LONG)(SIZE_X * m_ZoomRatio + GetSystemMetrics(SM_CXFRAME) * 2);
+	lpMMI->ptMinTrackSize.x = (LONG)(SIZE_X * m_ZoomRatio + GetSystemMetrics(SM_CXFRAME) * 2 + GetSystemMetrics(92/*SM_CXPADDEDBORDER*/) * 2);
 	lpMMI->ptMinTrackSize.y = (LONG)(SIZE_MIN_Y * m_ZoomRatio + GetSystemMetrics(SM_CYMENU)
-							+ GetSystemMetrics(SM_CYSIZEFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION));
+							+ GetSystemMetrics(SM_CYSIZEFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(92/*SM_CXPADDEDBORDER*/) * 2);
 
-	lpMMI->ptMaxTrackSize.x = (LONG)(SIZE_X * m_ZoomRatio + GetSystemMetrics(SM_CXFRAME) * 2);
+	lpMMI->ptMaxTrackSize.x = (LONG)(SIZE_X * m_ZoomRatio + GetSystemMetrics(SM_CXFRAME) * 2 + GetSystemMetrics(92/*SM_CXPADDEDBORDER*/) * 2);
 	lpMMI->ptMaxTrackSize.y = (LONG)(SIZE_MAX_Y * m_ZoomRatio + GetSystemMetrics(SM_CYMENU)
-							+ GetSystemMetrics(SM_CYSIZEFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION));
+							+ GetSystemMetrics(SM_CYSIZEFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION)) + GetSystemMetrics(92/*SM_CXPADDEDBORDER*/) * 2;
 
 	CMainDialog::OnGetMinMaxInfo(lpMMI);
 }
