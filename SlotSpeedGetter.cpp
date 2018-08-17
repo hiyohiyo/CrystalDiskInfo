@@ -115,7 +115,7 @@ SlotMaxCurrSpeed ConvertOSResult(const OSSlotMaxCurrSpeed OSLevelResult)
 SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 {
 	DWORD CurrentDevice = 0;
-	OSSlotMaxCurrSpeed OSLevelResult = {};
+	OSSlotMaxCurrSpeed OSLevelResult = {0};
 	GUID SCSIAdapterGUID = GUID_DEVCLASS_SCSIADAPTER;
 	HDEVINFO ClassDeviceInformations = SetupDiGetClassDevs(&SCSIAdapterGUID, nullptr, 0, DIGCF_PRESENT);
 
@@ -132,7 +132,7 @@ SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 		if (LastResult && DeviceIDFound)
 		{
 			DEVPROPTYPE PropertyType;
-			BYTE ResultBuffer[1024];
+			BYTE ResultBuffer[1024] = {0};
 			DWORD RequiredSize;
 
 			FN_SetupDiGetDeviceProperty SetupDiGetDeviceProperty = 
