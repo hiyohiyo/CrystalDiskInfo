@@ -2167,6 +2167,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.DiskSizeChs = 0;
 	asi.DiskSizeLba28 = 0;
 	asi.DiskSizeLba48 = 0;
+	asi.LogicalSectorSize = 512;
 	asi.DiskSizeWmi = 0;
 	asi.BufferSize = 0;
 	asi.NvCacheSize = 0;
@@ -2450,6 +2451,9 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.Sector = identify->A.LogicalSectors;
 	asi.Sector28 = 0x0FFFFFFF & identify->A.TotalAddressableSectors;
 	asi.Sector48 = 0x0000FFFFFFFFFFFF & identify->A.MaxUserLba;
+
+	// if(identify->A.SectorSize & 0xF == 0x8)
+	// asi.LogicalSectorSize = 512;
 
 	if(identify->A.TotalAddressableSectors == 0x01100003) // 9126807040 bytes
 	{
@@ -4237,7 +4241,8 @@ BOOL CAtaSmart::IsSsdPlextor(ATA_SMART_INFO &asi)
 	}
 
 	// Added CFD's SSD
-	return 	asi.Model.Find(_T("PLEXTOR")) == 0 || asi.Model.Find(_T("CSSD-S6T128NM3PQ")) == 0 || asi.Model.Find(_T("CSSD-S6T256NM3PQ")) == 0
+	// Added LITEON CV6-CQ (2018/9/17)
+	return 	asi.Model.Find(_T("PLEXTOR")) == 0 || asi.Model.Find(_T("LITEON")) == 0 || asi.Model.Find(_T("CV6-CQ")) == 0 || asi.Model.Find(_T("CSSD-S6T128NM3PQ")) == 0 || asi.Model.Find(_T("CSSD-S6T256NM3PQ")) == 0
 		|| flagSmartType;
 }
 
@@ -4742,7 +4747,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_LOGITEC2, &identify, siliconImageType, NULL, pnpDeviceId);
 			}
 			// USB-NVMe
-			else if (DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify))
+			else if (FlagUsbNVMeJMicron && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify))
 			{
 				debug.Format(_T("DoIdentifyDeviceNVMeJMicron"));
 				DebugPrint(debug);
@@ -4751,7 +4756,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				return AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify);
 			}
 			// USB-NVMe
-			else if (DoIdentifyDeviceNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &identify))
+			else if (FlagUsbNVMeASMedia && DoIdentifyDeviceNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &identify))
 			{
 				debug.Format(_T("DoIdentifyDeviceNVMeASMedia"));
 				DebugPrint(debug);
@@ -5893,6 +5898,8 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPo
 	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeIdentify;
 	nptwb.ProtocolSpecific.ProtocolDataOffset = sizeof(StorageQuery::TStorageProtocolSpecificData);
 	nptwb.ProtocolSpecific.ProtocolDataLength = 4096;
+	nptwb.ProtocolSpecific.ProtocolDataRequestValue = 1; /*NVME_IDENTIFY_CNS_CONTROLLER*/
+	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0;
 	nptwb.Query.PropertyId = StorageQuery::StorageAdapterProtocolSpecificProperty;
 	nptwb.Query.QueryType = StorageQuery::PropertyStandardQuery;
 	DWORD dwReturned = 0;
@@ -5921,7 +5928,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiP
 	nptwb.ProtocolSpecific.ProtocolType = StorageQuery::ProtocolTypeNvme;
 	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeLogPage;
 	nptwb.ProtocolSpecific.ProtocolDataRequestValue = 2; // SMART Health Information
-	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0xFFFFFFFF;
+	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0x00000000;
 	nptwb.ProtocolSpecific.ProtocolDataOffset = sizeof(StorageQuery::TStorageProtocolSpecificData);
 	nptwb.ProtocolSpecific.ProtocolDataLength = 4096;
 	nptwb.Query.PropertyId = StorageQuery::StorageAdapterProtocolSpecificProperty;
@@ -5930,6 +5937,13 @@ BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiP
 
 	bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
 		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
+	if (!bRet)
+	{
+		nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0xFFFFFFFF;
+		bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
+			&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
+	}
+
 	CloseHandle(hIoCtrl);
 
 	memcpy_s(&(asi->SmartReadData), 512, nptwb.Buffer, 512);
@@ -6387,7 +6401,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 	{
 		count += sptwb.DataBuf[i];
 	}
-	if (count == 0 || sptwb.DataBuf[510] != 0xA5)
+	if (count == 0) // || sptwb.DataBuf[510] != 0xA5
 	{
 		return	FALSE;
 	}

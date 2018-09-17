@@ -1270,7 +1270,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	}
 	else
 	{
-		m_CtrlModel.InitControl(40 + OFFSET_X, 52, 592, 32, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawTransparent | m_IsHighContrast);
+		m_CtrlModel.InitControl(32 + OFFSET_X, 52, 608, 32, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawTransparent | m_IsHighContrast);
 		m_CtrlButtonPreDisk.InitControl(8 + OFFSET_X, 56, 24, 24, m_ZoomRatio, IP(L"preDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage);
 		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 56, 24, 24, m_ZoomRatio, IP(L"nextDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage);
 	}

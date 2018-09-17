@@ -1388,6 +1388,7 @@ public:
 		DWORD				DiskSizeChs;
 		DWORD				DiskSizeLba28;
 		DWORD				DiskSizeLba48;
+		DWORD				LogicalSectorSize;
 		DWORD				DiskSizeWmi;
 		DWORD				BufferSize;
 		ULONGLONG			NvCacheSize;
