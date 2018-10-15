@@ -147,6 +147,7 @@ public:
 		SSD_VENDOR_KINGSTON   = 17,
 		SSD_VENDOR_MICRON_MU02= 18,
 		SSD_VENDOR_NVME		  = 19,
+		SSD_VENDOR_REALTEK    = 20,
 		SSD_VENDOR_MAX        = 99,
 
 		VENDOR_UNKNOWN      = 0x0000,
@@ -1523,9 +1524,9 @@ protected:
 	BOOL CheckSmartAttributeCorrect(ATA_SMART_INFO* asi1, ATA_SMART_INFO* asi2);
 
 	VOID WakeUp(INT physicalDriveId);
-	VOID InitAtaInfo();
-	VOID InitAtaInfoByWmi();
-	VOID InitStruct();
+//	VOID InitAtaInfo();
+//	VOID InitAtaInfoByWmi();
+//	VOID InitStruct();
 	VOID ChangeByteOrder(PCHAR str, DWORD length);
 	BOOL CheckAsciiStringError(PCHAR str, DWORD length);
 	HANDLE GetIoCtrlHandle(BYTE index);
@@ -1614,6 +1615,7 @@ protected:
 	BOOL IsSsdKingston(ATA_SMART_INFO &asi);
 	BOOL IsSsdOczVector(ATA_SMART_INFO &asi);
 	BOOL IsSsdToshiba(ATA_SMART_INFO &asi);
+	BOOL IsSsdRealtek(ATA_SMART_INFO &asi);
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
 	static int Compare(const void *p1, const void *p2);
