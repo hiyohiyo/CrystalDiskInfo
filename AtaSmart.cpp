@@ -3621,6 +3621,22 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					+ (UINT64)asi.Attribute[j].RawValue[0])
 					* 16 / 1024 / 1024);
 			}
+			else if (asi.DiskVendorId == SSD_VENDOR_REALTEK)
+			{
+				asi.NandWrites = (INT)(MAKELONG(
+					MAKEWORD(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1]),
+					MAKEWORD(asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3])
+				));
+			}
+			break;
+		case 0xFA:
+			if (asi.DiskVendorId == SSD_VENDOR_REALTEK)
+			{
+				asi.NandWrites = asi.NandWrites + (INT)(MAKELONG(
+					MAKEWORD(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1]),
+					MAKEWORD(asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3])
+				));
+			}
 			break;
 		case 0x64:
 			if(asi.DiskVendorId == SSD_VENDOR_SANDFORCE)
@@ -3668,6 +3684,15 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				}
 			}
 			break;
+		case 0xE7:
+			if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON)
+			{
+				if (asi.Attribute[j].CurrentValue <= 100)
+				{
+					asi.Life = asi.Attribute[j].CurrentValue;
+				}
+			}
+			break;
 		case 0xAA:
 			if(asi.DiskVendorId == SSD_VENDOR_JMICRON && ! asi.IsRawValues8)
 			{
@@ -3678,7 +3703,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			}
 			break;
 		case 0xA9:
-			if(asi.DiskVendorId == SSD_VENDOR_MICRON_MU02)
+			if(asi.DiskVendorId == SSD_VENDOR_MICRON_MU02 || asi.DiskVendorId == SSD_VENDOR_REALTEK)
 			{
 				if(asi.Attribute[j].CurrentValue <= 100)
 				{
@@ -7992,6 +8017,22 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						+ (UINT64)asi->Attribute[j].RawValue[1] * 256
 						+ (UINT64)asi->Attribute[j].RawValue[0])
 						* 16 / 1024 / 1024);
+				}
+				else if (asi->DiskVendorId == SSD_VENDOR_REALTEK)
+				{
+					asi->NandWrites = (INT)(MAKELONG(
+						MAKEWORD(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1]),
+						MAKEWORD(asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3])
+					));
+				}
+				break;
+			case 0xFA:
+				if (asi->DiskVendorId == SSD_VENDOR_REALTEK)
+				{
+					asi->NandWrites = asi->NandWrites + (INT)(MAKELONG(
+						MAKEWORD(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1]),
+						MAKEWORD(asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3])
+						));
 				}
 				break;
 			case 0x64:

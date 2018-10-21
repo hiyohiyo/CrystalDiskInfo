@@ -1,4 +1,4 @@
-﻿/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
@@ -25,11 +25,41 @@ static const TCHAR *attributeString[] =
 	_T("SmartSandForce"),
 	_T("SmartMicron"),
 	_T("SmartOcz"),
+	_T("SmartSeagate"), // Not implemented
+	_T("SmartWesternDigital"), // Not implemented
 	_T("SmartPlextor"),
 	_T("SmartSanDisk"),
 	_T("SmartOczVector"),
+	_T("SmartToshiba"),
+	_T("SmartCorsair"),
+	_T("SmartKingston"),
+	_T("SmartMicronMU02"),
 	_T("SmartNVMe"),
+	_T("SmartRealtek"),
 };
+
+/*
+SSD_GENERAL = 1,
+SSD_VENDOR_MTRON = 2,
+SSD_VENDOR_INDILINX = 3,
+SSD_VENDOR_JMICRON = 4,
+SSD_VENDOR_INTEL = 5,
+SSD_VENDOR_SAMSUNG = 6,
+SSD_VENDOR_SANDFORCE = 7,
+SSD_VENDOR_MICRON = 8,
+SSD_VENDOR_OCZ = 9,
+HDD_SSD_VENDOR_SEAGATE = 10,
+HDD_VENDOR_WESTERN_DIGITAL = 11,
+SSD_VENDOR_PLEXTOR = 12,
+SSD_VENDOR_SANDISK = 13,
+SSD_VENDOR_OCZ_VECTOR = 14,
+HDD_SSD_VENDOR_TOSHIBA = 15,
+SSD_VENDOR_CORSAIR = 16,
+SSD_VENDOR_KINGSTON = 17,
+SSD_VENDOR_MICRON_MU02 = 18,
+SSD_VENDOR_NVME = 19,
+SSD_VENDOR_REALTEK = 20,
+*/
 
 #define SMART_TEMPERATURE                  300
 #define SMART_POWER_ON_HOURS               301
@@ -222,6 +252,7 @@ BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_COMMAND(ID_SSD_PLEXTOR, &CGraphDlg::OnSsdPlextor)
 	ON_COMMAND(ID_SSD_SANDISK, &CGraphDlg::OnSsdSanDisk)
 	ON_COMMAND(ID_SSD_OCZ_VECTOR, &CGraphDlg::OnSsdOczVector)
+	ON_COMMAND(ID_SSD_REALTEK, &CGraphDlg::OnSsdRealtek)
 	ON_COMMAND(ID_SSD_NVME, &CGraphDlg::OnSsdNVMe)
 
 END_MESSAGE_MAP()
@@ -813,11 +844,11 @@ void CGraphDlg::InitMenuBar()
 	// Temperature
 	if(m_FlagFahrenheit)
 	{
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (°F)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_FlagSmartEnglish));
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (&deg;F)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_FlagSmartEnglish));
 	}
 	else
 	{
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (°C)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_FlagSmartEnglish));
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (&deg;C)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_FlagSmartEnglish));
 	}
 	select += cstr;if(SelectedAttributeId == SMART_TEMPERATURE){index = counter;}counter++;
 	
@@ -1405,6 +1436,7 @@ void CGraphDlg::InitMenu()
 	case CAtaSmart::SSD_VENDOR_PLEXTOR: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_PLEXTOR, MF_BYCOMMAND);break;
 	case CAtaSmart::SSD_VENDOR_SANDISK: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SANDISK, MF_BYCOMMAND);break;
 	case CAtaSmart::SSD_VENDOR_OCZ_VECTOR: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_OCZ_VECTOR, MF_BYCOMMAND);break;
+	case CAtaSmart::SSD_VENDOR_REALTEK: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_REALTEK, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_NVME: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_NVME, MF_BYCOMMAND); break;
 
 	default:
@@ -1713,6 +1745,11 @@ void CGraphDlg::OnSsdSanDisk()
 void CGraphDlg::OnSsdOczVector()
 {
 	SetAttribute(ID_SSD_OCZ_VECTOR, CAtaSmart::SSD_VENDOR_OCZ_VECTOR);
+}
+
+void CGraphDlg::OnSsdRealtek()
+{
+	SetAttribute(ID_SSD_REALTEK, CAtaSmart::SSD_VENDOR_REALTEK);
 }
 
 void CGraphDlg::OnSsdNVMe()

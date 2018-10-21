@@ -13,6 +13,7 @@
 #include "OptionDlg.h"
 #include "FontSelection.h"
 #include "SoundSettingDlg.h"
+#include "GraphDlg.h"
 
 #include "DialogCx.h"
 #include "MainDialog.h"
@@ -125,6 +126,7 @@ protected:
 	COptionDlg*			m_OptionDlg;
 //	CAlarmHistoryDlg*	m_AlarmHistoryDlg;
 	CSoundSettingDlg*	m_SoundSettingDlg;
+	CGraphDlg*			m_GraphDlg;
 	CListCtrlEx			m_List;
 	CImageList			m_ImageList;
 
@@ -355,11 +357,7 @@ protected:
 	void OnPreDisk();
 	void OnNextDisk();
 	void OnDiskStatus();
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	HRESULT OnChangeShizuku(IHTMLElement *pElement);
-	HRESULT OnShizukuCopyright(IHTMLElement *pElement);
-	void ChangeShizukuImage(DWORD index);
-#endif
+
 	LRESULT OnPowerBroadcast(WPARAM wParam, LPARAM lParam);
 	LRESULT OnDeviceChange(WPARAM wParam, LPARAM lParam);
 	LRESULT OnQueryEndSession(WPARAM wParam, LPARAM lParam);

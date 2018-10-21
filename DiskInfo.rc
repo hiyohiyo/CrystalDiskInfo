@@ -461,8 +461,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 7,8,1,2018
- PRODUCTVERSION 7,8,1,2018
+ FILEVERSION 7,8,2,2018
+ PRODUCTVERSION 7,8,2,2018
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -479,9 +479,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "7.8.1.2018"
+            VALUE "FileVersion", "7.8.2.2018"
             VALUE "LegalCopyright", "(C) 2008-2018 hiyohiyo"
-            VALUE "ProductVersion", "7.8.1.2018"
+            VALUE "ProductVersion", "7.8.2.2018"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"
@@ -818,6 +818,7 @@ BEGIN
         BEGIN
             MENUITEM "HDD",                         ID_HDD
             MENUITEM "SSD",                         ID_SSD
+			MENUITEM "SSD - NVMe",                  ID_SSD_NVME
             MENUITEM "SSD - MTRON",                 ID_SSD_MTRON
             MENUITEM "SSD - Indilinx",              ID_SSD_INDILINX
             MENUITEM "SSD - JMicron",               ID_SSD_JMICRON
@@ -829,7 +830,7 @@ BEGIN
             MENUITEM "SSD - Plextor",               ID_SSD_PLEXTOR
             MENUITEM "SSD - SanDisk",               ID_SSD_SANDISK
             MENUITEM "SSD - OCZ VECTOR",            ID_SSD_OCZ_VECTOR
-			MENUITEM "SSD - NVMe",                  ID_SSD_NVME
+			MENUITEM "SSD - Realtek",               ID_SSD_REALTEK
         END
         MENUITEM "Paint Weekend",               ID_PAINT_WEEKEND
     END

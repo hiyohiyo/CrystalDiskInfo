@@ -489,7 +489,8 @@
 #define ID_SSD_PLEXTOR                  33011
 #define ID_SSD_SANDISK                  33012
 #define ID_SSD_OCZ_VECTOR               33013
-#define ID_SSD_NVME                     33014
+#define ID_SSD_REALTEK                  33014
+#define ID_SSD_NVME                     33015
 #define ID_SSD_MAX                      33049
 #define ID_ATA_PASS_THROUGH_SMART       33050
 #define ID_ADVANCEDFEATURE_ALERTMAIL    33051

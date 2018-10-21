@@ -98,6 +98,9 @@ void CDiskInfoDlg::OnGraph()
 
 void CDiskInfoDlg::ShowGraphDlg(int index)
 {
+//	m_GraphDlg = new CGraphDlg(this);
+//	m_GraphDlg->Create(CGraphDlg::IDD, m_GraphDlg, ID_GRAPH, this);
+
 	CreateExchangeInfo();
 
 	TCHAR path[MAX_PATH];

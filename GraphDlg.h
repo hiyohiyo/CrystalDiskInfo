@@ -223,5 +223,6 @@ public:
 	afx_msg void OnSsdPlextor();
 	afx_msg void OnSsdSanDisk();
 	afx_msg void OnSsdOczVector();
+	afx_msg void OnSsdRealtek();
 	afx_msg void OnSsdNVMe();
 };
