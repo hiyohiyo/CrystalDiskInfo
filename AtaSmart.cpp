@@ -1463,6 +1463,12 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 							flagTarget = FALSE;
 						}
 
+						// [2018/10/24] Workaround for FuzeDrive (AMDStoreMi)
+						if (model.Find(_T("FuzeDrive")) != -1 || model.Find(_T("StoreMI")) != -1)
+						{
+							flagTarget = FALSE;
+						}
+
 						DebugPrint(_T("flagTarget && GetDiskInfo"));
 						if (flagTarget && GetDiskInfo(physicalDriveId, scsiPort, scsiTargetId, interfaceType, commandType, usbVendorId, usbProductId, scsiBus, siliconImageType, FlagNvidiaController, FlagMarvellController, pnpDeviceId, flagNVMe, flagUasp))
 						{
@@ -1800,13 +1806,18 @@ safeRelease:
 
 		delete [] pcbData;
 
+		// [2010/12/05] Workaround for SAMSUNG HD204UI
+		// http://sourceforge.net/apps/trac/smartmontools/wiki/SamsungF4EGBadBlocks
 		if((model.Find(_T("SAMSUNG HD155UI")) == 0 || model.Find(_T("SAMSUNG HD204UI")) == 0) && firmware.Find(_T("1AQ10003")) != 0 && IsWorkaroundHD204UI)
 		{
 			continue;
 		}
 
-		// [2010/12/05] Workaround for SAMSUNG HD204UI
-		// http://sourceforge.net/apps/trac/smartmontools/wiki/SamsungF4EGBadBlocks
+		// [2018/10/24] Workaround for FuzeDrive (AMDStoreMi)
+		if (model.Find(_T("FuzeDrive")) != -1 || model.Find(_T("StoreMI")) != -1)
+		{
+			continue;
+		}
 		
 		// USB-HDD Check
 		// if(! IsEnabledWmi)
