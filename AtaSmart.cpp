@@ -254,6 +254,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			break;
 		
 		case CMD_TYPE_SAT:
+		case CMD_TYPE_SAT_ASM1352R:
 		case CMD_TYPE_SUNPLUS:
 		case CMD_TYPE_IO_DATA:
 		case CMD_TYPE_LOGITEC1:
@@ -304,6 +305,7 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 		flag = DoIdentifyDeviceCsmi(vars[i].ScsiPort, &(vars[i].sasPhyEntity), &(vars[i].IdentifyDevice));
 		break;
 	case CMD_TYPE_SAT:
+	case CMD_TYPE_SAT_ASM1352R:
 	case CMD_TYPE_SUNPLUS:
 	case CMD_TYPE_IO_DATA:
 	case CMD_TYPE_LOGITEC1:
@@ -420,6 +422,7 @@ BOOL CAtaSmart::SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param)
 		}
 		break;
 	case CMD_TYPE_SAT:
+	case CMD_TYPE_SAT_ASM1352R:
 	case CMD_TYPE_SUNPLUS:
 	case CMD_TYPE_IO_DATA:
 	case CMD_TYPE_LOGITEC1:
@@ -1469,145 +1472,151 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 							flagTarget = FALSE;
 						}
 
+
+						int previousCount = (int)vars.GetCount();
 						DebugPrint(_T("flagTarget && GetDiskInfo"));
 						if (flagTarget && GetDiskInfo(physicalDriveId, scsiPort, scsiTargetId, interfaceType, commandType, usbVendorId, usbProductId, scsiBus, siliconImageType, FlagNvidiaController, FlagMarvellController, pnpDeviceId, flagNVMe, flagUasp))
 						{
 							DebugPrint(_T("int index = (int)vars.GetCount() - 1;"));
-							int index = (int)vars.GetCount() - 1;
-							if(! diskSize.IsEmpty())
+							// for ASM1352 support
+							for(int index = (int)vars.GetCount() - 1; index + 1 > previousCount; index--)
 							{
-								vars[index].DiskSizeWmi = (DWORD)(_ttoi64(diskSize) / 1000 / 1000 - 49);
-								if(0 < vars[index].TotalDiskSize && vars[index].TotalDiskSize < 1000) // < 1GB
+							//	int index = (int)vars.GetCount() - 1;
+								if (!diskSize.IsEmpty())
 								{
-								//	vars[index].TotalDiskSize == vars[index].DiskSizeChs;
-								}
-								else if(vars[index].TotalDiskSize < 10 * 1000) // < 10GB
-								{
-									vars[index].TotalDiskSize = vars[index].DiskSizeWmi;
-								}
-								else if(vars[index].TotalDiskSize < vars[index].DiskSizeWmi)
-								{
-								//	vars[index].TotalDiskSize = vars[index].DiskSizeWmi;
-								}
-							}
-
-							BOOL flagSkipModelCheck = FALSE;
-
-							vars[index].ModelWmi = model;
-							// Model
-							model.Replace(_T(" SCSI Disk Device"), _T(""));
-							model.Replace(_T(" SATA Disk Device"), _T(""));
-							model.Replace(_T(" ATA Disk Device"), _T(""));
-							model.Replace(_T(" SCSI Device"), _T(""));
-							model.Replace(_T(" SATA Device"), _T(""));
-							model.Replace(_T(" ATA Device"), _T(""));
-							model.Replace(_T("NVMe "), _T(""));
-
-							if(flagUasp)
-							{
-								flagSkipModelCheck = TRUE;
-								cstr.Format(_T("UASP (%s)"), vars[index].Interface);
-								vars[index].Interface = cstr;
-								vars[index].InterfaceType = INTERFACE_TYPE_USB;
-								vars[index].IsUasp = TRUE;
-								
-								detectUASPdisks = TRUE;
-								for (int i = 0; i < externals.GetCount(); i++)
-								{
-									if (externals.GetAt(i).Enclosure.Find(vars[index].ModelWmi) == 0)
+									vars[index].DiskSizeWmi = (DWORD)(_ttoi64(diskSize) / 1000 / 1000 - 49);
+									if (0 < vars[index].TotalDiskSize && vars[index].TotalDiskSize < 1000) // < 1GB
 									{
-										vars[index].Enclosure = externals.GetAt(i).Enclosure;
-										vars[index].UsbVendorId = externals.GetAt(i).UsbVendorId;
-										vars[index].UsbProductId = externals.GetAt(i).UsbProductId;
+										//	vars[index].TotalDiskSize == vars[index].DiskSizeChs;
+									}
+									else if (vars[index].TotalDiskSize < 10 * 1000) // < 10GB
+									{
+										vars[index].TotalDiskSize = vars[index].DiskSizeWmi;
+									}
+									else if (vars[index].TotalDiskSize < vars[index].DiskSizeWmi)
+									{
+										//	vars[index].TotalDiskSize = vars[index].DiskSizeWmi;
 									}
 								}
-							}
-							else if(model.Replace(_T(" USB Device"), _T("")) > 0 || interfaceTypeWmi.Find(_T("USB")) >= 0)
-							{
-								flagSkipModelCheck = TRUE;
-								cstr.Format(_T("USB (%s)"), vars[index].Interface);
-								vars[index].Interface = cstr;
-								vars[index].InterfaceType = INTERFACE_TYPE_USB;
 
-								for(int i = 0; i < externals.GetCount(); i++)
+								BOOL flagSkipModelCheck = FALSE;
+
+								vars[index].ModelWmi = model;
+								// Model
+								model.Replace(_T(" SCSI Disk Device"), _T(""));
+								model.Replace(_T(" SATA Disk Device"), _T(""));
+								model.Replace(_T(" ATA Disk Device"), _T(""));
+								model.Replace(_T(" SCSI Device"), _T(""));
+								model.Replace(_T(" SATA Device"), _T(""));
+								model.Replace(_T(" ATA Device"), _T(""));
+								model.Replace(_T("NVMe "), _T(""));
+
+								if (flagUasp)
 								{
-									if(externals.GetAt(i).Enclosure.Find(vars[index].ModelWmi) == 0)
+									flagSkipModelCheck = TRUE;
+									cstr.Format(_T("UASP (%s)"), vars[index].Interface);
+									vars[index].Interface = cstr;
+									vars[index].InterfaceType = INTERFACE_TYPE_USB;
+									vars[index].IsUasp = TRUE;
+
+									detectUASPdisks = TRUE;
+									for (int i = 0; i < externals.GetCount(); i++)
 									{
-										vars[index].Enclosure = externals.GetAt(i).Enclosure;
-										vars[index].UsbVendorId  = externals.GetAt(i).UsbVendorId;
-										vars[index].UsbProductId = externals.GetAt(i).UsbProductId;
+										if (externals.GetAt(i).Enclosure.Find(vars[index].ModelWmi) == 0)
+										{
+											vars[index].Enclosure = externals.GetAt(i).Enclosure;
+											vars[index].UsbVendorId = externals.GetAt(i).UsbVendorId;
+											vars[index].UsbProductId = externals.GetAt(i).UsbProductId;
+										}
 									}
 								}
-							}
-							else if(model.Replace(_T(" IEEE 1394 SBP2 Device"), _T("")) > 0 || interfaceTypeWmi.Find(_T("1394")) >= 0)
-							{
-								flagSkipModelCheck = TRUE;
-								cstr.Format(_T("IEEE 1394 (%s)"), vars[index].Interface);
-								vars[index].Interface = cstr;
-								vars[index].InterfaceType = INTERFACE_TYPE_IEEE1394;
-								for(int i = 0; i < externals.GetCount(); i++)
+								else if (model.Replace(_T(" USB Device"), _T("")) > 0 || interfaceTypeWmi.Find(_T("USB")) >= 0)
 								{
-									if(externals.GetAt(i).Enclosure.Find(vars[index].ModelWmi) == 0)
+									flagSkipModelCheck = TRUE;
+									cstr.Format(_T("USB (%s)"), vars[index].Interface);
+									vars[index].Interface = cstr;
+									vars[index].InterfaceType = INTERFACE_TYPE_USB;
+
+									for (int i = 0; i < externals.GetCount(); i++)
 									{
-										vars[index].Enclosure = externals.GetAt(i).Enclosure;
-										vars[index].UsbVendorId  = externals.GetAt(i).UsbVendorId;
-										vars[index].UsbProductId = externals.GetAt(i).UsbProductId;
+										if (externals.GetAt(i).Enclosure.Find(vars[index].ModelWmi) == 0)
+										{
+											vars[index].Enclosure = externals.GetAt(i).Enclosure;
+											vars[index].UsbVendorId = externals.GetAt(i).UsbVendorId;
+											vars[index].UsbProductId = externals.GetAt(i).UsbProductId;
+										}
 									}
 								}
-							}
-														
-							CString cmp, cmp1, cmp2, cmp3;
-							cmp = model;
-							cmp.Replace(_T(" "), _T(""));
-							cmp1 = cmp.Left(8);
+								else if (model.Replace(_T(" IEEE 1394 SBP2 Device"), _T("")) > 0 || interfaceTypeWmi.Find(_T("1394")) >= 0)
+								{
+									flagSkipModelCheck = TRUE;
+									cstr.Format(_T("IEEE 1394 (%s)"), vars[index].Interface);
+									vars[index].Interface = cstr;
+									vars[index].InterfaceType = INTERFACE_TYPE_IEEE1394;
+									for (int i = 0; i < externals.GetCount(); i++)
+									{
+										if (externals.GetAt(i).Enclosure.Find(vars[index].ModelWmi) == 0)
+										{
+											vars[index].Enclosure = externals.GetAt(i).Enclosure;
+											vars[index].UsbVendorId = externals.GetAt(i).UsbVendorId;
+											vars[index].UsbProductId = externals.GetAt(i).UsbProductId;
+										}
+									}
+								}
 
-							cmp = vars[index].Model;
-							cmp.Replace(_T(" "), _T(""));
-							cmp2 = cmp.Left(8);
+								CString cmp, cmp1, cmp2, cmp3;
+								cmp = model;
+								cmp.Replace(_T(" "), _T(""));
+								cmp1 = cmp.Left(8);
 
-							cmp = vars[index].ModelReverse;
-							cmp.Replace(_T(" "), _T(""));
-							cmp3 = cmp.Left(8);
-							
-							if(vars[index].Model.IsEmpty())
-							{
-								DebugPrint(_T("WmiModel: ") + model);
-								DebugPrint(_T("SerialNumber: ") + vars[index].SerialNumber);
-								DebugPrint(_T("vars.RemoveAt(index) - 1"));
-								vars.RemoveAt(index);
-							}
-							else if(flagSkipModelCheck)
-							{
-								// None
-							}
-							else if(model.IsEmpty() || cmp1.Compare(cmp2) == 0)
-							{
-								// None
-							}
-							else if(cmp1.Compare(cmp3) == 0)
-							{
-								vars[index].SerialNumber = vars[index].SerialNumberReverse;
-								vars[index].FirmwareRev = vars[index].FirmwareRevReverse;
-								vars[index].Model = vars[index].ModelReverse;
-								vars[index].ModelSerial = GetModelSerial(vars[index].Model, vars[index].SerialNumber);
-							}
-							else if(vars[index].InterfaceType == INTERFACE_TYPE_USB)
-							{
-								// None
-							}
-							else
-							{
-								DebugPrint(_T("WmiModel: ") + model);
-								DebugPrint(_T("Model: ") + vars[index].Model);
-								DebugPrint(_T("SerialNumber: ") + vars[index].SerialNumber);
-								DebugPrint(_T("DISABLED: vars.RemoveAt(index) - 2"));
-							//	vars.RemoveAt(index);
-							}
+								cmp = vars[index].Model;
+								cmp.Replace(_T(" "), _T(""));
+								cmp2 = cmp.Left(8);
 
-							// DEBUG
-							// vars[index].VendorId = VENDOR_MTRON;
-							DebugPrint(_T("OK:Check Model Name"));
+								cmp = vars[index].ModelReverse;
+								cmp.Replace(_T(" "), _T(""));
+								cmp3 = cmp.Left(8);
 
+								if (vars[index].Model.IsEmpty())
+								{
+									DebugPrint(_T("WmiModel: ") + model);
+									DebugPrint(_T("SerialNumber: ") + vars[index].SerialNumber);
+									DebugPrint(_T("vars.RemoveAt(index) - 1"));
+									vars.RemoveAt(index);
+								}
+								else if (flagSkipModelCheck)
+								{
+									// None
+								}
+								else if (model.IsEmpty() || cmp1.Compare(cmp2) == 0)
+								{
+									// None
+								}
+								else if (cmp1.Compare(cmp3) == 0)
+								{
+									vars[index].SerialNumber = vars[index].SerialNumberReverse;
+									vars[index].FirmwareRev = vars[index].FirmwareRevReverse;
+									vars[index].Model = vars[index].ModelReverse;
+									vars[index].ModelSerial = GetModelSerial(vars[index].Model, vars[index].SerialNumber);
+								}
+								else if (vars[index].InterfaceType == INTERFACE_TYPE_USB)
+								{
+									// None
+								}
+								else
+								{
+									DebugPrint(_T("WmiModel: ") + model);
+									DebugPrint(_T("Model: ") + vars[index].Model);
+									DebugPrint(_T("SerialNumber: ") + vars[index].SerialNumber);
+									DebugPrint(_T("DISABLED: vars.RemoveAt(index) - 2"));
+									//	vars.RemoveAt(index);
+								}
+
+								// DEBUG
+								// vars[index].VendorId = VENDOR_MTRON;
+								DebugPrint(_T("OK:Check Model Name"));
+
+							}
 						}
 					}
 				}
@@ -2112,7 +2121,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		memcpy(&(asi.sasPhyEntity), sasPhyEntity, sizeof(CSMI_SAS_PHY_ENTITY));
 	}
 
-	if(commandType == CMD_TYPE_PHYSICAL_DRIVE || CMD_TYPE_SAT <= commandType && commandType <= CMD_TYPE_PROLIFIC)
+	if(commandType == CMD_TYPE_PHYSICAL_DRIVE || CMD_TYPE_SAT <= commandType && commandType <= CMD_TYPE_SAT_ASM1352R)
 	{
 		if(target == 0xB0)
 		{
@@ -2808,6 +2817,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 			break;
 
 		case CMD_TYPE_SAT:
+		case CMD_TYPE_SAT_ASM1352R:
 		case CMD_TYPE_SUNPLUS:
 		case CMD_TYPE_IO_DATA:
 		case CMD_TYPE_LOGITEC1:
@@ -4744,8 +4754,17 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 
 			if(FlagUsbSat && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT))
 			{
+				BOOL flag = FALSE;
 				DebugPrint(_T("AddDisk - USB10"));
-				return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT, &identify, siliconImageType, NULL, pnpDeviceId);
+				flag = AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT, &identify, siliconImageType, NULL, pnpDeviceId);
+
+				// for ASM1352R 
+				if (DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT_ASM1352R))
+				{
+					AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT_ASM1352R, &identify, siliconImageType, NULL, pnpDeviceId);
+				}
+
+				return flag;
 			}
 			else if(FlagUsbJmicron && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_JMICRON))
 			{
@@ -6292,6 +6311,21 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 		sptwb.Spt.Cdb[8] = target;
 		sptwb.Spt.Cdb[9] = ID_CMD;//COMMAND
 	}
+	else if (type == CMD_TYPE_SAT_ASM1352R)
+	{
+		// PROTOCOL field should be "0Dh”SATA port0 and "0Eh" SATA port1.
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+		sptwb.Spt.Cdb[1] = (0xE << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = 0;//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = 1;//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 0;//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = 0;//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = 0;//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;
+		sptwb.Spt.Cdb[9] = ID_CMD;//COMMAND
+	}
 	else if (type == CMD_TYPE_SUNPLUS)
 	{
 		sptwb.Spt.CdbLength = 12;
@@ -6512,6 +6546,21 @@ BOOL CAtaSmart::GetSmartAttributeSat(INT PhysicalDriveId, BYTE target, ATA_SMART
 		sptwb.Spt.Cdb[8] = target;
 		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
 	}
+	else if (type == CMD_TYPE_SAT_ASM1352R)
+	{
+		// PROTOCOL field should be "0Dh”SATA port0 and "0Eh" SATA port1.
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+		sptwb.Spt.Cdb[1] = (0xE << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = READ_ATTRIBUTES;//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = 1;//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 1;//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = SMART_CYL_LOW;//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = SMART_CYL_HI;//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;
+		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
+	}
 	else if(type == CMD_TYPE_SUNPLUS)
 	{
 		sptwb.Spt.CdbLength = 12;
@@ -6693,6 +6742,21 @@ BOOL CAtaSmart::GetSmartThresholdSat(INT physicalDriveId, BYTE target, ATA_SMART
 		sptwb.Spt.Cdb[8] = target;
 		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
 	}
+	else if (type == CMD_TYPE_SAT_ASM1352R)
+	{
+		// PROTOCOL field should be "0Dh”SATA port0 and "0Eh" SATA port1.
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1; ////ATA PASS THROUGH(12) OPERATION CODE (A1h)
+		sptwb.Spt.Cdb[1] = (0xE << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = READ_THRESHOLDS;//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = 1;//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 1;//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = SMART_CYL_LOW;//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = SMART_CYL_HI;//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;
+		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
+	}
 	else if(type == CMD_TYPE_SUNPLUS)
 	{
 		sptwb.Spt.CdbLength = 12;
@@ -6842,11 +6906,27 @@ BOOL CAtaSmart::ControlSmartStatusSat(INT physicalDriveId, BYTE target, BYTE com
 	sptwb.Spt.TimeOutValue = 2;
 	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, DataBuf);
 	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, SenseBuf);
+
 	if(type == CMD_TYPE_SAT)
 	{
 		sptwb.Spt.CdbLength = 12;
 		sptwb.Spt.Cdb[0] = 0xA1; //ATA PASS THROUGH (12) OPERATION CODE (A1h)
 		sptwb.Spt.Cdb[1] = (3 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=3(Non-Data),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = command;//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = 0;//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 1;//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = SMART_CYL_LOW;//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = SMART_CYL_HI;//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;
+		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
+	}
+	else if (type == CMD_TYPE_SAT_ASM1352R)
+	{
+		// PROTOCOL field should be "0Dh”SATA port0 and "0Eh" SATA port1.
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1; //ATA PASS THROUGH (12) OPERATION CODE (A1h)
+		sptwb.Spt.Cdb[1] = (0xE << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=3(Non-Data),Reserved
 		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
 		sptwb.Spt.Cdb[3] = command;//FEATURES (7:0)
 		sptwb.Spt.Cdb[4] = 0;//SECTOR_COUNT (7:0)
@@ -7012,6 +7092,23 @@ BOOL CAtaSmart::SendAtaCommandSat(INT physicalDriveId, BYTE target, BYTE main, B
 		sptwb.Spt.Cdb[7]  = 0x00;		//LBA_HIGH (7:0)
 		sptwb.Spt.Cdb[8]  = target;		//DEVICE_HEAD
 		sptwb.Spt.Cdb[9]  = main;		//COMMAND
+		sptwb.Spt.Cdb[10] = 0x00;
+		sptwb.Spt.Cdb[11] = 0x00;
+	}
+	else if (type == CMD_TYPE_SAT_ASM1352R)
+	{
+		// PROTOCOL field should be "0Dh”SATA port0 and "0Eh" SATA port1.
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1; //ATA PASS THROUGH (12) OPERATION CODE (A1h)
+		sptwb.Spt.Cdb[1] = (0xE << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=3(Non-Data),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = sub;		//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = param;		//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 0x00;		//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = 0x00;		//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = 0x00;		//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;		//DEVICE_HEAD
+		sptwb.Spt.Cdb[9] = main;		//COMMAND
 		sptwb.Spt.Cdb[10] = 0x00;
 		sptwb.Spt.Cdb[11] = 0x00;
 	}
