@@ -461,8 +461,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8.0.0,2018
- PRODUCTVERSION 8.0.0,2018
+ FILEVERSION 8.1.0,2019
+ PRODUCTVERSION 8.1.0,2019
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -479,9 +479,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.0.0.2018"
-            VALUE "LegalCopyright", "(C) 2008-2018 hiyohiyo"
-            VALUE "ProductVersion", "8.0.0.2018"
+            VALUE "FileVersion", "8.1.0.2019"
+            VALUE "LegalCopyright", "(C) 2008-2019 hiyohiyo"
+            VALUE "ProductVersion", "8.1.0.2019"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"
@@ -699,6 +699,7 @@ BEGIN
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
 		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron)",            ID_USB_NVME_JMICRON
 		        MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA
+				MENUITEM "SCSI_NVME_TRANSLATION (Realtek)",            ID_USB_NVME_REALTEK
                 MENUITEM SEPARATOR
                 MENUITEM "Enable All",                  ID_USB_ENABLE_ALL
                 MENUITEM "Disable All",                 ID_USB_DISABLE_ALL

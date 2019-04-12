@@ -529,6 +529,7 @@ public:
 	afx_msg void OnUsbMemory();
 	afx_msg void OnUsbNVMeJMicron();
 	afx_msg void OnUsbNVMeASMedia();
+	afx_msg void OnUsbNVMeRealtek();
 	afx_msg void OnUsbEnableAll();
 	afx_msg void OnUsbDisableAll();
 	afx_msg void OnHealthStatus();

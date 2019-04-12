@@ -108,6 +108,7 @@ public:
 		CMD_TYPE_NVME_STORAGE_QUERY,
 		CMD_TYPE_NVME_JMICRON,
 		CMD_TYPE_NVME_ASMEDIA,
+		CMD_TYPE_NVME_REALTEK,
 		CMD_TYPE_DEBUG
 	};
 
@@ -160,6 +161,7 @@ public:
 		USB_VENDOR_CYPRESS  = 0x04B4,
 		USB_VENDOR_OXFORD   = 0x0928,
 		USB_VENDOR_PROLIFIC = 0x067B,
+		USB_VENDOR_REALTEK  = 0x0BDA,
 		USB_VENDOR_ALL      = 0xFFFF,
 	};
 
@@ -1505,6 +1507,7 @@ public:
 	BOOL FlagUsbMemory;
 	BOOL FlagUsbNVMeJMicron;
 	BOOL FlagUsbNVMeASMedia;
+	BOOL FlagUsbNVMeRealtek;
 
 	DWORD CsmiType;
 
@@ -1547,6 +1550,9 @@ protected:
 
 	BOOL DoIdentifyDeviceNVMeASMedia(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeNVMeASMedia(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+	
+	BOOL DoIdentifyDeviceNVMeRealtek(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
+	BOOL GetSmartAttributeNVMeRealtek(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	BOOL DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);

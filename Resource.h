@@ -541,13 +541,14 @@
 #define ID_ASCII_VIEW                   33131
 #define ID_HIDE_NO_SMART_DISK           33132
 #define ID_GREEN_MODE                   33133
+#define ID_USB_NVME_REALTEK             33134
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        171
-#define _APS_NEXT_COMMAND_VALUE         34002
+#define _APS_NEXT_COMMAND_VALUE         33135
 #define _APS_NEXT_CONTROL_VALUE         1101
 #define _APS_NEXT_SYMED_VALUE           111
 #endif

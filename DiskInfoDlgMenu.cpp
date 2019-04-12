@@ -1247,6 +1247,25 @@ void CDiskInfoDlg::OnUsbNVMeASMedia()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::OnUsbNVMeRealtek()
+{
+	CMenu *menu = GetMenu();
+	if (m_Ata.FlagUsbNVMeRealtek)
+	{
+		m_Ata.FlagUsbNVMeRealtek = FALSE;
+		menu->CheckMenuItem(ID_USB_NVME_REALTEK, MF_UNCHECKED);
+		WritePrivateProfileString(_T("USB"), _T("NVMeRealtek"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagUsbNVMeRealtek = TRUE;
+		menu->CheckMenuItem(ID_USB_NVME_REALTEK, MF_CHECKED);
+		WritePrivateProfileString(_T("USB"), _T("NVMeRealtek"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
 void CDiskInfoDlg::OnUsbEnableAll()
 {
 	m_Ata.FlagUsbSat     = FALSE;
@@ -1259,6 +1278,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbMemory  = FALSE;
 	m_Ata.FlagUsbNVMeJMicron = FALSE;
 	m_Ata.FlagUsbNVMeASMedia = FALSE;
+	m_Ata.FlagUsbNVMeRealtek = FALSE;
 
 	OnUsbSat();
 	OnUsbIodata();
@@ -1270,6 +1290,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbMemory();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
+	OnUsbNVMeRealtek();
 }
 
 void CDiskInfoDlg::OnUsbDisableAll()
@@ -1284,6 +1305,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbMemory  = TRUE;
 	m_Ata.FlagUsbNVMeJMicron = TRUE;
 	m_Ata.FlagUsbNVMeASMedia = TRUE;
+	m_Ata.FlagUsbNVMeRealtek = TRUE;
 
 	OnUsbSat();
 	OnUsbIodata();
@@ -1295,6 +1317,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbMemory();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
+	OnUsbNVMeRealtek();
 }
 
 void CDiskInfoDlg::OnDumpIdentifyDevice()
