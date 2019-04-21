@@ -109,6 +109,7 @@ public:
 		CMD_TYPE_NVME_JMICRON,
 		CMD_TYPE_NVME_ASMEDIA,
 		CMD_TYPE_NVME_REALTEK,
+		CMD_TYPE_NVME_INTEL_RST,
 		CMD_TYPE_DEBUG
 	};
 
@@ -1301,8 +1302,128 @@ typedef struct _CSMI_SAS_RAID_CONFIG_BUFFER {
 } CSMI_SAS_RAID_CONFIG_BUFFER,
   *PCSMI_SAS_RAID_CONFIG_BUFFER;
 
-
 #pragma pack()
+
+//////////////////////////////////////////////////////////////////
+// for Intel RST NVMe
+//////////////////////////////////////////////////////////////////
+#pragma pack(push, 1)
+
+typedef union
+{
+	struct
+	{
+		ULONG Opcode : 8;
+		ULONG FUSE : 2;
+		ULONG _Rsvd : 4;
+		ULONG PSDT : 2;
+		ULONG CID : 16;
+	} DUMMYSTRUCTNAME;
+	ULONG AsDWord;
+} NVME_CDW0, * PNVME_CDW0;
+
+// NVMe Command Format
+// See NVMe specification 1.3c Section 4.2, Figure 10
+typedef union
+{
+	struct
+	{
+		ULONG   CNS : 2;
+		ULONG   _Rsvd : 30;
+	} DUMMYSTRUCTNAME;
+	ULONG AsDWord;
+} NVME_IDENTIFY_CDW10, * PNVME_IDENTIFY_CDW10;
+
+// NVMe Specification < 1.3
+typedef union
+{
+	struct
+	{
+		ULONG   LID : 8;
+		ULONG   _Rsvd1 : 8;
+		ULONG   NUMD : 12;
+		ULONG   _Rsvd2 : 4;
+	} DUMMYSTRUCTNAME;
+	ULONG   AsDWord;
+} NVME_GET_LOG_PAGE_CDW10, * PNVME_GET_LOG_PAGE_CDW10;
+
+// NVMe Specification >= 1.3
+typedef union
+{
+	struct
+	{
+		ULONG   LID : 8;
+		ULONG   LSP : 4;
+		ULONG   Reserved0 : 3;
+		ULONG   RAE : 1;
+		ULONG   NUMDL : 16;
+	} DUMMYSTRUCTNAME;
+	ULONG   AsDWord;
+} NVME_GET_LOG_PAGE_CDW10_V13, * PNVME_GET_LOG_PAGE_CDW10_V13;
+
+typedef struct
+{
+	// Common fields for all commands
+	NVME_CDW0           CDW0;
+
+	ULONG               NSID;
+	ULONG               _Rsvd[2];
+	ULONGLONG           MPTR;
+	ULONGLONG           PRP1;
+	ULONGLONG           PRP2;
+
+	// Command independent fields from CDW10 to CDW15
+	union
+	{
+		// Admin Command: Identify (6)
+		struct
+		{
+			NVME_IDENTIFY_CDW10 CDW10;
+			ULONG   CDW11;
+			ULONG   CDW12;
+			ULONG   CDW13;
+			ULONG   CDW14;
+			ULONG   CDW15;
+		} IDENTIFY;
+
+		// Admin Command: Get Log Page (2)
+		struct
+		{
+			NVME_GET_LOG_PAGE_CDW10 CDW10;
+			//NVME_GET_LOG_PAGE_CDW10_V13 CDW10;
+			ULONG   CDW11;
+			ULONG   CDW12;
+			ULONG   CDW13;
+			ULONG   CDW14;
+			ULONG   CDW15;
+		} GET_LOG_PAGE;
+	} u;
+} NVME_CMD, * PNVME_CMD;
+
+typedef struct _INTEL_NVME_PAYLOAD
+{
+	BYTE    Version;        // 0x001C
+	BYTE    PathId;         // 0x001D
+	BYTE    TargetID;       // 0x001E
+	BYTE    Lun;            // 0x001F
+	NVME_CMD Cmd;           // 0x0020 ~ 0x005F
+	DWORD   CplEntry[4];    // 0x0060 ~ 0x006F
+	DWORD   QueueId;        // 0x0070 ~ 0x0073
+	DWORD   ParamBufLen;    // 0x0074
+	DWORD   ReturnBufferLen;// 0x0078
+	BYTE    __rsvd2[0x28];  // 0x007C ~ 0xA3
+} INTEL_NVME_PAYLOAD, * PINTEL_NVME_PAYLOAD;
+
+typedef struct _INTEL_NVME_PASS_THROUGH
+{
+	SRB_IO_CONTROL SRB;     // 0x0000 ~ 0x001B
+	INTEL_NVME_PAYLOAD Payload;
+	BYTE DataBuffer[0x1000];
+} INTEL_NVME_PASS_THROUGH, * PINTEL_NVME_PASS_THROUGH;
+#pragma pack(pop)
+
+#define IOCTL_INTEL_NVME_PASS_THROUGH CTL_CODE(0xf000, 0xA02, METHOD_BUFFERED, FILE_ANY_ACCESS);
+
 
 public:
 	DWORD UpdateSmartInfo(DWORD index);
@@ -1561,6 +1682,10 @@ protected:
 	CString GetScsiPath(const TCHAR* Path);
 	BOOL DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
 	BOOL GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+
+	BOOL GetScsiAddress(const TCHAR* Path, BYTE* PortNumber, BYTE* PathId, BYTE* TargetId, BYTE* Lun);
+	BOOL DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
+	BOOL GetSmartAttributeNVMeIntelRst(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	BOOL DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
 	BOOL GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);

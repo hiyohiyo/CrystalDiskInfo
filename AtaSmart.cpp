@@ -39,6 +39,7 @@ static const TCHAR *commandTypeString[] =
 	_T("nj"), // NVMe JMicron
 	_T("na"), // NVMe ASMedia
 	_T("nr"), // NVMe Realtek
+	_T("nt"), // NVMe Intel RST
 };
 
 static const TCHAR *ssdVendorString[] = 
@@ -140,6 +141,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 
 		if ((m_FlagNVMeStorageQuery && vars[i].CommandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL_RST && GetSmartAttributeNVMeIntelRst(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung951(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
@@ -3034,7 +3036,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.AlarmTemperature = 0;
 	asi.IsNVMe = TRUE;
 
-	if (commandType >= CMD_TYPE_NVME_JMICRON)
+	if (commandType == CMD_TYPE_NVME_JMICRON || commandType == CMD_TYPE_NVME_ASMEDIA || commandType == CMD_TYPE_NVME_JMICRON)
 	{
 		asi.InterfaceType = INTERFACE_TYPE_USB;
 	}
@@ -3107,6 +3109,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	if (
 		(m_FlagNVMeStorageQuery && commandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &asi))
+	||  (commandType == CMD_TYPE_NVME_INTEL_RST && GetSmartAttributeNVMeIntelRst(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung951(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &asi))
@@ -4557,6 +4560,16 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL"));
 			DebugPrint(debug);
 			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_INTEL, &identify)){return TRUE; }
+		}
+
+		debug.Format(_T("DoIdentifyDeviceNVMeIntelRst"));
+		DebugPrint(debug);
+
+		if (DoIdentifyDeviceNVMeIntelRst(physicalDriveId, scsiPort, scsiTargetId, &identify))
+		{
+			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL_RST"));
+			DebugPrint(debug);
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_INTEL_RST, &identify)) { return TRUE; }
 		}
 	}
 	
@@ -6117,6 +6130,139 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, IN
 
 	CloseHandle(hIoCtrl);
 	return bRet;
+}
+
+/*---------------------------------------------------------------------------*/
+// NVMe Intel RST
+/*---------------------------------------------------------------------------*/
+
+BOOL CAtaSmart::GetScsiAddress(const TCHAR* Path, BYTE* PortNumber, BYTE* PathId, BYTE* TargetId, BYTE* Lun)
+{
+	HANDLE hDevice = CreateFile(Path,
+		GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE,
+		nullptr,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
+		nullptr);
+	DWORD dwReturned;
+	SCSI_ADDRESS ScsiAddr;
+	BOOL bRet = DeviceIoControl(hDevice, IOCTL_SCSI_GET_ADDRESS,
+		nullptr, 0, &ScsiAddr, sizeof(ScsiAddr), &dwReturned, NULL);
+
+	CloseHandle(hDevice);
+
+	*PortNumber = ScsiAddr.PortNumber;
+	*PathId = ScsiAddr.PathId;
+	*TargetId = ScsiAddr.TargetId;
+	*Lun = ScsiAddr.Lun;
+
+	return bRet == TRUE;
+}
+
+BOOL CAtaSmart::DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
+{
+	CString path;
+	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
+
+	BYTE portNumber, pathId, targetId, lun;
+	GetScsiAddress(path, &portNumber, &pathId, &targetId, &lun);
+	CString drive;
+	drive.Format(L"\\\\.\\Scsi%d:", portNumber);
+
+	HANDLE hIoCtrl = CreateFile(drive,
+		GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
+		OPEN_EXISTING, 0, nullptr);
+
+	if (hIoCtrl != INVALID_HANDLE_VALUE)
+	{
+		INTEL_NVME_PASS_THROUGH NVMeData;
+		memset(&NVMeData, 0, sizeof(NVMeData));
+
+		NVMeData.SRB.HeaderLength = sizeof(SRB_IO_CONTROL);
+		memcpy(NVMeData.SRB.Signature, "IntelNvm", 8);
+		NVMeData.SRB.Timeout = 10;
+		NVMeData.SRB.ControlCode = IOCTL_INTEL_NVME_PASS_THROUGH;
+		NVMeData.SRB.Length = sizeof(INTEL_NVME_PASS_THROUGH) - sizeof(SRB_IO_CONTROL);
+
+		NVMeData.Payload.Version = 1;
+		NVMeData.Payload.PathId = pathId;
+		NVMeData.Payload.Cmd.CDW0.Opcode = 0x06; // ADMIN_IDENTIFY
+		NVMeData.Payload.Cmd.NSID = 0;
+		NVMeData.Payload.Cmd.u.IDENTIFY.CDW10.CNS = 1;
+		NVMeData.Payload.ParamBufLen = sizeof(INTEL_NVME_PAYLOAD) + sizeof(SRB_IO_CONTROL); //0xA4;
+		NVMeData.Payload.ReturnBufferLen = 0x1000;
+		NVMeData.Payload.CplEntry[0] = 0;
+
+		DWORD dummy;
+		if (DeviceIoControl(hIoCtrl, IOCTL_SCSI_MINIPORT,
+			&NVMeData,
+			sizeof(NVMeData),
+			&NVMeData,
+			sizeof(NVMeData),
+			&dummy, nullptr))
+		{
+			memcpy_s(data, sizeof(IDENTIFY_DEVICE), NVMeData.DataBuffer, sizeof(IDENTIFY_DEVICE));
+
+			return TRUE;
+		}
+
+		CloseHandle(hIoCtrl);
+	}
+	return FALSE;
+}
+
+BOOL CAtaSmart::GetSmartAttributeNVMeIntelRst(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
+{
+	CString path;
+	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
+
+	BYTE portNumber, pathId, targetId, lun;
+	GetScsiAddress(path, &portNumber, &pathId, &targetId, &lun);
+	CString drive;
+	drive.Format(L"\\\\.\\Scsi%d:", portNumber);
+
+	HANDLE hIoCtrl = CreateFile(drive,
+		GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
+		OPEN_EXISTING, 0, nullptr);
+
+	if (hIoCtrl != INVALID_HANDLE_VALUE)
+	{
+		INTEL_NVME_PASS_THROUGH NVMeData;
+		memset(&NVMeData, 0, sizeof(NVMeData));
+
+		NVMeData.SRB.HeaderLength = sizeof(SRB_IO_CONTROL);
+		memcpy(NVMeData.SRB.Signature, "IntelNvm", 8);
+		NVMeData.SRB.Timeout = 10;
+		NVMeData.SRB.ControlCode = IOCTL_INTEL_NVME_PASS_THROUGH;
+		NVMeData.SRB.Length = sizeof(INTEL_NVME_PASS_THROUGH) - sizeof(SRB_IO_CONTROL);
+
+		NVMeData.Payload.Version = 1;
+		NVMeData.Payload.PathId = pathId;
+		NVMeData.Payload.Cmd.CDW0.Opcode = 0x02; // ADMIN_GET_LOG_PAGE
+		NVMeData.Payload.Cmd.NSID = 0xFFFFFFFF; //  NVME_NAMESPACE_ALL;
+		NVMeData.Payload.Cmd.u.GET_LOG_PAGE.CDW10.LID = 2; // = 0x7f0002;
+		NVMeData.Payload.Cmd.u.GET_LOG_PAGE.CDW10.NUMD = 0x7F;
+		NVMeData.Payload.ParamBufLen = sizeof(INTEL_NVME_PAYLOAD) + sizeof(SRB_IO_CONTROL); //0xA4;
+		NVMeData.Payload.ReturnBufferLen = 0x1000;
+		NVMeData.Payload.CplEntry[0] = 0;
+
+		DWORD dummy;
+		if (DeviceIoControl(hIoCtrl, IOCTL_SCSI_MINIPORT,
+			&NVMeData,
+			sizeof(NVMeData),
+			&NVMeData,
+			sizeof(NVMeData),
+			&dummy, nullptr))
+		{
+			memcpy_s(&(asi->SmartReadData), 512, NVMeData.DataBuffer, 512);
+			return TRUE;
+		}
+		CloseHandle(hIoCtrl);
+	}
+	return FALSE;
 }
 
 /*---------------------------------------------------------------------------*/
