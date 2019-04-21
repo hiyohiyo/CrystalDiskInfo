@@ -4782,10 +4782,9 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				// for ASM1352R 
 				if (DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT_ASM1352R))
 				{
-					AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT_ASM1352R, &identify, siliconImageType, NULL, pnpDeviceId);
+					flag |= AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT_ASM1352R, &identify, siliconImageType, NULL, pnpDeviceId);
 				}
-
-				return flag;
+				if (flag == TRUE) { return TRUE; }
 			}
 			
 			if(FlagUsbJmicron && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_JMICRON))
