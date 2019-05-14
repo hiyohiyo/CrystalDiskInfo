@@ -150,6 +150,7 @@ public:
 		SSD_VENDOR_MICRON_MU02= 18,
 		SSD_VENDOR_NVME       = 19,
 		SSD_VENDOR_REALTEK    = 20,
+		SSD_VENDOR_SKhynix	=	21,
 		SSD_VENDOR_MAX        = 99,
 
 		VENDOR_UNKNOWN      = 0x0000,
@@ -1747,6 +1748,7 @@ protected:
 	BOOL IsSsdOczVector(ATA_SMART_INFO &asi);
 	BOOL IsSsdToshiba(ATA_SMART_INFO &asi);
 	BOOL IsSsdRealtek(ATA_SMART_INFO &asi);
+	BOOL IsSsdSKhynix(ATA_SMART_INFO& asi);
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
 	static int Compare(const void *p1, const void *p2);
