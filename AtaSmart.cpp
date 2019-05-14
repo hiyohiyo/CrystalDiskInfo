@@ -4418,13 +4418,7 @@ BOOL CAtaSmart::IsSsdRealtek(ATA_SMART_INFO &asi)
 BOOL CAtaSmart::IsSsdSKhynix(ATA_SMART_INFO &asi)
 {
 	BOOL flagSmartType = FALSE;
-	if (asi.Model.Find(_T("SK hynix")) >= 0)
-	{
-		flagSmartType = TRUE;
-		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
-		asi.SmartKeyName = _T("SmartSKhynix");
-	}
-	else if (asi.Model.Find(_T("HFS")) >= 0)
+	if (asi.Model.Find(_T("SK hynix")) >= 0 || asi.Model.Find(_T("HFS")) >= 0)
 	{
 		flagSmartType = TRUE;
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
