@@ -3336,6 +3336,12 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.DiskVendorId = SSD_VENDOR_REALTEK;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
+	else if (IsSsdSKhynix(asi))
+	{
+		asi.SmartKeyName = _T("SmartSKhynix");
+		asi.DiskVendorId = SSD_VENDOR_SKhynix;
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+	}
 	else if(asi.IsSsd)
 	{
 		asi.SmartKeyName = _T("SmartSsd");
@@ -3511,6 +3517,18 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					+ (UINT64) asi.Attribute[j].RawValue[0])
 					* 512 / 1024 / 1024 / 1024);
 			}
+			else if (asi.DiskVendorId == SSD_VENDOR_SKhynix && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
+			{
+				asi.HostWrites = (INT)(
+					(UINT64)
+					((UINT64)asi.Attribute[j].RawValue[5] * 256 * 256 * 256 * 256 * 256
+						+ (UINT64)asi.Attribute[j].RawValue[4] * 256 * 256 * 256 * 256
+						+ (UINT64)asi.Attribute[j].RawValue[3] * 256 * 256 * 256
+						+ (UINT64)asi.Attribute[j].RawValue[2] * 256 * 256
+						+ (UINT64)asi.Attribute[j].RawValue[1] * 256
+						+ (UINT64)asi.Attribute[j].RawValue[0])
+					* 512 / 1024 / 1024 / 1024);
+			}
 			/*
 			else if(asi.DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 			{
@@ -3612,6 +3630,18 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					asi.Life = asi.Attribute[j].CurrentValue;
 				}
 			}
+			else if (asi.DiskVendorId == SSD_VENDOR_SKhynix && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
+			{
+				asi.HostReads = (INT)(
+					(UINT64)
+					((UINT64)asi.Attribute[j].RawValue[5] * 256 * 256 * 256 * 256 * 256
+						+ (UINT64)asi.Attribute[j].RawValue[4] * 256 * 256 * 256 * 256
+						+ (UINT64)asi.Attribute[j].RawValue[3] * 256 * 256 * 256
+						+ (UINT64)asi.Attribute[j].RawValue[2] * 256 * 256
+						+ (UINT64)asi.Attribute[j].RawValue[1] * 256
+						+ (UINT64)asi.Attribute[j].RawValue[0])
+					* 512 / 1024 / 1024 / 1024);
+			}
 			/*
 			else if(asi.DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 			{
@@ -3711,7 +3741,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			}
 			break;
 		case 0xE7:
-			if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON)
+			if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_SKhynix)
 			{
 				if (asi.Attribute[j].CurrentValue <= 100)
 				{
@@ -4385,7 +4415,17 @@ BOOL CAtaSmart::IsSsdRealtek(ATA_SMART_INFO &asi)
 
 	return flagSmartType;
 }
-
+BOOL CAtaSmart::IsSsdSKhynix(ATA_SMART_INFO &asi)
+{
+	BOOL flagSmartType = FALSE;
+	if (asi.Model.Find(_T("SK hynix")) >= 0 || asi.Model.Find(_T("HFS")) >= 0)
+	{
+		flagSmartType = TRUE;
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+		asi.SmartKeyName = _T("SmartSKhynix");
+	}
+	return flagSmartType;
+}
 BOOL CAtaSmart::CheckSmartAttributeCorrect(ATA_SMART_INFO* asi1, ATA_SMART_INFO* asi2)
 {
 	if(asi1->AttributeCount != asi2->AttributeCount)
