@@ -4329,7 +4329,9 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 
 	// 2013/10/7
 	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1425;id=diskinfo#1425
-	if (asi.Model.Find(_T("SanDisk")) >= 0)
+	if (asi.Model.Find(_T("SanDisk")) >= 0
+		|| (asi.Model.Left(7)==_T("WDC WDS") && asi.Model.Find(_T("2B0")) == asi.Model.GetLength()-4)  // WD Blue 3D is the same as SanDisk Ultra 3D
+		)
 	{
 		flagSmartType = TRUE;
 		asi.SmartKeyName = _T("SmartSanDisk");
@@ -4340,6 +4342,7 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 			{
 				asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 				asi.SmartKeyName = _T("SmartSanDiskGb");
+				break;
 			}
 		}
 	}
