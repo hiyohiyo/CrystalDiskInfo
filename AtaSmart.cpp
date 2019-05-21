@@ -8346,6 +8346,18 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						+ (UINT64) asi->Attribute[j].RawValue[0])
 						* 512 / 1024 / 1024 / 1024);
 				}
+				else if (asi->DiskVendorId == SSD_VENDOR_SKhynix && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
+				{
+					asi->HostWrites = (INT)(
+						(UINT64)
+						((UINT64)asi->Attribute[j].RawValue[5] * 256 * 256 * 256 * 256 * 256
+							+ (UINT64)asi->Attribute[j].RawValue[4] * 256 * 256 * 256 * 256
+							+ (UINT64)asi->Attribute[j].RawValue[3] * 256 * 256 * 256
+							+ (UINT64)asi->Attribute[j].RawValue[2] * 256 * 256
+							+ (UINT64)asi->Attribute[j].RawValue[1] * 256
+							+ (UINT64)asi->Attribute[j].RawValue[0])
+						* 512 / 1024 / 1024 / 1024);
+				}
 				/*
 				else if(asi->DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 				{
@@ -8446,6 +8458,18 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					{
 						asi->Life = asi->Attribute[j].CurrentValue;
 					}
+				}
+				else if (asi->DiskVendorId == SSD_VENDOR_SKhynix && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
+				{
+					asi->HostReads = (INT)(
+						(UINT64)
+						((UINT64)asi->Attribute[j].RawValue[5] * 256 * 256 * 256 * 256 * 256
+							+ (UINT64)asi->Attribute[j].RawValue[4] * 256 * 256 * 256 * 256
+							+ (UINT64)asi->Attribute[j].RawValue[3] * 256 * 256 * 256
+							+ (UINT64)asi->Attribute[j].RawValue[2] * 256 * 256
+							+ (UINT64)asi->Attribute[j].RawValue[1] * 256
+							+ (UINT64)asi->Attribute[j].RawValue[0])
+						* 512 / 1024 / 1024 / 1024);
 				}
 				/*
 				else if(asi->DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
