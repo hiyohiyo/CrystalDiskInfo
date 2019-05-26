@@ -1593,6 +1593,11 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	cstr = i18n(_T("Menu"), _T("AAM_APM_CONTROL"));
 	menuState = menu->GetMenuState(ID_AAM_APM, MF_BYCOMMAND);
 	menu->ModifyMenu(ID_AAM_APM, MF_STRING, ID_AAM_APM, cstr);
+
+	cstr = i18n(_T("Alarm"), _T("ALARM_TEMPERATURE"));
+	menuState = menu->GetMenuState(ID_TEMPERATURE, MF_BYCOMMAND);
+	menu->ModifyMenu(ID_TEMPERATURE, MF_STRING, ID_TEMPERATURE, cstr);
+
 	/*
 	if(m_Ata.vars.GetCount() && menuState != MF_GRAYED)
 	{
@@ -1681,16 +1686,17 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 	// Advanced Features
 	subMenu.Attach(menu->GetSubMenu(2)->GetSubMenu(12)->GetSafeHmenu());
-	cstr = i18n(_T("Menu"), _T("AUTO_DTECTION"));
-	subMenu.ModifyMenu(5, MF_BYPOSITION, 5, cstr);
-	cstr = i18n(_T("Dialog"), _T("LIST_RAW_VALUES"));
-	subMenu.ModifyMenu(6, MF_BYPOSITION, 6, cstr);
 	cstr = i18n(_T("Menu"), _T("TEMPERATURE_TYPE"));
-	subMenu.ModifyMenu(4, MF_BYPOSITION, 4, cstr);
-	cstr = i18n(_T("Menu"), _T("RESIDENT_STYLE"));
-	subMenu.ModifyMenu(8, MF_BYPOSITION, 8, cstr);
-	cstr = i18n(_T("Menu"), _T("WAIT_TIME_AT_STARTUP"));
+	subMenu.ModifyMenu(5, MF_BYPOSITION, 5, cstr);
+	cstr = i18n(_T("Menu"), _T("AUTO_DTECTION"));
+	subMenu.ModifyMenu(6, MF_BYPOSITION, 6, cstr);
+	cstr = i18n(_T("Dialog"), _T("LIST_RAW_VALUES"));
 	subMenu.ModifyMenu(7, MF_BYPOSITION, 7, cstr);
+	cstr = i18n(_T("Menu"), _T("WAIT_TIME_AT_STARTUP"));
+	subMenu.ModifyMenu(8, MF_BYPOSITION, 8, cstr);
+	cstr = i18n(_T("Menu"), _T("RESIDENT_STYLE"));
+	subMenu.ModifyMenu(9, MF_BYPOSITION, 9, cstr);
+
 #ifdef UWP
 	subMenu.EnableMenuItem(7, MF_GRAYED);
 #endif

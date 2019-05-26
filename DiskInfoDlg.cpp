@@ -698,6 +698,7 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialog)
 	ON_COMMAND(ID_CELSIUS, &CDiskInfoDlg::OnCelsius)
 	ON_COMMAND(ID_FAHRENHEIT, &CDiskInfoDlg::OnFahrenheit)
 	ON_COMMAND(ID_AAM_APM, &CDiskInfoDlg::OnAamApm)
+	ON_COMMAND(ID_TEMPERATURE, &CDiskInfoDlg::OnTemperature)
 	ON_COMMAND(ID_AUTO_AAM_APM, &CDiskInfoDlg::OnAutoAamApm)
 	ON_COMMAND(ID_RESCAN, &CDiskInfoDlg::OnRescan)
 	ON_COMMAND(ID_USB_SAT, &CDiskInfoDlg::OnUsbSat)
@@ -754,6 +755,7 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialog)
 	ON_BN_CLICKED(IDC_BUTTON_PRE_DISK, &CDiskInfoDlg::OnBnClickedButtonPreDisk)
 	ON_BN_CLICKED(IDC_BUTTON_NEXT_DISK, &CDiskInfoDlg::OnBnClickedButtonNextDisk)
 	ON_BN_CLICKED(IDC_BUTTON_HEALTH_STATUS, &CDiskInfoDlg::OnBnClickedButtonHealthStatus)
+	ON_BN_CLICKED(IDC_BUTTON_TEMPERATURE, &CDiskInfoDlg::OnBnClickedButtonTemperature)
 	ON_BN_CLICKED(IDC_BUTTON_VOICE, &CDiskInfoDlg::OnBnClickedButtonVoice)
 	ON_BN_CLICKED(IDC_BUTTON_COPYRIGHT, &CDiskInfoDlg::OnBnClickedButtonCopyright)
 	ON_BN_CLICKED(IDC_BUTTON_LIFE, &CDiskInfoDlg::OnBnClickedButtonLife)
@@ -1334,6 +1336,8 @@ void CDiskInfoDlg::UpdateDialogSize()
 #endif
 
 	m_CtrlDiskStatus.SetHandCursor(TRUE);
+
+	m_CtrlTemperature.SetHandCursor(TRUE);
 
 	m_CtrlLabelFirmware.InitControl(128 + OFFSET_X, 88, labelWidth, 20, m_ZoomRatio, NULL, 0, SS_RIGHT, CStaticCx::OwnerDrawTransparent | m_IsHighContrast);
 	m_CtrlLabelSerialNumber.InitControl(128 + OFFSET_X, 112, labelWidth, 20, m_ZoomRatio, NULL, 0, SS_RIGHT, CStaticCx::OwnerDrawTransparent | m_IsHighContrast);
@@ -2343,6 +2347,15 @@ void CDiskInfoDlg::OnBnClickedButtonHealthStatus()
 	}
 }
 
+void CDiskInfoDlg::OnBnClickedButtonTemperature()
+{
+	CMenu* menu = GetMenu();
+	if (!(menu->GetMenuState(ID_TEMPERATURE, MF_BYCOMMAND) & MF_GRAYED))
+	{
+		m_TemperatureDlg = new CTemperatureDlg(this);
+		m_TemperatureDlg->Create(CTemperatureDlg::IDD, m_TemperatureDlg, ID_TEMPERATURE, this);
+	}
+}
 
 void CDiskInfoDlg::OnBnClickedButtonVoice()
 {

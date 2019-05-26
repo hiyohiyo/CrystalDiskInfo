@@ -26,6 +26,7 @@
 #define IDI_MINI_ICON                   145
 #define IDI_TRAY_ICON                   146
 #define IDD_FONT                        147
+#define IDD_TEMPERATURE                 148
 #define IDR_WAVE1                       150
 #define IDD_ALARM_HISTORY               151
 #define IDD_SOUND_SETTINGS              152
@@ -334,6 +335,13 @@
 #define IDC_LABEL_05                    1098
 #define IDC_LABEL_C6                    1099
 #define IDC_LABEL_C5                    1100
+
+
+#define IDC_VALUE_TEMPERATURE           1101
+#define IDC_VALUE_TEMPERATURE_F         1102
+#define IDC_SCROLLBAR_TEMPERATURE       1103
+
+
 #define ID_FILE_EXIT                    32771
 #define ID_HELP_ABOUT                   32772
 #define ID_HELP_CRYSTALDEWWORLD         32773
@@ -445,6 +453,7 @@
 #define ID_AUTO_AAM_APM                 32954
 #define ID_FUNCTION_RESCAN              32955
 #define ID_RESCAN                       32956
+#define ID_TEMPERATURE                  32957
 #define ID_TIMEFORMAT_DD                32959
 #define ID_FORADVANCEDUSERS_USB         32967
 #define ID_USB_SAT                      32968

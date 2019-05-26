@@ -67,6 +67,12 @@ void CDiskInfoDlg::OnAamApm()
 	m_SettingDlg->Create(CSettingDlg::IDD, m_SettingDlg, ID_AAM_APM, this);
 }
 
+void CDiskInfoDlg::OnTemperature()
+{
+	m_TemperatureDlg = new CTemperatureDlg(this);
+	m_TemperatureDlg->Create(CTemperatureDlg::IDD, m_TemperatureDlg, ID_TEMPERATURE, this);
+}
+
 void CDiskInfoDlg::OnHealthStatus()
 {
 	CMenu *menu = GetMenu();

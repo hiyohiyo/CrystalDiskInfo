@@ -14,6 +14,7 @@
 #include "FontSelection.h"
 #include "SoundSettingDlg.h"
 #include "GraphDlg.h"
+#include "TemperatureDlg.h"
 
 #include "DialogCx.h"
 #include "MainDialog.h"
@@ -122,6 +123,7 @@ protected:
 
 	CAboutDlg*			m_AboutDlg;
 	CSettingDlg*		m_SettingDlg;
+	CTemperatureDlg*	m_TemperatureDlg;
 	CHealthDlg*			m_HealthDlg;
 	COptionDlg*			m_OptionDlg;
 //	CAlarmHistoryDlg*	m_AlarmHistoryDlg;
@@ -517,6 +519,7 @@ public:
 	afx_msg void OnCelsius();
 	afx_msg void OnFahrenheit();
 	afx_msg void OnAamApm();
+	afx_msg void OnTemperature();
 	afx_msg void OnAutoAamApm();
 	afx_msg void OnRescan();
 	afx_msg void OnUsbSat();
@@ -575,6 +578,7 @@ public:
 	afx_msg void OnBnClickedButtonPreDisk();
 	afx_msg void OnBnClickedButtonNextDisk();
 	afx_msg void OnBnClickedButtonHealthStatus();
+	afx_msg void OnBnClickedButtonTemperature();
 	afx_msg void OnBnClickedButtonVoice();
 	afx_msg void OnBnClickedButtonCopyright();
 

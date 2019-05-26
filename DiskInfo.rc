@@ -398,6 +398,19 @@ BEGIN
     CTEXT           "Current APM",IDC_VALUE_CURRENT_APM,265,182,40,14
 END
 
+IDD_TEMPERATURE DIALOGEX 0, 0, 333, 248
+	STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+	CAPTION "Temperature Setting"
+	FONT 8, "MS Shell Dlg", 400, 0, 0x1
+	BEGIN
+	COMBOBOX        IDC_SELECT_DISK, 7, 7, 319, 30, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+	SCROLLBAR       IDC_SCROLLBAR_TEMPERATURE, 20, 46, 134, 11
+	PUSHBUTTON      "default", IDC_DEFAULT, 55, 185, 83, 14, BS_CENTER
+	PUSHBUTTON      "apply", IDC_APPLY, 185, 185, 83, 14, BS_CENTER
+	CTEXT           "スタティック", IDC_VALUE_TEMPERATURE, 195, 47, 33, 8
+	CTEXT           "スタティック", IDC_VALUE_TEMPERATURE_F, 245, 44, 33, 8
+END
+
 IDD_HEALTH DIALOGEX 0, 0, 333, 214
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Health Status Setting"
@@ -461,8 +474,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8.1.0,2019
- PRODUCTVERSION 8.1.0,2019
+ FILEVERSION 8.2.0,2019
+ PRODUCTVERSION 8.2.0,2019
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -479,9 +492,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.1.0.2019"
+            VALUE "FileVersion", "8.2.0.2019"
             VALUE "LegalCopyright", "(C) 2008-2019 hiyohiyo"
-            VALUE "ProductVersion", "8.1.0.2019"
+            VALUE "ProductVersion", "8.2.0.2019"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"
@@ -538,6 +551,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 241
     END
+
+	IDD_TEMPERATURE, DIALOG
+		BEGIN
+		LEFTMARGIN, 7
+		RIGHTMARGIN, 326
+		TOPMARGIN, 7
+		BOTTOMMARGIN, 241
+		END
 
     IDD_HEALTH, DIALOG
     BEGIN
@@ -640,6 +661,7 @@ BEGIN
             MENUITEM "AAM/APM Setting",             ID_AAM_APM
             MENUITEM "Auto AAM/APM Adaptation",     ID_AUTO_AAM_APM
             MENUITEM "Health Status Setting",       ID_HEALTH_STATUS
+			MENUITEM "Temperature Setting",			ID_TEMPERATURE
             MENUITEM SEPARATOR
             POPUP "Temperature"
             BEGIN

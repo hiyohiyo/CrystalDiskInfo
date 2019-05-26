@@ -117,6 +117,9 @@
     <ClCompile Include="SlotSpeedGetter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TemperatureDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="StorageQuery.h">
       <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TemperatureDlg.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
