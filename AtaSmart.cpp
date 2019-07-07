@@ -164,7 +164,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 					+ ((ULONG64)vars[i].SmartReadData[0x23] << 24)
 					+ ((ULONG64)vars[i].SmartReadData[0x22] << 16)
 					+ ((ULONG64)vars[i].SmartReadData[0x21] << 8)
-					+ ((ULONG64)vars[i].SmartReadData[0x20])) * 512 / 1024 / 1024;
+					+ ((ULONG64)vars[i].SmartReadData[0x20])) * 512 * 1000 / 1024 / 1024 / 1024;
 
 			vars[i].HostWrites = (ULONG64)
 				(((ULONG64)vars[i].SmartReadData[0x37] << 56)
@@ -174,7 +174,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 					+ ((ULONG64)vars[i].SmartReadData[0x33] << 24)
 					+ ((ULONG64)vars[i].SmartReadData[0x32] << 16)
 					+ ((ULONG64)vars[i].SmartReadData[0x31] << 8)
-					+ ((ULONG64)vars[i].SmartReadData[0x30])) * 512 / 1024 / 1024;
+					+ ((ULONG64)vars[i].SmartReadData[0x30])) * 512 * 1000 / 1024 / 1024 / 1024;
 
 			vars[i].PowerOnCount = (ULONG64)
 				(((ULONG64)vars[i].SmartReadData[0x77] << 56)
@@ -3133,7 +3133,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x23] << 24)
 				+ ((ULONG64)asi.SmartReadData[0x22] << 16)
 				+ ((ULONG64)asi.SmartReadData[0x21] << 8)
-				+ ((ULONG64)asi.SmartReadData[0x20])) * 512 / 1024 / 1024;
+				+ ((ULONG64)asi.SmartReadData[0x20])) * 512 * 1000 / 1024 / 1024 / 1024;
 
 		asi.HostWrites = (ULONG64)
 		         (((ULONG64)asi.SmartReadData[0x37] << 56)
@@ -3143,7 +3143,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x33] << 24)
 				+ ((ULONG64)asi.SmartReadData[0x32] << 16)
 				+ ((ULONG64)asi.SmartReadData[0x31] << 8)
-				+ ((ULONG64)asi.SmartReadData[0x30])) * 512 / 1024 / 1024;
+				+ ((ULONG64)asi.SmartReadData[0x30])) * 512 / 1000 / 1024 / 1024 / 1024;
 
 		asi.PowerOnCount = (ULONG64)
 			     (((ULONG64)asi.SmartReadData[0x77] << 56)
@@ -4200,7 +4200,7 @@ BOOL CAtaSmart::IsSsdMicron(ATA_SMART_INFO &asi)
 		|| modelUpper.Find(_T("M4-")) == 0 || modelUpper.Find(_T("M400")) == 0
 		|| modelUpper.Find(_T("P300")) == 0 || modelUpper.Find(_T("C300")) == 0
 		|| modelUpper.Find(_T("M3-")) == 0 || modelUpper.Find(_T("M300")) == 0
-		|| (modelUpper.Find(_T("CT")) == 0 && modelUpper.Right(4) == _T("SSD1"))
+		|| (modelUpper.Find(_T("CT")) == 0 && modelUpper.Find(_T("SSD")) != -1)
 		|| modelUpper.Find(_T("CRUCIAL")) == 0 || modelUpper.Find(_T("MICRON")) == 0
 		|| flagSmartType;
 }
