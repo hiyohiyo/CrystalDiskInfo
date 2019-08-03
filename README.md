@@ -1,21 +1,27 @@
-# Overview
+English | [Japanese](./README.ja.md)
+
+# CrystalDiskInfo
+
+## Overview
 CrystalDiskInfo is a disk information tool.
 
-CrystalDiskInfo supports
+CrystalDiskInfo supports:
 - PATA drives
 - SATA drives
-- A part of USB drives
-- A part of RAID controllers (IRST)
-- A part of NVMe drives
 
-# Notification
+Partially supports:
+- USB drives
+- RAID controllers (IRST)
+- NVMe drives
+
+## Notification
 This repository does not include resource files, so please download them from below.
-- https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc
+- [Link to download page](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc)
 
-# Project Page 
-- https://crystalmark.info/
+## Project Page
+- [Crystal Dew World](https://crystalmark.info/)
 
-# License
+## License
 The MIT License
-- https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-license/ (Japanese)
-- https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-license/ (English)
+- [Japanese version](https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-license/)
+- [English version](https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-license/)
