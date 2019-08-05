@@ -288,8 +288,15 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 			errorCount++;
 		}
 
-		m_FlagAutoRefreshTarget[i] = GetPrivateProfileInt(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, 1, m_Ini);;
-		m_Ata.vars[i].AlarmTemperature = GetPrivateProfileInt(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, 50, m_Ini);
+		m_FlagAutoRefreshTarget[i] = GetPrivateProfileInt(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		if (m_Ata.vars[i].IsSsd)
+		{
+			m_Ata.vars[i].AlarmTemperature = GetPrivateProfileInt(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, 60, m_Ini);
+		}
+		else
+		{
+			m_Ata.vars[i].AlarmTemperature = GetPrivateProfileInt(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, 50, m_Ini);
+		}
 		m_Ata.vars[i].AlarmHealthStatus = GetPrivateProfileInt(_T("AlarmHealthStatus"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
 
 		m_Ata.vars[i].Threshold05     = GetPrivateProfileInt(_T("ThreasholdOfCaution05"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
@@ -389,13 +396,13 @@ CString CDiskInfoDlg::GetDiskStatusClass(DWORD statusCode)
 	}
 }
 
-CString CDiskInfoDlg::GetTemperatureClass(INT temperature)
+CString CDiskInfoDlg::GetTemperatureClass(INT temperature, INT alarmTemperature)
 {
-	if(temperature >= 55)
+	if(temperature > alarmTemperature)
 	{
 		return _T("temperatureBad");
 	}
-	else if(temperature >= 50)
+	else if(temperature == alarmTemperature)
 	{
 		return _T("temperatureCaution");
 	}

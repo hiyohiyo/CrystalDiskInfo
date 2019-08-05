@@ -1325,7 +1325,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 
 	if (m_Ata.vars.GetCount() && (m_Ata.vars[m_SelectDisk].IsSmartCorrect || m_Ata.vars[m_SelectDisk].DiskVendorId == m_Ata.SSD_VENDOR_NVME))
 	{
-		className = GetTemperatureClass(m_Ata.vars[m_SelectDisk].Temperature);
+		className = GetTemperatureClass(m_Ata.vars[m_SelectDisk].Temperature, m_Ata.vars[m_SelectDisk].AlarmTemperature);
 	}
 	else
 	{
@@ -1837,7 +1837,7 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 
 			// Convert Opus to WAV
 			CString option;
-			option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath, m_AlertSoundPath, m_TempFilePathWave);
+			option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath.GetString(), m_AlertSoundPath.GetString(), m_TempFilePathWave.GetString());
 
 			ExecAndWait((TCHAR*)(option.GetString()), TRUE);
 			PlaySound(m_TempFilePathWave, NULL, SND_SYNC | SND_FILENAME | SND_NODEFAULT);

@@ -31,7 +31,7 @@ CMainDialog::CMainDialog(UINT dlgResouce,
 		m_RecommendTheme = L"KureiKeiRecoding";
 	#else
 		m_DefaultTheme = L"Shizuku";
-		m_RecommendTheme = L"Shizuku7thAnniversary";
+		m_RecommendTheme = L"ShizukuMermaid";
 	#endif
 #else
 	m_DefaultTheme = L"default";

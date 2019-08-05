@@ -159,7 +159,7 @@ void CDiskInfoDlg::UpdateShareInfo()
 		RegSetValueEx(hSubKey, _T("Temperature"), 0, REG_SZ,
 			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
 
-		cstr = GetTemperatureClass(m_Ata.vars[i].Temperature);
+		cstr = GetTemperatureClass(m_Ata.vars[i].Temperature, m_Ata.vars[i].AlarmTemperature);
 		cstr.Replace(L"Green", L"");
 		_stprintf_s(str, 256, _T("%s"), (LPCTSTR)cstr);
 		RegSetValueEx(hSubKey, _T("TemperatureClass"), 0, REG_SZ,
@@ -966,7 +966,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	m_CtrlLife.ReloadImage(IP(L"SD" + className), 1);
 #endif
 
-	className = GetTemperatureClass(m_Ata.vars[i].Temperature);
+	className = GetTemperatureClass(m_Ata.vars[i].Temperature, m_Ata.vars[i].AlarmTemperature);
 
 	if (preTemperatureStatus.Compare(className) != 0)
 	{

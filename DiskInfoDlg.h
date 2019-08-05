@@ -300,7 +300,7 @@ protected:
 	CString GetDiskStatus(DWORD statusCode);
 	CString GetDiskStatusClass(DWORD statusCode);
 	CString GetDiskStatusReason(DWORD index);
-	CString GetTemperatureClass(INT temperature);
+	CString GetTemperatureClass(INT temperature, INT alarmTemperature);
 	CString GetLogicalDriveInfo(DWORD index, INT maxLength = 65535);
 
 	CString Encode10X(DWORD value);
