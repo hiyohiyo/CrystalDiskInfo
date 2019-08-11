@@ -190,6 +190,8 @@ void CDiskInfoDlg::OnGreenMode()
 	SetMenu(menu);
 	DrawMenuBar();
 
+	UpdateTrayTemperatureIcon(TRUE);
+
 	UpdateDialogSize();
 }
 
