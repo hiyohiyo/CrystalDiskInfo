@@ -142,7 +142,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	// Set Default Locale for CStdioFile
 	_tsetlocale(LC_ALL, _T(""));
 
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < 200; i++)
 	{
 		m_hTempIcon[0][i] = NULL;
 		m_hTempIcon[1][i] = NULL;

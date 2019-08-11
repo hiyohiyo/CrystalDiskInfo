@@ -600,13 +600,25 @@ BOOL CDiskInfoDlg::AddTemperatureIcon(DWORD i)
 
 	cstr += GetLogicalDriveInfo(i, 128);
 	cstr.TrimRight();
-	if(m_hTempIcon[m_FlagFahrenheit][m_Ata.vars[i].Temperature] == NULL)
+
+	INT TemperatureOffset = 0;
+	if (m_Ata.vars[i].Temperature >= m_Ata.vars[i].AlarmTemperature)
 	{
-		m_hTempIcon[m_FlagFahrenheit][m_Ata.vars[i].Temperature]
-		= AfxGetApp()->LoadIcon(IDI_TEMP00 + m_FlagFahrenheit * 100 + m_Ata.vars[i].Temperature);
+		TemperatureOffset = 200;
+	}
+	else if (m_FlagGreenMode)
+	{
+		TemperatureOffset = 100;
 	}
 
-	if(AddTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_TempIconIndex[i], m_hTempIcon[m_FlagFahrenheit][m_Ata.vars[i].Temperature], cstr))
+	if(m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] == NULL)
+	{
+		m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] = 
+	//	AfxGetApp()->LoadIcon(IDI_TEMP_00 + m_FlagFahrenheit * 200 + alermTemperatureOffset + m_Ata.vars[i].Temperature);
+		(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_FlagFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
+	}
+
+	if(AddTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_TempIconIndex[i], m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature], cstr))
 	{
 		m_FlagTrayTemperatureIcon[i] = TRUE;
 
@@ -637,15 +649,26 @@ BOOL CDiskInfoDlg::ModifyTemperatureIcon(DWORD i)
 	diskStatus = GetDiskStatus(m_Ata.vars[i].DiskStatus);
 	cstr.Format(_T("(%d) %s [%s]\r\n"), i + 1, m_Ata.vars[i].Model, diskStatus);
 	cstr += GetLogicalDriveInfo(i, 128);
-
 	cstr.TrimRight();
-	if(m_hTempIcon[m_FlagFahrenheit][m_Ata.vars[i].Temperature] == NULL)
+
+	INT TemperatureOffset = 0;
+	if (m_Ata.vars[i].Temperature >= m_Ata.vars[i].AlarmTemperature)
 	{
-		m_hTempIcon[m_FlagFahrenheit][m_Ata.vars[i].Temperature] = 
-			AfxGetApp()->LoadIcon(IDI_TEMP00 + m_FlagFahrenheit * 100 + m_Ata.vars[i].Temperature);
+		TemperatureOffset = 200;
+	}
+	else if (m_FlagGreenMode)
+	{
+		TemperatureOffset = 100;
 	}
 
-	if(ModifyTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_hTempIcon[m_FlagFahrenheit][m_Ata.vars[i].Temperature], cstr))
+	if (m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] == NULL)
+	{
+		m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] =
+			//	AfxGetApp()->LoadIcon(IDI_TEMP_00 + m_FlagFahrenheit * 200 + alermTemperatureOffset + m_Ata.vars[i].Temperature);
+			(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_FlagFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
+	}
+
+	if(ModifyTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature], cstr))
 	{
 		return TRUE;
 	}

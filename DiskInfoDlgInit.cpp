@@ -259,13 +259,6 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 
 	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_FlagHideNoSmartDisk);
 	
-	if(! once)
-	{
-		DebugPrint(_T("CheckResident()"));
-		CheckResident();
-		once = TRUE;
-	}
-
 	DWORD errorCount = 0;
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
@@ -308,6 +301,14 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 		DebugPrint(_T("SaveSmartInfo(i)"));
 		SaveSmartInfo(i);
 	}
+
+	if (!once)
+	{
+		DebugPrint(_T("CheckResident()"));
+		CheckResident();
+		once = TRUE;
+	}
+
 	AlertSound(0, AS_PLAY_SOUND);
 	if(errorCount)
 	{
@@ -398,14 +399,14 @@ CString CDiskInfoDlg::GetDiskStatusClass(DWORD statusCode)
 
 CString CDiskInfoDlg::GetTemperatureClass(INT temperature, INT alarmTemperature)
 {
-	if(temperature > alarmTemperature)
+	if(temperature >= alarmTemperature)
 	{
 		return _T("temperatureBad");
-	}
+	}/*
 	else if(temperature == alarmTemperature)
 	{
 		return _T("temperatureCaution");
-	}
+	}*/
 	else if(temperature == -1000)
 	{
 		return _T("temperatureUnknown");

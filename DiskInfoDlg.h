@@ -111,7 +111,7 @@ protected:
 protected:
 	HICON m_hIcon;
 	HICON m_hIconMini;
-	HICON m_hTempIcon[2][100];
+	HICON m_hTempIcon[2][200];
 	UINT m_TempIconIndex[CAtaSmart::MAX_DISK];
 
 	UINT m_MainIconId;
