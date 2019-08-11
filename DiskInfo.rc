@@ -75,6 +75,12 @@ IDR_MAINFRAME           ICON                    "resN\\DiskInfo.ico"
 IDI_MINI_ICON           ICON                    "resN\\DiskInfo16.ico"
 #endif
 
+IDI_GOOD                 ICON                    "res\\good.ico"
+IDI_GOOD_GREEN           ICON                    "res\\goodGreen.ico"
+IDI_CAUTION              ICON                    "res\\caution.ico"
+IDI_BAD                  ICON                    "res\\bad.ico"
+IDI_UNKNOWN              ICON                    "res\\unknown.ico"
+
 IDI_TEMP_BC01            ICON                    "res\\B001.ico"
 IDI_TEMP_BC02            ICON                    "res\\B002.ico"
 IDI_TEMP_BC03            ICON                    "res\\B003.ico"
@@ -372,7 +378,6 @@ IDI_TEMP_RC96            ICON                    "res\\R096.ico"
 IDI_TEMP_RC97            ICON                    "res\\R097.ico"
 IDI_TEMP_RC98            ICON                    "res\\R098.ico"
 IDI_TEMP_RC99            ICON                    "res\\R099.ico"
-
 IDI_TEMP_BF01            ICON                    "res\\B033.ico"
 IDI_TEMP_BF02            ICON                    "res\\B035.ico"
 IDI_TEMP_BF03            ICON                    "res\\B037.ico"
@@ -865,8 +870,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8.2.2,2019
- PRODUCTVERSION 8.2.2,2019
+ FILEVERSION 8.2.3,2019
+ PRODUCTVERSION 8.2.3,2019
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -883,9 +888,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.2.2.2019"
+            VALUE "FileVersion", "8.2.3.2019"
             VALUE "LegalCopyright", "(C) 2008-2019 hiyohiyo"
-            VALUE "ProductVersion", "8.2.2.2019"
+            VALUE "ProductVersion", "8.2.3.2019"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"
