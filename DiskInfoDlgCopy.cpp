@@ -55,7 +55,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 	clip = _T("\
 ----------------------------------------------------------------------------\r\n\
 %PRODUCT% %VERSION% (C) %COPY_YEAR% hiyohiyo\r\n\
-                                Crystal Dew World : https://crystalmark.info/\r\n\
+                                Crystal Dew World: https://crystalmark.info/\r\n\
 ----------------------------------------------------------------------------\r\n\
 \r\n\
     OS : %OS%\r\n\
