@@ -870,8 +870,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8.2.5,2019
- PRODUCTVERSION 8.2.5,2019
+ FILEVERSION 8.3.0,2019
+ PRODUCTVERSION 8.3.0,2019
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -888,9 +888,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.2.5.2019"
+            VALUE "FileVersion", "8.3.0.2019"
             VALUE "LegalCopyright", "(C) 2008-2019 hiyohiyo"
-            VALUE "ProductVersion", "8.2.5.2019"
+            VALUE "ProductVersion", "8.3.0.2019"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"
@@ -1122,7 +1122,7 @@ BEGIN
                 MENUITEM "Enable All",                  ID_USB_ENABLE_ALL
                 MENUITEM "Disable All",                 ID_USB_DISABLE_ALL
             END
-            POPUP "Intel RAID (CSMI)"
+            POPUP "Intel/AMD RAID (CSMI)"
             BEGIN
                 MENUITEM "Enable (Auto Detection, default)", ID_CSMI_ENABLE_AUTO
                 MENUITEM "Enable (Access RAID Disks only)", ID_CSMI_ENABLE_RAID

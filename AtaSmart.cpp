@@ -7806,7 +7806,7 @@ BOOL CAtaSmart::GetSmartInfoWmi(DWORD type, ATA_SMART_INFO* asi)
 }
 
 /*---------------------------------------------------------------------------*/
-// CSMI support (Intel RAID support)
+// CSMI support (Intel/AMD RAID support)
 /*---------------------------------------------------------------------------*/
 
 HANDLE CAtaSmart::GetIoCtrlHandleCsmi(INT scsiPort)
