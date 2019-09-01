@@ -7888,6 +7888,20 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 		return FALSE;
 	}
 	memcpy(&phyInfo, &(phyInfoBuf.Information), sizeof(phyInfoBuf.Information));
+
+	// AMD-RAIDXpert2 support
+	if(memcmp(driverInfoBuf.Information.szName, "rcraid", 7) == 0)
+	{
+		for(UINT i = 0; i < raidInfoBuf.Information.uMaxPhysicalDrives; i++)
+		{
+			if(i >= phyInfo.bNumberOfPhys)
+			{
+				memcpy(&phyInfo.Phy[i], &phyInfo.Phy[0], sizeof(phyInfo.Phy[i]));
+			}
+			phyInfo.Phy[i].Attached.bPhyIdentifier = phyInfo.Phy[i].bPortIdentifier = i;
+		}
+		phyInfo.bNumberOfPhys = raidInfoBuf.Information.uMaxPhysicalDrives;
+	}
 	
 	IDENTIFY_DEVICE identify = {0};	
 	if(phyInfo.bNumberOfPhys <= sizeof(phyInfo.Phy)/sizeof(phyInfo.Phy[0]))
