@@ -3143,7 +3143,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x33] << 24)
 				+ ((ULONG64)asi.SmartReadData[0x32] << 16)
 				+ ((ULONG64)asi.SmartReadData[0x31] << 8)
-				+ ((ULONG64)asi.SmartReadData[0x30])) * 512 / 1000 / 1024 / 1024 / 1024;
+				+ ((ULONG64)asi.SmartReadData[0x30])) * 512 * 1000 / 1024 / 1024 / 1024;
 
 		asi.PowerOnCount = (ULONG64)
 			     (((ULONG64)asi.SmartReadData[0x77] << 56)
