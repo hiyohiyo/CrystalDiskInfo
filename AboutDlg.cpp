@@ -166,7 +166,7 @@ void CAboutDlg::OnCrystalDewWorld()
 
 #ifdef KUREI_KEI_SUPPORT
 	OpenUrl(URL_PRONAMA);
-#else if
+#else
 	if (GetUserDefaultLCID() == 0x0411)// Japanese
 	{
 		OpenUrl(URL_CRYSTAL_DEW_WORLD_JA);

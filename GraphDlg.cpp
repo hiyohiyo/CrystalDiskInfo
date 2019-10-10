@@ -1382,10 +1382,6 @@ void CGraphDlg::InitMenu()
 	{
 		menu->CheckMenuRadioItem(ID_MDHM, ID_DMY2, ID_DMYHM, MF_BYCOMMAND);
 	}
-	else if(m_TimeFormat.Compare(_T("%d/%m/%y")) == 0)
-	{
-		menu->CheckMenuRadioItem(ID_MDHM, ID_DMY2, ID_DMY, MF_BYCOMMAND);
-	}
 	else if(m_TimeFormat.Compare(_T("%d.%m.%y %H:%M")) == 0)
 	{
 		menu->CheckMenuRadioItem(ID_MDHM, ID_DMY2, ID_DMYHM2, MF_BYCOMMAND);

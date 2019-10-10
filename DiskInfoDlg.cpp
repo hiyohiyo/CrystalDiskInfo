@@ -2398,7 +2398,7 @@ void CDiskInfoDlg::OnBnClickedButtonCopyright()
 	CString url;
 	url.Format(L"http://pronama.jp/crystaldiskinfo_themes/?%s", m_CurrentTheme);
 	OpenUrl(url);
-#else if
+#else
 	UINT themeIndex = rand() % (UINT)m_MenuArrayTheme.GetSize();
 	SendMessage(WM_COMMAND, WM_THEME_ID + themeIndex);
 #endif

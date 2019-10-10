@@ -64,6 +64,9 @@ static const TCHAR *ssdVendorString[] =
 	_T("ki"), // Kingston
 	_T("m2"), // Micron MU02
 	_T("nv"), // NVMe
+	_T("re"), // Realtek
+	_T("sk"), // SKhynix
+	_T(""),
 };
 
 static const TCHAR *deviceFormFactorString[] = 
@@ -3036,7 +3039,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.AlarmTemperature = 0;
 	asi.IsNVMe = TRUE;
 
-	if (commandType == CMD_TYPE_NVME_JMICRON || commandType == CMD_TYPE_NVME_ASMEDIA || commandType == CMD_TYPE_NVME_JMICRON)
+	if (commandType == CMD_TYPE_NVME_JMICRON || commandType == CMD_TYPE_NVME_ASMEDIA || commandType == CMD_TYPE_NVME_REALTEK)
 	{
 		asi.InterfaceType = INTERFACE_TYPE_USB;
 	}
@@ -9166,25 +9169,9 @@ DWORD CAtaSmart::GetAtaMajorVersion(WORD w80, CString &majorVersion)
 		}
 	}
 
-	if(major > 10)
+	if (major >= 9)
 	{
-		majorVersion = _T("");
-	}
-	else if (major == 12)
-	{
-		majorVersion = _T("ACS-5");
-	}
-	else if(major == 11)
-	{
-		majorVersion = _T("ACS-4");
-	}
-	else if(major == 10)
-	{
-		majorVersion = _T("ACS-3");
-	}
-	else if(major == 9)
-	{
-		majorVersion = _T("ACS-2");
+		majorVersion.Format(_T("ACS-%d"), major - 7);
 	}
 	else if(major == 8)
 	{
@@ -9260,8 +9247,9 @@ VOID CAtaSmart::GetAtaMinorVersion(WORD w81, CString &minor)
 	case 0x0042:	minor = _T("ATA8-ACS version 3f");							break;
 	case 0x0052:	minor = _T("ATA8-ACS version 3b");							break;
 	case 0x005E:	minor = _T("ACS-4 Revision 5");								break;
-	case 0x006D:	minor = _T("ACS-3 Revision 4");								break;
+	case 0x006D:	minor = _T("ACS-3 Revision 5");								break;
 	case 0x0082:	minor = _T("ACS-2 published, ANSI INCITS 482-2012");		break;
+	case 0x009C:	minor = _T("ACS-4 published, ANSI INCITS 529-2018");		break;
 	case 0x0107:	minor = _T("ATA8-ACS version 2d");							break;
 	case 0x010A:	minor = _T("ACS-3 published, ANSI INCITS 522-2014");		break;
 	case 0x0110:	minor = _T("ACS-2 Revision 3");								break;

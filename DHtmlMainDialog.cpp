@@ -364,7 +364,7 @@ void CDHtmlMainDialog::ChangeTheme(CString ThemeName)
 	hr = pStyleSheetsCollection->item(&index, &dispatch);
 	if(FAILED(hr)) return ;
 
-	dispatch.pdispVal->QueryInterface(IID_IHTMLStyleSheet, (void **) &pHtmlStyleSheet);
+	hr = dispatch.pdispVal->QueryInterface(IID_IHTMLStyleSheet, (void **) &pHtmlStyleSheet);
 	if(FAILED(hr)) return ;
 
 	cstr.Format(_T("%s\\%s\\%s"), m_ThemeDir, ThemeName, MAIN_CSS_FILE_NAME);

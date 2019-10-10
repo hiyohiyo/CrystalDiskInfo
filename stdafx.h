@@ -104,8 +104,8 @@ static void ControlBarCleanUp() {}
 #endif
 #endif
 
-#define PRODUCT_VERSION			_T("8.3.0")
-#define PRODUCT_RELEASE			_T("2019/09/01")
+#define PRODUCT_VERSION			_T("8.3.1")
+#define PRODUCT_RELEASE			_T("2019/10/11")
 #define PRODUCT_COPY_YEAR		_T("2008-2019")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2019 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
@@ -127,13 +127,12 @@ static void ControlBarCleanUp() {}
 	#define URL_PROJECT_SITE_3	        L"http://pronama.jp/uesakasumire"
 	#define URL_PROJECT_SITE_4			L"http://pronama.jp/crystaldiskinfo"
 	#define URL_PROJECT_SITE_5			L""
-	#else if
+	#else
 	#define	URL_PROJECT_SITE_1		    L"http://kirinokasumu.com/"
 	#define URL_PROJECT_SITE_2		    L"http://linux-ha.sourceforge.jp/wp/"
 	#define URL_PROJECT_SITE_3	        L"http://ch.nicovideo.jp/oss"
 	#define URL_PROJECT_SITE_4			L"http://www.bellche.com/"
 	#define URL_PROJECT_SITE_5			L"https://suishoshizuku.com/"
-
 	#endif
 
 #endif
