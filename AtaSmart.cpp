@@ -1818,6 +1818,11 @@ safeRelease:
 		{
 			firmware	= (char*)pDescriptor + pDescriptor->ProductRevisionOffset;
 		}
+		// [2019/10/28] Workaround for NVMe SSD on MS Storage Space
+		if(pDescriptor->BusType == BusTypeNvme)
+		{
+			interfaceType = INTERFACE_TYPE_NVME;
+		}
 
 		delete [] pcbData;
 
