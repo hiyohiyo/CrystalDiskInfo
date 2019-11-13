@@ -1270,14 +1270,20 @@ void CDiskInfoDlg::UpdateDialogSize()
 	if (m_IsHighContrast)
 	{
 		m_CtrlModel.InitControl(40 + OFFSET_X, 56, 592, 32, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawTransparent | m_IsHighContrast);
-		m_CtrlButtonPreDisk.InitControl (  8 + OFFSET_X, 60, 24, 24, m_ZoomRatio, IP(L"preDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage);
-		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 60, 24, 24, m_ZoomRatio, IP(L"nextDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage);
+		m_CtrlButtonPreDisk.InitControl (  8 + OFFSET_X, 60, 24, 24, m_ZoomRatio, IP(L"preDisk"), 2, BS_CENTER, CButtonCx::OwnerDrawImage | m_IsHighContrast);
+		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 60, 24, 24, m_ZoomRatio, IP(L"nextDisk"), 2, BS_CENTER, CButtonCx::OwnerDrawImage | m_IsHighContrast);
+
+		m_CtrlButtonPreDisk.SetWindowTextW(L"<");
+		m_CtrlButtonNextDisk.SetWindowTextW(L">");
 	}
 	else
 	{
 		m_CtrlModel.InitControl(32 + OFFSET_X, 52, 608, 32, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawTransparent | m_IsHighContrast);
-		m_CtrlButtonPreDisk.InitControl(8 + OFFSET_X, 56, 24, 24, m_ZoomRatio, IP(L"preDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage);
-		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 56, 24, 24, m_ZoomRatio, IP(L"nextDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage);
+		m_CtrlButtonPreDisk.InitControl(8 + OFFSET_X, 56, 24, 24, m_ZoomRatio, IP(L"preDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage | m_IsHighContrast);
+		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 56, 24, 24, m_ZoomRatio, IP(L"nextDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage | m_IsHighContrast);
+
+		m_CtrlButtonPreDisk.SetWindowTextW(L"");
+		m_CtrlButtonNextDisk.SetWindowTextW(L"");
 	}
 	m_CtrlModel.SetMargin(2, 0, 0, 0, m_ZoomRatio);
 
@@ -2289,8 +2295,8 @@ void CDiskInfoDlg::SetControlFont()
 		m_CtrlModel.SetFontEx(m_FontFace, 24, m_ZoomRatio, textAlpha, textColor, FW_NORMAL, m_FontType);
 	}
 
-	m_CtrlButtonPreDisk.SetFontEx(m_FontFace, 12, m_ZoomRatio, textAlpha, textColor, FW_NORMAL, m_FontType);
-	m_CtrlButtonNextDisk.SetFontEx(m_FontFace, 12, m_ZoomRatio, textAlpha, textColor, FW_NORMAL, m_FontType);
+	m_CtrlButtonPreDisk.SetFontEx(m_FontFace, 24, m_ZoomRatio, textAlpha, textColor, FW_NORMAL, m_FontType);
+	m_CtrlButtonNextDisk.SetFontEx(m_FontFace, 24, m_ZoomRatio, textAlpha, textColor, FW_NORMAL, m_FontType);
 	
 	m_CtrlLabelFirmware.SetFontEx(m_FontFace, 12, m_ZoomRatio, textAlpha, textColor, FW_NORMAL, m_FontType);
 	m_CtrlLabelSerialNumber.SetFontEx(m_FontFace, 12, m_ZoomRatio, textAlpha, textColor, FW_NORMAL, m_FontType);

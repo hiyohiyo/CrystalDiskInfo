@@ -28,10 +28,10 @@ CMainDialog::CMainDialog(UINT dlgResouce,
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef KUREI_KEI_SUPPORT
 		m_DefaultTheme = L"KureiKei";
-		m_RecommendTheme = L"KureiKeiRecoding";
+		m_RecommendTheme = L"KureiKeiHomebuiltComputer~Kronotokage";
 	#else
 		m_DefaultTheme = L"Shizuku";
-		m_RecommendTheme = L"ShizukuMermaid";
+		m_RecommendTheme = L"ShizukuHotaru";
 	#endif
 #else
 	m_DefaultTheme = L"default";
