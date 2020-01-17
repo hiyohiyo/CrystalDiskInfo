@@ -110,6 +110,7 @@ public:
 		CMD_TYPE_NVME_ASMEDIA,
 		CMD_TYPE_NVME_REALTEK,
 		CMD_TYPE_NVME_INTEL_RST,
+		CMD_TYPE_MEGARAID,
 		CMD_TYPE_DEBUG
 	};
 
@@ -1425,6 +1426,106 @@ typedef struct _INTEL_NVME_PASS_THROUGH
 
 #define IOCTL_INTEL_NVME_PASS_THROUGH CTL_CODE(0xf000, 0xA02, METHOD_BUFFERED, FILE_ANY_ACCESS);
 
+//////////////////////////////////////////////////////////////////
+// for MegaRAID SAS
+//////////////////////////////////////////////////////////////////
+#pragma pack(push, 1)
+
+#define MAX_SYS_PDS               240
+
+struct MEGARAID_PASS_THROUGH
+{
+	UCHAR Cmd;
+	UCHAR SenseLength;
+	UCHAR CmdStatus;
+	UCHAR ScsiStatus;
+
+	UCHAR TargetId;
+	UCHAR Lun;
+	UCHAR CdbLength;
+	UCHAR SenseInfoLength;
+
+	ULONG Context;
+	ULONG Padding0;
+
+	USHORT Flags;
+	USHORT TimeOutValue;
+	ULONG DataTransferLength;
+
+	ULONG SenseInfoOffsetLo;
+	ULONG SenseInfoOffsetHi;
+
+	UCHAR Cdb[16];
+};
+
+struct MEGARAID_PASS_THROUGH_IOCTL
+{
+	SRB_IO_CONTROL    SrbIoCtrl;
+	MEGARAID_PASS_THROUGH Mpt;
+	UCHAR             SenseBuf[112];
+	UCHAR             DataBuf[4096];
+};
+
+struct MEGARAID_DCOMD
+{
+	UCHAR Cmd;
+	UCHAR Reserved0;
+	UCHAR CmdStatus;
+	UCHAR Reserved1[4];
+	UCHAR SenseInfoLength;
+
+	ULONG Context;
+	ULONG Padding0;
+
+	USHORT Flags;
+	USHORT TimeOutValue;
+
+	ULONG DataTransferLength;
+	ULONG Opcode;
+
+	UCHAR Mbox[12];
+};
+
+struct MEGARAID_DCOMD_IOCTL
+{
+	SRB_IO_CONTROL SrbIoCtrl;
+	MEGARAID_DCOMD Mpt;
+	UCHAR          SenseBuf[120];
+	UCHAR          DataBuf[4096];
+};
+
+struct MEGARAID_PHYSICAL_DRIVE_ADDRESS
+{
+	USHORT DeviceId;
+	USHORT EnclDeviceId;
+	UCHAR  EnclIndex;
+	UCHAR  SlotNumber;
+	UCHAR  ScsiDevType;
+	UCHAR  ConnectPortBitmap;
+	UINT64 SasAddr[2];
+};
+
+struct MEGARAID_PHYSICAL_DRIVE_LIST
+{
+	ULONG Size;
+	ULONG Count;
+	MEGARAID_PHYSICAL_DRIVE_ADDRESS Addr[MAX_SYS_PDS];
+};
+#pragma pack(pop)
+
+#define MFI_CMD_PD_SCSI_IO        0x04
+#define MFI_CMD_DCMD              0x05
+
+#define MFI_STAT_OK               0x00
+
+#define MFI_DCMD_PD_GET_LIST      0x02010000
+
+#define MFI_MBOX_SIZE             12
+#define MFI_FRAME_DIR_NONE        0x0000
+#define MFI_FRAME_DIR_WRITE       0x0008
+#define MFI_FRAME_DIR_READ        0x0010
+#define MFI_FRAME_DIR_BOTH        0x0018
+
 
 public:
 	DWORD UpdateSmartInfo(DWORD index);
@@ -1657,6 +1758,7 @@ protected:
 	HANDLE GetIoCtrlHandle(BYTE index);
 	HANDLE GetIoCtrlHandle(INT scsiPort, DWORD siliconImageType);
 	HANDLE GetIoCtrlHandleCsmi(INT scsiPort);
+	HANDLE GetIoCtrlHandleMegaRAID(INT scsiPort);
 	BOOL SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param);
 
 	BOOL DoIdentifyDevicePd(INT physicalDriveId, BYTE target, IDENTIFY_DEVICE* identify);
@@ -1719,6 +1821,15 @@ protected:
 	BOOL GetSmartThresholdCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEntity, ATA_SMART_INFO* asi);
 	BOOL ControlSmartStatusCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEntity, BYTE command);
 	BOOL SendAtaCommandCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEntity, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize);
+
+	BOOL AddDiskMegaRAID(INT scsiPort);
+	BOOL DoIdentifyDeviceMegaRAID(INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
+	BOOL GetSmartAttributeMegaRAID(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+	BOOL GetSmartThresholdMegaRAID(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+	BOOL ControlSmartStatusMegaRAID(INT scsiPort, INT scsiTargetId, BYTE command);
+	BOOL SendAtaCommandMegaRAID(INT scsiPort, INT scsiTargetId, BYTE main, BYTE sub, BYTE param);
+	BOOL SendDCommandMegaRAID(HANDLE hHandle, ULONG opcode, void* buf, size_t bufsize, BYTE* mbox, size_t mboxlen);
+	BOOL SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, void* buf, size_t bufsize, const UCHAR Cdb[], UCHAR CdbLength);
 
 	DWORD GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &currentTransferMode, CString &maxTransferMode, CString &Interface, INTERFACE_TYPE *interfaceType);
 	VOID GetTransferModePCIe(CString & current, CString & max, SlotMaxCurrSpeed slotspeed);

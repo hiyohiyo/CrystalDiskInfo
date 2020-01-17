@@ -40,6 +40,7 @@ static const TCHAR *commandTypeString[] =
 	_T("na"), // NVMe ASMedia
 	_T("nr"), // NVMe Realtek
 	_T("nt"), // NVMe Intel RST
+	_T("mr"), // MegaRAID SAS
 };
 
 static const TCHAR *ssdVendorString[] = 
@@ -281,6 +282,13 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			}
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
+		case CMD_TYPE_MEGARAID:
+			if(! GetSmartAttributeMegaRAID(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+			{
+				return SMART_STATUS_NO_CHANGE;
+			}
+			vars[i].DiskStatus = CheckDiskStatus(i);
+			break;
 		default:
 			return SMART_STATUS_NO_CHANGE;
 		}
@@ -319,6 +327,9 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 	case CMD_TYPE_JMICRON:
 	case CMD_TYPE_CYPRESS:
 		flag = DoIdentifyDeviceSat(vars[i].PhysicalDriveId, vars[i].Target, &(vars[i].IdentifyDevice), vars[i].CommandType);
+		break;
+	case CMD_TYPE_MEGARAID:
+		flag =  DoIdentifyDeviceMegaRAID(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i].IdentifyDevice));
 		break;
 	default:
 		return FALSE;
@@ -436,6 +447,9 @@ BOOL CAtaSmart::SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param)
 	case CMD_TYPE_JMICRON:
 	case CMD_TYPE_CYPRESS:
 		return SendAtaCommandSat(vars[i].PhysicalDriveId, vars[i].Target, main, sub, param, vars[i].CommandType);
+		break;
+	case CMD_TYPE_MEGARAID:
+		return SendAtaCommandMegaRAID(vars[i].ScsiPort, vars[i].ScsiTargetId, main, sub, param);
 		break;
 	default:
 		return FALSE;
@@ -1234,6 +1248,15 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			for(int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
 			{
 				AddDiskCsmi(i);
+			}
+
+			///////////////////////////////
+			// MegaRAID SAS support
+			///////////////////////////////
+
+			for(int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
+			{
+				AddDiskMegaRAID(i);
 			}
 
 			try
@@ -2877,6 +2900,42 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 			{
 				CheckSsdSupport(asi);
 				asi.IsSmartEnabled = TRUE;
+			}
+			break;
+		case CMD_TYPE_MEGARAID:
+			if(GetSmartAttributeMegaRAID(scsiPort, scsiTargetId, &asi))
+			{
+				CheckSsdSupport(asi);
+				GetSmartAttributeMegaRAID(scsiPort, scsiTargetId, &asiCheck);
+				if(CheckSmartAttributeCorrect(&asi, &asiCheck))
+				{
+					asi.IsSmartCorrect = TRUE;
+				}
+				if(GetSmartThresholdMegaRAID(scsiPort, scsiTargetId, &asi))
+				{
+					asi.IsThresholdCorrect = TRUE;
+				}
+			//	asi.DiskStatus = CheckDiskStatus(asi.Attribute, asi.Threshold, asi.AttributeCount, asi.DiskVendorId, asi.IsSmartCorrect, asi.IsSsd);
+				asi.IsSmartEnabled = TRUE;
+			}
+			
+			if(! asi.IsSmartCorrect && ControlSmartStatusMegaRAID(scsiPort, scsiTargetId, ENABLE_SMART))
+			{
+				if(GetSmartAttributeMegaRAID(scsiPort, scsiTargetId, &asi))
+				{
+					CheckSsdSupport(asi);
+					GetSmartAttributeMegaRAID(scsiPort, scsiTargetId, &asiCheck);
+					if(CheckSmartAttributeCorrect(&asi, &asiCheck))
+					{
+						asi.IsSmartCorrect = TRUE;
+					}
+					if(GetSmartThresholdMegaRAID(scsiPort, scsiTargetId, &asi))
+					{
+						asi.IsThresholdCorrect = TRUE;
+					}
+				//	asi.DiskStatus = CheckDiskStatus(asi.Attribute, asi.Threshold, asi.AttributeCount, asi.DiskVendorId, asi.IsSmartCorrect, asi.IsSsd);
+					asi.IsSmartEnabled = TRUE;
+				}
 			}
 			break;
 		default:
@@ -8107,6 +8166,334 @@ BOOL CAtaSmart::SendAtaCommandCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEnti
 	VirtualFree(buf, 0, MEM_RELEASE);
 	
 	return	TRUE;
+}
+
+/*---------------------------------------------------------------------------*/
+// MEGARaid SAS support
+/*---------------------------------------------------------------------------*/
+
+HANDLE CAtaSmart::GetIoCtrlHandleMegaRAID(INT scsiPort)
+{
+	HANDLE hScsiDriveIOCTL = 0;
+	CString driveName;
+
+	driveName.Format(_T("\\\\.\\Scsi%d:"), scsiPort);
+	hScsiDriveIOCTL = CreateFile(driveName, GENERIC_READ | GENERIC_WRITE,
+							FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+	return hScsiDriveIOCTL;
+}
+
+BOOL CAtaSmart::SendDCommandMegaRAID(HANDLE hHandle, ULONG opcode, void* buf, size_t bufsize, BYTE* mbox, size_t mboxlen)
+{
+	if ((mbox != NULL && (mboxlen == 0 || mboxlen > MFI_MBOX_SIZE)) ||
+		(mbox == NULL && mboxlen != 0))
+	{
+		return FALSE;
+	}
+
+	MEGARAID_DCOMD_IOCTL mdi;
+	memset(&mdi, 0, sizeof(mdi));
+
+	mdi.SrbIoCtrl.HeaderLength = sizeof(SRB_IO_CONTROL);
+	memcpy(mdi.SrbIoCtrl.Signature, "LSILOGIC", 8);
+	mdi.SrbIoCtrl.Timeout = 0;
+	mdi.SrbIoCtrl.ControlCode = 0;
+	mdi.SrbIoCtrl.Length = sizeof(MEGARAID_DCOMD_IOCTL) - sizeof(mdi.DataBuf) + bufsize;
+
+	if (mbox)
+	{
+		memcpy(mdi.Mpt.Mbox, mbox, mboxlen);
+	}
+
+	mdi.Mpt.Cmd = MFI_CMD_DCMD;
+	mdi.Mpt.TimeOutValue = 0;
+	mdi.Mpt.Flags = 0;
+	mdi.Mpt.DataTransferLength = bufsize;
+	mdi.Mpt.Opcode = opcode;
+
+	DWORD read_size = 0;
+	if (!DeviceIoControl(hHandle, IOCTL_SCSI_MINIPORT,
+		&mdi,
+		sizeof(mdi),
+		&mdi,
+		sizeof(mdi),
+		&read_size, nullptr))
+	{
+		return FALSE;
+	}
+
+	if (read_size < sizeof(SRB_IO_CONTROL) + sizeof(MEGARAID_DCOMD))
+	{
+		return FALSE;
+	}
+
+	if (mdi.Mpt.CmdStatus != MFI_STAT_OK)
+	{
+		return FALSE;
+	}
+
+	if (read_size - (sizeof(mdi) - sizeof(mdi.DataBuf)) < mdi.Mpt.DataTransferLength)
+	{
+		return FALSE;
+	}
+
+	memcpy(buf, mdi.DataBuf, mdi.Mpt.DataTransferLength);
+
+	return TRUE;
+}
+
+BOOL CAtaSmart::SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, void* buf, size_t bufsize, const UCHAR Cdb[], UCHAR CdbLength)
+{
+	if (!Cdb || CdbLength == 0) 
+	{
+		return FALSE;
+	}
+
+	HANDLE hHandle = GetIoCtrlHandleMegaRAID(scsiPort);
+	if (hHandle == INVALID_HANDLE_VALUE)
+	{
+		return FALSE;
+	}
+
+	MEGARAID_PASS_THROUGH_IOCTL mpti;
+	memset(&mpti, 0, sizeof(mpti));
+
+	mpti.SrbIoCtrl.HeaderLength = sizeof(SRB_IO_CONTROL);
+	memcpy(mpti.SrbIoCtrl.Signature, "LSILOGIC", 8);
+	mpti.SrbIoCtrl.Timeout = 0;
+	mpti.SrbIoCtrl.ControlCode = 0;
+	mpti.SrbIoCtrl.Length = sizeof(MEGARAID_PASS_THROUGH_IOCTL) - sizeof(mpti.DataBuf) + bufsize;
+
+	mpti.Mpt.Cmd = MFI_CMD_PD_SCSI_IO;
+	mpti.Mpt.CmdStatus = 0xFF;
+	mpti.Mpt.ScsiStatus = 0x00;
+	mpti.Mpt.TargetId = scsiTargetId;
+	mpti.Mpt.Lun = 0;
+	mpti.Mpt.CdbLength = CdbLength;
+	mpti.Mpt.TimeOutValue = 0;
+	mpti.Mpt.Flags = MFI_FRAME_DIR_READ;
+	mpti.Mpt.DataTransferLength = bufsize;
+
+	memcpy_s(mpti.Mpt.Cdb, sizeof(mpti.Mpt.Cdb), Cdb, CdbLength);
+
+	DWORD read_size = 0;
+	if (!DeviceIoControl(hHandle, IOCTL_SCSI_MINIPORT,
+		&mpti,
+		sizeof(mpti),
+		&mpti,
+		sizeof(mpti),
+		&read_size, nullptr))
+	{
+		CloseHandle(hHandle);
+		return FALSE;
+	}
+
+	if (read_size < sizeof(SRB_IO_CONTROL) + sizeof(MEGARAID_DCOMD))
+	{
+		CloseHandle(hHandle);
+		return FALSE;
+	}
+
+	if (mpti.Mpt.CmdStatus != MFI_STAT_OK)
+	{
+		CloseHandle(hHandle);
+		return FALSE;
+	}
+
+	if (read_size - (sizeof(mpti) - sizeof(mpti.DataBuf)) < mpti.Mpt.DataTransferLength)
+	{
+		CloseHandle(hHandle);
+		return FALSE;
+	}
+
+	if (buf)
+	{
+		memcpy_s(buf, bufsize, mpti.DataBuf, mpti.Mpt.DataTransferLength);
+	}
+
+	CloseHandle(hHandle);
+	return TRUE;
+}
+
+BOOL CAtaSmart::AddDiskMegaRAID(INT scsiPort)
+{
+	if(CsmiType == CSMI_TYPE_DISABLE)
+	{
+		return FALSE;
+	}
+
+	HANDLE hHandle = GetIoCtrlHandleMegaRAID(scsiPort);
+	if(hHandle == INVALID_HANDLE_VALUE)
+	{
+		return FALSE;
+	}
+
+	MEGARAID_PHYSICAL_DRIVE_LIST* list = NULL;
+	for (ULONG listSize = 1024; ; )
+	{
+		list = (MEGARAID_PHYSICAL_DRIVE_LIST*)VirtualAlloc(NULL, listSize, MEM_COMMIT, PAGE_READWRITE);
+		if (!list)
+		{
+			CloseHandle(hHandle);
+			return FALSE;
+		}
+
+		memset(list, 0, listSize);
+		if (!SendDCommandMegaRAID(hHandle, MFI_DCMD_PD_GET_LIST, list, listSize, NULL, 0))
+		{
+			CloseHandle(hHandle);
+			VirtualFree(list, 0, MEM_RELEASE);
+			return FALSE;
+		}
+
+		if (list->Size <= listSize)
+		{
+			break;
+		}
+		listSize = list->Size;
+
+		VirtualFree(list, 0, MEM_RELEASE);
+		list = NULL;
+	}
+
+	IDENTIFY_DEVICE identify = { 0 };
+	for (ULONG i = 0; i < list->Count; i++)
+	{
+		if (list->Addr[i].ScsiDevType > 0) // non disk device
+		{
+			continue;
+		}
+
+		if (DoIdentifyDeviceMegaRAID(scsiPort, list->Addr[i].DeviceId, &identify))
+		{
+			AddDisk(-1, scsiPort, list->Addr[i].DeviceId, -1, 0xA0, CMD_TYPE_MEGARAID, &identify);
+		}
+	}
+
+	CloseHandle(hHandle);
+	VirtualFree(list, 0, MEM_RELEASE);
+
+	return TRUE;
+}
+
+BOOL CAtaSmart::DoIdentifyDeviceMegaRAID(INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
+{
+	UCHAR Cdb[16];
+	UCHAR CdbLength = 12;
+	memset(Cdb, 0, sizeof(Cdb));
+
+	Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+	Cdb[1] = (4 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+	Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+	Cdb[3] = 0;//FEATURES (7:0)
+	Cdb[4] = 1;//SECTOR_COUNT (7:0)
+	Cdb[5] = 0;//LBA_LOW (7:0)
+	Cdb[6] = 0;//LBA_MID (7:0)
+	Cdb[7] = 0;//LBA_HIGH (7:0)
+	Cdb[8] = 0;//target
+	Cdb[9] = ID_CMD;//COMMAND
+
+	if (!SendPassThroughCommandMegaRAID(scsiPort, scsiTargetId, data, sizeof(IDENTIFY_DEVICE), Cdb, CdbLength))
+	{
+		return FALSE;
+	}
+
+	return	TRUE;
+}
+
+BOOL CAtaSmart::GetSmartAttributeMegaRAID(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
+{
+	IDEREGS irDriveRegs;
+	memset(&irDriveRegs, 0, sizeof(irDriveRegs));
+
+	irDriveRegs.bFeaturesReg = READ_ATTRIBUTES;
+	irDriveRegs.bSectorCountReg = 1;
+	irDriveRegs.bSectorNumberReg = 0;
+	irDriveRegs.bCylLowReg = SMART_CYL_LOW;
+	irDriveRegs.bCylHighReg = SMART_CYL_HI;
+	irDriveRegs.bDriveHeadReg = 0;
+	irDriveRegs.bCommandReg = SMART_CMD;
+
+	UCHAR Cdb[16];
+	UCHAR CdbLength = 12;
+	memset(Cdb, 0, sizeof(Cdb));
+
+	Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+	Cdb[1] = (4 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+	Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+	memcpy_s(Cdb + 3, sizeof(Cdb) - 3, &irDriveRegs, sizeof(irDriveRegs));
+
+	if (!SendPassThroughCommandMegaRAID(scsiPort, scsiTargetId, asi->SmartReadData, READ_ATTRIBUTE_BUFFER_SIZE, Cdb, CdbLength))
+	{
+		return FALSE;
+	}
+
+	return FillSmartData(asi);
+}
+
+BOOL CAtaSmart::GetSmartThresholdMegaRAID(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
+{
+	IDEREGS irDriveRegs;
+	memset(&irDriveRegs, 0, sizeof(irDriveRegs));
+
+	irDriveRegs.bFeaturesReg = READ_THRESHOLDS;
+	irDriveRegs.bSectorCountReg = 1;
+	irDriveRegs.bSectorNumberReg = 0;
+	irDriveRegs.bCylLowReg = SMART_CYL_LOW;
+	irDriveRegs.bCylHighReg = SMART_CYL_HI;
+	irDriveRegs.bCommandReg = SMART_CMD;
+
+	UCHAR Cdb[16];
+	UCHAR CdbLength = 12;
+	memset(Cdb, 0, sizeof(Cdb));
+
+	Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+	Cdb[1] = (4 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+	Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+	memcpy_s(Cdb + 3, sizeof(Cdb) - 3, &irDriveRegs, sizeof(irDriveRegs));
+
+	if (!SendPassThroughCommandMegaRAID(scsiPort, scsiTargetId, asi->SmartReadThreshold, READ_THRESHOLD_BUFFER_SIZE, Cdb, CdbLength))
+	{
+		return FALSE;
+	}
+
+	return FillSmartThreshold(asi);
+}
+
+BOOL CAtaSmart::ControlSmartStatusMegaRAID(INT scsiPort, INT scsiTargetId, BYTE command)
+{
+	IDEREGS irDriveRegs;
+	memset(&irDriveRegs, 0, sizeof(irDriveRegs));
+
+	irDriveRegs.bFeaturesReg = command;
+	irDriveRegs.bSectorCountReg = 1;
+	irDriveRegs.bSectorNumberReg = 0;
+	irDriveRegs.bCylLowReg = SMART_CYL_LOW;
+	irDriveRegs.bCylHighReg = SMART_CYL_HI;
+	irDriveRegs.bCommandReg = SMART_CMD;
+
+	UCHAR Cdb[16];
+	UCHAR CdbLength = 12;
+	memset(Cdb, 0, sizeof(Cdb));
+
+	Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+	Cdb[1] = (4 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+	Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+	memcpy_s(Cdb + 3, sizeof(Cdb) - 3, &irDriveRegs, sizeof(irDriveRegs));
+
+	if (!SendPassThroughCommandMegaRAID(scsiPort, scsiTargetId, NULL, READ_ATTRIBUTE_BUFFER_SIZE, Cdb, CdbLength))
+	{
+		return FALSE;
+	}
+
+	return	TRUE;
+}
+
+BOOL CAtaSmart::SendAtaCommandMegaRAID(INT scsiPort, INT scsiTargetId, BYTE main, BYTE sub, BYTE param)
+{
+/** Does not work...
+*/
+	return FALSE;
 }
 
 /*---------------------------------------------------------------------------*/
