@@ -84,9 +84,16 @@ CString GetDeviceIDFromPhysicalDriveID(const INT physicalDriveId, const BOOL IsK
 				{
 					query.Format(query2findstorage, physicalDriveId);
 					CString StorageID = GetStringValueFromQuery(pIWbemServices, query, L"DeviceID");
-					query.Format(query2findcontroller, StorageID);
-					CString ControllerID = GetStringValueFromQuery(pIWbemServices, query, L"DeviceID");
-					result = ControllerID;
+					if(!StorageID.IsEmpty())
+					{
+						query.Format(query2findcontroller, StorageID);
+						CString ControllerID = GetStringValueFromQuery(pIWbemServices, query, L"DeviceID");
+						result = ControllerID;
+					}
+					else
+					{
+						result = L"";
+					}
 				}
 			}
 		}
