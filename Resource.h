@@ -953,6 +953,7 @@
 #define ID_HIDE_NO_SMART_DISK           33132
 #define ID_GREEN_MODE                   33133
 #define ID_USB_NVME_REALTEK             33134
+#define ID_MEGA_RAID                    33135
 
 // Next default values for new objects
 // 

@@ -104,10 +104,10 @@ static void ControlBarCleanUp() {}
 #endif
 #endif
 
-#define PRODUCT_VERSION			_T("8.3.2")
-#define PRODUCT_RELEASE			_T("2019/11/12")
-#define PRODUCT_COPY_YEAR		_T("2008-2019")
-#define PRODUCT_COPYRIGHT		_T("© 2008-2019 hiyohiyo")
+#define PRODUCT_VERSION			_T("8.4.0")
+#define PRODUCT_RELEASE			_T("2020/01/19")
+#define PRODUCT_COPY_YEAR		_T("2008-2020")
+#define PRODUCT_COPYRIGHT		_T("© 2008-2020 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
 
 #define URL_CRYSTAL_DEW_WORLD_JA	_T("https://crystalmark.info/ja/")

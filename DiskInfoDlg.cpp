@@ -712,6 +712,8 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialog)
 	ON_COMMAND(ID_USB_NVME_JMICRON, &CDiskInfoDlg::OnUsbNVMeJMicron)
 	ON_COMMAND(ID_USB_NVME_ASMEDIA, &CDiskInfoDlg::OnUsbNVMeASMedia)
 	ON_COMMAND(ID_USB_NVME_REALTEK, &CDiskInfoDlg::OnUsbNVMeRealtek)
+	ON_COMMAND(ID_MEGA_RAID, &CDiskInfoDlg::OnMegaRAID)
+		
 	ON_COMMAND(ID_USB_ENABLE_ALL, &CDiskInfoDlg::OnUsbEnableAll)
 	ON_COMMAND(ID_USB_DISABLE_ALL, &CDiskInfoDlg::OnUsbDisableAll)
 	ON_COMMAND(ID_HEALTH_STATUS, &CDiskInfoDlg::OnHealthStatus)
@@ -1150,6 +1152,14 @@ CString CDiskInfoDlg::IP(CString imageName)
 	if (m_CurrentTheme.Find(L"ShizukuHotaru") == 0)
 	{
 		imagePath.Format(L"%s%s\\%s-%3d.png", m_ThemeDir, L"ShizukuHeianKomachi", imageName, (DWORD) (m_ZoomRatio * 100));
+		if (IsFileExist(imagePath))
+		{
+			return imagePath;
+		}
+	}
+	if (m_CurrentTheme.Find(L"ShizukuKotatsuNight") == 0)
+	{
+		imagePath.Format(L"%s%s\\%s-%3d.png", m_ThemeDir, L"ShizukuKotatsu", imageName, (DWORD)(m_ZoomRatio * 100));
 		if (IsFileExist(imagePath))
 		{
 			return imagePath;

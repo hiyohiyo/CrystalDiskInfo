@@ -1244,7 +1244,6 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			///////////////////////////////
 			// Intel RAID support
 			///////////////////////////////
-
 			for(int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
 			{
 				AddDiskCsmi(i);
@@ -1253,10 +1252,12 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			///////////////////////////////
 			// MegaRAID SAS support
 			///////////////////////////////
-
-			for(int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
+			if(FlagMegaRAID)
 			{
-				AddDiskMegaRAID(i);
+				for(int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
+				{
+					AddDiskMegaRAID(i);
+				}
 			}
 
 			try
@@ -8174,7 +8175,8 @@ BOOL CAtaSmart::SendAtaCommandCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEnti
 }
 
 /*---------------------------------------------------------------------------*/
-// MEGARaid SAS support
+// MegaRAID SAS support
+// https://github.com/hiyohiyo/CrystalDiskInfo/pull/32
 /*---------------------------------------------------------------------------*/
 
 HANDLE CAtaSmart::GetIoCtrlHandleMegaRAID(INT scsiPort)
@@ -8203,7 +8205,7 @@ BOOL CAtaSmart::SendDCommandMegaRAID(HANDLE hHandle, ULONG opcode, void* buf, si
 	memcpy(mdi.SrbIoCtrl.Signature, "LSILOGIC", 8);
 	mdi.SrbIoCtrl.Timeout = 0;
 	mdi.SrbIoCtrl.ControlCode = 0;
-	mdi.SrbIoCtrl.Length = sizeof(MEGARAID_DCOMD_IOCTL) - sizeof(mdi.DataBuf) + bufsize;
+	mdi.SrbIoCtrl.Length = (ULONG)(sizeof(MEGARAID_DCOMD_IOCTL) - sizeof(mdi.DataBuf) + bufsize);
 
 	if (mbox)
 	{
@@ -8213,7 +8215,7 @@ BOOL CAtaSmart::SendDCommandMegaRAID(HANDLE hHandle, ULONG opcode, void* buf, si
 	mdi.Mpt.Cmd = MFI_CMD_DCMD;
 	mdi.Mpt.TimeOutValue = 0;
 	mdi.Mpt.Flags = 0;
-	mdi.Mpt.DataTransferLength = bufsize;
+	mdi.Mpt.DataTransferLength = (ULONG)bufsize;
 	mdi.Mpt.Opcode = opcode;
 
 	DWORD read_size = 0;
@@ -8267,7 +8269,7 @@ BOOL CAtaSmart::SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, v
 	memcpy(mpti.SrbIoCtrl.Signature, "LSILOGIC", 8);
 	mpti.SrbIoCtrl.Timeout = 0;
 	mpti.SrbIoCtrl.ControlCode = 0;
-	mpti.SrbIoCtrl.Length = sizeof(MEGARAID_PASS_THROUGH_IOCTL) - sizeof(mpti.DataBuf) + bufsize;
+	mpti.SrbIoCtrl.Length = (ULONG)(sizeof(MEGARAID_PASS_THROUGH_IOCTL) - sizeof(mpti.DataBuf) + bufsize);
 
 	mpti.Mpt.Cmd = MFI_CMD_PD_SCSI_IO;
 	mpti.Mpt.CmdStatus = 0xFF;
@@ -8277,7 +8279,7 @@ BOOL CAtaSmart::SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, v
 	mpti.Mpt.CdbLength = CdbLength;
 	mpti.Mpt.TimeOutValue = 0;
 	mpti.Mpt.Flags = MFI_FRAME_DIR_READ;
-	mpti.Mpt.DataTransferLength = bufsize;
+	mpti.Mpt.DataTransferLength = (ULONG)bufsize;
 
 	memcpy_s(mpti.Mpt.Cdb, sizeof(mpti.Mpt.Cdb), Cdb, CdbLength);
 

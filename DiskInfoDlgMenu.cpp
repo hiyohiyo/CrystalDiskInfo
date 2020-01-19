@@ -1274,6 +1274,25 @@ void CDiskInfoDlg::OnUsbNVMeRealtek()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::OnMegaRAID()
+{
+	CMenu *menu = GetMenu();
+	if (m_Ata.FlagMegaRAID)
+	{
+		m_Ata.FlagMegaRAID = FALSE;
+		menu->CheckMenuItem(ID_MEGA_RAID, MF_UNCHECKED);
+		WritePrivateProfileString(_T("Setting"), _T("MegaRAID"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagMegaRAID = TRUE;
+		menu->CheckMenuItem(ID_MEGA_RAID, MF_CHECKED);
+		WritePrivateProfileString(_T("Setting"), _T("MegaRAID"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
 void CDiskInfoDlg::OnUsbEnableAll()
 {
 	m_Ata.FlagUsbSat     = FALSE;

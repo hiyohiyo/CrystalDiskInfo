@@ -1731,6 +1731,7 @@ public:
 	BOOL FlagUsbNVMeJMicron;
 	BOOL FlagUsbNVMeASMedia;
 	BOOL FlagUsbNVMeRealtek;
+	BOOL FlagMegaRAID;
 
 	DWORD CsmiType;
 

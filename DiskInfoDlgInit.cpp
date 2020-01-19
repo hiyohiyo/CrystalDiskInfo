@@ -140,6 +140,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagUsbNVMeASMedia = !GetPrivateProfileInt(_T("USB"), _T("NVMeASMedia"), 1, m_Ini);
 	m_Ata.FlagUsbNVMeRealtek = !GetPrivateProfileInt(_T("USB"), _T("NVMeRealtek"), 1, m_Ini);
 
+	m_Ata.FlagMegaRAID = !GetPrivateProfileInt(_T("Setting"), _T("FlagMegaRAID"), 1, m_Ini);
+
 	OnUsbSat();
 	OnUsbIodata();
 	OnUsbSunplus();
@@ -151,6 +153,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
 	OnUsbNVMeRealtek();
+	OnMegaRAID();
 
 	DebugPrint(_T("InitAta"));
 	InitAta((BOOL)GetPrivateProfileInt(_T("Setting"), _T("UseWMI"), 1, m_Ini), m_FlagAdvancedDiskSearch, NULL, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
