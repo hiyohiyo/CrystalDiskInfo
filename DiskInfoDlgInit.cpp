@@ -53,7 +53,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	CString defaultFontFace;
 	BOOL hasMeiryo = FALSE;
     ZeroMemory(&logfont, sizeof(LOGFONT)); 
-    logfont.lfCharSet = ANSI_CHARSET;
+    logfont.lfCharSet = DEFAULT_CHARSET;
     ::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)EnumFontFamExProcMeiryo, (INT_PTR)(&hasMeiryo), 0);
 	
 	if(hasMeiryo)
