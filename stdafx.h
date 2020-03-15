@@ -104,8 +104,8 @@ static void ControlBarCleanUp() {}
 #endif
 #endif
 
-#define PRODUCT_VERSION			_T("8.4.1")
-#define PRODUCT_RELEASE			_T("2020/02/29")
+#define PRODUCT_VERSION			_T("8.4.2")
+#define PRODUCT_RELEASE			_T("2020/03/15")
 #define PRODUCT_COPY_YEAR		_T("2008-2020")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2020 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
