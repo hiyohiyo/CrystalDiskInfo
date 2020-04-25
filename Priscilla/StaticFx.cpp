@@ -271,8 +271,6 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 
 	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24) 
 	{
-		BLENDFUNCTION blendfunc = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-
 		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBgDC, 0, m_CtrlSize.cy, SRCCOPY);
 		if (!m_CtrlImage.IsNull())
 		{

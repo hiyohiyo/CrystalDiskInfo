@@ -254,13 +254,7 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 		preVendorId = m_Ata.HDD_GENERAL;
 	}
 
-	HDITEM hi;
-	for (int i = 0; i < m_List.m_Header.GetItemCount(); i++)
-	{
-		m_List.m_Header.GetItem(i, &hi);
-		hi.fmt |= HDF_OWNERDRAW;
-		m_List.m_Header.SetItem(i, &hi);
-	}
+	m_List.EnableHeaderOwnerDraw(TRUE);
 }
 
 BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
@@ -295,8 +289,8 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 		m_List.SetBkColor1(RGB(0, 0, 0));
 		m_List.SetBkColor2(RGB(0, 0, 0));
 
-		m_List.SetTextColor1(RGB(0, 0, 0));
-		m_List.SetTextColor2(RGB(0, 0, 0));
+	//	m_List.SetTextColor1(RGB(0, 0, 0));
+	//	m_List.SetTextColor2(RGB(0, 0, 0));
 	}
 	else
 	{

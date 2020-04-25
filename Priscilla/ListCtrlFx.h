@@ -35,7 +35,7 @@ public:
 
 	void InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, BOOL bHighCotrast);
 	void SetFontEx(CString face, double zoomRatio, double fontRatio = 1.0);
-	CHeaderCtrlFx m_Header;
+	void EnableHeaderOwnerDraw(BOOL bOwnerDraw);
 
 protected:
 	int m_X;
@@ -43,6 +43,7 @@ protected:
 	CSize m_CtrlSize;
 	CRect m_Margin;
 	BOOL m_bHighContrast;
+	CHeaderCtrlFx m_Header;
 
 	COLORREF m_TextColor1;
 	COLORREF m_TextColor2;
@@ -54,11 +55,22 @@ protected:
 	CImageList m_Image;
 	CDC* m_BgDC;
 
-	DECLARE_MESSAGE_MAP()
+	// Glass
+	COLORREF m_GlassColor;
+	BYTE m_GlassAlpha;
+
+	// Image
+	CBitmap m_BgBitmap;
+	CBitmap m_CtrlBitmap;
+	CImage m_CtrlImage;
+
+
+	void SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap);
 
 	virtual void PreSubclassWindow();
-
+	
 	afx_msg void OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
+	DECLARE_MESSAGE_MAP()
 };
 
 

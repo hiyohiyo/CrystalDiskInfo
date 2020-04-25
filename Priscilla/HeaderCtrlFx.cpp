@@ -25,11 +25,12 @@ BEGIN_MESSAGE_MAP(CHeaderCtrlFx, CHeaderCtrl)
 	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
-void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bgDC)
+void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bgDC, CBitmap* ctrlBitmap)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
 	m_BgDC = bgDC;
+	m_CtrlBitmap = ctrlBitmap;
 }
 
 void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
@@ -41,16 +42,19 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	drawDC->SetBkMode(TRANSPARENT);
 	drawDC->SetTextColor(RGB(255,255,255));
-	drawDC->SetTextColor(RGB(0, 0, 0));
+//	drawDC->SetTextColor(RGB(0, 0, 0));
 
 	drawDC->FillRect(&(lpDrawItemStruct->rcItem), &br);
 
 	CRect clientRect;
 	GetClientRect(&clientRect);
 
-	CRect rc = lpDrawItemStruct->rcItem;
-	drawDC->BitBlt(rc.left, rc.top, rc.right, rc.bottom, m_BgDC, m_X + rc.left, m_Y + rc.top, SRCCOPY);
+	CDC BgDC;
+	BgDC.CreateCompatibleDC(m_BgDC);
+	BgDC.SelectObject(m_CtrlBitmap);
 
+	CRect rc = lpDrawItemStruct->rcItem;
+	drawDC->BitBlt(rc.left, rc.top, rc.right, rc.bottom, &BgDC, rc.left, rc.top, SRCCOPY);
 
 
 
@@ -89,7 +93,15 @@ void CHeaderCtrlFx::OnPaint()
 	if (rectRightItem.right < rectClient.right)
 	{
 		CDC* drawDC = GetDC();
-		drawDC->BitBlt(rectRightItem.right, rectClient.top, rectClient.right, rectClient.bottom, m_BgDC, m_X + rectRightItem.right, m_Y + rectClient.top, SRCCOPY);
+	//	drawDC->BitBlt(rectRightItem.right, rectClient.top, rectClient.right, rectClient.bottom, m_BgDC, m_X + rectRightItem.right, m_Y + rectClient.top, SRCCOPY);
+
+
+		CDC BgDC;
+		BgDC.CreateCompatibleDC(m_BgDC);
+		BgDC.SelectObject(m_CtrlBitmap);
+		drawDC->BitBlt(rectRightItem.right, rectClient.top, rectClient.right, rectClient.bottom, &BgDC, rectRightItem.right, rectClient.top, SRCCOPY);
+
+
 
 		/*
 		HDC hDC = ::GetDC(this->m_hWnd);

@@ -19,6 +19,11 @@ CListCtrlFx::CListCtrlFx()
 	m_BkColor1   = RGB(255, 255, 255);
 	m_BkColor2   = RGB(248, 248, 248);
 	m_LineColor  = RGB(224, 224, 224);
+
+	// Glass
+	m_GlassColor = RGB(255, 255, 255);
+	m_GlassColor = RGB(0, 0, 0);
+	m_GlassAlpha = 128;
 }
 
 CListCtrlFx::~CListCtrlFx()
@@ -32,8 +37,6 @@ END_MESSAGE_MAP()
 
 void CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, BOOL bHighCotrast)
 {
-	// MoveWindow((int)(x * zoomRatio), (int)(y * zoomRatio), (int)(width * zoomRatio), (int)(height * zoomRatio));
-
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
 	m_CtrlSize.cx = (int)(width * zoomRatio);
@@ -43,25 +46,102 @@ void CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 	m_BgDC = bgDC;
 	m_bHighContrast = bHighCotrast;
 
-	CBitmap bitmap;
-	CDC cdc;
+	CDC BgDC;
 
-	bitmap.CreateCompatibleBitmap(m_BgDC, m_CtrlSize.cx, m_CtrlSize.cy);
-	cdc.CreateCompatibleDC(m_BgDC);
-	cdc.SelectObject(bitmap);
-	cdc.BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X, m_Y, SRCCOPY);
+	m_BgBitmap.DeleteObject();
+	m_BgBitmap.CreateCompatibleBitmap(m_BgDC, m_CtrlSize.cx, m_CtrlSize.cy);
+	BgDC.CreateCompatibleDC(m_BgDC);
+	BgDC.SelectObject(m_BgBitmap);
+	BgDC.BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X + 2, m_Y + 2, SRCCOPY);
 
+	{
+		m_CtrlImage.Destroy();
+		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
 
-	/*
-	CImage image;
+		RECT rect;
+		rect.top = 0;
+		rect.left = 0;
+		rect.right = m_CtrlSize.cx;
+		rect.bottom = m_CtrlSize.cy;
 
-	image.Destroy();
-	image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
-	::BitBlt(image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *m_BgDC, m_X, m_Y,SRCCOPY);
-	*/
+		m_CtrlBitmap.Detach();
+		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
 
-	SetBkImage((HBITMAP)bitmap);
+		DWORD length = m_CtrlSize.cx * m_CtrlSize.cy * 4;
+		BYTE* bitmapBits = new BYTE[length];
+		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
 
+		BYTE r = (BYTE)GetRValue(m_GlassColor);
+		BYTE g = (BYTE)GetGValue(m_GlassColor);
+		BYTE b = (BYTE)GetBValue(m_GlassColor);
+		BYTE a = m_GlassAlpha;
+
+		for (int y = 0; y < m_CtrlSize.cy; y++)
+		{
+			for (int x = 0; x < m_CtrlSize.cx; x++)
+			{
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = b;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = a;
+			}
+		}
+
+		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
+		delete[] bitmapBits;
+	}
+
+	SetupControlImage(m_BgBitmap, m_CtrlBitmap);
+
+	SetBkImage((HBITMAP)m_CtrlBitmap);
+
+	m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap);
+}
+
+void CListCtrlFx::SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap)
+{
+	if (m_BgDC->GetDeviceCaps(BITSPIXEL) * m_BgDC->GetDeviceCaps(PLANES) >= 24)
+	{
+		BITMAP CtlBmpInfo, DstBmpInfo;
+		bgBitmap.GetBitmap(&DstBmpInfo);
+		DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
+		DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
+		ctrlBitmap.GetBitmap(&CtlBmpInfo);
+		DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
+		DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
+
+		if (DstBmpInfo.bmWidthBytes != CtlBmpInfo.bmWidthBytes
+			|| DstBmpInfo.bmHeight != CtlBmpInfo.bmHeight) {
+			return;
+		}
+
+		BYTE* DstBuffer = new BYTE[DstMemSize];
+		bgBitmap.GetBitmapBits(DstMemSize, DstBuffer);
+		BYTE* CtlBuffer = new BYTE[CtlMemSize];
+		ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
+
+		int baseY = 0;
+		for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+		{
+			int dn = py * DstLineBytes;
+			int cn = (baseY + py) * CtlLineBytes;
+			for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+			{
+				BYTE a = CtlBuffer[cn + 3];
+				BYTE na = 255 - a;
+				CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+				CtlBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+				CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+				dn += (DstBmpInfo.bmBitsPixel / 8);
+				cn += (CtlBmpInfo.bmBitsPixel / 8);
+			}
+		}
+
+		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+
+		delete[] DstBuffer;
+		delete[] CtlBuffer;
+	}
 }
 
 void CListCtrlFx::OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
@@ -154,4 +234,27 @@ void CListCtrlFx::PreSubclassWindow()
 
 	CHeaderCtrlFx* pHeader = (CHeaderCtrlFx*)GetHeaderCtrl();
 	m_Header.SubclassWindow(pHeader->GetSafeHwnd());
+}
+
+void CListCtrlFx::EnableHeaderOwnerDraw(BOOL bOwnerDraw)
+{
+	HDITEM hi;
+	if (bOwnerDraw)
+	{
+		for (int i = 0; i < m_Header.GetItemCount(); i++)
+		{
+			m_Header.GetItem(i, &hi);
+			hi.fmt |= HDF_OWNERDRAW;
+			m_Header.SetItem(i, &hi);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < m_Header.GetItemCount(); i++)
+		{
+			m_Header.GetItem(i, &hi);
+			hi.fmt &= ~HDF_OWNERDRAW;
+			m_Header.SetItem(i, &hi);
+		}
+	}
 }
