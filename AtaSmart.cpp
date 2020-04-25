@@ -91,20 +91,20 @@ CAtaSmart::CAtaSmart()
 		GetVersionEx((OSVERSIONINFO *)&m_Os);
 	}
 
-	m_FlagAtaPassThrough = FALSE;
-	m_FlagAtaPassThroughSmart = FALSE;
-	m_FlagNVMeStorageQuery = FALSE;
+	m_bAtaPassThrough = FALSE;
+	m_bAtaPassThroughSmart = FALSE;
+	m_bNVMeStorageQuery = FALSE;
 
 	if (m_Os.dwMajorVersion >= 10)
 	{
-		m_FlagAtaPassThrough = TRUE;
-		m_FlagAtaPassThroughSmart = TRUE;
-		m_FlagNVMeStorageQuery = TRUE;
+		m_bAtaPassThrough = TRUE;
+		m_bAtaPassThroughSmart = TRUE;
+		m_bNVMeStorageQuery = TRUE;
 	}
 	else if(m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2))
 	{
-		m_FlagAtaPassThrough = TRUE;
-		m_FlagAtaPassThroughSmart = TRUE;
+		m_bAtaPassThrough = TRUE;
+		m_bAtaPassThroughSmart = TRUE;
 	}
 	else if(m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 1)
 	{
@@ -113,8 +113,8 @@ CAtaSmart::CAtaSmart()
 		cstr.Replace(_T("Service Pack "), _T(""));
 		if(_tstoi(cstr) >= 2)
 		{
-			m_FlagAtaPassThrough = TRUE;
-			m_FlagAtaPassThroughSmart = TRUE;
+			m_bAtaPassThrough = TRUE;
+			m_bAtaPassThroughSmart = TRUE;
 		}
 	}
 }
@@ -126,7 +126,7 @@ CAtaSmart::~CAtaSmart()
 /* PUBLIC FUNCTION */
 VOID CAtaSmart::SetAtaPassThroughSmart(BOOL flag)
 {
-	m_FlagAtaPassThroughSmart = flag;
+	m_bAtaPassThroughSmart = flag;
 }
 
 /* PUBLIC FUNCTION */
@@ -143,7 +143,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 	{
 		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
 
-		if ((m_FlagNVMeStorageQuery && vars[i].CommandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		if ((m_bNVMeStorageQuery && vars[i].CommandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL_RST && GetSmartAttributeNVMeIntelRst(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
@@ -1119,7 +1119,9 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 							VariantClear(&pVal);
 							if(cstr.Find(_T("USBSTOR")) >= 0)
 							{
-								EXTERNAL_DISK_INFO edi = {0};
+								EXTERNAL_DISK_INFO edi;
+								edi.UsbProductId = 0;
+								edi.UsbVendorId = 0;
 								int curPos= 0;
 								CString resToken;
 								resToken = deviceId.Tokenize(_T("\\&"), curPos);
@@ -2648,7 +2650,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				asi.IsSmartEnabled = FALSE;
 
 				/* 2013/04/12 Disabled
-				m_FlagAtaPassThroughSmart = TRUE; // Force Enable ATA_PASS_THROUGH
+				m_bAtaPassThroughSmart = TRUE; // Force Enable ATA_PASS_THROUGH
 				
 				debug.Format(_T("GetSmartAttributePd(%d) - 1"), physicalDriveId);
 				DebugPrint(debug);
@@ -3180,7 +3182,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			+ ((ULONG64)(asi.IdentifyDevice.B.Bin[10]));
 	*/
 	if (
-		(m_FlagNVMeStorageQuery && commandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &asi))
+		(m_bNVMeStorageQuery && commandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_INTEL_RST && GetSmartAttributeNVMeIntelRst(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_SAMSUNG && GetSmartAttributeNVMeSamsung(physicalDriveId, scsiPort, scsiTargetId, &asi))
@@ -4654,7 +4656,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 
 		debug.Format(_T("DoIdentifyDeviceNVMeStorageQuery"));
 		DebugPrint(debug);
-		if (m_FlagNVMeStorageQuery && DoIdentifyDeviceNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &identify))
+		if (m_bNVMeStorageQuery && DoIdentifyDeviceNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &identify))
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_STORAGE_QUERY"));
 			DebugPrint(debug);
@@ -5034,7 +5036,7 @@ BOOL CAtaSmart::DoIdentifyDevicePd(INT physicalDriveId, BYTE target, IDENTIFY_DE
 		return	FALSE;
 	}
 
-	if(m_FlagAtaPassThrough && m_FlagAtaPassThroughSmart)
+	if(m_bAtaPassThrough && m_bAtaPassThroughSmart)
 	{
 		DebugPrint(_T("SendAtaCommandPd - IDENTIFY_DEVICE (ATA_PASS_THROUGH)"));
 		bRet = SendAtaCommandPd(physicalDriveId, target, 0xEC, 0x00, 0x00, (PBYTE)data, sizeof(IDENTIFY_DEVICE));
@@ -5086,7 +5088,7 @@ BOOL CAtaSmart::GetSmartAttributePd(INT physicalDriveId, BYTE target, ATA_SMART_
 	SMART_READ_DATA_OUTDATA	sendCmdOutParam;
 	SENDCMDINPARAMS	sendCmd;
 
-	if(m_FlagAtaPassThrough && m_FlagAtaPassThroughSmart)
+	if(m_bAtaPassThrough && m_bAtaPassThroughSmart)
 	{
 		DebugPrint(_T("SendAtaCommandPd - SMART_READ_DATA (ATA_PASS_THROUGH)"));
 		bRet = SendAtaCommandPd(physicalDriveId, target, SMART_CMD, READ_ATTRIBUTES, 0x00, 
@@ -5141,7 +5143,7 @@ BOOL CAtaSmart::GetSmartThresholdPd(INT physicalDriveId, BYTE target, ATA_SMART_
 	SMART_READ_DATA_OUTDATA	sendCmdOutParam;
 	SENDCMDINPARAMS	sendCmd;
 
-	if(m_FlagAtaPassThrough && m_FlagAtaPassThroughSmart)
+	if(m_bAtaPassThrough && m_bAtaPassThroughSmart)
 	{
 		DebugPrint(_T("SendAtaCommandPd - SMART_READ_THRESHOLDS (ATA_PASS_THROUGH)"));
 		bRet = SendAtaCommandPd(physicalDriveId, target, SMART_CMD, READ_THRESHOLDS, 0x00, 
@@ -5196,7 +5198,7 @@ BOOL CAtaSmart::ControlSmartStatusPd(INT physicalDriveId, BYTE target, BYTE comm
 	SENDCMDINPARAMS		sendCmd;
 	SENDCMDOUTPARAMS	sendCmdOutParam;
 
-	if(m_FlagAtaPassThrough && m_FlagAtaPassThroughSmart)
+	if(m_bAtaPassThrough && m_bAtaPassThroughSmart)
 	{
 		DebugPrint(_T("SendAtaCommandPd - SMART_CONTROL_STATUS (ATA_PASS_THROUGH)"));
 		bRet = SendAtaCommandPd(physicalDriveId, target, SMART_CMD, command, 0x00, NULL, 0);
@@ -5246,7 +5248,7 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 		return	FALSE;
 	}
 
-	if(m_FlagAtaPassThrough)
+	if(m_bAtaPassThrough)
 	{
 		ATA_PASS_THROUGH_EX_WITH_BUFFERS ab;
 		::ZeroMemory(&ab, sizeof(ab));

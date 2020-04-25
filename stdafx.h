@@ -9,42 +9,38 @@
 #endif
 
 #ifndef VC_EXTRALEAN
-#define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN
 #endif
 
-#define _WIN32_DCOM 
-
-// Modify the following defines if you have to target a platform prior to the ones specified below.
-// Refer to MSDN for the latest info on corresponding values for different platforms.
-#ifndef WINVER				// Allow use of features specific to Windows XP or later.
-#define WINVER 0x0501		// Change this to the appropriate value to target other versions of Windows.
+#ifndef WINVER
+#define WINVER 0x0501
 #endif
 
-#ifndef _WIN32_WINNT		// Allow use of features specific to Windows XP or later.                   
-#define _WIN32_WINNT 0x0501	// Change this to the appropriate value to target other versions of Windows.
+#ifndef _WIN32_WINNT              
+#define _WIN32_WINNT 0x0501
 #endif						
 
-#ifndef _WIN32_WINDOWS		// Allow use of features specific to Windows 98 or later.
-#define _WIN32_WINDOWS 0x0410 // Change this to the appropriate value to target Windows Me or later.
+#ifndef _WIN32_WINDOWS
+#define _WIN32_WINDOWS 0x0410
 #endif
 
-#ifndef _WIN32_IE			// Allow use of features specific to IE 6.0 or later.
-#define _WIN32_IE 0x0500	// Change this to the appropriate value to target other versions of IE.
+#ifndef _WIN32_IE
+#define _WIN32_IE 0x0600
 #endif
 
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
 
-// turns off MFC's hiding of some common and often safely ignored warning messages
+#define _AFX_NO_MFC_CONTROLS_IN_DIALOGS
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS
 #define _AFX_ALL_WARNINGS
 
-#include <afxwin.h>         // MFC core and standard components
-//#include <afxext.h>         // MFC extensions
+#include <afxwin.h>         // MFC core and standard component
+#include <afxext.h>         // Extended MFC
 
 #ifndef _AFX_NO_OLE_SUPPORT
-#include <afxdtctl.h>		// MFC support for Internet Explorer 4 Common Controls
+#include <afxdtctl.h>		// MFC IE4 Common Control support
 #endif
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC support for Windows Common Controls
+#include <afxcmn.h>			// MFC Windows Common Control support
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 #include <afxdhtml.h>			// HTML Dialogs
@@ -52,17 +48,9 @@
 #include "DHtmlDialogEx.h"		// CDHtmlDialogEx by hiyohiyo
 #include "DHtmlMainDialog.h"	// CDHtmlMainDialog by hiyohiyo
 
+#include <comutil.h>
 
 #include "DebugPrint.h"
-
-#include <afxcontrolbars.h>     // MFC support for ribbons and control bars
-/*
-#include "afxdialogex.h"
-#include "atlimage.h"
-#include "comutil.h"
-class CMFCRibbonBar {}; // block CMFCRibbonBar
-static void ControlBarCleanUp() {}
-*/
 
 // Version Information
 #define PROJECT_NAME			_T("CrystalDiskInfo")
@@ -104,8 +92,8 @@ static void ControlBarCleanUp() {}
 #endif
 #endif
 
-#define PRODUCT_VERSION			_T("8.4.2")
-#define PRODUCT_RELEASE			_T("2020/03/15")
+#define PRODUCT_VERSION			_T("8.5.0")
+#define PRODUCT_RELEASE			_T("2020/04/19")
 #define PRODUCT_COPY_YEAR		_T("2008-2020")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2020 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")
@@ -166,3 +154,25 @@ static const int RE_EXEC = 5963;
 #endif
 
 #pragma warning(disable : 4996)
+
+//------------------------------------------------
+// Option Flags
+//------------------------------------------------
+
+// For Task Tray Icon Feature
+#define OPTION_TASK_TRAY
+
+//------------------------------------------------
+// Global Sttings
+//------------------------------------------------
+
+#define THEME_DIR					L"CdiResource\\themes\\"
+#define LANGUAGE_DIR				L"CdiResource\\language\\"
+
+#define MENU_THEME_INDEX			3
+#define MENU_LANG_INDEX				6
+
+#define DEFAULT_THEME				L"Default"
+#define DEFAULT_LANGUAGE			L"English"
+
+#define TIMER_UPDATE_DIALOG			500

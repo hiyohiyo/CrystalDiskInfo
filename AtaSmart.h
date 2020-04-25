@@ -1740,9 +1740,9 @@ public:
 protected:
 	OSVERSIONINFOEX m_Os;
 	CString m_SerialNumberA_Z[26];
-	BOOL m_FlagAtaPassThrough;
-	BOOL m_FlagAtaPassThroughSmart;
-	BOOL m_FlagNVMeStorageQuery;
+	BOOL m_bAtaPassThrough;
+	BOOL m_bAtaPassThroughSmart;
+	BOOL m_bNVMeStorageQuery;
 
 	BOOL GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INTERFACE_TYPE interfaceType, COMMAND_TYPE commandType, VENDOR_ID vendorId, DWORD productId = 0, INT scsiBus = -1, DWORD siliconImageId = 0, BOOL FlagNvidiaController = 0, BOOL FlagMarvellController = 0, CString pnpDeviceId = _T(""), BOOL FlagNVMe = FALSE, BOOL FlagUasp = FALSE);
 	BOOL AddDisk(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, INT siliconImageType = -1, PCSMI_SAS_PHY_ENTITY sasPhyEntity = NULL, CString pnpDeviceId = _T(""));

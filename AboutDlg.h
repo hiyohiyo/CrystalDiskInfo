@@ -6,11 +6,11 @@
 /*---------------------------------------------------------------------------*/
 
 #pragma once
-#include "DialogCx.h"
+#include "DialogFx.h"
 #include "StaticCx.h"
 #include "ButtonCx.h"
 
-class CAboutDlg : public CDialogCx
+class CAboutDlg : public CDialogFx
 {
 	DECLARE_DYNCREATE(CAboutDlg)
 

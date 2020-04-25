@@ -7,7 +7,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "DialogCx.h"
+#include "DialogFx.h"
 #include "GetOsInfo.h"
 #include <Shlwapi.h>
 #include "GetFileVersion.h"
@@ -24,34 +24,33 @@ using namespace Gdiplus;
 
 typedef HRESULT(WINAPI *FuncGetDpiForMonitor) (HMONITOR hmonitor, UINT dpiType, UINT *dpiX, UINT *dpiY);
 
-CDialogCx::CDialogCx(UINT dlgResouce, CWnd* pParent)
-				:CDialogEx(dlgResouce, pParent)
+CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
+				:CDialog(dlgResouce, pParent)
 {
-	DebugPrint(L"CDialogCx::CDialogCx");
+	DebugPrint(L"CDialogFx::CDialogFx");
 
-	m_FlagShowWindow = FALSE;
-	m_FlagModelessDlg = FALSE;
+	m_bShowWindow = FALSE;
+	m_bModelessDlg = FALSE;
 	m_ParentWnd = NULL;
 	m_DlgWnd = NULL;
 	m_MenuId = 0;
-	m_FontType = FT_GDI;
 
 	m_BackgroundName = L"background";
 
 	m_ZoomRatio = 1.0;
-	m_ZoomType = ZOOM_TYPE_AUTO;
+	m_ZoomType = ZoomTypeAuto;
 }
 
-CDialogCx::~CDialogCx()
+CDialogFx::~CDialogFx()
 {
 }
 
-void CDialogCx::DoDataExchange(CDataExchange* pDX)
+void CDialogFx::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 }
 
-BOOL CDialogCx::OnInitDialog()
+BOOL CDialogFx::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -78,14 +77,14 @@ BOOL CDialogCx::OnInitDialog()
 	return TRUE;
 }
 
-BEGIN_MESSAGE_MAP(CDialogCx, CDialog)
+BEGIN_MESSAGE_MAP(CDialogFx, CDialog)
 	ON_WM_CTLCOLOR()
-	ON_MESSAGE(WM_DPICHANGED, &CDialogCx::OnDpiChanged)
-	ON_MESSAGE(WM_SYSCOLORCHANGE, &CDialogCx::OnSysColorChange)
-	ON_MESSAGE(WM_DISPLAYCHANGE, &CDialogCx::OnDisplayChange)
+	ON_MESSAGE(WM_DPICHANGED, &CDialogFx::OnDpiChanged)
+	ON_MESSAGE(WM_SYSCOLORCHANGE, &CDialogFx::OnSysColorChange)
+	ON_MESSAGE(WM_DISPLAYCHANGE, &CDialogFx::OnDisplayChange)
 END_MESSAGE_MAP()
 
-BOOL CDialogCx::PreTranslateMessage(MSG* pMsg) 
+BOOL CDialogFx::PreTranslateMessage(MSG* pMsg) 
 {
 	if(m_hAccelerator != NULL)
 	{
@@ -98,40 +97,40 @@ BOOL CDialogCx::PreTranslateMessage(MSG* pMsg)
 	return CDialog::PreTranslateMessage(pMsg);
 }
 
-double CDialogCx::GetZoomRatio()
+double CDialogFx::GetZoomRatio()
 {
 	return m_ZoomRatio;
 }
 
-DWORD CDialogCx::ChangeZoomType(DWORD zoomType)
+DWORD CDialogFx::ChangeZoomType(DWORD zoomType)
 {
 	DWORD current = (DWORD)(m_Dpi / 96.0 * 100);
 
-	if(zoomType == ZOOM_TYPE_AUTO)
+	if(zoomType == ZoomTypeAuto)
 	{
 		if(current >= 300)
 		{
-			zoomType = ZOOM_TYPE_300;
+			zoomType = ZoomType300;
 		}
 		else if (current >= 250)
 		{
-			zoomType = ZOOM_TYPE_250;
+			zoomType = ZoomType250;
 		}
 		else if(current >= 200)
 		{
-			zoomType = ZOOM_TYPE_200;
+			zoomType = ZoomType200;
 		}
 		else if(current >= 150)
 		{
-			zoomType = ZOOM_TYPE_150;
+			zoomType = ZoomType150;
 		}
 		else if(current >= 125)
 		{
-			zoomType = ZOOM_TYPE_125;
+			zoomType = ZoomType125;
 		}
 		else
 		{
-			zoomType = ZOOM_TYPE_100;
+			zoomType = ZoomType100;
 		}
 	}
 
@@ -140,7 +139,7 @@ DWORD CDialogCx::ChangeZoomType(DWORD zoomType)
 	return zoomType;
 }
 
-void CDialogCx::SetClientRect(DWORD sizeX, DWORD sizeY, DWORD menuLine)
+void CDialogFx::SetClientRect(DWORD sizeX, DWORD sizeY, DWORD menuLine)
 {
 	CRect rc;
 	CRect clientRc;
@@ -179,9 +178,9 @@ void CDialogCx::SetClientRect(DWORD sizeX, DWORD sizeY, DWORD menuLine)
 	}
 }
 
-BOOL CDialogCx::Create(UINT nIDTemplate, CWnd* pDlgWnd, UINT menuId, CWnd* pParentWnd)
+BOOL CDialogFx::Create(UINT nIDTemplate, CWnd* pDlgWnd, UINT menuId, CWnd* pParentWnd)
 {
-	m_FlagModelessDlg = TRUE;
+	m_bModelessDlg = TRUE;
 	m_ParentWnd = pParentWnd;
 	m_DlgWnd = pDlgWnd;
 	m_MenuId = menuId;
@@ -197,9 +196,9 @@ BOOL CDialogCx::Create(UINT nIDTemplate, CWnd* pDlgWnd, UINT menuId, CWnd* pPare
 	return CDialog::Create(nIDTemplate, pParentWnd);
 }
 
-void CDialogCx::OnCancel() 
+void CDialogFx::OnCancel() 
 {
-	if(m_FlagModelessDlg)
+	if(m_bModelessDlg)
 	{
 		if(m_MenuId != 0 && m_ParentWnd != NULL)
 		{
@@ -216,27 +215,27 @@ void CDialogCx::OnCancel()
 	}
 }
 
-void CDialogCx::PostNcDestroy()
+void CDialogFx::PostNcDestroy()
 {
-	if(m_FlagModelessDlg)
+	if(m_bModelessDlg)
 	{
 		m_DlgWnd = NULL;
 		delete this;
 	}
 }
 
-void CDialogCx::OnOK()
+void CDialogFx::OnOK()
 {
 }
 
-void CDialogCx::ShowWindowEx(int nCmdShow)
+void CDialogFx::ShowWindowEx(int nCmdShow)
 {
-	m_FlagShowWindow = TRUE;
+	m_bShowWindow = TRUE;
 	ShowWindow(nCmdShow);
 	SetForegroundWindow();
 }
 
-CString CDialogCx::i18n(CString section, CString key, BOOL inEnglish)
+CString CDialogFx::i18n(CString section, CString key, BOOL inEnglish)
 {
 	TCHAR str[256];
 	CString cstr;
@@ -262,7 +261,7 @@ CString CDialogCx::i18n(CString section, CString key, BOOL inEnglish)
 
 // 2012/5/6
 // http://msdn.microsoft.com/ja-jp/magazine/cc163834(en-us).aspx
-void CDialogCx::OpenUrl(CString url)
+void CDialogFx::OpenUrl(CString url)
 {
 	INT_PTR result = 0;
 	result = (INT_PTR)(ShellExecute(NULL, _T("open"), url, NULL, NULL, SW_SHOWNORMAL));
@@ -278,7 +277,7 @@ void CDialogCx::OpenUrl(CString url)
 	}
 }
 
-void CDialogCx::SetupControl(int nIDDlgItem , int x, int y, int width, int height)
+void CDialogFx::SetupControl(int nIDDlgItem , int x, int y, int width, int height)
 {
 	GetDlgItem(nIDDlgItem)->MoveWindow(
 		(int)(x * m_ZoomRatio),
@@ -288,7 +287,7 @@ void CDialogCx::SetupControl(int nIDDlgItem , int x, int y, int width, int heigh
 		);
 }
 
-BOOL CDialogCx::IsHighContrast()
+BOOL CDialogFx::IsHighContrast()
 {
 	HIGHCONTRAST hc;
 	hc.cbSize = sizeof(HIGHCONTRAST);
@@ -296,7 +295,7 @@ BOOL CDialogCx::IsHighContrast()
 	return hc.dwFlags & HCF_HIGHCONTRASTON;
 }
 
-BOOL CDialogCx::IsDrawFrame()
+BOOL CDialogFx::IsDrawFrame()
 {
 	BOOL isDrawFrame = FALSE;
 	CDC *pDC = GetDC();
@@ -309,7 +308,7 @@ BOOL CDialogCx::IsDrawFrame()
 	return isDrawFrame;
 }
 
-afx_msg LRESULT CDialogCx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 {
 	static DWORD preTime = 0;
 	DWORD currentTime = GetTickCount();
@@ -324,7 +323,7 @@ afx_msg LRESULT CDialogCx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 
 	m_Dpi = (INT)HIWORD(wParam);
-	if(m_ZoomType == ZOOM_TYPE_AUTO)
+	if(m_ZoomType == ZoomTypeAuto)
 	{
 		DWORD oldZoomRatio = (DWORD)(m_ZoomRatio * 100);
 		if (ChangeZoomType(m_ZoomType) != oldZoomRatio)
@@ -336,25 +335,25 @@ afx_msg LRESULT CDialogCx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-afx_msg LRESULT CDialogCx::OnSysColorChange(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CDialogFx::OnSysColorChange(WPARAM wParam, LPARAM lParam)
 {
 	m_IsHighContrast = IsHighContrast();
 	UpdateDialogSize();
 	return 0;
 }
 
-afx_msg LRESULT CDialogCx::OnDisplayChange(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CDialogFx::OnDisplayChange(WPARAM wParam, LPARAM lParam)
 {
 	UpdateDialogSize();
 	return 0;
 }
 
-void CDialogCx::UpdateDialogSize()
+void CDialogFx::UpdateDialogSize()
 {
 
 }
 
-void CDialogCx::UpdateBackground(bool resize)
+void CDialogFx::UpdateBackground(bool resize)
 {
 	HRESULT hr;
 	BOOL    br = FALSE;
@@ -411,7 +410,7 @@ void CDialogCx::UpdateBackground(bool resize)
 	m_BrushDlg.CreateHatchBrush(HS_BDIAGONAL, RGB(0xF8, 0xF8, 0xF8));
 }
 
-CString CDialogCx::IP(CString imageName)
+CString CDialogFx::IP(CString imageName)
 {
 	CString imagePath;
 	imagePath.Format(L"%s%s\\%s-%3d.png", m_CxThemeDir.GetString(), m_CxCurrentTheme.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
@@ -427,7 +426,7 @@ CString CDialogCx::IP(CString imageName)
 	return L"";	
 }
 
-HBRUSH CDialogCx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+HBRUSH CDialogFx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
 	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
 	CBrush nullb;
@@ -467,7 +466,7 @@ HBRUSH CDialogCx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 /*
 typedef BOOL(WINAPI *FuncEnableNonClientDpiScaling) (HWND hwnd);
 
-BOOL CDialogCx::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
+BOOL CDialogFx::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (!CDialogEx::OnNcCreate(lpCreateStruct))
 		return FALSE;

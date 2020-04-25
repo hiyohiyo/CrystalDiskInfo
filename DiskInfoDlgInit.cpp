@@ -156,9 +156,9 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnMegaRAID();
 
 	DebugPrint(_T("InitAta"));
-	InitAta((BOOL)GetPrivateProfileInt(_T("Setting"), _T("UseWMI"), 1, m_Ini), m_FlagAdvancedDiskSearch, NULL, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
+	InitAta((BOOL)GetPrivateProfileInt(_T("Setting"), _T("UseWMI"), 1, m_Ini), m_bAdvancedDiskSearch, NULL, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);
 
-	if(m_FlagStartupExit)
+	if(m_bStartupExit)
 	{
 		// Added 2013/04/12 - Workaround for Exec Failed
 		WritePrivateProfileString(_T("Workaround"), _T("ExecFailed"), _T("0"), m_Ini);
@@ -206,18 +206,18 @@ void CDiskInfoDlg::InitDialogComplete()
 		DebugPrint(_T("CheckPage()"));
 		CheckPage();
 			
-		m_FlagShowWindow = TRUE;
+		m_bShowWindow = TRUE;
 		DebugPrint(_T("CenterWindow()"));
 		CenterWindow();
 
-		if(m_FlagResident)
+		if(m_bResident)
 		{
 			DebugPrint(_T("AlarmOverheat()"));
 			AlarmOverheat();
 		//	CheckTrayTemperatureIcon();
-			if(! m_FlagResidentMinimize)
+			if(! m_bResidentMinimize)
 			{
-				m_FlagShowWindow = FALSE;
+				m_bShowWindow = FALSE;
 			}
 		}
 		else
@@ -233,7 +233,7 @@ void CDiskInfoDlg::InitDialogComplete()
 		}
 
 		once = TRUE;
-		m_FlagInitializing = FALSE;
+		m_bInitializing = FALSE;
 
 
 		// Added 2013/04/12 - Workaround for Exec Failed
@@ -244,7 +244,7 @@ void CDiskInfoDlg::InitDialogComplete()
 			CopySave(((CDiskInfoApp*)AfxGetApp())->m_SaveAsText);
 		}
 
-		if(((CDiskInfoApp*)AfxGetApp())->m_FlagCopyExit)
+		if(((CDiskInfoApp*)AfxGetApp())->m_bCopyExit)
 		{
 			DebugPrint(_T("EndDialog(0)"));
 			EndDialog(0);
@@ -260,7 +260,7 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 	SetWindowTitle(i18n(_T("Message"), _T("DETECT_DISK")));
 	m_NowDetectingUnitPowerOnHours = FALSE;
 
-	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_FlagHideNoSmartDisk);
+	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_bHideNoSmartDisk);
 	
 	DWORD errorCount = 0;
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
@@ -284,7 +284,7 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 			errorCount++;
 		}
 
-		m_FlagAutoRefreshTarget[i] = GetPrivateProfileInt(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_bAutoRefreshTarget[i] = GetPrivateProfileInt(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
 		if (m_Ata.vars[i].IsSsd)
 		{
 			m_Ata.vars[i].AlarmTemperature = GetPrivateProfileInt(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, 60, m_Ini);
@@ -339,7 +339,7 @@ void CDiskInfoDlg::InitListCtrl()
 	if (m_LayeredListCtrl)
 	{
 		::SetWindowLong(m_List.m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_List.m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-		if (m_IsHighContrast)
+		if (m_bHighContrast)
 		{
 			::SetLayeredWindowAttributes(m_List.m_hWnd, 0, 255, LWA_ALPHA);
 		}
@@ -378,7 +378,7 @@ CString CDiskInfoDlg::GetDiskStatusClass(DWORD statusCode)
 	switch(statusCode)
 	{
 	case CAtaSmart::DISK_STATUS_GOOD:
-		if (m_FlagGreenMode)
+		if (m_bGreenMode)
 		{
 			return _T("diskStatusGoodGreen");
 		}
@@ -416,7 +416,7 @@ CString CDiskInfoDlg::GetTemperatureClass(INT temperature, INT alarmTemperature)
 	}
 	else
 	{
-		if (m_FlagGreenMode)
+		if (m_bGreenMode)
 		{
 			return _T("temperatureGoodGreen");
 		}
@@ -655,7 +655,7 @@ void CDiskInfoDlg::InitDriveList()
 			targetDisk.Format(_T("Disk%d"), i % 8);
 			if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME && m_Ata.vars[i].Temperature > -300)
 			{
-				if (m_FlagFahrenheit)
+				if (m_bFahrenheit)
 				{
 					m_LiDisk[i % 8].Format(_T("%s%s%d °F%s%s"),
 						diskStatus, delimiter, m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter, driveLetter);
@@ -668,7 +668,7 @@ void CDiskInfoDlg::InitDriveList()
 			}
 			else if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > -300)
 			{
-				if(m_FlagFahrenheit)
+				if(m_bFahrenheit)
 				{
 					m_LiDisk[i % 8].Format(_T("%s%s%d °F%s%s"), 
 								diskStatus, delimiter, m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter, driveLetter);
@@ -681,7 +681,7 @@ void CDiskInfoDlg::InitDriveList()
 			}
 			else if(m_Ata.vars[i].IsSmartEnabled)
 			{
-				if(m_FlagFahrenheit)
+				if(m_bFahrenheit)
 				{
 					m_LiDisk[i % 8].Format(_T("%s%s-- °F%s%s"), diskStatus, delimiter, delimiter, driveLetter);
 				}
@@ -692,7 +692,7 @@ void CDiskInfoDlg::InitDriveList()
 			}
 			else
 			{
-				if(m_FlagFahrenheit)
+				if(m_bFahrenheit)
 				{
 					m_LiDisk[i % 8].Format(_T("----%s-- °F%s%s"), delimiter, delimiter, driveLetter);
 				}

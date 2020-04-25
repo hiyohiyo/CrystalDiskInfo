@@ -5,7 +5,7 @@
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+#include "../stdafx.h"
 #include "GetFileVersion.h"
 
 #pragma comment(lib,"version.lib")
@@ -23,13 +23,13 @@ int GetFileVersion(const TCHAR* file, TCHAR* version)
 	TCHAR *vbuf = new TCHAR[size];
 	if(GetFileVersionInfo((TCHAR*)file, 0, size, vbuf))
 	{
-		VerQueryValue(vbuf, _T("\\"), (void**)&buf, &size);
+		VerQueryValue(vbuf, L"\\", (void**)&buf, &size);
 		CopyMemory(&vffi, buf, sizeof(VS_FIXEDFILEINFO));
 
-		VerQueryValue(vbuf, _T("\\VarFileInfo\\Translation"), (void**)&buf, &size);
+		VerQueryValue(vbuf, L"\\VarFileInfo\\Translation", (void**)&buf, &size);
 		CopyMemory(&Locale, buf, sizeof(int));
-		wsprintf(str, _T("\\StringFileInfo\\%04X%04X\\%s"), 
-					LOWORD(Locale), HIWORD(Locale), _T("FileVersion"));
+		wsprintf(str, L"\\StringFileInfo\\%04X%04X\\%s", 
+					LOWORD(Locale), HIWORD(Locale), L"FileVersion");
 		VerQueryValue(vbuf, str, (void**)&buf, &size);
 
 		_tcscpy_s(str, 256, buf);
@@ -40,7 +40,7 @@ int GetFileVersion(const TCHAR* file, TCHAR* version)
 	}
 	delete [] vbuf;
 
-	if(_tcscmp(str, _T("")) != 0)
+	if(_tcscmp(str, L"") != 0)
 	{
 		return int(_tstof(str) * 100);
 	}
@@ -55,7 +55,7 @@ BOOL IsFileExist(const TCHAR* path)
 	FILE* fp;
 	errno_t err;
 
-	err = _tfopen_s(&fp, path, _T("rb"));
+	err = _tfopen_s(&fp, path, L"rb");
 	if(err != 0 || fp == NULL)
 	{
 		return FALSE;

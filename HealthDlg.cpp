@@ -15,18 +15,20 @@ static CDiskInfoDlg *p;
 IMPLEMENT_DYNAMIC(CHealthDlg, CDialog)
 
 CHealthDlg::CHealthDlg(CWnd* pParent /*=NULL*/)
-	: CDialogCx(CHealthDlg::IDD, pParent)
+	: CDialogFx(CHealthDlg::IDD, pParent)
 {
-	p = (CDiskInfoDlg*)pParent;
-	_tcscpy_s(m_Ini, MAX_PATH, ((CDiskInfoApp*)AfxGetApp())->m_Ini);
+	CMainDialog* p = (CMainDialog*)pParent;
 
-	m_CurrentLangPath = ((CMainDialog*)pParent)->m_CurrentLangPath;
-	m_DefaultLangPath = ((CMainDialog*)pParent)->m_DefaultLangPath;
-	m_ZoomType = ((CMainDialog*)pParent)->GetZoomType();
-	m_FontFace = ((CMainDialog*)pParent)->m_FontFace;
-	m_CxThemeDir = ((CDiskInfoApp*)AfxGetApp())->m_ThemeDir;
-	m_CxCurrentTheme = ((CMainDialog*)pParent)->m_CurrentTheme;
-	m_CxDefaultTheme = ((CMainDialog*)pParent)->m_DefaultTheme;
+	m_ZoomType = p->GetZoomType();
+	m_FontScale = p->GetFontScale();
+	m_FontRatio = p->GetFontRatio();
+	m_FontFace = p->GetFontFace();
+	m_CurrentLangPath = p->GetCurrentLangPath();
+	m_DefaultLangPath = p->GetDefaultLangPath();
+	m_ThemeDir = p->GetThemeDir();
+	m_CurrentTheme = p->GetCurrentTheme();
+	m_DefaultTheme = p->GetDefaultTheme();
+	m_Ini = p->GetIniPath();
 }
 
 CHealthDlg::~CHealthDlg()
@@ -35,7 +37,7 @@ CHealthDlg::~CHealthDlg()
 
 void CHealthDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogCx::DoDataExchange(pDX);
+	CDialogFx::DoDataExchange(pDX);
 
 	DDX_Text(pDX, IDC_VALUE_05, m_Value05);
 	DDX_Text(pDX, IDC_VALUE_C5, m_ValueC5);
@@ -72,7 +74,7 @@ void CHealthDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CHealthDlg, CDialogCx)
+BEGIN_MESSAGE_MAP(CHealthDlg, CDialogFx)
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_APPLY, &CHealthDlg::OnBnClickedApply)
 	ON_BN_CLICKED(IDC_DEFAULT, &CHealthDlg::OnBnClickedDefault)
@@ -81,7 +83,7 @@ END_MESSAGE_MAP()
 
 BOOL CHealthDlg::OnInitDialog()
 {
-	CDialogCx::OnInitDialog();
+	CDialogFx::OnInitDialog();
 
 	SetWindowText(i18n(_T("WindowTitle"), _T("HEALTH_STATUS_SETTING"))
 		+ _T(" - ") + i18n(_T("HealthStatus"), _T("THRESHOLD_OF_CAUTION"))
@@ -92,7 +94,7 @@ BOOL CHealthDlg::OnInitDialog()
 	m_CtrlScrollbarC6.SetScrollRange(0x00, 0xFF);
 	m_CtrlScrollbarFF.SetScrollRange(0x00, 0x63);
 
-	m_FlagShowWindow = TRUE;
+	m_bShowWindow = TRUE;
 
 	InitLang();
 	InitSelectDisk();
@@ -136,7 +138,7 @@ BOOL CHealthDlg::OnInitDialog()
 void CHealthDlg::UpdateDialogSize()
 {
 	ChangeZoomType(m_ZoomType);
-	SetClientRect((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
+	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
 
 	UpdateBackground();
 
@@ -160,40 +162,38 @@ void CHealthDlg::UpdateDialogSize()
 	m_CtrlValueC6X.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 	m_CtrlValueFFX.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 
-	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlLabelC6.InitControl(8, 156, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlLabelFF.InitControl(8, 212, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
+	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlLabelC6.InitControl(8, 156, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlLabelFF.InitControl(8, 212, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
 
-	m_CtrlValue05.InitControl(300,  72, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlValueC5.InitControl(300, 128, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlValueC6.InitControl(300, 184, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlValueFF.InitControl(300, 240, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
+	m_CtrlValue05.InitControl(300,  72, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueC5.InitControl(300, 128, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueC6.InitControl(300, 184, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueFF.InitControl(300, 240, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
 
-	m_CtrlValue05X.InitControl(344,  72, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlValueC5X.InitControl(344, 128, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
+	m_CtrlValue05X.InitControl(344,  72, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueC5X.InitControl(344, 128, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
 
 	m_CtrlApply.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 	m_CtrlDefault.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 
-	m_CtrlApply.InitControl(220, 268, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_IsHighContrast);
-	m_CtrlDefault.InitControl(20, 268, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_IsHighContrast);
+	m_CtrlApply.InitControl(220, 268, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
+	m_CtrlDefault.InitControl(20, 268, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
 
 	m_CtrlSelectDisk.SetFontEx(m_FontFace, 14, m_ZoomRatio);
 	m_CtrlSelectDisk.MoveWindow((DWORD)(8 * m_ZoomRatio), (DWORD)(8 * m_ZoomRatio), (DWORD)(384 * m_ZoomRatio), (DWORD)(40 * m_ZoomRatio));
 
-	m_IsDrawFrame = IsDrawFrame();
-
-	m_CtrlValue05.SetDrawFrame(m_IsDrawFrame);
-	m_CtrlValueC5.SetDrawFrame(m_IsDrawFrame);
-	m_CtrlValueC6.SetDrawFrame(m_IsDrawFrame);
-	m_CtrlValueFF.SetDrawFrame(m_IsDrawFrame);
-	m_CtrlValue05X.SetDrawFrame(m_IsDrawFrame);
-	m_CtrlValueC5X.SetDrawFrame(m_IsDrawFrame);
-	m_CtrlValueC6X.SetDrawFrame(m_IsDrawFrame);
-	m_CtrlValueFFX.SetDrawFrame(m_IsDrawFrame);
+	m_CtrlValue05.SetDrawFrame(m_bHighContrast);
+	m_CtrlValueC5.SetDrawFrame(m_bHighContrast);
+	m_CtrlValueC6.SetDrawFrame(m_bHighContrast);
+	m_CtrlValueFF.SetDrawFrame(m_bHighContrast);
+	m_CtrlValue05X.SetDrawFrame(m_bHighContrast);
+	m_CtrlValueC5X.SetDrawFrame(m_bHighContrast);
+	m_CtrlValueC6X.SetDrawFrame(m_bHighContrast);
+	m_CtrlValueFFX.SetDrawFrame(m_bHighContrast);
 
 	Invalidate();
 }
@@ -306,7 +306,7 @@ void CHealthDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	UpdateData(FALSE);
 
-	CDialogCx::OnHScroll(nSBCode, nPos, pScrollBar);
+	CDialogFx::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 void CHealthDlg::UpdateSelectDisk(DWORD index)

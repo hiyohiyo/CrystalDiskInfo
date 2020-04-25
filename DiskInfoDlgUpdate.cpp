@@ -21,7 +21,7 @@ void CDiskInfoDlg::Refresh(DWORD flagForceUpdate)
 
 	for (int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
-		if (flagForceUpdate || m_FlagAutoRefreshTarget[i])
+		if (flagForceUpdate || m_bAutoRefreshTarget[i])
 		{
 			switch (m_Ata.UpdateSmartInfo(i))
 			{
@@ -55,7 +55,7 @@ void CDiskInfoDlg::Refresh(DWORD flagForceUpdate)
 		InitDriveList();
 		UpdateToolTip();
 
-		if (m_FlagResident)
+		if (m_bResident)
 		{
 			AlarmOverheat();
 			UpdateTrayTemperatureIcon(TRUE);
@@ -66,7 +66,7 @@ void CDiskInfoDlg::Refresh(DWORD flagForceUpdate)
 
 void CDiskInfoDlg::UpdateShareInfo()
 {
-	if (!m_FlagGadget || m_Ata.vars.GetCount() == 0)
+	if (!m_bGadget || m_Ata.vars.GetCount() == 0)
 	{
 		return;
 	}
@@ -126,7 +126,7 @@ void CDiskInfoDlg::UpdateShareInfo()
 		RegSetValueEx(hSubKey, _T("DiskSize"), 0, REG_SZ,
 			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
 
-		if (m_FlagFahrenheit)
+		if (m_bFahrenheit)
 		{
 			if (m_Ata.vars[i].Temperature > -300)
 			{
@@ -200,57 +200,57 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 	if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
-		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
-		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
-		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
-		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
-		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(140 * m_ZoomRatio), 0);
-		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_FlagSmartEnglish), LVCFMT_LEFT, (int)(width - 172 * m_ZoomRatio - 25), 0);
+		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_bSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
+		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(140 * m_ZoomRatio), 0);
+		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_bSmartEnglish), LVCFMT_LEFT, (int)(width - 172 * m_ZoomRatio - 25), 0);
 		preVendorId = m_Ata.SSD_VENDOR_NVME;
 	}
 	else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
-		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
-		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
-		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
-		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
-		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(136 * m_ZoomRatio), 0);
-		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_FlagSmartEnglish), LVCFMT_LEFT, (int)(width - 384 * m_ZoomRatio - 25), 0);
+		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_bSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
+		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
+		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
+		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
+		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(136 * m_ZoomRatio), 0);
+		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_bSmartEnglish), LVCFMT_LEFT, (int)(width - 384 * m_ZoomRatio - 25), 0);
 		preVendorId = m_Ata.SSD_VENDOR_SANDFORCE;
 	}
 	// JMicron 60x
 	else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && m_Ata.vars[i].IsRawValues8)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
-		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
-		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
-		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
-		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
-		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(140 * m_ZoomRatio), 0);
-		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_FlagSmartEnglish), LVCFMT_LEFT, (int)(width - 244 * m_ZoomRatio - 25), 0);
+		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_bSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
+		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
+		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(140 * m_ZoomRatio), 0);
+		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_bSmartEnglish), LVCFMT_LEFT, (int)(width - 244 * m_ZoomRatio - 25), 0);
 		preVendorId = m_Ata.SSD_VENDOR_JMICRON;
 	}
 	else if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
-		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
-		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
-		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
-		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
-		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(140 * m_ZoomRatio), 0);
-		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_FlagSmartEnglish), LVCFMT_LEFT, (int)(width - 172 * m_ZoomRatio - 25), 0);
+		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_bSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
+		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(0 * m_ZoomRatio), 0);
+		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(140 * m_ZoomRatio), 0);
+		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_bSmartEnglish), LVCFMT_LEFT, (int)(width - 172 * m_ZoomRatio - 25), 0);
 		preVendorId = m_Ata.SSD_VENDOR_INDILINX;
 	}
 	else
 	{
 		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 25, 0);
-		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_FlagSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
-		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
-		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
-		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
-		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_FlagSmartEnglish), LVCFMT_RIGHT, (int)(108 * m_ZoomRatio), 0);
-		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_FlagSmartEnglish), LVCFMT_LEFT, (int)(width - 356 * m_ZoomRatio - 25), 0);
+		m_List.InsertColumn(1, i18n(_T("Dialog"), _T("LIST_ID"), m_bSmartEnglish), LVCFMT_CENTER, (int)(32 * m_ZoomRatio), 0);
+		m_List.InsertColumn(3, i18n(_T("Dialog"), _T("LIST_CURRENT"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
+		m_List.InsertColumn(4, i18n(_T("Dialog"), _T("LIST_WORST"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
+		m_List.InsertColumn(5, i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(72 * m_ZoomRatio), 0);
+		m_List.InsertColumn(6, i18n(_T("Dialog"), _T("LIST_RAW_VALUES"), m_bSmartEnglish), LVCFMT_RIGHT, (int)(108 * m_ZoomRatio), 0);
+		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_bSmartEnglish), LVCFMT_LEFT, (int)(width - 356 * m_ZoomRatio - 25), 0);
 		preVendorId = m_Ata.HDD_GENERAL;
 	}
 }
@@ -279,8 +279,13 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 
 	if (m_Ata.vars[i].IsSmartCorrect)
 	{
-		m_List.SetTextColor1(RGB(0, 0, 0));
-		m_List.SetTextColor2(RGB(0, 0, 0));
+	//	m_List.SetTextColor1(RGB(0, 0, 0));
+	//	m_List.SetTextColor2(RGB(0, 0, 0));
+
+		m_List.SetTextColor1(RGB(255, 255, 255));
+		m_List.SetTextColor2(RGB(255, 255, 255));
+		m_List.SetBkColor1(RGB(0, 0, 0));
+		m_List.SetBkColor2(RGB(0, 0, 0));
 	}
 	else
 	{
@@ -298,8 +303,8 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 	CString unknown;
 	CString vendorSpecific;
 
-	//	unknown = i18n(_T("Smart"), _T("UNKNOWN"), m_FlagSmartEnglish);
-	vendorSpecific = i18n(_T("Smart"), _T("VENDOR_SPECIFIC"), m_FlagSmartEnglish);
+	//	unknown = i18n(_T("Smart"), _T("UNKNOWN"), m_bSmartEnglish);
+	vendorSpecific = i18n(_T("Smart"), _T("VENDOR_SPECIFIC"), m_bSmartEnglish);
 
 	for (DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
 	{
@@ -366,11 +371,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				{
 					if (flag)
 					{
-						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
 					}
 					else
 					{
-						m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 					}
 				}
 			}
@@ -379,11 +384,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			{
 				if (flag)
 				{
-					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
 				}
 				else
 				{
-					m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+					m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 				}
 			}
 			// End-to-End Error
@@ -393,11 +398,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			{
 				if (flag)
 				{
-					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
 				}
 				else
 				{
-					m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+					m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 				}
 			}
 			// Life
@@ -438,11 +443,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				{
 					if (flag)
 					{
-						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
 					}
 					else
 					{
-						m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 					}
 				}
 			}
@@ -455,11 +460,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				{
 					if (flag)
 					{
-						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
 					}
 					else
 					{
-						m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 					}
 				}
 				else if (m_Ata.vars[i].Threshold[j].ThresholdValue != 0
@@ -478,11 +483,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				{
 					if (flag)
 					{
-						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
 					}
 					else
 					{
-						m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 					}
 				}
 			}
@@ -515,11 +520,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				{
 					if (flag)
 					{
-						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
 					}
 					else
 					{
-						m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 					}
 				}
 			}
@@ -527,11 +532,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			{
 				if (flag)
 				{
-					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_FlagGreenMode, 0, 0, 0, 0);
+					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
 				}
 				else
 				{
-					m_List.InsertItem(k, _T(""), ICON_GOOD + m_FlagGreenMode);
+					m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 				}
 			}
 		}
@@ -552,7 +557,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 
 		BYTE id = m_Ata.vars[i].Attribute[j].Id;
 
-		if (m_FlagSmartEnglish)
+		if (m_bSmartEnglish)
 		{
 			GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_DefaultLangPath);
 		}
@@ -908,10 +913,10 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	}
 
 	static int preFlagFahrenheit = -1;
-	if (preFlagFahrenheit != m_FlagFahrenheit)
+	if (preFlagFahrenheit != m_bFahrenheit)
 	{
 		flagUpdate = TRUE;
-		preFlagFahrenheit = m_FlagFahrenheit;
+		preFlagFahrenheit = m_bFahrenheit;
 	}
 
 	static CString preLang = _T("");
@@ -963,7 +968,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	{
 		className += L"100";
 	}
-	m_CtrlLife.ReloadImage(IP(L"SD" + className), 1);
+	 m_CtrlLife.ReloadImage(IP(L"SD" + className), 1);
 #endif
 
 	className = GetTemperatureClass(m_Ata.vars[i].Temperature, m_Ata.vars[i].AlarmTemperature);
@@ -978,7 +983,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	{
 		if (m_Ata.vars[i].Temperature > -300)
 		{
-			if (m_FlagFahrenheit)
+			if (m_bFahrenheit)
 			{
 				m_Temperature.Format(_T("%d °F"), m_Ata.vars[i].Temperature * 9 / 5 + 32);
 			}
@@ -989,7 +994,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		}
 		else
 		{
-			if (m_FlagFahrenheit)
+			if (m_bFahrenheit)
 			{
 				m_Temperature.Format(_T("-- °F"));
 			}
@@ -1029,13 +1034,13 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	}
 	*/
 
-	if (preFlagHideSerialNumber != m_FlagHideSerialNumber)
+	if (preFlagHideSerialNumber != m_bHideSerialNumber)
 	{
-		preFlagHideSerialNumber = m_FlagHideSerialNumber;
+		preFlagHideSerialNumber = m_bHideSerialNumber;
 		flagUpdate = TRUE;
 	}
 
-	if (m_FlagHideSerialNumber)
+	if (m_bHideSerialNumber)
 	{
 		m_SerialNumber = _T("");
 		for (int j = 0; j < m_Ata.vars[i].SerialNumber.GetLength(); j++)
@@ -1719,7 +1724,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	cstr = i18n(_T("Menu"), _T("FAHRENHEIT"));
 	menu->ModifyMenu(ID_FAHRENHEIT, MF_STRING, ID_FAHRENHEIT, cstr);
 
-	if (m_FlagFahrenheit)
+	if (m_bFahrenheit)
 	{
 		OnFahrenheit();
 	}
@@ -1733,7 +1738,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	cstr = i18n(_T("Menu"), _T("MINIMIZE"));
 	menu->ModifyMenu(ID_RESIDENT_MINIMIZE, MF_STRING, ID_RESIDENT_MINIMIZE, cstr);
 
-	if (m_FlagResidentMinimize)
+	if (m_bResidentMinimize)
 	{
 		OnResidentMinimize();
 	}
@@ -1763,7 +1768,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 	// Check Status
 
-	if (m_FlagDumpIdentifyDevice)
+	if (m_bDumpIdentifyDevice)
 	{
 		menu->CheckMenuItem(ID_DUMP_IDENTIFY_DEVICE, MF_CHECKED);
 	}
@@ -1772,7 +1777,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_DUMP_IDENTIFY_DEVICE, MF_UNCHECKED);
 	}
 
-	if (m_FlagDumpSmartReadData)
+	if (m_bDumpSmartReadData)
 	{
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_DATA, MF_CHECKED);
 	}
@@ -1781,7 +1786,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_DATA, MF_UNCHECKED);
 	}
 
-	if (m_FlagDumpSmartReadThreshold)
+	if (m_bDumpSmartReadThreshold)
 	{
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_THRESHOLD, MF_CHECKED);
 	}
@@ -1790,7 +1795,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_THRESHOLD, MF_UNCHECKED);
 	}
 
-	if (m_FlagAsciiView)
+	if (m_bAsciiView)
 	{
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_CHECKED);
 	}
@@ -1799,7 +1804,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_UNCHECKED);
 	}
 
-	if (m_FlagSmartEnglish)
+	if (m_bSmartEnglish)
 	{
 		menu->CheckMenuItem(ID_SMART_ENGLISH, MF_CHECKED);
 	}
@@ -1808,7 +1813,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_SMART_ENGLISH, MF_UNCHECKED);
 	}
 
-	if (m_FlagHideSerialNumber)
+	if (m_bHideSerialNumber)
 	{
 		menu->CheckMenuItem(ID_HIDE_SERIAL_NUMBER, MF_CHECKED);
 	}
@@ -1817,7 +1822,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_HIDE_SERIAL_NUMBER, MF_UNCHECKED);
 	}
 
-	if (m_FlagHideSmartInfo)
+	if (m_bHideSmartInfo)
 	{
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_CHECKED);
 	}
@@ -1826,7 +1831,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_UNCHECKED);
 	}
 
-	if (m_FlagHideNoSmartDisk)
+	if (m_bHideNoSmartDisk)
 	{
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_CHECKED);
 	}
@@ -1835,7 +1840,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_UNCHECKED);
 	}
 
-	if (m_FlagAdvancedDiskSearch)
+	if (m_bAdvancedDiskSearch)
 	{
 		menu->CheckMenuItem(ID_ADVANCED_DISK_SEARCH, MF_CHECKED);
 	}
@@ -1844,7 +1849,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ADVANCED_DISK_SEARCH, MF_UNCHECKED);
 	}
 
-	if (m_FlagWorkaroundHD204UI)
+	if (m_bWorkaroundHD204UI)
 	{
 		menu->CheckMenuItem(ID_WORKAROUND_HD204UI, MF_CHECKED);
 	}
@@ -1853,7 +1858,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_WORKAROUND_HD204UI, MF_UNCHECKED);
 	}
 
-	if (m_FlagWorkaroundIE8MODE)
+	if (m_bWorkaroundIE8MODE)
 	{
 		menu->CheckMenuItem(ID_WORKAROUND_IE8MODE, MF_CHECKED);
 	}
@@ -1862,7 +1867,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_WORKAROUND_IE8MODE, MF_UNCHECKED);
 	}
 
-	if (m_FlagWorkaroundIgnoreC4)
+	if (m_bWorkaroundIgnoreC4)
 	{
 		menu->CheckMenuItem(ID_WORKAROUND_IGNORE_C4, MF_CHECKED);
 	}
@@ -1889,7 +1894,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->EnableMenuItem(ID_GRAPH, MF_GRAYED);
 	}
 
-	if (m_FlagEventLog)
+	if (m_bEventLog)
 	{
 		menu->CheckMenuItem(ID_EVENT_LOG, MF_CHECKED);
 	}
@@ -1898,7 +1903,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_EVENT_LOG, MF_UNCHECKED);
 	}
 
-	if (m_FlagAlertMail)
+	if (m_bAlertMail)
 	{
 		menu->CheckMenuItem(ID_ALERT_MAIL, MF_CHECKED);
 	}
@@ -1907,7 +1912,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ALERT_MAIL, MF_UNCHECKED);
 	}
 
-	if (m_FlagAtaPassThroughSmart)
+	if (m_bAtaPassThroughSmart)
 	{
 		menu->CheckMenuItem(ID_ATA_PASS_THROUGH_SMART, MF_CHECKED);
 	}
@@ -1916,7 +1921,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_ATA_PASS_THROUGH_SMART, MF_UNCHECKED);
 	}
 
-	if (m_FlagGadget)
+	if (m_bGadget)
 	{
 		menu->CheckMenuItem(ID_GADGET_SUPPORT, MF_CHECKED);
 	}
@@ -1925,7 +1930,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_GADGET_SUPPORT, MF_UNCHECKED);
 	}
 
-	if (m_FlagAutoAamApm)
+	if (m_bAutoAamApm)
 	{
 		menu->CheckMenuItem(ID_AUTO_AAM_APM, MF_CHECKED);
 	}
@@ -1934,7 +1939,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_AUTO_AAM_APM, MF_UNCHECKED);
 	}
 
-	if (m_FlagResident)
+	if (m_bResident)
 	{
 		menu->CheckMenuItem(ID_RESIDENT, MF_CHECKED);
 	}
@@ -1943,7 +1948,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_RESIDENT, MF_UNCHECKED);
 	}
 
-	if (m_FlagStartup)
+	if (m_bStartup)
 	{
 		menu->CheckMenuItem(ID_STARTUP, MF_CHECKED);
 	}
@@ -1952,7 +1957,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_STARTUP, MF_UNCHECKED);
 	}
 
-	if (m_FlagAlertSound)
+	if (m_bAlertSound)
 	{
 		menu->CheckMenuItem(ID_ALERT_SOUND, MF_CHECKED);
 	}
@@ -1981,7 +1986,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 	CheckRadioZoomType();
 
-	if (m_FlagGreenMode)
+	if (m_bGreenMode)
 	{
 		menu->CheckMenuItem(ID_GREEN_MODE, MF_CHECKED);
 	}
@@ -2063,7 +2068,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		}
 		subSubMenuInfo.wID = AUTO_REFRESH_TARGET_BASE + i;
 		subSubMenuInfo.dwTypeData = (LPWSTR)cstr.GetString();
-		if (m_FlagAutoRefreshTarget[i])
+		if (m_bAutoRefreshTarget[i])
 		{
 			subSubMenuInfo.fState = MFS_CHECKED;
 		}
@@ -2140,12 +2145,12 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	InitListCtrl();
 	UpdateListCtrl(m_SelectDisk);
 
-	if (m_FlagResident)
+	if (m_bResident)
 	{
 		UpdateTrayTemperatureIcon(TRUE);
 	}
 
-	SetClientRect((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
+	SetClientSize((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
 
 	WritePrivateProfileString(_T("Setting"), _T("Language"), LangName, m_Ini);
 }
@@ -2184,13 +2189,13 @@ void CDiskInfoDlg::SelectDrive(DWORD i)
 	default:
 		if (m_SelectDisk == i)
 		{
-			if (preFlagFahrenheit == m_FlagFahrenheit)
+			if (preFlagFahrenheit == m_bFahrenheit)
 			{
 				//	return ;
 			}
 			else
 			{
-				preFlagFahrenheit = m_FlagFahrenheit;
+				preFlagFahrenheit = m_bFahrenheit;
 			}
 		}
 		break;
@@ -2210,7 +2215,7 @@ void CDiskInfoDlg::SelectDrive(DWORD i)
 	DrawMenuBar();
 	CheckPage();
 
-	if (m_FlagResident)
+	if (m_bResident)
 	{
 		UpdateTrayTemperatureIcon(FALSE);
 	}

@@ -29,12 +29,12 @@ public:
 	virtual ~CGraphDlg();
 
 	CString	m_SmartDir;
-	BOOL m_FlagSmartEnglish;
+	BOOL m_bSmartEnglish;
 
 	int m_SizeX;
 	int m_SizeY;
 	
-	BOOL m_FlagGraph[CAtaSmart::MAX_DISK];
+	BOOL m_bGraph[CAtaSmart::MAX_DISK];
 	COLORREF m_LineColor[CAtaSmart::MAX_DISK + 1];
 	COLORREF m_DefaultLineColor[CAtaSmart::MAX_DISK + 1];
 
@@ -160,8 +160,8 @@ protected:
 
 	CString GetModelSerial(CString &model, CString &serialNumber);
 
-	BOOL m_FlagFahrenheit;
-	BOOL m_FlagPaintWeekend;
+	BOOL m_bFahrenheit;
+	BOOL m_bPaintWeekend;
 	DWORD m_MaxPlotPoint;
 	DWORD m_Attribute;
 

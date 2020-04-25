@@ -207,7 +207,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		drive.Replace(_T("%MODEL%"), m_Ata.vars[i].Model);
 //		drive.Replace(_T("%MODEL_WMI%"), m_Ata.vars[i].ModelWmi);
 		drive.Replace(_T("%FIRMWARE%"), m_Ata.vars[i].FirmwareRev);
-		if(m_FlagHideSerialNumber)
+		if(m_bHideSerialNumber)
 		{
 			CString temp = _T("");
 			for(int j = 0; j < m_Ata.vars[i].SerialNumber.GetLength(); j++)
@@ -578,7 +578,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		clip += drive;
 
 		CString vendorSpecific;
-		vendorSpecific = i18n(_T("Smart"), _T("VENDOR_SPECIFIC"), m_FlagSmartEnglish);
+		vendorSpecific = i18n(_T("Smart"), _T("VENDOR_SPECIFIC"), m_bSmartEnglish);
 
 		if(m_Ata.vars[i].AttributeCount > 0)
 		{
@@ -612,7 +612,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 
 				cstr.Format(_T("%02X"), m_Ata.vars[i].Attribute[j].Id);
 
-				if (m_FlagSmartEnglish)
+				if (m_bSmartEnglish)
 				{
 					GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_DefaultLangPath);
 				}
@@ -734,10 +734,10 @@ void CDiskInfoDlg::CopySave(CString fileName)
 		}
 
 		WORD data[256];
-		if(m_FlagDumpIdentifyDevice)
+		if(m_bDumpIdentifyDevice)
 		{
 			memcpy(data, &(m_Ata.vars[i].IdentifyDevice), 512);
-			if(m_FlagHideSerialNumber)
+			if(m_bHideSerialNumber)
 			{
 				if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 				{
@@ -766,7 +766,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 								data[10 * k + 0], data[10 * k + 1], data[10 * k + 2], data[10 * k + 3], data[10 * k + 4],
 								data[10 * k + 5], data[10 * k + 6], data[10 * k + 7], data[10 * k + 8], data[10 * k + 9]);
 				line += cstr;
-				if(m_FlagAsciiView)
+				if(m_bAsciiView)
 				{
 					cstr.Format(_T("  %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c"),
 									AsciiFilter(HIBYTE(data[10 * k + 0])), AsciiFilter(LOBYTE(data[10 * k + 0])),
@@ -788,7 +788,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 								250,
 								data[250], data[251], data[252], data[253], data[254], data[255]);
 			line += cstr;
-			if(m_FlagAsciiView)
+			if(m_bAsciiView)
 			{
 				cstr.Format(_T("                      %c%c%c%c%c%c%c%c%c%c%c%c"),
 							AsciiFilter(HIBYTE(data[250])), AsciiFilter(LOBYTE(data[250])),
@@ -806,7 +806,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			clip += _T("\r\n");
 		}
 
-		if(m_FlagDumpSmartReadData)
+		if(m_bDumpSmartReadData)
 		{
 			memcpy(data, &(m_Ata.vars[i].SmartReadData), 512);
 			if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
@@ -833,7 +833,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 								LOBYTE(data[8 * k + 6]), HIBYTE(data[8 * k + 6]),
 								LOBYTE(data[8 * k + 7]), HIBYTE(data[8 * k + 7]));
 				line += cstr;
-				if(m_FlagAsciiView)
+				if(m_bAsciiView)
 				{
 					cstr.Format(_T("  %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n"),
 									AsciiFilter(LOBYTE(data[8 * k + 0])), AsciiFilter(HIBYTE(data[8 * k + 0])),
@@ -855,7 +855,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 			clip += _T("\r\n");
 		}
 
-		if(m_FlagDumpSmartReadData && (m_Ata.vars[i].DiskVendorId != m_Ata.SSD_VENDOR_NVME))
+		if(m_bDumpSmartReadData && (m_Ata.vars[i].DiskVendorId != m_Ata.SSD_VENDOR_NVME))
 		{
 			memcpy(data, &(m_Ata.vars[i].SmartReadThreshold), 512);
 			cstr.Format(_T("-- SMART_READ_THRESHOLD ----------------------------------------------------\r\n"));
@@ -874,7 +874,7 @@ void CDiskInfoDlg::CopySave(CString fileName)
 								LOBYTE(data[8 * k + 6]), HIBYTE(data[8 * k + 6]),
 								LOBYTE(data[8 * k + 7]), HIBYTE(data[8 * k + 7]));
 				line += cstr;
-				if(m_FlagAsciiView)
+				if(m_bAsciiView)
 				{
 					cstr.Format(_T("  %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n"),
 									AsciiFilter(LOBYTE(data[8 * k + 0])), AsciiFilter(HIBYTE(data[8 * k + 0])),

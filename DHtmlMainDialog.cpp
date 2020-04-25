@@ -21,9 +21,9 @@ CDHtmlMainDialog::CDHtmlMainDialog(UINT dlgResouce, UINT dlgHtml,
 	m_LangDir = LangDir;
 	m_LangIndex = LangIndex;
 
-	m_FlagInitializing = TRUE;
-	m_FlagWindoowMinimizeOnce = TRUE;
-	m_FlagResidentMinimize = FALSE;
+	m_bInitializing = TRUE;
+	m_bWindoowMinimizeOnce = TRUE;
+	m_bResidentMinimize = FALSE;
 }
 
 CDHtmlMainDialog::~CDHtmlMainDialog()
@@ -412,15 +412,15 @@ BOOL CDHtmlMainDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 
 void CDHtmlMainDialog::OnWindowPosChanging(WINDOWPOS * lpwndpos)
 {
-	if(! m_FlagShowWindow)
+	if(! m_bShowWindow)
 	{
 		lpwndpos->flags &= ~SWP_SHOWWINDOW;
 	}
 	
-	if(m_FlagWindoowMinimizeOnce && ! m_FlagInitializing)
+	if(m_bWindoowMinimizeOnce && ! m_bInitializing)
 	{
-		m_FlagWindoowMinimizeOnce = FALSE;
-		if(m_FlagResident && m_FlagResidentMinimize)
+		m_bWindoowMinimizeOnce = FALSE;
+		if(m_bResident && m_bResidentMinimize)
 		{
 			ShowWindow(SW_MINIMIZE);
 		}
@@ -431,7 +431,7 @@ void CDHtmlMainDialog::OnWindowPosChanging(WINDOWPOS * lpwndpos)
 
 DWORD CDHtmlMainDialog::GetZoomType()
 {
-	return GetPrivateProfileInt(_T("Setting"), _T("ZoomType"), ZOOM_TYPE_AUTO, m_Ini);
+	return GetPrivateProfileInt(_T("Setting"), _T("ZoomType"), ZoomTypeAuto, m_Ini);
 }
 
 void CDHtmlMainDialog::SetZoomType(DWORD zoomType)
@@ -450,7 +450,7 @@ void CDHtmlMainDialog::SetZoomType(DWORD zoomType)
 // Add TaskTray
 BOOL CDHtmlMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata;
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -464,7 +464,7 @@ BOOL CDHtmlMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString t
 
 		::Shell_NotifyIcon(NIM_SETVERSION, &nidata);
 		int waitCount = 10;
-		if(m_FlagStartup)
+		if(m_bStartup)
 		{
 			waitCount = 20;
 		}
@@ -483,7 +483,7 @@ BOOL CDHtmlMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString t
 // Update TaskTray Icon
 BOOL CDHtmlMainDialog::ModifyTaskTrayIcon(UINT id, HICON icon)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata;
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -506,7 +506,7 @@ BOOL CDHtmlMainDialog::ModifyTaskTrayIcon(UINT id, HICON icon)
 // Update TaskTray Tips
 BOOL CDHtmlMainDialog::ModifyTaskTrayTip(UINT id, CString tip)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata;
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -531,7 +531,7 @@ BOOL CDHtmlMainDialog::ModifyTaskTrayTip(UINT id, CString tip)
 // Update TaskTray
 BOOL CDHtmlMainDialog::ModifyTaskTray(UINT id, HICON icon, CString tip)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata;
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -556,7 +556,7 @@ BOOL CDHtmlMainDialog::ModifyTaskTray(UINT id, HICON icon, CString tip)
 // Show Balloon
 BOOL CDHtmlMainDialog::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, CString info)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata;
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -583,7 +583,7 @@ BOOL CDHtmlMainDialog::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, C
 // Remove TaskTray
 BOOL CDHtmlMainDialog::RemoveTaskTray(UINT id)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata;
 		nidata.cbSize = sizeof(NOTIFYICONDATA);

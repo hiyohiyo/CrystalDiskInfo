@@ -6,12 +6,12 @@
 /*---------------------------------------------------------------------------*/
 
 #pragma once
-#include "DialogCx.h"
+#include "DialogFx.h"
 #include "StaticCx.h"
 #include "ButtonCx.h"
 #include "ComboBoxCx.h"
 
-class CHealthDlg : public CDialogCx
+class CHealthDlg : public CDialogFx
 {
 	DECLARE_DYNAMIC(CHealthDlg)
 

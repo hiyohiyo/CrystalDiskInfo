@@ -16,14 +16,14 @@
 CDHtmlDialogEx::CDHtmlDialogEx(UINT dlgResouce, UINT dlgHtml, CWnd* pParent)
 				:CDHtmlDialog(dlgResouce, dlgHtml, pParent)
 {
-	m_FlagShowWindow = FALSE;
-	m_FlagModelessDlg = FALSE;
+	m_bShowWindow = FALSE;
+	m_bModelessDlg = FALSE;
 	m_ParentWnd = NULL;
 	m_DlgWnd = NULL;
 	m_MenuId = 0;
 
 	m_ZoomRatio = 1.0;
-	m_ZoomType = ZOOM_TYPE_AUTO;
+	m_ZoomType = ZoomTypeAuto;
 }
 
 CDHtmlDialogEx::~CDHtmlDialogEx()
@@ -102,7 +102,7 @@ void CDHtmlDialogEx::InitDialogComplete()
 {
 	DebugPrint(_T("InitDialogComplete"));
 	UpdateData(FALSE);
-	m_FlagShowWindow = TRUE;
+	m_bShowWindow = TRUE;
 	ShowWindow(SW_SHOW);
 	DebugPrint(_T("InitDialogComplete - once"));
 }
@@ -141,23 +141,23 @@ DWORD CDHtmlDialogEx::ChangeZoomType(DWORD zoomType)
 	m_pBrowserApp->ExecWB(OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT_DODEFAULT, NULL, &zoom);
 	current = zoom.lVal;
 
-	if(zoomType == ZOOM_TYPE_AUTO)
+	if(zoomType == ZoomTypeAuto)
 	{
 		if(current >= 200)
 		{
-			zoomType = ZOOM_TYPE_200;
+			zoomType = ZoomType200;
 		}
 		else if(current >= 150)
 		{
-			zoomType = ZOOM_TYPE_150;
+			zoomType = ZoomType150;
 		}
 		else if(current >= 125)
 		{
-			zoomType = ZOOM_TYPE_125;
+			zoomType = ZoomType125;
 		}
 		else
 		{
-			zoomType = ZOOM_TYPE_100;
+			zoomType = ZoomType100;
 		}
 	}
 
@@ -237,7 +237,7 @@ void CDHtmlDialogEx::SetClientRect(DWORD sizeX, DWORD sizeY, DWORD menuLine)
 
 BOOL CDHtmlDialogEx::Create(UINT nIDTemplate, CWnd* pDlgWnd, UINT menuId, CWnd* pParentWnd)
 {
-	m_FlagModelessDlg = TRUE;
+	m_bModelessDlg = TRUE;
 	m_ParentWnd = pParentWnd;
 	m_DlgWnd = pDlgWnd;
 	m_MenuId = menuId;
@@ -255,7 +255,7 @@ BOOL CDHtmlDialogEx::Create(UINT nIDTemplate, CWnd* pDlgWnd, UINT menuId, CWnd* 
 
 void CDHtmlDialogEx::OnCancel() 
 {
-	if(m_FlagModelessDlg)
+	if(m_bModelessDlg)
 	{
 		if(m_MenuId != 0 && m_ParentWnd != NULL)
 		{
@@ -274,7 +274,7 @@ void CDHtmlDialogEx::OnCancel()
 
 void CDHtmlDialogEx::PostNcDestroy()
 {
-	if(m_FlagModelessDlg)
+	if(m_bModelessDlg)
 	{
 		m_DlgWnd = NULL;
 		delete this;
@@ -287,7 +287,7 @@ void CDHtmlDialogEx::OnOK()
 
 void CDHtmlDialogEx::ShowWindowEx(int nCmdShow)
 {
-	m_FlagShowWindow = TRUE;
+	m_bShowWindow = TRUE;
 	ShowWindow(nCmdShow);
 	SetForegroundWindow();
 }

@@ -7,25 +7,18 @@
 
 #pragma once
 
-// CFontComboBox
-
-class CFontComboBox : public CComboBoxCx
+class CHeaderCtrlFx : public CHeaderCtrl
 {
-	DECLARE_DYNAMIC(CFontComboBox)
+	DECLARE_DYNAMIC(CHeaderCtrlFx)
 
 public:
-	CFontComboBox();
-	virtual ~CFontComboBox();
+	CHeaderCtrlFx();
+	virtual ~CHeaderCtrlFx();
 
 protected:
-	DECLARE_MESSAGE_MAP()
-
-	INT m_FontHeight;
-public:
-	void SetFontHeight(int height, double zoomRatio);
+	// Draw Control
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
-	virtual int CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct);
-	virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
+	DECLARE_MESSAGE_MAP()
 };
 
 

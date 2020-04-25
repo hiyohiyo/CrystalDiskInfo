@@ -107,7 +107,7 @@ LRESULT CDiskInfoDlg::OnTempIcon63(WPARAM w, LPARAM l){ if (l == WM_LBUTTONDOWN)
 
 LRESULT CDiskInfoDlg::OnRegMessage(WPARAM wParam, LPARAM lParam)
 {
-	if(lParam == WM_LBUTTONDOWN && m_FlagResidentMinimize)
+	if(lParam == WM_LBUTTONDOWN && m_bResidentMinimize)
 	{
 		if(! IsIconic())
 		{
@@ -138,19 +138,19 @@ LRESULT CDiskInfoDlg::OnRegMessage(WPARAM wParam, LPARAM lParam)
 
 LRESULT CDiskInfoDlg::OnTaskbarCreated(WPARAM, LPARAM) 
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 		{
-			if(m_FlagTrayTemperatureIcon[i])
+			if(m_bTrayTemperatureIcon[i])
 			{
-				m_FlagTrayTemperatureIcon[i] = FALSE; // Force Add Temperature Icon
+				m_bTrayTemperatureIcon[i] = FALSE; // Force Add Temperature Icon
 				AddTemperatureIcon(i);
 			}
 		}
-		if(m_FlagTrayMainIcon)
+		if(m_bTrayMainIcon)
 		{
-			m_FlagTrayMainIcon = FALSE; // Force Add Main Icon
+			m_bTrayMainIcon = FALSE; // Force Add Main Icon
 			AddTrayMainIcon();
 		}
 	}
@@ -210,7 +210,7 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 		hDiskMenu[i] = CreateMenu();
 		for(int j = 20; j <= 80; j++)
 		{
-			if(m_FlagFahrenheit)
+			if(m_bFahrenheit)
 			{
 				cstr.Format(_T("%d C (%d F)"), j, j * 9 / 5 + 32);
 			}
@@ -281,7 +281,7 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 		{
 			subMenuInfo.fState = MFS_DISABLED;
 		}
-		else if(m_FlagTrayTemperatureIcon[i])
+		else if(m_bTrayTemperatureIcon[i])
 		{
 			subMenuInfo.fState = MFS_CHECKED;
 		}
@@ -297,7 +297,7 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 		subMenuInfo.dwTypeData = (LPWSTR)cstr.GetString();
 		subMenuInfo.fType = 0;
 
-		if(m_FlagAutoRefreshTarget[i])
+		if(m_bAutoRefreshTarget[i])
 		{
 			subMenuInfo.fState = MFS_CHECKED;
 		}
@@ -323,7 +323,7 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 	hDiskHealth = CreateMenu();
 	for(int j = 20; j <= 80; j++)
 	{
-		if(m_FlagFahrenheit)
+		if(m_bFahrenheit)
 		{
 			cstr.Format(_T("%d C (%d F)"), j, j * 9 / 5 + 32);
 		}
@@ -529,7 +529,7 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 
 	menuInfo.fType = MFT_STRING;
 
-	if(m_FlagShowTemperatureIconOnly)
+	if(m_bShowTemperatureIconOnly)
 	{
 		menuInfo.fState = MFS_CHECKED;
 	}
@@ -547,7 +547,7 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 	menuInfo.wID = MY_SHOW_TEMPERATURE_ICON_ONLY;
 	InsertMenuItem(m_hMenu, -1, TRUE, &menuInfo);
 
-	if(m_FlagResidentMinimize)
+	if(m_bResidentMinimize)
 	{
 		if(! IsIconic())
 		{
@@ -588,7 +588,7 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 
 BOOL CDiskInfoDlg::AddTemperatureIcon(DWORD i)
 {
-	if(m_Ata.vars[i].Temperature <= 0 || m_FlagTrayTemperatureIcon[i] == TRUE)
+	if(m_Ata.vars[i].Temperature <= 0 || m_bTrayTemperatureIcon[i] == TRUE)
 	{
 		return FALSE;
 	}
@@ -606,21 +606,21 @@ BOOL CDiskInfoDlg::AddTemperatureIcon(DWORD i)
 	{
 		TemperatureOffset = 200;
 	}
-	else if (m_FlagGreenMode)
+	else if (m_bGreenMode)
 	{
 		TemperatureOffset = 100;
 	}
 
-	if(m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] == NULL)
+	if(m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] == NULL)
 	{
-		m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] = 
-	//	AfxGetApp()->LoadIcon(IDI_TEMP_00 + m_FlagFahrenheit * 200 + alermTemperatureOffset + m_Ata.vars[i].Temperature);
-		(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_FlagFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
+		m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] = 
+	//	AfxGetApp()->LoadIcon(IDI_TEMP_00 + m_bFahrenheit * 200 + alermTemperatureOffset + m_Ata.vars[i].Temperature);
+		(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_bFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
 	}
 
-	if(AddTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_TempIconIndex[i], m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature], cstr))
+	if(AddTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_TempIconIndex[i], m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature], cstr))
 	{
-		m_FlagTrayTemperatureIcon[i] = TRUE;
+		m_bTrayTemperatureIcon[i] = TRUE;
 
 		return TRUE;
 	}
@@ -631,7 +631,7 @@ BOOL CDiskInfoDlg::RemoveTemperatureIcon(DWORD i)
 {
 	if(RemoveTaskTray(TRAY_TEMPERATURE_ICON_BASE + i))
 	{
-		m_FlagTrayTemperatureIcon[i] = FALSE;
+		m_bTrayTemperatureIcon[i] = FALSE;
 		return TRUE;
 	}
 	return FALSE;
@@ -656,19 +656,19 @@ BOOL CDiskInfoDlg::ModifyTemperatureIcon(DWORD i)
 	{
 		TemperatureOffset = 200;
 	}
-	else if (m_FlagGreenMode)
+	else if (m_bGreenMode)
 	{
 		TemperatureOffset = 100;
 	}
 
-	if (m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] == NULL)
+	if (m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] == NULL)
 	{
-		m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] =
-			//	AfxGetApp()->LoadIcon(IDI_TEMP_00 + m_FlagFahrenheit * 200 + alermTemperatureOffset + m_Ata.vars[i].Temperature);
-			(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_FlagFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
+		m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] =
+			//	AfxGetApp()->LoadIcon(IDI_TEMP_00 + m_bFahrenheit * 200 + alermTemperatureOffset + m_Ata.vars[i].Temperature);
+			(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_bFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
 	}
 
-	if(ModifyTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_hTempIcon[m_FlagFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature], cstr))
+	if(ModifyTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature], cstr))
 	{
 		return TRUE;
 	}
@@ -692,10 +692,10 @@ void CDiskInfoDlg::CheckTrayTemperatureIcon()
 void CDiskInfoDlg::UpdateTrayTemperatureIcon(BOOL flagForce)
 {
 	static int preFlagFahrenheit = -1;
-	if(preFlagFahrenheit != m_FlagFahrenheit)
+	if(preFlagFahrenheit != m_bFahrenheit)
 	{
 		flagForce = TRUE;
-		preFlagFahrenheit = m_FlagFahrenheit;
+		preFlagFahrenheit = m_bFahrenheit;
 	}
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
@@ -709,7 +709,7 @@ void CDiskInfoDlg::UpdateTrayTemperatureIcon(BOOL flagForce)
 
 void CDiskInfoDlg::UpdateToolTip()
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		CString cstr;
 		CString tipFull, tipMid, tipShort;
@@ -721,7 +721,7 @@ void CDiskInfoDlg::UpdateToolTip()
 			// Tooltip
 			if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > -300)
 			{
-				if(m_FlagFahrenheit)
+				if(m_bFahrenheit)
 				{
 					if(m_Ata.vars[i].TotalDiskSize >= 1000)
 					{
@@ -797,7 +797,7 @@ void CDiskInfoDlg::UpdateToolTip()
 		ModifyTaskTrayTip(gRegIconId, m_StatusTip);
 		for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 		{
-			if(m_FlagTrayTemperatureIcon[i])
+			if(m_bTrayTemperatureIcon[i])
 			{
 				ModifyTemperatureIcon(i);
 			}
@@ -809,7 +809,7 @@ void CDiskInfoDlg::CheckResident()
 {
 	if(GetPrivateProfileInt(_T("Setting"), _T("Resident"), 0, m_Ini) == 0)
 	{
-		m_FlagResident = FALSE;
+		m_bResident = FALSE;
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_RESIDENT, MF_UNCHECKED);
 		SetMenu(menu);
@@ -817,10 +817,10 @@ void CDiskInfoDlg::CheckResident()
 	}
 	else
 	{
-		m_FlagResident = TRUE;
+		m_bResident = TRUE;
 		CheckTrayTemperatureIcon();
 
-		if(! m_FlagShowTemperatureIconOnly || ! IsTemperatureIconExist())
+		if(! m_bShowTemperatureIconOnly || ! IsTemperatureIconExist())
 		{
 			AddTrayMainIcon();
 		}
@@ -828,7 +828,7 @@ void CDiskInfoDlg::CheckResident()
 		{
 			for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 			{
-				if(m_FlagTrayTemperatureIcon[i])
+				if(m_bTrayTemperatureIcon[i])
 				{
 					m_MainIconId = TRAY_TEMPERATURE_ICON_BASE + i;
 				}
@@ -844,8 +844,8 @@ void CDiskInfoDlg::CheckResident()
 
 void CDiskInfoDlg::OnResident()
 {
-	m_FlagWindoowMinimizeOnce = FALSE;
-	if(m_FlagResident)
+	m_bWindowMinimizeOnce = FALSE;
+	if(m_bResident)
 	{
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_RESIDENT, MF_UNCHECKED);
@@ -855,17 +855,17 @@ void CDiskInfoDlg::OnResident()
 		RemoveTrayMainIcon();
 		for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 		{
-			if(m_FlagTrayTemperatureIcon[i])
+			if(m_bTrayTemperatureIcon[i])
 			{
 				RemoveTemperatureIcon(i);
 			}
 		}
-		m_FlagResident = FALSE;
+		m_bResident = FALSE;
 		WritePrivateProfileString(_T("Setting"), _T("Resident"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagResident = TRUE;
+		m_bResident = TRUE;
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_RESIDENT, MF_CHECKED);
@@ -874,7 +874,7 @@ void CDiskInfoDlg::OnResident()
 		WritePrivateProfileString(_T("Setting"), _T("Resident"), _T("1"), m_Ini);
 		CheckTrayTemperatureIcon();
 
-		if(! m_FlagShowTemperatureIconOnly || ! IsTemperatureIconExist())
+		if(! m_bShowTemperatureIconOnly || ! IsTemperatureIconExist())
 		{
 			AddTrayMainIcon();
 		}
@@ -883,16 +883,16 @@ void CDiskInfoDlg::OnResident()
 
 void CDiskInfoDlg::ShowTemperatureIconOnly()
 {
-	if(m_FlagShowTemperatureIconOnly)
+	if(m_bShowTemperatureIconOnly)
 	{
-		m_FlagShowTemperatureIconOnly = FALSE;
+		m_bShowTemperatureIconOnly = FALSE;
 		WritePrivateProfileString(_T("Setting"), _T("ShowTemperatureIconOnly"), _T("0"), m_Ini);
 
 		AddTrayMainIcon();
 	}
 	else
 	{
-		m_FlagShowTemperatureIconOnly = TRUE;
+		m_bShowTemperatureIconOnly = TRUE;
 		WritePrivateProfileString(_T("Setting"), _T("ShowTemperatureIconOnly"), _T("1"), m_Ini);
 
 		if(IsTemperatureIconExist())
@@ -901,7 +901,7 @@ void CDiskInfoDlg::ShowTemperatureIconOnly()
 			{
 				for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 				{
-					if(m_FlagTrayTemperatureIcon[i])
+					if(m_bTrayTemperatureIcon[i])
 					{
 						m_MainIconId = TRAY_TEMPERATURE_ICON_BASE + i;
 					}
@@ -913,13 +913,13 @@ void CDiskInfoDlg::ShowTemperatureIconOnly()
 
 BOOL CDiskInfoDlg::AddTrayMainIcon()
 {
-	if(m_FlagTrayMainIcon)
+	if(m_bTrayMainIcon)
 	{
 		return TRUE;
 	}
 	else if(AddTaskTray(gRegIconId, gRegMessageId, m_hIconMini, m_StatusTip))
 	{
-		m_FlagTrayMainIcon = TRUE;
+		m_bTrayMainIcon = TRUE;
 		m_MainIconId = gRegIconId;
 	}
 	return FALSE;
@@ -927,13 +927,13 @@ BOOL CDiskInfoDlg::AddTrayMainIcon()
 
 BOOL CDiskInfoDlg::RemoveTrayMainIcon()
 {
-	if(! m_FlagTrayMainIcon)
+	if(! m_bTrayMainIcon)
 	{
 		return TRUE;
 	}
 	else if(RemoveTaskTray(gRegIconId))
 	{
-		m_FlagTrayMainIcon = FALSE;
+		m_bTrayMainIcon = FALSE;
 		return TRUE;
 	}
 	return FALSE;
@@ -943,7 +943,7 @@ BOOL CDiskInfoDlg::IsTemperatureIconExist()
 {
 	for(int j = 0; j < m_Ata.vars.GetCount(); j++)
 	{
-		if(m_FlagTrayTemperatureIcon[j])
+		if(m_bTrayTemperatureIcon[j])
 		{
 			return TRUE;
 		}

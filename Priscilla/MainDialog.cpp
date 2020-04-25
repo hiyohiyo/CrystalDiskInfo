@@ -4,68 +4,116 @@
 //          Web : https://crystalmark.info/
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
-#include "stdafx.h"
-#include "resource.h"
+
+#include "../stdafx.h"
+#include "DebugPrint.h"
 #include "GetFileVersion.h"
 #include "GetOsInfo.h"
-
 #include "MainDialog.h"
 
-UINT CMainDialog::wmTaskbarCreated = ::RegisterWindowMessage(_T("TaskbarCreated"));
-
-CMainDialog::CMainDialog(UINT dlgResouce, 
-		CString ThemeDir, DWORD ThemeIndex, CString LangDir, DWORD LangIndex,
-		CWnd* pParent)
-		:CDialogCx(dlgResouce, pParent)
+CMainDialog::CMainDialog(UINT dlgResouce, CWnd* pParent)
+		:CDialogFx(dlgResouce, pParent)
 {
+	// Common
+	m_bStartup = FALSE;
+	m_bInitializing = TRUE;
+	m_bWindowMinimizeOnce = TRUE;
+	m_bResident = FALSE;
+	m_bResidentMinimize = FALSE;
 
-	DebugPrint(L"CMainDialog::CMainDialog");
-	m_ThemeDir = ThemeDir;
-	m_ThemeIndex = ThemeIndex;
-	m_LangDir = LangDir;
-	m_LangIndex = LangIndex;
+	// Theme
+	m_ThemeKeyName = L"Theme";
 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
-		m_DefaultTheme = L"KureiKei";
-		m_RecommendTheme = L"KureiKeiHomebuiltComputer~Kronotokage";
-	#else
-		m_DefaultTheme = L"Shizuku";
-		m_RecommendTheme = L"ShizukuHotaru";
-	#endif
-#else
-	m_DefaultTheme = L"default";
-#endif
+	TCHAR* ptrEnd;
+	TCHAR ini[MAX_PATH];
+	TCHAR tmp[MAX_PATH];
 
-	m_FlagInitializing = TRUE;
-	m_FlagWindoowMinimizeOnce = TRUE;
-	m_FlagResidentMinimize = FALSE;
+	GetModuleFileName(NULL, ini, MAX_PATH);
+	if ((ptrEnd = _tcsrchr(ini, '.')) != NULL)
+	{
+		*ptrEnd = '\0';
+		_tcscat_s(ini, MAX_PATH, L".ini");
+		m_Ini = ini;
+	}
+
+	GetModuleFileName(NULL, tmp, MAX_PATH);
+	if ((ptrEnd = _tcsrchr(tmp, '\\')) != NULL) { *ptrEnd = '\0'; }
+	m_ThemeDir.Format(L"%s\\%s", tmp, THEME_DIR);
+	m_LangDir.Format(L"%s\\%s", tmp, LANGUAGE_DIR);
+
+	CString cstr;
+	DWORD debugMode = GetPrivateProfileInt(L"Setting", L"DebugMode", 0, m_Ini);
+	SetDebugMode(debugMode);
+	cstr.Format(L"%d", debugMode);
+	WritePrivateProfileString(L"Setting", L"DebugMode", cstr, m_Ini);
 }
 
 CMainDialog::~CMainDialog()
 {
 }
 
-BEGIN_MESSAGE_MAP(CMainDialog, CDialogCx)
+BEGIN_MESSAGE_MAP(CMainDialog, CDialogFx)
 	ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
-void CMainDialog::SetWindowTitle(CString message, CString mode)
+int CMainDialog::GetFontScale()
+{
+	return m_FontScale;
+}
+
+double CMainDialog::GetFontRatio()
+{
+	return m_FontRatio;
+}
+
+CString CMainDialog::GetFontFace()
+{
+	return m_FontFace;
+}
+
+CString CMainDialog::GetCurrentLangPath()
+{
+	return m_CurrentLangPath;
+}
+
+CString CMainDialog::GetDefaultLangPath()
+{
+	return m_DefaultLangPath;
+}
+
+CString CMainDialog::GetThemeDir()
+{
+	return m_ThemeDir;
+}
+
+CString CMainDialog::GetCurrentTheme()
+{
+	return m_CurrentTheme;
+}
+
+CString CMainDialog::GetDefaultTheme()
+{
+	return m_DefaultTheme;
+}
+
+CString CMainDialog::GetIniPath()
+{
+	return m_Ini;
+}
+
+void CMainDialog::SetWindowTitle(CString message)
 {
 	CString title;
 
 	if(! message.IsEmpty())
 	{
-		title.Format(_T("%s - %s"), PRODUCT_SHORT_NAME, message);
-	}
-	else if(! mode.IsEmpty())
-	{
-		title.Format(_T("%s %s %s"), PRODUCT_NAME, PRODUCT_VERSION, mode);
+		title.Format(L"%s - %s", PRODUCT_SHORT_NAME, message.GetString());
 	}
 	else
 	{
-		title.Format(_T("%s %s %s"), PRODUCT_NAME, PRODUCT_VERSION, PRODUCT_EDITION);
+		title.Format(L"%s %s %s", PRODUCT_NAME, PRODUCT_VERSION, PRODUCT_EDITION);
 	}
+
 	SetWindowText(title);
 }
 
@@ -86,50 +134,33 @@ void CMainDialog::InitThemeLang()
 	{
 		CString defaultTheme = m_DefaultTheme;
 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
-		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\KureiKeiBackground-300.png"))
+		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\Background-300.png"))
 		{
 			defaultTheme = m_RecommendTheme;
 		}
-	#else
-		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\ShizukuBackground-300.png"))
-		{
-			defaultTheme = m_RecommendTheme;
-		}
-	#endif
-#endif
 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
-			GetPrivateProfileString(_T("Setting"), _T("ThemeKureiKei"), defaultTheme, str, 256, m_Ini);
-	#else
-			GetPrivateProfileString(_T("Setting"), _T("ThemeShizuku"), defaultTheme, str, 256, m_Ini);
-	#endif
-#else
-		GetPrivateProfileString(_T("Setting"), _T("Theme"), defaultTheme, str, 256, m_Ini);
-#endif
-
+		GetPrivateProfileString(L"Setting", m_ThemeKeyName, defaultTheme, str, 256, m_Ini);
 		m_CurrentTheme = str;
 	}
 
 // Set Language
-	GetPrivateProfileString(_T("Setting"), _T("Language"), _T(""), str, 256, m_Ini);
+	GetPrivateProfileString(L"Setting", L"Language", L"", str, 256, m_Ini);
 
-	langPath.Format(_T("%s\\%s.lang"), m_LangDir, str);
-	m_DefaultLangPath.Format(_T("%s\\%s.lang"), m_LangDir, _T("English"));
+	langPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), str);
+	m_DefaultLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), DEFAULT_LANGUAGE);
 
-	if(_tcscmp(str, _T("")) != 0 && IsFileExist((const TCHAR*)langPath))
+	if(_tcscmp(str, L"") != 0 && IsFileExist((const TCHAR*)langPath))
 	{
 		m_CurrentLang = str;
-		m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, str);
+		m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), str);
 	}
 	else
 	{
-		m_CurrentLocalID.Format(_T("0x%04X"), GetUserDefaultLCID());
+		CString currentLocalID;
+		currentLocalID.Format(L"0x%04X", GetUserDefaultLCID());
 		PrimaryLangID = PRIMARYLANGID(GetUserDefaultLCID());
 
-		langPath.Format(_T("%s\\*.lang"), m_LangDir);
+		langPath.Format(L"%s\\*.lang", (LPTSTR)m_LangDir.GetString());
 
 		hFind = ::FindFirstFile(langPath, &findData);
 		if(hFind != INVALID_HANDLE_VALUE)
@@ -139,14 +170,14 @@ void CMainDialog::InitThemeLang()
 				{
 					i++;
 					CString cstr;
-					cstr.Format(_T("%s\\%s"), m_LangDir, findData.cFileName);
-					GetPrivateProfileString(_T("Language"), _T("LOCALE_ID"), _T(""), str, 256, cstr);
+					cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
+					GetPrivateProfileString(L"Language", L"LOCALE_ID", L"", str, 256, cstr);
 					if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){*ptrEnd = '\0';}
 
-					if(_tcsstr(str, m_CurrentLocalID) != NULL)
+					if(_tcsstr(str, currentLocalID) != NULL)
 					{
 						m_CurrentLang = findData.cFileName;
-						m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, findData.cFileName);
+						m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
 					}
 					if(PrimaryLangID == PRIMARYLANGID(_tcstol(str, NULL, 16)))
 					{
@@ -161,16 +192,18 @@ void CMainDialog::InitThemeLang()
 		{
 			if(PrimaryLang.IsEmpty())
 			{
-				m_CurrentLang = _T("English");
-				m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, m_CurrentLang);
+				m_CurrentLang = DEFAULT_LANGUAGE;
+				m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), (LPTSTR)m_CurrentLang.GetString());
 			}
 			else
 			{
 				m_CurrentLang = PrimaryLang;
-				m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, PrimaryLang);
+				m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), (LPTSTR)PrimaryLang.GetString());
 			}	
 		}
 	}
+
+	UpdateThemeInfo();
 }
 
 void CMainDialog::InitMenu()
@@ -190,14 +223,13 @@ void CMainDialog::InitMenu()
 	CString themeCssPath;
 	CString langPath;
 	int i = 0;
-	TCHAR *ptrEnd;
+	TCHAR *ptrEnd = NULL;
 	TCHAR str[256];
 	
 	menu.Attach(GetMenu()->GetSafeHmenu());
-	subMenu.Attach(menu.GetSubMenu(m_ThemeIndex)->GetSafeHmenu());
-//	subMenu.RemoveMenu(0, MF_BYPOSITION);
+	subMenu.Attach(menu.GetSubMenu(MENU_THEME_INDEX)->GetSafeHmenu());
 
-	themePath.Format(_T("%s\\*.*"), m_ThemeDir);
+	themePath.Format(L"%s\\*.*", (LPTSTR)m_ThemeDir.GetString());
 
 	hFind = ::FindFirstFile(themePath, &findData);
 	if(hFind != INVALID_HANDLE_VALUE)
@@ -207,15 +239,7 @@ void CMainDialog::InitMenu()
 			if(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
 				CString name = findData.cFileName;
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
-				if(name.Find(L"KureiKei") == 0)
-	#else
-				if(name.Find(L"Shizuku") == 0)
-	#endif
-#else
-				if(name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0  && name.Find(L".") != 0)
-#endif
+				if(CheckThemeEdition(name))
 				{
 					// Add Theme
 					newItemID = WM_THEME_ID + i;
@@ -244,23 +268,17 @@ void CMainDialog::InitMenu()
 		m_CurrentTheme = m_DefaultTheme;
 	}
 
-	subMenu.CheckMenuRadioItem(WM_THEME_ID, WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize(),
-								currentItemID, MF_BYCOMMAND);
-
-	subMenu.Detach();
-
-#ifdef _UNICODE
-	subMenu.Attach(menu.GetSubMenu(m_LangIndex)->GetSafeHmenu());
-
 	CMenu subMenuAN;
 	CMenu subMenuOZ;
-
+	subMenu.CheckMenuRadioItem(WM_THEME_ID, WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize(),
+								currentItemID, MF_BYCOMMAND);
+	subMenu.Detach();
+	subMenu.Attach(menu.GetSubMenu(MENU_LANG_INDEX)->GetSafeHmenu());
 	subMenuAN.Attach(subMenu.GetSubMenu(0)->GetSafeHmenu()); // 1st is "A~N"
 	subMenuAN.RemoveMenu(0, MF_BYPOSITION);
 	subMenuOZ.Attach(subMenu.GetSubMenu(1)->GetSafeHmenu()); // 2nd is "O~Z"
 	subMenuOZ.RemoveMenu(0, MF_BYPOSITION);
-
-	langPath.Format(_T("%s\\*.lang"), m_LangDir);
+	langPath.Format(L"%s\\*.lang", (LPTSTR)m_LangDir.GetString());
 	i = 0;
 	hFind = ::FindFirstFile(langPath, &findData);
 	if(hFind != INVALID_HANDLE_VALUE)
@@ -273,15 +291,15 @@ void CMainDialog::InitMenu()
 
 				// Add Language
 				CString cstr;
-				cstr.Format(_T("%s\\%s"), m_LangDir, findData.cFileName);
-				GetPrivateProfileString(_T("Language"), _T("LANGUAGE"), _T(""), str, 256, cstr);
-				if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL)
+				cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
+				GetPrivateProfileString(L"Language", L"LANGUAGE", L"", str, 256, cstr);
+				if((ptrEnd = _tcsrchr(findData.cFileName, L'.')) != NULL)
 				{
 					*ptrEnd = '\0';
 				}
 
-				cstr.Format(_T("%s, [%s]"), str, findData.cFileName);
-				if('A' <= findData.cFileName[0] && findData.cFileName[0] <= 'N')
+				cstr.Format(L"%s, [%s]", str, findData.cFileName);
+				if(L'A' <= findData.cFileName[0] && findData.cFileName[0] <= L'N')
 				{
 					subMenuAN.AppendMenu(MF_STRING, (UINT_PTR)newItemID, cstr);
 				}
@@ -310,74 +328,28 @@ void CMainDialog::InitMenu()
 	subMenuAN.Detach();
 	subMenu.Detach();
 	menu.Detach();
-#else
-	subMenu.Attach(menu.GetSubMenu(m_LangIndex)->GetSafeHmenu());
-	subMenu.RemoveMenu(0, MF_BYPOSITION);//A~N
-	subMenu.RemoveMenu(0, MF_BYPOSITION);//O~Z
-	langPath.Format(_T("%s\\*.lang"), m_LangDir);
-	i = 0;
-	hFind = ::FindFirstFile(langPath, &findData);
-	if(hFind != INVALID_HANDLE_VALUE)
-	{
-		do{
-			if(findData.dwFileAttributes != FILE_ATTRIBUTE_DIRECTORY)
-			{
-				newItemID = WM_LANGUAGE_ID + i;
-				i++;
 
-				// Add Language
-				CString cstr;
-				cstr.Format(_T("%s\\%s"), m_LangDir, findData.cFileName);
-				GetPrivateProfileString(_T("Language"), _T("LANGUAGE"), _T(""), str, 256, cstr);
-				if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){
-					*ptrEnd = '\0';
-				}
-
-				cstr.Format(_T("%s, [%s]"), str, findData.cFileName);
-				subMenu.AppendMenu(MF_STRING, (UINT_PTR)newItemID, cstr);
-				m_MenuArrayLang.Add(findData.cFileName);
-
-				if(m_CurrentLang.Compare(findData.cFileName) == 0)
-				{
-					currentItemID = newItemID;
-					FlagHitLang = TRUE;
-				}
-			}
-		}while(::FindNextFile(hFind, &findData) && i <= 0xFF);
-
-	}
-	FindClose(hFind);
-
-	subMenu.CheckMenuRadioItem(WM_LANGUAGE_ID, WM_LANGUAGE_ID + (UINT)m_MenuArrayLang.GetSize(),
-								currentItemID, MF_BYCOMMAND);
-
-	subMenu.Detach();
-	menu.Detach();
-#endif
 	if(! FlagHitLang)
 	{
-		AfxMessageBox(_T("Fatal Error. Missing Language Files!!"));
+		AfxMessageBox(L"FATAL ERROR: Missing Language Files!!");
 	}
+}
+
+BOOL CMainDialog::CheckThemeEdition(CString name)
+{
+	if (name.Find(L".") != 0) { return TRUE; }
+
+	return FALSE;
 }
 
 BOOL CMainDialog::OnInitDialog()
 {
-	return CDialogCx::OnInitDialog();
+	return CDialogFx::OnInitDialog();
 }
 
 void CMainDialog::ChangeTheme(CString ThemeName)
 {
-	UpdateDialogSize();
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
-		WritePrivateProfileString(_T("Setting"), _T("ThemeKureiKei"), ThemeName, m_Ini);
-	#else
-		WritePrivateProfileString(_T("Setting"), _T("ThemeShizuku"), ThemeName, m_Ini);
-	#endif
-#else
-	WritePrivateProfileString(_T("Setting"), _T("Theme"), ThemeName, m_Ini);
-#endif
-
+	WritePrivateProfileString(L"Setting", m_ThemeKeyName, ThemeName, m_Ini);
 }
 
 BOOL CMainDialog::OnCommand(WPARAM wParam, LPARAM lParam) 
@@ -388,7 +360,7 @@ BOOL CMainDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 		CMenu menu;
 		CMenu subMenu;
 		menu.Attach(GetMenu()->GetSafeHmenu());
-		subMenu.Attach(menu.GetSubMenu(m_ThemeIndex)->GetSafeHmenu());
+		subMenu.Attach(menu.GetSubMenu(MENU_THEME_INDEX)->GetSafeHmenu());
 
 		m_CurrentTheme = m_MenuArrayTheme.GetAt(wParam - WM_THEME_ID);
 		ChangeTheme(m_MenuArrayTheme.GetAt(wParam - WM_THEME_ID));
@@ -396,40 +368,88 @@ BOOL CMainDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 									(UINT)wParam, MF_BYCOMMAND);
 		subMenu.Detach();
 		menu.Detach();
+
+		UpdateThemeInfo();
+		UpdateDialogSize();
 	}
 
-	return CDialogCx::OnCommand(wParam, lParam);
+	return CDialogFx::OnCommand(wParam, lParam);
 }
 
 void CMainDialog::OnWindowPosChanging(WINDOWPOS * lpwndpos)
 {
-	if(! m_FlagShowWindow)
+	if(! m_bShowWindow)
 	{
 		lpwndpos->flags &= ~SWP_SHOWWINDOW;
 	}
 	
-	if(m_FlagWindoowMinimizeOnce && ! m_FlagInitializing)
+	if(m_bWindowMinimizeOnce && ! m_bInitializing)
 	{
-		m_FlagWindoowMinimizeOnce = FALSE;
-		if(m_FlagResident && m_FlagResidentMinimize)
+		m_bWindowMinimizeOnce = FALSE;
+		if(m_bResident && m_bResidentMinimize)
 		{
 			ShowWindow(SW_MINIMIZE);
 		}
 	}
 
-    CDialog::OnWindowPosChanging(lpwndpos);
+    CDialogFx::OnWindowPosChanging(lpwndpos);
 }
 
 DWORD CMainDialog::GetZoomType()
 {
-	return GetPrivateProfileInt(_T("Setting"), _T("ZoomType"), ZOOM_TYPE_AUTO, m_Ini);
+	return GetPrivateProfileInt(L"Setting", L"ZoomType", ZoomTypeAuto, m_Ini);
 }
 
 void CMainDialog::SetZoomType(DWORD zoomType)
 {
 	CString cstr;
-	cstr.Format(_T("%d"), m_ZoomType);
-	WritePrivateProfileString(_T("Setting"), _T("ZoomType"), cstr, m_Ini);
+	cstr.Format(L"%d", m_ZoomType);
+	WritePrivateProfileString(L"Setting", L"ZoomType", cstr, m_Ini);
+}
+
+void CMainDialog::UpdateThemeInfo()
+{
+	CString theme = m_ThemeDir + m_CurrentTheme + L"\\theme.ini";
+
+	m_LabelText = GetControlColor(L"LabelText", 0, theme);
+	m_MeterText = GetControlColor(L"MeterText", 0, theme);
+	m_ComboText = GetControlColor(L"ComboText", 0, theme);
+	m_ComboTextSelected = GetControlColor(L"ComboTextSelected", 0, theme);
+	m_ComboBg   = GetControlColor(L"ComboBg", 255, theme);
+	m_ComboBgSelected = GetControlColor(L"ComboBgSelected", 192, theme);
+	m_ComboAlpha = GetControlAlpha(L"ComboAlpha", 255, theme);
+	m_ButtonText= GetControlColor(L"ButtonText", 0, theme);
+	m_EditText  = GetControlColor(L"EditText", 0, theme);
+	m_EditBg    = GetControlColor(L"EditBg", 255, theme);
+	m_EditAlpha = GetControlAlpha(L"EditAlpha", 255, theme);
+	m_CharacterPosition = GetCharacterPosition(theme);
+	m_Glass = GetControlColor(L"Glass", 255, theme);
+	m_GlassAlpha = GetControlAlpha(L"GlassAlpha", 128, theme);
+}
+
+COLORREF CMainDialog::GetControlColor(CString name, BYTE defaultColor, CString theme)
+{
+	COLORREF reverseColor;
+
+	reverseColor = GetPrivateProfileInt(L"Color", name, RGB(defaultColor, defaultColor, defaultColor), theme);
+	
+	COLORREF color = RGB(GetBValue(reverseColor), GetGValue(reverseColor), GetRValue(reverseColor));
+
+	return color;
+}
+
+BYTE CMainDialog::GetControlAlpha(CString name, BYTE defaultAlpha, CString theme)
+{
+	BYTE alpha = GetPrivateProfileInt(L"Alpha", name, defaultAlpha, theme);
+	
+	return alpha;
+}
+
+BYTE CMainDialog::GetCharacterPosition(CString theme)
+{
+	BYTE position = GetPrivateProfileInt(L"Character", L"Position", 0, theme);
+
+	return position;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -438,10 +458,14 @@ void CMainDialog::SetZoomType(DWORD zoomType)
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef OPTION_TASK_TRAY
+
+UINT CMainDialog::wmTaskbarCreated = ::RegisterWindowMessage(L"TaskbarCreated");
+
 // Add TaskTray
 BOOL CMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata = {0};
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -455,7 +479,7 @@ BOOL CMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
 
 		::Shell_NotifyIcon(NIM_SETVERSION, &nidata);
 		int waitCount = 10;
-		if(m_FlagStartup)
+		if(m_bStartup)
 		{
 			waitCount = 20;
 		}
@@ -474,7 +498,7 @@ BOOL CMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
 // Update TaskTray Icon
 BOOL CMainDialog::ModifyTaskTrayIcon(UINT id, HICON icon)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -497,7 +521,7 @@ BOOL CMainDialog::ModifyTaskTrayIcon(UINT id, HICON icon)
 // Update TaskTray Tips
 BOOL CMainDialog::ModifyTaskTrayTip(UINT id, CString tip)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -522,7 +546,7 @@ BOOL CMainDialog::ModifyTaskTrayTip(UINT id, CString tip)
 // Update TaskTray
 BOOL CMainDialog::ModifyTaskTray(UINT id, HICON icon, CString tip)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -547,7 +571,7 @@ BOOL CMainDialog::ModifyTaskTray(UINT id, HICON icon, CString tip)
 // Show Balloon
 BOOL CMainDialog::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, CString info)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -574,7 +598,7 @@ BOOL CMainDialog::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, CStrin
 // Remove TaskTray
 BOOL CMainDialog::RemoveTaskTray(UINT id)
 {
-	if(m_FlagResident)
+	if(m_bResident)
 	{
 		NOTIFYICONDATA nidata = { 0 };
 		nidata.cbSize = sizeof(NOTIFYICONDATA);
@@ -592,3 +616,5 @@ BOOL CMainDialog::RemoveTaskTray(UINT id)
 	}
 	return FALSE;
 }
+
+#endif

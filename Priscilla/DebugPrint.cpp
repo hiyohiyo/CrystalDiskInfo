@@ -5,9 +5,8 @@
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+#include "../stdafx.h"
 #include <io.h>
-
 
 static const DWORD DEBUG_MODE_NONE    = 0;
 static const DWORD DEBUG_MODE_LOG     = 1;
@@ -30,14 +29,14 @@ void SetDebugMode(DWORD mode)
 void DebugPrint(CString cstr)
 {
 	static int flag = TRUE;
-	static TCHAR file[MAX_PATH];
+	static TCHAR file[MAX_PATH] = L"";
 	static DWORD first = GetTickCount();
 	CString output;
 
-	output.Format(_T("%08d "), GetTickCount() - first);
+	output.Format(L"%08d ", GetTickCount() - first);
 	output += cstr;
-	output.Append(_T("\n"));
-	output.Replace(_T("\r"), _T(""));
+	output.Append(L"\n");
+	output.Replace(L"\r", L"");
 
 	if(flag)
 	{
@@ -46,7 +45,7 @@ void DebugPrint(CString cstr)
 		if((ptrEnd = _tcsrchr(file, '.')) != NULL )
 		{
 			*ptrEnd = '\0';
-			_tcscat_s(file, MAX_PATH, _T(".log"));
+			_tcscat_s(file, MAX_PATH, L".log");
 		}
 		DeleteFile(file);
 		flag = FALSE;
@@ -58,10 +57,10 @@ void DebugPrint(CString cstr)
 	}
 
 	FILE *fp;
-	_tfopen_s(&fp, file, _T("ac"));
+	_tfopen_s(&fp, file, L"ac");
 	if (fp != NULL)
 	{
-		_ftprintf(fp, _T("%s"), (LPCTSTR)output);
+		_ftprintf(fp, L"%s", (LPCTSTR)output);
 		fflush(fp);
 		fclose(fp);
 	}

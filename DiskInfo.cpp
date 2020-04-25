@@ -57,7 +57,7 @@ BOOL CDiskInfoApp::InitInstance()
 {
 	BOOL flagEarthlight = FALSE;
 	BOOL flagStartupExit = FALSE;
-	m_FlagCopyExit = FALSE;
+	m_bCopyExit = FALSE;
 
 	int defaultDisk = -1;
 	HANDLE hMutex = NULL;
@@ -145,7 +145,7 @@ BOOL CDiskInfoApp::InitInstance()
 		if(cstr.CompareNoCase(_T("/CopyExit")) == 0)
 		{
 			m_SaveAsText = m_Txt;
-			m_FlagCopyExit = TRUE;
+			m_bCopyExit = TRUE;
 		}
 
 	}
@@ -204,8 +204,8 @@ BOOL CDiskInfoApp::InitInstance()
 	m_ThemeIndex = MENU_THEME_INDEX;
 	m_LangIndex = MENU_LANG_INDEX;
 
-	DefaultTheme.Format(_T("%s\\%s"), tmp, DEFAULT_THEME);
-	DefaultLanguage.Format(_T("%s\\%s"), tmp, DEFAULT_LANGUAGE);
+	DefaultTheme.Format(_T("%s\\%s"), m_ThemeDir, DEFAULT_THEME);
+	DefaultLanguage.Format(_T("%s\\%s.lang"), m_LangDir, DEFAULT_LANGUAGE);
 
 	OSVERSIONINFOEX osvi;
 	BOOL bosVersionInfoEx;

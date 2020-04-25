@@ -145,22 +145,22 @@ void CDiskInfoDlg::CreateExchangeInfo()
 void CDiskInfoDlg::OnHideSmartInfo()
 {
 	CMenu *menu = GetMenu();		
-	if(m_FlagHideSmartInfo)
+	if(m_bHideSmartInfo)
 	{
 		m_SizeX = SIZE_SMART_X;
 		m_SizeY = SIZE_SMART_Y;
-		SetClientRect((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
+		SetClientSize((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_UNCHECKED);
-		m_FlagHideSmartInfo = FALSE;
+		m_bHideSmartInfo = FALSE;
 		WritePrivateProfileStringW(_T("Setting"), _T("HideSmartInfo"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_SizeX = SIZE_X;
 		m_SizeY = SIZE_Y;
-		SetClientRect((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
+		SetClientSize((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_CHECKED);
-		m_FlagHideSmartInfo = TRUE;
+		m_bHideSmartInfo = TRUE;
 		WritePrivateProfileStringW(_T("Setting"), _T("HideSmartInfo"), _T("1"), m_Ini);
 	}
 
@@ -178,13 +178,13 @@ void CDiskInfoDlg::OnGreenMode()
 	if (menu->GetMenuState(ID_GREEN_MODE, MF_BYCOMMAND) & MFS_CHECKED)
 	{
 		menu->CheckMenuItem(ID_GREEN_MODE, MF_UNCHECKED);
-		m_FlagGreenMode = FALSE;
+		m_bGreenMode = FALSE;
 		WritePrivateProfileStringW(_T("Setting"), _T("GreenMode"), _T("0"), m_Ini);
 	}
 	else
 	{
 		menu->CheckMenuItem(ID_GREEN_MODE, MF_CHECKED);
-		m_FlagGreenMode = TRUE;
+		m_bGreenMode = TRUE;
 		WritePrivateProfileStringW(_T("Setting"), _T("GreenMode"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
@@ -200,12 +200,12 @@ void CDiskInfoDlg::CheckHideSerialNumber()
 	CMenu *menu = GetMenu();
 	if(GetPrivateProfileInt(_T("Setting"), _T("HideSerialNumber"), 0, m_Ini))
 	{
-		m_FlagHideSerialNumber = TRUE;
+		m_bHideSerialNumber = TRUE;
 		menu->CheckMenuItem(ID_HIDE_SERIAL_NUMBER, MF_CHECKED);
 	}
 	else
 	{
-		m_FlagHideSerialNumber = FALSE;
+		m_bHideSerialNumber = FALSE;
 		menu->CheckMenuItem(ID_HIDE_SERIAL_NUMBER, MF_UNCHECKED);
 	}
 	SetMenu(menu);
@@ -215,15 +215,15 @@ void CDiskInfoDlg::CheckHideSerialNumber()
 void CDiskInfoDlg::OnHideSerialNumber()
 {
 	CMenu *menu = GetMenu();		
-	if(m_FlagHideSerialNumber)
+	if(m_bHideSerialNumber)
 	{
-		m_FlagHideSerialNumber = FALSE;
+		m_bHideSerialNumber = FALSE;
 		menu->CheckMenuItem(ID_HIDE_SERIAL_NUMBER, MF_UNCHECKED);
 		WritePrivateProfileStringW(_T("Setting"), _T("HideSerialNumber"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagHideSerialNumber = TRUE;
+		m_bHideSerialNumber = TRUE;
 		menu->CheckMenuItem(ID_HIDE_SERIAL_NUMBER, MF_CHECKED);
 		WritePrivateProfileStringW(_T("Setting"), _T("HideSerialNumber"), _T("1"), m_Ini);
 	}
@@ -267,7 +267,7 @@ void CDiskInfoDlg::OnRescan()
 	CWaitCursor wait;
 	BOOL flagChangeDisk = FALSE;
 
-	InitAta(TRUE, m_FlagAdvancedDiskSearch, &flagChangeDisk, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
+	InitAta(TRUE, m_bAdvancedDiskSearch, &flagChangeDisk, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);
 
 	if(flagChangeDisk)
 	{
@@ -281,7 +281,7 @@ void CDiskInfoDlg::OnRescan()
 		Refresh(TRUE);
 	}
 
-	if(m_FlagResident && flagChangeDisk)
+	if(m_bResident && flagChangeDisk)
 	{
 		for(int i = 0; i < CAtaSmart::MAX_DISK; i++)
 		{
@@ -498,10 +498,10 @@ void CDiskInfoDlg::OnAdvancedDiskSearch()
 	CWaitCursor wait;
 	BOOL flagChangeDisk = FALSE;
 
-	if(m_FlagAdvancedDiskSearch)
+	if(m_bAdvancedDiskSearch)
 	{
-		m_FlagAdvancedDiskSearch = FALSE;
-		InitAta(TRUE, m_FlagAdvancedDiskSearch, &flagChangeDisk, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
+		m_bAdvancedDiskSearch = FALSE;
+		InitAta(TRUE, m_bAdvancedDiskSearch, &flagChangeDisk, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);
 
 		if(flagChangeDisk)
 		{
@@ -517,8 +517,8 @@ void CDiskInfoDlg::OnAdvancedDiskSearch()
 	}
 	else
 	{
-		m_FlagAdvancedDiskSearch = TRUE;
-		InitAta(TRUE, m_FlagAdvancedDiskSearch, &flagChangeDisk, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
+		m_bAdvancedDiskSearch = TRUE;
+		InitAta(TRUE, m_bAdvancedDiskSearch, &flagChangeDisk, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);
 
 		if(flagChangeDisk)
 		{
@@ -533,7 +533,7 @@ void CDiskInfoDlg::OnAdvancedDiskSearch()
 		DrawMenuBar();
 	}
 
-	if(m_FlagResident && flagChangeDisk)
+	if(m_bResident && flagChangeDisk)
 	{
 		for(int i = 0; i < CAtaSmart::MAX_DISK; i++)
 		{
@@ -548,10 +548,10 @@ void CDiskInfoDlg::OnWorkaroundHD204UI()
 	CWaitCursor wait;
 	BOOL flagChangeDisk = FALSE;
 
-	if(m_FlagWorkaroundHD204UI)
+	if(m_bWorkaroundHD204UI)
 	{
-		m_FlagWorkaroundHD204UI = FALSE;
-		InitAta(TRUE, m_FlagAdvancedDiskSearch, &flagChangeDisk, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
+		m_bWorkaroundHD204UI = FALSE;
+		InitAta(TRUE, m_bAdvancedDiskSearch, &flagChangeDisk, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);
 
 		if(flagChangeDisk)
 		{
@@ -567,8 +567,8 @@ void CDiskInfoDlg::OnWorkaroundHD204UI()
 	}
 	else
 	{
-		m_FlagWorkaroundHD204UI = TRUE;
-		InitAta(TRUE, m_FlagAdvancedDiskSearch, &flagChangeDisk, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
+		m_bWorkaroundHD204UI = TRUE;
+		InitAta(TRUE, m_bAdvancedDiskSearch, &flagChangeDisk, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);
 
 		if(flagChangeDisk)
 		{
@@ -583,7 +583,7 @@ void CDiskInfoDlg::OnWorkaroundHD204UI()
 		DrawMenuBar();
 	}
 
-	if(m_FlagResident && flagChangeDisk)
+	if(m_bResident && flagChangeDisk)
 	{
 		for(int i = 0; i < CAtaSmart::MAX_DISK; i++)
 		{
@@ -598,9 +598,9 @@ void CDiskInfoDlg::OnWorkaroundIE8MODE()
 	CWaitCursor wait;
 	BOOL flagChangeDisk = FALSE;
 
-	if(m_FlagWorkaroundIE8MODE)
+	if(m_bWorkaroundIE8MODE)
 	{
-		m_FlagWorkaroundIE8MODE = FALSE;
+		m_bWorkaroundIE8MODE = FALSE;
 		WritePrivateProfileString(_T("Workaround"), _T("IE8MODE"), _T("0"), m_Ini);
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_IE8MODE, MF_UNCHECKED);
@@ -609,7 +609,7 @@ void CDiskInfoDlg::OnWorkaroundIE8MODE()
 	}
 	else
 	{
-		m_FlagWorkaroundIE8MODE = TRUE;
+		m_bWorkaroundIE8MODE = TRUE;
 		WritePrivateProfileString(_T("Workaround"), _T("IE8MODE"), _T("1"), m_Ini);
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_IE8MODE, MF_CHECKED);
@@ -623,10 +623,10 @@ void CDiskInfoDlg::OnWorkaroundAdataSsd()
 	CWaitCursor wait;
 	BOOL flagChangeDisk = FALSE;
 
-	if(m_FlagWorkaroundAdataSsd)
+	if(m_bWorkaroundAdataSsd)
 	{
-		m_FlagWorkaroundAdataSsd = FALSE;
-		InitAta(TRUE, m_FlagAdvancedDiskSearch, &flagChangeDisk, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
+		m_bWorkaroundAdataSsd = FALSE;
+		InitAta(TRUE, m_bAdvancedDiskSearch, &flagChangeDisk, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);
 
 		if(flagChangeDisk)
 		{
@@ -642,8 +642,8 @@ void CDiskInfoDlg::OnWorkaroundAdataSsd()
 	}
 	else
 	{
-		m_FlagWorkaroundAdataSsd = TRUE;
-		InitAta(TRUE, m_FlagAdvancedDiskSearch, &flagChangeDisk, m_FlagWorkaroundHD204UI, m_FlagWorkaroundAdataSsd);
+		m_bWorkaroundAdataSsd = TRUE;
+		InitAta(TRUE, m_bAdvancedDiskSearch, &flagChangeDisk, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);
 
 		if(flagChangeDisk)
 		{
@@ -658,7 +658,7 @@ void CDiskInfoDlg::OnWorkaroundAdataSsd()
 		DrawMenuBar();
 	}
 
-	if(m_FlagResident && flagChangeDisk)
+	if(m_bResident && flagChangeDisk)
 	{
 		for(int i = 0; i < CAtaSmart::MAX_DISK; i++)
 		{
@@ -673,9 +673,9 @@ void CDiskInfoDlg::OnWorkaroundIgnoreC4()
 	CWaitCursor wait;
 	BOOL flagChangeDisk = FALSE;
 
-	if (m_FlagWorkaroundIgnoreC4)
+	if (m_bWorkaroundIgnoreC4)
 	{
-		m_FlagWorkaroundIgnoreC4 = FALSE;
+		m_bWorkaroundIgnoreC4 = FALSE;
 		WritePrivateProfileString(_T("Workaround"), _T("IgnoreC4"), _T("0"), m_Ini);
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_IGNORE_C4, MF_UNCHECKED);
@@ -684,7 +684,7 @@ void CDiskInfoDlg::OnWorkaroundIgnoreC4()
 	}
 	else
 	{
-		m_FlagWorkaroundIgnoreC4 = TRUE;
+		m_bWorkaroundIgnoreC4 = TRUE;
 		WritePrivateProfileString(_T("Workaround"), _T("IgnoreC4"), _T("1"), m_Ini);
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_IGNORE_C4, MF_CHECKED);
@@ -696,16 +696,16 @@ void CDiskInfoDlg::OnWorkaroundIgnoreC4()
 void CDiskInfoDlg::OnAtaPassThroughSmart()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagAtaPassThroughSmart)
+	if(m_bAtaPassThroughSmart)
 	{
-		m_FlagAtaPassThroughSmart = FALSE;
+		m_bAtaPassThroughSmart = FALSE;
 		m_Ata.SetAtaPassThroughSmart(FALSE);
 		menu->CheckMenuItem(ID_ATA_PASS_THROUGH_SMART, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AtaPassThroughSmart"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagAtaPassThroughSmart = TRUE;
+		m_bAtaPassThroughSmart = TRUE;
 		m_Ata.SetAtaPassThroughSmart(TRUE);
 		menu->CheckMenuItem(ID_ATA_PASS_THROUGH_SMART, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AtaPassThroughSmart"), _T("1"), m_Ini);
@@ -717,24 +717,24 @@ void CDiskInfoDlg::OnAtaPassThroughSmart()
 void CDiskInfoDlg::OnEventLog()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagEventLog)
+	if(m_bEventLog)
 	{
-		m_FlagEventLog = FALSE;
+		m_bEventLog = FALSE;
 		menu->CheckMenuItem(ID_EVENT_LOG, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("EventLog"), _T("0"), m_Ini);
 
-	//	if(! m_FlagUseEventCreate)
+	//	if(! m_bUseEventCreate)
 	//	{
 			UninstallEventSource();
 	//	}
 	}
 	else
 	{
-		m_FlagEventLog = TRUE;
+		m_bEventLog = TRUE;
 		menu->CheckMenuItem(ID_EVENT_LOG, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("EventLog"), _T("1"), m_Ini);
 
-	//	if(m_FlagUseEventCreate)
+	//	if(m_bUseEventCreate)
 	//	{
 			InstallEventSource();
 	//	}
@@ -746,15 +746,15 @@ void CDiskInfoDlg::OnEventLog()
 void CDiskInfoDlg::OnAlertMail()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagAlertMail)
+	if(m_bAlertMail)
 	{
-		m_FlagAlertMail = FALSE;
+		m_bAlertMail = FALSE;
 		menu->CheckMenuItem(ID_ALERT_MAIL, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AlertMail"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagAlertMail = TRUE;
+		m_bAlertMail = TRUE;
 		menu->CheckMenuItem(ID_ALERT_MAIL, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AlertMail"), _T("1"), m_Ini);
 	}
@@ -765,16 +765,16 @@ void CDiskInfoDlg::OnAlertMail()
 void CDiskInfoDlg::OnAlertSound()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagAlertSound)
+	if(m_bAlertSound)
 	{
-		m_FlagAlertSound = FALSE;
+		m_bAlertSound = FALSE;
 		menu->CheckMenuItem(ID_ALERT_SOUND, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AlertSound"), _T("0"), m_Ini);
 		AlertSound(0, AS_SET_SOUND_ID);
 	}
 	else
 	{
-		m_FlagAlertSound = TRUE;
+		m_bAlertSound = TRUE;
 		menu->CheckMenuItem(ID_ALERT_SOUND, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AlertSound"), _T("1"), m_Ini);
 		AlertSound(0, AS_SET_SOUND_ID);
@@ -786,15 +786,15 @@ void CDiskInfoDlg::OnAlertSound()
 void CDiskInfoDlg::OnHideNoSmartDisk()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagHideNoSmartDisk)
+	if(m_bHideNoSmartDisk)
 	{
-		m_FlagHideNoSmartDisk = FALSE;
+		m_bHideNoSmartDisk = FALSE;
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("HideNoSmartDisk"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagHideNoSmartDisk = TRUE;
+		m_bHideNoSmartDisk = TRUE;
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("HideNoSmartDisk"), _T("1"), m_Ini);
 	}
@@ -807,16 +807,16 @@ void CDiskInfoDlg::OnHideNoSmartDisk()
 void CDiskInfoDlg::OnGadgetSupport()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagGadget)
+	if(m_bGadget)
 	{
-		m_FlagGadget = FALSE;
+		m_bGadget = FALSE;
 		menu->CheckMenuItem(ID_GADGET_SUPPORT, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("Gadget"), _T("0"), m_Ini);
 		DeleteShareInfo();
 	}
 	else
 	{
-		m_FlagGadget = TRUE;
+		m_bGadget = TRUE;
 		menu->CheckMenuItem(ID_GADGET_SUPPORT, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("Gadget"), _T("1"), m_Ini);
 		UpdateShareInfo();
@@ -837,7 +837,7 @@ void CDiskInfoDlg::CheckStartup()
 {
 	if(GetPrivateProfileInt(_T("Setting"), _T("Startup"), 0, m_Ini) == 1)
 	{
-		m_FlagStartup = TRUE;
+		m_bStartup = TRUE;
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_STARTUP, MF_CHECKED);
 		SetMenu(menu);
@@ -852,7 +852,7 @@ void CDiskInfoDlg::CheckStartup()
 	}
 	else
 	{
-		m_FlagStartup = FALSE;
+		m_bStartup = FALSE;
 		WritePrivateProfileString(_T("Setting"), _T("StartupFixed"), _T("1"), m_Ini);
 	}
 }
@@ -860,17 +860,17 @@ void CDiskInfoDlg::CheckStartup()
 void CDiskInfoDlg::OnStartup()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagStartup)
+	if(m_bStartup)
 	{
 		UnregisterStartup();
-		m_FlagStartup = FALSE;
+		m_bStartup = FALSE;
 		menu->CheckMenuItem(ID_STARTUP, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("Startup"), _T("0"), m_Ini);
 	}
 	else
 	{
 		RegisterStartup();
-		m_FlagStartup = TRUE;
+		m_bStartup = TRUE;
 		menu->CheckMenuItem(ID_STARTUP, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("Startup"), _T("1"), m_Ini);
 	}
@@ -1028,7 +1028,7 @@ void CDiskInfoDlg::OnCelsius()
 	menu->CheckMenuRadioItem(ID_CELSIUS, ID_FAHRENHEIT, ID_CELSIUS, MF_BYCOMMAND);
 	SetMenu(menu);
 	DrawMenuBar();
-	m_FlagFahrenheit = FALSE;
+	m_bFahrenheit = FALSE;
 	WritePrivateProfileString(_T("Setting"), _T("Temperature"), _T("0"), m_Ini);
 
 	SelectDrive(m_SelectDisk);
@@ -1040,7 +1040,7 @@ void CDiskInfoDlg::OnFahrenheit()
 	menu->CheckMenuRadioItem(ID_CELSIUS, ID_FAHRENHEIT, ID_FAHRENHEIT, MF_BYCOMMAND);
 	SetMenu(menu);
 	DrawMenuBar();
-	m_FlagFahrenheit = TRUE;
+	m_bFahrenheit = TRUE;
 	WritePrivateProfileString(_T("Setting"), _T("Temperature"), _T("1"), m_Ini);
 
 	SelectDrive(m_SelectDisk);
@@ -1049,15 +1049,15 @@ void CDiskInfoDlg::OnFahrenheit()
 void CDiskInfoDlg::OnAutoAamApm()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagAutoAamApm)
+	if(m_bAutoAamApm)
 	{
-		m_FlagAutoAamApm = FALSE;
+		m_bAutoAamApm = FALSE;
 		menu->CheckMenuItem(ID_AUTO_AAM_APM, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AutoAamApm"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagAutoAamApm = TRUE;
+		m_bAutoAamApm = TRUE;
 		menu->CheckMenuItem(ID_AUTO_AAM_APM, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AutoAamApm"), _T("1"), m_Ini);
 	}
@@ -1350,15 +1350,15 @@ void CDiskInfoDlg::OnUsbDisableAll()
 void CDiskInfoDlg::OnDumpIdentifyDevice()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagDumpIdentifyDevice)
+	if(m_bDumpIdentifyDevice)
 	{
-		m_FlagDumpIdentifyDevice = FALSE;
+		m_bDumpIdentifyDevice = FALSE;
 		menu->CheckMenuItem(ID_DUMP_IDENTIFY_DEVICE, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("DumpIdentifyDevice"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagDumpIdentifyDevice = TRUE;
+		m_bDumpIdentifyDevice = TRUE;
 		menu->CheckMenuItem(ID_DUMP_IDENTIFY_DEVICE, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("DumpIdentifyDevice"), _T("1"), m_Ini);
 	}
@@ -1369,15 +1369,15 @@ void CDiskInfoDlg::OnDumpIdentifyDevice()
 void CDiskInfoDlg::OnDumpSmartReadData()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagDumpSmartReadData)
+	if(m_bDumpSmartReadData)
 	{
-		m_FlagDumpSmartReadData = FALSE;
+		m_bDumpSmartReadData = FALSE;
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_DATA, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("DumpSmartReadData"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagDumpSmartReadData = TRUE;
+		m_bDumpSmartReadData = TRUE;
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_DATA, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("DumpSmartReadData"), _T("1"), m_Ini);
 	}
@@ -1388,15 +1388,15 @@ void CDiskInfoDlg::OnDumpSmartReadData()
 void CDiskInfoDlg::OnDumpSmartReadThreshold()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagDumpSmartReadThreshold)
+	if(m_bDumpSmartReadThreshold)
 	{
-		m_FlagDumpSmartReadThreshold = FALSE;
+		m_bDumpSmartReadThreshold = FALSE;
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_THRESHOLD, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("DumpSmartReadThreshold"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagDumpSmartReadThreshold = TRUE;
+		m_bDumpSmartReadThreshold = TRUE;
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_THRESHOLD, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("DumpSmartReadThreshold"), _T("1"), m_Ini);
 	}
@@ -1408,15 +1408,15 @@ void CDiskInfoDlg::OnDumpSmartReadThreshold()
 void CDiskInfoDlg::OnAsciiView()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagAsciiView)
+	if(m_bAsciiView)
 	{
-		m_FlagAsciiView = FALSE;
+		m_bAsciiView = FALSE;
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AsciiView"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagAsciiView = TRUE;
+		m_bAsciiView = TRUE;
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("AsciiView"), _T("1"), m_Ini);
 	}
@@ -1427,15 +1427,15 @@ void CDiskInfoDlg::OnAsciiView()
 void CDiskInfoDlg::OnSmartEnglish()
 {
 	CMenu *menu = GetMenu();
-	if(m_FlagSmartEnglish)
+	if(m_bSmartEnglish)
 	{
-		m_FlagSmartEnglish = FALSE;
+		m_bSmartEnglish = FALSE;
 		menu->CheckMenuItem(ID_SMART_ENGLISH, MF_UNCHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("SmartEnglish"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_FlagSmartEnglish = TRUE;
+		m_bSmartEnglish = TRUE;
 		menu->CheckMenuItem(ID_SMART_ENGLISH, MF_CHECKED);
 		WritePrivateProfileString(_T("Setting"), _T("SmartEnglish"), _T("1"), m_Ini);
 	}
@@ -1451,13 +1451,10 @@ void CDiskInfoDlg::OnFontSetting()
 	if(fontSelection.DoModal() == IDOK)
 	{
 		m_FontFace = fontSelection.GetFontFace();
-		m_FontType = fontSelection.GetFontType();
 		SetControlFont();
 		Invalidate();
 		CString cstr;
-		cstr.Format(L"%d", m_FontType);
 		WritePrivateProfileString(_T("Setting"), _T("FontFace"), _T("\"") + m_FontFace + _T("\""), m_Ini);
-		WritePrivateProfileString(_T("Setting"), _T("FontType"), cstr, m_Ini);
 	}
 }
 
@@ -1468,7 +1465,7 @@ void CDiskInfoDlg::OnResidentHide()
 	menu->CheckMenuRadioItem(ID_RESIDENT_HIDE, ID_RESIDENT_MINIMIZE, ID_RESIDENT_HIDE, MF_BYCOMMAND);
 	SetMenu(menu);
 	DrawMenuBar();
-	m_FlagResidentMinimize = FALSE;
+	m_bResidentMinimize = FALSE;
 	WritePrivateProfileString(_T("Setting"), _T("ResidentMinimize"), _T("0"), m_Ini);
 }
 
@@ -1478,7 +1475,7 @@ void CDiskInfoDlg::OnResidentMinimize()
 	menu->CheckMenuRadioItem(ID_RESIDENT_HIDE, ID_RESIDENT_MINIMIZE, ID_RESIDENT_MINIMIZE, MF_BYCOMMAND);
 	SetMenu(menu);
 	DrawMenuBar();
-	m_FlagResidentMinimize = TRUE;
+	m_bResidentMinimize = TRUE;
 	WritePrivateProfileString(_T("Setting"), _T("ResidentMinimize"), _T("1"), m_Ini);
 }
 

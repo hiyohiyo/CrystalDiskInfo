@@ -35,17 +35,11 @@
 #define OPTION_DIALOG				_T("Option.html")
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
-		#define DEFAULT_THEME		THEME_DIR _T("KureiKei")
-		#define PROJECT_COPYRIGHT   L"KureiKeiCopyright"
-	#else
-		#define DEFAULT_THEME		THEME_DIR _T("Shizuku")
 		#define PROJECT_COPYRIGHT   L"ShizukuCopyright"
-	#endif
+#elif KUREI_KEI_SUPPORT
+		#define PROJECT_COPYRIGHT   L"KureiKeiCopyright"
 #else
-#define DEFAULT_THEME				THEME_DIR _T("default")
 #endif
-#define DEFAULT_LANGUAGE			LANGUAGE_DIR _T("English.lang")
 
 class CDiskInfoApp : public CWinApp
 {
@@ -66,7 +60,7 @@ public:
 	CString m_Ini;
 	CString m_Txt;
 	CString m_SaveAsText;
-	BOOL m_FlagCopyExit;
+	BOOL m_bCopyExit;
 
 	CString m_ThemeDir;
 	CString m_LangDir;

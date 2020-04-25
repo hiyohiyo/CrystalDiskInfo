@@ -186,7 +186,7 @@ void COptionDlg::InitDialogComplete()
 	DebugPrint(_T("InitDialogComplete"));
 
 	CString cstr;
-	m_FlagShowWindow = TRUE;
+	m_bShowWindow = TRUE;
 
 	m_LabelThreshold = i18n(_T("Dialog"), _T("LIST_THRESHOLD"));
 	m_LabelLineColor = i18n(_T("Customize"), _T("LINE_COLOR"));

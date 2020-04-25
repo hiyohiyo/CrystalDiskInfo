@@ -19,6 +19,9 @@
     <Filter Include="Library Files">
       <UniqueIdentifier>{ccf9d115-ef58-4a15-a3f1-d031a8749b44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Prscilla">
+      <UniqueIdentifier>{f4e869f9-d8e3-4338-9ff0-8fc30cd9ea8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AboutDlg.cpp">
@@ -60,9 +63,6 @@
     <ClCompile Include="AtaSmart.cpp">
       <Filter>Library Files</Filter>
     </ClCompile>
-    <ClCompile Include="DebugPrint.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
     <ClCompile Include="DHtmlDialogEx.cpp">
       <Filter>Library Files</Filter>
     </ClCompile>
@@ -72,19 +72,10 @@
     <ClCompile Include="EventLog.cpp">
       <Filter>Library Files</Filter>
     </ClCompile>
-    <ClCompile Include="GetFileVersion.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GetOsInfo.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
     <ClCompile Include="IsCurrentUserLocalAdministrator.cpp">
       <Filter>Library Files</Filter>
     </ClCompile>
     <ClCompile Include="ListCtrlEx.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FontComboBox.cpp">
       <Filter>Library Files</Filter>
     </ClCompile>
     <ClCompile Include="FontSelection.cpp">
@@ -92,12 +83,6 @@
     </ClCompile>
     <ClCompile Include="SoundSettingDlg.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainDialog.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DialogCx.cpp">
-      <Filter>Library Files</Filter>
     </ClCompile>
     <ClCompile Include="ButtonCx.cpp">
       <Filter>Library Files</Filter>
@@ -119,6 +104,42 @@
     </ClCompile>
     <ClCompile Include="TemperatureDlg.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\ButtonFx.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\ComboBoxFx.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\DebugPrint.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\DialogFx.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\EditFx.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\FontComboBox.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\GetFileVersion.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\GetOsInfo.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\MainDialog.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\StaticFx.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\ListCtrlFx.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\HeaderCtrlFx.cpp">
+      <Filter>Prscilla</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +167,6 @@
     <ClInclude Include="AtaSmart.h">
       <Filter>Library Files</Filter>
     </ClInclude>
-    <ClInclude Include="DebugPrint.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
     <ClInclude Include="DHtmlDialogEx.h">
       <Filter>Library Files</Filter>
     </ClInclude>
@@ -161,12 +179,6 @@
     <ClInclude Include="EventLog.h">
       <Filter>Library Files</Filter>
     </ClInclude>
-    <ClInclude Include="GetFileVersion.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GetOsInfo.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
     <ClInclude Include="IsCurrentUserLocalAdministrator.h">
       <Filter>Library Files</Filter>
     </ClInclude>
@@ -174,9 +186,6 @@
       <Filter>Library Files</Filter>
     </ClInclude>
     <ClInclude Include="SPTIUtil.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FontComboBox.h">
       <Filter>Library Files</Filter>
     </ClInclude>
     <ClInclude Include="FontSelection.h">
@@ -190,12 +199,6 @@
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainDialog.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DialogCx.h">
-      <Filter>Library Files</Filter>
     </ClInclude>
     <ClInclude Include="ButtonCx.h">
       <Filter>Library Files</Filter>
@@ -223,6 +226,48 @@
     </ClInclude>
     <ClInclude Include="TemperatureDlg.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonFx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\ButtonFx.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\ComboBoxFx.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\CommonFx.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\DebugPrint.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\DialogFx.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\EditFx.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\FontComboBox.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\GetFileVersion.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\GetOsInfo.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\MainDialog.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\StaticFx.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\ListCtrlFx.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\HeaderCtrlFx.h">
+      <Filter>Prscilla</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,13 +9,13 @@
 
 #pragma once
 #include "afxwin.h"
-#include "DialogCx.h"
+#include "DialogFx.h"
 
 #include "StaticCx.h"
 #include "ButtonCx.h"
 #include "ComboBoxCx.h"
 
-class CSettingDlg : public CDialogCx
+class CSettingDlg : public CDialogFx
 {
 	DECLARE_DYNCREATE(CSettingDlg)
 

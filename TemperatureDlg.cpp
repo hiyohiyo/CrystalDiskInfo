@@ -15,18 +15,20 @@ static CDiskInfoDlg* p;
 IMPLEMENT_DYNAMIC(CTemperatureDlg, CDialog)
 
 CTemperatureDlg::CTemperatureDlg(CWnd* pParent /*=NULL*/)
-	: CDialogCx(CTemperatureDlg::IDD, pParent)
+	: CDialogFx(CTemperatureDlg::IDD, pParent)
 {
-	p = (CDiskInfoDlg*)pParent;
-	_tcscpy_s(m_Ini, MAX_PATH, ((CDiskInfoApp*)AfxGetApp())->m_Ini);
+	CMainDialog* p = (CMainDialog*)pParent;
 
-	m_CurrentLangPath = ((CMainDialog*)pParent)->m_CurrentLangPath;
-	m_DefaultLangPath = ((CMainDialog*)pParent)->m_DefaultLangPath;
-	m_ZoomType = ((CMainDialog*)pParent)->GetZoomType();
-	m_FontFace = ((CMainDialog*)pParent)->m_FontFace;
-	m_CxThemeDir = ((CDiskInfoApp*)AfxGetApp())->m_ThemeDir;
-	m_CxCurrentTheme = ((CMainDialog*)pParent)->m_CurrentTheme;
-	m_CxDefaultTheme = ((CMainDialog*)pParent)->m_DefaultTheme;
+	m_ZoomType = p->GetZoomType();
+	m_FontScale = p->GetFontScale();
+	m_FontRatio = p->GetFontRatio();
+	m_FontFace = p->GetFontFace();
+	m_CurrentLangPath = p->GetCurrentLangPath();
+	m_DefaultLangPath = p->GetDefaultLangPath();
+	m_ThemeDir = p->GetThemeDir();
+	m_CurrentTheme = p->GetCurrentTheme();
+	m_DefaultTheme = p->GetDefaultTheme();
+	m_Ini = p->GetIniPath();
 }
 
 CTemperatureDlg::~CTemperatureDlg()
@@ -35,7 +37,7 @@ CTemperatureDlg::~CTemperatureDlg()
 
 void CTemperatureDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogCx::DoDataExchange(pDX);
+	CDialogFx::DoDataExchange(pDX);
 
 	DDX_Text(pDX, IDC_VALUE_TEMPERATURE, m_ValueTemperature);
 	DDX_Text(pDX, IDC_VALUE_TEMPERATURE_F, m_ValueTemperatureF);
@@ -51,7 +53,7 @@ void CTemperatureDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CTemperatureDlg, CDialogCx)
+BEGIN_MESSAGE_MAP(CTemperatureDlg, CDialogFx)
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_APPLY, &CTemperatureDlg::OnBnClickedApply)
 	ON_BN_CLICKED(IDC_DEFAULT, &CTemperatureDlg::OnBnClickedDefault)
@@ -60,13 +62,13 @@ END_MESSAGE_MAP()
 
 BOOL CTemperatureDlg::OnInitDialog()
 {
-	CDialogCx::OnInitDialog();
+	CDialogFx::OnInitDialog();
 
 	SetWindowText(i18n(_T("Alarm"), _T("ALARM_TEMPERATURE")));
 
 	m_CtrlScrollbarTemperature.SetScrollRange(20, 80);
 
-	m_FlagShowWindow = TRUE;
+	m_bShowWindow = TRUE;
 
 	InitLang();
 	InitSelectDisk();
@@ -93,7 +95,7 @@ BOOL CTemperatureDlg::OnInitDialog()
 void CTemperatureDlg::UpdateDialogSize()
 {
 	ChangeZoomType(m_ZoomType);
-	SetClientRect((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
+	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
 
 	UpdateBackground();
 
@@ -101,23 +103,21 @@ void CTemperatureDlg::UpdateDialogSize()
 //	m_CtrlLabelTemperature.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 	m_CtrlValueTemperature.SetFontEx(m_FontFace, 12, m_ZoomRatio);
    	m_CtrlValueTemperatureF.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-//	m_CtrlLabelTemperature.InitControl(8, 44, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
-	m_CtrlValueTemperatureF.InitControl(344, 44, 48, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
+//	m_CtrlLabelTemperature.InitControl(8, 44, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueTemperatureF.InitControl(344, 44, 48, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
 
 	m_CtrlApply.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 	m_CtrlDefault.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 
-	m_CtrlApply.InitControl(220, 76, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_IsHighContrast);
-	m_CtrlDefault.InitControl(20, 76, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_IsHighContrast);
+	m_CtrlApply.InitControl(220, 76, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
+	m_CtrlDefault.InitControl(20, 76, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
 
 	m_CtrlSelectDisk.SetFontEx(m_FontFace, 14, m_ZoomRatio);
 	m_CtrlSelectDisk.MoveWindow((DWORD)(8 * m_ZoomRatio), (DWORD)(8 * m_ZoomRatio), (DWORD)(384 * m_ZoomRatio), (DWORD)(40 * m_ZoomRatio));
 
-	m_IsDrawFrame = IsDrawFrame();
-
-	m_CtrlValueTemperature.SetDrawFrame(m_IsDrawFrame);
-	m_CtrlValueTemperatureF.SetDrawFrame(m_IsDrawFrame);
+	m_CtrlValueTemperature.SetDrawFrame(m_bHighContrast);
+	m_CtrlValueTemperatureF.SetDrawFrame(m_bHighContrast);
 
 	Invalidate();
 }
@@ -212,7 +212,7 @@ void CTemperatureDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	UpdateData(FALSE);
 
-	CDialogCx::OnHScroll(nSBCode, nPos, pScrollBar);
+	CDialogFx::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 void CTemperatureDlg::UpdateSelectDisk(DWORD index)

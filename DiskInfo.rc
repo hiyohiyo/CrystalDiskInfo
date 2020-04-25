@@ -836,11 +836,15 @@ END
 IDD_FONT DIALOGEX 0, 0, 180, 89
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Font Setting"
-FONT 12, "MS UI Gothic", 400, 0, 0x80
+FONT 12, "MS Shell Dlg", 400, 0, 0x80
 BEGIN
-    COMBOBOX        IDC_FONT_COMBO,7,6,166,148,CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
-    DEFPUSHBUTTON   "OK",ID_OK,48,68,83,14,BS_CENTER
-    COMBOBOX        IDC_FONT_TYPE_COMBO,7,28,166,148,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Font Face", IDC_FONT_FACE, 1, 1, 1, 1
+    LTEXT           "Font Scale", IDC_FONT_SCALE, 1, 1, 1, 1
+
+    COMBOBOX        IDC_FONT_COMBO, 7, 6, 166, 20, CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FONT_SCALE_COMBO, 7, 28, 166, 148, CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Default", IDC_SET_DEFAULT, 26, 17, 156, 107, BS_CENTER
+    PUSHBUTTON      "OK", ID_OK, 48, 68, 83, 14, BS_CENTER
 END
 
 IDD_ALARM_HISTORY DIALOGEX 0, 0, 316, 183
@@ -870,8 +874,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8.4.2,2020
- PRODUCTVERSION 8.4.2, 2020
+ FILEVERSION 8.5.0,2020
+ PRODUCTVERSION 8.5.0, 2020
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -888,9 +892,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.4.2.2020"
+            VALUE "FileVersion", "8.5.0.2020"
             VALUE "LegalCopyright", "(C) 2008-2020 hiyohiyo"
-            VALUE "ProductVersion", "8.4.2.2020"
+            VALUE "ProductVersion", "8.5.0.2020"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"

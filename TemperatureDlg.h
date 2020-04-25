@@ -6,12 +6,12 @@
 /*---------------------------------------------------------------------------*/
 
 #pragma once
-#include "DialogCx.h"
+#include "DialogFx.h"
 #include "StaticCx.h"
 #include "ButtonCx.h"
 #include "ComboBoxCx.h"
 
-class CTemperatureDlg : public CDialogCx
+class CTemperatureDlg : public CDialogFx
 {
 	DECLARE_DYNAMIC(CTemperatureDlg)
 

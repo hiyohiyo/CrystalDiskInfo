@@ -24,11 +24,11 @@ public:
 
 	enum ZOOM_TYPE
 	{
-		ZOOM_TYPE_AUTO = 0,
-		ZOOM_TYPE_100 = 100,
-		ZOOM_TYPE_125 = 125,
-		ZOOM_TYPE_150 = 150,
-		ZOOM_TYPE_200 = 200,
+		ZoomTypeAuto = 0,
+		ZoomType100 = 100,
+		ZoomType125 = 125,
+		ZoomType150 = 150,
+		ZoomType200 = 200,
 	};
 
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
@@ -42,8 +42,8 @@ protected:
 	virtual void OnCancel();
 
 	HACCEL m_hAccelerator;
-	BOOL m_FlagShowWindow;
-	BOOL m_FlagModelessDlg;
+	BOOL m_bShowWindow;
+	BOOL m_bModelessDlg;
 	CWnd* m_ParentWnd;
 	CWnd* m_DlgWnd;
 	UINT m_MenuId;

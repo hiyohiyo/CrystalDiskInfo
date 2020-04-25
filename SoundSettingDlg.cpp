@@ -15,18 +15,20 @@ IMPLEMENT_DYNCREATE(CSoundSettingDlg, CDialog)
 static CDiskInfoDlg *p;
 
 CSoundSettingDlg::CSoundSettingDlg(CWnd* pParent /*=NULL*/)
-	: CDialogCx(CDiskInfoDlg::IDD, pParent)
+	: CDialogFx(CDiskInfoDlg::IDD, pParent)
 {
-	p = (CDiskInfoDlg*)pParent;
-	_tcscpy_s(m_Ini, MAX_PATH, ((CDiskInfoApp*)AfxGetApp())->m_Ini);
+	CMainDialog* p = (CMainDialog*)pParent;
 
-	m_CurrentLangPath = ((CMainDialog*)pParent)->m_CurrentLangPath;
-	m_DefaultLangPath = ((CMainDialog*)pParent)->m_DefaultLangPath;
-	m_ZoomType = ((CMainDialog*)pParent)->GetZoomType();
-	m_FontFace = ((CMainDialog*)pParent)->m_FontFace;
-	m_CxThemeDir = ((CDiskInfoApp*)AfxGetApp())->m_ThemeDir;
-	m_CxCurrentTheme = ((CMainDialog*)pParent)->m_CurrentTheme;
-	m_CxDefaultTheme = ((CMainDialog*)pParent)->m_DefaultTheme;
+	m_ZoomType = p->GetZoomType();
+	m_FontScale = p->GetFontScale();
+	m_FontRatio = p->GetFontRatio();
+	m_FontFace = p->GetFontFace();
+	m_CurrentLangPath = p->GetCurrentLangPath();
+	m_DefaultLangPath = p->GetDefaultLangPath();
+	m_ThemeDir = p->GetThemeDir();
+	m_CurrentTheme = p->GetCurrentTheme();
+	m_DefaultTheme = p->GetDefaultTheme();
+	m_Ini = p->GetIniPath();
 }
 
 CSoundSettingDlg::~CSoundSettingDlg()
@@ -35,7 +37,7 @@ CSoundSettingDlg::~CSoundSettingDlg()
 
 void CSoundSettingDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogCx::DoDataExchange(pDX);
+	CDialogFx::DoDataExchange(pDX);
 
 	DDX_Text(pDX, IDC_FILE_PATH, m_FilePath);
 
@@ -48,11 +50,11 @@ void CSoundSettingDlg::DoDataExchange(CDataExchange* pDX)
 
 BOOL CSoundSettingDlg::OnInitDialog()
 {
-	CDialogCx::OnInitDialog();
+	CDialogFx::OnInitDialog();
 
 	SetWindowText(i18n(_T("WindowTitle"), _T("SOUND_SETTINGS")));
 
-	m_FlagShowWindow = TRUE;
+	m_bShowWindow = TRUE;
 
 	TCHAR str[256];
 	GetPrivateProfileString(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
@@ -69,7 +71,7 @@ BOOL CSoundSettingDlg::OnInitDialog()
 	return TRUE;
 }
 
-BEGIN_MESSAGE_MAP(CSoundSettingDlg, CDialogCx)
+BEGIN_MESSAGE_MAP(CSoundSettingDlg, CDialogFx)
 	ON_BN_CLICKED(IDC_BUTTON_SELECT_FILE, &CSoundSettingDlg::OnBnClickedButtonSelectFile)
 	ON_BN_CLICKED(IDC_BUTTON_PLAY, &CSoundSettingDlg::OnBnClickedButtonPlay)
 	ON_BN_CLICKED(IDC_BUTTON_DEFAULT, &CSoundSettingDlg::OnBnClickedButtonDefault)
@@ -79,7 +81,7 @@ END_MESSAGE_MAP()
 void CSoundSettingDlg::UpdateDialogSize()
 {
 	ChangeZoomType(m_ZoomType);
-	SetClientRect((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
+	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
 
 	UpdateBackground();
 
@@ -89,16 +91,15 @@ void CSoundSettingDlg::UpdateDialogSize()
 	m_CtrlDefault.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 	m_CtrlOk.SetFontEx(m_FontFace, 12, m_ZoomRatio);
 
-	m_CtrlFilePath.InitControl(8, 8, 416, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_IsHighContrast);
+	m_CtrlFilePath.InitControl(8, 8, 416, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
 	m_CtrlSelectFile.InitControl(428, 8, 24, 24, m_ZoomRatio, IP(L"selectSound"), 2, BS_CENTER, CButtonCx::OwnerDrawImage);
 	m_CtrlSelectFile.SetHandCursor();
 	m_CtrlPlay.InitControl(456, 8, 24, 24, m_ZoomRatio, IP(L"playSound"), 2, BS_CENTER, CButtonCx::OwnerDrawImage);
 	m_CtrlPlay.SetHandCursor();
-	m_CtrlDefault.InitControl(40, 40, 160, 28, m_ZoomRatio, NULL, 0, BS_CENTER, CButtonCx::SystemDraw | m_IsHighContrast);
-	m_CtrlOk.InitControl(280, 40, 160, 28, m_ZoomRatio, NULL, 0, BS_CENTER, CButtonCx::SystemDraw | m_IsHighContrast);
+	m_CtrlDefault.InitControl(40, 40, 160, 28, m_ZoomRatio, NULL, 0, BS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
+	m_CtrlOk.InitControl(280, 40, 160, 28, m_ZoomRatio, NULL, 0, BS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
 
-	m_IsDrawFrame = IsDrawFrame();
-	m_CtrlFilePath.SetDrawFrame(m_IsDrawFrame);
+	m_CtrlFilePath.SetDrawFrame(m_bHighContrast);
 
 	Invalidate();
 }
@@ -136,5 +137,5 @@ void CSoundSettingDlg::OnBnClickedButtonDefault()
 
 void CSoundSettingDlg::OnBnClickedButtonOk()
 {
-	CDialogCx::OnCancel();
+	CDialogFx::OnCancel();
 }

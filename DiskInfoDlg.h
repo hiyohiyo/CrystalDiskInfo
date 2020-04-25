@@ -16,12 +16,13 @@
 #include "GraphDlg.h"
 #include "TemperatureDlg.h"
 
-#include "DialogCx.h"
+#include "DialogFx.h"
 #include "MainDialog.h"
+// #include "CommonFx.h"
 
 #include "ButtonCx.h"
 #include "StaticCx.h"
-#include "ListCtrlEx.h"
+#include "ListCtrlFx.h"
 
 #include "GetOsInfo.h"
 #include "EventLog.h"
@@ -129,7 +130,7 @@ protected:
 //	CAlarmHistoryDlg*	m_AlarmHistoryDlg;
 	CSoundSettingDlg*	m_SoundSettingDlg;
 	CGraphDlg*			m_GraphDlg;
-	CListCtrlEx			m_List;
+	CListCtrlFx			m_List;
 	CImageList			m_ImageList;
 
 	CButtonCx			m_ButtonDisk[8];
@@ -165,11 +166,11 @@ protected:
 	CStaticCx			m_CtrlPowerOnHours;
 	CStaticCx			m_CtrlAtaAtapi;
 	CStaticCx			m_CtrlFeature;
-	CButtonCx			m_CtrlDiskStatus;
-	CButtonCx			m_CtrlTemperature;
-	CButtonCx			m_CtrlLife;
-	CButtonCx			m_CtrlVoice;
-	CButtonCx			m_CtrlCopyright;
+	CButtonFx			m_CtrlDiskStatus;
+	CButtonFx			m_CtrlTemperature;
+	CButtonFx			m_CtrlLife;
+	CButtonFx			m_CtrlVoice;
+	CButtonFx			m_CtrlCopyright;
 
 	HDEVNOTIFY m_hDevNotify;
 
@@ -198,35 +199,35 @@ protected:
 	int m_SizeY;
 
 	int m_PreTemp[CAtaSmart::MAX_DISK];
-	BOOL m_FlagTrayTemperatureIcon[CAtaSmart::MAX_DISK];
-	BOOL m_FlagAutoRefreshTarget[CAtaSmart::MAX_DISK];
-	BOOL m_FlagTrayMainIcon;
+	BOOL m_bTrayTemperatureIcon[CAtaSmart::MAX_DISK];
+	BOOL m_bAutoRefreshTarget[CAtaSmart::MAX_DISK];
+	BOOL m_bTrayMainIcon;
 
 	// Options
-	BOOL m_FlagStartupExit;
-	BOOL m_FlagHideSmartInfo;
-	BOOL m_FlagHideSerialNumber;
-	BOOL m_FlagAdvancedDiskSearch;
-	BOOL m_FlagWorkaroundHD204UI;
-	BOOL m_FlagWorkaroundIE8MODE;
-	BOOL m_FlagWorkaroundAdataSsd;
-	BOOL m_FlagWorkaroundIgnoreC4;
-	BOOL m_FlagEventLog;
-	BOOL m_FlagAlertMail;
-	BOOL m_FlagAtaPassThroughSmart;
-//	BOOL m_FlagUseEventCreate;		// Use eventcreate.exe (XP Pro or later)
-	BOOL m_FlagFahrenheit;
-	BOOL m_FlagAutoAamApm;
-	BOOL m_FlagDumpIdentifyDevice;
-	BOOL m_FlagDumpSmartReadData;
-	BOOL m_FlagDumpSmartReadThreshold;
-	BOOL m_FlagShowTemperatureIconOnly;
-	BOOL m_FlagAsciiView;
-	BOOL m_FlagSmartEnglish;
-	BOOL m_FlagGadget;
-	BOOL m_FlagGreenMode;
-	BOOL m_FlagAlertSound;
-	BOOL m_FlagHideNoSmartDisk;
+	BOOL m_bStartupExit;
+	BOOL m_bHideSmartInfo;
+	BOOL m_bHideSerialNumber;
+	BOOL m_bAdvancedDiskSearch;
+	BOOL m_bWorkaroundHD204UI;
+	BOOL m_bWorkaroundIE8MODE;
+	BOOL m_bWorkaroundAdataSsd;
+	BOOL m_bWorkaroundIgnoreC4;
+	BOOL m_bEventLog;
+	BOOL m_bAlertMail;
+	BOOL m_bAtaPassThroughSmart;
+//	BOOL m_bUseEventCreate;		// Use eventcreate.exe (XP Pro or later)
+	BOOL m_bFahrenheit;
+	BOOL m_bAutoAamApm;
+	BOOL m_bDumpIdentifyDevice;
+	BOOL m_bDumpSmartReadData;
+	BOOL m_bDumpSmartReadThreshold;
+	BOOL m_bShowTemperatureIconOnly;
+	BOOL m_bAsciiView;
+	BOOL m_bSmartEnglish;
+	BOOL m_bGadget;
+	BOOL m_bGreenMode;
+	BOOL m_bAlertSound;
+	BOOL m_bHideNoSmartDisk;
 
 	BOOL AddTemperatureIcon(DWORD index);
 	BOOL RemoveTemperatureIcon(DWORD index);
@@ -339,6 +340,9 @@ protected:
 
 	CString __Number(DWORD value);
 	CHAR AsciiFilter(BYTE c);
+
+	void ShowWindowEx(int nCmdShow);
+	virtual BOOL CheckThemeEdition(CString name);
 
 	// Generated message map functions
 	virtual void OnOK();
