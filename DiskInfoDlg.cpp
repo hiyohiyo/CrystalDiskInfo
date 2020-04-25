@@ -1418,7 +1418,9 @@ void CDiskInfoDlg::UpdateDialogSize()
 	CRect rect;
 	GetClientRect(&rect);
 
-	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, m_bHighContrast);
+	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast);
+	m_List.m_Header.InitControl(8 + OFFSET_X, SIZE_Y, m_ZoomRatio, &m_BgDC);
+
 //	m_List.SetWindowPos(NULL, (int)((8 + OFFSET_X) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio),
 //			(int)((672 - 16) * m_ZoomRatio), (int)(rect.Height() - SIZE_Y * m_ZoomRatio - 8 * m_ZoomRatio), SWP_SHOWWINDOW);
 
@@ -1438,7 +1440,8 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 	if(flag)
 	{
 #ifdef SUISHO_SHIZUKU_SUPPORT
-		m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, m_bHighContrast);
+		m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast);
+		m_List.m_Header.InitControl(8 + OFFSET_X, SIZE_Y, m_ZoomRatio, &m_BgDC);
 
 //		m_List.SetWindowPos(NULL, (int)((8 + OFFSET_X) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio),
 //		(int)((672 - 16) * m_ZoomRatio), (int)(cy - SIZE_Y * m_ZoomRatio - 8 * m_ZoomRatio), SWP_SHOWWINDOW);
@@ -1450,7 +1453,8 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 	//	m_CtrlCopyright.SetBgReload();
 		m_CtrlCopyright.ShowWindow(SW_SHOW);
 #else
-		m_List.InitControl(8, SIZE_Y, 672 - 16, (cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, m_bHighContrast);
+		m_List.InitControl(8, SIZE_Y, 672 - 16, (cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast);
+		m_List.m_Header.InitControl(8, SIZE_Y, m_ZoomRatio, &m_BgDC);
 
 	//	m_List.SetWindowPos(NULL, (int)(8 * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio),
 	//	(int)((672 - 16) * m_ZoomRatio), (int)(cy - SIZE_Y * m_ZoomRatio - 8 * m_ZoomRatio), SWP_SHOWWINDOW);
@@ -2467,6 +2471,7 @@ void CDiskInfoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	CMainDialog::OnShowWindow(bShow, nStatus);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
+	/*
 	if (m_LayeredListCtrl && bShow)
 	{
 		::SetWindowLong(m_List.m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_List.m_hWnd, GWL_EXSTYLE) ^ WS_EX_LAYERED);
@@ -2475,6 +2480,7 @@ void CDiskInfoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		::SetWindowLong(m_List.m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_List.m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
 		::SetLayeredWindowAttributes(m_List.m_hWnd, 0, LIST_CTL_ALPHA, LWA_ALPHA);
 	}
+	*/
 #endif
 }
 /*

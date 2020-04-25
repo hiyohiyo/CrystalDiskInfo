@@ -15,7 +15,14 @@ public:
 	CHeaderCtrlFx();
 	virtual ~CHeaderCtrlFx();
 
+	void InitControl(int x, int y, double zoomRatio, CDC* bgDC);
+
 protected:
+	int m_X;
+	int m_Y;
+
+	CDC* m_BgDC;
+
 	// Draw Control
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 	

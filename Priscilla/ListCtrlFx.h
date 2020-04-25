@@ -8,6 +8,10 @@
 #pragma once
 
 #include "HeaderCtrlFx.h"
+#include <atlimage.h>
+#include <gdiplus.h>
+#pragma comment(lib, "Gdiplus.lib")
+using namespace Gdiplus;
 
 class CListCtrlFx : public CListCtrl
 {
@@ -29,11 +33,15 @@ public:
 	COLORREF GetBkColor2();
 	COLORREF GetLineColor();
 
-	void InitControl(int x, int y, int width, int height, double zoomRatio, BOOL bHighCotrast);
+	void InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, BOOL bHighCotrast);
 	void SetFontEx(CString face, double zoomRatio, double fontRatio = 1.0);
 	CHeaderCtrlFx m_Header;
 
 protected:
+	int m_X;
+	int m_Y;
+	CSize m_CtrlSize;
+	CRect m_Margin;
 	BOOL m_bHighContrast;
 
 	COLORREF m_TextColor1;
@@ -44,6 +52,7 @@ protected:
 
 	CFont    m_Font;
 	CImageList m_Image;
+	CDC* m_BgDC;
 
 	DECLARE_MESSAGE_MAP()
 

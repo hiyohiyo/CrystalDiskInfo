@@ -287,14 +287,16 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 
 	if (m_Ata.vars[i].IsSmartCorrect)
 	{
-	//	m_List.SetTextColor1(RGB(0, 0, 0));
-	//	m_List.SetTextColor2(RGB(0, 0, 0));
+
 
 		m_List.SetTextColor1(RGB(255, 255, 255));
 		m_List.SetTextColor2(RGB(255, 255, 255));
 		m_List.SetBkColor(RGB(0, 0, 0));
 		m_List.SetBkColor1(RGB(0, 0, 0));
 		m_List.SetBkColor2(RGB(0, 0, 0));
+
+		m_List.SetTextColor1(RGB(0, 0, 0));
+		m_List.SetTextColor2(RGB(0, 0, 0));
 	}
 	else
 	{

@@ -30,10 +30,38 @@ BEGIN_MESSAGE_MAP(CListCtrlFx, CListCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CListCtrlFx::OnCustomdraw)
 END_MESSAGE_MAP()
 
-void CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, BOOL bHighCotrast)
+void CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, BOOL bHighCotrast)
 {
-	MoveWindow((int)(x * zoomRatio), (int)(y * zoomRatio), (int)(width * zoomRatio), (int)(height * zoomRatio));
+	// MoveWindow((int)(x * zoomRatio), (int)(y * zoomRatio), (int)(width * zoomRatio), (int)(height * zoomRatio));
+
+	m_X = (int)(x * zoomRatio);
+	m_Y = (int)(y * zoomRatio);
+	m_CtrlSize.cx = (int)(width * zoomRatio);
+	m_CtrlSize.cy = (int)(height * zoomRatio);
+	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
+
+	m_BgDC = bgDC;
 	m_bHighContrast = bHighCotrast;
+
+	CBitmap bitmap;
+	CDC cdc;
+
+	bitmap.CreateCompatibleBitmap(m_BgDC, m_CtrlSize.cx, m_CtrlSize.cy);
+	cdc.CreateCompatibleDC(m_BgDC);
+	cdc.SelectObject(bitmap);
+	cdc.BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X, m_Y, SRCCOPY);
+
+
+	/*
+	CImage image;
+
+	image.Destroy();
+	image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
+	::BitBlt(image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *m_BgDC, m_X, m_Y,SRCCOPY);
+	*/
+
+	SetBkImage((HBITMAP)bitmap);
+
 }
 
 void CListCtrlFx::OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)

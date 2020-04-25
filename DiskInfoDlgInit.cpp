@@ -41,8 +41,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	InitMenu();
 
 	// メイン画面をレイヤードウィンドウにする。
-	::SetWindowLong(m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-	::SetLayeredWindowAttributes(m_hWnd, 0, 255, LWA_ALPHA);
+	// ::SetWindowLong(m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+	// ::SetLayeredWindowAttributes(m_hWnd, 0, 255, LWA_ALPHA);
 
 //	m_BackgroundName = L"ShizukuOriginal";
 
@@ -336,6 +336,7 @@ void CDiskInfoDlg::InitListCtrl()
 
 	// このウィンドウに WS_EX_LAYERED を設定する 
 #ifdef SUISHO_SHIZUKU_SUPPORT
+	/*
 	if (m_LayeredListCtrl)
 	{
 		::SetWindowLong(m_List.m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_List.m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
@@ -347,7 +348,8 @@ void CDiskInfoDlg::InitListCtrl()
 		{
 			::SetLayeredWindowAttributes(m_List.m_hWnd, 0, LIST_CTL_ALPHA, LWA_ALPHA);
 		}
-	}	
+	}
+	*/
 #endif
 
 	m_List.SetImageList(&m_ImageList, LVSIL_SMALL);
