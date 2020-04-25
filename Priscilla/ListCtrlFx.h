@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "HeaderCtrlFx.h"
+
 class CListCtrlFx : public CListCtrl
 {
 	DECLARE_DYNAMIC(CListCtrlFx)
@@ -29,6 +31,7 @@ public:
 
 	void InitControl(int x, int y, int width, int height, double zoomRatio, BOOL bHighCotrast);
 	void SetFontEx(CString face, double zoomRatio, double fontRatio = 1.0);
+	CHeaderCtrlFx m_Header;
 
 protected:
 	BOOL m_bHighContrast;
@@ -46,7 +49,6 @@ protected:
 
 	virtual void PreSubclassWindow();
 
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
 };
 

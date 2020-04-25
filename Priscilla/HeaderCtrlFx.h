@@ -18,6 +18,9 @@ public:
 protected:
 	// Draw Control
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+	
+	afx_msg void OnPaint();
+
 	DECLARE_MESSAGE_MAP()
 };
 

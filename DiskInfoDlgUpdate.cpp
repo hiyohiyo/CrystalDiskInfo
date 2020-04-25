@@ -253,6 +253,14 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 		m_List.InsertColumn(2, i18n(_T("Dialog"), _T("LIST_ATTRIBUTE_NAME"), m_bSmartEnglish), LVCFMT_LEFT, (int)(width - 356 * m_ZoomRatio - 25), 0);
 		preVendorId = m_Ata.HDD_GENERAL;
 	}
+
+	HDITEM hi;
+	for (int i = 0; i < m_List.m_Header.GetItemCount(); i++)
+	{
+		m_List.m_Header.GetItem(i, &hi);
+		hi.fmt |= HDF_OWNERDRAW;
+		m_List.m_Header.SetItem(i, &hi);
+	}
 }
 
 BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
@@ -284,6 +292,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 
 		m_List.SetTextColor1(RGB(255, 255, 255));
 		m_List.SetTextColor2(RGB(255, 255, 255));
+		m_List.SetBkColor(RGB(0, 0, 0));
 		m_List.SetBkColor1(RGB(0, 0, 0));
 		m_List.SetBkColor2(RGB(0, 0, 0));
 	}

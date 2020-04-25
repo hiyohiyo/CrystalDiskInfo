@@ -27,7 +27,6 @@ CListCtrlFx::~CListCtrlFx()
 }
 
 BEGIN_MESSAGE_MAP(CListCtrlFx, CListCtrl)
-	ON_WM_ERASEBKGND()
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CListCtrlFx::OnCustomdraw)
 END_MESSAGE_MAP()
 
@@ -121,24 +120,10 @@ void CListCtrlFx::SetFontEx(CString face, double zoomRatio, double fontRatio)
 	SetFont(&m_Font);
 }
 
-BOOL CListCtrlFx::OnEraseBkgnd(CDC* pDC)
+void CListCtrlFx::PreSubclassWindow()
 {
-	BOOL bRes = CListCtrl::OnEraseBkgnd(pDC);
+	CListCtrl::PreSubclassWindow();
 
-	CRect rectClient;
-	GetClientRect(&rectClient);
-
-	CRect rectHeader;
-	GetHeaderCtrl()->GetItemRect(0, &rectHeader);
-	GetHeaderCtrl()->MapWindowPoints(this, rectHeader);
-
-	CRect rectColumn = rectClient;
-	rectColumn.left = rectHeader.left;
-	rectColumn.right = rectHeader.right;
-
-	CBrush br;
-	br.CreateSolidBrush(RGB(0, 0, 0));
-	pDC->FillRect(rectHeader, &br);
-
-	return bRes;
+	CHeaderCtrlFx* pHeader = (CHeaderCtrlFx*)GetHeaderCtrl();
+	m_Header.SubclassWindow(pHeader->GetSafeHwnd());
 }
