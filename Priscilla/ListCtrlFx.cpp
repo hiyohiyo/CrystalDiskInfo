@@ -13,6 +13,7 @@ IMPLEMENT_DYNAMIC(CListCtrlFx, CListCtrl)
 CListCtrlFx::CListCtrlFx()
 {
 	m_bHighContrast = FALSE;
+	m_RenderMode = SystemDraw;
 
 	m_TextColor1 = RGB(0, 0, 0);
 	m_TextColor2 = RGB(0, 0, 0);
@@ -35,7 +36,7 @@ BEGIN_MESSAGE_MAP(CListCtrlFx, CListCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CListCtrlFx::OnCustomdraw)
 END_MESSAGE_MAP()
 
-void CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, BOOL bHighCotrast)
+BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, int renderMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -44,17 +45,21 @@ void CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
 
 	m_BgDC = bgDC;
-	m_bHighContrast = bHighCotrast;
+	m_RenderMode = renderMode;
 
-	CDC BgDC;
-
-	m_BgBitmap.DeleteObject();
-	m_BgBitmap.CreateCompatibleBitmap(m_BgDC, m_CtrlSize.cx, m_CtrlSize.cy);
-	BgDC.CreateCompatibleDC(m_BgDC);
-	BgDC.SelectObject(m_BgBitmap);
-	BgDC.BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X + 2, m_Y + 2, SRCCOPY);
-
+	if (renderMode & HighContrast)
 	{
+		m_bHighContrast = TRUE;
+	}
+	else if (renderMode & OwnerDrawGlass)
+	{
+		m_BgBitmap.DeleteObject();
+		m_BgBitmap.CreateCompatibleBitmap(m_BgDC, m_CtrlSize.cx, m_CtrlSize.cy);
+		CDC BgDC;
+		BgDC.CreateCompatibleDC(m_BgDC);
+		BgDC.SelectObject(m_BgBitmap);
+		BgDC.BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X + 2, m_Y + 2, SRCCOPY);
+
 		m_CtrlImage.Destroy();
 		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
 
@@ -89,13 +94,19 @@ void CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 
 		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
 		delete[] bitmapBits;
+
+		SetupControlImage(m_BgBitmap, m_CtrlBitmap);
+
+		SetBkImage((HBITMAP)m_CtrlBitmap);
+
+		m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap, m_RenderMode);
+	}
+	else
+	{
+		m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_RenderMode);
 	}
 
-	SetupControlImage(m_BgBitmap, m_CtrlBitmap);
-
-	SetBkImage((HBITMAP)m_CtrlBitmap);
-
-	m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap);
+	return TRUE;
 }
 
 void CListCtrlFx::SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap)
@@ -232,29 +243,38 @@ void CListCtrlFx::PreSubclassWindow()
 {
 	CListCtrl::PreSubclassWindow();
 
-	CHeaderCtrlFx* pHeader = (CHeaderCtrlFx*)GetHeaderCtrl();
-	m_Header.SubclassWindow(pHeader->GetSafeHwnd());
+//	CHeaderCtrlFx* pHeader = (CHeaderCtrlFx*)GetHeaderCtrl();
+//	m_Header.SubclassWindow(pHeader->GetSafeHwnd());
 }
 
 void CListCtrlFx::EnableHeaderOwnerDraw(BOOL bOwnerDraw)
 {
-	HDITEM hi;
-	if (bOwnerDraw)
+	if (m_RenderMode & HighContrast)
 	{
-		for (int i = 0; i < m_Header.GetItemCount(); i++)
-		{
-			m_Header.GetItem(i, &hi);
-			hi.fmt |= HDF_OWNERDRAW;
-			m_Header.SetItem(i, &hi);
-		}
+		return;
 	}
-	else
+	else if (m_RenderMode & OwnerDrawGlass)
 	{
-		for (int i = 0; i < m_Header.GetItemCount(); i++)
+		return;
+
+		HDITEM hi;
+		if (bOwnerDraw)
 		{
-			m_Header.GetItem(i, &hi);
-			hi.fmt &= ~HDF_OWNERDRAW;
-			m_Header.SetItem(i, &hi);
+			for (int i = 0; i < m_Header.GetItemCount(); i++)
+			{
+				m_Header.GetItem(i, &hi);
+				hi.fmt |= HDF_OWNERDRAW;
+				m_Header.SetItem(i, &hi);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < m_Header.GetItemCount(); i++)
+			{
+				m_Header.GetItem(i, &hi);
+				hi.fmt &= ~HDF_OWNERDRAW;
+				m_Header.SetItem(i, &hi);
+			}
 		}
 	}
 }

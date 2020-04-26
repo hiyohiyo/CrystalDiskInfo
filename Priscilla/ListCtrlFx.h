@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "CommonFx.h"
 #include "HeaderCtrlFx.h"
 #include <atlimage.h>
 #include <gdiplus.h>
@@ -33,7 +34,7 @@ public:
 	COLORREF GetBkColor2();
 	COLORREF GetLineColor();
 
-	void InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, BOOL bHighCotrast);
+	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, int renderMode);
 	void SetFontEx(CString face, double zoomRatio, double fontRatio = 1.0);
 	void EnableHeaderOwnerDraw(BOOL bOwnerDraw);
 
@@ -42,6 +43,7 @@ protected:
 	int m_Y;
 	CSize m_CtrlSize;
 	CRect m_Margin;
+	int m_RenderMode;
 	BOOL m_bHighContrast;
 	CHeaderCtrlFx m_Header;
 
