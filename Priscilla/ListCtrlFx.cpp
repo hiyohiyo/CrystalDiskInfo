@@ -50,6 +50,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 	if (renderMode & HighContrast)
 	{
 		m_bHighContrast = TRUE;
+		SetBkImage(L"");
 	}
 	else if (renderMode & OwnerDrawGlass)
 	{
@@ -104,6 +105,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 	else
 	{
 		m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_RenderMode);
+		SetBkImage(L"");
 	}
 
 	return TRUE;
@@ -157,26 +159,24 @@ void CListCtrlFx::SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap)
 
 void CListCtrlFx::OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	if(m_bHighContrast)
-	{
-		return;
-	}
-
 	LPNMLVCUSTOMDRAW lpLVCustomDraw = reinterpret_cast<LPNMLVCUSTOMDRAW>(pNMHDR);
 
 	switch(lpLVCustomDraw->nmcd.dwDrawStage)
 	{
 	case CDDS_ITEMPREPAINT:
 	case CDDS_ITEMPREPAINT | CDDS_SUBITEM:
-		if(lpLVCustomDraw->nmcd.dwItemSpec % 2 == 0)
+		if(! m_bHighContrast)
 		{
-			lpLVCustomDraw->clrText = m_TextColor1;
-			lpLVCustomDraw->clrTextBk = m_BkColor1;
-		}
-		else
-		{
-			lpLVCustomDraw->clrText = m_TextColor2;
-			lpLVCustomDraw->clrTextBk = m_BkColor2;
+			if(lpLVCustomDraw->nmcd.dwItemSpec % 2 == 0)
+			{
+				lpLVCustomDraw->clrText = m_TextColor1;
+				lpLVCustomDraw->clrTextBk = m_BkColor1;
+			}
+			else
+			{
+				lpLVCustomDraw->clrText = m_TextColor2;
+				lpLVCustomDraw->clrTextBk = m_BkColor2;
+			}
 		}
 		break;
 	case CDDS_ITEMPOSTPAINT | CDDS_SUBITEM:
@@ -243,8 +243,8 @@ void CListCtrlFx::PreSubclassWindow()
 {
 	CListCtrl::PreSubclassWindow();
 
-//	CHeaderCtrlFx* pHeader = (CHeaderCtrlFx*)GetHeaderCtrl();
-//	m_Header.SubclassWindow(pHeader->GetSafeHwnd());
+	CHeaderCtrlFx* pHeader = (CHeaderCtrlFx*)GetHeaderCtrl();
+	m_Header.SubclassWindow(pHeader->GetSafeHwnd());
 }
 
 void CListCtrlFx::EnableHeaderOwnerDraw(BOOL bOwnerDraw)
@@ -255,8 +255,6 @@ void CListCtrlFx::EnableHeaderOwnerDraw(BOOL bOwnerDraw)
 	}
 	else if (m_RenderMode & OwnerDrawGlass)
 	{
-		return;
-
 		HDITEM hi;
 		if (bOwnerDraw)
 		{

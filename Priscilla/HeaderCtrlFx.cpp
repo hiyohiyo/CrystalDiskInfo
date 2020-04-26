@@ -59,7 +59,6 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	CRect clientRect;
 	GetClientRect(&clientRect);
 
-	/*
 	if (m_CtrlBitmap != NULL)
 	{
 		CDC BgDC;
@@ -69,7 +68,6 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		CRect rc = lpDrawItemStruct->rcItem;
 		drawDC->BitBlt(rc.left, rc.top, rc.right, rc.bottom, &BgDC, rc.left, rc.top, SRCCOPY);
 	}
-	*/
 
 	br.DeleteObject();
 	br.CreateSolidBrush(RGB(255, 255, 255));
@@ -101,8 +99,9 @@ void CHeaderCtrlFx::OnPaint()
 		return CHeaderCtrl::OnPaint();
 	}
 
-	/*
-//	if (m_CtrlBitmap != NULL)
+	CHeaderCtrl::OnPaint();
+
+	if (m_CtrlBitmap != NULL)
 	{
 		RECT rectRightItem;
 		int iItemCount = Header_GetItemCount(this->m_hWnd);
@@ -118,5 +117,4 @@ void CHeaderCtrlFx::OnPaint()
 			drawDC->BitBlt(rectRightItem.right, rectClient.top, rectClient.right, rectClient.bottom, &BgDC, rectRightItem.right, rectClient.top, SRCCOPY);
 		}
 	}
-	*/
 }
