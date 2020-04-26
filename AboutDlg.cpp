@@ -35,7 +35,7 @@ CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
 		m_BackgroundName = L"ShizukuAbout";
 	#endif
 #else
-	m_BackgroundName = L"background";
+	m_BackgroundName = L"Background";
 #endif
 }
 

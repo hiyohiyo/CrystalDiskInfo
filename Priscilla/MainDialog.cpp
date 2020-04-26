@@ -134,7 +134,7 @@ void CMainDialog::InitThemeLang()
 	{
 		CString defaultTheme = m_DefaultTheme;
 
-		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\Background-300.png"))
+		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\" + m_BackgroundName + L"-300.png"))
 		{
 			defaultTheme = m_RecommendTheme;
 		}

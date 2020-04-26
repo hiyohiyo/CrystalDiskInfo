@@ -37,6 +37,7 @@ public:
 
 	// Mouse
 	void SetHandCursor(BOOL bHandCuror = TRUE);
+	void SetSelected(BOOL bSelected = TRUE);
 
 	// ToolTip
 	void SetToolTipText(LPCTSTR text);
@@ -108,4 +109,5 @@ protected:
 	BOOL m_bFocas;
 	BOOL m_bTrackingNow;
 	BOOL m_bHandCursor;
+	BOOL m_bSelected;
 };

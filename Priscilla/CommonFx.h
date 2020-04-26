@@ -55,7 +55,8 @@ static const int TimerUpdateDialogSize = 0x2001;
 static const int ControlImageNormal   = 0x0000;
 static const int ControlImageHover    = 0x0001;
 static const int ControlImageFocus    = 0x0002;
-static const int ControlImageDisabled = 0x0003;
+static const int ControlImageSelected = 0x0003;
+static const int ControlImageDisabled = 0x0004;
 
 static const int HighContrast         = 0x0001;
 static const int SystemDraw           = 0x0002;

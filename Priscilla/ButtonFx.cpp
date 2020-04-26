@@ -39,6 +39,7 @@ CButtonFx::CButtonFx()
 	m_bFocas = FALSE;
 	m_bTrackingNow = FALSE;
 	m_bHandCursor = FALSE;
+	m_bSelected = FALSE;
 }
 
 CButtonFx::~CButtonFx()
@@ -289,7 +290,11 @@ void CButtonFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	if (IsWindowEnabled())
 	{
-		if ((lpDrawItemStruct->itemState & ODS_SELECTED || m_bHover) && m_ImageCount > ControlImageHover)
+		if (m_bSelected && m_ImageCount > ControlImageSelected)
+		{
+			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageSelected);
+		}
+		else if ((lpDrawItemStruct->itemState & ODS_SELECTED || m_bHover) && m_ImageCount > ControlImageHover)
 		{
 			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageHover);
 		}
@@ -661,6 +666,12 @@ BOOL CButtonFx::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	}
 
 	return TRUE;
+}
+
+void CButtonFx::SetSelected(BOOL bSelected)
+{
+	m_bSelected = bSelected;
+	Invalidate();
 }
 
 //------------------------------------------------

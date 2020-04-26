@@ -133,10 +133,10 @@ protected:
 	CListCtrlFx			m_List;
 	CImageList			m_ImageList;
 
-	CButtonCx			m_ButtonDisk[8];
+	CButtonFx			m_ButtonDisk[8];
 
-	CButtonCx			m_CtrlButtonPreDisk;
-	CButtonCx			m_CtrlButtonNextDisk;
+	CButtonFx			m_CtrlButtonPreDisk;
+	CButtonFx			m_CtrlButtonNextDisk;
 
 	CStaticCx			m_CtrlLabelFirmware;
 	CStaticCx			m_CtrlLabelSerialNumber;
@@ -153,7 +153,7 @@ protected:
 	CStaticCx			m_CtrlLabelDiskStatus;
 	CStaticCx			m_CtrlLabelTemperature;
 
-	CStaticCx			m_CtrlModel;
+	CStaticFx			m_CtrlModel;
 	CStaticCx			m_CtrlFirmware;
 	CStaticCx			m_CtrlSerialNumber;
 	CStaticCx			m_CtrlInterface;

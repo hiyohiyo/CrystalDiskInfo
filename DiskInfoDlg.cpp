@@ -102,6 +102,22 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 {
 	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg");
 
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	m_DefaultTheme = L"Shizuku";
+	m_RecommendTheme = L"ShizukuHotaru";
+	m_ThemeKeyName = L"ThemeShizuku";
+#elif KUREI_KEI_SUPPORT
+	m_DefaultTheme = L"KureiKei";
+	m_RecommendTheme = L"KureiKeiRecoding";
+	m_ThemeKeyName = L"ThemeKureiKei";
+#else
+	m_DefaultTheme = L"Default";
+	m_RecommendTheme = L"Default";
+	m_ThemeKeyName = L"Theme";
+#endif
+
+	m_BackgroundName = L"Background";
+
 	m_hMenu = NULL;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_hIconMini = AfxGetApp()->LoadIcon(IDI_MINI_ICON);
@@ -313,7 +329,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 		m_BackgroundName = L"ShizukuBackground";
 	#endif
 #else
-	m_BackgroundName = L"mainBackground";
+	m_BackgroundName = L"Background";
 #endif
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
@@ -1251,11 +1267,11 @@ void CDiskInfoDlg::UpdateDialogSize()
 	if(m_bHighContrast){ buttonDiskHeight = 56;}
 	for(int i = 0; i < 8; i++)
 	{
-		m_ButtonDisk[i].InitControl(84 * i + OFFSET_X, 0, 84, buttonDiskHeight, m_ZoomRatio, IP(L"noDisk"), 1, SS_CENTER, CButtonCx::OwnerDrawImage | m_bHighContrast);
+		m_ButtonDisk[i].InitControl(84 * i + OFFSET_X, 0, 84, buttonDiskHeight, m_ZoomRatio, &m_BgDC, IP(L"noDisk"), 1, BS_CENTER, OwnerDrawImage | m_bHighContrast);
 		m_ButtonDisk[i].SetMargin(0, 0, 3, 0, m_ZoomRatio);
 		m_ButtonDisk[i].SetHandCursor(TRUE);
 #ifdef SUISHO_SHIZUKU_SUPPORT
-		m_ButtonDisk[i].SetAlpha(IMAGE_ALPHA);
+	//	m_ButtonDisk[i].SetAlpha(IMAGE_ALPHA);
 #endif
 	}
 
@@ -1266,18 +1282,18 @@ void CDiskInfoDlg::UpdateDialogSize()
 
 	if (m_bHighContrast)
 	{
-		m_CtrlModel.InitControl(40 + OFFSET_X, 56, 592, 32, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawTransparent | m_bHighContrast);
-		m_CtrlButtonPreDisk.InitControl (  8 + OFFSET_X, 60, 24, 24, m_ZoomRatio, IP(L"preDisk"), 2, BS_CENTER, CButtonCx::OwnerDrawImage | m_bHighContrast);
-		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 60, 24, 24, m_ZoomRatio, IP(L"nextDisk"), 2, BS_CENTER, CButtonCx::OwnerDrawImage | m_bHighContrast);
+		m_CtrlModel.InitControl(40 + OFFSET_X, 56, 592, 32, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+		m_CtrlButtonPreDisk.InitControl (  8 + OFFSET_X, 60, 24, 24, m_ZoomRatio, &m_BgDC, IP(L"preDisk"), 2, BS_CENTER, OwnerDrawImage | m_bHighContrast);
+		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 60, 24, 24, m_ZoomRatio, &m_BgDC, IP(L"nextDisk"), 2, BS_CENTER, OwnerDrawImage | m_bHighContrast);
 
 		m_CtrlButtonPreDisk.SetWindowTextW(L"<");
 		m_CtrlButtonNextDisk.SetWindowTextW(L">");
 	}
 	else
 	{
-		m_CtrlModel.InitControl(32 + OFFSET_X, 52, 608, 32, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawTransparent | m_bHighContrast);
-		m_CtrlButtonPreDisk.InitControl(8 + OFFSET_X, 56, 24, 24, m_ZoomRatio, IP(L"preDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage | m_bHighContrast);
-		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 56, 24, 24, m_ZoomRatio, IP(L"nextDisk"), 2, SS_CENTER, CButtonCx::OwnerDrawImage | m_bHighContrast);
+		m_CtrlModel.InitControl(32 + OFFSET_X, 52, 608, 32, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+		m_CtrlButtonPreDisk.InitControl(8 + OFFSET_X, 56, 24, 24, m_ZoomRatio, &m_BgDC, IP(L"preDisk"), 2, BS_CENTER, OwnerDrawImage | m_bHighContrast);
+		m_CtrlButtonNextDisk.InitControl(640 + OFFSET_X, 56, 24, 24, m_ZoomRatio, &m_BgDC, IP(L"nextDisk"), 2, BS_CENTER, OwnerDrawImage | m_bHighContrast);
 
 		m_CtrlButtonPreDisk.SetWindowTextW(L"");
 		m_CtrlButtonNextDisk.SetWindowTextW(L"");
@@ -1428,7 +1444,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	//	m_CtrlCopyright.SetBgReload();
 	m_CtrlCopyright.ShowWindow(SW_SHOW);
 #else
-	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | SystemDraw);
+	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | SystemDraw);
 #endif
 
 
@@ -1455,7 +1471,7 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 	//	m_CtrlCopyright.SetBgReload();
 		m_CtrlCopyright.ShowWindow(SW_SHOW);
 #else
-		m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | SystemDraw);
+		m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | SystemDraw);
 #endif
 	}
 	flag = TRUE;
@@ -2288,20 +2304,20 @@ void CDiskInfoDlg::SetControlFont()
 
 	for(int i = 0; i < 8; i++)
 	{
-		m_ButtonDisk[i].SetFontEx(m_FontFace, 12, m_ZoomRatio, textAlpha, textColor, FW_NORMAL);
+		m_ButtonDisk[i].SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, textAlpha, textColor, FW_NORMAL);
 	}
 
 	if (m_bHighContrast)
 	{
-		m_CtrlModel.SetFontEx(m_FontFace, 20, m_ZoomRatio, textAlpha, textColor, FW_NORMAL);
+		m_CtrlModel.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textAlpha, textColor, FW_NORMAL);
 	}
 	else
 	{
-		m_CtrlModel.SetFontEx(m_FontFace, 24, m_ZoomRatio, textAlpha, textColor, FW_NORMAL);
+		m_CtrlModel.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, textAlpha, textColor, FW_NORMAL);
 	}
 
-	m_CtrlButtonPreDisk.SetFontEx(m_FontFace, 24, m_ZoomRatio, textAlpha, textColor, FW_NORMAL);
-	m_CtrlButtonNextDisk.SetFontEx(m_FontFace, 24, m_ZoomRatio, textAlpha, textColor, FW_NORMAL);
+	m_CtrlButtonPreDisk.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, textAlpha, textColor, FW_NORMAL);
+	m_CtrlButtonNextDisk.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, textAlpha, textColor, FW_NORMAL);
 	
 	m_CtrlLabelFirmware.SetFontEx(m_FontFace, 12, m_ZoomRatio, textAlpha, textColor, FW_NORMAL);
 	m_CtrlLabelSerialNumber.SetFontEx(m_FontFace, 12, m_ZoomRatio, textAlpha, textColor, FW_NORMAL);
