@@ -14,6 +14,10 @@ CHeaderCtrlFx::CHeaderCtrlFx()
 {
 	m_X = 0;
 	m_Y = 0;
+
+	m_TextColor = RGB(0, 0, 0);
+	m_LineColor = RGB(224, 224, 224);
+
 	m_BgDC = NULL;
 	m_CtrlBitmap = NULL;
 	m_bHighContrast = FALSE;
@@ -86,7 +90,7 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	rect = (CRect)(lpDrawItemStruct->rcItem);
 	rect.left += (int)(4 * m_ZoomRatio);
-	drawDC->DrawText(hi.pszText, lstrlen(str), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+	drawDC->DrawText(hi.pszText, lstrlen(hi.pszText), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 }
 
 void CHeaderCtrlFx::OnPaint()
