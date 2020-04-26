@@ -12,8 +12,8 @@
 
 #include "resource.h"		// main symbols
 
-#define THEME_DIR					_T("CdiResource\\themes\\")
-#define LANGUAGE_DIR				_T("CdiResource\\language\\")
+// #define THEME_DIR					_T("CdiResource\\themes\\")
+// #define LANGUAGE_DIR				_T("CdiResource\\language\\")
 #define DIALOG_DIR					_T("CdiResource\\dialog\\")
 #define GADGET_DIR					_T("CdiResource\\gadget\\")
 #define SMART_DIR					_T("Smart\\")

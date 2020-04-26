@@ -1421,7 +1421,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 //	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | OwnerDrawGlass);
+	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | OwnerDrawGlass);
 	m_CtrlVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(rect.Height() - ((24 + 48) * m_ZoomRatio)));
 	m_CtrlCopyright.MoveWindow(0, (int)(rect.Height() - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
 	m_CtrlCopyright.ShowWindow(SW_HIDE);
@@ -1448,7 +1448,7 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 	if(flag)
 	{
 #ifdef SUISHO_SHIZUKU_SUPPORT
-		m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | OwnerDrawGlass);
+		m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | OwnerDrawGlass);
 		m_CtrlVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X  * m_ZoomRatio), (int)(cy - ((24 + 48) * m_ZoomRatio)));
 		m_CtrlCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
 		m_CtrlCopyright.ShowWindow(SW_HIDE);

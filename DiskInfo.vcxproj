@@ -373,13 +373,14 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>SUISHO_SHIZUKU_SUPPORT;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -423,7 +424,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
@@ -473,7 +474,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
@@ -481,6 +482,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -517,7 +519,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
@@ -525,6 +527,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -625,6 +628,7 @@
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>SUISHO_SHIZUKU_SUPPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -678,6 +682,7 @@
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>SUISHO_SHIZUKU_SUPPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -821,6 +826,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -917,6 +923,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>SUISHO_SHIZUKU_SUPPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -963,6 +970,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>SUISHO_SHIZUKU_SUPPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -1059,6 +1067,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>SUISHO_SHIZUKU_SUPPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -1105,6 +1114,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>SUISHO_SHIZUKU_SUPPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -1564,6 +1574,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM'">Create</PrecompiledHeader>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</MinimalRebuild>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">false</MinimalRebuild>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</MinimalRebuild>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</MinimalRebuild>
     </ClCompile>
     <ClCompile Include="AtaSmart.cpp" />
     <ClCompile Include="DHtmlDialogEx.cpp" />
@@ -1571,7 +1585,12 @@
     <ClCompile Include="EventLog.cpp" />
     <ClCompile Include="IsCurrentUserLocalAdministrator.cpp" />
     <ClCompile Include="ListCtrlEx.cpp" />
-    <ClCompile Include="TemperatureDlg.cpp" />
+    <ClCompile Include="TemperatureDlg.cpp">
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</MinimalRebuild>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">false</MinimalRebuild>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</MinimalRebuild>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</MinimalRebuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h" />
