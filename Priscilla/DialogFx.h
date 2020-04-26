@@ -80,13 +80,22 @@ protected:
 	COLORREF m_ComboTextSelected;
 	COLORREF m_ComboBg;
 	COLORREF m_ComboBgSelected;
-	BYTE     m_ComboAlpha;
 	COLORREF m_ButtonText;
 	COLORREF m_EditText;
 	COLORREF m_EditBg;
-	BYTE     m_EditAlpha;
-	BYTE     m_CharacterPosition;
+	COLORREF m_ListText1;
+	COLORREF m_ListText2;
+	COLORREF m_ListTextSelected;
+	COLORREF m_ListBg1;
+	COLORREF m_ListBg2;
+	COLORREF m_ListBgSelected;
+	COLORREF m_ListLine;
 	COLORREF m_Glass;
+
+	BYTE     m_CharacterPosition;
+
+	BYTE     m_ComboAlpha;
+	BYTE     m_EditAlpha;
 	BYTE     m_GlassAlpha;
 
 	// Theme for SubClass

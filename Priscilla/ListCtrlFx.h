@@ -24,14 +24,19 @@ public:
 
 	void SetTextColor1(COLORREF color);
 	void SetTextColor2(COLORREF color);
+	void SetTextSelected(COLORREF color);
 	void SetBkColor1(COLORREF color);
 	void SetBkColor2(COLORREF color);
+	void SetBkSelected(COLORREF color);
 	void SetLineColor(COLORREF color);
+	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);
 
 	COLORREF GetTextColor1();
 	COLORREF GetTextColor2();
+	COLORREF GetTextSelected();
 	COLORREF GetBkColor1();
 	COLORREF GetBkColor2();
+	COLORREF GetBkSelected();
 	COLORREF GetLineColor();
 
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, int renderMode);
@@ -49,8 +54,10 @@ protected:
 
 	COLORREF m_TextColor1;
 	COLORREF m_TextColor2;
+	COLORREF m_TextSelected;
 	COLORREF m_BkColor1;
 	COLORREF m_BkColor2;
+	COLORREF m_BkSelected;
 	COLORREF m_LineColor;
 
 	CFont    m_Font;
@@ -65,7 +72,6 @@ protected:
 	CBitmap m_BgBitmap;
 	CBitmap m_CtrlBitmap;
 	CImage m_CtrlImage;
-
 
 	void SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap);
 

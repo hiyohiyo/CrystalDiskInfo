@@ -15,15 +15,17 @@ CListCtrlFx::CListCtrlFx()
 	m_bHighContrast = FALSE;
 	m_RenderMode = SystemDraw;
 
-	m_TextColor1 = RGB(0, 0, 0);
-	m_TextColor2 = RGB(0, 0, 0);
-	m_BkColor1   = RGB(255, 255, 255);
-	m_BkColor2   = RGB(248, 248, 248);
-	m_LineColor  = RGB(224, 224, 224);
+	// Color
+	m_TextColor1   = RGB(0, 0, 0);
+	m_TextColor2   = RGB(0, 0, 0);
+	m_TextSelected = RGB(0, 0, 0);
+	m_BkColor1     = RGB(255, 255, 255);
+	m_BkColor2     = RGB(248, 248, 248);
+	m_BkSelected   = RGB(248, 248, 255);
+	m_LineColor    = RGB(224, 224, 224);
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
-	m_GlassColor = RGB(0, 0, 0);
 	m_GlassAlpha = 128;
 }
 
@@ -100,12 +102,12 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 
 		SetBkImage((HBITMAP)m_CtrlBitmap);
 
-		m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap, m_RenderMode);
+		m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap, m_TextColor1, m_LineColor, m_RenderMode);
 	}
 	else
 	{
-		m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_RenderMode);
 		SetBkImage(L"");
+		m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_TextColor1, m_LineColor, m_RenderMode);
 	}
 
 	return TRUE;
@@ -209,14 +211,25 @@ void CListCtrlFx::OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CListCtrlFx::SetTextColor1(COLORREF color){m_TextColor1 = color;}
 void CListCtrlFx::SetTextColor2(COLORREF color){m_TextColor2 = color;}
+void CListCtrlFx::SetTextSelected(COLORREF color) { m_TextSelected = color; }
 void CListCtrlFx::SetBkColor1(COLORREF color)  {m_BkColor1   = color;}
 void CListCtrlFx::SetBkColor2(COLORREF color)  {m_BkColor2   = color;}
+void CListCtrlFx::SetBkSelected(COLORREF color) { m_BkSelected = color; }
 void CListCtrlFx::SetLineColor(COLORREF color) {m_LineColor  = color;}
+
+void CListCtrlFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
+{
+	m_GlassColor = glassColor;
+	m_GlassAlpha = glassAlpha;
+}
+
 
 COLORREF CListCtrlFx::GetTextColor1(){return m_TextColor1;}
 COLORREF CListCtrlFx::GetTextColor2(){return m_TextColor2;}
+COLORREF CListCtrlFx::GetTextSelected() { return m_TextSelected; }
 COLORREF CListCtrlFx::GetBkColor1()  {return m_BkColor1;}
 COLORREF CListCtrlFx::GetBkColor2()  {return m_BkColor2;}
+COLORREF CListCtrlFx::GetBkSelected() { return m_BkSelected; }
 COLORREF CListCtrlFx::GetLineColor() {return m_LineColor;}
 
 void CListCtrlFx::SetFontEx(CString face, double zoomRatio, double fontRatio)

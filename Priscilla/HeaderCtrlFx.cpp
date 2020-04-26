@@ -28,11 +28,14 @@ BEGIN_MESSAGE_MAP(CHeaderCtrlFx, CHeaderCtrl)
 	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
-void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bgDC, CBitmap* ctrlBitmap, int renderMode)
+void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bgDC, CBitmap* ctrlBitmap, COLORREF textColor, COLORREF lineColor, int renderMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
+	m_ZoomRatio = zoomRatio;
 	m_BgDC = bgDC;
+	m_TextColor = textColor;
+	m_LineColor = lineColor;
 	m_CtrlBitmap = ctrlBitmap;
 	m_RenderMode = renderMode;
 	m_bHighContrast = renderMode & HighContrast;
@@ -47,14 +50,8 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	CDC* drawDC = CDC::FromHandle(lpDrawItemStruct->hDC);
 
-	CBrush br;
-	br.CreateSolidBrush(RGB(0, 0, 0));
-
 	drawDC->SetBkMode(TRANSPARENT);
-	drawDC->SetTextColor(RGB(255,255,255));
-//	drawDC->SetTextColor(RGB(0, 0, 0));
-
-	drawDC->FillRect(&(lpDrawItemStruct->rcItem), &br);
+	drawDC->SetTextColor(m_TextColor);
 
 	CRect clientRect;
 	GetClientRect(&clientRect);
@@ -69,8 +66,8 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		drawDC->BitBlt(rc.left, rc.top, rc.right, rc.bottom, &BgDC, rc.left, rc.top, SRCCOPY);
 	}
 
-	br.DeleteObject();
-	br.CreateSolidBrush(RGB(255, 255, 255));
+	CBrush br;
+	br.CreateSolidBrush(m_LineColor);
 
 	CRect rect = lpDrawItemStruct->rcItem;
 	rect.left = rect.right - 1;
@@ -88,7 +85,7 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	GetItem(lpDrawItemStruct->itemID, &hi);
 
 	rect = (CRect)(lpDrawItemStruct->rcItem);
-	rect.left += 8;
+	rect.left += (int)(4 * m_ZoomRatio);
 	drawDC->DrawText(hi.pszText, lstrlen(str), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 }
 

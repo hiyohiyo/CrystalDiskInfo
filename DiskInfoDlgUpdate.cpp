@@ -279,24 +279,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 		preSelectDisk = i;
 	}
 
-	if (m_Ata.vars[i].IsSmartCorrect)
-	{
-
-		/*
-		m_List.SetTextColor1(RGB(255, 255, 255));
-		m_List.SetTextColor2(RGB(255, 255, 255));
-		m_List.SetBkColor(RGB(0, 0, 0));
-		m_List.SetBkColor1(RGB(0, 0, 0));
-		m_List.SetBkColor2(RGB(0, 0, 0));
-		*/
-		m_List.SetTextColor1(RGB(0, 0, 0));
-		m_List.SetTextColor2(RGB(0, 0, 0));
-	}
-	else
-	{
-		m_List.SetTextColor1(RGB(192, 192, 192));
-		m_List.SetTextColor2(RGB(192, 192, 192));
-	}
+	m_List.SetTextColor1(m_ListText1);
+	m_List.SetTextColor2(m_ListText2);
+	m_List.SetBkColor1(m_ListBg1);
+	m_List.SetBkColor2(m_ListBg2);
+	m_List.SetLineColor(m_ListLine);
 
 	CString cstr;
 	DWORD caution = 0;

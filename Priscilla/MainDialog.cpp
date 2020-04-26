@@ -417,13 +417,22 @@ void CMainDialog::UpdateThemeInfo()
 	m_ComboTextSelected = GetControlColor(L"ComboTextSelected", 0, theme);
 	m_ComboBg   = GetControlColor(L"ComboBg", 255, theme);
 	m_ComboBgSelected = GetControlColor(L"ComboBgSelected", 192, theme);
-	m_ComboAlpha = GetControlAlpha(L"ComboAlpha", 255, theme);
 	m_ButtonText= GetControlColor(L"ButtonText", 0, theme);
 	m_EditText  = GetControlColor(L"EditText", 0, theme);
 	m_EditBg    = GetControlColor(L"EditBg", 255, theme);
-	m_EditAlpha = GetControlAlpha(L"EditAlpha", 255, theme);
-	m_CharacterPosition = GetCharacterPosition(theme);
+	m_ListText1 = GetControlColor(L"ListText1", 0, theme);
+	m_ListText2 = GetControlColor(L"ListText2", 0, theme);
+	m_ListTextSelected = GetControlColor(L"ListTextSelected", 0, theme);
+	m_ListBg1 = GetControlColor(L"ListBg1", 0, theme);
+	m_ListBg2 = GetControlColor(L"ListBg2", 0, theme);
+	m_ListBgSelected = GetControlColor(L"ListBgSelected", 0, theme);
+	m_ListLine = GetControlColor(L"ListLine", 0, theme);
 	m_Glass = GetControlColor(L"Glass", 255, theme);
+
+	m_CharacterPosition = GetCharacterPosition(theme);
+
+	m_ComboAlpha = GetControlAlpha(L"ComboAlpha", 255, theme);
+	m_EditAlpha = GetControlAlpha(L"EditAlpha", 255, theme);
 	m_GlassAlpha = GetControlAlpha(L"GlassAlpha", 128, theme);
 }
 

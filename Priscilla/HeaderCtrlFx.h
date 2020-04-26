@@ -16,11 +16,14 @@ class CHeaderCtrlFx : public CHeaderCtrl
 public:
 	CHeaderCtrlFx();
 	virtual ~CHeaderCtrlFx();
-	void InitControl(int x, int y, double zoomRatio, CDC* bgDC, CBitmap* ctrlBitmap, int renderMode);
+	void InitControl(int x, int y, double zoomRatio, CDC* bgDC, CBitmap* ctrlBitmap, COLORREF textColor, COLORREF lineColor, int renderMode);
 
 protected:
 	int m_X;
 	int m_Y;
+	COLORREF m_TextColor;
+	COLORREF m_LineColor;
+	double m_ZoomRatio;
 	int m_RenderMode;
 	BOOL m_bHighContrast;
 
