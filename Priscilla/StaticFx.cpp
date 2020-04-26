@@ -53,6 +53,7 @@ IMPLEMENT_DYNAMIC(CStaticFx, CStatic)
 
 BEGIN_MESSAGE_MAP(CStaticFx, CStatic)
 	//{{AFX_MSG_MAP(CStaticFx)
+	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEHOVER()
 	ON_WM_MOUSELEAVE()
@@ -721,4 +722,9 @@ BOOL CStaticFx::PreTranslateMessage(MSG* pMsg)
 	m_ToolTip.RelayEvent(pMsg);
 
 	return CStatic::PreTranslateMessage(pMsg);
+}
+
+BOOL CStaticFx::OnEraseBkgnd(CDC* pDC)
+{
+	return TRUE;
 }

@@ -1314,13 +1314,13 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlLife.SetHandCursor(TRUE);
 #else
 	m_CtrlLife.ShowWindow(SW_HIDE);
-	m_CtrlLabelDiskStatus.InitControl  (8 + OFFSET_X,  88, 100, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlLabelTemperature.InitControl (8 + OFFSET_X, 184, 100, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlLabelDiskStatus.InitControl  (8 + OFFSET_X,  88, 100, 20, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlLabelTemperature.InitControl (8 + OFFSET_X, 184, 100, 20, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
 
 	m_CtrlLabelDiskStatus.SetMargin(0, 0, 0, 1, m_ZoomRatio);
 	m_CtrlLabelTemperature.SetMargin(0, 0, 0, 1, m_ZoomRatio);
 
-	m_CtrlDiskStatus.InitControl       (8 + OFFSET_X, 112, 100, 60, m_ZoomRatio, &m_BgDC, IP(className), 1, SS_CENTER, CButtonCx::OwnerDrawImage | m_bHighContrast);
+	m_CtrlDiskStatus.InitControl       (8 + OFFSET_X, 112, 100, 60, m_ZoomRatio, &m_BgDC, IP(className), 1, BS_CENTER, OwnerDrawImage | m_bHighContrast);
 	m_CtrlDiskStatus.SetMargin(4, 0, 4, 0, m_ZoomRatio);
 #endif
 	m_CtrlDiskStatus.SetHandCursor(TRUE);
@@ -1433,11 +1433,14 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_List.SetGlassColor(m_Glass, m_GlassAlpha);
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | OwnerDrawGlass);
-	m_CtrlVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(rect.Height() - ((24 + 48) * m_ZoomRatio)));
-	m_CtrlCopyright.MoveWindow(0, (int)(rect.Height() - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
-	m_CtrlCopyright.ShowWindow(SW_HIDE);
+
+	m_CtrlVoice.InitControl(0, 48, OFFSET_X, (int)(rect.Height() / m_ZoomRatio - 24 - 48), m_ZoomRatio, &m_BgDC, NULL, 0, BS_CENTER, OwnerDrawTransparent);
+//	m_CtrlVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(rect.Height() - ((24 + 48) * m_ZoomRatio)));
+//	m_CtrlCopyright.InitControl(0, rect.Height() / m_ZoomRatio - 24, OFFSET_X, 24, m_ZoomRatio, &m_BgDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage);
+//	m_CtrlCopyright.MoveWindow(0, (int)(rect.Height() - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
+//	m_CtrlCopyright.ShowWindow(SW_HIDE);
 	//	m_CtrlCopyright.SetBgReload();
-	m_CtrlCopyright.ShowWindow(SW_SHOW);
+//	m_CtrlCopyright.ShowWindow(SW_SHOW);
 #else
 	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | SystemDraw);
 #endif
@@ -2356,7 +2359,8 @@ void CDiskInfoDlg::SetControlFont()
 	m_List.SetBkColor1(m_ListBg1);
 	m_List.SetBkColor2(m_ListBg2);
 	m_List.SetBkSelected(m_ListBgSelected);
-	m_List.SetLineColor(m_ListLine);
+	m_List.SetLineColor1(m_ListLine1);
+	m_List.SetLineColor2(m_ListLine2);
 }
 
 void CDiskInfoDlg::OnBnClickedButtonPreDisk()

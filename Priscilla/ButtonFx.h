@@ -61,9 +61,11 @@ protected:
 	// ToolTip
 	void InitToolTip();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	
 
 	// Message Map
 	DECLARE_MESSAGE_MAP()
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnMouseHover(UINT nFlags, CPoint point);
 	afx_msg void OnMouseLeave();

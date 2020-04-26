@@ -283,7 +283,8 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 	m_List.SetTextColor2(m_ListText2);
 	m_List.SetBkColor1(m_ListBg1);
 	m_List.SetBkColor2(m_ListBg2);
-	m_List.SetLineColor(m_ListLine);
+	m_List.SetLineColor1(m_ListLine1);
+	m_List.SetLineColor2(m_ListLine2);
 
 	CString cstr;
 	DWORD caution = 0;

@@ -12,6 +12,9 @@ IMPLEMENT_DYNAMIC(CListCtrlFx, CListCtrl)
 
 CListCtrlFx::CListCtrlFx()
 {
+	m_X = 0;
+	m_Y = 0;
+	m_BgDC = NULL;
 	m_bHighContrast = FALSE;
 	m_RenderMode = SystemDraw;
 
@@ -22,7 +25,8 @@ CListCtrlFx::CListCtrlFx()
 	m_BkColor1     = RGB(255, 255, 255);
 	m_BkColor2     = RGB(248, 248, 248);
 	m_BkSelected   = RGB(248, 248, 255);
-	m_LineColor    = RGB(224, 224, 224);
+	m_LineColor1   = RGB(224, 224, 224);
+	m_LineColor2   = RGB(240, 240, 240);
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
@@ -31,7 +35,6 @@ CListCtrlFx::CListCtrlFx()
 
 CListCtrlFx::~CListCtrlFx()
 {
-	m_Font.DeleteObject();
 }
 
 BEGIN_MESSAGE_MAP(CListCtrlFx, CListCtrl)
@@ -102,12 +105,12 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 
 		SetBkImage((HBITMAP)m_CtrlBitmap);
 
-		m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap, m_TextColor1, m_LineColor, m_RenderMode);
+		m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap, m_TextColor1, m_LineColor1, m_RenderMode);
 	}
 	else
 	{
 		SetBkImage(L"");
-		m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_TextColor1, m_LineColor, m_RenderMode);
+		m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_TextColor1, m_LineColor1, m_RenderMode);
 	}
 
 	return TRUE;
@@ -184,7 +187,8 @@ void CListCtrlFx::OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 	case CDDS_ITEMPOSTPAINT | CDDS_SUBITEM:
 		{
 			RECT rc;
-			CBrush brush(m_LineColor);
+			CBrush br1(m_LineColor1);
+			CBrush br2(m_LineColor2);
 
 			CHeaderCtrl* header = this->GetHeaderCtrl();
 			if(header != NULL)
@@ -193,8 +197,12 @@ void CListCtrlFx::OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 				for(int i = 0; i < count; i++)
 				{
 					ListView_GetSubItemRect(m_hWnd, lpLVCustomDraw->nmcd.dwItemSpec, i, LVIR_LABEL, &rc);
+					LONG left = rc.left;
 					rc.left = rc.right - 1;
-					FillRect(lpLVCustomDraw->nmcd.hdc, &rc, (HBRUSH) brush.GetSafeHandle());
+					FillRect(lpLVCustomDraw->nmcd.hdc, &rc, (HBRUSH)br1.GetSafeHandle());
+					rc.left = left;
+					rc.top = rc.bottom - 1;				
+					FillRect(lpLVCustomDraw->nmcd.hdc, &rc, (HBRUSH)br2.GetSafeHandle());
 				}
 			}
 		}
@@ -214,8 +222,9 @@ void CListCtrlFx::SetTextColor2(COLORREF color){m_TextColor2 = color;}
 void CListCtrlFx::SetTextSelected(COLORREF color) { m_TextSelected = color; }
 void CListCtrlFx::SetBkColor1(COLORREF color)  {m_BkColor1   = color;}
 void CListCtrlFx::SetBkColor2(COLORREF color)  {m_BkColor2   = color;}
-void CListCtrlFx::SetBkSelected(COLORREF color) { m_BkSelected = color; }
-void CListCtrlFx::SetLineColor(COLORREF color) {m_LineColor  = color;}
+void CListCtrlFx::SetBkSelected(COLORREF color) {m_BkSelected = color; }
+void CListCtrlFx::SetLineColor1(COLORREF color) {m_LineColor1  = color;}
+void CListCtrlFx::SetLineColor2(COLORREF color) {m_LineColor2 = color; }
 
 void CListCtrlFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
 {
@@ -230,7 +239,8 @@ COLORREF CListCtrlFx::GetTextSelected() { return m_TextSelected; }
 COLORREF CListCtrlFx::GetBkColor1()  {return m_BkColor1;}
 COLORREF CListCtrlFx::GetBkColor2()  {return m_BkColor2;}
 COLORREF CListCtrlFx::GetBkSelected() { return m_BkSelected; }
-COLORREF CListCtrlFx::GetLineColor() {return m_LineColor;}
+COLORREF CListCtrlFx::GetLineColor1() {return m_LineColor1;}
+COLORREF CListCtrlFx::GetLineColor2() { return m_LineColor2; }
 
 void CListCtrlFx::SetFontEx(CString face, double zoomRatio, double fontRatio)
 {

@@ -426,7 +426,8 @@ void CMainDialog::UpdateThemeInfo()
 	m_ListBg1 = GetControlColor(L"ListBg1", 0, theme);
 	m_ListBg2 = GetControlColor(L"ListBg2", 0, theme);
 	m_ListBgSelected = GetControlColor(L"ListBgSelected", 0, theme);
-	m_ListLine = GetControlColor(L"ListLine", 0, theme);
+	m_ListLine1 = GetControlColor(L"ListLine1", 0, theme);
+	m_ListLine2 = GetControlColor(L"ListLine2", 0, theme);
 	m_Glass = GetControlColor(L"Glass", 255, theme);
 
 	m_CharacterPosition = GetCharacterPosition(theme);

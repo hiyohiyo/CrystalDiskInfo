@@ -89,7 +89,8 @@ protected:
 	COLORREF m_ListBg1;
 	COLORREF m_ListBg2;
 	COLORREF m_ListBgSelected;
-	COLORREF m_ListLine;
+	COLORREF m_ListLine1;
+	COLORREF m_ListLine2;
 	COLORREF m_Glass;
 
 	BYTE     m_CharacterPosition;

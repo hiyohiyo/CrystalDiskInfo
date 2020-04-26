@@ -50,6 +50,7 @@ IMPLEMENT_DYNAMIC(CButtonFx, CButton)
 
 BEGIN_MESSAGE_MAP(CButtonFx, CButton)
 	//{{AFX_MSG_MAP(CButtonFx)
+	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEHOVER()
 	ON_WM_MOUSELEAVE()
@@ -735,4 +736,9 @@ BOOL CButtonFx::PreTranslateMessage(MSG* pMsg)
 	m_ToolTip.RelayEvent(pMsg);
 
 	return CButton::PreTranslateMessage(pMsg);
+}
+
+BOOL CButtonFx::OnEraseBkgnd(CDC* pDC)
+{
+	return TRUE;
 }

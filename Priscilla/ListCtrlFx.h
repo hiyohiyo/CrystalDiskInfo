@@ -28,7 +28,8 @@ public:
 	void SetBkColor1(COLORREF color);
 	void SetBkColor2(COLORREF color);
 	void SetBkSelected(COLORREF color);
-	void SetLineColor(COLORREF color);
+	void SetLineColor1(COLORREF color);
+	void SetLineColor2(COLORREF color);
 	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);
 
 	COLORREF GetTextColor1();
@@ -37,7 +38,8 @@ public:
 	COLORREF GetBkColor1();
 	COLORREF GetBkColor2();
 	COLORREF GetBkSelected();
-	COLORREF GetLineColor();
+	COLORREF GetLineColor1();
+	COLORREF GetLineColor2();
 
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, int renderMode);
 	void SetFontEx(CString face, double zoomRatio, double fontRatio = 1.0);
@@ -58,7 +60,8 @@ protected:
 	COLORREF m_BkColor1;
 	COLORREF m_BkColor2;
 	COLORREF m_BkSelected;
-	COLORREF m_LineColor;
+	COLORREF m_LineColor1;
+	COLORREF m_LineColor2;
 
 	CFont    m_Font;
 	CImageList m_Image;
@@ -76,7 +79,6 @@ protected:
 	void SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap);
 
 	virtual void PreSubclassWindow();
-	
 	afx_msg void OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
 	DECLARE_MESSAGE_MAP()
 };
