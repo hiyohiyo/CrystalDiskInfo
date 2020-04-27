@@ -281,6 +281,7 @@ void CListCtrlFx::EnableHeaderOwnerDraw(BOOL bOwnerDraw)
 	else if (m_RenderMode & OwnerDrawGlass)
 	{
 		HDITEM hi = {0};
+		hi.mask = HDI_FORMAT;
 		if (bOwnerDraw)
 		{
 			for (int i = 0; i < m_Header.GetItemCount(); i++)
