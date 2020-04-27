@@ -1432,7 +1432,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 
 	m_List.SetGlassColor(m_Glass, m_GlassAlpha);
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | OwnerDrawGlass);
+	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BgDC, m_bHighContrast | OwnerDrawGlass);
 
 	m_CtrlVoice.InitControl(0, 48, OFFSET_X, (int)(rect.Height() / m_ZoomRatio - 24 - 48), m_ZoomRatio, &m_BgDC, NULL, 0, BS_CENTER, OwnerDrawTransparent);
 //	m_CtrlVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(rect.Height() - ((24 + 48) * m_ZoomRatio)));
@@ -1442,7 +1442,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	//	m_CtrlCopyright.SetBgReload();
 //	m_CtrlCopyright.ShowWindow(SW_SHOW);
 #else
-	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | SystemDraw);
+	m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BgDC, m_bHighContrast | SystemDraw);
 #endif
 
 	RebuildListHeader(m_SelectDisk, TRUE);
@@ -1455,20 +1455,18 @@ void CDiskInfoDlg::UpdateDialogSize()
 void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CMainDialog::OnSize(nType, cx, cy);
+	
 
 	static BOOL flag = FALSE;
 
 	if(flag)
 	{
 #ifdef SUISHO_SHIZUKU_SUPPORT
-		m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | OwnerDrawGlass);
+		m_List.MoveWindow((int)((8 + OFFSET_X) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672 - 16) * m_ZoomRatio), (int)(cy - ((SIZE_Y + 8) * m_ZoomRatio)));
 		m_CtrlVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X  * m_ZoomRatio), (int)(cy - ((24 + 48) * m_ZoomRatio)));
 		m_CtrlCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
-		m_CtrlCopyright.ShowWindow(SW_HIDE);
-	//	m_CtrlCopyright.SetBgReload();
-		m_CtrlCopyright.ShowWindow(SW_SHOW);
 #else
-		m_List.InitControl(8 + OFFSET_X, SIZE_Y, 672 - 16, (int)(cy / m_ZoomRatio - SIZE_Y - 8), m_ZoomRatio, &m_BgDC, m_bHighContrast | SystemDraw);
+		m_List.MoveWindow((int)((8 + OFFSET_X) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672 - 16) * m_ZoomRatio), (int)(cy - ((SIZE_Y + 8) * m_ZoomRatio)));
 #endif
 	}
 	flag = TRUE;

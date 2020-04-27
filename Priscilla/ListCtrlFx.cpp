@@ -41,13 +41,15 @@ BEGIN_MESSAGE_MAP(CListCtrlFx, CListCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CListCtrlFx::OnCustomdraw)
 END_MESSAGE_MAP()
 
-BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, int renderMode)
+BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bgDC, int renderMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
 	m_CtrlSize.cx = (int)(width * zoomRatio);
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
+	maxWidth = (int)(maxWidth * zoomRatio);
+	maxHeight = (int)(maxHeight * zoomRatio);
 
 	m_BgDC = bgDC;
 	m_RenderMode = renderMode;
@@ -60,25 +62,25 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 	else if (renderMode & OwnerDrawGlass)
 	{
 		m_BgBitmap.DeleteObject();
-		m_BgBitmap.CreateCompatibleBitmap(m_BgDC, m_CtrlSize.cx, m_CtrlSize.cy);
+		m_BgBitmap.CreateCompatibleBitmap(m_BgDC, maxWidth, maxHeight);
 		CDC BgDC;
 		BgDC.CreateCompatibleDC(m_BgDC);
 		BgDC.SelectObject(m_BgBitmap);
-		BgDC.BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X + 2, m_Y + 2, SRCCOPY);
+		BgDC.BitBlt(0, 0, maxWidth, maxHeight, m_BgDC, m_X + 2, m_Y + 2, SRCCOPY);
 
 		m_CtrlImage.Destroy();
-		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
+		m_CtrlImage.Create(maxWidth, maxHeight, 32);
 
 		RECT rect;
 		rect.top = 0;
 		rect.left = 0;
-		rect.right = m_CtrlSize.cx;
-		rect.bottom = m_CtrlSize.cy;
+		rect.right = maxWidth;
+		rect.bottom = maxHeight;
 
 		m_CtrlBitmap.Detach();
 		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
 
-		DWORD length = m_CtrlSize.cx * m_CtrlSize.cy * 4;
+		DWORD length = maxWidth * maxHeight * 4;
 		BYTE* bitmapBits = new BYTE[length];
 		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
 
@@ -87,14 +89,14 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, double zoomRa
 		BYTE b = (BYTE)GetBValue(m_GlassColor);
 		BYTE a = m_GlassAlpha;
 
-		for (int y = 0; y < m_CtrlSize.cy; y++)
+		for (int y = 0; y < maxHeight; y++)
 		{
-			for (int x = 0; x < m_CtrlSize.cx; x++)
+			for (int x = 0; x < maxWidth; x++)
 			{
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = b;
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = a;
+				bitmapBits[(y * maxWidth + x) * 4 + 0] = b;
+				bitmapBits[(y * maxWidth + x) * 4 + 1] = g;
+				bitmapBits[(y * maxWidth + x) * 4 + 2] = r;
+				bitmapBits[(y * maxWidth + x) * 4 + 3] = a;
 			}
 		}
 
