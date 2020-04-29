@@ -35,10 +35,11 @@
 #define OPTION_DIALOG				_T("Option.html")
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-		#define PROJECT_COPYRIGHT   L"ShizukuCopyright"
-#elif KUREI_KEI_SUPPORT
+	#ifdef KUREI_KEI_SUPPORT
 		#define PROJECT_COPYRIGHT   L"KureiKeiCopyright"
-#else
+	#else
+		#define PROJECT_COPYRIGHT   L"ShizukuCopyright"
+	#endif
 #endif
 
 class CDiskInfoApp : public CWinApp

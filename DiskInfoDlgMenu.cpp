@@ -1447,14 +1447,18 @@ void CDiskInfoDlg::OnSmartEnglish()
 
 void CDiskInfoDlg::OnFontSetting()
 {
-	CFontSelection fontSelection(this);
-	if(fontSelection.DoModal() == IDOK)
+	CFontSelectionDlg fontSelection(this);
+	if (fontSelection.DoModal() == IDOK)
 	{
 		m_FontFace = fontSelection.GetFontFace();
-		SetControlFont();
-		Invalidate();
+		m_FontScale = fontSelection.GetFontScale();
+		m_FontRatio = m_FontScale / 100.0;
 		CString cstr;
-		WritePrivateProfileString(_T("Setting"), _T("FontFace"), _T("\"") + m_FontFace + _T("\""), m_Ini);
+		WritePrivateProfileString(L"Setting", L"FontFace", L"\"" + m_FontFace + L"\"", m_Ini);
+		cstr.Format(L"%d", m_FontScale);
+		WritePrivateProfileString(L"Setting", L"FontScale", cstr, m_Ini);
+
+		UpdateDialogSize();
 	}
 }
 

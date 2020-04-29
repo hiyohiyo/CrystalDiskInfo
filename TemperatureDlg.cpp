@@ -17,7 +17,7 @@ IMPLEMENT_DYNAMIC(CTemperatureDlg, CDialog)
 CTemperatureDlg::CTemperatureDlg(CWnd* pParent /*=NULL*/)
 	: CDialogFx(CTemperatureDlg::IDD, pParent)
 {
-	CMainDialog* p = (CMainDialog*)pParent;
+	p = (CDiskInfoDlg*)pParent;
 
 	m_ZoomType = p->GetZoomType();
 	m_FontScale = p->GetFontScale();

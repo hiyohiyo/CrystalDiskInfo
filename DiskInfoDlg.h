@@ -11,7 +11,7 @@
 #include "SettingDlg.h"
 #include "HealthDlg.h"
 #include "OptionDlg.h"
-#include "FontSelection.h"
+#include "FontSelectionDlg.h"
 #include "SoundSettingDlg.h"
 #include "GraphDlg.h"
 #include "TemperatureDlg.h"

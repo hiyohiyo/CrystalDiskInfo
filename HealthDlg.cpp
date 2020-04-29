@@ -10,14 +10,14 @@
 #include "DiskInfoDlg.h"
 #include "HealthDlg.h"
 
-static CDiskInfoDlg *p;
+static CDiskInfoDlg* p;
 
 IMPLEMENT_DYNAMIC(CHealthDlg, CDialog)
 
 CHealthDlg::CHealthDlg(CWnd* pParent /*=NULL*/)
 	: CDialogFx(CHealthDlg::IDD, pParent)
 {
-	CMainDialog* p = (CMainDialog*)pParent;
+	p = (CDiskInfoDlg*)pParent;
 
 	m_ZoomType = p->GetZoomType();
 	m_FontScale = p->GetFontScale();

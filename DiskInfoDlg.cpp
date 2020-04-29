@@ -103,13 +103,15 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg");
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_DefaultTheme = L"Shizuku";
-	m_RecommendTheme = L"ShizukuHotaru";
-	m_ThemeKeyName = L"ThemeShizuku";
-#elif KUREI_KEI_SUPPORT
+	#ifdef KUREI_KEI_SUPPORT
 	m_DefaultTheme = L"KureiKei";
 	m_RecommendTheme = L"KureiKeiRecoding";
 	m_ThemeKeyName = L"ThemeKureiKei";
+	#else 
+	m_DefaultTheme = L"Shizuku";
+	m_RecommendTheme = L"ShizukuHotaru";
+	m_ThemeKeyName = L"ThemeShizuku";
+#endif
 #else
 	m_DefaultTheme = L"Default";
 	m_RecommendTheme = L"Default";
@@ -1179,8 +1181,6 @@ CString CDiskInfoDlg::IP(CString imageName)
 
 void CDiskInfoDlg::UpdateDialogSize()
 {
-	UpdateBackground(true);
-
 	if (GetPrivateProfileInt(_T("Setting"), _T("HideSmartInfo"), 0, m_Ini))
 	{
 		m_SizeX = SIZE_X;
@@ -1213,6 +1213,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 		DrawMenuBar();
 	}
 
+	UpdateBackground(true);
 	SetControlFont();
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
@@ -1464,7 +1465,8 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 #ifdef SUISHO_SHIZUKU_SUPPORT
 		m_List.MoveWindow((int)((8 + OFFSET_X) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672 - 16) * m_ZoomRatio), (int)(cy - ((SIZE_Y + 8) * m_ZoomRatio)));
 		m_CtrlVoice.MoveWindow(0, (int)(48 * m_ZoomRatio), (int)(OFFSET_X  * m_ZoomRatio), (int)(cy - ((24 + 48) * m_ZoomRatio)));
-		m_CtrlCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
+		// m_CtrlCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio));
+		m_CtrlCopyright.InitControl(0, (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio), 1.0, &m_BgDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage);
 #else
 		m_List.MoveWindow((int)((8 + OFFSET_X) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672 - 16) * m_ZoomRatio), (int)(cy - ((SIZE_Y + 8) * m_ZoomRatio)));
 #endif
@@ -2295,7 +2297,7 @@ void CDiskInfoDlg::SetControlFont()
 	COLORREF textColor = m_LabelText;
 #endif
 
-	m_List.SetFontEx(m_FontFace, m_ZoomRatio);
+	m_List.SetFontEx(m_FontFace, m_ZoomRatio, m_FontRatio);
 
 	for(int i = 0; i < 8; i++)
 	{
@@ -2529,9 +2531,11 @@ void CDiskInfoDlg::ShowWindowEx(int nCmdShow)
 BOOL CDiskInfoDlg::CheckThemeEdition(CString name)
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	if (name.Find(L"Shizuku") == 0) { return TRUE; }
-#elif KUREI_KEI_SUPPORT
+	#ifdef KUREI_KEI_SUPPORT
 	if (name.Find(L"KureiKei") == 0) { return TRUE; }
+	#else
+	if (name.Find(L"Shizuku") == 0) { return TRUE; }
+	#endif
 #else
 	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L".") != 0) { return TRUE; }
 #endif

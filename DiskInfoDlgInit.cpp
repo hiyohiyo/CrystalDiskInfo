@@ -18,9 +18,9 @@ typedef BOOL(WINAPI *FuncEnableNonClientDpiScaling) (HWND hWnd);
 
 extern const GUID StrageGUID;
 
-int CALLBACK EnumFontFamExProcMeiryo(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX *lpntme, int FontType, LPARAM lParam)
+int CALLBACK EnumFontFamExProcSegoeUI(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX *lpntme, int FontType, LPARAM lParam)
 {
-	if(_tcscmp(lpelfe->elfLogFont.lfFaceName, _T("メイリオ")) == 0)
+	if(_tcscmp(lpelfe->elfLogFont.lfFaceName, _T("SegoeUI")) == 0)
 	{
 		BOOL *flag = (BOOL*)lParam;
 		*flag = TRUE;
@@ -51,14 +51,14 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	CClientDC dc(this);
     LOGFONT logfont;
 	CString defaultFontFace;
-	BOOL hasMeiryo = FALSE;
+	BOOL hasSegoeUI = FALSE;
     ZeroMemory(&logfont, sizeof(LOGFONT)); 
     logfont.lfCharSet = DEFAULT_CHARSET;
-    ::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)EnumFontFamExProcMeiryo, (INT_PTR)(&hasMeiryo), 0);
+    ::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)EnumFontFamExProcSegoeUI, (INT_PTR)(&hasSegoeUI), 0);
 	
-	if(hasMeiryo)
+	if(hasSegoeUI)
 	{
-		defaultFontFace = _T("メイリオ");
+		defaultFontFace = _T("Segoe UI");
 	}
 	else
 	{
@@ -67,6 +67,16 @@ BOOL CDiskInfoDlg::OnInitDialog()
 
 	GetPrivateProfileString(_T("Setting"), _T("FontFace"), defaultFontFace, str, 256, m_Ini);
 	m_FontFace = str;
+	m_FontScale = GetPrivateProfileInt(L"Setting", L"FontScale", 100, m_Ini);
+	if (m_FontScale > 200 || m_FontScale < 50)
+	{
+		m_FontScale = 100;
+		m_FontRatio = 1.0;
+	}
+	else
+	{
+		m_FontRatio = m_FontScale / 100.0;
+	}
 
 	switch(GetPrivateProfileInt(_T("Setting"), _T("AutoRefresh"), 10, m_Ini))
 	{

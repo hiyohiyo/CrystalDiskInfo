@@ -1156,7 +1156,7 @@
     <ClCompile Include="DiskInfoDlgMenu.cpp" />
     <ClCompile Include="DiskInfoDlgTray.cpp" />
     <ClCompile Include="DiskInfoDlgUpdate.cpp" />
-    <ClCompile Include="FontSelection.cpp" />
+    <ClCompile Include="FontSelectionDlg.cpp" />
     <ClCompile Include="GraphDlg.cpp" />
     <ClCompile Include="HealthDlg.cpp" />
     <ClCompile Include="NVMeInterpreter.cpp" />
@@ -1599,7 +1599,7 @@
     <ClInclude Include="CommonFx.h" />
     <ClInclude Include="DiskInfo.h" />
     <ClInclude Include="DiskInfoDlg.h" />
-    <ClInclude Include="FontSelection.h" />
+    <ClInclude Include="FontSelectionDlg.h" />
     <ClInclude Include="GraphDlg.h" />
     <ClInclude Include="HealthDlg.h" />
     <ClInclude Include="NVMeInterpreter.h" />

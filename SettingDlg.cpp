@@ -12,12 +12,12 @@
 
 IMPLEMENT_DYNCREATE(CSettingDlg, CDialog)
 
-static CDiskInfoDlg *p;
+static CDiskInfoDlg* p;
 
 CSettingDlg::CSettingDlg(CWnd* pParent /*=NULL*/)
 	: CDialogFx(CSettingDlg::IDD, pParent)
 {
-	CMainDialog* p = (CMainDialog*)pParent;
+	p = (CDiskInfoDlg*)pParent;
 
 	m_ZoomType = p->GetZoomType();
 	m_FontScale = p->GetFontScale();
