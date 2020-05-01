@@ -33,7 +33,7 @@ public:
 
 	// Font
 	void SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio = 1.0,
-		 BYTE textAlpha = 255, COLORREF textColor = RGB(0, 0, 0), LONG fontWeight = FW_NORMAL);
+		 COLORREF textColor = RGB(0, 0, 0), LONG fontWeight = FW_NORMAL);
 
 	// Mouse
 	void SetHandCursor(BOOL bHandCuror = TRUE);

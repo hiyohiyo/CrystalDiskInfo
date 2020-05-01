@@ -33,7 +33,7 @@ public:
 
 	// Font
 	void SetFontEx(CString face, int size, double zoomRatio, double fontRatio = 1.0,
-		BYTE textAlpha = 255, COLORREF textColor = RGB(0, 0, 0), LONG fontWeight = FW_NORMAL);
+		 COLORREF textColor = RGB(0, 0, 0), LONG fontWeight = FW_NORMAL);
 
 protected:
 	// Image

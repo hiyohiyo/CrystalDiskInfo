@@ -517,7 +517,7 @@ void CComboBoxFx::LoadCtrlBg(CDC* drawDC)
 //------------------------------------------------
 
 void CComboBoxFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio,
-     BYTE textAlpha, COLORREF textColor, COLORREF textColorSelected, LONG fontWeight)
+     COLORREF textColor, COLORREF textColorSelected, LONG fontWeight)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;

@@ -568,8 +568,7 @@ void CButtonFx::LoadCtrlBg(CDC* drawDC)
 // Font
 //------------------------------------------------
 
-void CButtonFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio,
-	BYTE textAlpha, COLORREF textColor, LONG fontWeight)
+void CButtonFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio, COLORREF textColor, LONG fontWeight)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;

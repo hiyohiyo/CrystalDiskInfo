@@ -148,11 +148,11 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlSecretVoice.SetHandCursor();
 #endif
 
-	m_CtrlVersion.SetFontEx(m_FontFace, 28, 28, m_ZoomRatio, m_FontRatio, 255, RGB(0, 0, 0), FW_BOLD);
-	m_CtrlEdition.SetFontEx(m_FontFace, 28, 28, m_ZoomRatio, m_FontRatio, 255, RGB(0, 0, 0), FW_BOLD);
-	m_CtrlRelease.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, 255, RGB(0, 0, 0), FW_NORMAL);
-	m_CtrlCopyright.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, 255, RGB(0, 0, 0), FW_NORMAL);
-	m_CtrlLicense.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, 255, RGB(0, 0, 0), FW_NORMAL);
+	m_CtrlVersion.SetFontEx(m_FontFace, 28, 28, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
+	m_CtrlEdition.SetFontEx(m_FontFace, 28, 28, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
+	m_CtrlRelease.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
+	m_CtrlCopyright.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
+	m_CtrlLicense.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
 
 	m_CtrlVersion.InitControl(200, 12, 420, 36, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
 	m_CtrlEdition.InitControl(200, 48, 420, 36, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);

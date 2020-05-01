@@ -563,7 +563,7 @@ void CStaticFx::LoadCtrlBg(CDC* drawDC)
 //------------------------------------------------
 
 void CStaticFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio,
-     BYTE textAlpha, COLORREF textColor, LONG fontWeight)
+     COLORREF textColor, LONG fontWeight)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;

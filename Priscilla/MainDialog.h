@@ -40,17 +40,16 @@ protected:
 	BYTE GetControlAlpha(CString name, BYTE defaultAlpha, CString theme);
 	BYTE GetCharacterPosition(CString theme);
 
-	virtual BOOL CheckThemeEdition(CString name);
-
-	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+	virtual BOOL CheckThemeEdition(CString name);
+	virtual CString GetDefaultFont();
 
 	DECLARE_MESSAGE_MAP()
+	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 
 	// Common
 	BOOL m_bStartup;
-	BOOL m_bInitializing;
 	BOOL m_bWindowMinimizeOnce;
 	BOOL m_bResident;
 	BOOL m_bResidentMinimize;

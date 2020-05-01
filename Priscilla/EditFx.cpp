@@ -348,7 +348,7 @@ void CEditFx::SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap)
 //------------------------------------------------
 
 void CEditFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio,
-     BYTE textAlpha, COLORREF textColor, LONG fontWeight)
+     COLORREF textColor, LONG fontWeight)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;

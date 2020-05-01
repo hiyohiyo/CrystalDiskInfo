@@ -166,6 +166,9 @@ static const int RE_EXEC = 5963;
 // Global Sttings
 //------------------------------------------------
 
+#define DEFAULT_FONT_FACE_1			L"Segoe UI"
+#define DEFAULT_FONT_FACE_2			L"Tahoma"
+
 #define THEME_DIR					L"CdiResource\\themes\\"
 #define LANGUAGE_DIR				L"CdiResource\\language\\"
 

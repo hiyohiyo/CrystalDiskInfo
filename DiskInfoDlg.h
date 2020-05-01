@@ -291,6 +291,7 @@ protected:
 
 	void SetControlFont();
 	CString IP(CString imagePath); // IP means Image Path!!
+	virtual void SetClientSize(int sizeX, int sizeY, DWORD menuLine = 0);
 
 	void UpdateShareInfo(); // For Sidebar Gadget Support
 	void DeleteShareInfo();

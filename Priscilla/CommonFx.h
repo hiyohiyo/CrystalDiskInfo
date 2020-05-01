@@ -46,7 +46,9 @@
 // TIMER ID
 //------------------------------------------------
 
-static const int TimerUpdateDialogSize = 0x2001;
+static const int TimerUpdateDialogSizeDpiChanged     = 0x2001;
+static const int TimerUpdateDialogSizeDisplayChange  = 0x2002;
+static const int TimerUpdateDialogSizeSysColorChange = 0x2003;
 
 //------------------------------------------------
 // Const Values

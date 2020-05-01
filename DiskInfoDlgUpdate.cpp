@@ -182,7 +182,7 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 {
 	static DWORD preVendorId = -1;
 	DWORD width = 0;
-	width = (DWORD)(652 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL));
+	width = (DWORD)((652 - GetSystemMetrics(SM_CXVSCROLL)) * m_ZoomRatio);
 
 	if (m_Ata.vars.GetCount() == 0)
 	{

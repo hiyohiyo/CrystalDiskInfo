@@ -139,15 +139,15 @@ void CFontSelectionDlg::UpdateDialogSize()
 	m_LabelFontScale.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio);
 
 	m_FontComboBox.SetFontHeight(28, m_ZoomRatio, m_FontRatio);
-	m_FontComboBox.SetFontEx(m_FontFace, 28, 28, m_ZoomRatio, m_FontRatio, textAlpha, textColor, textSelectedColor, FW_NORMAL);
+	m_FontComboBox.SetFontEx(m_FontFace, 28, 28, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL);
 	m_FontComboBox.SetItemHeightEx(-1, 44, m_ZoomRatio, m_FontRatio);
 	for (int i = 0; i < m_FontComboBox.GetCount(); i++)
 	{
 		m_FontComboBox.SetItemHeightEx(i, 44, m_ZoomRatio, m_FontRatio);
 	}
 
-	m_FontScaleComboBox.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textAlpha, textColor, textSelectedColor, FW_NORMAL);
-	m_FontScaleComboBox.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textAlpha, textColor, textSelectedColor, FW_NORMAL);
+	m_FontScaleComboBox.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL);
+	m_FontScaleComboBox.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL);
 	m_FontScaleComboBox.SetItemHeightEx(-1, 28, m_ZoomRatio, m_FontRatio);
 	for (int i = 0; i < m_FontScaleComboBox.GetCount(); i++)
 	{

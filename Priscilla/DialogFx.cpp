@@ -30,6 +30,8 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	      :CDialog(dlgResouce, pParent)
 {
 	// Dialog
+	m_bInitializing = TRUE;
+	m_bDpiChanging = FALSE;
 	m_bShowWindow = FALSE;
 	m_bModelessDlg = FALSE;
 	m_bHighContrast = FALSE;
@@ -41,6 +43,11 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_bDrag = FALSE;
 	m_FontScale = 100;
 	m_FontRatio = 1.0;
+
+	m_MaxSizeX = 65535;
+	m_MinSizeX = 0;
+	m_MaxSizeY = 65535;
+	m_MinSizeY = 0;
 
 	// Zoom
 	m_Dpi = 96;
@@ -110,6 +117,8 @@ BOOL CDialogFx::OnInitDialog()
 
 	m_hAccelerator = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR));
 
+	m_bInitializing = FALSE;
+
 	return TRUE;
 }
 
@@ -157,7 +166,7 @@ void CDialogFx::SetClientSize(int sizeX, int sizeY, DWORD menuLine)
 
 	GetWindowRect(&currentRc);
 	GetClientRect(&clientRc);
-	X = currentRc.left;// -(clientRc.Width() - sizeX) / 2;
+	X = currentRc.left;
 	Y = currentRc.top;
 
 	if (clientRc.Height() == sizeY && clientRc.Width() == sizeX)
@@ -165,8 +174,8 @@ void CDialogFx::SetClientSize(int sizeX, int sizeY, DWORD menuLine)
 		return;
 	}
 
-	rc.right += currentRc.Width() - clientRc.Width();
-	rc.bottom += currentRc.Height() - clientRc.Height();
+	rc.right = sizeX;
+	rc.bottom = sizeY;
 	SetWindowPos(&CWnd::wndTop, X, Y, rc.right, rc.bottom, SWP_NOMOVE);
 	GetClientRect(&clientRc);
 
@@ -396,24 +405,51 @@ void CDialogFx::OpenUrl(CString url)
 	}
 }
 
+void CDialogFx::SetLayeredWindow(HWND hWnd, BYTE alpha)
+{
+	if (IsWin2k()) { return; }
+
+	::SetWindowLong(hWnd, GWL_EXSTYLE, ::GetWindowLong(hWnd, GWL_EXSTYLE) ^ WS_EX_LAYERED);
+	::SetWindowLong(hWnd, GWL_EXSTYLE, ::GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+	if (m_bHighContrast)
+	{
+		::SetLayeredWindowAttributes(hWnd, 0, 255, LWA_ALPHA);
+	}
+	else
+	{
+		::SetLayeredWindowAttributes(hWnd, 0, alpha, LWA_ALPHA);
+	}
+}
+
 //------------------------------------------------
 // MessageMap
 //------------------------------------------------
 
 void CDialogFx::OnTimer(UINT_PTR nIDEvent)
 {
-	if (nIDEvent == TimerUpdateDialogSize)
+	switch (nIDEvent)
 	{
+	case TimerUpdateDialogSizeDpiChanged:
 		if (m_bDrag)
 		{
-			KillTimer(TimerUpdateDialogSize);
-			SetTimer(TimerUpdateDialogSize, TIMER_UPDATE_DIALOG, NULL);
+			KillTimer(TimerUpdateDialogSizeDpiChanged);
+			SetTimer(TimerUpdateDialogSizeDpiChanged, TIMER_UPDATE_DIALOG, NULL);
 		}
 		else
 		{
-			KillTimer(TimerUpdateDialogSize);
+			m_bDpiChanging = FALSE;
+			KillTimer(TimerUpdateDialogSizeDpiChanged);
 			UpdateDialogSize();
 		}
+		break;
+	case TimerUpdateDialogSizeDisplayChange:
+		KillTimer(TimerUpdateDialogSizeDisplayChange);
+		UpdateDialogSize();
+		break;
+	case TimerUpdateDialogSizeSysColorChange:
+		KillTimer(TimerUpdateDialogSizeSysColorChange);
+		UpdateDialogSize();
+		break;
 	}
 }
 
@@ -448,6 +484,8 @@ afx_msg LRESULT CDialogFx::OnUpdateDialogSize(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 {
+	if (m_bInitializing) { return 0; }
+
 	static DWORD preTime = 0;
 	DWORD currentTime = GetTickCount();
 	if (currentTime - preTime < 1000)
@@ -464,14 +502,16 @@ afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 	if (GetWin10Version() >= 1709) // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
 	{
 		ChangeZoomType(m_ZoomType);
-		SetTimer(TimerUpdateDialogSize, TIMER_UPDATE_DIALOG, NULL);
+		m_bDpiChanging = TRUE;
+		SetTimer(TimerUpdateDialogSizeDpiChanged, TIMER_UPDATE_DIALOG, NULL);
 	}
 	else if(m_ZoomType == ZoomTypeAuto)
 	{
 		DWORD oldZoomRatio = (DWORD)(m_ZoomRatio * 100);
 		if (ChangeZoomType(m_ZoomType) != oldZoomRatio)
 		{
-			SetTimer(TimerUpdateDialogSize, TIMER_UPDATE_DIALOG, NULL);
+			m_bDpiChanging = TRUE;
+			SetTimer(TimerUpdateDialogSizeDpiChanged, TIMER_UPDATE_DIALOG, NULL);
 		}
 	}
 
@@ -480,16 +520,20 @@ afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT CDialogFx::OnDisplayChange(WPARAM wParam, LPARAM lParam)
 {
-	SetTimer(TimerUpdateDialogSize, TIMER_UPDATE_DIALOG, NULL);
+	if (m_bInitializing) { return 0; }
+
+	SetTimer(TimerUpdateDialogSizeDisplayChange, TIMER_UPDATE_DIALOG, NULL);
 
 	return 0;
 }
 
 afx_msg LRESULT CDialogFx::OnSysColorChange(WPARAM wParam, LPARAM lParam)
 {
+	if (m_bInitializing) { return 0; }
+
 	m_bHighContrast = IsHighContrast();
 
-	SetTimer(TimerUpdateDialogSize, TIMER_UPDATE_DIALOG, NULL);
+	SetTimer(TimerUpdateDialogSizeSysColorChange, TIMER_UPDATE_DIALOG, NULL);
 
 	return 0;
 }
