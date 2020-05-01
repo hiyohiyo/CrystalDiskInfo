@@ -8,8 +8,6 @@
 #pragma once
 
 #include "afxwin.h"
-#include "DebugPrint.h"
-#include "StaticFx.h"
 #include "ButtonFx.h"
 #include "ComboBoxFx.h"
 #include "FontComboBox.h"
@@ -18,8 +16,8 @@ class CFontSelectionDlg : public CDialogFx
 {
 	DECLARE_DYNAMIC(CFontSelectionDlg)
 
-	static const int SIZE_X = 520;
-	static const int SIZE_Y = 228;
+	static const int SIZE_X = 480;
+	static const int SIZE_Y = 240;
 	enum { IDD = IDD_FONT };
 
 public:
@@ -31,20 +29,21 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
-
-	CButtonFx m_CtrlOk;
-	void OnSetDefault();
-
-	DECLARE_MESSAGE_MAP()
-public:
 	virtual BOOL OnInitDialog();
 	virtual void UpdateDialogSize();
 
+	void SetDefaultFont(CString fontFace);
+
+	DECLARE_MESSAGE_MAP()
+	afx_msg void OnSetDefault();
+	afx_msg void OnOk();
+
 	CStaticFx m_LabelFontFace;
 	CStaticFx m_LabelFontScale;
+	CButtonFx m_CtrlOk;
+	CButtonFx m_CtrlSetDefault;
 
-	CFontComboBox m_FontComboBox;
-	CComboBoxFx m_FontScaleComboBox;
-	CButtonFx m_ButtonSetDefault;
-	afx_msg void OnBnClickedOk();
+	CFontComboBox m_CtrlFontFace;
+	CComboBoxFx   m_CtrlFontScale;
+
 };

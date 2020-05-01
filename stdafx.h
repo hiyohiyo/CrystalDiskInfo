@@ -50,6 +50,7 @@
 
 #include <comutil.h>
 
+#include "CommonFx.h"
 #include "DebugPrint.h"
 
 // Version Information
@@ -92,8 +93,8 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION			_T("8.5.0 Beta1")
-#define PRODUCT_RELEASE			_T("2020/04/28")
+#define PRODUCT_VERSION			_T("8.5.0 Beta2")
+#define PRODUCT_RELEASE			_T("2020/05/01")
 #define PRODUCT_COPY_YEAR		_T("2008-2020")
 #define PRODUCT_COPYRIGHT		_T("© 2008-2020 hiyohiyo")
 #define PRODUCT_LICENSE			_T("The MIT License")

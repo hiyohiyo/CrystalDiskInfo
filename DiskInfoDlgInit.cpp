@@ -18,12 +18,11 @@ typedef BOOL(WINAPI *FuncEnableNonClientDpiScaling) (HWND hWnd);
 
 extern const GUID StrageGUID;
 
-int CALLBACK EnumFontFamExProcSegoeUI(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX *lpntme, int FontType, LPARAM lParam)
+int CALLBACK EnumFontFamExProcDefaultFont(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX *lpntme, int FontType, LPARAM lParam)
 {
-	if(_tcscmp(lpelfe->elfLogFont.lfFaceName, _T("SegoeUI")) == 0)
+	if(_tcscmp(lpelfe->elfLogFont.lfFaceName, DEFAULT_FONT_FACE_1) == 0)
 	{
-		BOOL *flag = (BOOL*)lParam;
-		*flag = TRUE;
+		*((BOOL*)lParam) = TRUE;
 	}
     return TRUE;
 }
@@ -35,34 +34,28 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	CMainDialog::OnInitDialog();
 
 	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIconMini, FALSE);		// Set small icon
+	SetIcon(m_hIconMini, FALSE);	// Set small icon
 
 	InitThemeLang();
 	InitMenu();
-
-	// メイン画面をレイヤードウィンドウにする。
-	// ::SetWindowLong(m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-	// ::SetLayeredWindowAttributes(m_hWnd, 0, 255, LWA_ALPHA);
-
-//	m_BackgroundName = L"ShizukuOriginal";
 
 	TCHAR str[256];
 	
 	CClientDC dc(this);
     LOGFONT logfont;
 	CString defaultFontFace;
-	BOOL hasSegoeUI = FALSE;
+	BOOL hasDefaultFont = FALSE;
     ZeroMemory(&logfont, sizeof(LOGFONT)); 
     logfont.lfCharSet = DEFAULT_CHARSET;
-    ::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)EnumFontFamExProcSegoeUI, (INT_PTR)(&hasSegoeUI), 0);
+    ::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)EnumFontFamExProcDefaultFont, (INT_PTR)(&hasDefaultFont), 0);
 	
-	if(hasSegoeUI)
+	if(hasDefaultFont)
 	{
-		defaultFontFace = _T("Segoe UI");
+		defaultFontFace = DEFAULT_FONT_FACE_1;
 	}
 	else
 	{
-		defaultFontFace = _T("Tahoma");
+		defaultFontFace = DEFAULT_FONT_FACE_2;
 	}
 
 	GetPrivateProfileString(_T("Setting"), _T("FontFace"), defaultFontFace, str, 256, m_Ini);
@@ -343,24 +336,6 @@ void CDiskInfoDlg::InitListCtrl()
 	DWORD style = ListView_GetExtendedListViewStyle(m_List.m_hWnd);
 	style |= LVS_EX_FULLROWSELECT | /*LVS_EX_GRIDLINES |*/ LVS_EX_LABELTIP ;
 	ListView_SetExtendedListViewStyle(m_List.m_hWnd, style);
-
-	// このウィンドウに WS_EX_LAYERED を設定する 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	/*
-	if (m_LayeredListCtrl)
-	{
-		::SetWindowLong(m_List.m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_List.m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-		if (m_bHighContrast)
-		{
-			::SetLayeredWindowAttributes(m_List.m_hWnd, 0, 255, LWA_ALPHA);
-		}
-		else
-		{
-			::SetLayeredWindowAttributes(m_List.m_hWnd, 0, LIST_CTL_ALPHA, LWA_ALPHA);
-		}
-	}
-	*/
-#endif
 
 	m_List.SetImageList(&m_ImageList, LVSIL_SMALL);
 }

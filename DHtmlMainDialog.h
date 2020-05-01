@@ -7,8 +7,6 @@
 
 #pragma once
 
-#define WM_THEME_ID				(WM_APP + 0x2000)
-#define WM_LANGUAGE_ID			(WM_APP + 0x3000)
 #define MAIN_CSS_FILE_NAME	_T("Main.css")
 
 class CDHtmlMainDialog : public CDHtmlDialogEx

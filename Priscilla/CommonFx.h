@@ -33,14 +33,15 @@
 //------------------------------------------------
 // WM_APP
 //------------------------------------------------
-// WM_APP + 0x0000-0x0FFF: User Application
-// WM_APP + 0x1000-0x1FFF: Project Priscilla
-// WM_APP + 0x2000-0x2FFF: Themes
-// WM_APP + 0x3000-0x3FFF: Languages
+// WM_APP + 0x0000-0x0FFF: Project Priscilla
+     // WM_APP + 0x0000-0x00FF: Timer
+     // WM_APP + 0x0100-0x01FF: Themes
+     // WM_APP + 0x0200-0x02FF: Languages
+// WM_APP + 0x1000-0x3FFF: User Application
 
-#define WM_UPDATE_DIALOG_SIZE	(WM_APP + 0x1000)
-#define WM_THEME_ID				(WM_APP + 0x2000)
-#define WM_LANGUAGE_ID			(WM_APP + 0x3000)
+#define WM_UPDATE_DIALOG_SIZE	(WM_APP + 0x0100)
+#define WM_THEME_ID				(WM_APP + 0x0200)
+#define WM_LANGUAGE_ID			(WM_APP + 0x0300)
 
 //------------------------------------------------
 // TIMER ID

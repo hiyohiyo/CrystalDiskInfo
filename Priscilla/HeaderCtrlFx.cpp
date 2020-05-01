@@ -17,7 +17,7 @@ CHeaderCtrlFx::CHeaderCtrlFx()
 
 	m_TextColor = RGB(0, 0, 0);
 	m_LineColor = RGB(224, 224, 224);
-
+	m_ZoomRatio = 1.0;
 	m_BgDC = NULL;
 	m_CtrlBitmap = NULL;
 	m_bHighContrast = FALSE;
@@ -106,16 +106,19 @@ void CHeaderCtrlFx::OnPaint()
 	{
 		RECT rectRightItem;
 		int iItemCount = Header_GetItemCount(this->m_hWnd);
-		Header_GetItemRect(this->m_hWnd, iItemCount - 1, &rectRightItem);
-		RECT rectClient;
-		GetClientRect(&rectClient);
-		if (rectRightItem.right < rectClient.right)
+		if (iItemCount > 0)
 		{
-			CDC* drawDC = GetDC();
-			CDC BgDC;
-			BgDC.CreateCompatibleDC(m_BgDC);
-			BgDC.SelectObject(m_CtrlBitmap);
-			drawDC->BitBlt(rectRightItem.right, rectClient.top, rectClient.right, rectClient.bottom, &BgDC, rectRightItem.right, rectClient.top, SRCCOPY);
+			Header_GetItemRect(this->m_hWnd, iItemCount - 1, &rectRightItem);
+			RECT rectClient;
+			GetClientRect(&rectClient);
+			if (rectRightItem.right < rectClient.right)
+			{
+				CDC* drawDC = GetDC();
+				CDC BgDC;
+				BgDC.CreateCompatibleDC(m_BgDC);
+				BgDC.SelectObject(m_CtrlBitmap);
+				drawDC->BitBlt(rectRightItem.right, rectClient.top, rectClient.right, rectClient.bottom, &BgDC, rectRightItem.right, rectClient.top, SRCCOPY);
+			}
 		}
 	}
 }

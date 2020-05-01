@@ -743,7 +743,7 @@
 #define IDC_VALUE_TEMPERATURE_F         1102
 #define IDC_SCROLLBAR_TEMPERATURE       1103
 
-// #define IDC_FONT_COMBO                  1201
+#define IDC_FONT_FACE_COMBO             1201
 #define IDC_FONT_SCALE_COMBO			1203
 #define IDC_FONT_FACE					1204
 #define IDC_FONT_SCALE					1205

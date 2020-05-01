@@ -102,6 +102,8 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 {
 	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg");
 
+	m_Ini = ((CDiskInfoApp*)AfxGetApp())->m_Ini;
+
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef KUREI_KEI_SUPPORT
 	m_DefaultTheme = L"KureiKei";
@@ -344,15 +346,6 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	{
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 		GetVersionEx((OSVERSIONINFO *)&osvi);
-	}
-	// Windows 8 or later
-	if (osvi.dwMajorVersion >= 7 || (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion >= 2))
-	{
-		m_LayeredListCtrl = TRUE;
-	}
-	else
-	{
-		m_LayeredListCtrl = FALSE;
 	}
 
 	m_hVoice = LoadLibrary(m_VoicePath);
@@ -2525,37 +2518,7 @@ void CDiskInfoDlg::SetLabel(CStaticFx& ctrl, CString& label, CString title)
 void CDiskInfoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CMainDialog::OnShowWindow(bShow, nStatus);
-
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	/*
-	if (m_LayeredListCtrl && bShow)
-	{
-		::SetWindowLong(m_List.m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_List.m_hWnd, GWL_EXSTYLE) ^ WS_EX_LAYERED);
-		m_List.UpdateWindow();
-
-		::SetWindowLong(m_List.m_hWnd, GWL_EXSTYLE, ::GetWindowLong(m_List.m_hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-		::SetLayeredWindowAttributes(m_List.m_hWnd, 0, LIST_CTL_ALPHA, LWA_ALPHA);
-	}
-	*/
-#endif
 }
-/*
-typedef BOOL(WINAPI *FuncEnableNonClientDpiScaling) (HWND hwnd);
-
-BOOL CDiskInfoDlg::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
-{
-	if (!CMainDialog::OnNcCreate(lpCreateStruct))
-		return FALSE;
-
-	FuncEnableNonClientDpiScaling pEnableNonClientDpiScaling = (FuncEnableNonClientDpiScaling)GetProcAddress(GetModuleHandle(_T("User32.dll")), "EnableNonClientDpiScaling");
-
-	if (pEnableNonClientDpiScaling != NULL)
-	{
-		pEnableNonClientDpiScaling(m_hWnd);
-	}
-	return FALSE;
-}
-*/
 
 void CDiskInfoDlg::ShowWindowEx(int nCmdShow)
 {

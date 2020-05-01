@@ -178,11 +178,25 @@ void CDiskInfoDlg::DeleteShareInfo()
 	SHDeleteKey(HKEY_CURRENT_USER, REGISTRY_PATH);
 }
 
+typedef int(WINAPI* FuncGetSystemMetricsForDpi) (int nIndex, UINT dpi);
+typedef UINT(WINAPI* FuncGetDpiForWindow) (HWND hWnd);
+
 void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 {
 	static DWORD preVendorId = -1;
-	DWORD width = 0;
-	width = (DWORD)((652 - GetSystemMetrics(SM_CXVSCROLL)) * m_ZoomRatio);
+	int width = 0;
+
+	static FuncGetSystemMetricsForDpi pGetSystemMetricsForDpi = (FuncGetSystemMetricsForDpi)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetSystemMetricsForDpi");
+	static FuncGetDpiForWindow pGetDpiForWindow = (FuncGetDpiForWindow)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetDpiForWindow");
+
+	if (pGetSystemMetricsForDpi != NULL)
+	{
+		width = (int)((652 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))));
+	}
+	else
+	{
+		width = (int)(652 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL));
+	}
 
 	if (m_Ata.vars.GetCount() == 0)
 	{
@@ -278,13 +292,6 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 		RebuildListHeader(i);
 		preSelectDisk = i;
 	}
-
-	m_List.SetTextColor1(m_ListText1);
-	m_List.SetTextColor2(m_ListText2);
-	m_List.SetBkColor1(m_ListBg1);
-	m_List.SetBkColor2(m_ListBg2);
-	m_List.SetLineColor1(m_ListLine1);
-	m_List.SetLineColor2(m_ListLine2);
 
 	CString cstr;
 	DWORD caution = 0;

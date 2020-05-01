@@ -39,12 +39,6 @@ CMainDialog::CMainDialog(UINT dlgResouce, CWnd* pParent)
 	if ((ptrEnd = _tcsrchr(tmp, '\\')) != NULL) { *ptrEnd = '\0'; }
 	m_ThemeDir.Format(L"%s\\%s", tmp, THEME_DIR);
 	m_LangDir.Format(L"%s\\%s", tmp, LANGUAGE_DIR);
-
-	CString cstr;
-	DWORD debugMode = GetPrivateProfileInt(L"Setting", L"DebugMode", 0, m_Ini);
-	SetDebugMode(debugMode);
-	cstr.Format(L"%d", debugMode);
-	WritePrivateProfileString(L"Setting", L"DebugMode", cstr, m_Ini);
 }
 
 CMainDialog::~CMainDialog()

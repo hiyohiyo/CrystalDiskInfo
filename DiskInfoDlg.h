@@ -117,11 +117,6 @@ protected:
 
 	UINT m_MainIconId;
 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	BOOL m_LayeredListCtrl;
-#endif
-//	CString m_FontFace;
-
 	CAboutDlg*			m_AboutDlg;
 	CSettingDlg*		m_SettingDlg;
 	CTemperatureDlg*	m_TemperatureDlg;
