@@ -72,10 +72,10 @@ BOOL CSoundSettingDlg::OnInitDialog()
 }
 
 BEGIN_MESSAGE_MAP(CSoundSettingDlg, CDialogFx)
-	ON_BN_CLICKED(IDC_BUTTON_SELECT_FILE, &CSoundSettingDlg::OnBnClickedButtonSelectFile)
-	ON_BN_CLICKED(IDC_BUTTON_PLAY, &CSoundSettingDlg::OnBnClickedButtonPlay)
-	ON_BN_CLICKED(IDC_BUTTON_DEFAULT, &CSoundSettingDlg::OnBnClickedButtonDefault)
-	ON_BN_CLICKED(IDC_BUTTON_OK, &CSoundSettingDlg::OnBnClickedButtonOk)
+	ON_BN_CLICKED(IDC_BUTTON_SELECT_FILE, &CSoundSettingDlg::OnSelectFile)
+	ON_BN_CLICKED(IDC_BUTTON_PLAY, &CSoundSettingDlg::OnPlay)
+	ON_BN_CLICKED(IDC_BUTTON_DEFAULT, &CSoundSettingDlg::OnDefault)
+	ON_BN_CLICKED(IDC_BUTTON_OK, &CSoundSettingDlg::OnOk)
 END_MESSAGE_MAP()
 
 void CSoundSettingDlg::UpdateDialogSize()
@@ -85,26 +85,27 @@ void CSoundSettingDlg::UpdateDialogSize()
 
 	UpdateBackground();
 
-	m_CtrlFilePath.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlSelectFile.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlPlay.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlDefault.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlOk.SetFontEx(m_FontFace, 12, m_ZoomRatio);
+	m_CtrlFilePath.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlSelectFile.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlPlay.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlOk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlFilePath.InitControl(8, 8, 416, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlSelectFile.InitControl(428, 8, 24, 24, m_ZoomRatio, IP(L"selectSound"), 2, BS_CENTER, CButtonCx::OwnerDrawImage);
+	m_CtrlFilePath.InitControl(8, 8, 416, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlSelectFile.InitControl(428, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"selectSound"), 2, BS_CENTER, OwnerDrawImage);
 	m_CtrlSelectFile.SetHandCursor();
-	m_CtrlPlay.InitControl(456, 8, 24, 24, m_ZoomRatio, IP(L"playSound"), 2, BS_CENTER, CButtonCx::OwnerDrawImage);
+	m_CtrlPlay.InitControl(456, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"playSound"), 2, BS_CENTER, OwnerDrawImage);
 	m_CtrlPlay.SetHandCursor();
-	m_CtrlDefault.InitControl(40, 40, 160, 28, m_ZoomRatio, NULL, 0, BS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
-	m_CtrlOk.InitControl(280, 40, 160, 28, m_ZoomRatio, NULL, 0, BS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
+	m_CtrlDefault.InitControl(40, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlOk.InitControl(280, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlOk.InitControl(280, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
 
-	m_CtrlFilePath.SetDrawFrame(m_bHighContrast);
+	m_CtrlFilePath.SetDrawFrame(TRUE);
 
 	Invalidate();
 }
 
-void CSoundSettingDlg::OnBnClickedButtonSelectFile()
+void CSoundSettingDlg::OnSelectFile()
 {
 	CFileDialog dlg(TRUE, _T(""), _T(""), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER,
 		i18n(_T("Customize"), _T("SUPPORTED_SOUND_FORMAT"))
@@ -121,13 +122,13 @@ void CSoundSettingDlg::OnBnClickedButtonSelectFile()
 	}
 }
 
-void CSoundSettingDlg::OnBnClickedButtonPlay()
+void CSoundSettingDlg::OnPlay()
 {
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_PLAY_ALERT_SOUND, NULL, NULL);
 }
 
 
-void CSoundSettingDlg::OnBnClickedButtonDefault()
+void CSoundSettingDlg::OnDefault()
 {
 	m_FilePath = _T("");
 	WritePrivateProfileString(_T("Setting"), _T("AlertSoundPath"), m_FilePath, m_Ini);
@@ -135,7 +136,7 @@ void CSoundSettingDlg::OnBnClickedButtonDefault()
 	UpdateData(FALSE);
 }
 
-void CSoundSettingDlg::OnBnClickedButtonOk()
+void CSoundSettingDlg::OnOk()
 {
 	CDialogFx::OnCancel();
 }

@@ -156,7 +156,7 @@ protected:
 	void SetAttribute(DWORD id, DWORD type);
 	void InitVars(int defaultDisk);
 	void UpdateColor();
-	void UpdateBgImage();
+	void UpdateBkImage();
 
 	CString GetModelSerial(CString &model, CString &serialNumber);
 
@@ -168,7 +168,7 @@ protected:
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg LRESULT OnUpdateBgImage(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnUpdateBkImage(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUpdateLineColor(WPARAM wParam, LPARAM lParam);
 
 	DECLARE_MESSAGE_MAP()

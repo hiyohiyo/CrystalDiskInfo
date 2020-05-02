@@ -41,22 +41,18 @@ void CTemperatureDlg::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Text(pDX, IDC_VALUE_TEMPERATURE, m_ValueTemperature);
 	DDX_Text(pDX, IDC_VALUE_TEMPERATURE_F, m_ValueTemperatureF);
-//	DDX_Text(pDX, IDC_LABEL_TEMPERATURE, m_LabelTemperature);
-
 	DDX_Control(pDX, IDC_SCROLLBAR_TEMPERATURE, m_CtrlScrollbarTemperature);
 	DDX_Control(pDX, IDC_VALUE_TEMPERATURE, m_CtrlValueTemperature);
 	DDX_Control(pDX, IDC_VALUE_TEMPERATURE_F, m_CtrlValueTemperatureF);
-//	DDX_Control(pDX, IDC_LABEL_TEMPERATURE, m_CtrlLabelTemperature);
 	DDX_Control(pDX, IDC_SELECT_DISK, m_CtrlSelectDisk);
 	DDX_Control(pDX, IDC_APPLY, m_CtrlApply);
 	DDX_Control(pDX, IDC_DEFAULT, m_CtrlDefault);
 }
 
-
 BEGIN_MESSAGE_MAP(CTemperatureDlg, CDialogFx)
 	ON_WM_HSCROLL()
-	ON_BN_CLICKED(IDC_APPLY, &CTemperatureDlg::OnBnClickedApply)
-	ON_BN_CLICKED(IDC_DEFAULT, &CTemperatureDlg::OnBnClickedDefault)
+	ON_BN_CLICKED(IDC_APPLY, &CTemperatureDlg::OnApply)
+	ON_BN_CLICKED(IDC_DEFAULT, &CTemperatureDlg::OnDefault)
 	ON_CBN_SELCHANGE(IDC_SELECT_DISK, &CTemperatureDlg::OnCbnSelchangeSelectDisk)
 END_MESSAGE_MAP()
 
@@ -82,7 +78,6 @@ BOOL CTemperatureDlg::OnInitDialog()
 	{
 		m_CtrlSelectDisk.EnableWindow(FALSE);
 		m_CtrlScrollbarTemperature.EnableWindow(FALSE);
-//		m_CtrlLabelTemperature.EnableWindow(FALSE);
 		m_CtrlValueTemperature.EnableWindow(FALSE);
 		m_CtrlValueTemperatureF.EnableWindow(FALSE);
 		m_CtrlApply.EnableWindow(FALSE);
@@ -100,32 +95,28 @@ void CTemperatureDlg::UpdateDialogSize()
 	UpdateBackground();
 
 	m_CtrlScrollbarTemperature.MoveWindow((DWORD)(8 * m_ZoomRatio), (DWORD)(44 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
-//	m_CtrlLabelTemperature.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlValueTemperature.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-   	m_CtrlValueTemperatureF.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-//	m_CtrlLabelTemperature.InitControl(8, 44, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueTemperatureF.InitControl(344, 44, 48, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueTemperature.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+   	m_CtrlValueTemperatureF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueTemperatureF.InitControl(344, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
 
-	m_CtrlApply.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlDefault.SetFontEx(m_FontFace, 12, m_ZoomRatio);
+	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlApply.InitControl(220, 76, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
-	m_CtrlDefault.InitControl(20, 76, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
+	m_CtrlApply.InitControl(220, 80, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlDefault.InitControl(20, 80, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw | m_bHighContrast);
 
-	m_CtrlSelectDisk.SetFontEx(m_FontFace, 14, m_ZoomRatio);
-	m_CtrlSelectDisk.MoveWindow((DWORD)(8 * m_ZoomRatio), (DWORD)(8 * m_ZoomRatio), (DWORD)(384 * m_ZoomRatio), (DWORD)(40 * m_ZoomRatio));
+	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, SystemDraw | m_bHighContrast, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
 
-	m_CtrlValueTemperature.SetDrawFrame(m_bHighContrast);
-	m_CtrlValueTemperatureF.SetDrawFrame(m_bHighContrast);
+	m_CtrlValueTemperature.SetDrawFrame(TRUE);
+	m_CtrlValueTemperatureF.SetDrawFrame(TRUE);
 
 	Invalidate();
 }
 
 void CTemperatureDlg::InitLang()
 {
-//	m_CtrlLabelTemperature.SetWindowTextW(i18n(_T("Alarm"), _T("ALARM_TEMPERATURE")));
-
 	m_CtrlApply.SetWindowTextW(i18n(_T("HealthStatus"), _T("APPLY")));
 	m_CtrlDefault.SetWindowTextW(i18n(_T("HealthStatus"), _T("DEFAULT")));
 }
@@ -232,7 +223,7 @@ void CTemperatureDlg::UpdateSelectDisk(DWORD index)
 	UpdateData(FALSE);
 }
 
-void CTemperatureDlg::OnBnClickedApply()
+void CTemperatureDlg::OnApply()
 {
 	UpdateData(TRUE);
 
@@ -241,7 +232,7 @@ void CTemperatureDlg::OnBnClickedApply()
 	p->SendMessage(WM_COMMAND, ID_REFRESH);
 }
 
-void CTemperatureDlg::OnBnClickedDefault()
+void CTemperatureDlg::OnDefault()
 {
 	if (p->m_Ata.vars[m_DiskIndex].IsSsd)
 	{

@@ -37,8 +37,8 @@ void COptionDlg::DoDataExchange(CDataExchange* pDX)
 	CDHtmlDialogEx::DoDataExchange(pDX);
 	DDX_DHtml_ElementInnerText(pDX, _T("LabelThreshold"), m_LabelThreshold);
 	DDX_DHtml_ElementInnerText(pDX, _T("LabelLineColor"), m_LabelLineColor);
-	DDX_DHtml_ElementInnerText(pDX, _T("LabelBgImage"), m_LabelBgImage);
-	DDX_DHtml_ElementInnerText(pDX, _T("BgImage"), m_BgImage);
+	DDX_DHtml_ElementInnerText(pDX, _T("LabelBkImage"), m_LabelBkImage);
+	DDX_DHtml_ElementInnerText(pDX, _T("BkImage"), m_BkImage);
 	DDX_DHtml_ElementInnerText(pDX, _T("Reset"), m_Reset);
 
 	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode0"), m_ColorCode[0]);
@@ -176,8 +176,8 @@ BEGIN_DHTML_EVENT_MAP(COptionDlg)
 
 
 
-	DHTML_EVENT_ONCLICK(_T("SelectBgImage"), OnSelectBgImage)
-	DHTML_EVENT_ONCLICK(_T("NoBgImage"), OnNoBgImage)
+	DHTML_EVENT_ONCLICK(_T("SelectBkImage"), OnSelectBkImage)
+	DHTML_EVENT_ONCLICK(_T("NoBkImage"), OnNoBkImage)
 	DHTML_EVENT_ONCLICK(_T("Reset"), OnReset)
 END_DHTML_EVENT_MAP()
 
@@ -190,13 +190,13 @@ void COptionDlg::InitDialogComplete()
 
 	m_LabelThreshold = i18n(_T("Dialog"), _T("LIST_THRESHOLD"));
 	m_LabelLineColor = i18n(_T("Customize"), _T("LINE_COLOR"));
-	m_LabelBgImage   = i18n(_T("Customize"), _T("BACKGROUND_IMAGE"));
+	m_LabelBkImage   = i18n(_T("Customize"), _T("BACKGROUND_IMAGE"));
 	m_Reset          = i18n(_T("Graph"), _T("RESET"));
 
 	TCHAR str[256];
-	GetPrivateProfileString(_T("Customize"), _T("GraphBgImage"), _T(""), str, 256, m_Ini);
-	m_BgImage = str;
-	SetElementPropertyEx(_T("GraphBgImage"), DISPID_IHTMLELEMENT_TITLE, m_BgImage);
+	GetPrivateProfileString(_T("Customize"), _T("GraphBkImage"), _T(""), str, 256, m_Ini);
+	m_BkImage = str;
+	SetElementPropertyEx(_T("GraphBkImage"), DISPID_IHTMLELEMENT_TITLE, m_BkImage);
 
 	for(int i = 0; i <= CAtaSmart::MAX_DISK; i++)
 	{
@@ -299,7 +299,7 @@ void COptionDlg::SelectColor(DWORD i)
 	}
 }
 
-HRESULT COptionDlg::OnSelectBgImage(IHTMLElement* /*pElement*/)
+HRESULT COptionDlg::OnSelectBkImage(IHTMLElement* /*pElement*/)
 {
 	CFileDialog dlg(TRUE, _T(""), _T(""), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER,
 		i18n(_T("Customize"), _T("SUPPORTED_IMAGE_FORMAT"))
@@ -309,20 +309,20 @@ HRESULT COptionDlg::OnSelectBgImage(IHTMLElement* /*pElement*/)
 
 	if(dlg.DoModal() == IDOK)
 	{
-		m_BgImage = dlg.GetPathName();
-		WritePrivateProfileString(_T("Customize"), _T("GraphBgImage"), m_BgImage, m_Ini);
-		SetElementPropertyEx(_T("GraphBgImage"), DISPID_IHTMLELEMENT_TITLE, m_BgImage);
+		m_BkImage = dlg.GetPathName();
+		WritePrivateProfileString(_T("Customize"), _T("GraphBkImage"), m_BkImage, m_Ini);
+		SetElementPropertyEx(_T("GraphBkImage"), DISPID_IHTMLELEMENT_TITLE, m_BkImage);
 		UpdateData(FALSE);
 		::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_UPDATE_BG_IMAGE, NULL, NULL);
 	}
 	return S_FALSE;
 }
 
-HRESULT COptionDlg::OnNoBgImage(IHTMLElement* /*pElement*/)
+HRESULT COptionDlg::OnNoBkImage(IHTMLElement* /*pElement*/)
 {
-	m_BgImage = _T("");
-	WritePrivateProfileString(_T("Customize"), _T("GraphBgImage"), m_BgImage, m_Ini);
-	SetElementPropertyEx(_T("GraphBgImage"), DISPID_IHTMLELEMENT_TITLE, m_BgImage);
+	m_BkImage = _T("");
+	WritePrivateProfileString(_T("Customize"), _T("GraphBkImage"), m_BkImage, m_Ini);
+	SetElementPropertyEx(_T("GraphBkImage"), DISPID_IHTMLELEMENT_TITLE, m_BkImage);
 	UpdateData(FALSE);
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_UPDATE_BG_IMAGE, NULL, NULL);
 	return S_FALSE;

@@ -7,6 +7,7 @@
 
 #include "../stdafx.h"
 #include "HeaderCtrlFx.h"
+#include "GetOsInfo.h"
 
 IMPLEMENT_DYNAMIC(CHeaderCtrlFx, CHeaderCtrl)
 
@@ -18,7 +19,9 @@ CHeaderCtrlFx::CHeaderCtrlFx()
 	m_TextColor = RGB(0, 0, 0);
 	m_LineColor = RGB(224, 224, 224);
 	m_ZoomRatio = 1.0;
-	m_BgDC = NULL;
+	m_FontRatio = 1.0;
+	m_FontSize = 12;
+	m_BkDC = NULL;
 	m_CtrlBitmap = NULL;
 	m_bHighContrast = FALSE;
 	m_RenderMode = SystemDraw;
@@ -30,16 +33,19 @@ CHeaderCtrlFx::~CHeaderCtrlFx()
 
 BEGIN_MESSAGE_MAP(CHeaderCtrlFx, CHeaderCtrl)
 	ON_WM_PAINT()
+	ON_MESSAGE(HDM_LAYOUT, OnLayout)
 END_MESSAGE_MAP()
 
-void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bgDC, CBitmap* ctrlBitmap, COLORREF textColor, COLORREF lineColor, int renderMode)
+void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bkDC, CBitmap* ctrlBitmap, COLORREF textColor, COLORREF bkColor, COLORREF lineColor, int renderMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
 	m_ZoomRatio = zoomRatio;
-	m_BgDC = bgDC;
+	m_BkDC = bkDC;
 	m_TextColor = textColor;
 	m_LineColor = lineColor;
+	m_BkColor = bkColor;
+
 	m_CtrlBitmap = ctrlBitmap;
 	m_RenderMode = renderMode;
 	m_bHighContrast = renderMode & HighContrast;
@@ -60,17 +66,23 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	CRect clientRect;
 	GetClientRect(&clientRect);
 
+	CDC BkDC;
+	BkDC.CreateCompatibleDC(m_BkDC);
+	BkDC.SelectObject(m_CtrlBitmap);
+	CRect rc = lpDrawItemStruct->rcItem;
+	CBrush br;
+
 	if (m_CtrlBitmap != NULL)
 	{
-		CDC BgDC;
-		BgDC.CreateCompatibleDC(m_BgDC);
-		BgDC.SelectObject(m_CtrlBitmap);
-
-		CRect rc = lpDrawItemStruct->rcItem;
-		drawDC->BitBlt(rc.left, rc.top, rc.right, rc.bottom, &BgDC, rc.left, rc.top, SRCCOPY);
+		drawDC->BitBlt(rc.left, rc.top, rc.right, rc.bottom, &BkDC, rc.left, rc.top, SRCCOPY);
+	}
+	else
+	{
+		br.CreateSolidBrush(m_BkColor);
+		drawDC->FillRect(&rc, &br);
 	}
 
-	CBrush br;
+	br.DeleteObject();
 	br.CreateSolidBrush(m_LineColor);
 
 	CRect rect = lpDrawItemStruct->rcItem;
@@ -89,7 +101,7 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	GetItem(lpDrawItemStruct->itemID, &hi);
 
 	rect = (CRect)(lpDrawItemStruct->rcItem);
-	rect.left += (int)(4 * m_ZoomRatio);
+	rect.left += 4;
 	drawDC->DrawText(hi.pszText, lstrlen(hi.pszText), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 }
 
@@ -102,23 +114,73 @@ void CHeaderCtrlFx::OnPaint()
 
 	CHeaderCtrl::OnPaint();
 
-	if (m_CtrlBitmap != NULL)
+	RECT rectRightItem;
+	int iItemCount = Header_GetItemCount(this->m_hWnd);
+	if (iItemCount > 0)
 	{
-		RECT rectRightItem;
-		int iItemCount = Header_GetItemCount(this->m_hWnd);
-		if (iItemCount > 0)
+		Header_GetItemRect(this->m_hWnd, iItemCount - 1, &rectRightItem);
+		RECT rectClient;
+		GetClientRect(&rectClient);
+		if (rectRightItem.right < rectClient.right)
 		{
-			Header_GetItemRect(this->m_hWnd, iItemCount - 1, &rectRightItem);
-			RECT rectClient;
-			GetClientRect(&rectClient);
-			if (rectRightItem.right < rectClient.right)
+			CDC* drawDC = GetDC();
+			if (m_CtrlBitmap != NULL)
 			{
-				CDC* drawDC = GetDC();
-				CDC BgDC;
-				BgDC.CreateCompatibleDC(m_BgDC);
-				BgDC.SelectObject(m_CtrlBitmap);
-				drawDC->BitBlt(rectRightItem.right, rectClient.top, rectClient.right, rectClient.bottom, &BgDC, rectRightItem.right, rectClient.top, SRCCOPY);
+				CDC BkDC;
+				BkDC.CreateCompatibleDC(m_BkDC);
+				BkDC.SelectObject(m_CtrlBitmap);
+				drawDC->BitBlt(rectRightItem.right, rectClient.top, rectClient.right, rectClient.bottom, &BkDC, rectRightItem.right, rectRightItem.top, SRCCOPY);
+			}
+			else
+			{
+				CBrush br;
+				br.CreateSolidBrush(m_BkColor);
+				rectClient.left = rectRightItem.right;
+				drawDC->FillRect(&rectClient, &br);
 			}
 		}
 	}
+}
+
+LRESULT CHeaderCtrlFx::OnLayout(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lResult = CHeaderCtrl::DefWindowProc(HDM_LAYOUT, 0, lParam);
+
+	if (IsXpLuna())
+	{
+		HD_LAYOUT& hdl = *(HD_LAYOUT*)lParam;
+		RECT* prc = hdl.prc;
+		WINDOWPOS* pwpos = hdl.pwpos;
+
+		int nHeight = (int)(pwpos->cy * (m_ZoomRatio * m_FontRatio));
+
+		pwpos->cy = nHeight;
+		prc->top = nHeight;
+	}
+
+	return lResult;
+}
+
+void CHeaderCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio)
+{
+	m_FontSize = size;
+	m_ZoomRatio = zoomRatio;
+	m_FontRatio = fontRatio;
+
+	LOGFONT logFont = { 0 };
+	logFont.lfCharSet = DEFAULT_CHARSET;
+	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
+	logFont.lfQuality = 6;
+	if (face.GetLength() < 32)
+	{
+		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
+	}
+	else
+	{
+		wsprintf(logFont.lfFaceName, L"");
+	}
+
+	m_Font.DeleteObject();
+	m_Font.CreateFontIndirect(&logFont);
+	SetFont(&m_Font);
 }

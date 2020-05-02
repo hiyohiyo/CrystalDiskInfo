@@ -5,7 +5,6 @@
 #define IDR_ABOUT_ICON                  500
 #define IDR_SHIZUKU_ABOUT               501
 #define IDR_SHIZUKU_COPYRIGHT           502
-#define IDR_SHIZUKU_3_COPYRIGHT         503
 #define IDR_SHIZUKU_0                   510
 #define IDR_SHIZUKU_1                   511
 #define IDR_SHIZUKU_2                   512

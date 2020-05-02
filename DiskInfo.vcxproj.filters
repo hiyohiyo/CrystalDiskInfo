@@ -72,26 +72,11 @@
     <ClCompile Include="EventLog.cpp">
       <Filter>Library Files</Filter>
     </ClCompile>
-    <ClCompile Include="IsCurrentUserLocalAdministrator.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ListCtrlEx.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
     <ClCompile Include="SoundSettingDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonCx.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticCx.cpp">
-      <Filter>Library Files</Filter>
-    </ClCompile>
     <ClCompile Include="HealthDlg.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ComboBoxCx.cpp">
-      <Filter>Library Files</Filter>
     </ClCompile>
     <ClCompile Include="NVMeInterpreter.cpp">
       <Filter>Source Files</Filter>
@@ -179,12 +164,6 @@
     <ClInclude Include="EventLog.h">
       <Filter>Library Files</Filter>
     </ClInclude>
-    <ClInclude Include="IsCurrentUserLocalAdministrator.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ListCtrlEx.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
     <ClInclude Include="SPTIUtil.h">
       <Filter>Library Files</Filter>
     </ClInclude>
@@ -197,17 +176,8 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonCx.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticCX.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
     <ClInclude Include="HealthDlg.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ComboBoxCx.h">
-      <Filter>Library Files</Filter>
     </ClInclude>
     <ClInclude Include="NVMeInterpreter.h">
       <Filter>Header Files</Filter>

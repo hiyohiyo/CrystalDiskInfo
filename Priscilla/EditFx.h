@@ -23,7 +23,7 @@ public:
 	virtual ~CEditFx();
 
 	// Control
-	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bgDC, LPCWSTR imagePath,
+	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, LPCWSTR imagePath,
 		 int imageCount = 0, DWORD textAlign = ES_LEFT, int renderMode = OwnerDrawImage);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
@@ -39,10 +39,10 @@ protected:
 	// Image
 	BOOL LoadBitmap(LPCTSTR fileName);
 	BOOL LoadBitmap(HBITMAP hBitmap);
-	void SetBgReload(void);
+	void SetBkReload(void);
 	BOOL SetBitmap(CBitmap& bitmap);
-	void LoadCtrlBg(CDC* drawDC);
-	void SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap);
+	void LoadCtrlBk(CDC* drawDC);
+	void SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap);
 
 	// MessageMap
 	DECLARE_MESSAGE_MAP()
@@ -66,11 +66,11 @@ protected:
 	// Image
 	CString m_ImagePath;
 	int m_ImageCount;
-	CDC* m_BgDC;
-	CBitmap m_BgBitmap;
-	CBrush m_BgBrush;
-	BOOL m_bBgBitmapInit;
-	BOOL m_bBgLoad;
+	CDC* m_BkDC;
+	CBitmap m_BkBitmap;
+	CBrush m_BkBrush;
+	BOOL m_bBkBitmapInit;
+	BOOL m_bBkLoad;
 	CBitmap m_CtrlBitmap;
 	CImage m_CtrlImage;
 

@@ -7,9 +7,9 @@
 
 #pragma once
 #include "DialogFx.h"
-#include "StaticCx.h"
-#include "ButtonCx.h"
-#include "ComboBoxCx.h"
+#include "StaticFx.h"
+#include "ButtonFx.h"
+#include "ComboBoxFx.h"
 
 class CHealthDlg : public CDialogFx
 {
@@ -25,8 +25,6 @@ public:
 	enum { IDD = IDD_HEALTH };
 
 protected:
-	DWORD m_DiskIndex;
-
 	virtual void DoDataExchange(CDataExchange* pDX);
 	virtual BOOL OnInitDialog();
 	virtual void UpdateDialogSize();
@@ -36,7 +34,12 @@ protected:
 	void UpdateSelectDisk(DWORD index);
 
 	DECLARE_MESSAGE_MAP()
-public:
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnApply();
+	afx_msg void OnDefault();
+	afx_msg void OnCbnSelchangeSelectDisk();
+
+	DWORD m_DiskIndex;
 	CString m_Value05;
 	CString m_ValueC5;
 	CString m_ValueC6;
@@ -54,26 +57,19 @@ public:
 	CScrollBar m_CtrlScrollbarC5;
 	CScrollBar m_CtrlScrollbarC6;
 	CScrollBar m_CtrlScrollbarFF;
-	CStaticCx m_CtrlValue05;
-	CStaticCx m_CtrlValueC5;
-	CStaticCx m_CtrlValueC6;
-	CStaticCx m_CtrlValueFF;
-	CStaticCx m_CtrlValue05X;
-	CStaticCx m_CtrlValueC5X;
-	CStaticCx m_CtrlValueC6X;
-	CStaticCx m_CtrlValueFFX;
-	CStaticCx m_CtrlLabel05;
-	CStaticCx m_CtrlLabelC5;
-	CStaticCx m_CtrlLabelC6;
-	CStaticCx m_CtrlLabelFF;
-	CComboBoxCx m_CtrlSelectDisk;
-
-	CButtonCx m_CtrlApply;
-	CButtonCx m_CtrlDefault; 
-
-	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-
-	afx_msg void OnBnClickedApply();
-	afx_msg void OnBnClickedDefault();
-	afx_msg void OnCbnSelchangeSelectDisk();
+	CStaticFx m_CtrlValue05;
+	CStaticFx m_CtrlValueC5;
+	CStaticFx m_CtrlValueC6;
+	CStaticFx m_CtrlValueFF;
+	CStaticFx m_CtrlValue05X;
+	CStaticFx m_CtrlValueC5X;
+	CStaticFx m_CtrlValueC6X;
+	CStaticFx m_CtrlValueFFX;
+	CStaticFx m_CtrlLabel05;
+	CStaticFx m_CtrlLabelC5;
+	CStaticFx m_CtrlLabelC6;
+	CStaticFx m_CtrlLabelFF;
+	CComboBoxFx m_CtrlSelectDisk;
+	CButtonFx m_CtrlApply;
+	CButtonFx m_CtrlDefault; 
 };

@@ -30,9 +30,9 @@ CEditFx::CEditFx()
 
 	// Image
 	m_ImageCount = 0;
-	m_BgDC = NULL;
-	m_bBgBitmapInit = FALSE;
-	m_bBgLoad = FALSE;
+	m_BkDC = NULL;
+	m_bBkBitmapInit = FALSE;
+	m_bBkLoad = FALSE;
 
 	// Font
 	m_TextAlign = SS_LEFT;
@@ -58,7 +58,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
-	 CDC* bgDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
+	 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -66,7 +66,7 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
 
-	m_BgDC = bgDC;
+	m_BkDC = bkDC;
 	m_ImagePath = imagePath;
 	m_ImageCount = imageCount;
 	m_RenderMode = renderMode;
@@ -86,8 +86,8 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 	else
 	{
 		m_bHighContrast = FALSE;
-		SetBgReload();
-		LoadCtrlBg(m_BgDC);
+		SetBkReload();
+		LoadCtrlBk(m_BkDC);
 	}
 
 	if (renderMode & OwnerDrawGlass)
@@ -135,10 +135,10 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 		}
 	}
 
-	SetupControlImage(m_BgBitmap, m_CtrlBitmap);
+	SetupControlImage(m_BkBitmap, m_CtrlBitmap);
 
-	m_BgBrush.DeleteObject();
-	m_BgBrush.CreatePatternBrush(&m_CtrlBitmap);
+	m_BkBrush.DeleteObject();
+	m_BkBrush.CreatePatternBrush(&m_CtrlBitmap);
 
 	Invalidate();
 
@@ -207,7 +207,7 @@ HBRUSH CEditFx::CtlColor(CDC* pDC, UINT nCtlColor)
 	{
 		pDC->SetTextColor(m_TextColor);
 		pDC->SetBkMode(TRANSPARENT);
-		return m_BgBrush;
+		return m_BkBrush;
 	}
 }
 
@@ -237,10 +237,10 @@ BOOL CEditFx::LoadBitmap(HBITMAP hBitmap)
 	return SetBitmap(m_CtrlBitmap);
 }
 
-void CEditFx::SetBgReload(void)
+void CEditFx::SetBkReload(void)
 {
-	m_bBgBitmapInit = FALSE;
-	m_bBgLoad = FALSE;
+	m_bBkBitmapInit = FALSE;
+	m_bBkLoad = FALSE;
 }
 
 BOOL CEditFx::SetBitmap(CBitmap& bitmap)
@@ -261,50 +261,50 @@ BOOL CEditFx::SetBitmap(CBitmap& bitmap)
 	}
 }
 
-void CEditFx::LoadCtrlBg(CDC* drawDC)
+void CEditFx::LoadCtrlBk(CDC* drawDC)
 {
-	if (m_bHighContrast) { SetBgReload(); return; }
+	if (m_bHighContrast) { SetBkReload(); return; }
 
-	if (m_BgBitmap.m_hObject != NULL)
+	if (m_BkBitmap.m_hObject != NULL)
 	{
 		BITMAP bitmapInfo;
-		m_BgBitmap.GetBitmap(&bitmapInfo);
+		m_BkBitmap.GetBitmap(&bitmapInfo);
 		if (bitmapInfo.bmBitsPixel != drawDC->GetDeviceCaps(BITSPIXEL))
 		{
-			SetBgReload();
+			SetBkReload();
 		}
 	}
 
 	if (&m_CtrlBitmap != NULL)
 	{
-		if (!m_bBgBitmapInit)
+		if (!m_bBkBitmapInit)
 		{
-			m_BgBitmap.DeleteObject();
-			m_BgBitmap.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
-			m_bBgBitmapInit = TRUE;
+			m_BkBitmap.DeleteObject();
+			m_BkBitmap.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
+			m_bBkBitmapInit = TRUE;
 		}
 
-		if (!m_bBgLoad)
+		if (!m_bBkLoad)
 		{
 			CBitmap* pOldBitmap;
 			CDC* pMemDC = new CDC;
 			pMemDC->CreateCompatibleDC(drawDC);
-			pOldBitmap = pMemDC->SelectObject(&m_BgBitmap);
-			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X, m_Y, SRCCOPY);
+			pOldBitmap = pMemDC->SelectObject(&m_BkBitmap);
+			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BkDC, m_X, m_Y, SRCCOPY);
 			pMemDC->SelectObject(pOldBitmap);
 			pMemDC->DeleteDC();
 			delete pMemDC;
-			m_bBgLoad = TRUE;
+			m_bBkLoad = TRUE;
 		}
 	}
 }
 
-void CEditFx::SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap)
+void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 {
-	if (m_BgDC->GetDeviceCaps(BITSPIXEL) * m_BgDC->GetDeviceCaps(PLANES) >= 24)
+	if (m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES) >= 24)
 	{
 		BITMAP CtlBmpInfo, DstBmpInfo;
-		bgBitmap.GetBitmap(&DstBmpInfo);
+		bkBitmap.GetBitmap(&DstBmpInfo);
 		DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
 		DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
 		ctrlBitmap.GetBitmap(&CtlBmpInfo);
@@ -315,7 +315,7 @@ void CEditFx::SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap)
 		|| DstBmpInfo.bmHeight != CtlBmpInfo.bmHeight) { return ; }
 
 		BYTE* DstBuffer = new BYTE[DstMemSize];
-		bgBitmap.GetBitmapBits(DstMemSize, DstBuffer);
+		bkBitmap.GetBitmapBits(DstMemSize, DstBuffer);
 		BYTE* CtlBuffer = new BYTE[CtlMemSize];
 		ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 

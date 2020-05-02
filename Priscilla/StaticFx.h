@@ -24,7 +24,7 @@ public:
 
 	// Control
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio,
-		 CDC* bgDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode);
+		 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);
@@ -47,15 +47,15 @@ public:
 protected:
 	// Draw Control
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
-	virtual void DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& ctrlBitmap, CBitmap& bgBitmap, int no);
+	virtual void DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& ctrlBitmap, CBitmap& bkBitmap, int no);
 	virtual void DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct);
 
 	// Image
 	BOOL LoadBitmap(LPCTSTR fileName);
 	BOOL LoadBitmap(HBITMAP hBitmap);
-	void SetBgReload(void);
+	void SetBkReload(void);
 	BOOL SetBitmap(CBitmap& bitmap);
-	void LoadCtrlBg(CDC* drawDC);
+	void LoadCtrlBk(CDC* drawDC);
 
 	// ToolTip
 	void InitToolTip();
@@ -91,10 +91,10 @@ protected:
 	// Image
 	CString m_ImagePath;
 	int m_ImageCount;
-	CDC* m_BgDC;
-	CBitmap m_BgBitmap;
-	BOOL m_bBgBitmapInit;
-	BOOL m_bBgLoad;
+	CDC* m_BkDC;
+	CBitmap m_BkBitmap;
+	BOOL m_bBkBitmapInit;
+	BOOL m_bBkLoad;
 	CBitmap m_CtrlBitmap;
 	CImage m_CtrlImage;
 

@@ -229,7 +229,7 @@ BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_COMMAND(ID_POINT_5000, &CGraphDlg::OnPoint5000)
 	ON_COMMAND(ID_POINT_ALL, &CGraphDlg::OnPointAll)
 	ON_COMMAND(ID_CUSTOMIZE, &CGraphDlg::OnCustomize)
-	ON_MESSAGE(MY_UPDATE_BG_IMAGE, OnUpdateBgImage)
+	ON_MESSAGE(MY_UPDATE_BG_IMAGE, OnUpdateBkImage)
 	ON_MESSAGE(MY_UPDATE_LINE_COLOR, OnUpdateLineColor)
 	ON_COMMAND(ID_MDHM, &CGraphDlg::OnMdhm)
 	ON_COMMAND(ID_MD, &CGraphDlg::OnMd)
@@ -374,7 +374,7 @@ void CGraphDlg::InitDialogComplete()
 		m_bShowWindow = TRUE;
 
 		InitMenuBar();
-		UpdateBgImage();
+		UpdateBkImage();
 
 		for(int i = 0; i < m_DetectedDisk; i++)
 		{
@@ -1651,11 +1651,11 @@ void CGraphDlg::OnCustomize()
 	m_OptionDlg->Create(COptionDlg::IDD, m_OptionDlg, ID_CUSTOMIZE, this);
 }
 
-void CGraphDlg::UpdateBgImage()
+void CGraphDlg::UpdateBkImage()
 {
 	TCHAR str[256];
 	CString cstr;
-	GetPrivateProfileString(_T("Customize"), _T("GraphBgImage"), _T(""), str, 256, m_Ini);
+	GetPrivateProfileString(_T("Customize"), _T("GraphBkImage"), _T(""), str, 256, m_Ini);
 	cstr = str;
 	cstr.Replace(_T("\\"), _T("/"));
 	if(cstr.IsEmpty())
@@ -1665,9 +1665,9 @@ void CGraphDlg::UpdateBgImage()
 	CallScript(_T("changeBackgroundImage"), _T("url(") + cstr + _T(")"));
 }
 
-LRESULT CGraphDlg::OnUpdateBgImage(WPARAM wParam, LPARAM lParam)
+LRESULT CGraphDlg::OnUpdateBkImage(WPARAM wParam, LPARAM lParam)
 {
-	UpdateBgImage();
+	UpdateBkImage();
 	return 0;
 }
 

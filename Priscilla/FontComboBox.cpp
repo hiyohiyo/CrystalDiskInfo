@@ -30,9 +30,9 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	if (m_bHighContrast)
 	{
 		m_TextColor = RGB(255, 255, 255);
-		m_BgColor = RGB(0, 0, 0);
+		m_BkColor = RGB(0, 0, 0);
 		m_TextColorSelected = RGB(0, 0, 0);
-		m_BgColorSelected = RGB(0, 255, 255);
+		m_BkColorSelected = RGB(0, 255, 255);
 	}
 
     CString title;
@@ -60,13 +60,13 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	CBrush* pOldBrush;
 
 	if (lpDrawItemStruct->itemState & ODS_SELECTED) {
-		Brush.CreateSolidBrush(m_BgColorSelected);
+		Brush.CreateSolidBrush(m_BkColorSelected);
 		pOldBrush = pDC->SelectObject(&Brush);
 		FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
 		SetTextColor(lpDrawItemStruct->hDC, m_TextColorSelected);
 	}
 	else {
-		Brush.CreateSolidBrush(m_BgColor);
+		Brush.CreateSolidBrush(m_BkColor);
 		pOldBrush = pDC->SelectObject(&Brush);
 		FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
 		SetTextColor(lpDrawItemStruct->hDC, m_TextColor);

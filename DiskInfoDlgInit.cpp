@@ -61,7 +61,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	GetPrivateProfileString(_T("Setting"), _T("FontFace"), defaultFontFace, str, 256, m_Ini);
 	m_FontFace = str;
 	m_FontScale = GetPrivateProfileInt(L"Setting", L"FontScale", 100, m_Ini);
-	if (m_FontScale > 200 || m_FontScale < 50)
+	if (m_FontScale > 150 || m_FontScale < 50)
 	{
 		m_FontScale = 100;
 		m_FontRatio = 1.0;

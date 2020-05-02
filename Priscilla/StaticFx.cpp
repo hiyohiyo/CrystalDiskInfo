@@ -30,9 +30,9 @@ CStaticFx::CStaticFx()
 
 	// Image
 	m_ImageCount = 0;
-	m_BgDC = NULL;
-	m_bBgBitmapInit = FALSE;
-	m_bBgLoad = FALSE;
+	m_BkDC = NULL;
+	m_bBkBitmapInit = FALSE;
+	m_bBkLoad = FALSE;
 
 	// Font
 	m_TextAlign = SS_LEFT;
@@ -68,7 +68,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRatio,
-	 CDC* bgDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
+	 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -76,7 +76,7 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
 
-	m_BgDC = bgDC;
+	m_BkDC = bkDC;
 	m_ImagePath = imagePath;
 	m_ImageCount = imageCount;
 	m_RenderMode = renderMode;
@@ -113,7 +113,7 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 	else
 	{
 		m_bHighContrast = FALSE;
-		SetBgReload();
+		SetBkReload();
 		ModifyStyle(m_TextAlign | SS_CENTERIMAGE, SS_OWNERDRAW);
 	}
 
@@ -254,25 +254,25 @@ void CStaticFx::SetMeter(BOOL bMeter, double meterRatio)
 void CStaticFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
 	CDC* drawDC = CDC::FromHandle(lpDrawItemStruct->hDC);
-	LoadCtrlBg(drawDC);
+	LoadCtrlBk(drawDC);
 
-	DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageNormal);
+	DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageNormal);
 }
 
-void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& CtrlBitmap, CBitmap& BgBitmap, int no)
+void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& CtrlBitmap, CBitmap& BkBitmap, int no)
 {
 	CDC* pMemDC = new CDC;
 	CBitmap* pOldMemBitmap;
 	pMemDC->CreateCompatibleDC(drawDC);
 	pOldMemBitmap = pMemDC->SelectObject(&CtrlBitmap);
-	CDC* pBgDC = new CDC;
-	CBitmap* pOldBgBitmap;
-	pBgDC->CreateCompatibleDC(drawDC);
-	pOldBgBitmap = pBgDC->SelectObject(&BgBitmap);
+	CDC* pBkDC = new CDC;
+	CBitmap* pOldBkBitmap;
+	pBkDC->CreateCompatibleDC(drawDC);
+	pOldBkBitmap = pBkDC->SelectObject(&BkBitmap);
 
 	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24) 
 	{
-		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBgDC, 0, m_CtrlSize.cy, SRCCOPY);
+		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy, SRCCOPY);
 		if (!m_CtrlImage.IsNull())
 		{
 			if (m_bMeter)
@@ -302,7 +302,7 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 			if (m_CtrlImage.GetBPP() == 32)
 			{
 				BITMAP CtlBmpInfo, DstBmpInfo;
-				BgBitmap.GetBitmap(&DstBmpInfo);
+				BkBitmap.GetBitmap(&DstBmpInfo);
 				DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
 				DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
 				CtrlBitmap.GetBitmap(&CtlBmpInfo);
@@ -310,7 +310,7 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 				DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
 
 				BYTE* DstBuffer = new BYTE[DstMemSize];
-				BgBitmap.GetBitmapBits(DstMemSize, DstBuffer);
+				BkBitmap.GetBitmapBits(DstMemSize, DstBuffer);
 				BYTE* CtlBuffer = new BYTE[CtlMemSize];
 				CtrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
@@ -395,13 +395,13 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 		{
 			if (m_bMeter)
 			{
-				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBgDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
 				DrawString(pDrawBmpDC, lpDrawItemStruct);
 				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 			}
 			else
 			{
-				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBgDC, 0, m_CtrlSize.cy* no, SRCCOPY);
+				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy* no, SRCCOPY);
 				DrawString(pDrawBmpDC, lpDrawItemStruct);
 				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 			}
@@ -415,11 +415,11 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 
 	// Clean up
 	pMemDC->SelectObject(&pOldMemBitmap);
-	pBgDC->SelectObject(&pOldBgBitmap);
+	pBkDC->SelectObject(&pOldBkBitmap);
 	pMemDC->DeleteDC();
-	pBgDC->DeleteDC();
+	pBkDC->DeleteDC();
 	delete pMemDC;
-	delete pBgDC;
+	delete pBkDC;
 }
 
 void CStaticFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
@@ -495,10 +495,10 @@ BOOL CStaticFx::LoadBitmap(HBITMAP hBitmap)
 	return SetBitmap(m_CtrlBitmap);
 }
 
-void CStaticFx::SetBgReload(void)
+void CStaticFx::SetBkReload(void)
 {
-	m_bBgBitmapInit = FALSE;
-	m_bBgLoad = FALSE;
+	m_bBkBitmapInit = FALSE;
+	m_bBkLoad = FALSE;
 }
 
 BOOL CStaticFx::SetBitmap(CBitmap& bitmap)
@@ -520,40 +520,40 @@ BOOL CStaticFx::SetBitmap(CBitmap& bitmap)
 	}
 }
 
-void CStaticFx::LoadCtrlBg(CDC* drawDC)
+void CStaticFx::LoadCtrlBk(CDC* drawDC)
 {
-	if (m_bHighContrast) { SetBgReload(); return; }
+	if (m_bHighContrast) { SetBkReload(); return; }
 
-	if (m_BgBitmap.m_hObject != NULL)
+	if (m_BkBitmap.m_hObject != NULL)
 	{
 		BITMAP bitmapInfo;
-		m_BgBitmap.GetBitmap(&bitmapInfo);
+		m_BkBitmap.GetBitmap(&bitmapInfo);
 		if (bitmapInfo.bmBitsPixel != drawDC->GetDeviceCaps(BITSPIXEL))
 		{
-			SetBgReload();
+			SetBkReload();
 		}
 	}
 
 	if (&m_CtrlBitmap != NULL)
 	{
-		if (!m_bBgBitmapInit)
+		if (!m_bBkBitmapInit)
 		{
-			m_BgBitmap.DeleteObject();
-			m_BgBitmap.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
-			m_bBgBitmapInit = TRUE;
+			m_BkBitmap.DeleteObject();
+			m_BkBitmap.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
+			m_bBkBitmapInit = TRUE;
 		}
 
-		if (!m_bBgLoad)
+		if (!m_bBkLoad)
 		{
 			CBitmap* pOldBitmap;
 			CDC* pMemDC = new CDC;
 			pMemDC->CreateCompatibleDC(drawDC);
-			pOldBitmap = pMemDC->SelectObject(&m_BgBitmap);
-			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X, m_Y, SRCCOPY);
+			pOldBitmap = pMemDC->SelectObject(&m_BkBitmap);
+			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BkDC, m_X, m_Y, SRCCOPY);
 			pMemDC->SelectObject(pOldBitmap);
 			pMemDC->DeleteDC();
 			delete pMemDC;
-			m_bBgLoad = TRUE;
+			m_bBkLoad = TRUE;
 		}
 	}
 }

@@ -7,18 +7,15 @@
 
 #pragma once
 #include "DialogFx.h"
-#include "ButtonCx.h"
-#include "StaticCX.h"
+#include "ButtonFx.h"
+#include "StaticFX.h"
 
 class CSoundSettingDlg : public CDialogFx
 {
 	DECLARE_DYNCREATE(CSoundSettingDlg)
 
 	static const int SIZE_X = 488;
-	static const int SIZE_Y = 76;
-
-	static const int SIZE_X_SJ = 480;
-	static const int SIZE_Y_SJ = 480;
+	static const int SIZE_Y = 72;
 
 public:
 	CSoundSettingDlg(CWnd* pParent = NULL);
@@ -31,18 +28,16 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual void UpdateDialogSize();
 
-	CString m_FilePath;
-
-	CStaticCx m_CtrlFilePath;
-	CButtonCx m_CtrlSelectFile;
-	CButtonCx m_CtrlPlay;
-	CButtonCx m_CtrlDefault;
-	CButtonCx m_CtrlOk;
-
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnBnClickedButtonSelectFile();
-	afx_msg void OnBnClickedButtonPlay();
-	afx_msg void OnBnClickedButtonDefault();
-	afx_msg void OnBnClickedButtonOk();
+	afx_msg void OnSelectFile();
+	afx_msg void OnPlay();
+	afx_msg void OnDefault();
+	afx_msg void OnOk();
+
+	CString m_FilePath;
+	CStaticFx m_CtrlFilePath;
+	CButtonFx m_CtrlSelectFile;
+	CButtonFx m_CtrlPlay;
+	CButtonFx m_CtrlDefault;
+	CButtonFx m_CtrlOk;
 };

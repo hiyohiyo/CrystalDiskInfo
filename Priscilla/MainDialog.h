@@ -6,8 +6,10 @@
 /*---------------------------------------------------------------------------*/
 
 #pragma once
-
 #include "DialogFx.h"
+#include "DebugPrint.h"
+#include "GetFileVersion.h"
+#include "GetOsInfo.h"
 
 class CMainDialog : public CDialogFx
 {

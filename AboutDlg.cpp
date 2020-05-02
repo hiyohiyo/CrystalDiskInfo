@@ -29,11 +29,11 @@ CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
 	m_Ini = p->GetIniPath();
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
-		m_BackgroundName = L"KureiKeiAbout";
-	#else
-		m_BackgroundName = L"ShizukuAbout";
-	#endif
+#ifdef KUREI_KEI_SUPPORT
+	m_BackgroundName = L"KureiKeiAbout";
+#else
+	m_BackgroundName = L"ShizukuAbout";
+#endif
 #else
 	m_BackgroundName = L"Background";
 #endif
@@ -55,11 +55,10 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PROJECT_SITE_5, m_CtrlProjectSite5);
 
 	DDX_Control(pDX, IDC_SECRET_VOICE, m_CtrlSecretVoice);
-
 	DDX_Control(pDX, IDC_VERSION, m_CtrlVersion);
+	DDX_Control(pDX, IDC_LICENSE, m_CtrlLicense);	
 	DDX_Control(pDX, IDC_RELEASE, m_CtrlRelease);
 	DDX_Control(pDX, IDC_COPYRIGHT, m_CtrlCopyright);
-	DDX_Control(pDX, IDC_LICENSE, m_CtrlLicense);
 	DDX_Control(pDX, IDC_EDITION, m_CtrlEdition);
 }
 
@@ -67,7 +66,7 @@ BOOL CAboutDlg::OnInitDialog()
 {
 	CDialogFx::OnInitDialog();
 
-	SetWindowText(i18n(_T("WindowTitle"), _T("ABOUT")));
+	SetWindowText(i18n(L"WindowTitle", L"ABOUT"));
 
 	m_bShowWindow = TRUE;
 	m_CtrlVersion.SetWindowTextW(PRODUCT_NAME L" " PRODUCT_VERSION);
@@ -82,9 +81,8 @@ BOOL CAboutDlg::OnInitDialog()
 	m_CtrlProjectSite3.ShowWindow(SW_HIDE);
 	m_CtrlProjectSite4.ShowWindow(SW_HIDE);
 	m_CtrlProjectSite5.ShowWindow(SW_HIDE);
-	m_CtrlSecretVoice.ShowWindow(SW_HIDE);
 #endif
-	
+
 	UpdateDialogSize();
 
 	CenterWindow();
@@ -94,52 +92,43 @@ BOOL CAboutDlg::OnInitDialog()
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogFx)
 	ON_BN_CLICKED(IDC_CRYSTAL_DEW_WORLD, &CAboutDlg::OnCrystalDewWorld)
+	ON_BN_CLICKED(IDC_LICENSE, &CAboutDlg::OnLicense)
+	ON_BN_CLICKED(IDC_VERSION, &CAboutDlg::OnVersion)
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	ON_BN_CLICKED(IDC_SECRET_VOICE, &CAboutDlg::OnSecretVoice)
-	ON_BN_CLICKED(IDC_PROJECT_SITE_1, &CAboutDlg::OnBnClickedProjectSite1)
-	ON_BN_CLICKED(IDC_PROJECT_SITE_2, &CAboutDlg::OnBnClickedProjectSite2)
-	ON_BN_CLICKED(IDC_PROJECT_SITE_3, &CAboutDlg::OnBnClickedProjectSite3)
-	ON_BN_CLICKED(IDC_PROJECT_SITE_4, &CAboutDlg::OnBnClickedProjectSite4)
-	ON_BN_CLICKED(IDC_PROJECT_SITE_5, &CAboutDlg::OnBnClickedProjectSite5)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_1, &CAboutDlg::OnProjectSite1)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_2, &CAboutDlg::OnProjectSite2)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_3, &CAboutDlg::OnProjectSite3)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_4, &CAboutDlg::OnProjectSite4)
+	ON_BN_CLICKED(IDC_PROJECT_SITE_5, &CAboutDlg::OnProjectSite5)
 #endif
 END_MESSAGE_MAP()
+
 
 void CAboutDlg::UpdateDialogSize()
 {
 	ChangeZoomType(m_ZoomType);
-	if (m_bHighContrast)
-	{
-		SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_HC_Y * m_ZoomRatio), 0);
-	}
-	else
-	{
-		SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
-	}
 
-	UpdateBackground(true);
-
-	m_CtrlCrystalDewWorld.InitControl( 24,  24, 128, 128, m_ZoomRatio, &m_BgDC, IP(L"logo"), 1, 0, CButtonCx::OwnerDrawImage);
-	m_CtrlCrystalDewWorld.SetHandCursor();
+	SetClientSize((int)(SIZE_X * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), 0);
+	UpdateBackground(TRUE);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-
-	#ifdef KUREI_KEI_SUPPORT
-	m_CtrlProjectSite1.InitControl(340, 232, 268, 100, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlProjectSite2.InitControl(386, 376, 48, 40, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlProjectSite3.InitControl(492, 376, 108, 40, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlProjectSite4.InitControl(386, 600, 224, 60, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlProjectSite5.InitControl(0, 0, 0, 0, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
+#ifdef KUREI_KEI_SUPPORT
+	m_CtrlProjectSite1.InitControl(340, 232, 268, 100, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlProjectSite2.InitControl(386, 376, 48, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlProjectSite3.InitControl(492, 376, 108, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlProjectSite4.InitControl(386, 600, 224, 60, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlProjectSite5.InitControl(0, 0, 0, 0, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
 	m_CtrlProjectSite5.ShowWindow(SW_HIDE);
-	m_CtrlSecretVoice.InitControl(132, 324, 48, 28, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	#else
-	m_CtrlProjectSite1.InitControl(340, 324, 292, 20, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlProjectSite2.InitControl(340, 368, 292, 20, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlProjectSite3.InitControl(340, 392, 292, 20, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlProjectSite4.InitControl(340, 416, 292, 20, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlProjectSite5.InitControl(320, 192, 292, 92, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlSecretVoice.InitControl(200, 412, 40, 40, m_ZoomRatio, &m_BgDC, NULL, 0, 0, CButtonCx::OwnerDrawTransparent | m_bHighContrast);
-	#endif
-	
+	m_CtrlSecretVoice.InitControl(132, 324, 48, 28, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+#else
+	m_CtrlProjectSite1.InitControl(340, 324, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlProjectSite2.InitControl(340, 368, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlProjectSite3.InitControl(340, 392, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlProjectSite4.InitControl(340, 416, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlProjectSite5.InitControl(320, 192, 292, 92, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlSecretVoice.InitControl(200, 412, 40, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+#endif
 	m_CtrlProjectSite1.SetHandCursor();
 	m_CtrlProjectSite2.SetHandCursor();
 	m_CtrlProjectSite3.SetHandCursor();
@@ -148,28 +137,40 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlSecretVoice.SetHandCursor();
 #endif
 
-	m_CtrlVersion.SetFontEx(m_FontFace, 28, 28, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
-	m_CtrlEdition.SetFontEx(m_FontFace, 28, 28, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
+	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage);
+	m_CtrlCrystalDewWorld.SetHandCursor();
+
+	m_CtrlVersion.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
+	m_CtrlEdition.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
 	m_CtrlRelease.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
 	m_CtrlCopyright.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
 	m_CtrlLicense.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
 
-	m_CtrlVersion.InitControl(200, 12, 420, 36, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlEdition.InitControl(200, 48, 420, 36, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlRelease.InitControl(200, 88, 420, 24, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlCopyright.InitControl(200, 112, 420, 24, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlLicense.InitControl(200, 136, 420, 24, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlVersion.SetHandCursor();
+	m_CtrlLicense.SetHandCursor();
+
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	m_CtrlVersion.InitControl(152, 12, 476, 36, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlEdition.InitControl(152, 48, 476, 36, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlRelease.InitControl(152, 88, 476, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlCopyright.InitControl(152, 112, 476, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlLicense.InitControl(152, 136, 476, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+#else
+	m_CtrlVersion.InitControl(152, 12, 316, 36, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlEdition.InitControl(152, 48, 316, 36, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlRelease.InitControl(152, 88, 316, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlCopyright.InitControl(152, 112, 316, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlLicense.InitControl(152, 136, 316, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+#endif
 
 	Invalidate();
 }
 
-
 void CAboutDlg::OnCrystalDewWorld()
 {
-
 #ifdef KUREI_KEI_SUPPORT
 	OpenUrl(URL_PRONAMA);
-#else
+#else if
 	if (GetUserDefaultLCID() == 0x0411)// Japanese
 	{
 		OpenUrl(URL_CRYSTAL_DEW_WORLD_JA);
@@ -181,33 +182,57 @@ void CAboutDlg::OnCrystalDewWorld()
 #endif
 }
 
+void CAboutDlg::OnVersion()
+{
+	if (GetUserDefaultLCID() == 0x0411)// Japanese
+	{
+		OpenUrl(URL_VERSION_JA);
+	}
+	else // Other Language
+	{
+		OpenUrl(URL_VERSION_EN);
+	}
+
+}
+void CAboutDlg::OnLicense()
+{
+	if (GetUserDefaultLCID() == 0x0411)// Japanese
+	{
+		OpenUrl(URL_LICENSE_JA);
+	}
+	else // Other Language
+	{
+		OpenUrl(URL_LICENSE_EN);
+	}
+}
+
 #ifdef SUISHO_SHIZUKU_SUPPORT
 void CAboutDlg::OnSecretVoice()
 {
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_PLAY_ALERT_SOUND, 901, NULL);
 }
 
-void CAboutDlg::OnBnClickedProjectSite1()
+void CAboutDlg::OnProjectSite1()
 {
 	OpenUrl(URL_PROJECT_SITE_1);
 }
 
-void CAboutDlg::OnBnClickedProjectSite2()
+void CAboutDlg::OnProjectSite2()
 {
 	OpenUrl(URL_PROJECT_SITE_2);
 }
 
-void CAboutDlg::OnBnClickedProjectSite3()
+void CAboutDlg::OnProjectSite3()
 {
 	OpenUrl(URL_PROJECT_SITE_3);
 }
 
-void CAboutDlg::OnBnClickedProjectSite4()
+void CAboutDlg::OnProjectSite4()
 {
 	OpenUrl(URL_PROJECT_SITE_4);
 }
 
-void CAboutDlg::OnBnClickedProjectSite5()
+void CAboutDlg::OnProjectSite5()
 {
 	OpenUrl(URL_PROJECT_SITE_5);
 }

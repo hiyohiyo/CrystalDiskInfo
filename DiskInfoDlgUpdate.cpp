@@ -191,25 +191,26 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 
 	if (pGetSystemMetricsForDpi != NULL)
 	{
-		width = (int)((652 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))));
+		width = (int)((656 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))) - 4);
 	}
 	else
 	{
-		width = (int)(652 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL));
+		width = (int)(656 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL) - 4);
 	}
 
 	if (m_Ata.vars.GetCount() == 0)
 	{
+		m_List.InsertColumn(0, _T(""), LVCFMT_CENTER, 0, 0);
+		m_List.EnableHeaderOwnerDraw(TRUE);
 		return;
 	}
-
-	m_List.DeleteAllItems();
 
 	if (preVendorId == m_Ata.vars[i].DiskVendorId && !forceUpdate)
 	{
 		return;
 	}
 
+	m_List.DeleteAllItems();
 	while (m_List.DeleteColumn(0)) {}
 	if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 	{
@@ -1563,7 +1564,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	menu->ModifyMenu(ID_CSMI_ENABLE_ALL, MF_STRING, ID_CSMI_ENABLE_ALL, cstr);
 	cstr = i18n(_T("Menu"), _T("INSTALL_GADGET"));
 	menu->ModifyMenu(ID_INSTALL_GADGET, MF_STRING, ID_INSTALL_GADGET, cstr);
-	if (IsSidebar())
+	if (HasSidebar())
 	{
 		menu->EnableMenuItem(ID_INSTALL_GADGET, MF_ENABLED);
 	}

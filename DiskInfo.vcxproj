@@ -1147,8 +1147,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AboutDlg.cpp" />
-    <ClCompile Include="ButtonCx.cpp" />
-    <ClCompile Include="ComboBoxCx.cpp" />
     <ClCompile Include="DiskInfo.cpp" />
     <ClCompile Include="DiskInfoDlg.cpp" />
     <ClCompile Include="DiskInfoDlgCopy.cpp" />
@@ -1556,7 +1554,6 @@
     <ClCompile Include="SettingDlg.cpp" />
     <ClCompile Include="SlotSpeedGetter.cpp" />
     <ClCompile Include="SoundSettingDlg.cpp" />
-    <ClCompile Include="StaticCx.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -1583,8 +1580,6 @@
     <ClCompile Include="DHtmlDialogEx.cpp" />
     <ClCompile Include="DHtmlMainDialog.cpp" />
     <ClCompile Include="EventLog.cpp" />
-    <ClCompile Include="IsCurrentUserLocalAdministrator.cpp" />
-    <ClCompile Include="ListCtrlEx.cpp" />
     <ClCompile Include="TemperatureDlg.cpp">
       <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</MinimalRebuild>
       <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">false</MinimalRebuild>
@@ -1594,8 +1589,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h" />
-    <ClInclude Include="ButtonCx.h" />
-    <ClInclude Include="ComboBoxCx.h" />
     <ClInclude Include="CommonFx.h" />
     <ClInclude Include="DiskInfo.h" />
     <ClInclude Include="DiskInfoDlg.h" />
@@ -1622,15 +1615,12 @@
     <ClInclude Include="SettingDlg.h" />
     <ClInclude Include="SlotSpeedGetter.h" />
     <ClInclude Include="SoundSettingDlg.h" />
-    <ClInclude Include="StaticCX.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="AtaSmart.h" />
     <ClInclude Include="DHtmlDialogEx.h" />
     <ClInclude Include="DHtmlMainDialog.h" />
     <ClInclude Include="DnpService.h" />
     <ClInclude Include="EventLog.h" />
-    <ClInclude Include="IsCurrentUserLocalAdministrator.h" />
-    <ClInclude Include="ListCtrlEx.h" />
     <ClInclude Include="SPTIUtil.h" />
     <ClInclude Include="StorageQuery.h" />
     <ClInclude Include="TemperatureDlg.h" />

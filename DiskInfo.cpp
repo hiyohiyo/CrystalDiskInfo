@@ -12,7 +12,6 @@
 
 #include "GetFileVersion.h"
 #include "GetOsInfo.h"
-#include "IsCurrentUserLocalAdministrator.h"
 
 #include <afxole.h>
 
@@ -237,9 +236,7 @@ BOOL CDiskInfoApp::InitInstance()
 
 // for Windows NT family
 #ifdef _UNICODE
-
-
-	if(! IsCurrentUserLocalAdministrator())
+	if(! IsUserAnAdmin())
 	{
 		if(osvi.dwMajorVersion < 6)
 		{

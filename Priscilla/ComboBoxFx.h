@@ -25,8 +25,8 @@ public:
 // Control
 public:
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio,
-		 CDC* bgDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode,
-		 COLORREF bgColor, COLORREF bgColorSelected, COLORREF glassColor, BYTE glassAlpha
+		 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode,
+		 COLORREF bkColor, COLORREF bkColorSelected, COLORREF glassColor, BYTE glassAlpha
 	);
 	void SetFontHeight(int height, double zoomRatio, double fontRatio = 1.0);
 	void SetItemHeightEx(int nIndex, int height, double zoomRatio, double fontRatio = 1.0);
@@ -52,15 +52,15 @@ protected:
 	// Draw Control
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 	virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
-	virtual void DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& ctrlBitmap, CBitmap& bgBitmap, int no);
+	virtual void DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& ctrlBitmap, CBitmap& bkBitmap, int no);
 	virtual void DrawString(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, COLORREF textColor);
 
 	// Image
 	BOOL LoadBitmap(LPCTSTR fileName);
 	BOOL LoadBitmap(HBITMAP hBitmap);
-	void SetBgReload(void);
+	void SetBkReload(void);
 	BOOL SetBitmap(CBitmap& bitmap);
-	void LoadCtrlBg(CDC* drawDC);
+	void LoadCtrlBk(CDC* drawDC);
 
 	// ToolTip
 	void InitToolTip();
@@ -93,10 +93,10 @@ protected:
 	// Image
 	CString m_ImagePath;
 	int m_ImageCount;
-	CDC* m_BgDC;
-	CBitmap m_BgBitmap;
-	BOOL m_bBgBitmapInit;
-	BOOL m_bBgLoad;
+	CDC* m_BkDC;
+	CBitmap m_BkBitmap;
+	BOOL m_bBkBitmapInit;
+	BOOL m_bBkLoad;
 	CBitmap m_CtrlBitmap;
 	CImage m_CtrlImage;
 
@@ -106,12 +106,12 @@ protected:
 	CFont m_FontToolTip;
 	COLORREF m_TextColor;
 	COLORREF m_TextColorSelected;
-	COLORREF m_BgColor;
-	COLORREF m_BgColorSelected;
+	COLORREF m_BkColor;
+	COLORREF m_BkColorSelected;
 	COLORREF m_TextColorHc;
 	COLORREF m_TextColorSelectedHc;
-	COLORREF m_BgColorHc;
-	COLORREF m_BgColorSelectedHc;
+	COLORREF m_BkColorHc;
+	COLORREF m_BkColorSelectedHc;
 	LONG m_FontHeight;
 
 	// ToolTip

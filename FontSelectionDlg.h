@@ -17,7 +17,7 @@ class CFontSelectionDlg : public CDialogFx
 	DECLARE_DYNAMIC(CFontSelectionDlg)
 
 	static const int SIZE_X = 480;
-	static const int SIZE_Y = 240;
+	static const int SIZE_Y = 208;
 	enum { IDD = IDD_FONT };
 
 public:

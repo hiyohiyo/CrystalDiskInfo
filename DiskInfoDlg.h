@@ -18,10 +18,6 @@
 
 #include "DialogFx.h"
 #include "MainDialog.h"
-// #include "CommonFx.h"
-
-// #include "ButtonCx.h"
-// #include "StaticCx.h"
 #include "ListCtrlFx.h"
 
 #include "GetOsInfo.h"

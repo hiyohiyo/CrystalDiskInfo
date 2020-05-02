@@ -26,9 +26,9 @@ CButtonFx::CButtonFx()
 
 	// Image
 	m_ImageCount = 0;
-	m_BgDC = NULL;
-	m_bBgBitmapInit = FALSE;
-	m_bBgLoad = FALSE;
+	m_BkDC = NULL;
+	m_bBkBitmapInit = FALSE;
+	m_bBkLoad = FALSE;
 
 	// Font
 	m_TextAlign = BS_LEFT;
@@ -65,7 +65,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRatio,
-	CDC* bgDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
+	CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -73,7 +73,7 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
 
-	m_BgDC = bgDC;
+	m_BkDC = bkDC;
 	m_ImagePath = imagePath;
 	m_ImageCount = imageCount;
 	m_RenderMode = renderMode;
@@ -110,7 +110,7 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 	else
 	{
 		m_bHighContrast = FALSE;
-		SetBgReload();
+		SetBkReload();
 		ModifyStyle(0, BS_OWNERDRAW);
 	}
 
@@ -287,50 +287,50 @@ void CButtonFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	if (m_bHighContrast) { return CButton::DrawItem(lpDrawItemStruct); }
 
 	CDC* drawDC = CDC::FromHandle(lpDrawItemStruct->hDC);
-	LoadCtrlBg(drawDC);
+	LoadCtrlBk(drawDC);
 
 	if (IsWindowEnabled())
 	{
 		if (m_bSelected && m_ImageCount > ControlImageSelected)
 		{
-			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageSelected);
+			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageSelected);
 		}
 		else if ((lpDrawItemStruct->itemState & ODS_SELECTED || m_bHover) && m_ImageCount > ControlImageHover)
 		{
-			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageHover);
+			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageHover);
 		}
 		else if ((lpDrawItemStruct->itemState & ODS_FOCUS || m_bFocas) && m_ImageCount > ControlImageFocus)
 		{
-			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageFocus);
+			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageFocus);
 		}
 		else
 		{
-			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageNormal);
+			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageNormal);
 		}
 	}
 	else
 	{
 		if (m_ImageCount > ControlImageDisabled)
 		{
-			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageDisabled);
+			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageDisabled);
 		}
 		else
 		{
-			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageNormal);
+			DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageNormal);
 		}
 	}
 }
 
-void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& ctrlBitmap, CBitmap& bgBitmap, int no)
+void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& ctrlBitmap, CBitmap& bkBitmap, int no)
 {
 	CDC* pMemDC = new CDC;
 	CBitmap* pOldMemBitmap;
 	pMemDC->CreateCompatibleDC(drawDC);
 	pOldMemBitmap = pMemDC->SelectObject(&ctrlBitmap);
-	CDC* pBgDC = new CDC;
-	CBitmap* pOldBgBitmap;
-	pBgDC->CreateCompatibleDC(drawDC);
-	pOldBgBitmap = pBgDC->SelectObject(&bgBitmap);
+	CDC* pBkDC = new CDC;
+	CBitmap* pOldBkBitmap;
+	pBkDC->CreateCompatibleDC(drawDC);
+	pOldBkBitmap = pBkDC->SelectObject(&bkBitmap);
 
 	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24)
 	{
@@ -351,7 +351,7 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 			if (m_CtrlImage.GetBPP() == 32)
 			{
 				BITMAP CtlBmpInfo, DstBmpInfo;
-				bgBitmap.GetBitmap(&DstBmpInfo);
+				bkBitmap.GetBitmap(&DstBmpInfo);
 				DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
 				DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
 				ctrlBitmap.GetBitmap(&CtlBmpInfo);
@@ -359,7 +359,7 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 				DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
 
 				BYTE* DstBuffer = new BYTE[DstMemSize];
-				bgBitmap.GetBitmapBits(DstMemSize, DstBuffer);
+				bkBitmap.GetBitmapBits(DstMemSize, DstBuffer);
 				BYTE* CtlBuffer = new BYTE[CtlMemSize];
 				ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
@@ -396,7 +396,7 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 		}
 		else
 		{
-			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBgDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
 			DrawString(pDrawBmpDC, lpDrawItemStruct);
 			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 		}
@@ -407,11 +407,11 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 	}
 
 	pMemDC->SelectObject(&pOldMemBitmap);
-	pBgDC->SelectObject(&pOldBgBitmap);
+	pBkDC->SelectObject(&pOldBkBitmap);
 	pMemDC->DeleteDC();
-	pBgDC->DeleteDC();
+	pBkDC->DeleteDC();
 	delete pMemDC;
-	delete pBgDC;
+	delete pBkDC;
 }
 
 void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
@@ -500,10 +500,10 @@ BOOL CButtonFx::LoadBitmap(HBITMAP hBitmap)
 	return SetBitmap(m_CtrlBitmap);
 }
 
-void CButtonFx::SetBgReload(void)
+void CButtonFx::SetBkReload(void)
 {
-	m_bBgBitmapInit = FALSE;
-	m_bBgLoad = FALSE;
+	m_bBkBitmapInit = FALSE;
+	m_bBkLoad = FALSE;
 }
 
 BOOL CButtonFx::SetBitmap(CBitmap& bitmap)
@@ -526,40 +526,40 @@ BOOL CButtonFx::SetBitmap(CBitmap& bitmap)
 	}
 }
 
-void CButtonFx::LoadCtrlBg(CDC* drawDC)
+void CButtonFx::LoadCtrlBk(CDC* drawDC)
 {
-	if (m_bHighContrast) { SetBgReload(); return; }
+	if (m_bHighContrast) { SetBkReload(); return; }
 
-	if (m_BgBitmap.m_hObject != NULL)
+	if (m_BkBitmap.m_hObject != NULL)
 	{
 		BITMAP bitmapInfo;
-		m_BgBitmap.GetBitmap(&bitmapInfo);
+		m_BkBitmap.GetBitmap(&bitmapInfo);
 		if (bitmapInfo.bmBitsPixel != drawDC->GetDeviceCaps(BITSPIXEL))
 		{
-			SetBgReload();
+			SetBkReload();
 		}
 	}
 
 	if (&m_CtrlBitmap != NULL)
 	{
-		if (!m_bBgBitmapInit)
+		if (!m_bBkBitmapInit)
 		{
-			m_BgBitmap.DeleteObject();
-			m_BgBitmap.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
-			m_bBgBitmapInit = TRUE;
+			m_BkBitmap.DeleteObject();
+			m_BkBitmap.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
+			m_bBkBitmapInit = TRUE;
 		}
 
-		if (!m_bBgLoad)
+		if (!m_bBkLoad)
 		{
 			CBitmap* pOldBitmap;
 			CDC* pMemDC = new CDC;
 			pMemDC->CreateCompatibleDC(drawDC);
-			pOldBitmap = pMemDC->SelectObject(&m_BgBitmap);
-			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X, m_Y, SRCCOPY);
+			pOldBitmap = pMemDC->SelectObject(&m_BkBitmap);
+			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BkDC, m_X, m_Y, SRCCOPY);
 			pMemDC->SelectObject(pOldBitmap);
 			pMemDC->DeleteDC();
 			delete pMemDC;
-			m_bBgLoad = TRUE;
+			m_bBkLoad = TRUE;
 		}
 	}
 }

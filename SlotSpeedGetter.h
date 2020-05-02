@@ -12,7 +12,9 @@
 typedef enum _PCIeSpecification  {
 	PCIe1d0 = 1,
 	PCIe2d0 = 2,
-	PCIe3d0 = 3
+	PCIe3d0 = 3,
+	PCIe4d0 = 4,
+	PCIe5d0 = 5
 } PCIeSpecification;
 
 typedef enum _PCIeDataWidth {

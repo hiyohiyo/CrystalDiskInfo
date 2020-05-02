@@ -32,8 +32,8 @@ protected:
 	CString m_ColorCode[CAtaSmart::MAX_DISK + 1];
 	CString m_LabelLineColor;
 	CString m_LabelThreshold;
-	CString m_LabelBgImage;
-	CString m_BgImage;
+	CString m_LabelBkImage;
+	CString m_BkImage;
 	CString m_Reset;
 
 	HRESULT OnSelect0(IHTMLElement *pElement);
@@ -102,8 +102,8 @@ protected:
 	HRESULT OnSelect63(IHTMLElement *pElement);
 	HRESULT OnSelect64(IHTMLElement *pElement);
 
-	HRESULT OnSelectBgImage(IHTMLElement *pElement);
-	HRESULT OnNoBgImage(IHTMLElement *pElement);
+	HRESULT OnSelectBkImage(IHTMLElement *pElement);
+	HRESULT OnNoBkImage(IHTMLElement *pElement);
 	HRESULT OnReset(IHTMLElement *pElement);
 
 	void SelectColor(DWORD index);

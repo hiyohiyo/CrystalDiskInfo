@@ -11,9 +11,9 @@
 #include "afxwin.h"
 #include "DialogFx.h"
 
-#include "StaticCx.h"
-#include "ButtonCx.h"
-#include "ComboBoxCx.h"
+#include "StaticFx.h"
+#include "ButtonFx.h"
+#include "ComboBoxFx.h"
 
 class CSettingDlg : public CDialogFx
 {
@@ -29,55 +29,6 @@ public:
 	enum { IDD = IDD_SETTING };
 
 protected:
-	DWORD m_DiskIndex;
-
-	CString m_SelectDisk;
-	CString m_AamLow;
-	CString m_AamHigh;
-	CString m_AamRecommend;
-	CString m_ApmLow;
-	CString m_ApmHigh;
-
-	CString m_AamStatus;
-	CString m_ApmStatus;
-
-	CString m_LabelAam;
-	CString m_LabelApm;
-
-	CString m_CurrentAam;
-	CString m_RecommendAam;
-	CString m_CurrentApm;
-//	CString m_RecommendApm;
-
-	CString m_EnableAam;
-	CString m_DisableAam;
-	CString m_EnableApm;
-	CString m_DisableApm;
-
-	CStaticCx m_CtrlAamStatus;
-	CStaticCx m_CtrlApmStatus;
-	CStaticCx m_CtrlCurrentAam;
-	CStaticCx m_CtrlCurrentApm;
-	CStaticCx m_CtrlRecommendAam;
-
-	CStaticCx m_CtrlLabelAam;
-	CStaticCx m_CtrlLabelApm;
-
-	CStaticCx m_CtrlLabelAamLow;
-	CStaticCx m_CtrlLabelAamHigh;
-	CStaticCx m_CtrlLabelAamRecommend;
-	CStaticCx m_CtrlLabelApmLow;
-	CStaticCx m_CtrlLabelApmHigh;
-
-	CButtonCx m_CtrlEnableAam;
-	CButtonCx m_CtrlDisableAam;
-	CButtonCx m_CtrlEnableApm;
-	CButtonCx m_CtrlDisableApm;
-
-	CComboBoxCx	m_CtrlSelectDisk;
-	CScrollBar m_AamScrollbar;
-	CScrollBar m_ApmScrollbar;
-
 	virtual void DoDataExchange(CDataExchange* pDX);
 	virtual BOOL OnInitDialog();
 	virtual void UpdateDialogSize();
@@ -93,9 +44,46 @@ protected:
 	void UpdateSelectDisk(DWORD index);
 
 	DECLARE_MESSAGE_MAP()
-
-public:
-
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnCbnSelchangeSelectDisk();
+
+	DWORD m_DiskIndex;
+	CString m_SelectDisk;
+	CString m_AamLow;
+	CString m_AamHigh;
+	CString m_AamRecommend;
+	CString m_ApmLow;
+	CString m_ApmHigh;
+	CString m_AamStatus;
+	CString m_ApmStatus;
+	CString m_LabelAam;
+	CString m_LabelApm;
+	CString m_CurrentAam;
+	CString m_RecommendAam;
+	CString m_CurrentApm;
+	CString m_EnableAam;
+	CString m_DisableAam;
+	CString m_EnableApm;
+	CString m_DisableApm;
+
+	CStaticFx m_CtrlAamStatus;
+	CStaticFx m_CtrlApmStatus;
+	CStaticFx m_CtrlCurrentAam;
+	CStaticFx m_CtrlCurrentApm;
+	CStaticFx m_CtrlRecommendAam;
+	CStaticFx m_CtrlLabelAam;
+	CStaticFx m_CtrlLabelApm;
+	CStaticFx m_CtrlLabelAamLow;
+	CStaticFx m_CtrlLabelAamHigh;
+	CStaticFx m_CtrlLabelAamRecommend;
+	CStaticFx m_CtrlLabelApmLow;
+	CStaticFx m_CtrlLabelApmHigh;
+
+	CButtonFx m_CtrlEnableAam;
+	CButtonFx m_CtrlDisableAam;
+	CButtonFx m_CtrlEnableApm;
+	CButtonFx m_CtrlDisableApm;
+	CComboBoxFx	m_CtrlSelectDisk;
+	CScrollBar m_AamScrollbar;
+	CScrollBar m_ApmScrollbar;
 };

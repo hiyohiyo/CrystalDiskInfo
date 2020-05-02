@@ -32,20 +32,20 @@ CComboBoxFx::CComboBoxFx()
 	// Image
 	m_ImageCount = 0;
 	m_ImagePath = L"";
-	m_BgDC = NULL;
-	m_bBgBitmapInit = FALSE;
-	m_bBgLoad = FALSE;
+	m_BkDC = NULL;
+	m_bBkBitmapInit = FALSE;
+	m_bBkLoad = FALSE;
 
 	// Font
 	m_TextAlign = SS_LEFT;
 	m_TextColor = RGB(0, 0, 0);
 	m_TextColorSelected = RGB(255, 255, 255);
-	m_BgColor = RGB(255, 255, 255);
-	m_BgColorSelected = RGB(230, 230, 230);
+	m_BkColor = RGB(255, 255, 255);
+	m_BkColorSelected = RGB(230, 230, 230);
 	m_TextColorHc = RGB(255, 255, 255);
 	m_TextColorSelectedHc = RGB(0, 0, 0);
-	m_BgColorHc = RGB(0, 0, 0);
-	m_BgColorSelectedHc = RGB(0, 255, 255);
+	m_BkColorHc = RGB(0, 0, 0);
+	m_BkColorSelectedHc = RGB(0, 255, 255);
 	m_FontHeight = 16;
 
 	// Mouse
@@ -78,8 +78,8 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRatio,
-	 CDC* bgDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode,
-	 COLORREF bgColor, COLORREF bgColorSelected, COLORREF glassColor, BYTE glassAlpha)
+	 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode,
+	 COLORREF bkColor, COLORREF bkColorSelected, COLORREF glassColor, BYTE glassAlpha)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -87,13 +87,13 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
 
-	m_BgDC = bgDC;
+	m_BkDC = bkDC;
 	m_ImagePath = imagePath;
 	m_ImageCount = imageCount;
 	m_RenderMode = renderMode;
 
-	m_BgColor = bgColor;
-	m_BgColorSelected = bgColorSelected;
+	m_BkColor = bkColor;
+	m_BkColorSelected = bkColorSelected;
 	m_GlassColor = glassColor;
 	m_GlassAlpha = glassAlpha;
 
@@ -168,7 +168,7 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 		delete[] bitmapBits;
 	}
 
-	SetBgReload();
+	SetBkReload();
 	Invalidate();
 
 	return TRUE;
@@ -230,7 +230,7 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	if (lpDrawItemStruct->itemID == -1) { return; }
 
 	CDC* drawDC = CDC::FromHandle(lpDrawItemStruct->hDC);
-	LoadCtrlBg(drawDC);
+	LoadCtrlBk(drawDC);
 	CString cstr = L"";
 	GetLBText(lpDrawItemStruct->itemID, cstr);
 	CDC* pDC = CDC::FromHandle(lpDrawItemStruct->hDC);
@@ -245,8 +245,8 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	static COLORREF textColor;
 	static COLORREF textColorSelected;
-	static COLORREF bgColor;
-	static COLORREF bgColorSelected;
+	static COLORREF bkColor;
+	static COLORREF bkColorSelected;
 
 	if (lpDrawItemStruct->rcItem.left != 0)
 	{
@@ -254,21 +254,21 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		{
 			textColor = GetTextColor(lpDrawItemStruct->hDC);
 			textColorSelected = RGB(0, 0, 0);
-			bgColor =  GetBkColor(lpDrawItemStruct->hDC);
-			bgColorSelected = RGB(0, 255, 255);
+			bkColor =  GetBkColor(lpDrawItemStruct->hDC);
+			bkColorSelected = RGB(0, 255, 255);
 		}
 		else
 		{
 			textColor = m_TextColor;
 			textColorSelected = m_TextColorSelected;
-			bgColor = m_BgColor;
-			bgColorSelected = m_BgColorSelected;
+			bkColor = m_BkColor;
+			bkColorSelected = m_BkColorSelected;
 		}
 	}
 
 	if (lpDrawItemStruct->rcItem.left != 0 && ! m_bHighContrast)
 	{
-		DrawControl(cstr, drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BgBitmap, ControlImageNormal);
+		DrawControl(cstr, drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageNormal);
 	}
 	else
 	{
@@ -276,14 +276,14 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		CBrush* pOldBrush;
 
 		if (lpDrawItemStruct->itemState & ODS_SELECTED) {
-			Brush.CreateSolidBrush(bgColorSelected);
+			Brush.CreateSolidBrush(bkColorSelected);
 			pOldBrush = pDC->SelectObject(&Brush);
 			FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
 			DrawString(cstr, pDC, lpDrawItemStruct, textColorSelected);
 		}
 		else
 		{
-			Brush.CreateSolidBrush(bgColor);
+			Brush.CreateSolidBrush(bkColor);
 			pOldBrush = pDC->SelectObject(&Brush);
 			FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
 			DrawString(cstr, pDC, lpDrawItemStruct, textColor);
@@ -298,16 +298,16 @@ void CComboBoxFx::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 	lpMeasureItemStruct->itemHeight = abs(m_FontHeight);
 }
 
-void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& ctrlBitmap, CBitmap& bgBitmap, int no)
+void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBitmap& ctrlBitmap, CBitmap& bkBitmap, int no)
 {
 	CDC* pMemDC = new CDC;
 	CBitmap* pOldMemBitmap;
 	pMemDC->CreateCompatibleDC(drawDC);
 	pOldMemBitmap = pMemDC->SelectObject(&ctrlBitmap);
-	CDC* pBgDC = new CDC;
-	CBitmap* pOldBgBitmap;
-	pBgDC->CreateCompatibleDC(drawDC);
-	pOldBgBitmap = pBgDC->SelectObject(&bgBitmap);
+	CDC* pBkDC = new CDC;
+	CBitmap* pOldBkBitmap;
+	pBkDC->CreateCompatibleDC(drawDC);
+	pOldBkBitmap = pBkDC->SelectObject(&bkBitmap);
 
 	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24)
 	{
@@ -328,7 +328,7 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 			if (m_CtrlImage.GetBPP() == 32)
 			{
 				BITMAP CtlBmpInfo, DstBmpInfo;
-				bgBitmap.GetBitmap(&DstBmpInfo);
+				bkBitmap.GetBitmap(&DstBmpInfo);
 				DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
 				DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
 				ctrlBitmap.GetBitmap(&CtlBmpInfo);
@@ -336,7 +336,7 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 				DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
 
 				BYTE* DstBuffer = new BYTE[DstMemSize];
-				bgBitmap.GetBitmapBits(DstMemSize, DstBuffer);
+				bkBitmap.GetBitmapBits(DstMemSize, DstBuffer);
 				BYTE* CtlBuffer = new BYTE[CtlMemSize];
 				ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
@@ -373,7 +373,7 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 		}
 		else
 		{
-			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBgDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
 			DrawString(title, pDrawBmpDC, lpDrawItemStruct, m_TextColor);
 			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 		}
@@ -384,11 +384,11 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 	}
 
 	pMemDC->SelectObject(&pOldMemBitmap);
-	pBgDC->SelectObject(&pOldBgBitmap);
+	pBkDC->SelectObject(&pOldBkBitmap);
 	pMemDC->DeleteDC();
-	pBgDC->DeleteDC();
+	pBkDC->DeleteDC();
 	delete pMemDC;
-	delete pBgDC;
+	delete pBkDC;
 }
 
 void CComboBoxFx::DrawString(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, COLORREF textColor)
@@ -450,10 +450,10 @@ BOOL CComboBoxFx::LoadBitmap(HBITMAP hBitmap)
 	return SetBitmap(m_CtrlBitmap);
 }
 
-void CComboBoxFx::SetBgReload(void)
+void CComboBoxFx::SetBkReload(void)
 {
-	m_bBgBitmapInit = FALSE;
-	m_bBgLoad = FALSE;
+	m_bBkBitmapInit = FALSE;
+	m_bBkLoad = FALSE;
 }
 
 BOOL CComboBoxFx::SetBitmap(CBitmap& bitmap)
@@ -474,40 +474,40 @@ BOOL CComboBoxFx::SetBitmap(CBitmap& bitmap)
 	}
 }
 
-void CComboBoxFx::LoadCtrlBg(CDC* drawDC)
+void CComboBoxFx::LoadCtrlBk(CDC* drawDC)
 {
-	if (m_bHighContrast) { SetBgReload(); return; }
+	if (m_bHighContrast) { SetBkReload(); return; }
 
-	if (m_BgBitmap.m_hObject != NULL)
+	if (m_BkBitmap.m_hObject != NULL)
 	{
 		BITMAP bitmapInfo;
-		m_BgBitmap.GetBitmap(&bitmapInfo);
+		m_BkBitmap.GetBitmap(&bitmapInfo);
 		if (bitmapInfo.bmBitsPixel != drawDC->GetDeviceCaps(BITSPIXEL))
 		{
-			SetBgReload();
+			SetBkReload();
 		}
 	}
 
 	if (&m_CtrlBitmap != NULL)
 	{
-		if (!m_bBgBitmapInit)
+		if (!m_bBkBitmapInit)
 		{
-			m_BgBitmap.DeleteObject();
-			m_BgBitmap.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
-			m_bBgBitmapInit = TRUE;
+			m_BkBitmap.DeleteObject();
+			m_BkBitmap.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
+			m_bBkBitmapInit = TRUE;
 		}
 
-		if (!m_bBgLoad)
+		if (!m_bBkLoad)
 		{
 			CBitmap* pOldBitmap;
 			CDC* pMemDC = new CDC;
 			pMemDC->CreateCompatibleDC(drawDC);
-			pOldBitmap = pMemDC->SelectObject(&m_BgBitmap);
-			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BgDC, m_X, m_Y, SRCCOPY);
+			pOldBitmap = pMemDC->SelectObject(&m_BkBitmap);
+			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BkDC, m_X, m_Y, SRCCOPY);
 			pMemDC->SelectObject(pOldBitmap);
 			pMemDC->DeleteDC();
 			delete pMemDC;
-			m_bBgLoad = TRUE;
+			m_bBkLoad = TRUE;
 		}
 	}
 }

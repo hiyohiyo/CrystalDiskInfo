@@ -76,8 +76,8 @@ void CHealthDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CHealthDlg, CDialogFx)
 	ON_WM_HSCROLL()
-	ON_BN_CLICKED(IDC_APPLY, &CHealthDlg::OnBnClickedApply)
-	ON_BN_CLICKED(IDC_DEFAULT, &CHealthDlg::OnBnClickedDefault)
+	ON_BN_CLICKED(IDC_APPLY, &CHealthDlg::OnApply)
+	ON_BN_CLICKED(IDC_DEFAULT, &CHealthDlg::OnDefault)
 	ON_CBN_SELCHANGE(IDC_SELECT_DISK, &CHealthDlg::OnCbnSelchangeSelectDisk)
 END_MESSAGE_MAP()
 
@@ -147,53 +147,53 @@ void CHealthDlg::UpdateDialogSize()
 	m_CtrlScrollbarC6.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)(184 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
 	m_CtrlScrollbarFF.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)(240 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
 
-	m_CtrlLabel05.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlLabelC5.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlLabelC6.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlLabelFF.SetFontEx(m_FontFace, 12, m_ZoomRatio);
+	m_CtrlLabel05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlLabelC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlLabelC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlLabelFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlValue05.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlValueC5.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlValueC6.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlValueFF.SetFontEx(m_FontFace, 12, m_ZoomRatio);
+	m_CtrlValue05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValueC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValueC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValueFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlValue05X.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlValueC5X.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlValueC6X.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlValueFFX.SetFontEx(m_FontFace, 12, m_ZoomRatio);
+	m_CtrlValue05X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValueC5X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValueC6X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValueFFX.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlLabelC6.InitControl(8, 156, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlLabelFF.InitControl(8, 212, 384, 24, m_ZoomRatio, NULL, 0, SS_LEFT, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
+	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
+	m_CtrlLabelC6.InitControl(8, 156, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
+	m_CtrlLabelFF.InitControl(8, 212, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
 
-	m_CtrlValue05.InitControl(300,  72, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueC5.InitControl(300, 128, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueC6.InitControl(300, 184, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueFF.InitControl(300, 240, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValue05.InitControl(300,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueC5.InitControl(300, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueC6.InitControl(300, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueFF.InitControl(300, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
 
-	m_CtrlValue05X.InitControl(344,  72, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueC5X.InitControl(344, 128, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, NULL, 0, SS_CENTER, CStaticCx::OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValue05X.InitControl(344,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueC5X.InitControl(344, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
 
-	m_CtrlApply.SetFontEx(m_FontFace, 12, m_ZoomRatio);
-	m_CtrlDefault.SetFontEx(m_FontFace, 12, m_ZoomRatio);
+	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlApply.InitControl(220, 268, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
-	m_CtrlDefault.InitControl(20, 268, 160, 28, m_ZoomRatio, NULL, 0, SS_CENTER, CButtonCx::SystemDraw | m_bHighContrast);
+	m_CtrlApply.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlDefault.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
 
-	m_CtrlSelectDisk.SetFontEx(m_FontFace, 14, m_ZoomRatio);
-	m_CtrlSelectDisk.MoveWindow((DWORD)(8 * m_ZoomRatio), (DWORD)(8 * m_ZoomRatio), (DWORD)(384 * m_ZoomRatio), (DWORD)(40 * m_ZoomRatio));
+	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, SystemDraw | m_bHighContrast, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
 
-	m_CtrlValue05.SetDrawFrame(m_bHighContrast);
-	m_CtrlValueC5.SetDrawFrame(m_bHighContrast);
-	m_CtrlValueC6.SetDrawFrame(m_bHighContrast);
-	m_CtrlValueFF.SetDrawFrame(m_bHighContrast);
-	m_CtrlValue05X.SetDrawFrame(m_bHighContrast);
-	m_CtrlValueC5X.SetDrawFrame(m_bHighContrast);
-	m_CtrlValueC6X.SetDrawFrame(m_bHighContrast);
-	m_CtrlValueFFX.SetDrawFrame(m_bHighContrast);
+	m_CtrlValue05.SetDrawFrame(TRUE);
+	m_CtrlValueC5.SetDrawFrame(TRUE);
+	m_CtrlValueC6.SetDrawFrame(TRUE);
+	m_CtrlValueFF.SetDrawFrame(TRUE);
+	m_CtrlValue05X.SetDrawFrame(TRUE);
+	m_CtrlValueC5X.SetDrawFrame(TRUE);
+	m_CtrlValueC6X.SetDrawFrame(TRUE);
+	m_CtrlValueFFX.SetDrawFrame(TRUE);
 
 	Invalidate();
 }
@@ -363,7 +363,7 @@ void CHealthDlg::UpdateSelectDisk(DWORD index)
 	UpdateData(FALSE);
 }
 
-void CHealthDlg::OnBnClickedApply()
+void CHealthDlg::OnApply()
 {
 	UpdateData(TRUE);
 
@@ -385,7 +385,7 @@ void CHealthDlg::OnBnClickedApply()
 	p->SendMessage(WM_COMMAND, ID_REFRESH);
 }
 
-void CHealthDlg::OnBnClickedDefault()
+void CHealthDlg::OnDefault()
 {
 	if(! p->m_Ata.vars[m_DiskIndex].IsSsd)
 	{

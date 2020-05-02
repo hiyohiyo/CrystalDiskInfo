@@ -28,7 +28,6 @@
 #define _WIN32_IE 0x0600
 #endif
 
-
 #define _AFX_NO_MFC_CONTROLS_IN_DIALOGS
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS
 #define _AFX_ALL_WARNINGS
@@ -52,6 +51,31 @@
 
 #include "CommonFx.h"
 #include "DebugPrint.h"
+
+#ifdef _UNICODE
+#if defined _M_IX86
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_IA64
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='ia64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_X64
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#else
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#endif
+#endif
+
+#pragma warning(disable : 4996)
+
+//------------------------------------------------
+// Option Flags
+//------------------------------------------------
+
+// For Task Tray Icon Feature
+#define OPTION_TASK_TRAY
+
+//------------------------------------------------
+// Global Sttings
+//------------------------------------------------
 
 // Version Information
 #define PROJECT_NAME			_T("CrystalDiskInfo")
@@ -93,79 +117,11 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION			_T("8.5.0 Beta2")
-#define PRODUCT_RELEASE			_T("2020/05/01")
-#define PRODUCT_COPY_YEAR		_T("2008-2020")
-#define PRODUCT_COPYRIGHT		_T("© 2008-2020 hiyohiyo")
-#define PRODUCT_LICENSE			_T("The MIT License")
-
-#define URL_CRYSTAL_DEW_WORLD_JA	_T("https://crystalmark.info/ja/")
-#define URL_CRYSTAL_DEW_WORLD_EN 	_T("https://crystalmark.info/en/")
-
-#define	URL_PROJECT_SHIZUKU_JA		_T("https://suishoshizuku.com/ja/")
-#define	URL_PROJECT_SHIZUKU_EN		_T("https://suishoshizuku.com/en/")
-
-#define URL_PRONAMA	                _T("http://pronama.jp/crystaldiskinfo")
-
-
-#ifdef SUISHO_SHIZUKU_SUPPORT
-
-	#ifdef KUREI_KEI_SUPPORT
-	#define	URL_PROJECT_SITE_1		    L"http://pronama.jp/crystaldiskinfo"
-	#define URL_PROJECT_SITE_2		    L"http://pronama.jp/ixy"
-	#define URL_PROJECT_SITE_3	        L"http://pronama.jp/uesakasumire"
-	#define URL_PROJECT_SITE_4			L"http://pronama.jp/crystaldiskinfo"
-	#define URL_PROJECT_SITE_5			L""
-	#else
-	#define	URL_PROJECT_SITE_1		    L"http://kirinokasumu.com/"
-	#define URL_PROJECT_SITE_2		    L"http://linux-ha.sourceforge.jp/wp/"
-	#define URL_PROJECT_SITE_3	        L"http://ch.nicovideo.jp/oss"
-	#define URL_PROJECT_SITE_4			L"http://www.bellche.com/"
-	#define URL_PROJECT_SITE_5			L"https://suishoshizuku.com/"
-	#endif
-
-#endif
-
-
-
-#define URL_HTML_HELP_JA		_T("https://crystalmark.info/ja/software/crystaldiskinfo/")
-#define URL_HTML_HELP_EN 		_T("https://crystalmark.info/en/software/crystaldiskinfo/")
-
-// Command
-static const int TRAY_TEMPERATURE_ICON_BASE			= WM_APP + 0x1200;
-static const int SELECT_DISK_BASE					= WM_APP + 0x1300;
-static const int AUTO_REFRESH_TARGET_BASE			= WM_APP + 0x1400;
-static const int SHOW_GRAPH_BASE					= WM_APP + 0x1500;
-static const int ALARM_SETTING_HEALTH_STATUS_BASE	= WM_APP + 0x1900;
-static const int ALARM_SETTING_TEMPERATURE_BASE		= WM_APP + 0x2000; // Main Only
-static const int GRAPH_DISK_INDEX					= WM_APP + 0x2000; // Graph Only
-
-static const int RE_EXEC = 5963;
-
-#ifdef _UNICODE
-#if defined _M_IX86
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#elif defined _M_IA64
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='ia64' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#elif defined _M_X64
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#else
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#endif
-#endif
-
-#pragma warning(disable : 4996)
-
-//------------------------------------------------
-// Option Flags
-//------------------------------------------------
-
-// For Task Tray Icon Feature
-#define OPTION_TASK_TRAY
-
-//------------------------------------------------
-// Global Sttings
-//------------------------------------------------
+#define PRODUCT_VERSION				L"8.5.0 Beta3"
+#define PRODUCT_RELEASE				L"2020/05/02"
+#define PRODUCT_COPY_YEAR			L"2008-2020"
+#define PRODUCT_COPYRIGHT			L"© 2008-2020 hiyohiyo"
+#define PRODUCT_LICENSE				L"The MIT License"
 
 #define DEFAULT_FONT_FACE_1			L"Segoe UI"
 #define DEFAULT_FONT_FACE_2			L"Tahoma"
@@ -180,3 +136,48 @@ static const int RE_EXEC = 5963;
 #define DEFAULT_LANGUAGE			L"English"
 
 #define TIMER_UPDATE_DIALOG			500
+
+#define URL_CRYSTAL_DEW_WORLD_JA	L"https://crystalmark.info/ja/"
+#define URL_CRYSTAL_DEW_WORLD_EN 	L"https://crystalmark.info/en/"
+
+#define	URL_PROJECT_SHIZUKU_JA		L"https://suishoshizuku.com/ja/"
+#define	URL_PROJECT_SHIZUKU_EN		L"https://suishoshizuku.com/en/"
+
+#define URL_PRONAMA	                L"http://pronama.jp/crystaldiskinfo"
+
+#ifdef SUISHO_SHIZUKU_SUPPORT
+
+#ifdef KUREI_KEI_SUPPORT
+#define	URL_PROJECT_SITE_1		    L"http://pronama.jp/crystaldiskinfo"
+#define URL_PROJECT_SITE_2		    L"http://pronama.jp/ixy"
+#define URL_PROJECT_SITE_3	        L"http://pronama.jp/uesakasumire"
+#define URL_PROJECT_SITE_4			L"http://pronama.jp/crystaldiskinfo"
+#define URL_PROJECT_SITE_5			L""
+#else
+#define	URL_PROJECT_SITE_1		    L"http://kirinokasumu.com/"
+#define URL_PROJECT_SITE_2		    L"http://linux-ha.sourceforge.jp/wp/"
+#define URL_PROJECT_SITE_3	        L"http://ch.nicovideo.jp/oss"
+#define URL_PROJECT_SITE_4			L"http://www.bellche.com/"
+#define URL_PROJECT_SITE_5			L"https://suishoshizuku.com/"
+#endif
+
+#endif
+
+#define	URL_VERSION_JA				L"https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-history/"
+#define	URL_VERSION_EN				L"https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-history/"
+#define	URL_LICENSE_JA				L"https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-license/"
+#define	URL_LICENSE_EN				L"https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-license/"
+
+#define URL_HTML_HELP_JA			L"https://crystalmark.info/ja/software/crystaldiskinfo/"
+#define URL_HTML_HELP_EN 			L"https://crystalmark.info/en/software/crystaldiskinfo/"
+
+// Command
+static const int TRAY_TEMPERATURE_ICON_BASE = WM_APP + 0x1200;
+static const int SELECT_DISK_BASE = WM_APP + 0x1300;
+static const int AUTO_REFRESH_TARGET_BASE = WM_APP + 0x1400;
+static const int SHOW_GRAPH_BASE = WM_APP + 0x1500;
+static const int ALARM_SETTING_HEALTH_STATUS_BASE = WM_APP + 0x1900;
+static const int ALARM_SETTING_TEMPERATURE_BASE = WM_APP + 0x2000; // Main Only
+static const int GRAPH_DISK_INDEX = WM_APP + 0x2000; // Graph Only
+
+static const int RE_EXEC = 5963;

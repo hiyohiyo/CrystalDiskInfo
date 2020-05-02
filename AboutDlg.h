@@ -18,10 +18,9 @@ class CAboutDlg : public CDialogFx
 	static const int SIZE_X = 640;
 	static const int SIZE_Y = 660;
 #else
-	static const int SIZE_X = 640;
-	static const int SIZE_Y = 170;
+	static const int SIZE_X = 480;
+	static const int SIZE_Y = 172;
 #endif
-	static const int SIZE_HC_Y = 170; // for HighContrast Mode
 
 public:
 	CAboutDlg(CWnd* pParent = NULL);
@@ -35,13 +34,17 @@ protected:
 	virtual void UpdateDialogSize();
 
 	DECLARE_MESSAGE_MAP()
-public:
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	afx_msg void OnSecretVoice();
+#endif
 	afx_msg void OnCrystalDewWorld();
-	afx_msg void OnBnClickedProjectSite1();
-	afx_msg void OnBnClickedProjectSite2();
-	afx_msg void OnBnClickedProjectSite3();
-	afx_msg void OnBnClickedProjectSite4();
-	afx_msg void OnBnClickedProjectSite5();
+	afx_msg void OnVersion();
+	afx_msg void OnLicense();
+	afx_msg void OnProjectSite1();
+	afx_msg void OnProjectSite2();
+	afx_msg void OnProjectSite3();
+	afx_msg void OnProjectSite4();
+	afx_msg void OnProjectSite5();
 
 	CButtonFx m_CtrlCrystalDewWorld;
 	CButtonFx m_CtrlSecretVoice;
@@ -50,15 +53,10 @@ public:
 	CButtonFx m_CtrlProjectSite3;
 	CButtonFx m_CtrlProjectSite4;
 	CButtonFx m_CtrlProjectSite5;
+	CButtonFx m_CtrlVersion;
+	CButtonFx m_CtrlLicense;
 
-	CStaticFx m_CtrlVersion;
 	CStaticFx m_CtrlEdition;
 	CStaticFx m_CtrlRelease;
 	CStaticFx m_CtrlCopyright;
-	CStaticFx m_CtrlLicense;
-
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	afx_msg void OnSecretVoice();
-#endif
-
 };

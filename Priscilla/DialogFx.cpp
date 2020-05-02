@@ -35,7 +35,7 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_bShowWindow = FALSE;
 	m_bModelessDlg = FALSE;
 	m_bHighContrast = FALSE;
-	m_bBgImage = FALSE;
+	m_bBkImage = FALSE;
 	m_MenuId = 0;
 	m_ParentWnd = NULL;
 	m_DlgWnd = NULL;
@@ -192,7 +192,7 @@ void CDialogFx::UpdateBackground(BOOL resize)
 	BOOL    br = FALSE;
 	CImage srcBitmap;
 	double ratio = m_ZoomRatio;
-	m_bBgImage = FALSE;
+	m_bBkImage = FALSE;
 
 	if (resize) { m_ZoomRatio = 3.0; }
 
@@ -202,7 +202,7 @@ void CDialogFx::UpdateBackground(BOOL resize)
 
 	if (SUCCEEDED(hr))
 	{
-		m_bBgImage = TRUE;
+		m_bBkImage = TRUE;
 		CBitmap	baseBitmap;
 		CDC		baseDC;
 		CDC* pWndDC = GetDC();
@@ -213,21 +213,21 @@ void CDialogFx::UpdateBackground(BOOL resize)
 		baseBitmap.CreateCompatibleBitmap(pWndDC, srcBitmap.GetWidth(), srcBitmap.GetHeight());
 		baseDC.CreateCompatibleDC(pWndDC);
 
-		m_BgBitmap.DeleteObject();
-		m_BgDC.DeleteDC();
-		m_BgBitmap.CreateCompatibleBitmap(pWndDC, w, h);
-		m_BgDC.CreateCompatibleDC(pWndDC);
+		m_BkBitmap.DeleteObject();
+		m_BkDC.DeleteDC();
+		m_BkBitmap.CreateCompatibleBitmap(pWndDC, w, h);
+		m_BkDC.CreateCompatibleDC(pWndDC);
 
 		ReleaseDC(pWndDC);
 
 		baseDC.SelectObject(&baseBitmap);
-		m_BgDC.SelectObject(&m_BgBitmap);
+		m_BkDC.SelectObject(&m_BkBitmap);
 
 		srcBitmap.BitBlt(baseDC.GetSafeHdc(), 0, 0, SRCCOPY);
 		srcBitmap.Destroy();
 
 		Bitmap* pBitmap = Bitmap::FromHBITMAP((HBITMAP)baseBitmap.GetSafeHandle(), NULL);
-		Graphics	g(m_BgDC.GetSafeHdc());
+		Graphics	g(m_BkDC.GetSafeHdc());
 		g.SetInterpolationMode(InterpolationModeHighQualityBicubic);
 		g.DrawImage(pBitmap, 0, 0, w, h);
 
@@ -236,7 +236,7 @@ void CDialogFx::UpdateBackground(BOOL resize)
 		baseDC.DeleteDC();
 
 		m_BrushDlg.DeleteObject();
-		m_BrushDlg.CreatePatternBrush(&m_BgBitmap);
+		m_BrushDlg.CreatePatternBrush(&m_BkBitmap);
 
 		return;
 	}
@@ -256,16 +256,16 @@ void CDialogFx::UpdateBackground(BOOL resize)
 		int w = rect.Width();
 		int h = rect.Height();
 
-		m_BgBitmap.DeleteObject();
-		m_BgBitmap.CreateCompatibleBitmap(pWndDC, w, h);
-		m_BgDC.DeleteDC();
-		m_BgDC.CreateCompatibleDC(pWndDC);
-		m_BgDC.SelectObject(&m_BgBitmap);
+		m_BkBitmap.DeleteObject();
+		m_BkBitmap.CreateCompatibleBitmap(pWndDC, w, h);
+		m_BkDC.DeleteDC();
+		m_BkDC.CreateCompatibleDC(pWndDC);
+		m_BkDC.SelectObject(&m_BkBitmap);
 
 		m_BrushDlg.DeleteObject();
 		m_BrushDlg.CreateSolidBrush(RGB(255, 255, 255));
 
-		m_BgDC.FillRect(&rect, &m_BrushDlg);
+		m_BkDC.FillRect(&rect, &m_BrushDlg);
 
 		ReleaseDC(pWndDC);
 	}
@@ -459,7 +459,7 @@ HBRUSH CDialogFx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	switch (nCtlColor) {
 	case CTLCOLOR_DLG:
-		if (m_bHighContrast && !m_bBgImage)
+		if (m_bHighContrast && !m_bBkImage)
 		{
 			return hbr;
 		}
