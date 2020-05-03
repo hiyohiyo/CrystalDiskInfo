@@ -205,12 +205,12 @@ void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 		return;
 	}
 
+	m_List.DeleteAllItems();
 	if (preVendorId == m_Ata.vars[i].DiskVendorId && !forceUpdate)
 	{
 		return;
 	}
 
-	m_List.DeleteAllItems();
 	while (m_List.DeleteColumn(0)) {}
 	if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 	{

@@ -17,7 +17,7 @@ IMPLEMENT_DYNAMIC(CFontSelectionDlg, CDialog)
 CFontSelectionDlg::CFontSelectionDlg(CWnd* pParent)
 	: CDialogFx(CFontSelectionDlg::IDD, pParent)
 {
-	CMainDialog* p = (CMainDialog*)pParent;
+	CMainDialogFx* p = (CMainDialogFx*)pParent;
 
 	m_ZoomType = p->GetZoomType();
 	m_FontScale = p->GetFontScale();

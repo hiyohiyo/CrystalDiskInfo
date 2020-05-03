@@ -8,7 +8,7 @@
 #include "stdafx.h"
 #include "DiskInfo.h"
 #include "DiskInfoDlg.h"
-#include "GetFileVersion.h"
+#include "UtilityFx.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,7 +31,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 {
 	BOOL result = FALSE;
 
-	CMainDialog::OnInitDialog();
+	CMainDialogFx::OnInitDialog();
 
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIconMini, FALSE);	// Set small icon

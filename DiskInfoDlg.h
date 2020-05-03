@@ -15,13 +15,12 @@
 #include "SoundSettingDlg.h"
 #include "GraphDlg.h"
 #include "TemperatureDlg.h"
+#include "EventLog.h"
 
 #include "DialogFx.h"
-#include "MainDialog.h"
+#include "MainDialogFx.h"
 #include "ListCtrlFx.h"
-
-#include "GetOsInfo.h"
-#include "EventLog.h"
+#include "OsInfoFx.h"
 
 #include <Dbt.h>
 
@@ -37,7 +36,7 @@ enum
 };
 
 // CDiskInfoDlg dialog
-class CDiskInfoDlg : public CMainDialog
+class CDiskInfoDlg : public CMainDialogFx
 {
 // Construction
 public:
@@ -281,7 +280,6 @@ protected:
 	void ShowTemperatureIconOnly();
 
 	void SetControlFont();
-	CString IP(CString imagePath); // IP means Image Path!!
 	virtual void SetClientSize(int sizeX, int sizeY, DWORD menuLine = 0);
 
 	void UpdateShareInfo(); // For Sidebar Gadget Support

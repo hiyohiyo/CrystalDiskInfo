@@ -11,7 +11,7 @@
 #include <wbemcli.h>
 
 #include "DnpService.h"
-#include "GetOsInfo.h"
+#include "OsInfoFx.h"
 
 #pragma comment(lib, "wbemuuid.lib")
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }

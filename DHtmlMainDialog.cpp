@@ -6,8 +6,8 @@
 /*---------------------------------------------------------------------------*/
 #include "stdafx.h"
 #include "resource.h"
-#include "GetFileVersion.h"
-#include "GetOsInfo.h"
+#include "UtilityFx.h"
+#include "OsInfoFx.h"
 
 UINT CDHtmlMainDialog::wmTaskbarCreated = ::RegisterWindowMessage(_T("TaskbarCreated"));
 

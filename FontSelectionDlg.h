@@ -10,7 +10,7 @@
 #include "afxwin.h"
 #include "ButtonFx.h"
 #include "ComboBoxFx.h"
-#include "FontComboBox.h"
+#include "FontComboBoxFx.h"
 
 class CFontSelectionDlg : public CDialogFx
 {

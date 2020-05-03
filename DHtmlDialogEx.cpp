@@ -8,9 +8,10 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "DHtmlDialogEx.h"
-#include "GetOsInfo.h"
-#include <Shlwapi.h>
 
+#include "OsInfoFx.h"
+
+#include <Shlwapi.h>
 #include <strsafe.h>
 
 CDHtmlDialogEx::CDHtmlDialogEx(UINT dlgResouce, UINT dlgHtml, CWnd* pParent)

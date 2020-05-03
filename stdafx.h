@@ -50,20 +50,9 @@
 #include <comutil.h>
 
 #include "CommonFx.h"
-#include "DebugPrint.h"
+#include "UtilityFx.h"
 
-#ifdef _UNICODE
-#if defined _M_IX86
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#elif defined _M_IA64
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='ia64' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#elif defined _M_X64
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#else
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#endif
-#endif
-
 #pragma warning(disable : 4996)
 
 //------------------------------------------------
@@ -117,8 +106,8 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.5.0 Beta3"
-#define PRODUCT_RELEASE				L"2020/05/02"
+#define PRODUCT_VERSION				L"8.5.0"
+#define PRODUCT_RELEASE				L"2020/05/03"
 #define PRODUCT_COPY_YEAR			L"2008-2020"
 #define PRODUCT_COPYRIGHT			L"© 2008-2020 hiyohiyo"
 #define PRODUCT_LICENSE				L"The MIT License"

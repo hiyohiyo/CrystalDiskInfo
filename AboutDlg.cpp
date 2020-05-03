@@ -15,7 +15,7 @@ IMPLEMENT_DYNCREATE(CAboutDlg, CDialog)
 CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
 	: CDialogFx(CAboutDlg::IDD, pParent)
 {
-	CMainDialog* p = (CMainDialog*)pParent;
+	CMainDialogFx* p = (CMainDialogFx*)pParent;
 
 	m_ZoomType = p->GetZoomType();
 	m_FontScale = p->GetFontScale();

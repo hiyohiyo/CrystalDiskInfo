@@ -10,8 +10,8 @@
 #include "DiskInfoDlg.h"
 #include "GraphDlg.h"
 
-#include "GetFileVersion.h"
-#include "GetOsInfo.h"
+#include "UtilityFx.h"
+#include "OsInfoFx.h"
 
 #include <afxole.h>
 

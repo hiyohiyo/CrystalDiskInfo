@@ -9,9 +9,9 @@
 #include "AtaSmart.h"
 #include "DiskInfo.h"
 #include "GraphDlg.h"
-#include "GetOsInfo.h"
-
 #include "DiskInfoDlg.h"
+
+#include "OsInfoFx.h"
 
 static const TCHAR *attributeString[] = 
 {
