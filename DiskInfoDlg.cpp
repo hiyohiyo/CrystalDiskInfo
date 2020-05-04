@@ -1148,7 +1148,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	else
 	{
 		m_SizeX = SIZE_SMART_X;
-		int y = GetPrivateProfileInt(_T("Setting"), _T("Height"), 0, m_Ini);
+		int y = GetPrivateProfileInt(_T("Setting"), _T("Height"), SIZE_SMART_Y, m_Ini);
 		if (y > 0)
 		{
 			m_SizeY = y;
@@ -2394,7 +2394,7 @@ void CDiskInfoDlg::OnBnClickedButtonVoice()
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	DWORD id;
-	if(GetTickCount() % 2)
+	if(GetTickCountFx() % 2)
 	{
 		id = 7;
 	}

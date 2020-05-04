@@ -62,7 +62,7 @@ public:
 #else
 	static const int SIZE_X = 672;
 	static const int SIZE_SMART_X = 672;
-	static const int SIZE_SMART_Y = 480;
+	static const int SIZE_SMART_Y = 640;
 	static const int SIZE_MIN_Y = 260;
 	static const int SIZE_Y = 260;
 	static const int SIZE_MAX_Y = 1000;

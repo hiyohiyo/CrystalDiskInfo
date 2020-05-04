@@ -556,7 +556,7 @@ DWORD CAtaSmart::CheckSmartAttributeUpdate(DWORD index, SMART_ATTRIBUTE* pre, SM
 /* PUBLIC FUNCTION */
 BOOL CAtaSmart::MeasuredTimeUnit()
 {
-	DWORD getTickCount = GetTickCount();
+	ULONGLONG getTickCount = GetTickCountFx();
 	if(getTickCount > MeasuredGetTickCount + 155000 || MeasuredGetTickCount + 125000 > getTickCount)
 	{
 		return FALSE;
@@ -2073,7 +2073,7 @@ safeRelease:
 	}
 	// Drive Letter Mapping2
 
-	MeasuredGetTickCount = GetTickCount();
+	MeasuredGetTickCount = GetTickCountFx();
 	DebugPrint(_T("CAtaSmart::Init - Complete"));
 
 	if(flagChangeDisk != NULL)

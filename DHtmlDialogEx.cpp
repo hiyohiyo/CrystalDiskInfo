@@ -469,8 +469,8 @@ void CDHtmlDialogEx::OpenUrl(CString url)
 
 BOOL CDHtmlDialogEx::ClickCheck()
 {
-	static DWORD preTime = 0;
-	DWORD currentTime = GetTickCount();
+	static ULONGLONG preTime = 0;
+	ULONGLONG currentTime = GetTickCountFx();
 
 	// CString cstr;
 	// cstr.Format(_T("Cur=%d Pre=%d Sabun=%d"), currentTime, preTime, currentTime - preTime);

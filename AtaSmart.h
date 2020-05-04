@@ -1716,7 +1716,7 @@ public:
 	BOOL IsWorkaroundHD204UI;
 	BOOL IsWorkaroundAdataSsd;
 
-	DWORD MeasuredGetTickCount;
+	ULONGLONG MeasuredGetTickCount;
 
 	BOOL FlagNvidiaController;
 	BOOL FlagMarvellController;
