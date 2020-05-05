@@ -406,7 +406,6 @@
     <Manifest>
       <AdditionalManifestFiles>%(AdditionalManifestFiles)</AdditionalManifestFiles>
       <EnableDpiAwareness>false</EnableDpiAwareness>
-      <OutputManifestFile />
     </Manifest>
     <BuildLog>
       <Path>Build\$(Configuration)$(Platform)\$(MSBuildProjectName).log</Path>
@@ -457,7 +456,6 @@
     <Manifest>
       <AdditionalManifestFiles>%(AdditionalManifestFiles)</AdditionalManifestFiles>
       <EnableDpiAwareness>false</EnableDpiAwareness>
-      <OutputManifestFile />
     </Manifest>
     <BuildLog>
       <Path>Build\$(Configuration)$(Platform)\$(MSBuildProjectName).log</Path>

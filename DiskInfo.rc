@@ -874,8 +874,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8.5.0,2020
- PRODUCTVERSION 8.5.0, 2020
+ FILEVERSION 8.5.1,2020
+ PRODUCTVERSION 8.5.1, 2020
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -892,9 +892,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.5.0.2020"
+            VALUE "FileVersion", "8.5.1.2020"
             VALUE "LegalCopyright", "(C) 2008-2020 hiyohiyo"
-            VALUE "ProductVersion", "8.5.0.2020"
+            VALUE "ProductVersion", "8.5.1.2020"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"

@@ -134,6 +134,10 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 		{
 		}
 	}
+	else
+	{
+		return TRUE;
+	}
 
 	SetupControlImage(m_BkBitmap, m_CtrlBitmap);
 

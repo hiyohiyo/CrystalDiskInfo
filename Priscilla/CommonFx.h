@@ -34,22 +34,23 @@
 // WM_APP
 //------------------------------------------------
 // WM_APP + 0x0000-0x0FFF: Project Priscilla
-     // WM_APP + 0x0000-0x00FF: Timer
-     // WM_APP + 0x0100-0x01FF: Themes
-     // WM_APP + 0x0200-0x02FF: Languages
+     // WM_APP + 0x0000-0x00FF: Common
+     // WM_APP + 0x0100-0x01FF: Theme
+     // WM_APP + 0x0200-0x02FF: Language
 // WM_APP + 0x1000-0x3FFF: User Application
 
-#define WM_UPDATE_DIALOG_SIZE	(WM_APP + 0x0100)
-#define WM_THEME_ID				(WM_APP + 0x0200)
-#define WM_LANGUAGE_ID			(WM_APP + 0x0300)
+#define WM_THEME_ID				(WM_APP + 0x0100)
+#define WM_LANGUAGE_ID			(WM_APP + 0x0200)
 
 //------------------------------------------------
 // TIMER ID
 //------------------------------------------------
+// 0x0000 - 0x0FFF: Project Priscilla
+// 0x1000 -       : User Application
 
-static const int TimerUpdateDialogSizeDpiChanged     = 0x2001;
-static const int TimerUpdateDialogSizeDisplayChange  = 0x2002;
-static const int TimerUpdateDialogSizeSysColorChange = 0x2003;
+static const int TimerUpdateDialogSizeDpiChanged     = 0x0001;
+static const int TimerUpdateDialogSizeDisplayChange  = 0x0002;
+static const int TimerUpdateDialogSizeSysColorChange = 0x0003;
 
 //------------------------------------------------
 // Const Values

@@ -62,7 +62,6 @@ CDialogFx::~CDialogFx()
 BEGIN_MESSAGE_MAP(CDialogFx, CDialog)
 	ON_WM_TIMER()
 	ON_WM_CTLCOLOR()
-	ON_MESSAGE(WM_UPDATE_DIALOG_SIZE, &CDialogFx::OnUpdateDialogSize)
 	ON_MESSAGE(WM_DPICHANGED, &CDialogFx::OnDpiChanged)
 	ON_MESSAGE(WM_DISPLAYCHANGE, &CDialogFx::OnDisplayChange)
 	ON_MESSAGE(WM_SYSCOLORCHANGE, &CDialogFx::OnSysColorChange)
@@ -483,13 +482,6 @@ HBRUSH CDialogFx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	}
 
 	return hbr;
-}
-
-afx_msg LRESULT CDialogFx::OnUpdateDialogSize(WPARAM wParam, LPARAM lParam)
-{
-	UpdateDialogSize();
-
-	return TRUE;
 }
 
 afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
