@@ -803,8 +803,8 @@ IDD_TEMPERATURE DIALOGEX 0, 0, 333, 248
 	SCROLLBAR       IDC_SCROLLBAR_TEMPERATURE, 20, 46, 134, 11
 	PUSHBUTTON      "default", IDC_DEFAULT, 55, 185, 83, 14, BS_CENTER
 	PUSHBUTTON      "apply", IDC_APPLY, 185, 185, 83, 14, BS_CENTER
-	CTEXT           "スタティック", IDC_VALUE_TEMPERATURE, 195, 47, 33, 8
-	CTEXT           "スタティック", IDC_VALUE_TEMPERATURE_F, 245, 44, 33, 8
+	CTEXT           "", IDC_VALUE_TEMPERATURE, 195, 47, 33, 8
+	CTEXT           "", IDC_VALUE_TEMPERATURE_F, 245, 44, 33, 8
 END
 
 IDD_HEALTH DIALOGEX 0, 0, 333, 214
@@ -819,18 +819,18 @@ BEGIN
     SCROLLBAR       IDC_SCROLLBAR_FF,15,162,134,11
     PUSHBUTTON      "default",IDC_DEFAULT,55,185,83,14,BS_CENTER
     PUSHBUTTON      "apply",IDC_APPLY,185,185,83,14,BS_CENTER
-    LTEXT           "スタティック",IDC_LABEL_05,7,24,286,13
-    LTEXT           "スタティック",IDC_LABEL_C5,7,70,33,8
-    LTEXT           "スタティック",IDC_LABEL_C6,7,111,33,8
-    CTEXT           "スタティック",IDC_VALUE_05,195,47,33,8
-    CTEXT           "スタティック",IDC_VALUE_05X,245,44,33,8
-    CTEXT           "スタティック",IDC_VALUE_C5,195,87,33,8
-    CTEXT           "スタティック",IDC_VALUE_C5X,245,86,33,8
-    CTEXT           "スタティック",IDC_VALUE_C6,197,130,33,8
-    CTEXT           "スタティック",IDC_VALUE_C6X,248,130,33,8
-    LTEXT           "スタティック",IDC_LABEL_FF,7,145,33,8
-    CTEXT           "スタティック",IDC_VALUE_FF,197,164,33,8
-    CTEXT           "スタティック",IDC_VALUE_FFX,248,164,33,8
+    LTEXT           "",IDC_LABEL_05,7,24,286,13
+    LTEXT           "",IDC_LABEL_C5,7,70,33,8
+    LTEXT           "",IDC_LABEL_C6,7,111,33,8
+    CTEXT           "",IDC_VALUE_05,195,47,33,8
+    CTEXT           "",IDC_VALUE_05X,245,44,33,8
+    CTEXT           "",IDC_VALUE_C5,195,87,33,8
+    CTEXT           "",IDC_VALUE_C5X,245,86,33,8
+    CTEXT           "",IDC_VALUE_C6,197,130,33,8
+    CTEXT           "",IDC_VALUE_C6X,248,130,33,8
+    LTEXT           "",IDC_LABEL_FF,7,145,33,8
+    CTEXT           "",IDC_VALUE_FF,197,164,33,8
+    CTEXT           "",IDC_VALUE_FFX,248,164,33,8
 END
 
 IDD_FONT DIALOGEX 0, 0, 180, 89
@@ -860,7 +860,7 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSM
 CAPTION "Dialog"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "スタティック",IDC_FILE_PATH,7,7,378,16,SS_NOTIFY
+    LTEXT           "",IDC_FILE_PATH,7,7,378,16,SS_NOTIFY
     PUSHBUTTON      "",IDC_BUTTON_SELECT_FILE,393,7,50,14
     PUSHBUTTON      "",IDC_BUTTON_PLAY,450,7,50,14
     PUSHBUTTON      "Default",IDC_BUTTON_DEFAULT,53,26,50,14,BS_CENTER
@@ -874,8 +874,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8.5.1,2020
- PRODUCTVERSION 8.5.1, 2020
+ FILEVERSION 8.5.2,2020
+ PRODUCTVERSION 8.5.2, 2020
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -892,9 +892,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.5.1.2020"
+            VALUE "FileVersion", "8.5.2.2020"
             VALUE "LegalCopyright", "(C) 2008-2020 hiyohiyo"
-            VALUE "ProductVersion", "8.5.1.2020"
+            VALUE "ProductVersion", "8.5.2.2020"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"

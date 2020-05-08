@@ -181,7 +181,16 @@ void CComboBoxFx::SetFontHeight(int height, double zoomRatio, double fontRatio)
 
 void CComboBoxFx::SetItemHeightEx(int nIndex, int height, double zoomRatio, double fontRatio)
 {
-	CComboBox::SetItemHeight(nIndex, (UINT)(height * zoomRatio * fontRatio));
+	if (nIndex == -1)
+	{
+		CRect rc = { 0 };
+		GetWindowRect(&rc);
+		CComboBox::SetItemHeight(-1, (UINT)(height * zoomRatio - rc.Height() + GetItemHeight(-1)));
+	}
+	else
+	{
+		CComboBox::SetItemHeight(nIndex, (UINT)(height * zoomRatio * fontRatio));
+	}
 }
 
 

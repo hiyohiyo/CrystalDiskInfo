@@ -202,4 +202,9 @@ void CFontSelectionDlg::SetDefaultFont(CString fontFace)
 			}
 		}
 	}
+
+	for (int i = 0; i < m_CtrlFontFace.GetCount(); i++)
+	{
+		m_CtrlFontFace.SetItemHeightEx(i, 32, m_ZoomRatio, m_FontRatio);
+	}
 }
