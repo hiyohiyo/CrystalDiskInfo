@@ -12,6 +12,8 @@
 //   CButtonFx
 ////------------------------------------------------
 
+extern bool g_darkModeEnabled;
+
 CButtonFx::CButtonFx()
 {
 	// Control
@@ -19,6 +21,7 @@ CButtonFx::CButtonFx()
 	m_Y = 0;
 	m_RenderMode = SystemDraw;
 	m_bHighContrast = FALSE;
+	m_bDarkMode = FALSE;
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
@@ -64,8 +67,8 @@ END_MESSAGE_MAP()
 // Control
 //------------------------------------------------
 
-BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRatio,
-	CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
+BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
+	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -94,9 +97,11 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 		m_ToolTip.AddTool(this, m_ToolTipText, rect, 1);
 	}
 
-	if (renderMode & HighContrast)
+	m_bHighContrast = bHighContrast;
+	m_bDarkMode = bDarkMode;
+
+	if (m_bHighContrast)
 	{
-		m_bHighContrast = TRUE;
 		ModifyStyle(BS_OWNERDRAW, m_TextAlign);
 
 		return TRUE;
@@ -109,7 +114,6 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 	}
 	else
 	{
-		m_bHighContrast = FALSE;
 		SetBkReload();
 		ModifyStyle(0, BS_OWNERDRAW);
 	}
@@ -454,7 +458,14 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 		CRect rectI;
 		CSize extent;
 		HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
-		SetTextColor(drawDC->m_hDC, m_TextColor);
+		if ((m_RenderMode & OwnerDrawTransparent) && m_bDarkMode)
+		{
+			SetTextColor(drawDC->m_hDC, RGB(255, 255, 255));
+		}
+		else
+		{
+			SetTextColor(drawDC->m_hDC, m_TextColor);
+		}
 		GetTextExtentPoint32(drawDC->m_hDC, arr.GetAt(i), arr.GetAt(i).GetLength() + 1, &extent);
 
 		if (m_TextAlign == BS_LEFT)

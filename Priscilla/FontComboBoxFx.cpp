@@ -35,6 +35,14 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		m_BkColorSelected = RGB(0, 255, 255);
 	}
 
+	if (m_bDarkMode)
+	{
+		m_TextColor = RGB(255, 255, 255);
+		m_BkColor = RGB(32, 32, 32);
+		m_TextColorSelected = RGB(255, 255, 255);
+		m_BkColorSelected = RGB(77, 77, 77);
+	}
+
     CString title;
 	if (lpDrawItemStruct->itemID == -1)
 	{

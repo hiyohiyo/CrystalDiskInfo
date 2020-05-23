@@ -18,6 +18,7 @@ CEditFx::CEditFx()
 	m_X = 0;
 	m_Y = 0;
 	m_bHighContrast = FALSE;
+	m_bDarkMode = FALSE;
 	m_RenderMode = OwnerDrawImage;
 	m_Margin.top = 0;
 	m_Margin.left = 0;
@@ -57,8 +58,8 @@ END_MESSAGE_MAP()
 // Control
 //------------------------------------------------
 
-BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
-	 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
+BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, 
+	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -77,7 +78,10 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 		ModifyStyle(0, m_TextAlign);
 	}
 
-	if (renderMode & HighContrast)
+	m_bHighContrast = bHighContrast;
+	m_bDarkMode = bDarkMode;
+
+	if (m_bHighContrast)
 	{
 		m_bHighContrast = TRUE;
 		

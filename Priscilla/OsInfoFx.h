@@ -24,6 +24,7 @@ BOOL IsDotNet4();
 BOOL IsNT5();
 BOOL IsNT6orLater();
 BOOL IsWin2k();
+BOOL IsWinXpOrLater();
 BOOL IsWinXpLuna();
 BOOL IsWin8orLater();
 BOOL HasSidebar();

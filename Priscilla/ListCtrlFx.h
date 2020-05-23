@@ -41,7 +41,7 @@ public:
 	COLORREF GetLineColor1();
 	COLORREF GetLineColor2();
 
-	BOOL InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bkDC, int renderMode);
+	BOOL InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bkDC, int renderMode, BOOL bHighContrast, BOOL bDarkMode);
 	void SetFontEx(CString face, int size, double zoomRatio, double fontRatio = 1.0);
 	void EnableHeaderOwnerDraw(BOOL bOwnerDraw);
 
@@ -60,6 +60,7 @@ protected:
 	CRect m_Margin;
 	int m_RenderMode;
 	BOOL m_bHighContrast;
+	BOOL m_bDarkMode;
 	CHeaderCtrlFx m_Header;
 
 	COLORREF m_TextColor1;

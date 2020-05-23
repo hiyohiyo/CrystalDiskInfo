@@ -62,11 +62,10 @@ static const int ControlImageFocus    = 0x0002;
 static const int ControlImageSelected = 0x0003;
 static const int ControlImageDisabled = 0x0004;
 
-static const int HighContrast         = 0x0001;
-static const int SystemDraw           = 0x0002;
-static const int OwnerDrawImage       = 0x0004;
-static const int OwnerDrawGlass       = 0x0008;
-static const int OwnerDrawTransparent = 0x0010;
+static const int SystemDraw           = 0x0001;
+static const int OwnerDrawImage       = 0x0002;
+static const int OwnerDrawGlass       = 0x0004;
+static const int OwnerDrawTransparent = 0x0008;
 
 static const int ZoomTypeAuto =  0;
 static const int ZoomType100 = 100;

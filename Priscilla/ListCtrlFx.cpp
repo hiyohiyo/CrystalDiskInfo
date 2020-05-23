@@ -43,7 +43,7 @@ BEGIN_MESSAGE_MAP(CListCtrlFx, CListCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CListCtrlFx::OnCustomdraw)
 END_MESSAGE_MAP()
 
-BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bkDC, int renderMode)
+BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bkDC, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -55,15 +55,15 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 
 	m_BkDC = bkDC;
 	m_RenderMode = renderMode;
+	m_bHighContrast = bHighContrast;
+	m_bDarkMode = bDarkMode;
 
-	if (renderMode & HighContrast)
+	if (m_bHighContrast)
 	{
-		m_bHighContrast = TRUE;
 		SetBkImage(L"");
 	}
 	else if (renderMode & OwnerDrawGlass)
 	{
-		m_bHighContrast = FALSE;
 		m_BkBitmap.DeleteObject();
 		m_BkBitmap.CreateCompatibleBitmap(m_BkDC, maxWidth, maxHeight);
 		CDC BkDC;
@@ -110,12 +110,12 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		if(m_bNT6orLater)
 		{
 			SetBkImage((HBITMAP)m_CtrlBitmap);
-			m_Header.InitControl(x, y, zoomRatio, bkDC, &m_CtrlBitmap, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode);
+			m_Header.InitControl(x, y, zoomRatio, bkDC, &m_CtrlBitmap, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
 		else
 		{
 			SetBkColor(m_BkColor1);
-			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode);
+			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
 	}
 	else
@@ -125,12 +125,12 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		{
 			SetBkImage(L"");
 			SetBkColor(m_BkColor1);
-			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode);
+			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
 		else
 		{
 			SetBkColor(m_BkColor1);
-			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode);
+			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
 	}
 
@@ -294,7 +294,7 @@ void CListCtrlFx::PreSubclassWindow()
 
 void CListCtrlFx::EnableHeaderOwnerDraw(BOOL bOwnerDraw)
 {
-	if (m_RenderMode & HighContrast)
+	if (m_bHighContrast)
 	{
 		HDITEM hi = { 0 };
 		hi.mask = HDI_FORMAT;

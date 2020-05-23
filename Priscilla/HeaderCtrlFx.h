@@ -16,7 +16,7 @@ class CHeaderCtrlFx : public CHeaderCtrl
 public:
 	CHeaderCtrlFx();
 	virtual ~CHeaderCtrlFx();
-	void InitControl(int x, int y, double zoomRatio, CDC* bkDC, CBitmap* ctrlBitmap, COLORREF textColor, COLORREF bkColor, COLORREF lineColor, int renderMode);
+	void InitControl(int x, int y, double zoomRatio, CDC* bkDC, CBitmap* ctrlBitmap, COLORREF textColor, COLORREF bkColor, COLORREF lineColor, int renderMode, BOOL bHighContrast, BOOL bDarkMode);
 	void SetFontEx(CString face, int size, double zoomRatio, double fontRatio);
 
 protected:
@@ -36,6 +36,7 @@ protected:
 	double m_FontRatio;
 	int m_RenderMode;
 	BOOL m_bHighContrast;
+	BOOL m_bDarkMode;
 
 	CFont m_Font;
 	int m_FontSize;

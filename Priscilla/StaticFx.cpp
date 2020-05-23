@@ -12,6 +12,8 @@
 //   CStaticFx
 ////------------------------------------------------
 
+extern bool g_darkModeEnabled;
+
 CStaticFx::CStaticFx()
 {
 	// Control
@@ -19,6 +21,7 @@ CStaticFx::CStaticFx()
 	m_Y = 0;
 	m_RenderMode = SystemDraw;
 	m_bHighContrast = FALSE;
+	m_bDarkMode = FALSE;
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
@@ -67,8 +70,8 @@ END_MESSAGE_MAP()
 // Control
 //------------------------------------------------
 
-BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRatio,
-	 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode)
+BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
+	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -97,9 +100,11 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 		m_ToolTip.AddTool(this, m_ToolTipText, rect, 1);
 	}
 
-	if (renderMode & HighContrast)
+	m_bHighContrast = bHighContrast;
+	m_bDarkMode = bDarkMode;
+
+	if (m_bHighContrast)
 	{
-		m_bHighContrast = TRUE;
 		ModifyStyle(SS_OWNERDRAW, m_TextAlign | SS_CENTERIMAGE);
 
 		return TRUE;
@@ -112,7 +117,6 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 	}
 	else
 	{
-		m_bHighContrast = FALSE;
 		SetBkReload();
 		ModifyStyle(m_TextAlign | SS_CENTERIMAGE, SS_OWNERDRAW);
 	}
@@ -235,7 +239,11 @@ void CStaticFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
 void CStaticFx::SetMeter(BOOL bMeter, double meterRatio)
 {
 	m_bMeter = bMeter;
-	if (meterRatio > 0)
+	if (meterRatio > 1.0)
+	{
+		m_MeterRatio = 1.0;
+	}
+	else if (meterRatio > 0)
 	{
 		m_MeterRatio = meterRatio;
 	}
@@ -442,7 +450,14 @@ void CStaticFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 	CRect rectI;
 	CSize extent;
 	HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
-	drawDC->SetTextColor(m_TextColor);
+	if ((m_RenderMode & OwnerDrawTransparent) && m_bDarkMode)
+	{
+		SetTextColor(drawDC->m_hDC, RGB(255, 255, 255));
+	}
+	else
+	{
+		SetTextColor(drawDC->m_hDC, m_TextColor);
+	}
 	extent = drawDC->GetTextExtent(title);
 
 	if (m_bMeter && rect.Width() < extent.cx)

@@ -25,6 +25,7 @@ CHeaderCtrlFx::CHeaderCtrlFx()
 	m_BkDC = NULL;
 	m_CtrlBitmap = NULL;
 	m_bHighContrast = FALSE;
+	m_bDarkMode = FALSE;
 	m_RenderMode = SystemDraw;
 }
 
@@ -37,7 +38,7 @@ BEGIN_MESSAGE_MAP(CHeaderCtrlFx, CHeaderCtrl)
 	ON_MESSAGE(HDM_LAYOUT, OnLayout)
 END_MESSAGE_MAP()
 
-void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bkDC, CBitmap* ctrlBitmap, COLORREF textColor, COLORREF bkColor, COLORREF lineColor, int renderMode)
+void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bkDC, CBitmap* ctrlBitmap, COLORREF textColor, COLORREF bkColor, COLORREF lineColor, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -49,7 +50,8 @@ void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bkDC, CBitm
 
 	m_CtrlBitmap = ctrlBitmap;
 	m_RenderMode = renderMode;
-	m_bHighContrast = renderMode & HighContrast;
+	m_bHighContrast = bHighContrast;
+	m_bDarkMode = bDarkMode;
 }
 
 void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)

@@ -77,8 +77,8 @@ END_MESSAGE_MAP()
 // Control
 //------------------------------------------------
 
-BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRatio,
-	 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode,
+BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
+	 LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode,
 	 COLORREF bkColor, COLORREF bkColorSelected, COLORREF glassColor, BYTE glassAlpha)
 {
 	m_X = (int)(x * zoomRatio);
@@ -114,19 +114,12 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 		m_ToolTip.AddTool(this, m_ToolTipText, rect, 1);
 	}
 
-	if (renderMode & HighContrast)
-	{
-		m_bHighContrast = TRUE;
+	m_bHighContrast = bHighContrast;
+	m_bDarkMode = bDarkMode;
 
-		return TRUE;
-	}
-	else if (renderMode & SystemDraw)
+	if (renderMode & SystemDraw)
 	{
 		return TRUE;
-	}
-	else
-	{
-		m_bHighContrast = FALSE;
 	}
 
 	if (renderMode & OwnerDrawGlass)
@@ -265,6 +258,13 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 			textColorSelected = RGB(0, 0, 0);
 			bkColor =  GetBkColor(lpDrawItemStruct->hDC);
 			bkColorSelected = RGB(0, 255, 255);
+		}
+		else if (m_bDarkMode)
+		{
+			textColor = RGB(255, 255, 255);
+			textColorSelected = RGB(255, 255, 255);
+			bkColor = RGB(32, 32, 32);
+			bkColorSelected = RGB(77, 77, 77);
 		}
 		else
 		{
@@ -415,7 +415,15 @@ void CComboBoxFx::DrawString(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDraw
 	rect.right -= m_Margin.right;
 
 	HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
-	drawDC->SetTextColor(textColor);
+
+	if (m_bDarkMode)
+	{
+		drawDC->SetTextColor(RGB(255, 255, 255));
+	}
+	else
+	{
+		drawDC->SetTextColor(textColor);
+	}
 
 	if (m_TextAlign == ES_LEFT)
 	{

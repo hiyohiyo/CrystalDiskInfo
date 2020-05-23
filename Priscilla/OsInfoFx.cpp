@@ -237,6 +237,29 @@ BOOL IsWin2k()
 	return b;
 }
 
+BOOL IsWinXpOrLater()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+		OSVERSIONINFOEX osvi;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion >= 1)
+		{
+			b = TRUE;
+		}
+		else if (osvi.dwMajorVersion >= 6)
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
 BOOL IsWinXpLuna()
 {
 	static BOOL xp = -1;

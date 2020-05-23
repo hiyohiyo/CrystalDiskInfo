@@ -24,7 +24,7 @@ public:
 
 	// Control
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, LPCWSTR imagePath,
-		 int imageCount = 0, DWORD textAlign = ES_LEFT, int renderMode = OwnerDrawImage);
+		 int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);
@@ -58,6 +58,7 @@ protected:
 	CRect m_Margin;
 	int m_RenderMode;
 	BOOL m_bHighContrast;
+	BOOL m_bDarkMode;
 
 	// Glass
 	COLORREF m_GlassColor;

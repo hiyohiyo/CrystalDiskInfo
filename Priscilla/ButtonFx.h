@@ -23,8 +23,8 @@ public:
 	virtual ~CButtonFx();
 
 	// Control
-	BOOL InitControl(int x, int y, int width, int height, double zoomRatio,
-		 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode);
+	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
+		LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode);
 	BOOL ReloadImage(LPCWSTR imagePath, UINT imageCount);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
@@ -81,6 +81,7 @@ protected:
 	CRect m_Margin;
 	int m_RenderMode;
 	BOOL m_bHighContrast;
+	BOOL m_bDarkMode;
 
 	// Glass
 	COLORREF m_GlassColor;

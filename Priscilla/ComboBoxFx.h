@@ -24,8 +24,8 @@ public:
 
 // Control
 public:
-	BOOL InitControl(int x, int y, int width, int height, double zoomRatio,
-		 CDC* bkDC, LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode,
+	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, 
+		 LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL m_bDarkMode,
 		 COLORREF bkColor, COLORREF bkColorSelected, COLORREF glassColor, BYTE glassAlpha
 	);
 	void SetFontHeight(int height, double zoomRatio, double fontRatio = 1.0);
@@ -84,6 +84,7 @@ protected:
 	CRect m_Margin;
 	int m_RenderMode;
 	BOOL m_bHighContrast;
+	BOOL m_bDarkMode;
 
 	// Alpha/Glass
 	BYTE m_Alpha;

@@ -10,6 +10,7 @@
 #include "DialogFx.h"
 #include "UtilityFx.h"
 #include "OsInfoFx.h"
+#include "DarkMode.h"
 
 #include <Shlwapi.h>
 #include <strsafe.h>
@@ -21,6 +22,8 @@ using namespace Gdiplus;
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0
 #endif
+
+extern bool g_darkModeEnabled;
 
 ////------------------------------------------------
 //   CDialogFx
@@ -35,6 +38,7 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_bShowWindow = FALSE;
 	m_bModelessDlg = FALSE;
 	m_bHighContrast = FALSE;
+	m_bDarkMode = FALSE;
 	m_bBkImage = FALSE;
 	m_MenuId = 0;
 	m_ParentWnd = NULL;
@@ -96,6 +100,10 @@ BOOL CDialogFx::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	m_bHighContrast = IsHighContrast();
+
+	m_bDarkMode = InitDarkMode();
+	AllowDarkModeForWindow(m_hWnd, g_darkModeEnabled);
+	RefreshTitleBarThemeColor(m_hWnd);
 
 	CDC *pDC = GetDC();
 	m_Dpi = GetDeviceCaps(pDC->m_hDC, LOGPIXELSY);
@@ -262,7 +270,16 @@ void CDialogFx::UpdateBackground(BOOL resize)
 		m_BkDC.SelectObject(&m_BkBitmap);
 
 		m_BrushDlg.DeleteObject();
-		m_BrushDlg.CreateSolidBrush(RGB(255, 255, 255));
+		COLORREF bkColor;
+		if (g_darkModeEnabled)
+		{
+			bkColor = RGB(32, 32, 32);
+		}
+		else
+		{
+			bkColor = RGB(255, 255, 255);
+		}
+		m_BrushDlg.CreateSolidBrush(bkColor);
 
 		m_BkDC.FillRect(&rect, &m_BrushDlg);
 
