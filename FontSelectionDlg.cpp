@@ -80,20 +80,22 @@ BOOL CFontSelectionDlg::OnInitDialog()
 
 void CFontSelectionDlg::UpdateDialogSize()
 {
+	CDialogFx::UpdateDialogSize();
+
 	COLORREF textColor = RGB(0, 0, 0);
 	COLORREF textSelectedColor = RGB(0, 0, 0);
 
 	ChangeZoomType(m_ZoomType);
 	SetClientSize((int)(SIZE_X * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), 0);
 
-	UpdateBackground();
+	UpdateBackground(FALSE, m_bDarkMode);
 
-	m_LabelFontFace.InitControl(8, 8, 432, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent | m_bHighContrast);
-	m_LabelFontScale.InitControl(8, 76, 432, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlFontFace.InitControl(20, 36, 440, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent | m_bHighContrast, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
-	m_CtrlFontScale.InitControl(20, 104, 440, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent | m_bHighContrast, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
-	m_CtrlSetDefault.InitControl(40, 156, 168, 32, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlOk.InitControl(280, 156, 168, 32, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
+	m_LabelFontFace.InitControl(8, 8, 432, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_LabelFontScale.InitControl(8, 76, 432, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlFontFace.InitControl(20, 36, 440, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
+	m_CtrlFontScale.InitControl(20, 104, 440, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
+	m_CtrlSetDefault.InitControl(40, 156, 168, 32, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlOk.InitControl(280, 156, 168, 32, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlFontFace.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 	m_CtrlFontScale.SetMargin(0, 4, 0, 0, m_ZoomRatio);
@@ -122,6 +124,9 @@ void CFontSelectionDlg::UpdateDialogSize()
 	
 	m_CtrlSetDefault.SetHandCursor();
 	m_CtrlOk.SetHandCursor();
+
+	SetDarkModeControl(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlSetDefault.GetSafeHwnd(), m_bDarkMode);
 
 	Invalidate();
 }

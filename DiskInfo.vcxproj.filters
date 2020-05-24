@@ -120,6 +120,9 @@
     <ClCompile Include="Priscilla\UtilityFx.cpp">
       <Filter>Prscilla</Filter>
     </ClCompile>
+    <ClCompile Include="Priscilla\DarkMode.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h">
@@ -225,6 +228,9 @@
       <Filter>Prscilla</Filter>
     </ClInclude>
     <ClInclude Include="Priscilla\UtilityFx.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\DarkMode.h">
       <Filter>Prscilla</Filter>
     </ClInclude>
   </ItemGroup>

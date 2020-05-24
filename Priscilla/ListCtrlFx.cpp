@@ -120,7 +120,6 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 	}
 	else
 	{
-		m_bHighContrast = FALSE;
 		if(m_bNT6orLater)
 		{
 			SetBkImage(L"");

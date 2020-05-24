@@ -80,10 +80,11 @@ END_MESSAGE_MAP()
 
 void CSoundSettingDlg::UpdateDialogSize()
 {
+	CDialogFx::UpdateDialogSize();
+
 	ChangeZoomType(m_ZoomType);
 	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
-
-	UpdateBackground();
+	UpdateBackground(FALSE, m_bDarkMode);
 
 	m_CtrlFilePath.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlSelectFile.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
@@ -91,16 +92,18 @@ void CSoundSettingDlg::UpdateDialogSize()
 	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlOk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlFilePath.InitControl(8, 8, 416, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlSelectFile.InitControl(428, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"selectSound"), 2, BS_CENTER, OwnerDrawImage);
+	m_CtrlFilePath.InitControl(8, 8, 416, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlSelectFile.InitControl(428, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"selectSound"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, m_bDarkMode);
 	m_CtrlSelectFile.SetHandCursor();
-	m_CtrlPlay.InitControl(456, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"playSound"), 2, BS_CENTER, OwnerDrawImage);
+	m_CtrlPlay.InitControl(456, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"playSound"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, m_bDarkMode);
 	m_CtrlPlay.SetHandCursor();
-	m_CtrlDefault.InitControl(40, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlOk.InitControl(280, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlOk.InitControl(280, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlDefault.InitControl(40, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlOk.InitControl(280, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlFilePath.SetDrawFrame(TRUE);
+
+	SetDarkModeControl(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlDefault.GetSafeHwnd(), m_bDarkMode);
 
 	Invalidate();
 }

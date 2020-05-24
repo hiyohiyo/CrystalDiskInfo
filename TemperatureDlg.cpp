@@ -89,28 +89,40 @@ BOOL CTemperatureDlg::OnInitDialog()
 
 void CTemperatureDlg::UpdateDialogSize()
 {
+	CDialogFx::UpdateDialogSize();
+
 	ChangeZoomType(m_ZoomType);
 	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
-
-	UpdateBackground();
+	UpdateBackground(FALSE, m_bDarkMode);
 
 	m_CtrlScrollbarTemperature.MoveWindow((DWORD)(8 * m_ZoomRatio), (DWORD)(44 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
 	m_CtrlValueTemperature.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
    	m_CtrlValueTemperatureF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueTemperatureF.InitControl(344, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValueTemperatureF.InitControl(344, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlApply.InitControl(220, 80, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlDefault.InitControl(20, 80, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlApply.InitControl(220, 80, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlDefault.InitControl(20, 80, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, SystemDraw | m_bHighContrast, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
+	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
+	m_CtrlSelectDisk.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
 	m_CtrlValueTemperature.SetDrawFrame(TRUE);
 	m_CtrlValueTemperatureF.SetDrawFrame(TRUE);
+
+	SetDarkModeControl(m_CtrlApply.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlDefault.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlScrollbarTemperature.GetSafeHwnd(), m_bDarkMode);
+
+	// SetLayeredWindow(m_CtrlSelectDisk.GetListHwnd(), m_ComboAlpha);
+	for (int i = -1; i < m_CtrlSelectDisk.GetCount(); i++)
+	{
+		m_CtrlSelectDisk.SetItemHeightEx(i, 24, m_ZoomRatio, m_FontRatio);
+	}
 
 	Invalidate();
 }

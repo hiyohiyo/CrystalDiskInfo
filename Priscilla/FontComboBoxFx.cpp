@@ -27,80 +27,89 @@ END_MESSAGE_MAP()
 
 void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
+	if (lpDrawItemStruct->itemID == -1) { return; }
+
+	static COLORREF textColor;
+	static COLORREF textColorSelected;
+	static COLORREF bkColor;
+	static COLORREF bkColorSelected;
+
 	if (m_bHighContrast)
 	{
-		m_TextColor = RGB(255, 255, 255);
-		m_BkColor = RGB(0, 0, 0);
-		m_TextColorSelected = RGB(0, 0, 0);
-		m_BkColorSelected = RGB(0, 255, 255);
-	}
+		textColor = GetTextColor(lpDrawItemStruct->hDC);
+		textColorSelected = RGB(0, 0, 0);
+		bkColor = GetBkColor(lpDrawItemStruct->hDC);
+		bkColorSelected = RGB(0, 255, 255);
 
-	if (m_bDarkMode)
+		if (bkColor == RGB(0, 0, 0)) { textColor = RGB(255, 255, 255); }
+		else if (bkColor == RGB(255, 255, 255)) { textColor = RGB(0, 0, 0); }
+	}
+	else if (m_bDarkMode)
 	{
-		m_TextColor = RGB(255, 255, 255);
-		m_BkColor = RGB(32, 32, 32);
-		m_TextColorSelected = RGB(255, 255, 255);
-		m_BkColorSelected = RGB(77, 77, 77);
+		textColor = RGB(255, 255, 255);
+		textColorSelected = RGB(255, 255, 255);
+		bkColor = RGB(32, 32, 32);
+		bkColorSelected = RGB(77, 77, 77);
 	}
-
-    CString title;
-	if (lpDrawItemStruct->itemID == -1)
+	else
 	{
-        return;
+		textColor = m_TextColor;
+		textColorSelected = m_TextColorSelected;
+		bkColor = m_BkColor;
+		bkColorSelected = m_BkColorSelected;
 	}
 
-    GetLBText(lpDrawItemStruct->itemID, title);
     CDC* pDC = CDC::FromHandle(lpDrawItemStruct->hDC);
+	LoadCtrlBk(pDC);
+	CString title;
+	GetLBText(lpDrawItemStruct->itemID, title);
 
-    CFont font;
-    LOGFONT logfont;
-    memset(&logfont, 0, sizeof(logfont));
-    logfont.lfHeight = m_FontHeight;
-    logfont.lfWidth = 0;
-    logfont.lfWeight = 400;
+	CFont font;
+	LOGFONT logfont;
+	memset(&logfont, 0, sizeof(logfont));
+	logfont.lfHeight = m_FontHeight;
+	logfont.lfWidth = 0;
+	logfont.lfWeight = 400;
 	logfont.lfQuality = 6;
 	logfont.lfCharSet = DEFAULT_CHARSET;
-    _tcscpy_s(logfont.lfFaceName, 32, (LPCTSTR)title);
-    font.CreateFontIndirect(&logfont);
+	_tcscpy_s(logfont.lfFaceName, 32, (LPCTSTR)title);
+	font.CreateFontIndirect(&logfont);
 	HGDIOBJ oldFont = pDC->SelectObject(&font);
 
 	CBrush Brush;
 	CBrush* pOldBrush;
-
-	if (lpDrawItemStruct->itemState & ODS_SELECTED) {
-		Brush.CreateSolidBrush(m_BkColorSelected);
-		pOldBrush = pDC->SelectObject(&Brush);
-		FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
-		SetTextColor(lpDrawItemStruct->hDC, m_TextColorSelected);
-	}
-	else {
-		Brush.CreateSolidBrush(m_BkColor);
-		pOldBrush = pDC->SelectObject(&Brush);
-		FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
-		SetTextColor(lpDrawItemStruct->hDC, m_TextColor);
-	}
-	pDC->SelectObject(pOldBrush);
-	Brush.DeleteObject();
-
-	pDC->SetBkMode(TRANSPARENT);
-	CRect rect = (CRect)(lpDrawItemStruct->rcItem);
-	rect.top += m_Margin.top;
-	rect.left += m_Margin.left;
-	rect.bottom -= m_Margin.bottom;
-	rect.right -= m_Margin.right;
-
-	if (m_TextAlign == ES_LEFT)
+	if (lpDrawItemStruct->rcItem.left != 0 && !m_bHighContrast)
 	{
-		pDC->DrawText(title, title.GetLength(), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
-	}
-	else if (m_TextAlign == ES_RIGHT)
-	{
-		pDC->DrawText(title, title.GetLength(), rect, DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
+		DrawControl(title, pDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageNormal);
+		Brush.CreateSolidBrush(bkColorSelected);
+		pOldBrush = pDC->SelectObject(&Brush);
+		if (lpDrawItemStruct->itemState & ODS_SELECTED)
+		{
+			RECT rc = lpDrawItemStruct->rcItem;
+			// rc.top = (LONG)(rc.bottom - 2 * m_ZoomRatio);
+			rc.right = (LONG)(rc.left + 3 * m_ZoomRatio);
+			FillRect(lpDrawItemStruct->hDC, &rc, (HBRUSH)Brush);
+		}
+		DrawString(title, pDC, lpDrawItemStruct, textColor);
 	}
 	else
 	{
-		pDC->DrawText(title, title.GetLength(), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		if (lpDrawItemStruct->itemState & ODS_SELECTED)
+		{
+			Brush.CreateSolidBrush(bkColorSelected);
+			pOldBrush = pDC->SelectObject(&Brush);
+			FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
+			DrawString(title, pDC, lpDrawItemStruct, textColorSelected);
+		}
+		else
+		{
+			Brush.CreateSolidBrush(bkColor);
+			pOldBrush = pDC->SelectObject(&Brush);
+			FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
+			DrawString(title, pDC, lpDrawItemStruct, textColor);
+		}
 	}
-
+	pDC->SelectObject(pOldBrush);
+	Brush.DeleteObject();
 	pDC->SelectObject(oldFont);
 }

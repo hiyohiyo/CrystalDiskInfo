@@ -12,8 +12,6 @@
 //   CButtonFx
 ////------------------------------------------------
 
-extern bool g_darkModeEnabled;
-
 CButtonFx::CButtonFx()
 {
 	// Control

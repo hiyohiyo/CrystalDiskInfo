@@ -6,6 +6,7 @@
 /*---------------------------------------------------------------------------*/
 
 #include "../stdafx.h"
+#include "OsInfoFx.h"
 #include "IatHook.h"
 
 enum IMMERSIVE_HC_CACHE_MODE
@@ -139,11 +140,14 @@ void RefreshTitleBarThemeColor(HWND hWnd)
 
 constexpr bool CheckBuildNumber(DWORD buildNumber)
 {
+	return (buildNumber >= 17763);
+	/*
 	return (buildNumber == 17763 || // 1809
 		buildNumber == 18362 || // 1903
 		buildNumber == 18363 || // 1909
 		buildNumber == 19041  // 2004
 		);
+	*/
 }
 
 void FixDarkScrollBar()
@@ -218,11 +222,34 @@ BOOL InitDarkMode()
 
 					g_darkModeEnabled = _ShouldAppsUseDarkMode() && !IsHighContrast();
 
-					FixDarkScrollBar();
+				//	FixDarkScrollBar();
 				}
 			}
 		}
 	}
 
 	return (BOOL)g_darkModeEnabled;
+}
+
+BOOL SetDarkMode(HWND hWnd)
+{
+	BOOL bDarkMode = FALSE;
+	if (IsDarkModeSupport())
+	{
+		bDarkMode = InitDarkMode();
+		AllowDarkModeForWindow(hWnd, bDarkMode);
+		RefreshTitleBarThemeColor(hWnd);
+	}
+
+	return bDarkMode;
+}
+
+void SetDarkModeControl(HWND hWnd, BOOL bDarkMode)
+{
+	if (IsDarkModeSupport())
+	{
+		SetWindowTheme(hWnd, L"Explorer", nullptr);
+		AllowDarkModeForWindow(hWnd, bDarkMode);
+		SendMessageW(hWnd, WM_THEMECHANGED, 0, 0);
+	}
 }

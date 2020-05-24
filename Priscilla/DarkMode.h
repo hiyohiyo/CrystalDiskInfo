@@ -7,6 +7,11 @@
 
 #pragma once
 
-BOOL InitDarkMode();
+BOOL SetDarkMode(HWND hWnd);
+void SetDarkModeControl(HWND hWnd, BOOL bDarkMode);
+
+void FixDarkScrollBar();
 bool AllowDarkModeForWindow(HWND hWnd, bool allow);
-void RefreshTitleBarThemeColor(HWND hWnd);
+
+// BOOL InitDarkMode();
+// void RefreshTitleBarThemeColor(HWND hWnd);

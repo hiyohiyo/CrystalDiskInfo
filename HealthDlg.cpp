@@ -137,10 +137,11 @@ BOOL CHealthDlg::OnInitDialog()
 
 void CHealthDlg::UpdateDialogSize()
 {
+	CDialogFx::UpdateDialogSize();
+
 	ChangeZoomType(m_ZoomType);
 	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
-
-	UpdateBackground();
+	UpdateBackground(FALSE, m_bDarkMode);
 
 	m_CtrlScrollbar05.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)( 72 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
 	m_CtrlScrollbarC5.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)(128 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
@@ -162,29 +163,30 @@ void CHealthDlg::UpdateDialogSize()
 	m_CtrlValueC6X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlValueFFX.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
-	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
-	m_CtrlLabelC6.InitControl(8, 156, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
-	m_CtrlLabelFF.InitControl(8, 212, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
+	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabelC6.InitControl(8, 156, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabelFF.InitControl(8, 212, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 
-	m_CtrlValue05.InitControl(300,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueC5.InitControl(300, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueC6.InitControl(300, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueFF.InitControl(300, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValue05.InitControl(300,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValueC5.InitControl(300, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValueC6.InitControl(300, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValueFF.InitControl(300, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 
-	m_CtrlValue05X.InitControl(344,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueC5X.InitControl(344, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlValue05X.InitControl(344,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValueC5X.InitControl(344, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlApply.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlDefault.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlApply.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlDefault.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, SystemDraw | m_bHighContrast, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
+	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
+	m_CtrlSelectDisk.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
 	m_CtrlValue05.SetDrawFrame(TRUE);
 	m_CtrlValueC5.SetDrawFrame(TRUE);
@@ -194,6 +196,20 @@ void CHealthDlg::UpdateDialogSize()
 	m_CtrlValueC5X.SetDrawFrame(TRUE);
 	m_CtrlValueC6X.SetDrawFrame(TRUE);
 	m_CtrlValueFFX.SetDrawFrame(TRUE);
+
+	SetDarkModeControl(m_CtrlApply.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlDefault.GetSafeHwnd(), m_bDarkMode);
+
+	SetDarkModeControl(m_CtrlScrollbar05.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlScrollbarC5.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlScrollbarC6.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlScrollbarFF.GetSafeHwnd(), m_bDarkMode);
+
+	// SetLayeredWindow(m_CtrlSelectDisk.GetListHwnd(), m_ComboAlpha);
+	for (int i = -1; i < m_CtrlSelectDisk.GetCount(); i++)
+	{
+		m_CtrlSelectDisk.SetItemHeightEx(i, 24, m_ZoomRatio, m_FontRatio);
+	}
 
 	Invalidate();
 }

@@ -27,6 +27,7 @@ BOOL IsWin2k();
 BOOL IsWinXpOrLater();
 BOOL IsWinXpLuna();
 BOOL IsWin8orLater();
+BOOL IsDarkModeSupport();
 BOOL HasSidebar();
 DWORD GetIeVersion();
 DWORD GetWin10Version();

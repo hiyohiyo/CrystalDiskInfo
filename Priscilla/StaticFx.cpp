@@ -12,8 +12,6 @@
 //   CStaticFx
 ////------------------------------------------------
 
-extern bool g_darkModeEnabled;
-
 CStaticFx::CStaticFx()
 {
 	// Control

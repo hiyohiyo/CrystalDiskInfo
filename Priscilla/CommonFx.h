@@ -51,6 +51,7 @@
 static const int TimerUpdateDialogSizeDpiChanged     = 0x0001;
 static const int TimerUpdateDialogSizeDisplayChange  = 0x0002;
 static const int TimerUpdateDialogSizeSysColorChange = 0x0003;
+static const int TimerUpdateDialogSizeSettingChange  = 0x0004;
 
 //------------------------------------------------
 // Const Values

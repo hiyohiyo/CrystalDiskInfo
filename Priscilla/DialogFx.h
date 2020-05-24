@@ -8,6 +8,8 @@
 #pragma once
 
 #include "CommonFx.h"
+#include "DarkMode.h"
+
 #include <atlimage.h>
 
 class CDialogFx : public CDialog
@@ -26,7 +28,7 @@ protected:
 	virtual void PostNcDestroy();
 	virtual void UpdateDialogSize();
 	virtual void SetClientSize(int sizeX, int sizeY, DWORD menuLine = 0);
-	virtual void UpdateBackground(BOOL resize = FALSE);
+	virtual void UpdateBackground(BOOL resize, BOOL darkMode);
 	virtual void OnOK();
 	virtual void OnCancel();
 
@@ -46,10 +48,10 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	afx_msg LRESULT OnUpdateDialogSize(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnDisplayChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSysColorChange(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSettingChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEnterSizeMove(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnExitSizeMove(WPARAM wParam, LPARAM lParam);
 

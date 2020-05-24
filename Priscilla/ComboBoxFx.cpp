@@ -17,6 +17,7 @@ CComboBoxFx::CComboBoxFx()
 	// Control
 	m_X = 0;
 	m_Y = 0;
+	m_ZoomRatio = 1.0;
 	m_bHighContrast = FALSE;
 	m_RenderMode = SystemDraw;
 	m_Margin.top = 0;
@@ -83,6 +84,7 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
+	m_ZoomRatio = zoomRatio;
 	m_CtrlSize.cx = (int)(width * zoomRatio);
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
@@ -193,6 +195,7 @@ void CComboBoxFx::SetMargin(int top, int left, int bottom, int right, double zoo
 	m_Margin.left = (int)(left * zoomRatio);
 	m_Margin.bottom = (int)(bottom * zoomRatio);
 	m_Margin.right = (int)(right * zoomRatio);
+	m_ZoomRatio = zoomRatio;
 }
 
 CSize CComboBoxFx::GetSize(void)
@@ -209,6 +212,15 @@ void CComboBoxFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
 void CComboBoxFx::SetAlpha(BYTE alpha)
 {
 	m_Alpha = alpha;
+}
+
+HWND CComboBoxFx::GetListHwnd()
+{
+	COMBOBOXINFO info = { 0 };
+	info.cbSize = sizeof(COMBOBOXINFO);
+	GetComboBoxInfo(&info);
+	
+	return info.hwndList;
 }
 
 HBRUSH CComboBoxFx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
@@ -231,75 +243,76 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
 	if (lpDrawItemStruct->itemID == -1) { return; }
 
-	CDC* drawDC = CDC::FromHandle(lpDrawItemStruct->hDC);
-	LoadCtrlBk(drawDC);
-	CString cstr = L"";
-	GetLBText(lpDrawItemStruct->itemID, cstr);
-	CDC* pDC = CDC::FromHandle(lpDrawItemStruct->hDC);
-	if (m_bHighContrast)
-	{
-		pDC->SetBkMode(OPAQUE);
-	}
-	else
-	{
-		pDC->SetBkMode(TRANSPARENT);
-	}
-
 	static COLORREF textColor;
 	static COLORREF textColorSelected;
 	static COLORREF bkColor;
 	static COLORREF bkColorSelected;
 
-	if (lpDrawItemStruct->rcItem.left != 0)
+	if (m_bHighContrast)
 	{
-		if (m_bHighContrast)
-		{
-			textColor = GetTextColor(lpDrawItemStruct->hDC);
-			textColorSelected = RGB(0, 0, 0);
-			bkColor =  GetBkColor(lpDrawItemStruct->hDC);
-			bkColorSelected = RGB(0, 255, 255);
-		}
-		else if (m_bDarkMode)
-		{
-			textColor = RGB(255, 255, 255);
-			textColorSelected = RGB(255, 255, 255);
-			bkColor = RGB(32, 32, 32);
-			bkColorSelected = RGB(77, 77, 77);
-		}
-		else
-		{
-			textColor = m_TextColor;
-			textColorSelected = m_TextColorSelected;
-			bkColor = m_BkColor;
-			bkColorSelected = m_BkColorSelected;
-		}
-	}
+		textColor = GetTextColor(lpDrawItemStruct->hDC);
+		textColorSelected = RGB(0, 0, 0);
+		bkColor =  GetBkColor(lpDrawItemStruct->hDC);
+		bkColorSelected = RGB(0, 255, 255);
 
-	if (lpDrawItemStruct->rcItem.left != 0 && ! m_bHighContrast)
+		if (bkColor == RGB(0, 0, 0)) {	textColor = RGB(255, 255, 255); }
+		else if (bkColor == RGB(255, 255, 255)) { textColor = RGB(0, 0, 0); }
+	}
+	else if (m_bDarkMode)
 	{
-		DrawControl(cstr, drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageNormal);
+		textColor = RGB(255, 255, 255);
+		textColorSelected = RGB(255, 255, 255);
+		bkColor = RGB(32, 32, 32);
+		bkColorSelected = RGB(77, 77, 77);
 	}
 	else
 	{
-		CBrush Brush;
-		CBrush* pOldBrush;
+		textColor = m_TextColor;
+		textColorSelected = m_TextColorSelected;
+		bkColor = m_BkColor;
+		bkColorSelected = m_BkColorSelected;
+	}
 
-		if (lpDrawItemStruct->itemState & ODS_SELECTED) {
+	CDC* pDC = CDC::FromHandle(lpDrawItemStruct->hDC);
+	LoadCtrlBk(pDC);
+	CString title;
+	GetLBText(lpDrawItemStruct->itemID, title);
+
+	CBrush Brush;
+	CBrush* pOldBrush;
+	if (lpDrawItemStruct->rcItem.left != 0 && !m_bHighContrast)
+	{
+		DrawControl(title, pDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageNormal);
+		Brush.CreateSolidBrush(bkColorSelected);
+		pOldBrush = pDC->SelectObject(&Brush);
+		if (lpDrawItemStruct->itemState & ODS_SELECTED)
+		{
+			RECT rc = lpDrawItemStruct->rcItem;
+			// rc.top = (LONG)(rc.bottom - 2 * m_ZoomRatio);
+			rc.right = (LONG)(rc.left + 3 * m_ZoomRatio);
+			FillRect(lpDrawItemStruct->hDC, &rc, (HBRUSH)Brush);
+		}
+		DrawString(title, pDC, lpDrawItemStruct, textColor);
+	}
+	else
+	{
+		if (lpDrawItemStruct->itemState & ODS_SELECTED)
+		{
 			Brush.CreateSolidBrush(bkColorSelected);
 			pOldBrush = pDC->SelectObject(&Brush);
 			FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
-			DrawString(cstr, pDC, lpDrawItemStruct, textColorSelected);
+			DrawString(title, pDC, lpDrawItemStruct, textColorSelected);
 		}
 		else
 		{
 			Brush.CreateSolidBrush(bkColor);
 			pOldBrush = pDC->SelectObject(&Brush);
 			FillRect(lpDrawItemStruct->hDC, &lpDrawItemStruct->rcItem, (HBRUSH)Brush);
-			DrawString(cstr, pDC, lpDrawItemStruct, textColor);
+			DrawString(title, pDC, lpDrawItemStruct, textColor);
 		}
-		pDC->SelectObject(pOldBrush);
-		Brush.DeleteObject();
 	}
+	pDC->SelectObject(pOldBrush);
+	Brush.DeleteObject();
 }
 
 void CComboBoxFx::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
@@ -321,7 +334,6 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24)
 	{
 		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
-		DrawString(title, drawDC, lpDrawItemStruct, m_TextColor);
 	}
 	else // Full Color (24/32bit)
 	{
@@ -365,9 +377,7 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 						cn += (CtlBmpInfo.bmBitsPixel / 8);
 					}
 				}
-
 				DrawBmp.SetBitmapBits(DstMemSize, DstBuffer);
-				DrawString(title, pDrawBmpDC, lpDrawItemStruct, m_TextColor);
 				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 
 				delete[] DstBuffer;
@@ -376,14 +386,12 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 			else
 			{
 				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
-				DrawString(title, pDrawBmpDC, lpDrawItemStruct, m_TextColor);
 				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 			}
 		}
 		else
 		{
 			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
-			DrawString(title, pDrawBmpDC, lpDrawItemStruct, m_TextColor);
 			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 		}
 
@@ -413,17 +421,7 @@ void CComboBoxFx::DrawString(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDraw
 	rect.left += m_Margin.left;
 	rect.bottom -= m_Margin.bottom;
 	rect.right -= m_Margin.right;
-
-	HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
-
-	if (m_bDarkMode)
-	{
-		drawDC->SetTextColor(RGB(255, 255, 255));
-	}
-	else
-	{
-		drawDC->SetTextColor(textColor);
-	}
+	drawDC->SetTextColor(textColor);
 
 	if (m_TextAlign == ES_LEFT)
 	{
@@ -437,8 +435,6 @@ void CComboBoxFx::DrawString(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDraw
 	{
 		drawDC->DrawText(title, title.GetLength(), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	}
-
-	drawDC->SelectObject(oldFont);
 }
 
 //------------------------------------------------

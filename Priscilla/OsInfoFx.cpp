@@ -331,6 +331,26 @@ BOOL IsWin8orLater()
 	return b;
 }
 
+BOOL IsDarkModeSupport()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+		OSVERSIONINFOEX osvi;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if (osvi.dwBuildNumber >= 17763) // Windows 10 Ver.1809 or later
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
+
 BOOL HasSidebar()
 {
 	static BOOL b = -1;

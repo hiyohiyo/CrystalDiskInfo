@@ -128,10 +128,11 @@ BOOL CSettingDlg::OnInitDialog()
 
 void CSettingDlg::UpdateDialogSize()
 {
+	CDialogFx::UpdateDialogSize();
+
 	ChangeZoomType(m_ZoomType);
 	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
-
-	UpdateBackground();
+	UpdateBackground(FALSE, m_bDarkMode);
 
 	m_CtrlLabelAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlLabelApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
@@ -153,28 +154,30 @@ void CSettingDlg::UpdateDialogSize()
 	m_CtrlEnableApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlDisableApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 
-	m_CtrlLabelAam.InitControl(8, 44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
-	m_CtrlLabelApm.InitControl(8, 188, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, SystemDraw | m_bHighContrast);
+	m_CtrlLabelAam.InitControl(8, 44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabelApm.InitControl(8, 188, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 
-	m_CtrlLabelAamLow.InitControl(16, 72, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlLabelAamHigh.InitControl(176, 72, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlLabelAamRecommend.InitControl(176, 120, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlLabelApmLow.InitControl(16, 216, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlLabelApmHigh.InitControl(176, 216, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlLabelAamLow.InitControl(16, 72, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabelAamHigh.InitControl(176, 72, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabelAamRecommend.InitControl(176, 120, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabelApmLow.InitControl(16, 216, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabelApmHigh.InitControl(176, 216, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 
-	m_CtrlAamStatus.InitControl(344, 72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlCurrentAam.InitControl(344, 96, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlRecommendAam.InitControl(344, 120, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlApmStatus.InitControl(344, 216, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
-	m_CtrlCurrentApm.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass | m_bHighContrast);
+	m_CtrlAamStatus.InitControl(344, 72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlCurrentAam.InitControl(344, 96, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlRecommendAam.InitControl(344, 120, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlApmStatus.InitControl(344, 216, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlCurrentApm.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 
-	m_CtrlEnableAam.InitControl(220, 148, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlDisableAam.InitControl(20, 148, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlEnableApm.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlDisableApm.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlEnableAam.InitControl(220, 148, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlDisableAam.InitControl(20, 148, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlEnableApm.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlDisableApm.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, SystemDraw | m_bHighContrast, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
+	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
+	m_CtrlSelectDisk.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+
 	m_AamScrollbar.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)(96 * m_ZoomRatio), (DWORD)(324 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
 	m_ApmScrollbar.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)(240 * m_ZoomRatio), (DWORD)(324 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
 
@@ -183,6 +186,19 @@ void CSettingDlg::UpdateDialogSize()
 	m_CtrlRecommendAam.SetDrawFrame(TRUE);
 	m_CtrlApmStatus.SetDrawFrame(TRUE);
 	m_CtrlCurrentApm.SetDrawFrame(TRUE);
+
+	SetDarkModeControl(m_CtrlEnableAam.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlDisableAam.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlEnableApm.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlDisableApm.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_AamScrollbar.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_ApmScrollbar.GetSafeHwnd(), m_bDarkMode);
+
+	// SetLayeredWindow(m_CtrlSelectDisk.GetListHwnd(), m_ComboAlpha);
+	for (int i = -1; i < m_CtrlSelectDisk.GetCount(); i++)
+	{
+		m_CtrlSelectDisk.SetItemHeightEx(i, 24, m_ZoomRatio, m_FontRatio);
+	}
 
 	Invalidate();
 }

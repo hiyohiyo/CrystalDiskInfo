@@ -10,7 +10,6 @@
 #include "DialogFx.h"
 #include "UtilityFx.h"
 #include "OsInfoFx.h"
-#include "DarkMode.h"
 
 #include <Shlwapi.h>
 #include <strsafe.h>
@@ -22,8 +21,6 @@ using namespace Gdiplus;
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0
 #endif
-
-extern bool g_darkModeEnabled;
 
 ////------------------------------------------------
 //   CDialogFx
@@ -69,6 +66,7 @@ BEGIN_MESSAGE_MAP(CDialogFx, CDialog)
 	ON_MESSAGE(WM_DPICHANGED, &CDialogFx::OnDpiChanged)
 	ON_MESSAGE(WM_DISPLAYCHANGE, &CDialogFx::OnDisplayChange)
 	ON_MESSAGE(WM_SYSCOLORCHANGE, &CDialogFx::OnSysColorChange)
+	ON_MESSAGE(WM_SETTINGCHANGE, &CDialogFx::OnSettingChange)
 	ON_MESSAGE(WM_ENTERSIZEMOVE, &CDialogFx::OnEnterSizeMove)
 	ON_MESSAGE(WM_EXITSIZEMOVE, &CDialogFx::OnExitSizeMove)
 END_MESSAGE_MAP()
@@ -100,11 +98,6 @@ BOOL CDialogFx::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	m_bHighContrast = IsHighContrast();
-
-	m_bDarkMode = InitDarkMode();
-	AllowDarkModeForWindow(m_hWnd, g_darkModeEnabled);
-	RefreshTitleBarThemeColor(m_hWnd);
-
 	CDC *pDC = GetDC();
 	m_Dpi = GetDeviceCaps(pDC->m_hDC, LOGPIXELSY);
 	ReleaseDC(pDC);
@@ -157,7 +150,7 @@ void CDialogFx::PostNcDestroy()
 
 void CDialogFx::UpdateDialogSize()
 {
-
+	m_bDarkMode = SetDarkMode(m_hWnd);
 }
 
 void CDialogFx::SetClientSize(int sizeX, int sizeY, DWORD menuLine)
@@ -193,7 +186,7 @@ void CDialogFx::SetClientSize(int sizeX, int sizeY, DWORD menuLine)
 	GetClientRect(&clientRc);
 }
 
-void CDialogFx::UpdateBackground(BOOL resize)
+void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 {
 	HRESULT hr;
 	BOOL    br = FALSE;
@@ -271,7 +264,7 @@ void CDialogFx::UpdateBackground(BOOL resize)
 
 		m_BrushDlg.DeleteObject();
 		COLORREF bkColor;
-		if (g_darkModeEnabled)
+		if (bDarkMode)
 		{
 			bkColor = RGB(32, 32, 32);
 		}
@@ -476,6 +469,10 @@ void CDialogFx::OnTimer(UINT_PTR nIDEvent)
 		KillTimer(TimerUpdateDialogSizeSysColorChange);
 		UpdateDialogSize();
 		break;
+	case TimerUpdateDialogSizeSettingChange:
+		KillTimer(TimerUpdateDialogSizeSettingChange);
+		UpdateDialogSize();
+		break;
 	}
 }
 
@@ -553,6 +550,18 @@ afx_msg LRESULT CDialogFx::OnSysColorChange(WPARAM wParam, LPARAM lParam)
 	m_bHighContrast = IsHighContrast();
 
 	SetTimer(TimerUpdateDialogSizeSysColorChange, TIMER_UPDATE_DIALOG, NULL);
+
+	return 0;
+}
+
+afx_msg LRESULT CDialogFx::OnSettingChange(WPARAM wParam, LPARAM lParam)
+{
+	if (m_bInitializing) { return 0; }
+
+	if (!lstrcmp(LPCTSTR(lParam), L"ImmersiveColorSet")) {
+		//アプリモードが切り替わった。
+		SetTimer(TimerUpdateDialogSizeSettingChange, TIMER_UPDATE_DIALOG, NULL);
+	}
 
 	return 0;
 }
