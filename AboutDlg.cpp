@@ -123,12 +123,12 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlProjectSite5.ShowWindow(SW_HIDE);
 	m_CtrlSecretVoice.InitControl(132, 324, 48, 28, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 #else
-	m_CtrlProjectSite1.InitControl(340, 324, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, m_bDarkMode);
-	m_CtrlProjectSite2.InitControl(340, 368, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, m_bDarkMode);
-	m_CtrlProjectSite3.InitControl(340, 392, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, m_bDarkMode);
-	m_CtrlProjectSite4.InitControl(340, 416, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, m_bDarkMode);
-	m_CtrlProjectSite5.InitControl(320, 192, 292, 92, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, m_bDarkMode);
-	m_CtrlSecretVoice.InitControl(200, 412, 40, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, m_bDarkMode);
+	m_CtrlProjectSite1.InitControl(340, 324, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlProjectSite2.InitControl(340, 368, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlProjectSite3.InitControl(340, 392, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlProjectSite4.InitControl(340, 416, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlProjectSite5.InitControl(320, 192, 292, 92, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlSecretVoice.InitControl(200, 412, 40, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 #endif
 	m_CtrlProjectSite1.SetHandCursor();
 	m_CtrlProjectSite2.SetHandCursor();

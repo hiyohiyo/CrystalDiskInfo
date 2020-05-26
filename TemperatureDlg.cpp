@@ -118,11 +118,7 @@ void CTemperatureDlg::UpdateDialogSize()
 	SetDarkModeControl(m_CtrlDefault.GetSafeHwnd(), m_bDarkMode);
 	SetDarkModeControl(m_CtrlScrollbarTemperature.GetSafeHwnd(), m_bDarkMode);
 
-	// SetLayeredWindow(m_CtrlSelectDisk.GetListHwnd(), m_ComboAlpha);
-	for (int i = -1; i < m_CtrlSelectDisk.GetCount(); i++)
-	{
-		m_CtrlSelectDisk.SetItemHeightEx(i, 24, m_ZoomRatio, m_FontRatio);
-	}
+	m_CtrlSelectDisk.SetItemHeightAll(24, m_ZoomRatio, m_FontRatio);
 
 	Invalidate();
 }

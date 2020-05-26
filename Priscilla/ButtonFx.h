@@ -61,7 +61,6 @@ protected:
 	// ToolTip
 	void InitToolTip();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	
 
 	// Message Map
 	DECLARE_MESSAGE_MAP()

@@ -1229,6 +1229,24 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|x64'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Priscilla\EditFx.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|Win32'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|ARM64'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM64'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|ARM'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|ARM'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|x64'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseKureiKei|x64'">..\stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="Priscilla\FontComboBoxFx.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseShizuku|Win32'">../stdafx.h</PrecompiledHeaderFile>
@@ -1406,6 +1424,7 @@
     <ClInclude Include="Priscilla\CommonFx.h" />
     <ClInclude Include="Priscilla\DarkMode.h" />
     <ClInclude Include="Priscilla\DialogFx.h" />
+    <ClInclude Include="Priscilla\EditFx.h" />
     <ClInclude Include="Priscilla\FontComboBoxFx.h" />
     <ClInclude Include="Priscilla\HeaderCtrlFx.h" />
     <ClInclude Include="Priscilla\ListCtrlFx.h" />

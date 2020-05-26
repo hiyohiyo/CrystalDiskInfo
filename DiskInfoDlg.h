@@ -19,6 +19,7 @@
 
 #include "DialogFx.h"
 #include "MainDialogFx.h"
+#include "EditFx.h"
 #include "ListCtrlFx.h"
 #include "OsInfoFx.h"
 
@@ -143,19 +144,19 @@ protected:
 	CStaticFx			m_CtrlLabelDiskStatus;
 	CStaticFx			m_CtrlLabelTemperature;
 
-	CStaticFx			m_CtrlModel;
-	CStaticFx			m_CtrlFirmware;
-	CStaticFx			m_CtrlSerialNumber;
-	CStaticFx			m_CtrlInterface;
-	CStaticFx			m_CtrlTransferMode;
-	CStaticFx			m_CtrlDriveMap;
-	CStaticFx			m_CtrlBufferSize;
-	CStaticFx			m_CtrlNvCacheSize;
-	CStaticFx			m_CtrlRotationRate;
-	CStaticFx			m_CtrlPowerOnCount;
-	CStaticFx			m_CtrlPowerOnHours;
-	CStaticFx			m_CtrlAtaAtapi;
-	CStaticFx			m_CtrlFeature;
+	CEditFx				m_CtrlModel;
+	CEditFx				m_CtrlFirmware;
+	CEditFx				m_CtrlSerialNumber;
+	CEditFx				m_CtrlInterface;
+	CEditFx				m_CtrlTransferMode;
+	CEditFx				m_CtrlDriveMap;
+	CEditFx				m_CtrlBufferSize;
+	CEditFx				m_CtrlNvCacheSize;
+	CEditFx				m_CtrlRotationRate;
+	CEditFx				m_CtrlPowerOnCount;
+	CEditFx				m_CtrlPowerOnHours;
+	CEditFx				m_CtrlAtaAtapi;
+	CEditFx				m_CtrlFeature;
 	CButtonFx			m_CtrlDiskStatus;
 	CButtonFx			m_CtrlTemperature;
 	CButtonFx			m_CtrlLife;

@@ -1233,7 +1233,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 
 	if (m_bHighContrast)
 	{
-		m_CtrlModel.InitControl(40 + m_OffsetX, 56, 592, 32, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE);
+		m_CtrlModel.InitControl(40 + m_OffsetX, 56, 592, 32, m_ZoomRatio, &m_BkDC, NULL, 0, ES_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE);
 		m_CtrlButtonPreDisk.InitControl (  8 + m_OffsetX, 60, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"preDisk"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
 		m_CtrlButtonNextDisk.InitControl(640 + m_OffsetX, 60, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"nextDisk"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
 
@@ -1242,7 +1242,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	}
 	else
 	{
-		m_CtrlModel.InitControl(32 + m_OffsetX, 52, 608, 32, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE);
+		m_CtrlModel.InitControl(32 + m_OffsetX, 52, 608, 32, m_ZoomRatio, &m_BkDC, NULL, 0, ES_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE);
 		m_CtrlButtonPreDisk.InitControl(8 + m_OffsetX, 56, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"preDisk"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
 		m_CtrlButtonNextDisk.InitControl(640 + m_OffsetX, 56, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"nextDisk"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
 
@@ -1342,7 +1342,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlAtaAtapi.SetMargin(0, 2, 0, 0, m_ZoomRatio);
 	m_CtrlFeature.SetMargin(0, 2, 0, 0, m_ZoomRatio);
 
-	m_CtrlFirmware.InitControl    (256 + m_OffsetX,  88, 180, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
+	m_CtrlFirmware.InitControl    (256 + m_OffsetX,  88, 180, 20, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
 	m_CtrlSerialNumber.InitControl(256 + m_OffsetX, 112, 180, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
 	m_CtrlInterface.InitControl   (256 + m_OffsetX, 136, 180, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
 	m_CtrlTransferMode.InitControl(256 + m_OffsetX, 160, 180, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
@@ -1393,6 +1393,21 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlRotationRate.SetDrawFrame(TRUE);
 	m_CtrlPowerOnCount.SetDrawFrame(TRUE);
 	m_CtrlPowerOnHours.SetDrawFrame(TRUE);
+
+
+	m_CtrlFirmware.Adjust();
+	m_CtrlSerialNumber.Adjust();
+	m_CtrlInterface.Adjust();
+	m_CtrlTransferMode.Adjust();
+	m_CtrlDriveMap.Adjust();
+	m_CtrlAtaAtapi.Adjust();
+	m_CtrlFeature.Adjust();
+
+	m_CtrlBufferSize.Adjust();
+	m_CtrlNvCacheSize.Adjust();
+	m_CtrlRotationRate.Adjust();
+	m_CtrlPowerOnCount.Adjust();
+	m_CtrlPowerOnHours.Adjust();
 
 	CRect rect;
 	GetClientRect(&rect);

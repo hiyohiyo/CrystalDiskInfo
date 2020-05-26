@@ -30,6 +30,7 @@ public:
 	);
 	void SetFontHeight(int height, double zoomRatio, double fontRatio = 1.0);
 	void SetItemHeightEx(int nIndex, int height, double zoomRatio, double fontRatio = 1.0);
+	void SetItemHeightAll(int height, double zoomRatio, double fontRatio = 1.0);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);

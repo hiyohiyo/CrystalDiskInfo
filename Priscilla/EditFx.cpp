@@ -77,6 +77,17 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 		m_TextAlign = textAlign;
 		ModifyStyle(0, m_TextAlign);
 	}
+	
+	if (m_ToolTip.m_hWnd != NULL)
+	{
+		if (m_ToolTip.GetToolCount() != 0)
+		{
+			m_ToolTip.DelTool(this, 1);
+		}
+		CRect rect;
+		GetClientRect(rect);
+		m_ToolTip.AddTool(this, m_ToolTipText, rect, 1);
+	}
 
 	m_bHighContrast = bHighContrast;
 	m_bDarkMode = bDarkMode;
@@ -137,6 +148,32 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 		if (!LoadBitmap(imagePath))
 		{
 		}
+	}
+	else if (renderMode & OwnerDrawTransparent)
+	{
+		m_ImageCount = 1;
+		m_CtrlImage.Destroy();
+		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy * m_ImageCount, 32);
+		m_CtrlBitmap.Detach();
+		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
+
+		DWORD length = m_CtrlSize.cx * m_CtrlSize.cy * m_ImageCount * 4;
+		BYTE* bitmapBits = new BYTE[length];
+		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
+
+		for (int y = 0; y < (int)(m_CtrlSize.cy * m_ImageCount); y++)
+		{
+			for (int x = 0; x < m_CtrlSize.cx; x++)
+			{
+				//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = 255;
+				//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = 255;
+				//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = 255;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = (BYTE)0;
+			}
+		}
+
+		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
+		delete[] bitmapBits;
 	}
 	else
 	{
@@ -355,7 +392,7 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 // Font
 //------------------------------------------------
 
-void CEditFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio,
+void CEditFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio,
      COLORREF textColor, LONG fontWeight)
 {
 	LOGFONT logFont = { 0 };
@@ -376,7 +413,16 @@ void CEditFx::SetFontEx(CString face, int size, double zoomRatio, double fontRat
 	m_Font.CreateFontIndirect(&logFont);
 	SetFont(&m_Font);
 
+	logFont.lfHeight = (LONG)(-1 * sizeToolTip * zoomRatio);
+	m_FontToolTip.DeleteObject();
+	m_FontToolTip.CreateFontIndirect(&logFont);
+
 	m_TextColor = textColor;
+
+	if (m_ToolTip.m_hWnd != NULL)
+	{
+		m_ToolTip.SetFont(&m_FontToolTip);
+	}
 }
 
 //------------------------------------------------
@@ -398,4 +444,67 @@ void CEditFx::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
 		CEdit::OnKeyDown(nChar, nRepCnt, nFlags);
 	}
+}
+
+//------------------------------------------------
+// ToolTip
+//------------------------------------------------
+
+void CEditFx::SetToolTipText(LPCTSTR text)
+{
+	if (text == NULL) { return; }
+
+	InitToolTip();
+	m_ToolTipText = text;
+	if (m_ToolTip.GetToolCount() == 0)
+	{
+		CRect rect;
+		GetClientRect(rect);
+		m_ToolTip.AddTool(this, m_ToolTipText, rect, 1);
+	}
+	else
+	{
+		m_ToolTip.UpdateTipText(m_ToolTipText, this, 1);
+	}
+
+	SetToolTipActivate(TRUE);
+}
+
+void CEditFx::SetToolTipActivate(BOOL bActivate)
+{
+	if (m_ToolTip.GetToolCount() == 0) { return; }
+	m_ToolTip.Activate(bActivate);
+}
+
+void CEditFx::SetToolTipWindowText(LPCTSTR text)
+{
+	SetToolTipText(text);
+	SetWindowText(text);
+}
+
+CString CEditFx::GetToolTipText()
+{
+	return m_ToolTipText;
+}
+
+void CEditFx::InitToolTip()
+{
+	if (m_ToolTip.m_hWnd == NULL)
+	{
+		m_ToolTip.Create(this, TTS_ALWAYSTIP | TTS_BALLOON | TTS_NOANIMATE | TTS_NOFADE);
+		m_ToolTip.Activate(FALSE);
+		m_ToolTip.SetFont(&m_FontToolTip);
+		m_ToolTip.SendMessageW(TTM_SETMAXTIPWIDTH, 0, 1024);
+		m_ToolTip.SetDelayTime(TTDT_AUTOPOP, 8000);
+		m_ToolTip.SetDelayTime(TTDT_INITIAL, 500);
+		m_ToolTip.SetDelayTime(TTDT_RESHOW, 100);
+	}
+}
+
+BOOL CEditFx::PreTranslateMessage(MSG* pMsg)
+{
+	InitToolTip();
+	m_ToolTip.RelayEvent(pMsg);
+
+	return CEdit::PreTranslateMessage(pMsg);
 }

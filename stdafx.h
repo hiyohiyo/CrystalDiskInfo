@@ -106,8 +106,8 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.6.0 Beta1"
-#define PRODUCT_RELEASE				L"2020/05/24"
+#define PRODUCT_VERSION				L"8.6.0 Beta2"
+#define PRODUCT_RELEASE				L"2020/05/26"
 #define PRODUCT_COPY_YEAR			L"2008-2020"
 #define PRODUCT_COPYRIGHT			L"© 2008-2020 hiyohiyo"
 #define PRODUCT_LICENSE				L"The MIT License"

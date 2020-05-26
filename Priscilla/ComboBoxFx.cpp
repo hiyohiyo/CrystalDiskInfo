@@ -188,6 +188,17 @@ void CComboBoxFx::SetItemHeightEx(int nIndex, int height, double zoomRatio, doub
 	}
 }
 
+void CComboBoxFx::SetItemHeightAll(int height, double zoomRatio, double fontRatio)
+{
+	CRect rc = { 0 };
+	GetWindowRect(&rc);
+	CComboBox::SetItemHeight(-1, (UINT)(height * zoomRatio - rc.Height() + GetItemHeight(-1)));
+
+	for(int i = 0; i < this->GetCount(); i++)
+	{
+		CComboBox::SetItemHeight(i, (UINT)(height * zoomRatio * fontRatio));
+	}
+}
 
 void CComboBoxFx::SetMargin(int top, int left, int bottom, int right, double zoomRatio)
 {
