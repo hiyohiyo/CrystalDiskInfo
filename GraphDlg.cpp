@@ -207,7 +207,7 @@ BOOL CGraphDlg::OnInitDialog()
 BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_WM_GETMINMAXINFO()
 	ON_WM_SIZE()
-	ON_COMMAND(ID_FILE_EXIT, &CGraphDlg::OnExit)
+	ON_COMMAND(ID_EXIT, &CGraphDlg::OnExit)
 	ON_COMMAND(ID_NORTH_WEST, &CGraphDlg::OnNorthWest)
 	ON_COMMAND(ID_NORTH_EAST, &CGraphDlg::OnNorthEast)
 	ON_COMMAND(ID_SOUTH_WEST, &CGraphDlg::OnSouthWest)
@@ -1314,7 +1314,7 @@ void CGraphDlg::InitMenu()
 	cstr = i18n(_T("Menu"), _T("CUSTOMIZE"));
 	menu->ModifyMenu(ID_CUSTOMIZE, MF_STRING, ID_CUSTOMIZE, cstr);
  	cstr = i18n(_T("Menu"), _T("EXIT"));
-	menu->ModifyMenu(ID_FILE_EXIT, MF_STRING, ID_FILE_EXIT, cstr);
+	menu->ModifyMenu(ID_EXIT, MF_STRING, ID_EXIT, cstr);
 	cstr = i18n(_T("Menu"), _T("PAINT_WEEKEND"));
 	menu->ModifyMenu(ID_PAINT_WEEKEND, MF_STRING, ID_PAINT_WEEKEND, cstr);
 	cstr = i18n(_T("Menu"), _T("ALL"));

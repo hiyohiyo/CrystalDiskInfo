@@ -1512,16 +1512,22 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	//////////////////////////////////////////////////////////////////////////////////
 	// File
 	//////////////////////////////////////////////////////////////////////////////////
+	cstr = i18n(_T("Menu"), _T("SAVE_TEXT"));
+	cstr += _T("\tCtrl + T");
+	menu->ModifyMenu(ID_SAVE_TEXT, MF_STRING, ID_SAVE_TEXT, cstr);
+	cstr = i18n(_T("Menu"), _T("SAVE_IMAGE"));
+	cstr += _T("\tCtrl + S");
+	menu->ModifyMenu(ID_SAVE_IMAGE, MF_STRING, ID_SAVE_IMAGE, cstr);
 	cstr = i18n(_T("Menu"), _T("EXIT"));
 	cstr += _T("\tAlt + F4");
-	menu->ModifyMenu(ID_FILE_EXIT, MF_STRING, ID_FILE_EXIT, cstr);
+	menu->ModifyMenu(ID_EXIT, MF_STRING, ID_EXIT, cstr);
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// Edit
 	//////////////////////////////////////////////////////////////////////////////////
 	cstr = i18n(_T("Menu"), _T("COPY"));
-	cstr += _T("\tCtrl + C");
-	menu->ModifyMenu(ID_EDIT_COPY, MF_STRING, ID_EDIT_COPY, cstr);
+	cstr += _T("\tCtrl + Alt + C");
+	menu->ModifyMenu(ID_COPY, MF_STRING, ID_COPY, cstr);
 
 	subMenu.Attach(menu->GetSubMenu(1)->GetSafeHmenu());
 	cstr = i18n(_T("Menu"), _T("COPY_OPTION"));
@@ -1751,9 +1757,9 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	cstr = i18n(_T("Menu"), _T("HELP_WEB")) + _T("\tF1");
 	menu->ModifyMenu(ID_HELP, MF_STRING, ID_HELP, cstr);
 	cstr = i18n(_T("Menu"), _T("HELP_ABOUT"));
-	menuState = menu->GetMenuState(ID_HELP_ABOUT, MF_BYCOMMAND);
-	menu->ModifyMenu(ID_HELP_ABOUT, MF_STRING, ID_HELP_ABOUT, cstr);
-	menu->EnableMenuItem(ID_HELP_ABOUT, menuState);
+	menuState = menu->GetMenuState(ID_ABOUT, MF_BYCOMMAND);
+	menu->ModifyMenu(ID_ABOUT, MF_STRING, ID_ABOUT, cstr);
+	menu->EnableMenuItem(ID_ABOUT, menuState);
 
 	cstr = i18n(_T("Menu"), _T("HELP_ABOUT_SMART"));
 	menu->ModifyMenu(ID_HELP_ABOUT_SMART, MF_STRING, ID_HELP_ABOUT_SMART, cstr);

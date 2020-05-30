@@ -374,7 +374,7 @@ protected:
 
 	void RebuildListHeader(DWORD index, BOOL forceUpdate = FALSE);
 
-	void CopySave(CString fileName);
+	void SaveText(CString fileName);
 
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
@@ -382,10 +382,12 @@ protected:
 
 public:
 	afx_msg void OnExit();
+	afx_msg void OnSaveText();
+	afx_msg void OnSaveImage();
 	afx_msg void OnAbout();
 	afx_msg void OnHideSmartInfo();
 	afx_msg void OnHideSerialNumber();
-	afx_msg void OnEditCopy();
+	afx_msg void OnCopy();
 	afx_msg void OnCrystalDewWorld();
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnSize(UINT nType, int cx, int cy);

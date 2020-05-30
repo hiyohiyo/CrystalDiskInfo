@@ -403,6 +403,27 @@ void CDiskInfoDlg::OnCancel()
 	}
 }
 
+void CDiskInfoDlg::OnSaveText()
+{
+	CString path;
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+	path.Format(L"%s_%04d%02d%02d%0d%02d%02d", PRODUCT_NAME, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+
+	CString filter = L"TEXT (*.txt)|*.txt||";
+	CFileDialog save(FALSE, L"txt", path, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER, filter);
+
+	if (save.DoModal() == IDOK)
+	{
+		SaveText(save.GetPathName());
+	}	
+}
+
+void CDiskInfoDlg::OnSaveImage()
+{
+	SaveImage();
+}
+
 void CDiskInfoDlg::OnExit()
 {
 	ShowWindow(SW_HIDE);
@@ -559,12 +580,14 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_WM_GETMINMAXINFO()
 	ON_WM_SIZE()
 	ON_WM_TIMER()
-	ON_COMMAND(ID_FILE_EXIT, &CDiskInfoDlg::OnExit)
-	ON_COMMAND(ID_HELP_ABOUT, &CDiskInfoDlg::OnAbout)
+	ON_COMMAND(ID_SAVE_TEXT, &CDiskInfoDlg::OnSaveText)
+	ON_COMMAND(ID_SAVE_IMAGE, &CDiskInfoDlg::OnSaveImage)
+	ON_COMMAND(ID_EXIT, &CDiskInfoDlg::OnExit)
+	ON_COMMAND(ID_ABOUT, &CDiskInfoDlg::OnAbout)
 	ON_COMMAND(ID_HIDE_SMART_INFO, &CDiskInfoDlg::OnHideSmartInfo)
 	ON_COMMAND(ID_HIDE_SERIAL_NUMBER, &CDiskInfoDlg::OnHideSerialNumber)
-	ON_COMMAND(ID_EDIT_COPY, &CDiskInfoDlg::OnEditCopy)
-	ON_COMMAND(ID_HELP_CRYSTALDEWWORLD, &CDiskInfoDlg::OnCrystalDewWorld)
+	ON_COMMAND(ID_COPY, &CDiskInfoDlg::OnCopy)
+	ON_COMMAND(ID_CRYSTALDEWWORLD, &CDiskInfoDlg::OnCrystalDewWorld)
 	ON_COMMAND(ID_REFRESH, &CDiskInfoDlg::OnRefresh)
 	ON_COMMAND(ID_HELP_ABOUT_SMART, &CDiskInfoDlg::OnHelpAboutSmart)
 	ON_COMMAND(ID_AUTO_REFRESH_DISABLE, &CDiskInfoDlg::OnAutoRefreshDisable)
@@ -1249,7 +1272,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 		m_CtrlButtonPreDisk.SetWindowTextW(L"");
 		m_CtrlButtonNextDisk.SetWindowTextW(L"");
 	}
-	m_CtrlModel.SetMargin(2, 0, 0, 0, m_ZoomRatio);
+	m_CtrlModel.Adjust();
 
 	CString className;
 	if (m_Ata.vars.GetCount())
@@ -1394,7 +1417,6 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlPowerOnCount.SetDrawFrame(TRUE);
 	m_CtrlPowerOnHours.SetDrawFrame(TRUE);
 
-
 	m_CtrlFirmware.Adjust();
 	m_CtrlSerialNumber.Adjust();
 	m_CtrlInterface.Adjust();
@@ -1463,7 +1485,7 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 	}
 	flag = TRUE;
 	
-	if(m_bHideSmartInfo == FALSE && m_bInitializing == FALSE && m_bDpiChanging == FALSE)
+	if(m_bHideSmartInfo == FALSE && m_bInitializing == FALSE && m_bDpiChanging == FALSE && cy > 0)
 	{
 		CString cstr;
 		m_SizeY = (int)(cy / m_ZoomRatio);

@@ -125,8 +125,8 @@ void CFontSelectionDlg::UpdateDialogSize()
 	m_CtrlSetDefault.SetHandCursor();
 	m_CtrlOk.SetHandCursor();
 
-	SetDarkModeControl(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
 	SetDarkModeControl(m_CtrlSetDefault.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
 
 	Invalidate();
 }

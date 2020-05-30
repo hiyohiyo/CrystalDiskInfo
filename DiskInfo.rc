@@ -704,43 +704,30 @@ BEGIN
     PUSHBUTTON      "",IDC_BUTTON_VOICE,338,202,50,14
     PUSHBUTTON      "",IDC_BUTTON_COPYRIGHT,406,202,50,14, BS_OWNERDRAW | BS_CENTER | BS_MULTILINE | BS_NOTIFY | WS_TABSTOP
     CONTROL         "",IDC_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,0,257,501,89
-    // LTEXT           "Model",IDC_VALUE_MODEL,81,52,340,16,SS_NOTIFY
     CONTROL         "", IDC_VALUE_MODEL, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Firmware",IDC_LABEL_FIRMWARE,107,82,67,12,SS_NOTIFY
-    // LTEXT           "FirmwareValue",IDC_VALUE_FIRMWARE,181,79,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_FIRMWARE, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Serial Number",IDC_LABEL_SERIAL_NUMBER,106,98,65,12,SS_NOTIFY
-    // LTEXT           "Serial Number Value",IDC_VALUE_SERIAL_NUMBER,180,97,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_SERIAL_NUMBER, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Interface",IDC_LABEL_INTERFACE,106,113,66,12,SS_NOTIFY
-    // LTEXT           "Interface Value",IDC_VALUE_INTERFACE,180,113,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_INTERFACE, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Transfer Mode",IDC_LABEL_TRANSFER_MODE,106,129,69,12,SS_NOTIFY
-    // LTEXT           "Transfer Mode Value",IDC_VALUE_TRANSFER_MODE,180,129,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_TRANSFER_MODE, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Drive Letter",IDC_LABEL_DRIVE_MAP,106,148,67,12,SS_NOTIFY
-    // LTEXT           "Drive Letter Value",IDC_VALUE_DRIVE_MAP,180,145,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_DRIVE_MAP, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Standard",IDC_LABEL_ATA_ATAPI,106,164,67,12,SS_NOTIFY
-    // LTEXT           "Standard Value",IDC_VALUE_ATA_ATAPI,180,161,313,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_ATA_ATAPI, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Feature",IDC_LABEL_FEATURE,106,180,67,12,SS_NOTIFY
-    // LTEXT           "Feature Value",IDC_VALUE_FEATURE,180,177,314,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_FEATURE, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Buffer Size",IDC_LABEL_BUFFER_SIZE,287,79,67,12,SS_NOTIFY
-    // LTEXT           "Buffer Size Value",IDC_VALUE_BUFFER_SIZE,361,76,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_BUFFER_SIZE, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "NV Cache Size",IDC_LABEL_NV_CACHE_SIZE,286,97,67,12,SS_NOTIFY
-    // LTEXT           "NV Cache Size Value",IDC_VALUE_NV_CACHE_SIZE,360,94,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_NV_CACHE_SIZE, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Rotation Rate",IDC_LABEL_ROTATION_RATE,287,113,67,12,SS_NOTIFY
-    // LTEXT           "Rotation Rate Value",IDC_VALUE_ROTATION_RATE,361,110,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_ROTATION_RATE, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Power On Count",IDC_LABEL_POWER_ON_COUNT,285,127,67,12,SS_NOTIFY
-    // LTEXT           "Power On Count Value",IDC_VALUE_POWER_ON_COUNT,359,124,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_POWER_ON_COUNT, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Power On Hours",IDC_LABEL_POWER_ON_HOURS,283,145,67,12,SS_NOTIFY
-    // LTEXT           "Power On Hours Value",IDC_VALUE_POWER_ON_HOURS,357,142,86,13,SS_NOTIFY
     CONTROL         "", IDC_VALUE_POWER_ON_HOURS, "EDIT", WS_CHILD | ES_MULTILINE | ES_WANTRETURN | ES_READONLY, 1, 1, 1, 1,
     LTEXT           "Health Status",IDC_LABEL_HEALTH_STATUS,12,82,67,12,SS_NOTIFY
     CTEXT           "Temperature",IDC_LABEL_TEMPERATURE,9,145,67,12,SS_NOTIFY
@@ -1017,11 +1004,13 @@ IDR_MAIN_MENU MENU
 BEGIN
     POPUP "&File"
     BEGIN
-        MENUITEM "&Exit",                       ID_FILE_EXIT
+        MENUITEM "Save (&text)",                    ID_SAVE_TEXT
+        MENUITEM "Save (&image)",                   ID_SAVE_IMAGE
+        MENUITEM "&Exit",                           ID_EXIT
     END
     POPUP "&Edit"
     BEGIN
-        MENUITEM "&Copy\tCtrl + C",             ID_EDIT_COPY
+        MENUITEM "&Copy\tCtrl + Shift + C",         ID_COPY
         POPUP "Options"
         BEGIN
             MENUITEM "IDENTIFY_DEVICE",             ID_DUMP_IDENTIFY_DEVICE
@@ -1033,7 +1022,7 @@ BEGIN
     END
     POPUP "F&unction"
     BEGIN
-        MENUITEM "Refresh\tF5",                 ID_REFRESH
+        MENUITEM "Refresh\tF5",                     ID_REFRESH
         POPUP "Auto Refresh"
         BEGIN
             MENUITEM "1 min.",                      ID_AUTO_REFRESH_01_MIN
@@ -1047,19 +1036,19 @@ BEGIN
 			MENUITEM "360 min.",					ID_AUTO_REFRESH_360_MIN
 			MENUITEM "720 min.",					ID_AUTO_REFRESH_720_MIN
 			MENUITEM "1440 min.",					ID_AUTO_REFRESH_1440_MIN
-			MENUITEM "Disable", ID_AUTO_REFRESH_DISABLE
+			MENUITEM "Disable",                     ID_AUTO_REFRESH_DISABLE
         END
         POPUP "Auto Refresh Target"
         BEGIN
             MENUITEM "DUMMY",                       ID_DUMMY
         END
-        MENUITEM "Rescan\tF6",                  ID_RESCAN
+        MENUITEM "Rescan\tF6",                      ID_RESCAN
         MENUITEM SEPARATOR
-        MENUITEM "Graph",                       ID_GRAPH
+        MENUITEM "Graph",                           ID_GRAPH
         MENUITEM SEPARATOR
-        MENUITEM "Hide Serial Number",          ID_HIDE_SERIAL_NUMBER
-        MENUITEM "Resident",                    ID_RESIDENT
-        MENUITEM "Startup",                     ID_STARTUP
+        MENUITEM "Hide Serial Number",              ID_HIDE_SERIAL_NUMBER
+        MENUITEM "Resident",                        ID_RESIDENT
+        MENUITEM "Startup",                         ID_STARTUP
         MENUITEM SEPARATOR
         POPUP "Alert Features"
         BEGIN
@@ -1078,23 +1067,23 @@ BEGIN
             MENUITEM SEPARATOR
             POPUP "Temperature"
             BEGIN
-                MENUITEM "Celsius",                     ID_CELSIUS
-                MENUITEM "Fahrenheit",                  ID_FAHRENHEIT
+                MENUITEM "Celsius",                 ID_CELSIUS
+                MENUITEM "Fahrenheit",              ID_FAHRENHEIT
             END
             POPUP "Auto Detection"
             BEGIN
-                MENUITEM "5 sec.",                      ID_AUTO_DETECTION_05_SEC
-                MENUITEM "10 sec.",                     ID_AUTO_DETECTION_10_SEC
-                MENUITEM "20 sec.",                     ID_AUTO_DETECTION_20_SEC
-                MENUITEM "30 sec.",                     ID_AUTO_DETECTION_30_SEC
-                MENUITEM "Disable",                     ID_AUTO_DETECTION_DISABLE
+                MENUITEM "5 sec.",                  ID_AUTO_DETECTION_05_SEC
+                MENUITEM "10 sec.",                 ID_AUTO_DETECTION_10_SEC
+                MENUITEM "20 sec.",                 ID_AUTO_DETECTION_20_SEC
+                MENUITEM "30 sec.",                 ID_AUTO_DETECTION_30_SEC
+                MENUITEM "Disable",                 ID_AUTO_DETECTION_DISABLE
             END
             POPUP "Raw Values"
             BEGIN
-                MENUITEM "16 [HEX]",                    ID_RAW_VALUES_16
-                MENUITEM "10 [DEC]",                    ID_RAW_VALUES_10_ALL
-                MENUITEM "10 [DEC] - 2byte",            ID_RAW_VALUES_2BYTE
-                MENUITEM "10 [DEC] - 1byte",            ID_RAW_VALUES_1BYTE
+                MENUITEM "16 [HEX]",                ID_RAW_VALUES_16
+                MENUITEM "10 [DEC]",                ID_RAW_VALUES_10_ALL
+                MENUITEM "10 [DEC] - 2byte",        ID_RAW_VALUES_2BYTE
+                MENUITEM "10 [DEC] - 1byte",        ID_RAW_VALUES_1BYTE
             END
             POPUP "Wait Time at Startup"
             BEGIN
@@ -1188,10 +1177,10 @@ BEGIN
     POPUP "&Help"
     BEGIN
         MENUITEM "Help [Web]",                  ID_HELP
-        MENUITEM "Crystal Dew World [Web]",     ID_HELP_CRYSTALDEWWORLD
+        MENUITEM "Crystal Dew World [Web]",     ID_CRYSTALDEWWORLD
         MENUITEM "About S.M.A.R.T. (Wikipedia) [Web]", ID_HELP_ABOUT_SMART
         MENUITEM SEPARATOR
-        MENUITEM "About CrystalDiskInfo",       ID_HELP_ABOUT
+        MENUITEM "About CrystalDiskInfo",       ID_ABOUT
     END
     POPUP "&Language"
     BEGIN
@@ -1212,7 +1201,7 @@ BEGIN
     POPUP "File"
     BEGIN
         MENUITEM "&Customize",                  ID_CUSTOMIZE
-        MENUITEM "Exit",                        ID_FILE_EXIT
+        MENUITEM "Exit",                        ID_EXIT
     END
     POPUP "Option"
     BEGIN
@@ -1282,8 +1271,10 @@ END
 
 IDR_ACCELERATOR ACCELERATORS
 BEGIN
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    VK_F4,          ID_FILE_EXIT,           VIRTKEY, ALT, NOINVERT
+    "C",            ID_COPY,                VIRTKEY, CONTROL, SHIFT, NOINVERT
+    "T",            ID_SAVE_TEXT,           VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_SAVE_IMAGE,          VIRTKEY, CONTROL, NOINVERT
+    VK_F4,          ID_EXIT,                VIRTKEY, ALT, NOINVERT
     VK_F1,          ID_HELP,                VIRTKEY, NOINVERT
     VK_F5,          ID_REFRESH,             VIRTKEY, NOINVERT
     VK_F6,          ID_RESCAN,              VIRTKEY, NOINVERT

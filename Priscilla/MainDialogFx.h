@@ -32,6 +32,8 @@ public:
 	CString GetParentTheme1();
 	CString GetParentTheme2();
 	CString GetIniPath();
+	
+	void SaveImage();
 
 protected:
 	void InitMenu();
@@ -43,6 +45,7 @@ protected:
 	BYTE GetControlAlpha(CString name, BYTE defaultAlpha, CString theme);
 	BYTE GetCharacterPosition(CString theme);
 	CString GetParentTheme(int i, CString theme);
+	void SaveImageDlg(CImage* image);
 
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);

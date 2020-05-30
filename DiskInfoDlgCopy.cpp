@@ -46,7 +46,7 @@ CHAR CDiskInfoDlg::AsciiFilter(BYTE ch)
 	return ch;
 }
 
-void CDiskInfoDlg::CopySave(CString fileName)
+void CDiskInfoDlg::SaveText(CString fileName)
 {
 	CString cstr, clip, driveTemplate, drive, feature, temp, line, csd;
 
@@ -915,17 +915,20 @@ void CDiskInfoDlg::CopySave(CString fileName)
 	}
 	else
 	{
-		clip.Replace(_T("\r\n"), _T("\n"));
-		FILE *fp;
-		_tfopen_s(&fp, fileName, _T("w, ccs=UTF-16LE"));
-		CStdioFile file(fp);
-		file.WriteString(clip);
+		int bufSize = ::WideCharToMultiByte(CP_UTF8, 0, clip, -1, NULL, 0, NULL, NULL);
+		CHAR* utf8 = new CHAR[bufSize];
+		::WideCharToMultiByte(CP_UTF8, 0, clip, -1, utf8, bufSize, NULL, NULL);
+
+		CFile file;
+		file.Open(fileName, CFile::modeCreate | CFile::modeWrite);
+		file.Write(utf8, bufSize - 1);
 		file.Close();
-		fclose(fp);
+
+		delete[] utf8;
 	}
 }
 
-void CDiskInfoDlg::OnEditCopy()
+void CDiskInfoDlg::OnCopy()
 {
-	CopySave(_T(""));
+	SaveText(_T(""));
 }

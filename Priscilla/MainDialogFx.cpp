@@ -504,6 +504,111 @@ CString CMainDialogFx::GetParentTheme(int i, CString theme)
 	return cstr;
 }
 
+void CMainDialogFx::SaveImage()
+{
+	BOOL bDwmEnabled = FALSE;
+
+	static HMODULE hModule = LoadLibraryEx(L"dwmapi.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
+	typedef HRESULT(WINAPI* FuncDwmGetWindowAttribute) (HWND hwnd, DWORD dwAttribute, PVOID pvAttribute, DWORD cbAttribute);
+	typedef HRESULT(WINAPI* FuncDwmIsCompositionEnabled)(BOOL* pfEnabled);
+	static FuncDwmGetWindowAttribute pDwmGetWindowAttribute = (FuncDwmGetWindowAttribute)GetProcAddress(hModule, "DwmGetWindowAttribute");
+	static FuncDwmIsCompositionEnabled pDwmIsCompositionEnabled = (FuncDwmIsCompositionEnabled)GetProcAddress(hModule, "DwmIsCompositionEnabled");
+	if (hModule && pDwmGetWindowAttribute && pDwmIsCompositionEnabled)
+	{
+		pDwmIsCompositionEnabled(&bDwmEnabled);
+	}
+
+	CRect rc1;
+	CRect rc2;
+
+	CImage* image1 = new CImage();
+	CImage* image2 = new CImage();
+
+	if (bDwmEnabled)
+	{
+		GetWindowRect(&rc1);
+		if (image1->Create(rc1.Width(), rc1.Height(), 32))
+		{
+			HDC hImage1DC = image1->GetDC();
+			if (IsWin81orLater())
+			{
+				::PrintWindow(m_hWnd, hImage1DC, 2); // PW_RENDERFULLCONTENT, Windows 8.1 or later
+			}
+			else
+			{
+				::PrintWindow(m_hWnd, hImage1DC, 0);
+			}
+
+			pDwmGetWindowAttribute(m_hWnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rc2, sizeof(rc2));
+			// cstr.Format(L"Width=%d/%d, Height=%d/%d", rc1.Width(), rc2.Width(), rc1.Height(), rc2.Height());
+			// AfxMessageBox(cstr);
+			if (rc1.Width() > rc2.Width())
+			{
+				if (image2->Create(rc2.Width(), rc2.Height(), 32))
+				{
+					HDC hImage2DC = image2->GetDC();
+					::BitBlt(hImage2DC, 0, 0, rc2.Width(), rc2.Height(), hImage1DC, (rc1.Width() - rc2.Width()) / 2, 0, SRCCOPY);
+					image2->ReleaseDC();
+					SaveImageDlg(image2);
+				}
+				else
+				{
+					SaveImageDlg(image1);
+				}
+			}
+			else
+			{
+				SaveImageDlg(image1);
+			}
+			image1->ReleaseDC();
+		}
+	}
+	else
+	{
+		GetWindowRect(&rc1);
+		// CString cstr;
+		// cstr.Format(L"Width=%d, Height=%d", rc1.Width(), rc1.Height());
+		// AfxMessageBox(cstr);
+		if (image1->Create(rc1.Width(), rc1.Height(), 32))
+		{
+			HDC hImage1DC = image1->GetDC();
+			if (IsWin81orLater())
+			{
+				::PrintWindow(m_hWnd, hImage1DC, 2); // PW_RENDERFULLCONTENT, Windows 8.1 or later
+			}
+			else
+			{
+				::PrintWindow(m_hWnd, hImage1DC, 0);
+			}
+			SaveImageDlg(image1);
+			image1->ReleaseDC();
+		}
+	}
+
+	SAFE_DELETE(image1);
+	SAFE_DELETE(image2);
+}
+
+void CMainDialogFx::SaveImageDlg(CImage* image)
+{
+	CString path;
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+	path.Format(L"%s_%04d%02d%02d%0d%02d%02d", PRODUCT_NAME, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+
+	CString filter = L"PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp||";
+	CFileDialog save(FALSE, L"", path, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER, filter);
+
+	if (save.DoModal() == IDOK)
+	{
+		HRESULT result = image->Save(save.GetPathName());
+		if (SUCCEEDED(result))
+		{
+			//	AfxMessageBox(L"SUCCEEDED");
+		}
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Task Tray

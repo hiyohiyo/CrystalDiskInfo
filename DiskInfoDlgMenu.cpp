@@ -52,7 +52,7 @@ DWORD CDiskInfoDlg::Decode10X(CString cstr)
 void CDiskInfoDlg::OnAbout()
 {
 	m_AboutDlg = new CAboutDlg(this);
-	m_AboutDlg->Create(CAboutDlg::IDD, m_AboutDlg, ID_HELP_ABOUT, this);
+	m_AboutDlg->Create(CAboutDlg::IDD, m_AboutDlg, ID_ABOUT, this);
 }
 
 void CDiskInfoDlg::OnCustomize()

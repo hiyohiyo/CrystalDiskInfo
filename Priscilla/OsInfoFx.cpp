@@ -331,6 +331,33 @@ BOOL IsWin8orLater()
 	return b;
 }
 
+BOOL IsWin81orLater()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+		OSVERSIONINFOEX osvi;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if (osvi.dwMajorVersion <= 5)
+		{
+			b = FALSE;
+		}
+		else if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion <= 2)
+		{
+			b = FALSE;
+		}
+		else
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
 BOOL IsDarkModeSupport()
 {
 	static BOOL b = -1;

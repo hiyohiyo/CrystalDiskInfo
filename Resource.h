@@ -749,14 +749,15 @@
 #define IDC_FONT_SCALE					1205
 #define IDC_SET_DEFAULT					1206
 
-#define ID_FILE_EXIT                    32771
-#define ID_HELP_ABOUT                   32772
-#define ID_HELP_CRYSTALDEWWORLD         32773
+#define ID_EXIT                         32771
+#define ID_ABOUT                        32772
+#define ID_CRYSTALDEWWORLD              32773
 #define ID_THEME                        32774
 #define ID_FUNCTION                     32775
-#define ID_EDIT                         32783
+#define ID_SAVE_TEXT                    32776
+#define ID_SAVE_IMAGE                   32777
+#define ID_COPY                         32783
 #define ID_LANGUAGE                     32784
-#define ID_ABOUT                        32785
 #define ID_LANGUAGE_DUMMY               32788
 #define ID_THEME_DUMMY                  32789
 #define ID_DUMMY_DUMMY                  32790

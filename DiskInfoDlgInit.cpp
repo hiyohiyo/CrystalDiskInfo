@@ -244,7 +244,7 @@ void CDiskInfoDlg::InitDialogComplete()
 
 		if(! ((CDiskInfoApp*)AfxGetApp())->m_SaveAsText.IsEmpty())
 		{
-			CopySave(((CDiskInfoApp*)AfxGetApp())->m_SaveAsText);
+			SaveText(((CDiskInfoApp*)AfxGetApp())->m_SaveAsText);
 		}
 
 		if(((CDiskInfoApp*)AfxGetApp())->m_bCopyExit)
