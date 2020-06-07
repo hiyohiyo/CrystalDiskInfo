@@ -897,34 +897,35 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		}
 	}
 
-	if(fileName.IsEmpty() && OpenClipboard())
+	if (fileName.IsEmpty())
 	{
-		HGLOBAL clipbuffer;
-		TCHAR* buffer;
-		EmptyClipboard();
-		clipbuffer = GlobalAlloc(GMEM_DDESHARE, sizeof(TCHAR) * (clip.GetLength() + 1));
-		buffer = (TCHAR*)GlobalLock(clipbuffer);
-		_tcscpy_s(buffer, clip.GetLength() + 1, LPCTSTR(clip));
-		GlobalUnlock(clipbuffer);
+		if (OpenClipboard())
+		{
+			HGLOBAL clipbuffer;
+			TCHAR* buffer;
+			EmptyClipboard();
+			clipbuffer = GlobalAlloc(GMEM_DDESHARE, sizeof(TCHAR) * (clip.GetLength() + 1));
+			buffer = (TCHAR*)GlobalLock(clipbuffer);
+			_tcscpy_s(buffer, clip.GetLength() + 1, LPCTSTR(clip));
+			GlobalUnlock(clipbuffer);
 #ifdef _UNICODE
-		SetClipboardData(CF_UNICODETEXT, clipbuffer);
+			SetClipboardData(CF_UNICODETEXT, clipbuffer);
 #else
-		SetClipboardData(CF_OEMTEXT, clipbuffer);
+			SetClipboardData(CF_OEMTEXT, clipbuffer);
 #endif
-		CloseClipboard();
+			CloseClipboard();
+		}
 	}
 	else
 	{
-		int bufSize = ::WideCharToMultiByte(CP_UTF8, 0, clip, -1, NULL, 0, NULL, NULL);
-		CHAR* utf8 = new CHAR[bufSize];
-		::WideCharToMultiByte(CP_UTF8, 0, clip, -1, utf8, bufSize, NULL, NULL);
+		CT2A utf8(clip, CP_UTF8);
 
 		CFile file;
-		file.Open(fileName, CFile::modeCreate | CFile::modeWrite);
-		file.Write(utf8, bufSize - 1);
-		file.Close();
-
-		delete[] utf8;
+		if (file.Open(fileName, CFile::modeCreate | CFile::modeWrite))
+		{
+			file.Write((char*)utf8, (UINT)strlen(utf8));
+			file.Close();
+		}
 	}
 }
 

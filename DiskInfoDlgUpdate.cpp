@@ -1526,7 +1526,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	// Edit
 	//////////////////////////////////////////////////////////////////////////////////
 	cstr = i18n(_T("Menu"), _T("COPY"));
-	cstr += _T("\tCtrl + Alt + C");
+	cstr += _T("\tCtrl + Shift + C");
 	menu->ModifyMenu(ID_COPY, MF_STRING, ID_COPY, cstr);
 
 	subMenu.Attach(menu->GetSubMenu(1)->GetSafeHmenu());

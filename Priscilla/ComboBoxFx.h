@@ -127,4 +127,7 @@ protected:
 	BOOL m_bFocas;
 	BOOL m_bTrackingNow;
 	BOOL m_bHandCursor;
+
+	// Brush
+	CBrush m_BkBrush;
 };

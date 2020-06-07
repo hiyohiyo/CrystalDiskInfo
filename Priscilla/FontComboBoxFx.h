@@ -19,8 +19,9 @@ public:
 
 protected:
 	DECLARE_MESSAGE_MAP()
-
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+
+	HBRUSH m_Brush;
 };
 
 

@@ -58,6 +58,7 @@ CComboBoxFx::CComboBoxFx()
 
 CComboBoxFx::~CComboBoxFx()
 {
+	m_BkBrush.DeleteObject();
 }
 
 IMPLEMENT_DYNAMIC(CComboBoxFx, CComboBox)
@@ -98,6 +99,17 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 	m_BkColorSelected = bkColorSelected;
 	m_GlassColor = glassColor;
 	m_GlassAlpha = glassAlpha;
+
+	// BkBrush
+	m_BkBrush.DeleteObject();
+	if (bDarkMode)
+	{
+		m_BkBrush.CreateSolidBrush(RGB(32, 32, 32));
+	}
+	else
+	{
+		m_BkBrush.CreateSolidBrush(bkColor);
+	}
 
 	if (ES_LEFT <= textAlign && textAlign <= ES_RIGHT)
 	{
@@ -190,6 +202,8 @@ void CComboBoxFx::SetItemHeightEx(int nIndex, int height, double zoomRatio, doub
 
 void CComboBoxFx::SetItemHeightAll(int height, double zoomRatio, double fontRatio)
 {
+	m_FontHeight = (LONG)(-1 * height * zoomRatio * fontRatio);
+
 	CRect rc = { 0 };
 	GetWindowRect(&rc);
 	CComboBox::SetItemHeight(-1, (UINT)(height * zoomRatio - rc.Height() + GetItemHeight(-1)));
@@ -241,6 +255,9 @@ HBRUSH CComboBoxFx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	case CTLCOLOR_EDIT:
 		pDC->SetBkMode(TRANSPARENT);
 		return hbr;
+	case CTLCOLOR_LISTBOX:
+		pDC->SetBkMode(TRANSPARENT);
+		return m_BkBrush;
 	default:
 		return hbr;
 	}

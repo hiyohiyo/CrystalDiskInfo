@@ -381,13 +381,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
-	afx_msg void OnExit();
+	afx_msg void OnCopy();
 	afx_msg void OnSaveText();
 	afx_msg void OnSaveImage();
+	afx_msg void OnExit();
 	afx_msg void OnAbout();
 	afx_msg void OnHideSmartInfo();
 	afx_msg void OnHideSerialNumber();
-	afx_msg void OnCopy();
 	afx_msg void OnCrystalDewWorld();
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnSize(UINT nType, int cx, int cy);

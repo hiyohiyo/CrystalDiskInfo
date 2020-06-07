@@ -30,7 +30,7 @@ BOOL IsX64()
 			}
 		}
 	}
-	return FALSE;
+	return b;
 }
 
 BOOL IsIa64()

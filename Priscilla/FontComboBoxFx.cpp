@@ -16,10 +16,12 @@ IMPLEMENT_DYNAMIC(CFontComboBox, CComboBoxFx)
 
 CFontComboBox::CFontComboBox()
 {
+	CComboBoxFx();
 }
 
 CFontComboBox::~CFontComboBox()
 {
+	m_BkBrush.DeleteObject();
 }
 
 BEGIN_MESSAGE_MAP(CFontComboBox, CComboBoxFx)
