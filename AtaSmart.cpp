@@ -4663,6 +4663,16 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			DebugPrint(debug);
 			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify)){return TRUE; }
 		}
+		
+		debug.Format(_T("DoIdentifyDeviceNVMeIntelRst"));
+		DebugPrint(debug);
+
+		if (DoIdentifyDeviceNVMeIntelRst(physicalDriveId, scsiPort, scsiTargetId, &identify))
+		{
+			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL_RST"));
+			DebugPrint(debug);
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_INTEL_RST, &identify)) { return TRUE; }
+		}
 
 		debug.Format(_T("DoIdentifyDeviceNVMeSamsung"));
 		DebugPrint(debug);
@@ -4683,15 +4693,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_INTEL, &identify)){return TRUE; }
 		}
 
-		debug.Format(_T("DoIdentifyDeviceNVMeIntelRst"));
-		DebugPrint(debug);
 
-		if (DoIdentifyDeviceNVMeIntelRst(physicalDriveId, scsiPort, scsiTargetId, &identify))
-		{
-			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL_RST"));
-			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_INTEL_RST, &identify)) { return TRUE; }
-		}
 	}
 	
 	if(physicalDriveId >= 0)
