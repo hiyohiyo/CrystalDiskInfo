@@ -1055,7 +1055,6 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	}
 
 	m_Model = m_Ata.vars[i].Model;
-	m_CtrlModel.SetToolTipText(m_Ata.vars[i].Enclosure);
 	m_Firmware = m_Ata.vars[i].FirmwareRev;
 
 	static int prePowerOnCount = -1;
@@ -1449,6 +1448,8 @@ DevSleep: Device Sleep\
 	}
 
 	m_ModelCapacity = m_Model + _T(" ") + m_Capacity;
+
+	m_CtrlModel.SetToolTipText(m_ModelCapacity + L"\r\n" + m_Ata.vars[i].Enclosure);
 
 	/*
 	if(m_Ata.vars[i].Life >= 0)
