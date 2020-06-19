@@ -83,7 +83,7 @@ void CSoundSettingDlg::UpdateDialogSize()
 	CDialogFx::UpdateDialogSize();
 
 	ChangeZoomType(m_ZoomType);
-	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
+	SetClientSize(SIZE_X, SIZE_Y, m_ZoomRatio);
 	UpdateBackground(FALSE, m_bDarkMode);
 
 	m_CtrlFilePath.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);

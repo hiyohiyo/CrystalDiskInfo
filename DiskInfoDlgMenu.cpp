@@ -149,7 +149,7 @@ void CDiskInfoDlg::OnHideSmartInfo()
 	{
 		m_SizeX = SIZE_SMART_X;
 		m_SizeY = SIZE_SMART_Y;
-		SetClientSize((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
+		SetClientSize(m_SizeX, m_SizeY, m_ZoomRatio);
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_UNCHECKED);
 		m_bHideSmartInfo = FALSE;
 		WritePrivateProfileStringW(_T("Setting"), _T("HideSmartInfo"), _T("0"), m_Ini);
@@ -158,7 +158,7 @@ void CDiskInfoDlg::OnHideSmartInfo()
 	{
 		m_SizeX = SIZE_X;
 		m_SizeY = SIZE_Y;
-		SetClientSize((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
+		SetClientSize(m_SizeX, m_SizeY, m_ZoomRatio);
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_CHECKED);
 		m_bHideSmartInfo = TRUE;
 		WritePrivateProfileStringW(_T("Setting"), _T("HideSmartInfo"), _T("1"), m_Ini);

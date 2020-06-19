@@ -140,13 +140,13 @@ void CHealthDlg::UpdateDialogSize()
 	CDialogFx::UpdateDialogSize();
 
 	ChangeZoomType(m_ZoomType);
-	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
+	SetClientSize(SIZE_X, SIZE_Y, m_ZoomRatio);
 	UpdateBackground(FALSE, m_bDarkMode);
 
-	m_CtrlScrollbar05.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)( 72 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
-	m_CtrlScrollbarC5.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)(128 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
-	m_CtrlScrollbarC6.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)(184 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
-	m_CtrlScrollbarFF.MoveWindow((DWORD)(16 * m_ZoomRatio), (DWORD)(240 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
+	m_CtrlScrollbar05.MoveWindow((int)(16 * m_ZoomRatio), (int)( 72 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
+	m_CtrlScrollbarC5.MoveWindow((int)(16 * m_ZoomRatio), (int)(128 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
+	m_CtrlScrollbarC6.MoveWindow((int)(16 * m_ZoomRatio), (int)(184 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
+	m_CtrlScrollbarFF.MoveWindow((int)(16 * m_ZoomRatio), (int)(240 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
 
 	m_CtrlLabel05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlLabelC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);

@@ -92,10 +92,10 @@ void CTemperatureDlg::UpdateDialogSize()
 	CDialogFx::UpdateDialogSize();
 
 	ChangeZoomType(m_ZoomType);
-	SetClientSize((DWORD)(SIZE_X * m_ZoomRatio), (DWORD)(SIZE_Y * m_ZoomRatio), 0);
+	SetClientSize(SIZE_X, SIZE_Y, m_ZoomRatio);
 	UpdateBackground(FALSE, m_bDarkMode);
 
-	m_CtrlScrollbarTemperature.MoveWindow((DWORD)(8 * m_ZoomRatio), (DWORD)(44 * m_ZoomRatio), (DWORD)(280 * m_ZoomRatio), (DWORD)(20 * m_ZoomRatio));
+	m_CtrlScrollbarTemperature.MoveWindow((int)(8 * m_ZoomRatio), (int)(44 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
 	m_CtrlValueTemperature.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
    	m_CtrlValueTemperatureF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);

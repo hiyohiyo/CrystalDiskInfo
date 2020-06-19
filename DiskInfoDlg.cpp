@@ -1163,7 +1163,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 		m_SizeX = SIZE_X;
 		m_SizeY = SIZE_MIN_Y;
 		m_bHideSmartInfo = TRUE;
-		SetClientSize((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 0);
+		SetClientSize(m_SizeX, m_SizeY, m_ZoomRatio);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_CHECKED);
@@ -1188,7 +1188,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 			m_SizeY = SIZE_MAX_Y;
 		}
 
-		SetClientSize((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
+		SetClientSize(m_SizeX, m_SizeY, m_ZoomRatio);
 		m_bHideSmartInfo = FALSE;
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_HIDE_SMART_INFO, MF_UNCHECKED);
@@ -1227,11 +1227,12 @@ void CDiskInfoDlg::UpdateDialogSize()
 		else 
 		{		}
 		*/
-		m_CtrlCopyright.InitControl(positionX, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, &m_BkDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
+		m_CtrlCopyright.InitControl((int)(positionX * m_ZoomRatio), (int)(m_SizeY * m_ZoomRatio) - (int)(24 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio), 1.0, &m_BkDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 	}
 	else
 	{
-		m_CtrlCopyright.InitControl(positionX, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, &m_BkDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
+		m_CtrlCopyright.InitControl((int)(positionX * m_ZoomRatio), (int)(m_SizeY * m_ZoomRatio) - (int)(24 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio), 1.0, &m_BkDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
+	//	m_CtrlCopyright.InitControl(positionX, m_SizeY - 24, OFFSET_X, 24, m_ZoomRatio, &m_BkDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 	}
 	
 	m_CtrlCopyright.SetHandCursor();
@@ -1494,43 +1495,24 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 	}
 }
 
-void CDiskInfoDlg::SetClientSize(int sizeX, int sizeY, DWORD menuLine)
+void CDiskInfoDlg::SetClientSize(int sizeX, int sizeY, double zoomRatio)
 {
-	m_MinSizeX = 0;
-	m_MaxSizeX = 65535;
-	m_MinSizeY = 0;
-	m_MaxSizeY = 65535;
+	RECT rw, rc;
+	GetWindowRect(&rw);
+	GetClientRect(&rc);
 
-	CRect rc;
-	CRect clientRc;
-	CRect currentRc;
-	rc.left = 0;
-	rc.top = 0;
-	rc.right = sizeX;
-	rc.bottom = sizeY;
-	int X = 0, Y = 0;
+	if (rc.right != 0)
+	{
+		int ncaWidth = (rw.right - rw.left) - (rc.right - rc.left);
+		int ncaHeight = (rw.bottom - rw.top) - (rc.bottom - rc.top);
 
-	GetWindowRect(&currentRc);
-	GetClientRect(&clientRc);
-	X = currentRc.left;
-	Y = currentRc.top;
+		m_MinSizeX = (int)(sizeX * zoomRatio) + ncaWidth;
+		m_MaxSizeX = m_MinSizeX;
+		m_MinSizeY = (int)(SIZE_MIN_Y * m_ZoomRatio + ncaHeight);
+		m_MaxSizeY = (int)(SIZE_MAX_Y * m_ZoomRatio + ncaHeight);
 
-	rc.right = sizeX;
-	rc.bottom = sizeY;
-	SetWindowPos(&CWnd::wndTop, X, Y, rc.right, rc.bottom, SWP_NOMOVE);
-	GetClientRect(&clientRc);
-
-	rc.right += sizeX - clientRc.Width();
-	int ncaHeight = sizeY - clientRc.Height();
-	rc.bottom += ncaHeight;
-
-	m_MinSizeX = rc.right;
-	m_MaxSizeX = rc.right;
-	m_MinSizeY = (int)(SIZE_MIN_Y * m_ZoomRatio) + ncaHeight;
-	m_MaxSizeY = (int)(SIZE_MAX_Y * m_ZoomRatio) + ncaHeight;
-
-	SetWindowPos(&CWnd::wndTop, X, Y, rc.right, rc.bottom, SWP_NOMOVE);
-	GetClientRect(&clientRc);
+		SetWindowPos(NULL, 0, 0, (int)(sizeX * zoomRatio) + ncaWidth, (int)(sizeY * zoomRatio) + ncaHeight, SWP_NOMOVE | SWP_NOZORDER);
+	}
 }
 
 void CDiskInfoDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)

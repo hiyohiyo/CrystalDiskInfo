@@ -2158,7 +2158,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		UpdateTrayTemperatureIcon(TRUE);
 	}
 
-	SetClientSize((DWORD)(m_SizeX * m_ZoomRatio), (DWORD)(m_SizeY * m_ZoomRatio), 1);
+	SetClientSize(m_SizeX, m_SizeY, m_ZoomRatio);
 
 	WritePrivateProfileString(_T("Setting"), _T("Language"), LangName, m_Ini);
 }

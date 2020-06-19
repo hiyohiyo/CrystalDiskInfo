@@ -281,7 +281,7 @@ protected:
 	void ShowTemperatureIconOnly();
 
 	void SetControlFont();
-	virtual void SetClientSize(int sizeX, int sizeY, DWORD menuLine = 0);
+	virtual void SetClientSize(int sizeX, int sizeY, double zoomRatio);
 
 	void UpdateShareInfo(); // For Sidebar Gadget Support
 	void DeleteShareInfo();

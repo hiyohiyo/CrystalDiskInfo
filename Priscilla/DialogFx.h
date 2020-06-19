@@ -27,7 +27,7 @@ protected:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	virtual void PostNcDestroy();
 	virtual void UpdateDialogSize();
-	virtual void SetClientSize(int sizeX, int sizeY, DWORD menuLine = 0);
+	virtual void SetClientSize(int sizeX, int sizeY, double zoomRatio);
 	virtual void UpdateBackground(BOOL resize, BOOL darkMode);
 	virtual void OnOK();
 	virtual void OnCancel();

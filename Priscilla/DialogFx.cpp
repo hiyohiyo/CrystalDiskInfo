@@ -153,37 +153,19 @@ void CDialogFx::UpdateDialogSize()
 	m_bDarkMode = SetDarkMode(m_hWnd);
 }
 
-void CDialogFx::SetClientSize(int sizeX, int sizeY, DWORD menuLine)
+void CDialogFx::SetClientSize(int sizeX, int sizeY, double zoomRatio)
 {
-	CRect rc;
-	CRect clientRc;
-	CRect currentRc;
-	rc.left = 0;
-	rc.top = 0;
-	rc.right = sizeX;
-	rc.bottom = sizeY;
-	int X = 0, Y = 0;
+	RECT rw, rc;
+	GetWindowRect(&rw);
+	GetClientRect(&rc);
 
-	GetWindowRect(&currentRc);
-	GetClientRect(&clientRc);
-	X = currentRc.left;
-	Y = currentRc.top;
-
-	if (clientRc.Height() == sizeY && clientRc.Width() == sizeX)
+	if (rc.right != 0)
 	{
-		return;
+		int ncaWidth = (rw.right - rw.left) - (rc.right - rc.left);
+		int ncaHeight = (rw.bottom - rw.top) - (rc.bottom - rc.top);
+
+		SetWindowPos(NULL, 0, 0, (int)(sizeX * zoomRatio) + ncaWidth, (int)(sizeY * zoomRatio) + ncaHeight, SWP_NOMOVE | SWP_NOZORDER);
 	}
-
-	rc.right = sizeX;
-	rc.bottom = sizeY;
-	SetWindowPos(&CWnd::wndTop, X, Y, rc.right, rc.bottom, SWP_NOMOVE);
-	GetClientRect(&clientRc);
-
-	rc.right += sizeX - clientRc.Width();
-	rc.bottom += sizeY - clientRc.Height();
-
-	SetWindowPos(&CWnd::wndTop, X, Y, rc.right, rc.bottom, SWP_NOMOVE);
-	GetClientRect(&clientRc);
 }
 
 void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
