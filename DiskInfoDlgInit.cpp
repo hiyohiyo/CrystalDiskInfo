@@ -494,7 +494,7 @@ CString CDiskInfoDlg::GetDiskStatusReason(DWORD index)
 			else
 			if((m_Ata.vars[index].Attribute[j].Id == 0xE8 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xBB && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
-			||((m_Ata.vars[index].Attribute[j].Id == 0xB4 || m_Ata.vars[index].Attribute[j].Id == 0xB3) && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
+			|| (m_Ata.vars[index].Attribute[j].Id == 0xB1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xD1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE7 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xAA && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && ! m_Ata.vars[index].IsRawValues8

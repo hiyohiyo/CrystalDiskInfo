@@ -16,7 +16,6 @@ IMPLEMENT_DYNAMIC(CFontComboBox, CComboBoxFx)
 
 CFontComboBox::CFontComboBox()
 {
-	CComboBoxFx();
 }
 
 CFontComboBox::~CFontComboBox()

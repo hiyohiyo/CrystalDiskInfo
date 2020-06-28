@@ -94,13 +94,10 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 
 	if (m_bHighContrast)
 	{
-		m_bHighContrast = TRUE;
-		
 		return TRUE;
 	}
 	else
 	{
-		m_bHighContrast = FALSE;
 		SetBkReload();
 		LoadCtrlBk(m_BkDC);
 	}
