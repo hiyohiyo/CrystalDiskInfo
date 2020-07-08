@@ -381,6 +381,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
+	int GetSelectedDrive();
+
 	afx_msg void OnCopy();
 	afx_msg void OnSaveText();
 	afx_msg void OnSaveImage();

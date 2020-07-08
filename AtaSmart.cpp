@@ -3069,7 +3069,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 }
 
 
-BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, CString pnpDeviceId)
+BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, DWORD* diskSize, CString pnpDeviceId)
 {
 	if (vars.GetCount() >= MAX_DISK)
 	{
@@ -3200,7 +3200,13 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 
 	asi.ModelSerial = GetModelSerial(asi.Model, asi.SerialNumber);
 
-	ULONG64 totalDiskSizeByte = 
+	if (diskSize != NULL)
+	{
+		asi.TotalDiskSize = *diskSize;
+	}
+
+	/*
+	ULONG64 totalDiskSizeByte =
 		(ULONG64)
 		( ((ULONG64)asi.IdentifyDevice.B.Bin[287] << 56)
 		+ ((ULONG64)asi.IdentifyDevice.B.Bin[286] << 48)
@@ -3210,13 +3216,6 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		+ ((ULONG64)asi.IdentifyDevice.B.Bin[282] << 16)
 		+ ((ULONG64)asi.IdentifyDevice.B.Bin[281] <<  8)
 		+ ((ULONG64)asi.IdentifyDevice.B.Bin[280]));
-
-	if (totalDiskSizeByte > 0)
-	{
-		asi.TotalDiskSize = (DWORD)(totalDiskSizeByte / 1000 / 1000);
-	}
-
-	/*
 	asi.NumberOfSectors = (ULONG64)
 	          (((ULONG64)asi.IdentifyDevice.B.Bin[17]) << 56)
 			+ (((ULONG64)asi.IdentifyDevice.B.Bin[16]) << 48)
@@ -3227,6 +3226,16 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			+ (((ULONG64)asi.IdentifyDevice.B.Bin[11]) << 8)
 			+ (((ULONG64)asi.IdentifyDevice.B.Bin[10]));
 	*/
+
+
+	// Check duplicate device
+	for (int i = 0; i < vars.GetCount(); i++)
+	{
+		if (asi.Model.Compare(vars[i].Model) == 0 && asi.SerialNumber.Compare(vars[i].SerialNumber) == 0)
+		{
+			return FALSE;
+		}
+	}
 
 	if (
 		(m_bNVMeStorageQuery && commandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &asi))
@@ -4613,6 +4622,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	}
 
 	IDENTIFY_DEVICE identify = {0};
+	DWORD diskSize = 0;
 
 	CString debug;
 	if(interfaceType == INTERFACE_TYPE_UNKNOWN || interfaceType == INTERFACE_TYPE_PATA || interfaceType == INTERFACE_TYPE_SATA)
@@ -4699,7 +4709,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		debug.Format(_T("DoIdentifyDeviceNVMeIntelRst"));
 		DebugPrint(debug);
 
-		if (DoIdentifyDeviceNVMeIntelRst(physicalDriveId, scsiPort, scsiTargetId, &identify))
+		if (DoIdentifyDeviceNVMeIntelRst(physicalDriveId, scsiPort, scsiTargetId, &identify, &diskSize))
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL_RST"));
 			DebugPrint(debug);
@@ -6315,7 +6325,7 @@ BOOL CAtaSmart::GetScsiAddress(const TCHAR* Path, BYTE* PortNumber, BYTE* PathId
 	return bRet == TRUE;
 }
 
-BOOL CAtaSmart::DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
+BOOL CAtaSmart::DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize)
 {
 	CString path;
 	BYTE portNumber, pathId, targetId, lun;
@@ -6353,8 +6363,8 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, 
 		NVMeData.Payload.Version = 1;
 		NVMeData.Payload.PathId = pathId;
 		NVMeData.Payload.Cmd.CDW0.Opcode = 0x06; // ADMIN_IDENTIFY
-		NVMeData.Payload.Cmd.NSID = 0;
-		NVMeData.Payload.Cmd.u.IDENTIFY.CDW10.CNS = 1;
+		NVMeData.Payload.Cmd.NSID = 1;
+		NVMeData.Payload.Cmd.u.IDENTIFY.CDW10.CNS = 0;
 		NVMeData.Payload.ParamBufLen = sizeof(INTEL_NVME_PAYLOAD) + sizeof(SRB_IO_CONTROL); //0xA4;
 		NVMeData.Payload.ReturnBufferLen = 0x1000;
 		NVMeData.Payload.CplEntry[0] = 0;
@@ -6367,8 +6377,32 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, 
 			sizeof(NVMeData),
 			&dummy, nullptr))
 		{
-			memcpy_s(data, sizeof(IDENTIFY_DEVICE), NVMeData.DataBuffer, sizeof(IDENTIFY_DEVICE));
+			ULONG64 totalLBA =
+				 (((ULONG64)NVMeData.DataBuffer[7] << 56)
+				+ ((ULONG64)NVMeData.DataBuffer[6] << 48)
+				+ ((ULONG64)NVMeData.DataBuffer[5] << 40)
+				+ ((ULONG64)NVMeData.DataBuffer[4] << 32)
+				+ ((ULONG64)NVMeData.DataBuffer[3] << 24)
+				+ ((ULONG64)NVMeData.DataBuffer[2] << 16)
+				+ ((ULONG64)NVMeData.DataBuffer[1] << 8)
+				+ ((ULONG64)NVMeData.DataBuffer[0]));
+			int sectorSize = 1 << NVMeData.DataBuffer[130];
 
+			*diskSize = (DWORD)(totalLBA * sectorSize / 1000 / 1000);
+		}
+
+		NVMeData.Payload.Cmd.NSID = 0;
+		NVMeData.Payload.Cmd.u.IDENTIFY.CDW10.CNS = 1;
+		if (DeviceIoControl(hIoCtrl, IOCTL_SCSI_MINIPORT,
+			&NVMeData,
+			sizeof(NVMeData),
+			&NVMeData,
+			sizeof(NVMeData),
+			&dummy, nullptr))
+		{
+			memcpy_s(data, sizeof(IDENTIFY_DEVICE), NVMeData.DataBuffer, sizeof(IDENTIFY_DEVICE));
+			
+			CloseHandle(hIoCtrl);
 			return TRUE;
 		}
 
@@ -6431,6 +6465,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntelRst(INT physicalDriveId, INT scsiPort,
 			&dummy, nullptr))
 		{
 			memcpy_s(&(asi->SmartReadData), 512, NVMeData.DataBuffer, 512);
+			CloseHandle(hIoCtrl);
 			return TRUE;
 		}
 		CloseHandle(hIoCtrl);
@@ -8023,6 +8058,7 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 	memcpy(&phyInfo, &(phyInfoBuf.Information), sizeof(phyInfoBuf.Information));
 	
 	IDENTIFY_DEVICE identify = {0};	
+	DWORD diskSize = 0;
 
 	// AMD-RAIDXpert2 support
 	if(memcmp(driverInfoBuf.Information.szName, "rcraid", 7) == 0)
@@ -8042,9 +8078,9 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 		// Intel RST NVMe RAID support
 		for (int j = 0; j < raidDrives.GetCount(); j++)
 		{
-			if (DoIdentifyDeviceNVMeIntelRst(-1, scsiPort, raidDrives.GetAt(j), &identify))
+			if (DoIdentifyDeviceNVMeIntelRst(-1, scsiPort, raidDrives.GetAt(j), &identify, &diskSize))
 			{
-				AddDiskNVMe(-1, scsiPort, raidDrives.GetAt(j), 0, 0, CMD_TYPE_NVME_INTEL_RST, &identify);
+				AddDiskNVMe(-1, scsiPort, raidDrives.GetAt(j), 0, 0, CMD_TYPE_NVME_INTEL_RST, &identify, &diskSize);
 			}
 		}
 	}

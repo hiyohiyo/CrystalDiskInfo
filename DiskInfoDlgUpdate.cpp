@@ -2176,6 +2176,11 @@ void CDiskInfoDlg::OnDisk5() { SelectDrive(5 + m_DriveMenuPage * 8); }
 void CDiskInfoDlg::OnDisk6() { SelectDrive(6 + m_DriveMenuPage * 8); }
 void CDiskInfoDlg::OnDisk7() { SelectDrive(7 + m_DriveMenuPage * 8); }
 
+int CDiskInfoDlg::GetSelectedDrive()
+{
+	return m_SelectDisk;
+}
+
 void CDiskInfoDlg::SelectDrive(DWORD i)
 {
 	if (i >= (DWORD)m_Ata.vars.GetCount())

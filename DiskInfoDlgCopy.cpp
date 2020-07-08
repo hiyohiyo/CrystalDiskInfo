@@ -92,12 +92,12 @@ void CDiskInfoDlg::SaveText(CString fileName)
 	{
 		if(m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
-			temp.Format(_T(" (%d) %s : %.1f GB"), i + 1,
+			temp.Format(_T(" (%02d) %s : %.1f GB"), i + 1,
 				m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
 		else
 		{
-			temp.Format(_T(" (%d) %s : %d MB"), i + 1,
+			temp.Format(_T(" (%02d) %s : %d MB"), i + 1,
 				m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize);
 		}
 
@@ -187,7 +187,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
 		drive = driveTemplate;
-		cstr.Format(_T("%d"), i + 1);
+		cstr.Format(_T("%02d"), i + 1);
 		drive.Replace(_T("%I%"), cstr);
 		if(m_Ata.vars[i].Enclosure.IsEmpty())
 		{

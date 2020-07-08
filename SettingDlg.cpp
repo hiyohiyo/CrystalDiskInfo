@@ -273,8 +273,12 @@ void CSettingDlg::InitSelectDisk()
 
 		cstr.Format(_T("(%d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model, temp, driveLetter);
 		m_CtrlSelectDisk.AddString(cstr);
+
+		if (i == p->GetSelectedDrive())
+		{
+			m_CtrlSelectDisk.SetCurSel(i);
+		}
 	}
-	m_CtrlSelectDisk.SetCurSel(0);
 
 	UpdateData(TRUE);
 	m_DiskIndex = 0;
