@@ -78,12 +78,6 @@
     <ClCompile Include="HealthDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NVMeInterpreter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SlotSpeedGetter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TemperatureDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -125,6 +119,12 @@
     </ClCompile>
     <ClCompile Include="Priscilla\EditFx.cpp">
       <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="SlotSpeedGetter.cpp">
+      <Filter>Library Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NVMeInterpreter.cpp">
+      <Filter>Library Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,13 +179,7 @@
     <ClInclude Include="HealthDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NVMeInterpreter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SlotSpeedGetter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StorageQuery.h">
@@ -238,6 +232,12 @@
     </ClInclude>
     <ClInclude Include="Priscilla\EditFx.h">
       <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="SlotSpeedGetter.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NVMeInterpreter.h">
+      <Filter>Library Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

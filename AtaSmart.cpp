@@ -67,6 +67,7 @@ static const TCHAR *ssdVendorString[] =
 	_T("nv"), // NVMe
 	_T("re"), // Realtek
 	_T("sk"), // SKhynix
+	_T("ki"), // KIOXIA
 	_T(""),
 };
 
@@ -2273,6 +2274,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.DiskSizeLba28 = 0;
 	asi.DiskSizeLba48 = 0;
 	asi.LogicalSectorSize = 512;
+	asi.PhysicalSectorSize = 512;
 	asi.DiskSizeWmi = 0;
 	asi.BufferSize = 0;
 	asi.NvCacheSize = 0;
@@ -2557,8 +2559,19 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.Sector28 = 0x0FFFFFFF & identify->A.TotalAddressableSectors;
 	asi.Sector48 = 0x0000FFFFFFFFFFFF & identify->A.MaxUserLba;
 
-	// if(identify->A.SectorSize & 0xF == 0x8)
-	// asi.LogicalSectorSize = 512;
+	if ((identify->A.SectorSize & 0xC000) == 0x4000) // bit 14-15, bit14=1, bit15=0
+	{
+		if ((identify->A.SectorSize & 0x000F) == 0x3) // bit 0-3
+		{
+			asi.LogicalSectorSize = 512;
+			asi.PhysicalSectorSize = 4096;
+		}
+		else if ((identify->A.SectorSize & 0x1000) == 0x1000) // bit 12
+		{
+			asi.LogicalSectorSize = 4096;
+			asi.PhysicalSectorSize = 4096;
+		}
+	}
 
 	if(identify->A.TotalAddressableSectors == 0x01100003) // 9126807040 bytes
 	{
@@ -2570,7 +2583,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		return FALSE;
 	//	asi.DiskSizeChs   = 0;
 	}
-	else if(((ULONGLONG)(identify->A.LogicalCylinders * identify->A.LogicalHeads * identify->A.LogicalSectors * 512) / 1000 / 1000) > 1000)
+	else if(((ULONGLONG)((ULONGLONG)identify->A.LogicalCylinders * identify->A.LogicalHeads * identify->A.LogicalSectors * 512) / 1000 / 1000) > 1000)
 	{
 		asi.DiskSizeChs   = (DWORD)(((ULONGLONG)identify->A.LogicalCylinders * identify->A.LogicalHeads * identify->A.LogicalSectors * 512) / 1000 / 1000 - 49);
 	}
@@ -2590,9 +2603,9 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.DiskSizeLba28 = 0;
 	}
 
-	if(asi.IsLba48Supported && (asi.Sector48 * 512) / 1000 / 1000 > 49)
+	if(asi.IsLba48Supported && (asi.Sector48 * asi.LogicalSectorSize) / 1000 / 1000 > 49)
 	{
-		asi.DiskSizeLba48 = (DWORD)((asi.Sector48 * 512) / 1000 / 1000 - 49);
+		asi.DiskSizeLba48 = (DWORD)((asi.Sector48 * asi.LogicalSectorSize) / 1000 / 1000 - 49);
 		asi.NumberOfSectors = asi.Sector48;
 	}
 	else
@@ -2603,7 +2616,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.BufferSize = identify->A.BufferSize * 512;
 	if(asi.IsNvCacheSupported)
 	{
-		asi.NvCacheSize = identify->A.NvCacheSizeLogicalBlocks * 512;
+		asi.NvCacheSize = (ULONGLONG)identify->A.NvCacheSizeLogicalBlocks * 512;
 	}
 
 	if(identify->A.TotalAddressableSectors > 0x0FFFFFFF)
@@ -3063,6 +3076,38 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		}
 	}
 
+	/*
+	if (physicalDriveId == 2)
+	{
+		BYTE d[512] = {0};
+		ReadLogExtPd(physicalDriveId, 0xA0, 0, 0, (PBYTE)&d, 512);
+		BYTE d0 = d[0];
+		BYTE d1 = d[1];
+
+		ReadLogExtPd(physicalDriveId, 0xA0, 4, 1, (PBYTE)&d, 512);
+		DWORD PowerOnCount = B8toB32(d[8], d[9], d[10], d[11]);
+		DWORD PowerOnHours = B8toB32(d[16], d[17], d[18], d[19]);
+		ULONG64 LogicalSectorsWritten = B8toB64(d[24], d[25], d[26], d[27], d[28], d[29]);
+		ULONG64 NumberOfWirteCommands = B8toB64(d[32], d[33], d[34], d[35], d[36], d[37]);
+		ULONG64 LogicalSectorsRead = B8toB64(d[40], d[41], d[42], d[43], d[44], d[45]);
+		ULONG64 NumberOfReadCommands = B8toB64(d[48], d[49], d[50], d[51], d[52], d[53]);
+		DWORD PendingErrorCount = B8toB32(d[64], d[65], d[66], d[67]);
+		DWORD WorkloadUtilization = d[72];
+		DWORD UsageRate = d[80];
+		DWORD ResourceAvailability = d[88];
+		DWORD RandomWriteResourcesUsed = d[96];
+
+		ReadLogExtPd(physicalDriveId, 0xA0, 4, 7, (PBYTE)&d, 512);
+		DWORD EnduranceIndicator = d[8];
+
+		ReadLogExtPd(physicalDriveId, 0xA0, 0x30, 2, (PBYTE)&d, 512);
+		ULONG64 DeviceCapacity = B8toB64(d[8], d[9], d[10], d[11], d[12], d[13]);
+		ULONG64 PhysicalLogicalSectorSize = B8toB64(d[16], d[17], d[18], d[19], d[20], d[21], d[22], d[23]);
+		DWORD LogicalSectorSize = B8toB32(d[24], d[25], d[26], d[27]);
+		DWORD BufferSize = B8toB32(d[32], d[33], d[34], d[35]);
+	}
+	*/
+
 	vars.Add(asi);
 	
 	return TRUE;
@@ -3121,6 +3166,8 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.DiskSizeChs = 0;
 	asi.DiskSizeLba28 = 0;
 	asi.DiskSizeLba48 = 0;
+	asi.LogicalSectorSize = 512;
+	asi.PhysicalSectorSize = 512;
 	asi.DiskSizeWmi = 0;
 	asi.BufferSize = 0;
 	asi.NvCacheSize = 0;
@@ -3250,7 +3297,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	{
 		asi.IsSmartSupported = TRUE;
 		asi.Temperature = asi.SmartReadData[0x2] * 256 + asi.SmartReadData[0x1] - 273;
-		if (asi.Temperature == -273)
+		if (asi.Temperature == -273 || asi.Temperature > 100)
 		{
 			asi.Temperature = -1000;
 		}
@@ -3479,6 +3526,13 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.DiskVendorId = SSD_VENDOR_SKhynix;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
+	else if (IsSsdKioxia(asi))
+	{
+		asi.SmartKeyName = _T("SmartKioxia");
+		asi.DiskVendorId = SSD_VENDOR_KIOXIA;
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+		asi.IsSsd = TRUE;
+	}
 	else if(asi.IsSsd)
 	{
 		asi.SmartKeyName = _T("SmartSsd");
@@ -3583,7 +3637,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					MAKEWORD(asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3])
 					));
 			}
-			else if(asi.DiskVendorId == SSD_VENDOR_INTEL || asi.DiskVendorId == HDD_SSD_VENDOR_TOSHIBA)
+			else if(asi.DiskVendorId == SSD_VENDOR_INTEL || asi.DiskVendorId == HDD_SSD_VENDOR_TOSHIBA || asi.DiskVendorId == SSD_VENDOR_KIOXIA)
 			{
 				asi.HostWrites  = (INT)(MAKELONG(
 					MAKEWORD(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1]),
@@ -3847,6 +3901,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					MAKEWORD(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1]),
 					MAKEWORD(asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3])
 					);
+			}
+			else if (asi.DiskVendorId == SSD_VENDOR_KIOXIA)
+			{
+				asi.Life = asi.Attribute[j].CurrentValue - 100;
+				if (asi.Life < 0) { asi.Life = 0; }
 			}
 			break;
 		case 0xB1:
@@ -4537,6 +4596,7 @@ BOOL CAtaSmart::IsSsdRealtek(ATA_SMART_INFO &asi)
 
 	return flagSmartType;
 }
+
 BOOL CAtaSmart::IsSsdSKhynix(ATA_SMART_INFO &asi)
 {
 	BOOL flagSmartType = FALSE;
@@ -4548,6 +4608,19 @@ BOOL CAtaSmart::IsSsdSKhynix(ATA_SMART_INFO &asi)
 	}
 	return flagSmartType;
 }
+
+BOOL CAtaSmart::IsSsdKioxia(ATA_SMART_INFO& asi)
+{
+	BOOL flagSmartType = FALSE;
+	if (asi.Model.Find(_T("KIOXIA")) >= 0)
+	{
+		flagSmartType = TRUE;
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_32MB;
+		asi.SmartKeyName = _T("SmartKioxia");
+	}
+	return flagSmartType;
+}
+
 BOOL CAtaSmart::CheckSmartAttributeCorrect(ATA_SMART_INFO* asi1, ATA_SMART_INFO* asi2)
 {
 	if(asi1->AttributeCount != asi2->AttributeCount)
@@ -5281,19 +5354,19 @@ BOOL CAtaSmart::ControlSmartStatusPd(INT physicalDriveId, BYTE target, BYTE comm
 	return	bRet;
 }
 
-BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize)
+BOOL CAtaSmart::ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, BYTE logPage, PBYTE data, DWORD dataSize)
 {
 	BOOL	bRet;
 	HANDLE	hIoCtrl;
 	DWORD	dwReturned;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-	if(hIoCtrl == INVALID_HANDLE_VALUE)
+	if (hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
 
-	if(m_bAtaPassThrough)
+	if (TRUE || m_bAtaPassThrough)
 	{
 		ATA_PASS_THROUGH_EX_WITH_BUFFERS ab;
 		::ZeroMemory(&ab, sizeof(ab));
@@ -5302,9 +5375,73 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 		DWORD size = offsetof(ATA_PASS_THROUGH_EX_WITH_BUFFERS, Buf);
 		ab.Apt.DataBufferOffset = size;
 
-		if(dataSize > 0)
+		if (dataSize > 0)
 		{
-			if(dataSize > sizeof(ab.Buf))
+			if (dataSize > sizeof(ab.Buf))
+			{
+				return FALSE;
+			}
+			ab.Apt.AtaFlags = ATA_FLAGS_DATA_IN | ATA_FLAGS_48BIT_COMMAND;
+			ab.Apt.DataTransferLength = dataSize;
+			ab.Buf[0] = 0xCF; // magic number
+			size += dataSize;
+		}
+
+		ab.Apt.CurrentTaskFile.bFeaturesReg = 0x00;
+		ab.Apt.CurrentTaskFile.bSectorCountReg = 0x01;
+		ab.Apt.CurrentTaskFile.bSectorNumberReg = logAddress;// Log Address
+		ab.Apt.CurrentTaskFile.bCylLowReg = logPage; // Page #
+		ab.Apt.CurrentTaskFile.bCylHighReg = 0;
+		ab.Apt.CurrentTaskFile.bDriveHeadReg = target;
+		ab.Apt.CurrentTaskFile.bCommandReg = 0x2F; // Read Log Ext
+
+		ab.Apt.PreviousTaskFile.bFeaturesReg = 0;
+		ab.Apt.PreviousTaskFile.bSectorCountReg = 0;
+		ab.Apt.PreviousTaskFile.bSectorNumberReg = 0;
+		ab.Apt.PreviousTaskFile.bCylLowReg = 0;
+		ab.Apt.PreviousTaskFile.bCylHighReg = 0;
+		ab.Apt.PreviousTaskFile.bDriveHeadReg = 0;
+		ab.Apt.PreviousTaskFile.bCommandReg = 0;
+
+		bRet = ::DeviceIoControl(hIoCtrl, IOCTL_ATA_PASS_THROUGH,
+			&ab, size, &ab, size, &dwReturned, NULL);
+		::CloseHandle(hIoCtrl);
+		if (bRet && dataSize && data != NULL)
+		{
+			memcpy_s(data, dataSize, ab.Buf, dataSize);
+		}
+	}
+	else if (m_Os.dwMajorVersion <= 4)
+	{
+		return FALSE;
+	}
+
+	return	bRet;
+}
+BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize)
+{
+	BOOL	bRet;
+	HANDLE	hIoCtrl;
+	DWORD	dwReturned;
+
+	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
+	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	{
+		return	FALSE;
+	}
+
+	if (m_bAtaPassThrough)
+	{
+		ATA_PASS_THROUGH_EX_WITH_BUFFERS ab;
+		::ZeroMemory(&ab, sizeof(ab));
+		ab.Apt.Length = sizeof(ATA_PASS_THROUGH_EX);
+		ab.Apt.TimeOutValue = 2;
+		DWORD size = offsetof(ATA_PASS_THROUGH_EX_WITH_BUFFERS, Buf);
+		ab.Apt.DataBufferOffset = size;
+
+		if (dataSize > 0)
+		{
+			if (dataSize > sizeof(ab.Buf))
 			{
 				return FALSE;
 			}
@@ -5319,23 +5456,23 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 		ab.Apt.CurrentTaskFile.bDriveHeadReg = target;
 		ab.Apt.CurrentTaskFile.bCommandReg = main;
 
-		if(main == SMART_CMD)
+		if (main == SMART_CMD)
 		{
-			ab.Apt.CurrentTaskFile.bCylLowReg		= SMART_CYL_LOW;
-			ab.Apt.CurrentTaskFile.bCylHighReg		= SMART_CYL_HI;
-			ab.Apt.CurrentTaskFile.bSectorCountReg  = 1;
+			ab.Apt.CurrentTaskFile.bCylLowReg = SMART_CYL_LOW;
+			ab.Apt.CurrentTaskFile.bCylHighReg = SMART_CYL_HI;
+			ab.Apt.CurrentTaskFile.bSectorCountReg = 1;
 			ab.Apt.CurrentTaskFile.bSectorNumberReg = 1;
 		}
 
 		bRet = ::DeviceIoControl(hIoCtrl, IOCTL_ATA_PASS_THROUGH,
 			&ab, size, &ab, size, &dwReturned, NULL);
 		::CloseHandle(hIoCtrl);
-		if(bRet && dataSize && data != NULL)
+		if (bRet && dataSize && data != NULL)
 		{
 			memcpy_s(data, dataSize, ab.Buf, dataSize);
 		}
 	}
-	else if(m_Os.dwMajorVersion <= 4)
+	else if (m_Os.dwMajorVersion <= 4)
 	{
 		return FALSE;
 	}
@@ -5344,20 +5481,20 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 		DWORD size = sizeof(CMD_IDE_PATH_THROUGH) - 1 + dataSize;
 		CMD_IDE_PATH_THROUGH* buf = (CMD_IDE_PATH_THROUGH*)VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);
 
-		buf->reg.bFeaturesReg		= sub;
-		buf->reg.bSectorCountReg	= param;
-		buf->reg.bSectorNumberReg	= 0;
-		buf->reg.bCylLowReg			= 0;
-		buf->reg.bCylHighReg		= 0;
-		buf->reg.bDriveHeadReg		= target;
-		buf->reg.bCommandReg		= main;
-		buf->reg.bReserved		    = 0;
-		buf->length					= dataSize;
+		buf->reg.bFeaturesReg = sub;
+		buf->reg.bSectorCountReg = param;
+		buf->reg.bSectorNumberReg = 0;
+		buf->reg.bCylLowReg = 0;
+		buf->reg.bCylHighReg = 0;
+		buf->reg.bDriveHeadReg = target;
+		buf->reg.bCommandReg = main;
+		buf->reg.bReserved = 0;
+		buf->length = dataSize;
 
 		bRet = ::DeviceIoControl(hIoCtrl, IOCTL_IDE_PASS_THROUGH,
 			buf, size, buf, size, &dwReturned, NULL);
 		::CloseHandle(hIoCtrl);
-		if(bRet && dataSize && data != NULL)
+		if (bRet && dataSize && data != NULL)
 		{
 			memcpy_s(data, dataSize, buf->buffer, dataSize);
 		}
@@ -5366,7 +5503,6 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 
 	return	bRet;
 }
-
 
 /*---------------------------------------------------------------------------*/
 //  NVMe JMicron
@@ -8800,7 +8936,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						MAKEWORD(asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3])
 						));
 				}
-				else if(asi->DiskVendorId == SSD_VENDOR_INTEL || asi->DiskVendorId == HDD_SSD_VENDOR_TOSHIBA)
+				else if(asi->DiskVendorId == SSD_VENDOR_INTEL || asi->DiskVendorId == HDD_SSD_VENDOR_TOSHIBA || asi->DiskVendorId == SSD_VENDOR_KIOXIA)
 				{
 					asi->HostWrites  = (INT)(MAKELONG(
 						MAKEWORD(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1]),
@@ -9064,6 +9200,11 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						MAKEWORD(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1]),
 						MAKEWORD(asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3])
 						);
+				}
+				else if (asi->DiskVendorId == SSD_VENDOR_KIOXIA)
+				{
+					asi->Life = asi->Attribute[j].CurrentValue - 100;
+					if (asi->Life < 0) { asi->Life = 0; }
 				}
 				break;
 			case 0xB1:

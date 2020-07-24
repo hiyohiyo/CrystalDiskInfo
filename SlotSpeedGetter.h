@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------------------*/
 //       Author : Minkyu Kim
 //          Web : http://naraeon.net/
-//                https://github.com/ebangin127/cdi-naraeon
+//                https://github.com/ebangin127/
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
 

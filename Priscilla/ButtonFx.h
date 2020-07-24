@@ -29,6 +29,7 @@ public:
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);
+	void SetDrawFrameEx(BOOL bDrawFrame, COLORREF frameColor = RGB(128, 128, 128));
 	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);
 
 	// Font
@@ -81,6 +82,8 @@ protected:
 	int m_RenderMode;
 	BOOL m_bHighContrast;
 	BOOL m_bDarkMode;
+	BOOL m_bDrawFrame;
+	COLORREF m_FrameColor;
 
 	// Glass
 	COLORREF m_GlassColor;

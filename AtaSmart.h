@@ -151,7 +151,8 @@ public:
 		SSD_VENDOR_MICRON_MU02= 18,
 		SSD_VENDOR_NVME       = 19,
 		SSD_VENDOR_REALTEK    = 20,
-		SSD_VENDOR_SKhynix	=	21,
+		SSD_VENDOR_SKhynix    =	21,
+		SSD_VENDOR_KIOXIA     = 22,
 		SSD_VENDOR_MAX        = 99,
 
 		VENDOR_UNKNOWN      = 0x0000,
@@ -1615,6 +1616,7 @@ public:
 		DWORD				DiskSizeLba28;
 		DWORD				DiskSizeLba48;
 		DWORD				LogicalSectorSize;
+		DWORD				PhysicalSectorSize;
 		DWORD				DiskSizeWmi;
 		DWORD				BufferSize;
 		ULONGLONG			NvCacheSize;
@@ -1767,6 +1769,7 @@ protected:
 	BOOL GetSmartThresholdPd(INT physicalDriveId, BYTE target, ATA_SMART_INFO* asi);
 	BOOL ControlSmartStatusPd(INT physicalDriveId, BYTE target, BYTE command);
 	BOOL SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize);
+	BOOL ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, BYTE logPage, PBYTE data, DWORD dataSize);
 
 	BOOL AddDiskNVMe(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, DWORD* diskSize = NULL, CString pnpDeviceId = _T(""));
 
@@ -1861,6 +1864,7 @@ protected:
 	BOOL IsSsdToshiba(ATA_SMART_INFO &asi);
 	BOOL IsSsdRealtek(ATA_SMART_INFO &asi);
 	BOOL IsSsdSKhynix(ATA_SMART_INFO& asi);
+	BOOL IsSsdKioxia(ATA_SMART_INFO& asi);
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
 	static int Compare(const void *p1, const void *p2);

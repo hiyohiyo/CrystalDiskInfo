@@ -457,6 +457,7 @@ void CMainDialogFx::UpdateThemeInfo()
 	m_ListLine1 = GetControlColor(L"ListLine1", 0, theme);
 	m_ListLine2 = GetControlColor(L"ListLine2", 0, theme);
 	m_Glass = GetControlColor(L"Glass", 255, theme);
+	m_Frame = GetControlColor(L"Frame", 128, theme);
 
 	m_ComboAlpha = GetControlAlpha(L"ComboAlpha", 255, theme);
 	m_EditAlpha = GetControlAlpha(L"EditAlpha", 255, theme);

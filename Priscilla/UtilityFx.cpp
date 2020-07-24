@@ -155,3 +155,29 @@ ULONGLONG GetTickCountFx()
 		return (ULONGLONG)GetTickCount();
 	}
 }
+
+ULONG64 B8toB64(BYTE b0, BYTE b1, BYTE b2, BYTE b3, BYTE b4, BYTE b5, BYTE b6, BYTE b7)
+{
+	ULONG64 data =
+		  ((ULONG64)b7 << 56)
+		+ ((ULONG64)b6 << 48)
+		+ ((ULONG64)b5 << 40)
+		+ ((ULONG64)b4 << 32)
+		+ ((ULONG64)b3 << 24)
+		+ ((ULONG64)b2 << 16)
+		+ ((ULONG64)b1 <<  8)
+		+ ((ULONG64)b0 <<  0);
+
+	return data;
+}
+
+DWORD B8toB32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
+{
+	DWORD data =
+		  ((DWORD)b3 << 24)
+		+ ((DWORD)b2 << 16)
+		+ ((DWORD)b1 << 8)
+		+ ((DWORD)b0 << 0);
+
+	return data;
+}

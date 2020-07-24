@@ -1,4 +1,11 @@
-﻿#include "stdafx.h"
+﻿/*---------------------------------------------------------------------------*/
+//       Author : Minkyu Kim
+//          Web : http://naraeon.net/
+//                https://github.com/ebangin127/
+//      License : The MIT License
+/*---------------------------------------------------------------------------*/
+
+#include "stdafx.h"
 #include "SlotSpeedGetter.h"
 #include <wbemcli.h>
 #include <comutil.h>
@@ -116,8 +123,6 @@ SlotMaxCurrSpeed ConvertOSResult(const OSSlotMaxCurrSpeed OSLevelResult)
 	result.Maximum.SpecVersion = PCIeSpecification(OSLevelResult.Maximum.SpecVersion);
 	return result;
 }
-
-
 
 SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 {

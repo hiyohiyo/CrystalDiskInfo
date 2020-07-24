@@ -20,6 +20,8 @@ CStaticFx::CStaticFx()
 	m_RenderMode = SystemDraw;
 	m_bHighContrast = FALSE;
 	m_bDarkMode = FALSE;
+	m_bDrawFrame = FALSE;
+	m_FrameColor = RGB(128, 128, 128);
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
@@ -228,6 +230,12 @@ void CStaticFx::SetDrawFrame(BOOL bDrawFrame)
 	}
 }
 
+void CStaticFx::SetDrawFrameEx(BOOL bDrawFrame, COLORREF frameColor)
+{
+	m_bDrawFrame = bDrawFrame;
+	m_FrameColor = frameColor;
+}
+
 void CStaticFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
 {
 	m_GlassColor = glassColor;
@@ -251,6 +259,12 @@ void CStaticFx::SetMeter(BOOL bMeter, double meterRatio)
 	}
 
 	Invalidate();
+}
+
+void CStaticFx::SetLabelUnit(CString label, CString unit)
+{
+	m_Label = label;
+	m_Unit = unit;
 }
 
 //------------------------------------------------
@@ -426,6 +440,14 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 	pBkDC->DeleteDC();
 	delete pMemDC;
 	delete pBkDC;
+
+	if (m_bDrawFrame)
+	{
+		CBrush brush;
+		brush.CreateSolidBrush(m_FrameColor);
+		drawDC->FrameRect(&(lpDrawItemStruct->rcItem), &brush);
+		brush.DeleteObject();
+	}
 }
 
 void CStaticFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
@@ -466,7 +488,16 @@ void CStaticFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 		extent = drawDC->GetTextExtent(title);
 	}
 
-	if (m_TextAlign == SS_LEFT)
+	if (!m_Label.IsEmpty())
+	{
+		drawDC->DrawText(title, title.GetLength(), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		drawDC->SelectObject(oldFont);
+
+		oldFont = drawDC->SelectObject(m_FontToolTip);
+		drawDC->DrawText(m_Label, m_Label.GetLength(), rect, DT_LEFT | DT_TOP | DT_SINGLELINE);
+		drawDC->DrawText(m_Unit, m_Unit.GetLength(), rect, DT_RIGHT | DT_BOTTOM | DT_SINGLELINE);
+	}
+	else if (m_TextAlign == SS_LEFT)
 	{
 		drawDC->DrawText(title, title.GetLength(), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 	}

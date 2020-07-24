@@ -103,6 +103,7 @@ protected:
 	COLORREF m_ListLine1;
 	COLORREF m_ListLine2;
 	COLORREF m_Glass;
+	COLORREF m_Frame;
 
 	BYTE     m_ComboAlpha;
 	BYTE     m_EditAlpha;
