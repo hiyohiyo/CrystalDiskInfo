@@ -1737,6 +1737,7 @@ public:
 //		INT					PlextorNandWritesUnit;
 
 		INT					Life;
+		BOOL				FlagLifeRawValue;
 
 		DWORD				Major;
 		DWORD				Minor;

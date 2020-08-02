@@ -106,7 +106,7 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.8.0 Alpha2"
+#define PRODUCT_VERSION				L"8.8.0 Alpha3"
 #define PRODUCT_RELEASE				L"2020/08/02"
 #define PRODUCT_COPY_YEAR			L"2008-2020"
 #define PRODUCT_COPYRIGHT			L"© 2008-2020 hiyohiyo"
