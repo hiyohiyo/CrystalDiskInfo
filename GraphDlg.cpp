@@ -12,54 +12,7 @@
 #include "DiskInfoDlg.h"
 
 #include "OsInfoFx.h"
-
-static const TCHAR *attributeString[] = 
-{
-	_T("Smart"),
-	_T("SmartSsd"),
-	_T("SmartMtron"),
-	_T("SmartIndlinx"),
-	_T("SmartJMicron"),
-	_T("SmartIntel"),
-	_T("SmartSamsung"),
-	_T("SmartSandForce"),
-	_T("SmartMicron"),
-	_T("SmartOcz"),
-	_T("SmartSeagate"), // Not implemented
-	_T("SmartWesternDigital"), // Not implemented
-	_T("SmartPlextor"),
-	_T("SmartSanDisk"),
-	_T("SmartOczVector"),
-	_T("SmartToshiba"),
-	_T("SmartCorsair"),
-	_T("SmartKingston"),
-	_T("SmartMicronMU02"),
-	_T("SmartNVMe"),
-	_T("SmartRealtek"),
-};
-
-/*
-SSD_GENERAL = 1,
-SSD_VENDOR_MTRON = 2,
-SSD_VENDOR_INDILINX = 3,
-SSD_VENDOR_JMICRON = 4,
-SSD_VENDOR_INTEL = 5,
-SSD_VENDOR_SAMSUNG = 6,
-SSD_VENDOR_SANDFORCE = 7,
-SSD_VENDOR_MICRON = 8,
-SSD_VENDOR_OCZ = 9,
-HDD_SSD_VENDOR_SEAGATE = 10,
-HDD_VENDOR_WESTERN_DIGITAL = 11,
-SSD_VENDOR_PLEXTOR = 12,
-SSD_VENDOR_SANDISK = 13,
-SSD_VENDOR_OCZ_VECTOR = 14,
-HDD_SSD_VENDOR_TOSHIBA = 15,
-SSD_VENDOR_CORSAIR = 16,
-SSD_VENDOR_KINGSTON = 17,
-SSD_VENDOR_MICRON_MU02 = 18,
-SSD_VENDOR_NVME = 19,
-SSD_VENDOR_REALTEK = 20,
-*/
+#include "AtaSmart.h"
 
 #define SMART_TEMPERATURE                  300
 #define SMART_POWER_ON_HOURS               301

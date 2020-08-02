@@ -408,7 +408,7 @@ void CDiskInfoDlg::OnSaveText()
 	CString path;
 	SYSTEMTIME st;
 	GetLocalTime(&st);
-	path.Format(L"%s_%04d%02d%02d%0d%02d%02d", PRODUCT_NAME, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+	path.Format(L"%s_%04d%02d%02d%02d%02d%02d", PRODUCT_NAME, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
 
 	CString filter = L"TEXT (*.txt)|*.txt||";
 	CFileDialog save(FALSE, L"txt", path, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER, filter);

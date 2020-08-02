@@ -176,8 +176,8 @@ DWORD B8toB32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 	DWORD data =
 		  ((DWORD)b3 << 24)
 		+ ((DWORD)b2 << 16)
-		+ ((DWORD)b1 << 8)
-		+ ((DWORD)b0 << 0);
+		+ ((DWORD)b1 <<  8)
+		+ ((DWORD)b0 <<  0);
 
 	return data;
 }

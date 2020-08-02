@@ -14,6 +14,99 @@
 #include "NVMeInterpreter.h"
 #include "StorageQuery.h"
 
+static const TCHAR* commandTypeString[] =
+{
+	_T("un"),
+	_T("pd"),
+	_T("sm"),
+	_T("si"),
+	_T("sa"),
+	_T("sp"),
+	_T("io"),
+	_T("l1"), // Logitec 1
+	_T("l2"), // Logitec 2
+	_T("jm"),
+	_T("cy"),
+	_T("pr"),
+	_T("cs"),
+	_T("cp"),
+	_T("wm"),
+	_T("ns"), // NVMe Samsung
+	_T("ni"), // NVMe Intel
+	_T("sq"), // NVMe Storage Query
+	_T("nj"), // NVMe JMicron
+	_T("na"), // NVMe ASMedia
+	_T("nr"), // NVMe Realtek
+	_T("nt"), // NVMe Intel RST
+	_T("mr"), // MegaRAID SAS
+};
+
+static const TCHAR* ssdVendorString[] =
+{
+	_T(""),
+	_T(""),
+	_T("mt"), // MTron
+	_T("ix"), // Indilinx
+	_T("jm"), // JMicron
+	_T("il"), // Intel
+	_T("sg"), // SAMSUNG
+	_T("sf"), // SandForce
+	_T("mi"), // Micron
+	_T("oz"), // OCZ
+	_T("st"), // SEAGATE
+	_T("wd"), // WDC for HDD
+	_T("px"), // PLEXTOR
+	_T("sd"), // SanDisk
+	_T("oz"), // OCZ Vector
+	_T("to"), // TOSHIABA
+	_T("co"), // Corsair
+	_T("ki"), // Kingston
+	_T("m2"), // Micron MU02
+	_T("nv"), // NVMe
+	_T("re"), // Realtek
+	_T("sk"), // SKhynix
+	_T("ki"), // KIOXIA
+	_T("wd"), // WDC for SSD
+};
+
+static const TCHAR* attributeString[] =
+{
+	_T("Smart"),
+	_T("SmartSsd"),
+	_T("SmartMtron"),
+	_T("SmartIndlinx"),
+	_T("SmartJMicron"),
+	_T("SmartIntel"),
+	_T("SmartSamsung"),
+	_T("SmartSandForce"),
+	_T("SmartMicron"),
+	_T("SmartOcz"),
+	_T("SmartSeagate"), // Not implemented
+	_T("SmartWdc"),     // Not implemented
+	_T("SmartPlextor"),
+	_T("SmartSanDisk"),
+	_T("SmartOczVector"),
+	_T("SmartToshiba"),
+	_T("SmartCorsair"),
+	_T("SmartKingston"),
+	_T("SmartMicronMU02"),
+	_T("SmartNVMe"),
+	_T("SmartRealtek"),
+	_T("SmartSKhynix"),
+	_T("SmartKioxia"),
+	_T("SmartWdc"),
+};
+
+static const TCHAR* deviceFormFactorString[] =
+{
+	_T(""),
+	_T("5.25 inch"),
+	_T("3.5 inch"),
+	_T("2.5 inch"),
+	_T("1.8 inch"),
+	_T("< 1.8 inch")
+};
+
 typedef struct _VOLUME_DISK_EXTENTS_LX {
     DWORD       NumberOfDiskExtents;
     DISK_EXTENT Extents[4];
@@ -34,6 +127,49 @@ public:
 public:
 	CAtaSmart();
 	virtual ~CAtaSmart();
+
+
+	enum VENDOR_ID
+	{
+		HDD_GENERAL = 0,
+		SSD_GENERAL = 1,
+		SSD_VENDOR_MTRON = 2,
+		SSD_VENDOR_INDILINX = 3,
+		SSD_VENDOR_JMICRON = 4,
+		SSD_VENDOR_INTEL = 5,
+		SSD_VENDOR_SAMSUNG = 6,
+		SSD_VENDOR_SANDFORCE = 7,
+		SSD_VENDOR_MICRON = 8,
+		SSD_VENDOR_OCZ = 9,
+		HDD_SSD_VENDOR_SEAGATE = 10,
+		HDD_VENDOR_WDC = 11,
+		SSD_VENDOR_PLEXTOR = 12,
+		SSD_VENDOR_SANDISK = 13,
+		SSD_VENDOR_OCZ_VECTOR = 14,
+		HDD_SSD_VENDOR_TOSHIBA = 15,
+		SSD_VENDOR_CORSAIR = 16,
+		SSD_VENDOR_KINGSTON = 17,
+		SSD_VENDOR_MICRON_MU02 = 18,
+		SSD_VENDOR_NVME = 19,
+		SSD_VENDOR_REALTEK = 20,
+		SSD_VENDOR_SKhynix = 21,
+		SSD_VENDOR_KIOXIA = 22,
+		SSD_VENDOR_WDC = 23,
+		SSD_VENDOR_MAX = 99,
+
+		VENDOR_UNKNOWN = 0x0000,
+		USB_VENDOR_BUFFALO = 0x0411,
+		USB_VENDOR_IO_DATA = 0x04BB,
+		USB_VENDOR_LOGITEC = 0x0789,
+		USB_VENDOR_INITIO = 0x13FD,
+		USB_VENDOR_SUNPLUS = 0x04FC,
+		USB_VENDOR_JMICRON = 0x152D,
+		USB_VENDOR_CYPRESS = 0x04B4,
+		USB_VENDOR_OXFORD = 0x0928,
+		USB_VENDOR_PROLIFIC = 0x067B,
+		USB_VENDOR_REALTEK = 0x0BDA,
+		USB_VENDOR_ALL = 0xFFFF,
+	};
 
 	enum SMART_STATUS
 	{
@@ -126,47 +262,6 @@ public:
 	{
 		WMI_SMART_DATA = 0,
 		WMI_SMART_THRESHOLD
-	};
-
-	enum VENDOR_ID
-	{
-		HDD_GENERAL           = 0,
-		SSD_GENERAL           = 1,
-		SSD_VENDOR_MTRON      = 2,
-		SSD_VENDOR_INDILINX   = 3,
-		SSD_VENDOR_JMICRON    = 4,
-		SSD_VENDOR_INTEL      = 5,
-		SSD_VENDOR_SAMSUNG    = 6,
-		SSD_VENDOR_SANDFORCE  = 7,
-		SSD_VENDOR_MICRON     = 8,
-		SSD_VENDOR_OCZ        = 9,
-		HDD_SSD_VENDOR_SEAGATE= 10,
-		HDD_VENDOR_WESTERN_DIGITAL=11,
-		SSD_VENDOR_PLEXTOR    = 12, 
-		SSD_VENDOR_SANDISK	  = 13,
-		SSD_VENDOR_OCZ_VECTOR = 14,
-		HDD_SSD_VENDOR_TOSHIBA= 15,
-		SSD_VENDOR_CORSAIR    = 16,
-		SSD_VENDOR_KINGSTON   = 17,
-		SSD_VENDOR_MICRON_MU02= 18,
-		SSD_VENDOR_NVME       = 19,
-		SSD_VENDOR_REALTEK    = 20,
-		SSD_VENDOR_SKhynix    =	21,
-		SSD_VENDOR_KIOXIA     = 22,
-		SSD_VENDOR_MAX        = 99,
-
-		VENDOR_UNKNOWN      = 0x0000,
-		USB_VENDOR_BUFFALO  = 0x0411,
-		USB_VENDOR_IO_DATA  = 0x04BB,
-		USB_VENDOR_LOGITEC  = 0x0789,
-		USB_VENDOR_INITIO   = 0x13FD,
-		USB_VENDOR_SUNPLUS  = 0x04FC,
-		USB_VENDOR_JMICRON  = 0x152D,
-		USB_VENDOR_CYPRESS  = 0x04B4,
-		USB_VENDOR_OXFORD   = 0x0928,
-		USB_VENDOR_PROLIFIC = 0x067B,
-		USB_VENDOR_REALTEK  = 0x0BDA,
-		USB_VENDOR_ALL      = 0xFFFF,
 	};
 
 	enum INTERFACE_TYPE
@@ -1808,6 +1903,7 @@ protected:
 	BOOL GetSmartThresholdSat(INT physicalDriveId, BYTE target, ATA_SMART_INFO* asi);
 	BOOL ControlSmartStatusSat(INT physicalDriveId, BYTE target, BYTE command, COMMAND_TYPE commandType);
 	BOOL SendAtaCommandSat(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, COMMAND_TYPE commandType);
+	BOOL ReadLogExtSat(INT physicalDriveId, BYTE target, BYTE logAddress, BYTE logPage, PBYTE data, DWORD dataSize, COMMAND_TYPE type);
 
 	BOOL DoIdentifyDeviceSi(INT physicalDriveId, INT scsiPort, INT scsiBus, DWORD siliconImageId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeSi(INT physicalDriveId, ATA_SMART_INFO* asi);

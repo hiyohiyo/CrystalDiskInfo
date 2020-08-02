@@ -406,6 +406,45 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
 				}
 			}
+			// Life for WDC/SanDisk
+			else if (m_Ata.vars[i].Attribute[j].Id == 0xE6 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_WDC || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK))
+			{
+				int life = 100 - m_Ata.vars[i].Attribute[j].RawValue[1];
+				if (life <= 0) { life = 0; }
+				if (life == 0)
+				{
+					if (flag)
+					{
+						m_List.SetItem(k, 0, mask, _T(""), ICON_BAD, 0, 0, 0, 0);
+					}
+					else
+					{
+						m_List.InsertItem(k, _T(""), ICON_BAD);
+					}
+				}
+				else if (life <= m_Ata.vars[i].ThresholdFF)
+				{
+					if (flag)
+					{
+						m_List.SetItem(k, 0, mask, _T(""), ICON_CAUTION, 0, 0, 0, 0);
+					}
+					else
+					{
+						m_List.InsertItem(k, _T(""), ICON_CAUTION);
+					}
+				}
+				else
+				{
+					if (flag)
+					{
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
+					}
+					else
+					{
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
+					}
+				}
+			}
 			// Life
 			else if ((m_Ata.vars[i].Attribute[j].Id == 0xE8 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xBB && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)

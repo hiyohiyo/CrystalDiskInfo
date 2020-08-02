@@ -165,14 +165,10 @@ void CTemperatureDlg::InitSelectDisk()
 		if (i == p->GetSelectedDrive())
 		{
 			m_CtrlSelectDisk.SetCurSel(i);
+			m_DiskIndex = i;
 		}
 	}
 
-	UpdateData(TRUE);
-	UpdateSelectDisk(0);
-
-	UpdateData(TRUE);
-	m_DiskIndex = 0;
 	UpdateSelectDisk(m_DiskIndex);
 }
 
