@@ -155,6 +155,8 @@ LRESULT CDiskInfoDlg::OnTaskbarCreated(WPARAM, LPARAM)
 		}
 	}
 
+	UpdateToolTip();
+
 	return 0;
 }
 
@@ -618,6 +620,8 @@ BOOL CDiskInfoDlg::AddTemperatureIcon(DWORD i)
 		(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_bFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
 	}
 
+	cstr.Format(L"CrystalDiskInfo_%2d", i + 1);
+
 	if(AddTaskTray(TRAY_TEMPERATURE_ICON_BASE + i, m_TempIconIndex[i], m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature], cstr))
 	{
 		m_bTrayTemperatureIcon[i] = TRUE;
@@ -687,6 +691,7 @@ void CDiskInfoDlg::CheckTrayTemperatureIcon()
 			}
 		}
 	}
+	UpdateToolTip();
 }
 
 void CDiskInfoDlg::UpdateTrayTemperatureIcon(BOOL flagForce)
@@ -917,7 +922,7 @@ BOOL CDiskInfoDlg::AddTrayMainIcon()
 	{
 		return TRUE;
 	}
-	else if(AddTaskTray(gRegIconId, gRegMessageId, m_hIconMini, m_StatusTip))
+	else if(AddTaskTray(gRegIconId, gRegMessageId, m_hIconMini, L"CrystalDiskInfo"))
 	{
 		m_bTrayMainIcon = TRUE;
 		m_MainIconId = gRegIconId;

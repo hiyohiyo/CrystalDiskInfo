@@ -4544,32 +4544,32 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 
 	if (asi.Model.Find(L"KINGSTON") >= 0)
 	{
-		if (asi.Model.Find(L"SM2280") || asi.Model.Find(L"SEDC400") || asi.Model.Find(L"SKC310") || asi.Model.Find(L"SHSS") || asi.Model.Find(L"SUV300") || asi.Model.Find(L"SKC400"))
+		if (asi.Model.Find(L"SM2280") >= 0 || asi.Model.Find(L"SEDC400") >= 0 || asi.Model.Find(L"SKC310") >= 0 || asi.Model.Find(L"SHSS") >= 0 || asi.Model.Find(L"SUV300") >= 0 || asi.Model.Find(L"SKC400") >= 0)
 		{
 			flagSmartType = TRUE;
 			asi.SmartKeyName = _T("SmartKingston");
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 		}
-		else if (asi.Model.Find(L"SA400"))
+		else if (asi.Model.Find(L"SA400") >= 0)
 		{
 			flagSmartType = TRUE;
 			asi.FlagLifeRawValue = TRUE;
 			asi.SmartKeyName = _T("SmartKingstonSA400");
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 		}
-		else if (asi.Model.Find(L"KC600"))
+		else if (asi.Model.Find(L"KC600") >= 0)
 		{
 			flagSmartType = TRUE;
 			asi.SmartKeyName = _T("SmartKingstonKC600");
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_32MB;
 		}
-		else if (asi.Model.Find(L"DC500"))
+		else if (asi.Model.Find(L"DC500") >= 0)
 		{
 			flagSmartType = TRUE;
 			asi.SmartKeyName = _T("SmartKingstonDC500");
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 		}
-		else if (asi.Model.Find(L"SUV400") || asi.Model.Find(L"SUV500"))
+		else if (asi.Model.Find(L"SUV400") >= 0 || asi.Model.Find(L"SUV500") >= 0)
 		{
 			flagSmartType = TRUE;
 			asi.SmartKeyName = _T("SmartKingstonSuv");

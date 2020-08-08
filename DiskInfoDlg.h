@@ -66,7 +66,7 @@ public:
 	static const int SIZE_SMART_Y = 640;
 	static const int SIZE_MIN_Y = 260;
 	static const int SIZE_Y = 260;
-	static const int SIZE_MAX_Y = 1000;
+	static const int SIZE_MAX_Y = 2000;
 	static const int OFFSET_X = 0;
 #endif
 
