@@ -278,6 +278,7 @@ void CDiskInfoDlg::OnRescan()
 	}
 	else
 	{
+		RebuildListHeader(m_SelectDisk, TRUE);
 		Refresh(TRUE);
 	}
 
@@ -1122,39 +1123,39 @@ void CDiskInfoDlg::OnUsbSunplus()
 	DrawMenuBar();
 }
 
-void CDiskInfoDlg::OnUsbLogitec1()
+void CDiskInfoDlg::OnUsbLogitec()
 {
 	CMenu *menu = GetMenu();
-	if(m_Ata.FlagUsbLogitec1)
+	if(m_Ata.FlagUsbLogitec)
 	{
-		m_Ata.FlagUsbLogitec1 = FALSE;
-		menu->CheckMenuItem(ID_USB_LOGITEC1, MF_UNCHECKED);
+		m_Ata.FlagUsbLogitec = FALSE;
+		menu->CheckMenuItem(ID_USB_LOGITEC, MF_UNCHECKED);
 		WritePrivateProfileString(_T("USB"), _T("Logitec"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_Ata.FlagUsbLogitec1 = TRUE;
-		menu->CheckMenuItem(ID_USB_LOGITEC1, MF_CHECKED);
+		m_Ata.FlagUsbLogitec = TRUE;
+		menu->CheckMenuItem(ID_USB_LOGITEC, MF_CHECKED);
 		WritePrivateProfileString(_T("USB"), _T("Logitec"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
 }
 
-void CDiskInfoDlg::OnUsbLogitec2()
+void CDiskInfoDlg::OnUsbProlific()
 {
 	CMenu *menu = GetMenu();
-	if (m_Ata.FlagUsbLogitec2)
+	if (m_Ata.FlagUsbProlific)
 	{
-		m_Ata.FlagUsbLogitec2 = FALSE;
-		menu->CheckMenuItem(ID_USB_LOGITEC2, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Logitec2"), _T("0"), m_Ini);
+		m_Ata.FlagUsbProlific = FALSE;
+		menu->CheckMenuItem(ID_USB_PROLIFIC, MF_UNCHECKED);
+		WritePrivateProfileString(_T("USB"), _T("Prolific"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_Ata.FlagUsbLogitec2 = TRUE;
-		menu->CheckMenuItem(ID_USB_LOGITEC2, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Logitec2"), _T("1"), m_Ini);
+		m_Ata.FlagUsbProlific = TRUE;
+		menu->CheckMenuItem(ID_USB_PROLIFIC, MF_CHECKED);
+		WritePrivateProfileString(_T("USB"), _T("Prolific"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1298,8 +1299,8 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbSat     = FALSE;
 	m_Ata.FlagUsbIodata  = FALSE;
 	m_Ata.FlagUsbSunplus = FALSE;
-	m_Ata.FlagUsbLogitec1 = FALSE;
-	m_Ata.FlagUsbLogitec2 = FALSE;
+	m_Ata.FlagUsbLogitec = FALSE;
+	m_Ata.FlagUsbProlific = FALSE;
 	m_Ata.FlagUsbJmicron = FALSE;
 	m_Ata.FlagUsbCypress = FALSE;
 	m_Ata.FlagUsbMemory  = FALSE;
@@ -1310,8 +1311,8 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbSat();
 	OnUsbIodata();
 	OnUsbSunplus();
-	OnUsbLogitec1();
-	OnUsbLogitec2();
+	OnUsbLogitec();
+	OnUsbProlific();
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();
@@ -1325,8 +1326,8 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbSat     = TRUE;
 	m_Ata.FlagUsbIodata  = TRUE;
 	m_Ata.FlagUsbSunplus = TRUE;
-	m_Ata.FlagUsbLogitec1 = TRUE;
-	m_Ata.FlagUsbLogitec2 = TRUE;
+	m_Ata.FlagUsbLogitec = TRUE;
+	m_Ata.FlagUsbProlific = TRUE;
 	m_Ata.FlagUsbJmicron = TRUE;
 	m_Ata.FlagUsbCypress = TRUE;
 	m_Ata.FlagUsbMemory  = TRUE;
@@ -1337,8 +1338,8 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbSat();
 	OnUsbIodata();
 	OnUsbSunplus();
-	OnUsbLogitec1();
-	OnUsbLogitec2();
+	OnUsbLogitec();
+	OnUsbProlific();
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();

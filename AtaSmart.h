@@ -23,8 +23,8 @@ static const TCHAR* commandTypeString[] =
 	_T("sa"),
 	_T("sp"),
 	_T("io"),
-	_T("l1"), // Logitec 1
-	_T("l2"), // Logitec 2
+	_T("lo"),
+	_T("pr"),
 	_T("jm"),
 	_T("cy"),
 	_T("pr"),
@@ -231,8 +231,8 @@ public:
 		CMD_TYPE_SAT,			// SAT = SCSI_ATA_TRANSLATION
 		CMD_TYPE_SUNPLUS,
 		CMD_TYPE_IO_DATA,
-		CMD_TYPE_LOGITEC1,
-		CMD_TYPE_LOGITEC2,
+		CMD_TYPE_LOGITEC,
+		CMD_TYPE_PROLIFIC,
 		CMD_TYPE_JMICRON,
 		CMD_TYPE_CYPRESS,
 		CMD_TYPE_SAT_ASM1352R,	// AMS1352 2nd drive
@@ -1821,8 +1821,8 @@ public:
 	BOOL FlagUsbSat;
 	BOOL FlagUsbSunplus;
 	BOOL FlagUsbIodata;
-	BOOL FlagUsbLogitec1;
-	BOOL FlagUsbLogitec2;
+	BOOL FlagUsbLogitec;
+	BOOL FlagUsbProlific;
 	BOOL FlagUsbJmicron;
 	BOOL FlagUsbCypress;
 	BOOL FlagUsbMemory;

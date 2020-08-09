@@ -867,8 +867,8 @@
 #define ID_USB_SAT                      32968
 #define ID_USB_IODATA                   32969
 #define ID_USB_SUNPLUS                  32970
-#define ID_USB_LOGITEC1                 32971
-#define ID_USB_LOGITEC2                 32972
+#define ID_USB_LOGITEC                  32971
+#define ID_USB_PROLIFIC                 32972
 #define ID_USB_JMICRON                  32973
 #define ID_USB_CYPRESS                  32974
 #define ID_USB_MEMORY                   32975

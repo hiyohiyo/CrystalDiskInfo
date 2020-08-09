@@ -1116,8 +1116,8 @@ BEGIN
                 MENUITEM "SCSI_ATA_TRANSLATION (SAT)",  ID_USB_SAT
                 MENUITEM "I-O DATA",                    ID_USB_IODATA
                 MENUITEM "Sunplus",                     ID_USB_SUNPLUS
-                MENUITEM "Logitec1",                    ID_USB_LOGITEC1
-				MENUITEM "Logitec2",                    ID_USB_LOGITEC2
+                MENUITEM "Logitec",                    ID_USB_LOGITEC
+				MENUITEM "Prolific",                    ID_USB_PROLIFIC
                 MENUITEM "JMicron",                     ID_USB_JMICRON
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
