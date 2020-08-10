@@ -454,7 +454,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xD1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE7 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SSSTC)))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xAA && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON && !m_Ata.vars[i].IsRawValues8)
-				|| (m_Ata.vars[i].Attribute[j].Id == 0xCA && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON)
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xCA && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU02))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE9 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR))
 				)
 			{
