@@ -67,6 +67,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("sk"), // SKhynix
 	_T("ki"), // KIOXIA
 	_T("wd"), // WDC for SSD
+	_T("ss"), // SSSTC
 };
 
 static const TCHAR* attributeString[] =
@@ -95,6 +96,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartSKhynix"),
 	_T("SmartKioxia"),
 	_T("SmartWdc"),
+	_T("SmartSsstc"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -152,9 +154,10 @@ public:
 		SSD_VENDOR_MICRON_MU02 = 18,
 		SSD_VENDOR_NVME = 19,
 		SSD_VENDOR_REALTEK = 20,
-		SSD_VENDOR_SKhynix = 21,
+		SSD_VENDOR_SKHYNIX = 21,
 		SSD_VENDOR_KIOXIA = 22,
 		SSD_VENDOR_WDC = 23,
+		SSD_VENDOR_SSSTC = 24,
 		SSD_VENDOR_MAX = 99,
 
 		VENDOR_UNKNOWN = 0x0000,
@@ -1954,7 +1957,8 @@ protected:
 	BOOL IsSsdMicronMU02(ATA_SMART_INFO &asi);
 	BOOL IsSsdMicron(ATA_SMART_INFO &asi);
 	BOOL IsSsdOcz(ATA_SMART_INFO &asi);
-	BOOL IsSsdPlextor(ATA_SMART_INFO &asi);
+	BOOL IsSsdSsstc(ATA_SMART_INFO &asi);
+	BOOL IsSsdPlextor(ATA_SMART_INFO& asi);
 	BOOL IsSsdSanDisk(ATA_SMART_INFO &asi);
 	BOOL IsSsdKingston(ATA_SMART_INFO &asi);
 	BOOL IsSsdOczVector(ATA_SMART_INFO &asi);
