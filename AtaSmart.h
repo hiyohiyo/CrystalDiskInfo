@@ -70,6 +70,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("ss"), // SSSTC
 	_T("id"), // Intel DC
 	_T("ap"), // Apacer
+	_T("ts"), // Transcend
 };
 
 static const TCHAR* attributeString[] =
@@ -101,6 +102,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartSsstc"),
 	_T("SmartIntelDc"),
 	_T("SmartApacer"),
+	_T("SmartTranscend"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -164,6 +166,7 @@ public:
 		SSD_VENDOR_SSSTC = 24,
 		SSD_VENDOR_INTEL_DC = 25,
 		SSD_VENDOR_APACER = 26,
+		SSD_VENDOR_TRANSCEND = 27,
 		SSD_VENDOR_MAX = 99,
 
 		VENDOR_UNKNOWN = 0x0000,
@@ -1974,6 +1977,7 @@ protected:
 	BOOL IsSsdSKhynix(ATA_SMART_INFO& asi);
 	BOOL IsSsdKioxia(ATA_SMART_INFO& asi);
 	BOOL IsSsdApacer(ATA_SMART_INFO& asi);
+	BOOL IsSsdTranscend(ATA_SMART_INFO& asi);
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
