@@ -70,7 +70,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("ss"), // SSSTC
 	_T("id"), // Intel DC
 	_T("ap"), // Apacer
-	_T("ts"), // Transcend
+	_T("sm"), // SiliconMotion
 };
 
 static const TCHAR* attributeString[] =
@@ -102,7 +102,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartSsstc"),
 	_T("SmartIntelDc"),
 	_T("SmartApacer"),
-	_T("SmartTranscend"),
+	_T("SmartSiliconMotion"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -166,7 +166,7 @@ public:
 		SSD_VENDOR_SSSTC = 24,
 		SSD_VENDOR_INTEL_DC = 25,
 		SSD_VENDOR_APACER = 26,
-		SSD_VENDOR_TRANSCEND = 27,
+		SSD_VENDOR_SILICONMOTION = 27,
 		SSD_VENDOR_MAX = 99,
 
 		VENDOR_UNKNOWN = 0x0000,
@@ -1960,6 +1960,7 @@ protected:
 	BOOL IsSsdIndlinx(ATA_SMART_INFO &asi);
 	BOOL IsSsdJMicron60x(ATA_SMART_INFO &asi);
 	BOOL IsSsdJMicron61x(ATA_SMART_INFO &asi);
+	BOOL IsSsdJMicron66x(ATA_SMART_INFO& asi);
 	BOOL IsSsdIntel(ATA_SMART_INFO &asi);
 	BOOL IsSsdIntelDc(ATA_SMART_INFO& asi);
 	BOOL IsSsdSamsung(ATA_SMART_INFO &asi);
@@ -1977,7 +1978,7 @@ protected:
 	BOOL IsSsdSKhynix(ATA_SMART_INFO& asi);
 	BOOL IsSsdKioxia(ATA_SMART_INFO& asi);
 	BOOL IsSsdApacer(ATA_SMART_INFO& asi);
-	BOOL IsSsdTranscend(ATA_SMART_INFO& asi);
+	BOOL IsSsdSiliconMotion(ATA_SMART_INFO& asi);
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
