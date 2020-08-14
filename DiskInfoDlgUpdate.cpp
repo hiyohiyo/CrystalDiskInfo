@@ -1412,7 +1412,18 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 
 	m_CtrlAtaAtapi.SetToolTipText(i18n(_T("Dialog"), _T("MAJOR_VERSION_MINOR_VERSION")));
 	m_Feature = _T("");
-	cstr = L"\
+	
+	if (m_Ata.vars[i].IsNVMe)
+	{
+		cstr = L"\
+S.M.A.R.T.: Self-Monitoring, Analysis and Reporting Technology\n\
+TRIM: Trim function of DATA SET MANAGEMENT command\n\
+VolatileWriteCache: Volatile Write Cache Present\n\
+";
+	}
+	else
+	{
+		cstr = L"\
 S.M.A.R.T.: Self-Monitoring, Analysis and Reporting Technology\n\
 APM: Advanced Power Management\n\
 AAM: Automatic Acoustic Management\n\
@@ -1420,6 +1431,8 @@ NCQ: Native Command Queuing\n\
 TRIM: Trim function of DATA SET MANAGEMENT command\n\
 DevSleep: Device Sleep\
 ";
+	}
+
 	m_CtrlFeature.SetToolTipText(cstr);
 
 	if (m_Ata.vars[i].IsSmartSupported)
@@ -1437,18 +1450,6 @@ DevSleep: Device Sleep\
 		m_Feature += _T("AAM, ");
 	}
 
-	/*
-	if(m_Ata.vars[i].IsLba48Supported)
-	{
-	m_Feature += _T("48bit LBA, ");
-	SetElementPropertyEx(_T("Feature48Lba"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
-	}
-	else
-	{
-	SetElementPropertyEx(_T("Feature48Lba"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
-	}
-	*/
-
 	if (m_Ata.vars[i].IsNcqSupported)
 	{
 		m_Feature += _T("NCQ, ");
@@ -1463,27 +1464,11 @@ DevSleep: Device Sleep\
 	{
 		m_Feature += _T("DevSleep, ");
 	}
-	/*
-	if(m_Ata.vars[i].IsNvCacheSupported)
-	{
-	m_Feature += _T("NV Cache, ");
-	SetElementPropertyEx(_T("FeatureNvc"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
-	}
-	else
-	{
-	SetElementPropertyEx(_T("FeatureNvc"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
-	}
 
-	if(m_Ata.vars[i].IsSsd)
+	if (m_Ata.vars[i].IsVolatileWriteCachePresent)
 	{
-	m_Feature += _T("SSD, ");
-	SetElementPropertyEx(_T("FeatureSsd"), DISPID_IHTMLELEMENT_CLASSNAME, _T("supported"));
+		m_Feature += _T("VolatileWriteCache, ");
 	}
-	else
-	{
-	SetElementPropertyEx(_T("FeatureSsd"), DISPID_IHTMLELEMENT_CLASSNAME, _T("unsupported"));
-	}
-	*/
 	if (!m_Feature.IsEmpty())
 	{
 		m_Feature.Delete(m_Feature.GetLength() - 2, 2);

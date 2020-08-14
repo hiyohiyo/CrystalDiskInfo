@@ -960,7 +960,7 @@
 #define ID_GREEN_MODE                   33133
 #define ID_USB_NVME_REALTEK             33134
 #define ID_MEGA_RAID                    33135
-
+#define ID_USB_ASM1352R                 33136
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

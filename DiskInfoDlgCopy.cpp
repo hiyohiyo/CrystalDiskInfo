@@ -486,7 +486,6 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		}
 		drive.Replace(_T("%ROTATION_RATE%"), cstr);
 
-
 		feature = _T("");
 		if(m_Ata.vars[i].IsSmartSupported)
 		{
@@ -515,6 +514,10 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		if(m_Ata.vars[i].IsDeviceSleepSupported)
 		{
 			feature += _T("DevSleep, ");
+		}
+		if (m_Ata.vars[i].IsVolatileWriteCachePresent)
+		{
+			feature += _T("VolatileWriteCache, ");
 		}
 
 		/*

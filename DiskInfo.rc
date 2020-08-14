@@ -1120,6 +1120,7 @@ BEGIN
 				MENUITEM "Prolific",                    ID_USB_PROLIFIC
                 MENUITEM "JMicron",                     ID_USB_JMICRON
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
+                MENUITEM "ASM1352R",                    ID_USB_ASM1352R
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
 		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron)",            ID_USB_NVME_JMICRON
 		        MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA

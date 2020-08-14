@@ -71,6 +71,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("id"), // Intel DC
 	_T("ap"), // Apacer
 	_T("sm"), // SiliconMotion
+	_T("ph"), // Phison
 };
 
 static const TCHAR* attributeString[] =
@@ -103,6 +104,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartIntelDc"),
 	_T("SmartApacer"),
 	_T("SmartSiliconMotion"),
+	_T("SmartPhison"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -167,6 +169,7 @@ public:
 		SSD_VENDOR_INTEL_DC = 25,
 		SSD_VENDOR_APACER = 26,
 		SSD_VENDOR_SILICONMOTION = 27,
+		SSD_VENDOR_PHISON = 28,
 		SSD_VENDOR_MAX = 99,
 
 		VENDOR_UNKNOWN = 0x0000,
@@ -230,6 +233,7 @@ public:
 	{
 		HOST_READS_WRITES_UNKNOWN = 0,
 		HOST_READS_WRITES_512B,
+		HOST_READS_WRITES_1MB,
 		HOST_READS_WRITES_32MB,
 		HOST_READS_WRITES_GB,
 	};
@@ -387,7 +391,7 @@ protected:
 
 	struct BIN_IDENTIFY_DEVICE
 	{
-		BYTE		Bin[512];
+		BYTE		Bin[4096];
 	};
 
 	struct NVME_IDENTIFY_DEVICE
@@ -400,6 +404,7 @@ protected:
 		CHAR		MinorVersion;
 		SHORT		MajorVersion;
 		CHAR		Reserved3[428];
+		CHAR		Reserved4[3584];
 	};
 
 	struct ATA_IDENTIFY_DEVICE
@@ -1701,6 +1706,7 @@ public:
 		BOOL				IsMaxtorMinute;
 		BOOL				IsSsd;
 		BOOL				IsTrimSupported;
+		BOOL				IsVolatileWriteCachePresent;
 
 		BOOL				IsNVMe;
 		BOOL				IsUasp;
@@ -1842,6 +1848,7 @@ public:
 	BOOL FlagUsbNVMeASMedia;
 	BOOL FlagUsbNVMeRealtek;
 	BOOL FlagMegaRAID;
+	BOOL FlagUsbASM1352R;
 
 	DWORD CsmiType;
 
@@ -1979,6 +1986,7 @@ protected:
 	BOOL IsSsdKioxia(ATA_SMART_INFO& asi);
 	BOOL IsSsdApacer(ATA_SMART_INFO& asi);
 	BOOL IsSsdSiliconMotion(ATA_SMART_INFO& asi);
+	BOOL IsSsdPhison(ATA_SMART_INFO& asi);
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 

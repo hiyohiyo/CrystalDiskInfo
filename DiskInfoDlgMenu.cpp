@@ -1294,6 +1294,25 @@ void CDiskInfoDlg::OnMegaRAID()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::OnUsbASM1352R()
+{
+	CMenu* menu = GetMenu();
+	if (m_Ata.FlagUsbASM1352R)
+	{
+		m_Ata.FlagUsbASM1352R = FALSE;
+		menu->CheckMenuItem(ID_USB_ASM1352R, MF_UNCHECKED);
+		WritePrivateProfileString(_T("USB"), _T("ASM1352R"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagUsbASM1352R = TRUE;
+		menu->CheckMenuItem(ID_USB_ASM1352R, MF_CHECKED);
+		WritePrivateProfileString(_T("USB"), _T("ASM1352R"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
 void CDiskInfoDlg::OnUsbEnableAll()
 {
 	m_Ata.FlagUsbSat     = FALSE;
@@ -1303,6 +1322,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbProlific = FALSE;
 	m_Ata.FlagUsbJmicron = FALSE;
 	m_Ata.FlagUsbCypress = FALSE;
+	m_Ata.FlagUsbASM1352R = FALSE;
 	m_Ata.FlagUsbMemory  = FALSE;
 	m_Ata.FlagUsbNVMeJMicron = FALSE;
 	m_Ata.FlagUsbNVMeASMedia = FALSE;
@@ -1316,6 +1336,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();
+	OnUsbASM1352R();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
 	OnUsbNVMeRealtek();
@@ -1330,6 +1351,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbProlific = TRUE;
 	m_Ata.FlagUsbJmicron = TRUE;
 	m_Ata.FlagUsbCypress = TRUE;
+	m_Ata.FlagUsbASM1352R = TRUE;
 	m_Ata.FlagUsbMemory  = TRUE;
 	m_Ata.FlagUsbNVMeJMicron = TRUE;
 	m_Ata.FlagUsbNVMeASMedia = TRUE;
@@ -1343,6 +1365,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();
+	OnUsbASM1352R();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
 	OnUsbNVMeRealtek();
