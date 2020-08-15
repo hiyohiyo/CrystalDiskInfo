@@ -100,7 +100,7 @@
 CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	: CMainDialogFx(CDiskInfoDlg::IDD, pParent)
 {
-	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg");
+	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg - START");
 
 	m_Ini = ((CDiskInfoApp*)AfxGetApp())->m_Ini;
 	m_OffsetX = 0;
@@ -244,7 +244,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_NowDetectingUnitPowerOnHours = FALSE;
 	m_bInitializing = TRUE;
 
-	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg");
+	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg - CENTER");
 
 	m_ImageList.Create(16, 16, ILC_COLOR32|ILC_MASK, 3, 1);
 	m_ImageList.Add(AfxGetApp()->LoadIcon(IDI_GOOD));
@@ -359,6 +359,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 		DebugPrint(L"m_hVoice == NULL");
 	}
 #endif
+	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg - END");
 }
 
 CDiskInfoDlg::~CDiskInfoDlg()
@@ -1292,8 +1293,8 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlLabelDiskStatus.InitControl(128 + m_OffsetX, 260, labelWidth, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, FALSE);
 	m_CtrlLabelTemperature.InitControl(436 + m_OffsetX, 260, labelWidth, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, FALSE);
 
-	m_CtrlLabelDiskStatus.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelTemperature.SetMargin(0, 0, 0, 1, m_ZoomRatio);
+	m_CtrlLabelDiskStatus.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelTemperature.SetMargin(0, 0, 0, 4, m_ZoomRatio);
 
 	m_CtrlDiskStatus.InitControl       (256 + m_OffsetX, 256, 180, 28, m_ZoomRatio, &m_BkDC, IP(className), 1, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
 //	m_CtrlDiskStatus.SetAlpha(IMAGE_ALPHA);
@@ -1310,8 +1311,8 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlLabelDiskStatus.InitControl  (8 + m_OffsetX,  88, 100, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 	m_CtrlLabelTemperature.InitControl (8 + m_OffsetX, 184, 100, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 
-	m_CtrlLabelDiskStatus.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelTemperature.SetMargin(0, 0, 0, 1, m_ZoomRatio);
+	m_CtrlLabelDiskStatus.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelTemperature.SetMargin(0, 0, 0, 4, m_ZoomRatio);
 
 	m_CtrlDiskStatus.InitControl       (8 + m_OffsetX, 112, 100, 60, m_ZoomRatio, &m_BkDC, IP(className), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 	m_CtrlDiskStatus.SetMargin(4, 0, 4, 0, m_ZoomRatio);
@@ -1335,13 +1336,13 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlDiskStatus.SetHandCursor(TRUE);
 	m_CtrlTemperature.SetHandCursor(TRUE);
 
-	m_CtrlLabelFirmware.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelSerialNumber.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelInterface.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelTransferMode.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelDriveMap.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelAtaAtapi.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelFeature.SetMargin(0, 0, 0, 1, m_ZoomRatio);
+	m_CtrlLabelFirmware.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelSerialNumber.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelInterface.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelTransferMode.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelDriveMap.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelAtaAtapi.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelFeature.SetMargin(0, 0, 0, 4, m_ZoomRatio);
 
 	m_CtrlLabelFirmware.InitControl(128 + m_OffsetX, 88, labelWidth, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, FALSE);
 	m_CtrlLabelSerialNumber.InitControl(128 + m_OffsetX, 112, labelWidth, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, FALSE);
@@ -1375,11 +1376,11 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlAtaAtapi.InitControl    (256 + m_OffsetX, 208, 408, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
 	m_CtrlFeature.InitControl     (256 + m_OffsetX, 232, 408, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
 
-	m_CtrlLabelBufferSize.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelNvCacheSize.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelRotationRate.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelPowerOnCount.SetMargin(0, 0, 0, 1, m_ZoomRatio);
-	m_CtrlLabelPowerOnHours.SetMargin(0, 0, 0, 1, m_ZoomRatio);
+	m_CtrlLabelBufferSize.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelNvCacheSize.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelRotationRate.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelPowerOnCount.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelPowerOnHours.SetMargin(0, 0, 0, 4, m_ZoomRatio);
 
 	m_CtrlLabelBufferSize.InitControl(436 + m_OffsetX, 88, labelWidth, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, FALSE);
 	m_CtrlLabelNvCacheSize.InitControl(436 + m_OffsetX, 112, labelWidth, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, FALSE);
@@ -1393,11 +1394,11 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlPowerOnCount.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_CtrlPowerOnHours.SetGlassColor(m_Glass, m_GlassAlpha);
 
-	m_CtrlBufferSize.SetMargin(0, 0, 0, 2, m_ZoomRatio);
-	m_CtrlNvCacheSize.SetMargin(0, 0, 0, 2, m_ZoomRatio);
-	m_CtrlRotationRate.SetMargin(0, 0, 0, 2, m_ZoomRatio);
-	m_CtrlPowerOnCount.SetMargin(0, 0, 0, 2, m_ZoomRatio);
-	m_CtrlPowerOnHours.SetMargin(0, 0, 0, 2, m_ZoomRatio);
+	m_CtrlBufferSize.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlNvCacheSize.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlRotationRate.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlPowerOnCount.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlPowerOnHours.SetMargin(0, 0, 0, 4, m_ZoomRatio);
 
 	m_CtrlBufferSize.InitControl  (564 + m_OffsetX,  88, 100, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawGlass, m_bHighContrast, FALSE);
 	m_CtrlNvCacheSize.InitControl (564 + m_OffsetX, 112, 100, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawGlass, m_bHighContrast, FALSE);

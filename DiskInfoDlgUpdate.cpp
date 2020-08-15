@@ -456,7 +456,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE6 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_WDC || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE7 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SSSTC || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_APACER || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE8 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR)
-				|| (m_Ata.vars[i].Attribute[j].Id == 0xE9 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR))
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xE9 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX))
 				))
 			{
 				if (m_Ata.vars[i].Attribute[j].CurrentValue == 0

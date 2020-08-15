@@ -151,6 +151,8 @@ BOOL CDiskInfoApp::InitInstance()
 
 	// DEBUG
 	// flagEarthlight = TRUE;
+	DebugPrint(PRODUCT_VERSION);
+	DebugPrint(PRODUCT_RELEASE);
 
 	if(! flagEarthlight)
 	{

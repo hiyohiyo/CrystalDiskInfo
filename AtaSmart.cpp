@@ -1511,10 +1511,14 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 						DebugPrint(_T("flagTarget && GetDiskInfo"));
 						if (flagTarget && GetDiskInfo(physicalDriveId, scsiPort, scsiTargetId, interfaceType, commandType, usbVendorId, usbProductId, scsiBus, siliconImageType, FlagNvidiaController, FlagMarvellController, pnpDeviceId, flagNVMe, flagUasp))
 						{
-							DebugPrint(_T("int index = (int)vars.GetCount() - 1;"));
+							CString debug;
+							debug.Format(L"index=%d", (int)vars.GetCount() - 1);
+							DebugPrint(debug);
 							// for ASM1352 support
 							for(int index = (int)vars.GetCount() - 1; index + 1 > previousCount; index--)
 							{
+								debug.Format(L"index=%d, previousCount=%d", vars.GetCount() - 1, previousCount);
+								DebugPrint(debug);
 							//	int index = (int)vars.GetCount() - 1;
 								if (!diskSize.IsEmpty())
 								{
@@ -1649,7 +1653,6 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 								// DEBUG
 								// vars[index].VendorId = VENDOR_MTRON;
 								DebugPrint(_T("OK:Check Model Name"));
-
 							}
 						}
 					}
@@ -3618,9 +3621,13 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			}
 			break;
 		case 0xE9:
-			if(asi.DiskVendorId == SSD_VENDOR_INTEL || asi.DiskVendorId == SSD_VENDOR_OCZ || asi.DiskVendorId == SSD_VENDOR_OCZ_VECTOR)
+			if(asi.DiskVendorId == SSD_VENDOR_INTEL || asi.DiskVendorId == SSD_VENDOR_OCZ || asi.DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi.DiskVendorId == SSD_VENDOR_SKHYNIX)
 			{
-				if(asi.Attribute[j].CurrentValue <= 100)
+				if (asi.FlagLifeRawValue && asi.Attribute[j].RawValue[0] <= 100)
+				{
+					asi.Life = asi.Attribute[j].RawValue[0];
+				}
+				else if (asi.Attribute[j].CurrentValue <= 100)
 				{
 					asi.Life = asi.Attribute[j].CurrentValue;
 				}
@@ -4611,9 +4618,10 @@ BOOL CAtaSmart::IsSsdSKhynix(ATA_SMART_INFO &asi)
 		asi.SmartKeyName = _T("SmartSKhynix");
 	}
 
-	if (asi.Model.Find(_T("SC308")) >= 0 || asi.Model.Find(_T("SC311")) >= 0 || asi.Model.Find(_T("SC401")) >= 0)
+	if (asi.Model.Find(_T("SC311")) >= 0 || asi.Model.Find(_T("SC401")) >= 0)
 	{
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
+		asi.FlagLifeRawValue = TRUE; // for SC311
 	}
 	else
 	{
@@ -5159,7 +5167,9 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				return AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_ASMEDIA, &identify);
 			}
 			*/
-
+			CString debug;
+			debug.Format(L"FlagUsbSat=%d", FlagUsbSat);
+			DebugPrint(debug);
 			if(FlagUsbSat && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT))
 			{
 				BOOL flag = FALSE;
@@ -7055,6 +7065,10 @@ BOOL CAtaSmart::SendAtaCommandScsi(INT scsiPort, INT scsiTargetId, BYTE main, BY
 
 BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_DEVICE* data, COMMAND_TYPE type)
 {
+	CString debug;
+	debug.Format(L"DoIdentifyDeviceSat pd=%d, tt=%d, ct=%d", physicalDriveId, target, type);
+	DebugPrint(debug);
+
 	BOOL	bRet;
 	HANDLE	hIoCtrl;
 	DWORD	dwReturned;
@@ -7064,6 +7078,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 
 	if (data == NULL)
 	{
+		DebugPrint(L"data == NULL");
 		return	FALSE;
 	}
 
@@ -7072,6 +7087,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 	if (hIoCtrl == INVALID_HANDLE_VALUE)
 	{
+		DebugPrint(L"hIoCtrl == INVALID_HANDLE_VALUE");
 		return	FALSE;
 	}
 
@@ -7263,6 +7279,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 	*/
 	else
 	{
+		DebugPrint(L"COMMAND_TYPE_UNKNOWN");
 		return FALSE;
 	}
 
@@ -7276,6 +7293,9 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 
 	if (bRet == FALSE || dwReturned != length)
 	{
+		
+		debug.Format(L"bRet == FALSE || dwReturned != length / Error Coce: %08X", GetLastError());
+		DebugPrint(debug);
 		return	FALSE;
 	}
 
@@ -7286,6 +7306,8 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 	}
 	if (count == 0) // || sptwb.DataBuf[510] != 0xA5
 	{
+		DebugPrint(L"count=0");
+
 		return	FALSE;
 	}
 
@@ -9106,9 +9128,13 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				}
 				break;
 			case 0xE9:
-				if(asi->DiskVendorId == SSD_VENDOR_INTEL || asi->DiskVendorId == SSD_VENDOR_OCZ || asi->DiskVendorId == SSD_VENDOR_OCZ_VECTOR)
+				if(asi->DiskVendorId == SSD_VENDOR_INTEL || asi->DiskVendorId == SSD_VENDOR_OCZ || asi->DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi->DiskVendorId == SSD_VENDOR_SKHYNIX)
 				{
-					if(asi->Attribute[j].CurrentValue <= 100)
+					if (asi->FlagLifeRawValue && asi->Attribute[j].RawValue[0] <= 100)
+					{
+						asi->Life = asi->Attribute[j].RawValue[0];
+					}
+					else if (asi->Attribute[j].CurrentValue <= 100)
 					{
 						asi->Life = asi->Attribute[j].CurrentValue;
 					}
@@ -9650,7 +9676,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		|| (vars[i].Attribute[j].Id == 0xD1 && vars[i].DiskVendorId == SSD_VENDOR_INDILINX)
 		|| (vars[i].Attribute[j].Id == 0xE7 && (vars[i].DiskVendorId == SSD_VENDOR_SANDFORCE || vars[i].DiskVendorId == SSD_VENDOR_CORSAIR || vars[i].DiskVendorId == SSD_VENDOR_KINGSTON || vars[i].DiskVendorId == SSD_VENDOR_SKHYNIX || vars[i].DiskVendorId == SSD_VENDOR_REALTEK || vars[i].DiskVendorId == SSD_VENDOR_SANDISK || vars[i].DiskVendorId == SSD_VENDOR_SSSTC || vars[i].DiskVendorId == SSD_VENDOR_APACER || vars[i].DiskVendorId == SSD_VENDOR_JMICRON))
 		|| (vars[i].Attribute[j].Id == 0xE8 && vars[i].DiskVendorId == SSD_VENDOR_PLEXTOR)
-		|| (vars[i].Attribute[j].Id == 0xE9 && (vars[i].DiskVendorId == SSD_VENDOR_INTEL || vars[i].DiskVendorId == SSD_VENDOR_OCZ || vars[i].DiskVendorId == SSD_VENDOR_OCZ_VECTOR))
+		|| (vars[i].Attribute[j].Id == 0xE9 && (vars[i].DiskVendorId == SSD_VENDOR_INTEL || vars[i].DiskVendorId == SSD_VENDOR_OCZ || vars[i].DiskVendorId == SSD_VENDOR_OCZ_VECTOR || vars[i].DiskVendorId == SSD_VENDOR_SKHYNIX))
 		))
 		{
 			flagUnknown = FALSE;

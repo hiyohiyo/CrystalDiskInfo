@@ -499,10 +499,6 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		{
 			feature += _T("AAM, ");
 		}
-		if(m_Ata.vars[i].IsLba48Supported)
-		{
-			feature += _T("48bit LBA, ");
-		}
 		if(m_Ata.vars[i].IsNcqSupported)
 		{
 			feature += _T("NCQ, ");
