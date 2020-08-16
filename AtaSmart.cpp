@@ -9672,7 +9672,6 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		|| (vars[i].Attribute[j].Id == 0xB1 && vars[i].DiskVendorId == SSD_VENDOR_SAMSUNG)
 		|| (vars[i].Attribute[j].Id == 0xBB && vars[i].DiskVendorId == SSD_VENDOR_MTRON)
 		|| (vars[i].Attribute[j].Id == 0xCA && (vars[i].DiskVendorId == SSD_VENDOR_MICRON || vars[i].DiskVendorId == SSD_VENDOR_MICRON_MU02 || vars[i].DiskVendorId == SSD_VENDOR_INTEL_DC))
-		|| (vars[i].Attribute[j].Id == 0xE6 && (vars[i].DiskVendorId == SSD_VENDOR_WDC ||vars[i].DiskVendorId == SSD_VENDOR_SANDISK))
 		|| (vars[i].Attribute[j].Id == 0xD1 && vars[i].DiskVendorId == SSD_VENDOR_INDILINX)
 		|| (vars[i].Attribute[j].Id == 0xE7 && (vars[i].DiskVendorId == SSD_VENDOR_SANDFORCE || vars[i].DiskVendorId == SSD_VENDOR_CORSAIR || vars[i].DiskVendorId == SSD_VENDOR_KINGSTON || vars[i].DiskVendorId == SSD_VENDOR_SKHYNIX || vars[i].DiskVendorId == SSD_VENDOR_REALTEK || vars[i].DiskVendorId == SSD_VENDOR_SANDISK || vars[i].DiskVendorId == SSD_VENDOR_SSSTC || vars[i].DiskVendorId == SSD_VENDOR_APACER || vars[i].DiskVendorId == SSD_VENDOR_JMICRON))
 		|| (vars[i].Attribute[j].Id == 0xE8 && vars[i].DiskVendorId == SSD_VENDOR_PLEXTOR)
@@ -9680,13 +9679,23 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		))
 		{
 			flagUnknown = FALSE;
-			if(vars[i].Attribute[j].CurrentValue == 0
-			|| vars[i].Attribute[j].CurrentValue < vars[i].Threshold[j].ThresholdValue
-			)
+			int life = 0;
+
+			if (vars[i].FlagLifeRawValue)
+			{
+				life = vars[i].Attribute[j].RawValue[0];
+			}
+			else
+			{
+				life = vars[i].Attribute[j].CurrentValue;
+			}
+			if (life > 100) { life = 100; }
+			
+			if(life == 0 || (!vars[i].FlagLifeRawValue && life < vars[i].Threshold[j].ThresholdValue))
 			{
 				error = 1;
 			}
-			else if(vars[i].Attribute[j].CurrentValue <= vars[i].ThresholdFF)
+			else if(life <= vars[i].ThresholdFF)
 			{
 				caution = 1;
 			}
@@ -9705,6 +9714,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 				life = 100 - vars[i].Attribute[j].RawValue[1];
 			}
 			if (life <= 0) { life = 0; }
+			if (life > 100) { life = 100; }
 
 			if (life == 0)
 			{

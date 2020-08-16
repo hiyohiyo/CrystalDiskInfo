@@ -453,13 +453,23 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xBB && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xCA && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU02 || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xD1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
-				|| (m_Ata.vars[i].Attribute[j].Id == 0xE6 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_WDC || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE7 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SSSTC || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_APACER || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE8 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE9 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX))
-				))
+				)
 			{
-				if (m_Ata.vars[i].Attribute[j].CurrentValue == 0
+				if (m_Ata.vars[i].FlagLifeRawValue)
+				{
+					if (flag)
+					{
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
+					}
+					else
+					{
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
+					}
+				}
+				else if (m_Ata.vars[i].Attribute[j].CurrentValue == 0
 					|| m_Ata.vars[i].Attribute[j].CurrentValue < m_Ata.vars[i].Threshold[j].ThresholdValue)
 				{
 					if (flag)
