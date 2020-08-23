@@ -72,6 +72,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("ap"), // Apacer
 	_T("sm"), // SiliconMotion
 	_T("ph"), // Phison
+	_T("sg"), // Seagate
 };
 
 static const TCHAR* attributeString[] =
@@ -105,6 +106,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartApacer"),
 	_T("SmartSiliconMotion"),
 	_T("SmartPhison"),
+	_T("SmartSeagate"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -1756,6 +1758,7 @@ public:
 
 		INT					Life;
 		BOOL				FlagLifeRawValue;
+		BOOL				FlagLifeRawValueIncrement;
 
 		DWORD				Major;
 		DWORD				Minor;
@@ -1987,6 +1990,7 @@ protected:
 	BOOL IsSsdApacer(ATA_SMART_INFO& asi);
 	BOOL IsSsdSiliconMotion(ATA_SMART_INFO& asi);
 	BOOL IsSsdPhison(ATA_SMART_INFO& asi);
+	BOOL IsSsdSeagate(ATA_SMART_INFO& asi);
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 

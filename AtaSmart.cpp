@@ -2250,6 +2250,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 //	asi.Speed = 0.0;
 	asi.Life = -1;
 	asi.FlagLifeRawValue = FALSE;
+	asi.FlagLifeRawValueIncrement = FALSE;
 	asi.HostWrites = -1;
 	asi.HostReads = -1;
 	asi.GBytesErased = -1;
@@ -3544,6 +3545,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 		asi.IsSsd = TRUE;
 	}
+	else if (IsSsdSeagate(asi))
+	{
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+		asi.IsSsd = TRUE;
+	}
 	else if(asi.IsSsd)
 	{
 		asi.SmartKeyName = _T("SmartSsd");
@@ -3629,7 +3635,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				asi.NandWrites = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_PLEXTOR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC)
+			else if (asi.DiskVendorId == SSD_VENDOR_PLEXTOR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 			{
 				asi.NandWrites = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
@@ -3651,7 +3657,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					        asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
 					/ 32); // 65536 * 512 / 1024 / 1024 / 1024;
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_KINGSTON
+			else if (asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == HDD_SSD_VENDOR_SEAGATE
 				||  (asi.DiskVendorId == SSD_VENDOR_SKHYNIX && asi.HostReadsWritesUnit ==  HOST_READS_WRITES_GB)
 				)
 			{
@@ -3686,7 +3692,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					        asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
 					/ 32); // 65536 * 512 / 1024 / 1024 / 1024;
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_REALTEK || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SKHYNIX || asi.DiskVendorId == SSD_VENDOR_PHISON)
+			else if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_REALTEK || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SKHYNIX || asi.DiskVendorId == SSD_VENDOR_PHISON || asi.DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 			{
 				if (asi.HostReadsWritesUnit == HOST_READS_WRITES_512B)
 				{
@@ -3718,14 +3724,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				asi.HostWrites = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_SAMSUNG)
-			{
-				asi.HostWrites  = (INT)(
-					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
-					        asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5]) 
-					/ 2 / 1024 / 1024);
-			}
-			else if(asi.DiskVendorId == HDD_VENDOR_WDC)
+			else if (asi.DiskVendorId == SSD_VENDOR_SAMSUNG || asi.DiskVendorId == HDD_VENDOR_WDC|| asi.DiskVendorId == SSD_VENDOR_APACER || asi.DiskVendorId == SSD_VENDOR_JMICRON)
 			{
 				asi.HostWrites  = (INT)(
 					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
@@ -3750,13 +3749,6 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					        asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
 					/ 2 / 1024 / 1024);
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_APACER || asi.DiskVendorId == SSD_VENDOR_JMICRON)
-			{
-				asi.HostWrites = (INT)(
-					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
-					        asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
-					/ 2 / 1024 / 1024);
-			}
 			break;
 		case 0xF2:
 			if (asi.DiskVendorId == HDD_SSD_VENDOR_TOSHIBA && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
@@ -3770,7 +3762,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					        asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
 					/ 32); // 65536 * 512 / 1024 / 1024 / 1024;
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_REALTEK || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SKHYNIX)
+			else if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_REALTEK || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SKHYNIX || asi.DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 			{
 				if (asi.HostReadsWritesUnit == HOST_READS_WRITES_512B)
 				{
@@ -3795,14 +3787,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				asi.HostReads = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
-			else if(asi.DiskVendorId == SSD_VENDOR_SAMSUNG)
-			{
-				asi.HostReads  = (INT)(
-					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
-					        asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
-					/ 2 / 1024 / 1024);
-			}
-			else if(asi.DiskVendorId == HDD_VENDOR_WDC)
+			else if(asi.DiskVendorId == SSD_VENDOR_SAMSUNG || asi.DiskVendorId == HDD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_JMICRON)
 			{
 				asi.HostReads  = (INT)(
 					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
@@ -3859,7 +3844,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			}
 			break;
 		case 0xAD:
-			if (asi.DiskVendorId == SSD_VENDOR_KIOXIA)
+			if (asi.DiskVendorId == HDD_SSD_VENDOR_TOSHIBA || asi.DiskVendorId == SSD_VENDOR_KIOXIA)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue - 100;
 				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
@@ -3878,9 +3863,13 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			break;
 		case 0xE7:
 			if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_SKHYNIX || asi.DiskVendorId == SSD_VENDOR_REALTEK
-			||  asi.DiskVendorId == SSD_VENDOR_SANDISK || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_APACER || asi.DiskVendorId == SSD_VENDOR_JMICRON || asi.DiskVendorId == SSD_VENDOR_PHISON)
+			||  asi.DiskVendorId == SSD_VENDOR_SANDISK || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_APACER || asi.DiskVendorId == SSD_VENDOR_JMICRON || asi.DiskVendorId == SSD_VENDOR_PHISON || asi.DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 			{
-				if (asi.FlagLifeRawValue)
+				if (asi.FlagLifeRawValueIncrement)
+				{
+					asi.Life = 100 - asi.Attribute[j].RawValue[0];
+				}
+				else if (asi.FlagLifeRawValue)
 				{
 					asi.Life = asi.Attribute[j].RawValue[0];
 				}
@@ -3939,6 +3928,13 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				asi.NandWrites = (INT)(
 					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
 					        asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
+					/ 32); // 65536 * 512 / 1024 / 1024 / 1024;
+			}
+			else if (asi.DiskVendorId == SSD_VENDOR_SILICONMOTION)
+			{
+				asi.NandWrites = (INT)(
+					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
+						asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
 					/ 32); // 65536 * 512 / 1024 / 1024 / 1024;
 			}
 			break;
@@ -4076,7 +4072,6 @@ BOOL CAtaSmart::IsSsdJMicron66x(ATA_SMART_INFO& asi)
 	&& asi.Attribute[12].Id == 0xAA
 	&& asi.Attribute[13].Id == 0xAD
 	&& asi.Attribute[14].Id == 0xAF
-	//	&& asi.Attribute[15].Id == 0xAD
 		)
 	{
 		flagSmartType = TRUE;
@@ -4566,6 +4561,7 @@ BOOL CAtaSmart::IsSsdToshiba(ATA_SMART_INFO &asi)
 		{
 			// TOSHIBA HG3
 			// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1106;id=diskinfo#1106
+			asi.HostReadsWritesUnit = HOST_READS_WRITES_32MB;
 		}
 		else
 		{
@@ -4609,7 +4605,16 @@ BOOL CAtaSmart::IsSsdSKhynix(ATA_SMART_INFO &asi)
 		asi.SmartKeyName = _T("SmartSKhynix");
 	}
 
-	if (asi.Model.Find(_T("SC311")) >= 0 || asi.Model.Find(_T("SC401")) >= 0)
+
+	// https://crystalmark.info/board/c-board.cgi?cmd=one;no=1772;id=#1772
+	if (
+	   (asi.Model.Find(_T("HFS")) >= 0 && asi.Model.Find(_T("TND")) >= 0) // SL300
+	|| (asi.Model.Find(_T("HFS")) >= 0 && asi.Model.Find(_T("MND")) >= 0) // SC210
+	) 
+	{
+		asi.FlagLifeRawValueIncrement = TRUE;
+	}
+	else if (asi.Model.Find(_T("SC311")) >= 0 || asi.Model.Find(_T("SC401")) >= 0)
 	{
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
 		asi.FlagLifeRawValue = TRUE; // for SC311
@@ -4674,9 +4679,31 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 		)
 	{
 		flagSmartType = TRUE;
-		asi.FlagLifeRawValue = TRUE;
-		asi.SmartKeyName = _T("SmartSiliconMotion");
-		asi.DiskVendorId = SSD_VENDOR_SILICONMOTION;
+	}
+	else if ( // ADATA SX950 https://crystalmark.info/board/c-board.cgi?cmd=one;no=1819;id=
+		   asi.Attribute[0].Id == 0x01
+		&& asi.Attribute[1].Id == 0x05
+		&& asi.Attribute[2].Id == 0x09
+		&& asi.Attribute[3].Id == 0x0C
+		&& asi.Attribute[4].Id == 0xA0
+		&& asi.Attribute[5].Id == 0xA1
+		&& asi.Attribute[6].Id == 0xA3
+		&& asi.Attribute[7].Id == 0xA4
+		&& asi.Attribute[8].Id == 0xA5
+		&& asi.Attribute[9].Id == 0xA6
+		&& asi.Attribute[10].Id == 0xA7
+		&& asi.Attribute[11].Id == 0x94
+		&& asi.Attribute[12].Id == 0x95
+		&& asi.Attribute[13].Id == 0x96
+		&& asi.Attribute[14].Id == 0x97
+		&& asi.Attribute[15].Id == 0xA9
+		&& asi.Attribute[16].Id == 0xB1
+		&& asi.Attribute[17].Id == 0xB5
+		&& asi.Attribute[18].Id == 0xB6
+		&& asi.Attribute[19].Id == 0xBB
+		)
+	{
+		flagSmartType = TRUE;
 	}
 	else if (
 		   asi.Attribute[0].Id == 0x01
@@ -4702,9 +4729,6 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 		)
 	{
 		flagSmartType = TRUE;
-		asi.FlagLifeRawValue = TRUE;
-		asi.SmartKeyName = _T("SmartSiliconMotion");
-		asi.DiskVendorId = SSD_VENDOR_SILICONMOTION;
 	}
 
 	// Transcend
@@ -4714,11 +4738,20 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 		||   asi.SmartReadData[400] == 'S' && asi.SmartReadData[401] == 'M') // Silicon Motion
 		{
 			flagSmartType = TRUE;
-			asi.FlagLifeRawValue = TRUE;
-			asi.SmartKeyName = _T("SmartSiliconMotion");
-			asi.DiskVendorId = SSD_VENDOR_SILICONMOTION;
 		}
 	}
+	else if (asi.Model.Find(_T("ADATA SX950")) == 0)
+	{
+		flagSmartType = TRUE;
+	}
+
+	if (flagSmartType)
+	{
+		asi.FlagLifeRawValue = TRUE;
+		asi.SmartKeyName = _T("SmartSiliconMotion");
+		asi.DiskVendorId = SSD_VENDOR_SILICONMOTION;
+	}
+
 	return flagSmartType;
 }
 
@@ -4733,13 +4766,32 @@ BOOL CAtaSmart::IsSsdPhison(ATA_SMART_INFO& asi)
 		&& asi.Attribute[ 4].Id == 0xAA
 		&& asi.Attribute[ 5].Id == 0xAD
 		&& asi.Attribute[ 6].Id == 0xC0
-		&& asi.Attribute[ 7].Id == 0xC2
+		&& asi.Attribute[ 7].Id == 0xC2 // with Temperature Sensor
 		&& asi.Attribute[ 8].Id == 0xDA
 		&& asi.Attribute[ 9].Id == 0xE7
 		&& asi.Attribute[10].Id == 0xF1
+	)
+	{
+		flagSmartType = TRUE;
+	}
+	else if(
+		   asi.Attribute[0].Id == 0x01
+		&& asi.Attribute[1].Id == 0x09
+		&& asi.Attribute[2].Id == 0x0C
+		&& asi.Attribute[3].Id == 0xA8
+		&& asi.Attribute[4].Id == 0xAA
+		&& asi.Attribute[5].Id == 0xAD
+		&& asi.Attribute[6].Id == 0xC0
+		&& asi.Attribute[7].Id == 0xDA
+		&& asi.Attribute[8].Id == 0xE7
+		&& asi.Attribute[9].Id == 0xF1
 		)
 	{
 		flagSmartType = TRUE;
+	}
+
+	if (flagSmartType)
+	{
 		asi.FlagLifeRawValue = TRUE;
 		asi.SmartKeyName = _T("SmartPhison");
 		asi.DiskVendorId = SSD_VENDOR_PHISON;
@@ -4751,6 +4803,43 @@ BOOL CAtaSmart::IsSsdPhison(ATA_SMART_INFO& asi)
 		{
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 		}
+	}
+
+	return flagSmartType;
+}
+
+BOOL CAtaSmart::IsSsdSeagate(ATA_SMART_INFO& asi)
+{
+	BOOL flagSmartType = FALSE;
+
+	if (   asi.Attribute[0].Id == 0x01
+		&& asi.Attribute[1].Id == 0x05
+		&& asi.Attribute[2].Id == 0x09
+		&& asi.Attribute[3].Id == 0x0C
+		&& asi.Attribute[4].Id == 0x64
+		&& asi.Attribute[5].Id == 0x66
+		&& asi.Attribute[6].Id == 0x67
+		&& asi.Attribute[7].Id == 0xAA
+		&& asi.Attribute[8].Id == 0xAB
+		&& asi.Attribute[9].Id == 0xAC
+		&& asi.Attribute[10].Id == 0xAD
+		&& asi.Attribute[11].Id == 0xAE
+		&& asi.Attribute[12].Id == 0xB1
+		&& asi.Attribute[13].Id == 0xB7
+		&& asi.Attribute[14].Id == 0xBB
+		)
+	{
+		flagSmartType = TRUE;
+		asi.SmartKeyName = _T("SmartSeagateIronWolf");
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+		asi.DiskVendorId = HDD_SSD_VENDOR_SEAGATE;
+	}
+	else if (asi.Model.Find(L"ST") == 0 || asi.Model.Find(L"Seagate") == 0)
+	{
+		flagSmartType = TRUE;
+		asi.SmartKeyName = _T("SmartSeagate");
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+		asi.DiskVendorId = HDD_SSD_VENDOR_SEAGATE;
 	}
 
 	return flagSmartType;
@@ -9127,7 +9216,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				{
 					asi->NandWrites = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC)
+				else if (asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 				{
 					asi->NandWrites = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
@@ -9149,7 +9238,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
 						/ 32); // 65536 * 512 / 1024 / 1024 / 1024;
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_KINGSTON
+				else if (asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == HDD_SSD_VENDOR_SEAGATE
 					||  (asi->DiskVendorId == SSD_VENDOR_SKHYNIX && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
 					)
 				{
@@ -9184,7 +9273,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
 						/ 32); // 65536 * 512 / 1024 / 1024 / 1024;
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_SANDFORCE || asi->DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi->DiskVendorId == SSD_VENDOR_CORSAIR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_REALTEK || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SKHYNIX || asi->DiskVendorId == SSD_VENDOR_PHISON)
+				else if (asi->DiskVendorId == SSD_VENDOR_SANDFORCE || asi->DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi->DiskVendorId == SSD_VENDOR_CORSAIR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_REALTEK || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SKHYNIX || asi->DiskVendorId == SSD_VENDOR_PHISON || asi->DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 				{
 					if (asi->HostReadsWritesUnit == HOST_READS_WRITES_512B)
 					{
@@ -9216,14 +9305,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				{
 					asi->HostWrites = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
-				else if(asi->DiskVendorId == SSD_VENDOR_SAMSUNG)
-				{
-					asi->HostWrites  = (INT)(
-						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
-						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
-						/ 2 / 1024 / 1024);
-				}
-				else if(asi->DiskVendorId == HDD_VENDOR_WDC)
+				else if(asi->DiskVendorId == SSD_VENDOR_SAMSUNG || asi->DiskVendorId == HDD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_APACER || asi->DiskVendorId == SSD_VENDOR_JMICRON)
 				{
 					asi->HostWrites  = (INT)(
 						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
@@ -9248,13 +9330,6 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
 						/ 2 / 1024 / 1024);
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_APACER || asi->DiskVendorId == SSD_VENDOR_JMICRON)
-				{
-					asi->HostWrites = (INT)(
-						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
-						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
-						/ 2 / 1024 / 1024);
-				}
 				break;
 			case 0xF2:
 				if (asi->DiskVendorId == HDD_SSD_VENDOR_TOSHIBA && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
@@ -9268,7 +9343,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
 						/ 32); // 65536 * 512 / 1024 / 1024 / 1024;
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_SANDFORCE || asi->DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi->DiskVendorId == SSD_VENDOR_CORSAIR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_REALTEK || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SKHYNIX)
+				else if (asi->DiskVendorId == SSD_VENDOR_SANDFORCE || asi->DiskVendorId == SSD_VENDOR_OCZ_VECTOR || asi->DiskVendorId == SSD_VENDOR_CORSAIR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_REALTEK || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SKHYNIX || asi->DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 				{
 					if (asi->HostReadsWritesUnit == HOST_READS_WRITES_512B)
 					{
@@ -9293,18 +9368,11 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				{
 					asi->HostReads = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
-				else if(asi->DiskVendorId == SSD_VENDOR_SAMSUNG)
+				else if(asi->DiskVendorId == SSD_VENDOR_SAMSUNG || asi->DiskVendorId == HDD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_JMICRON)
 				{
 					asi->HostReads  = (INT)(
 						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
 						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
-						/ 2 / 1024 / 1024);
-				}
-				else if(asi->DiskVendorId == HDD_VENDOR_WDC)
-				{
-					asi->HostReads  = (INT)(
-						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
-						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5]) 
 						/ 2 / 1024 / 1024);
 				}
 				else if(asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_MICRON_MU02)
@@ -9352,7 +9420,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				}
 				break;
 			case 0xAD:
-				if (asi->DiskVendorId == SSD_VENDOR_KIOXIA)
+				if (asi->DiskVendorId == HDD_SSD_VENDOR_TOSHIBA || asi->DiskVendorId == SSD_VENDOR_KIOXIA)
 				{
 					asi->Life = asi->Attribute[j].CurrentValue - 100;
 					if (asi->Life < 0 || asi->Life > 100) { asi->Life = -1; }
@@ -9371,9 +9439,14 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				break;
 			case 0xE7:
 				if (asi->DiskVendorId == SSD_VENDOR_SANDFORCE || asi->DiskVendorId == SSD_VENDOR_CORSAIR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_SKHYNIX || asi->DiskVendorId == SSD_VENDOR_REALTEK
-				||  asi->DiskVendorId == SSD_VENDOR_SANDISK || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_APACER || asi->DiskVendorId == SSD_VENDOR_JMICRON || asi->DiskVendorId == SSD_VENDOR_PHISON)
+				||  asi->DiskVendorId == SSD_VENDOR_SANDISK || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_APACER || asi->DiskVendorId == SSD_VENDOR_JMICRON || asi->DiskVendorId == SSD_VENDOR_PHISON || asi->DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 				{
-					if (asi->FlagLifeRawValue)
+
+					if (asi->FlagLifeRawValueIncrement)
+					{
+						asi->Life = 100 - asi->Attribute[j].RawValue[0];
+					}
+					else if (asi->FlagLifeRawValue)
 					{
 						asi->Life = asi->Attribute[j].RawValue[0];
 					}
@@ -9432,6 +9505,13 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					asi->NandWrites = (INT)(
 						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
 						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
+						) / 32;
+				}
+				else if (asi->DiskVendorId == SSD_VENDOR_SILICONMOTION)
+				{
+					asi->NandWrites = (INT)(
+						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
+							asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
 						) / 32;
 				}
 				break;
