@@ -9,7 +9,6 @@ Smart/
 *.exe
 *.csv
 *.png
-*.lang
 x64/
 Build/
 *.sdf
