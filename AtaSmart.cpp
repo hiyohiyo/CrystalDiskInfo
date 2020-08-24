@@ -4612,6 +4612,7 @@ BOOL CAtaSmart::IsSsdSKhynix(ATA_SMART_INFO &asi)
 	|| (asi.Model.Find(_T("HFS")) >= 0 && asi.Model.Find(_T("MND")) >= 0) // SC210
 	) 
 	{
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 		asi.FlagLifeRawValueIncrement = TRUE;
 	}
 	else if (asi.Model.Find(_T("SC311")) >= 0 || asi.Model.Find(_T("SC401")) >= 0)
