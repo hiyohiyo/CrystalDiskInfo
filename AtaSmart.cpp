@@ -3350,18 +3350,10 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.IsSsd = TRUE;
 	}
 
-	if(asi.Model.Find(_T("STT")) != 0 && asi.Model.Find(_T("ST")) == 0)
+	if(asi.Model.Find(_T("STT")) != 0 && asi.Model.Find(_T("ST")) == 0 && ! asi.IsSsd)
 	{
-		if(asi.IsSsd)
-		{
-			asi.SmartKeyName = _T("SmartSsd");
-			asi.DiskVendorId = HDD_SSD_VENDOR_SEAGATE;
-		}
-		else
-		{
-			asi.SmartKeyName = _T("Smart");
-			asi.DiskVendorId = HDD_SSD_VENDOR_SEAGATE;
-		}
+		asi.SmartKeyName = _T("Smart");
+		asi.DiskVendorId = HDD_SSD_VENDOR_SEAGATE;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
 	else if(asi.Model.Find(_T("WDC ")) == 0 && ! asi.IsSsd)
