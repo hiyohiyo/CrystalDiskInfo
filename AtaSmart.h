@@ -54,7 +54,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("mi"), // Micron
 	_T("oz"), // OCZ
 	_T("st"), // SEAGATE
-	_T("wd"), // WDC for HDD
+	_T("wd"), // WDC
 	_T("px"), // PLEXTOR
 	_T("sd"), // SanDisk
 	_T("oz"), // OCZ Vector
@@ -66,13 +66,11 @@ static const TCHAR* ssdVendorString[] =
 	_T("re"), // Realtek
 	_T("sk"), // SKhynix
 	_T("ki"), // KIOXIA
-	_T("wd"), // WDC for SSD
 	_T("ss"), // SSSTC
 	_T("id"), // Intel DC
 	_T("ap"), // Apacer
 	_T("sm"), // SiliconMotion
 	_T("ph"), // Phison
-	_T("sg"), // Seagate
 };
 
 static const TCHAR* attributeString[] =
@@ -87,8 +85,8 @@ static const TCHAR* attributeString[] =
 	_T("SmartSandForce"),
 	_T("SmartMicron"),
 	_T("SmartOcz"),
-	_T("SmartSeagate"), // Not implemented
-	_T("SmartWdc"),     // Not implemented
+	_T("SmartSeagate"),
+	_T("SmartWdc"),
 	_T("SmartPlextor"),
 	_T("SmartSanDisk"),
 	_T("SmartOczVector"),
@@ -100,13 +98,11 @@ static const TCHAR* attributeString[] =
 	_T("SmartRealtek"),
 	_T("SmartSKhynix"),
 	_T("SmartKioxia"),
-	_T("SmartWdc"),
 	_T("SmartSsstc"),
 	_T("SmartIntelDc"),
 	_T("SmartApacer"),
 	_T("SmartSiliconMotion"),
-	_T("SmartPhison"),
-	_T("SmartSeagate"),
+	_T("SmartPhison")
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -153,12 +149,12 @@ public:
 		SSD_VENDOR_SANDFORCE = 7,
 		SSD_VENDOR_MICRON = 8,
 		SSD_VENDOR_OCZ = 9,
-		HDD_SSD_VENDOR_SEAGATE = 10,
-		HDD_VENDOR_WDC = 11,
+		SSD_VENDOR_SEAGATE = 10,
+		SSD_VENDOR_WDC = 11,
 		SSD_VENDOR_PLEXTOR = 12,
 		SSD_VENDOR_SANDISK = 13,
 		SSD_VENDOR_OCZ_VECTOR = 14,
-		HDD_SSD_VENDOR_TOSHIBA = 15,
+		SSD_VENDOR_TOSHIBA = 15,
 		SSD_VENDOR_CORSAIR = 16,
 		SSD_VENDOR_KINGSTON = 17,
 		SSD_VENDOR_MICRON_MU02 = 18,
@@ -166,12 +162,11 @@ public:
 		SSD_VENDOR_REALTEK = 20,
 		SSD_VENDOR_SKHYNIX = 21,
 		SSD_VENDOR_KIOXIA = 22,
-		SSD_VENDOR_WDC = 23,
-		SSD_VENDOR_SSSTC = 24,
-		SSD_VENDOR_INTEL_DC = 25,
-		SSD_VENDOR_APACER = 26,
-		SSD_VENDOR_SILICONMOTION = 27,
-		SSD_VENDOR_PHISON = 28,
+		SSD_VENDOR_SSSTC = 23,
+		SSD_VENDOR_INTEL_DC = 24,
+		SSD_VENDOR_APACER = 25,
+		SSD_VENDOR_SILICONMOTION = 26,
+		SSD_VENDOR_PHISON = 27,
 		SSD_VENDOR_MAX = 99,
 
 		VENDOR_UNKNOWN = 0x0000,
