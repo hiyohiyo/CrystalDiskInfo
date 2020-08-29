@@ -3631,6 +3631,13 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				asi.NandWrites = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
+			else if (asi.DiskVendorId == SSD_VENDOR_JMICRON)
+			{
+				asi.NandWrites = (INT)(
+					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
+						asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
+					/ 2 / 1024 / 1024);
+			}
 			break;
 		case 0xE1:
 			if(asi.DiskVendorId == SSD_VENDOR_INTEL)
@@ -9212,6 +9219,13 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				else if (asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == HDD_SSD_VENDOR_SEAGATE)
 				{
 					asi->NandWrites = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
+				}
+				else if (asi->DiskVendorId == SSD_VENDOR_JMICRON)
+				{
+					asi->NandWrites = (INT)(
+						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
+							asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
+						/ 2 / 1024 / 1024);
 				}
 				break;
 			case 0xE1:
