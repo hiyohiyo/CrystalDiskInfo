@@ -3362,6 +3362,10 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.DiskVendorId = SSD_VENDOR_WDC;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
+	else if (IsSsdSeagate(asi))
+	{
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+	}
 	else if (IsSsdMtron(asi))
 	{
 		asi.SmartKeyName = _T("SmartMtron");
@@ -3379,14 +3383,14 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.SmartKeyName = _T("SmartJMicron61x");
 		asi.DiskVendorId = SSD_VENDOR_JMICRON;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
-	}	else if(IsSsdJMicron60x(asi))
+	}
+	else if(IsSsdJMicron60x(asi))
 	{
 		asi.SmartKeyName = _T("SmartJMicron60x");
 		asi.DiskVendorId = SSD_VENDOR_JMICRON;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 		asi.IsRawValues8 = TRUE;
 	}
-
 	else if(IsSsdIndlinx(asi))
 	{
 		asi.SmartKeyName = _T("SmartIndlinx");
@@ -3506,10 +3510,6 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
 	else if (IsSsdPhison(asi))
-	{
-		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
-	}
-	else if (IsSsdSeagate(asi))
 	{
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
@@ -4575,7 +4575,6 @@ BOOL CAtaSmart::IsSsdSKhynix(ATA_SMART_INFO &asi)
 		asi.SmartKeyName = _T("SmartSKhynix");
 	}
 
-
 	// https://crystalmark.info/board/c-board.cgi?cmd=one;no=1772;id=#1772
 	if (
 	   (asi.Model.Find(_T("HFS")) >= 0 && asi.Model.Find(_T("TND")) >= 0) // SL300
@@ -4697,6 +4696,38 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 		&& asi.Attribute[17].Id == 0xA8
 		&& asi.Attribute[18].Id == 0xA9
 		&& asi.Attribute[19].Id == 0xAF
+		)
+	{
+		flagSmartType = TRUE;
+	}
+	else if (
+		   asi.Attribute[0].Id == 0x01
+		&& asi.Attribute[1].Id == 0x05
+		&& asi.Attribute[2].Id == 0x09
+		&& asi.Attribute[3].Id == 0x0C
+		&& asi.Attribute[4].Id == 0xA0
+		&& asi.Attribute[5].Id == 0xA1
+		&& asi.Attribute[6].Id == 0xA3
+		&& asi.Attribute[7].Id == 0xA4
+		&& asi.Attribute[8].Id == 0xA5
+		&& asi.Attribute[9].Id == 0xA6
+		&& asi.Attribute[10].Id == 0xA7
+		)
+	{
+		flagSmartType = TRUE;
+	}
+	else if (
+		   asi.Attribute[0].Id == 0x01
+		&& asi.Attribute[1].Id == 0x05
+		&& asi.Attribute[2].Id == 0x09
+		&& asi.Attribute[3].Id == 0x0C
+		&& asi.Attribute[4].Id == 0xA0
+		&& asi.Attribute[5].Id == 0xA1
+		&& asi.Attribute[6].Id == 0xA3
+		&& asi.Attribute[7].Id == 0x94
+		&& asi.Attribute[8].Id == 0x95
+		&& asi.Attribute[9].Id == 0x96
+		&& asi.Attribute[10].Id == 0x97
 		)
 	{
 		flagSmartType = TRUE;
