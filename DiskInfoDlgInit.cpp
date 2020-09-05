@@ -493,7 +493,7 @@ CString CDiskInfoDlg::GetDiskStatusReason(DWORD index)
 				}
 			}
 			else if(
-			   (m_Ata.vars[index].Attribute[j].Id == 0xA9 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON))
+			   (m_Ata.vars[index].Attribute[j].Id == 0xA9 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON && m_Ata.vars[index].HostReadsWritesUnit == m_Ata.HOST_READS_WRITES_32MB) || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MARVELL))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xAD && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_TOSHIBA || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KIOXIA))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xB1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xBB && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)

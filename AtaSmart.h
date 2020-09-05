@@ -71,6 +71,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("ap"), // Apacer
 	_T("sm"), // SiliconMotion
 	_T("ph"), // Phison
+	_T("ma"), // Marvell
 };
 
 static const TCHAR* attributeString[] =
@@ -103,6 +104,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartApacer"),
 	_T("SmartSiliconMotion"),
 	_T("SmartPhison")
+	_T("SmartMarvell")
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -167,6 +169,7 @@ public:
 		SSD_VENDOR_APACER = 25,
 		SSD_VENDOR_SILICONMOTION = 26,
 		SSD_VENDOR_PHISON = 27,
+		SSD_VENDOR_MARVELL = 28,
 		SSD_VENDOR_MAX = 99,
 
 		VENDOR_UNKNOWN = 0x0000,
@@ -1986,6 +1989,8 @@ protected:
 	BOOL IsSsdSiliconMotion(ATA_SMART_INFO& asi);
 	BOOL IsSsdPhison(ATA_SMART_INFO& asi);
 	BOOL IsSsdSeagate(ATA_SMART_INFO& asi);
+	BOOL IsSsdMarvell(ATA_SMART_INFO& asi);
+	BOOL IsSsdGeneral(ATA_SMART_INFO& asi);
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
