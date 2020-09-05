@@ -106,7 +106,7 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.8.4"
+#define PRODUCT_VERSION				L"8.8.5"
 #define PRODUCT_RELEASE				L"2020/09/05"
 #define PRODUCT_COPY_YEAR			L"2008-2020"
 #define PRODUCT_COPYRIGHT			L"© 2008-2020 hiyohiyo"
@@ -116,6 +116,7 @@
 #define DEFAULT_FONT_FACE_2			L"Tahoma"
 
 #define THEME_DIR					L"CdiResource\\themes\\"
+#define LANGUAGE_DIR				L"CdiResource\\language\\"
 #define LANGUAGE_DIR				L"CdiResource\\language\\"
 
 #define MENU_THEME_INDEX			3

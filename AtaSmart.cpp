@@ -3522,6 +3522,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 	}
 	else if (IsSsdMarvell(asi))
 	{
+		asi.SmartKeyName = _T("SmartMarvell");
 		asi.DiskVendorId = SSD_VENDOR_MARVELL;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
