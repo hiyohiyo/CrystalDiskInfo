@@ -493,7 +493,7 @@ CString CDiskInfoDlg::GetDiskStatusReason(DWORD index)
 				}
 			}
 			else if(
-			   (m_Ata.vars[index].Attribute[j].Id == 0xA9 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON && m_Ata.vars[index].HostReadsWritesUnit == m_Ata.HOST_READS_WRITES_32MB) || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MARVELL))
+			   (m_Ata.vars[index].Attribute[j].Id == 0xA9 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON && m_Ata.vars[index].HostReadsWritesUnit == m_Ata.HOST_READS_WRITES_32MB)))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xAD && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_TOSHIBA || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KIOXIA))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xB1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xBB && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
@@ -503,7 +503,8 @@ CString CDiskInfoDlg::GetDiskStatusReason(DWORD index)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE8 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE7 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SSSTC || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_APACER || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SEAGATE))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE9 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INTEL || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX))
-			)
+			|| (m_Ata.vars[index].Attribute[j].Id == 0xE9 && m_Ata.vars[index].FlagLifeSanDiskLenovo)
+				)
 			{
 				cstr.Format(_T("%02X"), m_Ata.vars[index].Attribute[j].Id);
 				if(m_Ata.vars[index].DiskStatus == CAtaSmart::DISK_STATUS_CAUTION)

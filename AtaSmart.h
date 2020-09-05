@@ -1757,6 +1757,9 @@ public:
 		INT					Life;
 		BOOL				FlagLifeRawValue;
 		BOOL				FlagLifeRawValueIncrement;
+		BOOL				FlagLifeSanDisk0_1;
+		BOOL				FlagLifeSanDisk1;
+		BOOL				FlagLifeSanDiskLenovo;
 
 		DWORD				Major;
 		DWORD				Minor;
