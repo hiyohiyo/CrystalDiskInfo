@@ -629,7 +629,6 @@ void CDiskInfoDlg::SaveText(CString fileName)
 					}
 				}
 
-
 				if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
 				{
 					cstr.Format(_T("%02X %02X%02X%02X%02X%02X%02X %s\r\n"),
