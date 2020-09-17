@@ -3639,11 +3639,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				asi.NandWrites = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_PLEXTOR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SEAGATE)
+			else if (asi.DiskVendorId == SSD_VENDOR_PLEXTOR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SEAGATE || asi.DiskVendorId == SSD_VENDOR_MAXIOTEK)
 			{
 				asi.NandWrites = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_JMICRON || asi.DiskVendorId == SSD_VENDOR_MAXIOTEK)
+			else if (asi.DiskVendorId == SSD_VENDOR_JMICRON)
 			{
 				asi.NandWrites = (INT)(
 					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
@@ -4139,6 +4139,10 @@ BOOL CAtaSmart::IsSsdJMicron66x(ATA_SMART_INFO& asi)
 	&& asi.Attribute[13].Id == 0xAD
 	&& asi.Attribute[14].Id == 0xAF
 		)
+	{
+		flagSmartType = TRUE;
+	}
+	else if (asi.Model.Find(_T("ADATA SU700")) == 0)
 	{
 		flagSmartType = TRUE;
 	}
@@ -5011,23 +5015,18 @@ BOOL CAtaSmart::IsSsdMaxiotek(ATA_SMART_INFO& asi)
 		&& asi.Attribute[3].Id == 0xA7
 		&& asi.Attribute[4].Id == 0xA8
 		&& asi.Attribute[5].Id == 0xA9
-		&& asi.Attribute[6].Id == 0xAB
-		&& asi.Attribute[7].Id == 0xAC
-		&& asi.Attribute[8].Id == 0xAD
-		&& asi.Attribute[9].Id == 0xAF
-		&& asi.Attribute[10].Id == 0xB1
-		&& asi.Attribute[11].Id == 0xB4
-		&& asi.Attribute[12].Id == 0xBB
-		&& asi.Attribute[13].Id == 0xC0
-
 		)
+	{
+		flagSmartType = TRUE;
+	}
+	else if (asi.Model.Find(_T("Maxio")) == 0)
 	{
 		flagSmartType = TRUE;
 	}
 
 	if (flagSmartType)
 	{
-		asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 	}
 
 	return flagSmartType;
@@ -9436,11 +9435,11 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				{
 					asi->NandWrites = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SEAGATE)
+				else if (asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SEAGATE || asi->DiskVendorId == SSD_VENDOR_MAXIOTEK)
 				{
 					asi->NandWrites = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_JMICRON || asi->DiskVendorId == SSD_VENDOR_MAXIOTEK)
+				else if (asi->DiskVendorId == SSD_VENDOR_JMICRON)
 				{
 					asi->NandWrites = (INT)(
 						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
