@@ -853,7 +853,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 			clip += _T("\r\n");
 		}
 
-		if(m_bDumpSmartReadData && (m_Ata.vars[i].DiskVendorId != m_Ata.SSD_VENDOR_NVME))
+		if(m_bDumpSmartReadThreshold && (m_Ata.vars[i].DiskVendorId != m_Ata.SSD_VENDOR_NVME))
 		{
 			memcpy(data, &(m_Ata.vars[i].SmartReadThreshold), 512);
 			cstr.Format(_T("-- SMART_READ_THRESHOLD ----------------------------------------------------\r\n"));

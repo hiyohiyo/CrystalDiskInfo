@@ -616,7 +616,6 @@ BOOL CDiskInfoDlg::AddTemperatureIcon(DWORD i)
 	if(m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] == NULL)
 	{
 		m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] = 
-	//	AfxGetApp()->LoadIcon(IDI_TEMP_00 + m_bFahrenheit * 200 + alermTemperatureOffset + m_Ata.vars[i].Temperature);
 		(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_bFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
 	}
 
@@ -668,7 +667,6 @@ BOOL CDiskInfoDlg::ModifyTemperatureIcon(DWORD i)
 	if (m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] == NULL)
 	{
 		m_hTempIcon[m_bFahrenheit][TemperatureOffset + m_Ata.vars[i].Temperature] =
-			//	AfxGetApp()->LoadIcon(IDI_TEMP_00 + m_bFahrenheit * 200 + alermTemperatureOffset + m_Ata.vars[i].Temperature);
 			(HICON)::LoadImageW(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_TEMP_00 + m_bFahrenheit * 300 + TemperatureOffset + m_Ata.vars[i].Temperature), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
 	}
 

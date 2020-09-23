@@ -3501,15 +3501,6 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.SmartKeyName = _T("SmartKioxia");
 		asi.DiskVendorId = SSD_VENDOR_KIOXIA;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
-
-		asi.SmartKeyName = L"SmartJMicron66x";
-		asi.Attribute[0].Id = 0xE9;
-		asi.Attribute[1].Id = 0xE9;
-		asi.Attribute[2].Id = 0xE9;
-		asi.Attribute[3].Id = 0xE9;
-		asi.Attribute[4].Id = 0xE9;
-		asi.Attribute[5].Id = 0xE9;
-
 	}
 	else if (IsSsdApacer(asi))
 	{
@@ -3949,7 +3940,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		case 0xA9:
 			if(asi.DiskVendorId == SSD_VENDOR_REALTEK || (asi.DiskVendorId == SSD_VENDOR_KINGSTON && asi.HostReadsWritesUnit == HOST_READS_WRITES_32MB) || asi.DiskVendorId == SSD_VENDOR_SILICONMOTION)
 			{
-				if (asi.FlagLifeRawValue)
+				if (asi.FlagLifeRawValueIncrement)
+				{
+					asi.Life = 100 - asi.Attribute[j].RawValue[0];
+				}
+				else if (asi.FlagLifeRawValue)
 				{
 					asi.Life = asi.Attribute[j].RawValue[0];
 				}
@@ -4871,7 +4866,14 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 
 	if (flagSmartType)
 	{
-		asi.FlagLifeRawValue = TRUE;
+		if (asi.Model.Find(_T("SSD")) == 0) // for Goldenfir SSD
+		{
+			asi.FlagLifeRawValueIncrement = TRUE;
+		}
+		else
+		{
+			asi.FlagLifeRawValue = TRUE;
+		}
 	}
 
 	return flagSmartType;
@@ -4961,7 +4963,14 @@ BOOL CAtaSmart::IsSsdSeagate(ATA_SMART_INFO& asi)
 	{
 		flagSmartType = TRUE;
 		asi.SmartKeyName = _T("SmartSeagate");
-		asi.FlagLifeRawValue = TRUE;
+		if (asi.Model.Find(L"HM") >= 0 || asi.Model.Find(L"FP") >= 0)
+		{
+			asi.FlagLifeRawValue = FALSE;
+		}
+		else
+		{
+			asi.FlagLifeRawValue = TRUE;
+		}
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 		asi.DiskVendorId = SSD_VENDOR_SEAGATE;
 	}
@@ -5980,7 +5989,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.Lun = 0;
 	sptwb.Spt.SenseInfoLength = 24;
 	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_OUT;
-	sptwb.Spt.DataTransferLength = IDENTIFY_BUFFER_SIZE;
+	sptwb.Spt.DataTransferLength = 4096;
 	sptwb.Spt.TimeOutValue = 2;
 	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf);
 	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, SenseBuf);
@@ -9742,7 +9751,11 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 			case 0xA9:
 				if(asi->DiskVendorId == SSD_VENDOR_REALTEK || (asi->DiskVendorId == SSD_VENDOR_KINGSTON && asi->HostReadsWritesUnit == HOST_READS_WRITES_32MB) || asi->DiskVendorId == SSD_VENDOR_SILICONMOTION)
 				{
-					if (asi->FlagLifeRawValue)
+					if (asi->FlagLifeRawValueIncrement)
+					{
+						asi->Life = 100 - asi->Attribute[j].RawValue[0];
+					}
+					else if (asi->FlagLifeRawValue)
 					{
 						asi->Life = asi->Attribute[j].RawValue[0];
 					}

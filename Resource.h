@@ -952,9 +952,9 @@
 #define ID_RAW_VALUES_1BYTE             33113
 #define ID_AUTO_DETECTION_05_SEC        33125
 #define ID_AUTO_DETECTION_10_SEC        33126
-#define ID_AUTO_DETECTION_20_SEC        33128
-#define ID_AUTO_DETECTION_30_SEC        33129
-#define ID_AUTO_DETECTION_DISABLE       33130
+#define ID_AUTO_DETECTION_20_SEC        33127
+#define ID_AUTO_DETECTION_30_SEC        33128
+#define ID_AUTO_DETECTION_DISABLE       33129
 #define ID_ASCII_VIEW                   33131
 #define ID_HIDE_NO_SMART_DISK           33132
 #define ID_GREEN_MODE                   33133

@@ -1602,7 +1602,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 	cstr = i18n(_T("Menu"), _T("ALERT_SOUND"));
 	menu->ModifyMenu(ID_ALERT_SOUND, MF_STRING, ID_ALERT_SOUND, cstr);
-	cstr = i18n(_T("Menu"), _T("ALERM_HISTORY"));
+	cstr = i18n(_T("Menu"), _T("ALARM_HISTORY"));
 	menu->ModifyMenu(ID_ALARM_HISTORY, MF_STRING, ID_ALARM_HISTORY, cstr);
 	cstr = i18n(_T("Menu"), _T("SOUND_SETTINGS"));
 	menu->ModifyMenu(ID_SOUND_SETTINGS, MF_STRING, ID_SOUND_SETTINGS, cstr);
