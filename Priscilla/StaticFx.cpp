@@ -607,12 +607,12 @@ void CStaticFx::LoadCtrlBk(CDC* drawDC)
 //------------------------------------------------
 
 void CStaticFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio,
-     COLORREF textColor, LONG fontWeight)
+     COLORREF textColor, LONG fontWeight, BYTE fontRender)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;
 	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
-	logFont.lfQuality = 6;
+	logFont.lfQuality = fontRender;
 	logFont.lfWeight = fontWeight;
 	if (face.GetLength() < 32)
 	{

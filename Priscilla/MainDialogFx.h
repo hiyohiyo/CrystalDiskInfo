@@ -21,9 +21,6 @@ public:
 	void SetZoomType(DWORD zoomType);
 
 	// Getter
-	int GetFontScale();
-	double GetFontRatio();
-	CString GetFontFace();
 	CString GetCurrentLangPath();
 	CString GetDefaultLangPath();
 	CString GetThemeDir();

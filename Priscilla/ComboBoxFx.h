@@ -39,7 +39,7 @@ public:
 
 	// Font
 	void SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio = 1.0,
-		 COLORREF textColor = RGB(0, 0, 0), COLORREF textColorSelected = RGB(0, 0, 0), LONG fontWeight = FW_NORMAL);
+		 COLORREF textColor = RGB(0, 0, 0), COLORREF textColorSelected = RGB(0, 0, 0), LONG fontWeight = FW_NORMAL, BYTE fontRender = CLEARTYPE_NATURAL_QUALITY);
 
 	// ToolTip
 	void SetToolTipText(LPCTSTR pText);
@@ -88,6 +88,7 @@ protected:
 	int m_RenderMode;
 	BOOL m_bHighContrast;
 	BOOL m_bDarkMode;
+	BYTE m_FontRender; // For FontComboBoxFx
 
 	// Alpha/Glass
 	BYTE m_Alpha;

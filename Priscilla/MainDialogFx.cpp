@@ -74,21 +74,6 @@ CString CMainDialogFx::GetDefaultFont()
 	}
 }
 
-int CMainDialogFx::GetFontScale()
-{
-	return m_FontScale;
-}
-
-double CMainDialogFx::GetFontRatio()
-{
-	return m_FontRatio;
-}
-
-CString CMainDialogFx::GetFontFace()
-{
-	return m_FontFace;
-}
-
 CString CMainDialogFx::GetCurrentLangPath()
 {
 	return m_CurrentLangPath;

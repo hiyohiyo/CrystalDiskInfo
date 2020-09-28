@@ -48,6 +48,7 @@ CComboBoxFx::CComboBoxFx()
 	m_BkColorHc = RGB(0, 0, 0);
 	m_BkColorSelectedHc = RGB(0, 255, 255);
 	m_FontHeight = 16;
+	m_FontRender = CLEARTYPE_NATURAL_QUALITY;
 
 	// Mouse
 	m_bHover = FALSE;
@@ -558,13 +559,14 @@ void CComboBoxFx::LoadCtrlBk(CDC* drawDC)
 //------------------------------------------------
 
 void CComboBoxFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio,
-     COLORREF textColor, COLORREF textColorSelected, LONG fontWeight)
+     COLORREF textColor, COLORREF textColorSelected, LONG fontWeight, BYTE fontRender)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;
 	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
-	logFont.lfQuality = 6;
+	logFont.lfQuality = fontRender;
 	logFont.lfWeight = fontWeight;
+	m_FontRender = fontRender;
 
 	if (face.GetLength() < 32)
 	{

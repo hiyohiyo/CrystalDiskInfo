@@ -5275,6 +5275,12 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			DebugPrint(_T("FALSE: usbVendorId == USB_VENDOR_LOGITEC && productId == 0x00D9"));
 			return FALSE;
 		}
+		// 8.8.9 https://twitter.com/katmai_/status/1309815268315602945?s=20
+		if (interfaceType == INTERFACE_TYPE_USB && usbVendorId == 0x05E3 && productId == 0x0702)
+		{
+			DebugPrint(_T("FALSE: usbVendorId == 0x05E3 && productId == 0x0702"));
+			return FALSE;
+		}
 
 		if (interfaceType == INTERFACE_TYPE_USB && usbVendorId == USB_VENDOR_JMICRON)
 		{
@@ -5989,7 +5995,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.Lun = 0;
 	sptwb.Spt.SenseInfoLength = 24;
 	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_OUT;
-	sptwb.Spt.DataTransferLength = 4096;
+	sptwb.Spt.DataTransferLength = 512;
 	sptwb.Spt.TimeOutValue = 2;
 	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf);
 	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, SenseBuf);

@@ -21,6 +21,12 @@ public:
 	// Dialog
 	virtual BOOL Create(UINT nIDTemplate, CWnd* dlgWnd, UINT menuId, CWnd* pParentWnd = NULL);
 
+	// Font
+	int GetFontScale();
+	BYTE GetFontRender();
+	double GetFontRatio();
+	CString GetFontFace();
+
 protected:
 	// Dialog
 	virtual BOOL OnInitDialog();
@@ -71,6 +77,7 @@ protected:
 	HACCEL m_hAccelerator;
 	BOOL m_bDrag;
 	CString m_FontFace;
+	BYTE m_FontRender;
 	int m_FontScale;
 	double m_FontRatio;
 

@@ -44,6 +44,7 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_bDrag = FALSE;
 	m_FontScale = 100;
 	m_FontRatio = 1.0;
+	m_FontRender = CLEARTYPE_NATURAL_QUALITY;
 
 	m_MaxSizeX = 65535;
 	m_MinSizeX = 0;
@@ -165,6 +166,16 @@ void CDialogFx::SetClientSize(int sizeX, int sizeY, double zoomRatio)
 		int ncaHeight = (rw.bottom - rw.top) - (rc.bottom - rc.top);
 
 		SetWindowPos(NULL, 0, 0, (int)(sizeX * zoomRatio) + ncaWidth, (int)(sizeY * zoomRatio) + ncaHeight, SWP_NOMOVE | SWP_NOZORDER);
+
+		GetWindowRect(&rw);
+		GetClientRect(&rc);
+
+		int ncaHeightMenu = (rw.bottom - rw.top) - (rc.bottom - rc.top);
+
+		if (ncaHeight != ncaHeightMenu)
+		{
+			SetWindowPos(NULL, 0, 0, (int)(sizeX * zoomRatio) + ncaWidth, (int)(sizeY * zoomRatio) + ncaHeightMenu, SWP_NOMOVE | SWP_NOZORDER);
+		}
 	}
 }
 
@@ -283,6 +294,30 @@ void CDialogFx::OnCancel()
 	{
 		CDialog::OnCancel();
 	}
+}
+
+//------------------------------------------------
+// Font
+//------------------------------------------------
+
+int CDialogFx::GetFontScale()
+{
+	return m_FontScale;
+}
+
+BYTE CDialogFx::GetFontRender()
+{
+	return m_FontRender;
+}
+
+double CDialogFx::GetFontRatio()
+{
+	return m_FontRatio;
+}
+
+CString CDialogFx::GetFontFace()
+{
+	return m_FontFace;
 }
 
 //------------------------------------------------

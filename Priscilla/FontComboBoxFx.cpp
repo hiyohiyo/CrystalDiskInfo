@@ -70,8 +70,8 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	memset(&logfont, 0, sizeof(logfont));
 	logfont.lfHeight = m_FontHeight;
 	logfont.lfWidth = 0;
-	logfont.lfWeight = 400;
-	logfont.lfQuality = 6;
+	logfont.lfWeight = FW_NORMAL;
+	logfont.lfQuality = m_FontRender;
 	logfont.lfCharSet = DEFAULT_CHARSET;
 	_tcscpy_s(logfont.lfFaceName, 32, (LPCTSTR)title);
 	font.CreateFontIndirect(&logfont);
