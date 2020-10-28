@@ -18,6 +18,15 @@ CrystalDiskInfo は以下に対応しています:
 このリポジトリにはリソースファイルは含まれていないので、以下のリンクからダウンロードして下さい。
 - [ダウンロードページへのリンク](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc)
 
+## ビルド
+
+*DiskInfo.sln* を開いてビルドします。
+
+### ノート
+
+[ダウンロードファイル](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc) にある *CdiResource* フォルダーをビルド時に作られた *Marginality* フォルダーへコピーします。実行時に *CdiResource* フォルダーがない場合、「Not Found "Graph.html"」と表示されます。
+
+
 ## プロジェクトのページ
 - [Crystal Dew World](https://crystalmark.info/)
 
