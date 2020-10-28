@@ -22,7 +22,7 @@ This repository does not include resource files, so please download them from be
 
 Open *DiskInfo.sln* and build.
 
-#### Note
+### Note
 Copy *CdiResource* folder in the [download files](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc) to *Marginality* folder created in the build. If the *CdiResource* folder does not exist at runtime, the app displays "*Not Found 'Graph.html'*".
 
 ## Project Page
