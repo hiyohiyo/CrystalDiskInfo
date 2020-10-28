@@ -18,6 +18,8 @@ Partially supports:
 This repository does not include resource files, so please download them from below.
 - [Link to download page](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc)
 
+Copy CdiResource folder in the download files to Marginality folder created in the build. If the CdiResource folder does not exist at runtime, the app displays "Not Found 'Graph.html'".
+
 ## Project Page
 - [Crystal Dew World](https://crystalmark.info/)
 
