@@ -740,6 +740,7 @@
 
 
 #define IDC_VALUE_TEMPERATURE           1101
+#define IDC_SLIDER_GAIN                 1101
 #define IDC_VALUE_TEMPERATURE_F         1102
 #define IDC_SCROLLBAR_TEMPERATURE       1103
 
