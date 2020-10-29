@@ -16,9 +16,10 @@ CSliderCtrlFx::CSliderCtrlFx()
 
 CSliderCtrlFx::~CSliderCtrlFx()
 {
+	m_BkBrush.DeleteObject();
 }
 
-BOOL CSliderCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
+BOOL CSliderCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, int renderMode, BOOL bHighContrast, BOOL bDarkMode, int min, int max, int pos)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -31,6 +32,21 @@ BOOL CSliderCtrlFx::InitControl(int x, int y, int width, int height, double zoom
 	m_bHighContrast = bHighContrast;
 	m_bDarkMode = bDarkMode;
 
+	// BkBrush
+	m_BkBrush.DeleteObject();
+	if (bDarkMode)
+	{
+		m_BkBrush.CreateSolidBrush(RGB(32, 32, 32));
+	}
+	else
+	{
+		m_BkBrush.CreateSolidBrush(RGB(255, 255, 255));
+	}
+
+	// Range, Pos
+	SetRange(min, max, TRUE);
+	SetPos(pos);
+	
 	Invalidate();
 
 	return TRUE;

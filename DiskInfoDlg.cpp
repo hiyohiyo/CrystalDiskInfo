@@ -1951,9 +1951,13 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 			CloseHandle(hFile);
 		}
 
+		// Gain
+		int gain = GetPrivateProfileInt(_T("Setting"), _T("AlertSoundGain"), 0, m_Ini);
+		if (gain < -80 || gain > 80) gain = 0;
+		
 		// Convert Opus to WAV
 		CString option;
-		option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath, m_TempFilePathOpus, m_TempFilePathWave);
+		option.Format(_T("\"%s\" --gain %1.1f \"%s\" \"%s\""), m_OpusDecPath, static_cast<double>(gain / 10), m_TempFilePathOpus, m_TempFilePathWave);
 		ExecAndWait((TCHAR*)(option.GetString()), TRUE);
 		PlaySound(m_TempFilePathWave, NULL, SND_ASYNC | SND_FILENAME | SND_NODEFAULT);
 	}
