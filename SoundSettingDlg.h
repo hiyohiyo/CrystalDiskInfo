@@ -41,8 +41,8 @@ protected:
 	CStaticFx m_CtrlFilePath;
 	CButtonFx m_CtrlSelectFile;
 	CButtonFx m_CtrlPlay;
-	int m_InitialGain;
-	int m_CurrentGain;
+	int m_InitialVolume;
+	int m_CurrentVolume;
 	CSliderCtrlFx m_CtrlSlider;
 	CButtonFx m_CtrlDefault;
 	CButtonFx m_CtrlOk;
