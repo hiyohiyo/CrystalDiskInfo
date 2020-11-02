@@ -368,7 +368,8 @@ protected:
 #define AS_SET_SOUND_ID 1
 #define AS_PLAY_SOUND   2
 #define AS_DEINIT       3
-	BOOL AlertSound(DWORD eventId, DWORD mode);
+	BOOL AlertSound(DWORD eventId, DWORD mode) const;
+	BOOL AlertSound(const CString& alertSoundPath) const;
 	CString m_TempFilePathWave;
 	CString m_TempFilePathOpus;
 

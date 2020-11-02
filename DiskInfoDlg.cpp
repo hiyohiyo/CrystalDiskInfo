@@ -20,6 +20,8 @@
 #include "locale.h"
 #include <complex>
 
+#include "digitalv.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -809,6 +811,10 @@ LRESULT CDiskInfoDlg::OnPlayAlertSound(WPARAM wParam, LPARAM lParam)
 	TCHAR str[256];
 	GetPrivateProfileString(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
 	m_AlertSoundPath = str;
+	if (m_AlertSoundPath.Compare(_T("")) != 0)
+	{
+		id = 601;
+	}
 
 	AlertSound(id, AS_SET_SOUND_ID);
 	AlertSound(1000, AS_PLAY_SOUND);
@@ -1797,19 +1803,14 @@ int ExecAndWait(TCHAR *pszCmd, BOOL bNoWindow)
 }
 
 
-BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
+BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode) const
 {
 	if(mode != AS_SET_SOUND_ID && eventId != 1000 && ! m_bAlertSound)
 	{
 		return FALSE;
 	}
 
-	// Play Sound
-	static MCI_OPEN_PARMS mop = {0};
-	static MCI_PLAY_PARMS mpp = {0};
-	static MCI_GENERIC_PARMS mgp = {0};
 	static DWORD soundId = 0;
-	MCIERROR error = 0;
 
 	if(mode == AS_SET_SOUND_ID)
 	{
@@ -1819,7 +1820,7 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 		}
 		return TRUE;
 	}
-	else if(soundId == 0)
+	if(soundId == 0)
 	{
 		return TRUE;
 	}
@@ -1828,92 +1829,30 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 	{
 		if (mode == AS_DEINIT)
 		{
-			error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, 0, (DWORD_PTR)&mop);
-			if (error)
-			{
-				return FALSE;
-			}
-			else
-			{
-				return TRUE;
-			}
+			return AlertSound(_T(""));
 		}
 
-		CString ext;
-		TCHAR temp[_MAX_EXT];
-		_wsplitpath_s(m_AlertSoundPath, NULL, 0, NULL, 0, NULL, 0, temp, _MAX_EXT);
-		ext = temp;
-
-		ext.MakeUpper();
-		if (ext.Find(_T(".MP3")) == 0)
+		// mode == AS_PLAY_SOUND
+		// Play
+		if (AlertSound(m_AlertSoundPath) == FALSE)
 		{
-			if (mop.wDeviceID != 0)
-			{
-				error = mciSendCommandW(mop.wDeviceID, MCI_STOP, MCI_WAIT, (DWORD_PTR)&mop);
-				error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, MCI_WAIT, (DWORD_PTR)&mop);
-				mop.wDeviceID = 0;
-				ZeroMemory(&mop, sizeof(MCI_PLAY_PARMS));
-				if (error)
-				{
-					return FALSE;
-				}
-			}
-
-			mop.lpstrDeviceType = _T("MPEGVideo");
-			mop.lpstrElementName = m_AlertSoundPath;
-			error = mciSendCommandW(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD_PTR)&mop);
-			if (error)
-			{
-				return FALSE;
-			}
-			else
-			{
-				error = mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, (DWORD_PTR)&mgp);
-				if (error)
-				{
-					return FALSE;
-				}
-				else
-				{
-					error = mciSendCommandW(mop.wDeviceID, MCI_PLAY, 0, (DWORD_PTR)&mpp);
-					if (error)
-					{
-						return FALSE;
-					}
-				}
-			}
-		}
-		else if (ext.Find(_T(".OPUS")) == 0)
-		{
-			PlaySound(NULL, NULL, SND_NODEFAULT);
-
-			// Convert Opus to WAV
-			CString option;
-			option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath.GetString(), m_AlertSoundPath.GetString(), m_TempFilePathWave.GetString());
-
-			ExecAndWait((TCHAR*)(option.GetString()), TRUE);
-			PlaySound(m_TempFilePathWave, NULL, SND_SYNC | SND_FILENAME | SND_NODEFAULT);
-		}
-		else if (ext.Find(_T(".WAV")) == 0)
-		{
-			PlaySound(m_AlertSoundPath, NULL, SND_NODEFAULT);
+			return FALSE;
 		}
 	}
-	else if (mop.lpstrDeviceType == NULL)
+	else
 	{
 		// mode == AS_PLAY_SOUND
-		PlaySound(NULL, NULL, SND_NODEFAULT);
 
 		HRSRC hrs;
 		// Choose OPUS resource
 		CString resource;
-		HMODULE hModule = NULL;
+		HMODULE hModule = nullptr;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 		// For Japanese
 		if (m_CurrentLang.Find(_T("Japanese")) == 0 || GetUserDefaultLCID() == 0x0411)
 		{
-			if (m_hVoice != NULL)
+			if (m_hVoice != nullptr)
 			{
 				hModule = m_hVoice;
 			}
@@ -1932,18 +1871,18 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 #endif
 		hrs = FindResource(hModule, resource, _T("OPUS"));
 		// Resource to TempFile
-		if (hrs == NULL)
+		if (hrs == nullptr)
 		{
 			return FALSE;
 		}
-		HGLOBAL hOpus = LoadResource(hModule, hrs);
-		LPBYTE lpOpus = (LPBYTE)LockResource(hOpus);
+		const HGLOBAL hOpus = LoadResource(hModule, hrs);
+		const LPBYTE lpOpus = static_cast<LPBYTE>(LockResource(hOpus));
 		DWORD dwWrite = 0;
 
-		HANDLE hFile = CreateFile(m_TempFilePathOpus, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
+		const HANDLE hFile = CreateFile(m_TempFilePathOpus, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, nullptr);
 		if (hFile != INVALID_HANDLE_VALUE)
 		{
-			if (WriteFile(hFile, lpOpus, SizeofResource(hModule, hrs), &dwWrite, NULL) == 0)
+			if (WriteFile(hFile, lpOpus, SizeofResource(hModule, hrs), &dwWrite, nullptr) == 0)
 			{
 				CloseHandle(hFile);
 				return FALSE;
@@ -1951,14 +1890,90 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 			CloseHandle(hFile);
 		}
 
-		// Convert Opus to WAV
-		CString option;
-		option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath, m_TempFilePathOpus, m_TempFilePathWave);
-		ExecAndWait((TCHAR*)(option.GetString()), TRUE);
-		PlaySound(m_TempFilePathWave, NULL, SND_ASYNC | SND_FILENAME | SND_NODEFAULT);
+		// Play
+		if (AlertSound(m_TempFilePathOpus) == FALSE)
+		{
+			return FALSE;
+		}
 	}
 	soundId = 0;
 
+	return TRUE;
+}
+
+BOOL CDiskInfoDlg::AlertSound(const CString& alertSoundPath) const
+{
+	static MCI_OPEN_PARMS mop = { 0 };
+	static MCI_PLAY_PARMS mpp = { 0 };
+	static MCI_GENERIC_PARMS mgp = { 0 };
+	MCIERROR error = 0;
+
+	if (mop.wDeviceID != 0)
+	{
+		// Stop and close
+		error = mciSendCommandW(mop.wDeviceID, MCI_STOP, MCI_WAIT, (DWORD_PTR)&mop);
+		error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, MCI_WAIT, (DWORD_PTR)&mop);
+		mop.wDeviceID = 0;
+		ZeroMemory(&mop, sizeof(MCI_PLAY_PARMS));
+		if (error)
+		{
+			return FALSE;
+		}
+	}
+
+	if (alertSoundPath.Right(5).MakeUpper().Compare(_T(".OPUS")) == 0)
+	{
+		// Convert Opus to WAV
+		CString option;
+		option.Format(_T("\"%s\" \"%s\" \"%s\""), m_OpusDecPath.GetString(), alertSoundPath.GetString(), m_TempFilePathWave.GetString());
+		ExecAndWait(const_cast<TCHAR*>(option.GetString()), TRUE);
+
+		return AlertSound(m_TempFilePathWave);
+	}
+
+	if (alertSoundPath.Compare(_T("")) == 0) {
+		// mode == AS_DEINIT
+		// Close
+		error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, 0, reinterpret_cast<DWORD_PTR>(&mop));
+		if (error)
+		{
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	// Open
+	mop.lpstrDeviceType = _T("MPEGVideo");
+	mop.lpstrElementName = alertSoundPath;
+	error = mciSendCommandW(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, reinterpret_cast<DWORD_PTR>(&mop));
+	if (error)
+	{
+		return FALSE;
+	}
+
+	// Set volume
+	int volume = GetPrivateProfileInt(_T("Setting"), _T("AlertSoundVolume"), 80, m_Ini);
+	if (volume < 0 || volume > 100) volume = 80;
+
+	MCI_DGV_SETAUDIO_PARMS parms = { 0 };
+	parms.dwItem = MCI_DGV_SETAUDIO_VOLUME;
+	parms.dwValue = volume * 10; // 0-1000
+	error = mciSendCommand(mop.wDeviceID, MCI_SETAUDIO, MCI_DGV_SETAUDIO_ITEM | MCI_DGV_SETAUDIO_VALUE, (DWORD)&parms);
+
+	// Seek
+	error = mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, reinterpret_cast<DWORD_PTR>(&mgp));
+	if (error)
+	{
+		return FALSE;
+	}
+
+	// Play
+	error = mciSendCommandW(mop.wDeviceID, MCI_PLAY, 0, reinterpret_cast<DWORD_PTR>(&mpp));
+	if (error)
+	{
+		return FALSE;
+	}
+	
 	return TRUE;
 }
 

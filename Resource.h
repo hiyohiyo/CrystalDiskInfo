@@ -740,9 +740,11 @@
 
 
 #define IDC_VALUE_TEMPERATURE           1101
+#define IDC_SLIDER_VOLUME               1101
 #define IDC_VALUE_TEMPERATURE_F         1102
 #define IDC_SCROLLBAR_TEMPERATURE       1103
 
+#define IDC_STATIC_VOLUME               1105
 #define IDC_FONT_FACE_COMBO             1201
 #define IDC_FONT_SCALE_COMBO			1203
 #define IDC_FONT_FACE					1204
