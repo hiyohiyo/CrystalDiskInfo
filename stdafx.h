@@ -80,7 +80,7 @@
 #elif _M_X64
 #define PRODUCT_EDITION			_T("Kurei Kei Edition x64")
 #else
-#define PRODUCT_EDITION			_T("Kurei Kei Edition")
+#define PRODUCT_EDITION			_T("Kurei Kei Edition x86")
 #endif
 #elif SUISHO_SHIZUKU_SUPPORT
 #define PRODUCT_SHORT_NAME		_T("CDI 8 SE")
@@ -91,7 +91,7 @@
 #elif _M_X64
 #define PRODUCT_EDITION			_T("Shizuku Edition x64")
 #else
-#define PRODUCT_EDITION			_T("Shizuku Edition")
+#define PRODUCT_EDITION			_T("Shizuku Edition x86")
 #endif
 #else
 #define PRODUCT_SHORT_NAME		_T("CDI 8")
@@ -102,13 +102,13 @@
 #elif _M_X64
 #define PRODUCT_EDITION			_T("x64")
 #else
-#define PRODUCT_EDITION			_T("")
+#define PRODUCT_EDITION			_T("x86")
 #endif
 #endif
 
 
-#define PRODUCT_VERSION				L"8.8.9"
-#define PRODUCT_RELEASE				L"2020/09/28"
+#define PRODUCT_VERSION				L"8.9.0"
+#define PRODUCT_RELEASE				L"2020/10/11"
 #define PRODUCT_COPY_YEAR			L"2008-2020"
 #define PRODUCT_COPYRIGHT			L"© 2008-2020 hiyohiyo"
 #define PRODUCT_LICENSE				L"The MIT License"
@@ -134,21 +134,21 @@
 #define	URL_PROJECT_SHIZUKU_JA		L"https://suishoshizuku.com/ja/"
 #define	URL_PROJECT_SHIZUKU_EN		L"https://suishoshizuku.com/en/"
 
-#define URL_PRONAMA	                L"http://pronama.jp/crystaldiskinfo"
+#define URL_PRONAMA	                L"https://pronama.jp/crystaldiskinfo"
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 
 #ifdef KUREI_KEI_SUPPORT
-#define	URL_PROJECT_SITE_1		    L"http://pronama.jp/crystaldiskinfo"
-#define URL_PROJECT_SITE_2		    L"http://pronama.jp/ixy"
-#define URL_PROJECT_SITE_3	        L"http://pronama.jp/uesakasumire"
-#define URL_PROJECT_SITE_4			L"http://pronama.jp/crystaldiskinfo"
+#define	URL_PROJECT_SITE_1		    L"https://pronama.jp/crystaldiskinfo"
+#define URL_PROJECT_SITE_2		    L"https://pronama.jp/ixy"
+#define URL_PROJECT_SITE_3	        L"https://pronama.jp/uesakasumire"
+#define URL_PROJECT_SITE_4			L"https://pronama.jp/crystaldiskinfo"
 #define URL_PROJECT_SITE_5			L""
 #else
-#define	URL_PROJECT_SITE_1		    L"http://kirinokasumu.com/"
-#define URL_PROJECT_SITE_2		    L"http://linux-ha.sourceforge.jp/wp/"
-#define URL_PROJECT_SITE_3	        L"http://ch.nicovideo.jp/oss"
-#define URL_PROJECT_SITE_4			L"http://www.bellche.com/"
+#define	URL_PROJECT_SITE_1		    L"https://twitter.com/kirinokasumu"
+#define URL_PROJECT_SITE_2		    L"https://linux-ha.sourceforge.jp/wp/"
+#define URL_PROJECT_SITE_3	        L"https://ch.nicovideo.jp/oss"
+#define URL_PROJECT_SITE_4			L"https://twitter.com/bellche"
 #define URL_PROJECT_SITE_5			L"https://suishoshizuku.com/"
 #endif
 

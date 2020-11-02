@@ -1477,10 +1477,14 @@ void CDiskInfoDlg::OnFontSetting()
 		m_FontFace = fontSelection.GetFontFace();
 		m_FontScale = fontSelection.GetFontScale();
 		m_FontRatio = m_FontScale / 100.0;
+		m_FontRender = fontSelection.GetFontRender();
+
 		CString cstr;
 		WritePrivateProfileString(L"Setting", L"FontFace", L"\"" + m_FontFace + L"\"", m_Ini);
 		cstr.Format(L"%d", m_FontScale);
 		WritePrivateProfileString(L"Setting", L"FontScale", cstr, m_Ini);
+		cstr.Format(L"%d", m_FontRender);
+		WritePrivateProfileString(L"Setting", L"FontRender", cstr, m_Ini);
 
 		UpdateDialogSize();
 	}

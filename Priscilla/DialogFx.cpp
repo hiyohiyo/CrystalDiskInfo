@@ -576,7 +576,6 @@ afx_msg LRESULT CDialogFx::OnSettingChange(WPARAM wParam, LPARAM lParam)
 	if (m_bInitializing) { return 0; }
 
 	if (!lstrcmp(LPCTSTR(lParam), L"ImmersiveColorSet")) {
-		//アプリモードが切り替わった。
 		SetTimer(TimerUpdateDialogSizeSettingChange, TIMER_UPDATE_DIALOG, NULL);
 	}
 

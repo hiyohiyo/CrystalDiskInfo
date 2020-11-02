@@ -2325,7 +2325,7 @@ void CDiskInfoDlg::SetControlFont()
 	COLORREF textColor = m_LabelText;
 #endif
 
-	m_List.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio);
+	m_List.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
 	for(int i = 0; i < 8; i++)
 	{

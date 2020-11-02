@@ -42,7 +42,7 @@ public:
 	COLORREF GetLineColor2();
 
 	BOOL InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bkDC, int renderMode, BOOL bHighContrast, BOOL bDarkMode);
-	void SetFontEx(CString face, int size, double zoomRatio, double fontRatio = 1.0);
+	void SetFontEx(CString face, int size, double zoomRatio, double fontRatio, LONG fontWeight, BYTE fontRender);
 	void EnableHeaderOwnerDraw(BOOL bOwnerDraw);
 
 protected:

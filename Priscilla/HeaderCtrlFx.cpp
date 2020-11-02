@@ -177,7 +177,7 @@ LRESULT CHeaderCtrlFx::OnLayout(WPARAM wParam, LPARAM lParam)
 	return lResult;
 }
 
-void CHeaderCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio)
+void CHeaderCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio, LONG fontWeight, BYTE fontRender)
 {
 	m_FontSize = size;
 	m_ZoomRatio = zoomRatio;
@@ -186,7 +186,8 @@ void CHeaderCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double f
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;
 	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
-	logFont.lfQuality = 6;
+	logFont.lfQuality = fontRender;
+	logFont.lfWeight = fontWeight;
 	if (face.GetLength() < 32)
 	{
 		wsprintf(logFont.lfFaceName, L"%s", face.GetString());

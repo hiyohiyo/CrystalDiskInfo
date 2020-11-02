@@ -120,8 +120,8 @@ void CFontSelectionDlg::UpdateDialogSize()
 		m_CtrlFontScale.SetItemHeightEx(i, 32, m_ZoomRatio, m_FontRatio);
 	}
 
-	m_CtrlSetDefault.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio);
-	m_CtrlOk.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio);
+	m_CtrlSetDefault.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlOk.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 	
 	m_CtrlSetDefault.SetHandCursor();
 	m_CtrlOk.SetHandCursor();

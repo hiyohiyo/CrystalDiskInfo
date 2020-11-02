@@ -21,6 +21,7 @@ CButtonFx::CButtonFx()
 	m_bHighContrast = FALSE;
 	m_bDarkMode = FALSE;
 	m_bDrawFrame = FALSE;
+	m_FrameColor = RGB(128, 128, 128);
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
@@ -124,104 +125,41 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 			ModifyStyle(BS_OWNERDRAW, m_TextAlign);
 		}
 	}
-	else if (renderMode & OwnerDrawGlass)
-	{
-		m_ImageCount = 3;
-		m_CtrlImage.Destroy();
-		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy * m_ImageCount, 32);
-
-		RECT rect;
-		rect.left = 0;
-		rect.right = m_CtrlSize.cx;
-		
-		CDC* pDC = CDC::FromHandle(m_CtrlImage.GetDC());
-		rect.top = 0;
-		rect.bottom = m_CtrlSize.cy;
-		pDC->SetDCPenColor(RGB(128, 128, 128));
-		pDC->SelectObject(GetStockObject(DC_PEN));
-		pDC->Rectangle(&rect);
-
-		rect.top = m_CtrlSize.cy;
-		rect.bottom = m_CtrlSize.cy * 2;
-		pDC->SetDCPenColor(RGB(64, 64, 255));
-		pDC->SelectObject(GetStockObject(DC_PEN));
-		pDC->Rectangle(&rect);
-
-		rect.top = m_CtrlSize.cy * 2;
-		rect.bottom = m_CtrlSize.cy * 3;
-		pDC->SetDCPenColor(RGB(255, 64, 64));
-		pDC->SelectObject(GetStockObject(DC_PEN));
-		pDC->Rectangle(&rect);
-
-		m_CtrlImage.ReleaseDC();
-
-		m_CtrlBitmap.Detach();
-		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
-
-		DWORD length = m_CtrlSize.cx * m_CtrlSize.cy * m_ImageCount * 4;
-		BYTE* bitmapBits = new BYTE[length];
-		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
-
-		BYTE r = (BYTE)GetRValue(m_GlassColor);
-		BYTE g = (BYTE)GetGValue(m_GlassColor);
-		BYTE b = (BYTE)GetBValue(m_GlassColor);
-		BYTE a =  m_GlassAlpha;
-
-		// for Debug
-		// BYTE b0 = bitmapBits[0]; 128
-		// BYTE b1 = bitmapBits[1]; 128
-		// BYTE b2 = bitmapBits[2]; 128
-		// BYTE b3 = bitmapBits[3];   0
-
-		for (int i = 1; i <= m_ImageCount; i++)
-		{
-			for (int y = m_CtrlSize.cy * (i - 1) + 1; y < (int)(m_CtrlSize.cy * i) - 1; y++)
-			{
-				for (int x = 0 + 1 ; x < m_CtrlSize.cx - 1 ; x++)
-				{
-					bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = b;
-					bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
-					bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
-				}
-			}
-		}
-
-		for (int i = 1; i <= m_ImageCount; i++)
-		{
-			for (int y = m_CtrlSize.cy * (i - 1); y < (int)(m_CtrlSize.cy * i); y++)
-			{
-				for (int x = 0; x < m_CtrlSize.cx; x++)
-				{
-					bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = a;
-				}
-			}
-		}
-
-		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
-		delete[] bitmapBits;
-
-		SetDrawFrame(TRUE);
-	}	
-	else if (renderMode & OwnerDrawTransparent)
+	else
 	{
 		m_ImageCount = 1;
 		m_CtrlImage.Destroy();
 		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy * m_ImageCount, 32);
 		m_CtrlBitmap.Detach();
 		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
-
 		DWORD length = m_CtrlSize.cx * m_CtrlSize.cy * m_ImageCount * 4;
 		BYTE* bitmapBits = new BYTE[length];
 		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
+
+		BYTE r, g, b, a;
+		if (renderMode & OwnerDrawGlass)
+		{
+			r = (BYTE)GetRValue(m_GlassColor);
+			g = (BYTE)GetGValue(m_GlassColor);
+			b = (BYTE)GetBValue(m_GlassColor);
+			a = m_GlassAlpha;
+		}
+		else // OwnerDrawTransparent
+		{
+			r = 0;
+			g = 0;
+			b = 0;
+			a = 0;
+		}
 
 		for (int y = 0; y < (int)(m_CtrlSize.cy * m_ImageCount); y++)
 		{
 			for (int x = 0; x < m_CtrlSize.cx; x++)
 			{
-				//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = 255;
-				//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = 255;
-				//	bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = 255;
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = (BYTE)0;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = b;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = a;
 			}
 		}
 
@@ -341,85 +279,99 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 	pBkDC->CreateCompatibleDC(drawDC);
 	pOldBkBitmap = pBkDC->SelectObject(&bkBitmap);
 
-	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24)
-	{
-		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
-		DrawString(drawDC, lpDrawItemStruct);
-	}
-	else // Full Color (24/32bit)
-	{
-		CBitmap DrawBmp;
-		DrawBmp.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
-		CDC* pDrawBmpDC = new CDC;
-		CBitmap* pOldDrawBitmap;
-		pDrawBmpDC->CreateCompatibleDC(drawDC);
-		pOldDrawBitmap = pDrawBmpDC->SelectObject(&DrawBmp);
+	CBitmap DrawBmp;
+	DrawBmp.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
+	CDC* pDrawBmpDC = new CDC;
+	CBitmap* pOldDrawBitmap;
+	pDrawBmpDC->CreateCompatibleDC(drawDC);
+	pOldDrawBitmap = pDrawBmpDC->SelectObject(&DrawBmp);
 
-		if (!m_CtrlImage.IsNull())
+	int color = drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES);
+
+	if (!m_CtrlImage.IsNull())
+	{
+		if (m_CtrlImage.GetBPP() == 32)
 		{
-			if (m_CtrlImage.GetBPP() == 32)
+			CBitmap* bk32Bitmap;
+			CImage bk32Image;
+			if (color == 32)
 			{
-				BITMAP CtlBmpInfo, DstBmpInfo;
-				bkBitmap.GetBitmap(&DstBmpInfo);
-				DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
-				DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
-				ctrlBitmap.GetBitmap(&CtlBmpInfo);
-				DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
-				DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
-
-				BYTE* DstBuffer = new BYTE[DstMemSize];
-				bkBitmap.GetBitmapBits(DstMemSize, DstBuffer);
-				BYTE* CtlBuffer = new BYTE[CtlMemSize];
-				ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
-
-				int baseY = m_CtrlSize.cy * no;
-				for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
-				{
-					int dn = py * DstLineBytes;
-					int cn = (baseY + py) * CtlLineBytes;
-					for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
-					{
-						BYTE a = CtlBuffer[cn + 3];
-						BYTE na = 255 - a;
-						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
-						DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
-						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
-						dn += (DstBmpInfo.bmBitsPixel / 8);
-						cn += (CtlBmpInfo.bmBitsPixel / 8);
-					}
-				}
-
-				DrawBmp.SetBitmapBits(DstMemSize, DstBuffer);
-				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
-
-				delete[] DstBuffer;
-				delete[] CtlBuffer;
+				bk32Bitmap = &bkBitmap;
 			}
 			else
 			{
-				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
-				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+				bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
+				::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *pBkDC, 0, 0, SRCCOPY);
+				bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
 			}
+
+			BITMAP CtlBmpInfo, DstBmpInfo;
+			bk32Bitmap->GetBitmap(&DstBmpInfo);
+			DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
+			DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
+			ctrlBitmap.GetBitmap(&CtlBmpInfo);
+			DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
+			DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
+			BYTE* DstBuffer = new BYTE[DstMemSize];
+			bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
+			BYTE* CtlBuffer = new BYTE[CtlMemSize];
+			ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
+
+			int baseY = m_CtrlSize.cy * no;
+			for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+			{
+				int dn = py * DstLineBytes;
+				int cn = (baseY + py) * CtlLineBytes;
+				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+				{
+					BYTE a = CtlBuffer[cn + 3];
+					BYTE na = 255 - a;
+					DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+					DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+					DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+					dn += (DstBmpInfo.bmBitsPixel / 8);
+					cn += (CtlBmpInfo.bmBitsPixel / 8);
+				}
+			}
+
+			if (color == 32)
+			{
+				DrawBmp.SetBitmapBits(DstMemSize, DstBuffer);
+			}
+			else
+			{
+				bk32Bitmap->SetBitmapBits(DstMemSize, DstBuffer);
+				::BitBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
+				bk32Image.ReleaseDC();
+			}
+			DrawString(pDrawBmpDC, lpDrawItemStruct);
+			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+
+			delete[] DstBuffer;
+			delete[] CtlBuffer;
 		}
 		else
 		{
-			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
 			DrawString(pDrawBmpDC, lpDrawItemStruct);
 			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 		}
-
-		pDrawBmpDC->SelectObject(&pOldDrawBitmap);
-		pDrawBmpDC->DeleteDC();
-		delete pDrawBmpDC;
+	}
+	else
+	{
+		pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+		DrawString(pDrawBmpDC, lpDrawItemStruct);
+		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 	}
 
+	pDrawBmpDC->SelectObject(&pOldDrawBitmap);
+	pDrawBmpDC->DeleteDC();
+	delete pDrawBmpDC;
 	pMemDC->SelectObject(&pOldMemBitmap);
-	pBkDC->SelectObject(&pOldBkBitmap);
 	pMemDC->DeleteDC();
-	pBkDC->DeleteDC();
 	delete pMemDC;
+	pBkDC->SelectObject(&pOldBkBitmap);
+	pBkDC->DeleteDC();
 	delete pBkDC;
 
 	if (m_bDrawFrame)

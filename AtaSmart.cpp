@@ -4866,7 +4866,7 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 
 	if (flagSmartType)
 	{
-		if (asi.Model.Find(_T("SSD")) == 0) // for Goldenfir SSD
+		if (asi.Model.Find(_T("SSD")) == 0 && asi.FirmwareRev.Find(_T("FW")) == 0) // for Goldenfir SSD
 		{
 			asi.FlagLifeRawValueIncrement = TRUE;
 		}

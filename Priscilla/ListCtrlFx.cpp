@@ -19,6 +19,7 @@ CListCtrlFx::CListCtrlFx()
 	m_BkDC = NULL;
 	m_bHighContrast = FALSE;
 	m_RenderMode = SystemDraw;
+	m_bDarkMode = FALSE;
 
 	// Color
 	m_TextColor1   = RGB(0, 0, 0);
@@ -62,7 +63,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 	{
 		SetBkImage(L"");
 	}
-	else if (renderMode & OwnerDrawGlass)
+	else
 	{
 		m_BkBitmap.DeleteObject();
 		m_BkBitmap.CreateCompatibleBitmap(m_BkDC, maxWidth, maxHeight);
@@ -87,10 +88,21 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		BYTE* bitmapBits = new BYTE[length];
 		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
 
-		BYTE r = (BYTE)GetRValue(m_GlassColor);
-		BYTE g = (BYTE)GetGValue(m_GlassColor);
-		BYTE b = (BYTE)GetBValue(m_GlassColor);
-		BYTE a = m_GlassAlpha;
+		BYTE r, g, b, a;
+		if (renderMode & OwnerDrawGlass)
+		{
+			r = (BYTE)GetRValue(m_GlassColor);
+			g = (BYTE)GetGValue(m_GlassColor);
+			b = (BYTE)GetBValue(m_GlassColor);
+			a = m_GlassAlpha;
+		}
+		else // OwnerDrawTransparent
+		{
+			r = 0;
+			g = 0;
+			b = 0;
+			a = 0;
+		}
 
 		for (int y = 0; y < maxHeight; y++)
 		{
@@ -118,68 +130,73 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
 	}
-	else
-	{
-		if(m_bNT6orLater)
-		{
-			SetBkImage(L"");
-			SetBkColor(m_BkColor1);
-			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
-		}
-		else
-		{
-			SetBkColor(m_BkColor1);
-			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
-		}
-	}
 
 	return TRUE;
 }
 
 void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 {
-	if (m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES) >= 24)
+	int color = m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES);
+
+	CBitmap* bk32Bitmap;
+	CImage bk32Image;
+	if (color == 32)
 	{
-		BITMAP CtlBmpInfo, DstBmpInfo;
-		bkBitmap.GetBitmap(&DstBmpInfo);
-		DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
-		DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
-		ctrlBitmap.GetBitmap(&CtlBmpInfo);
-		DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
-		DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
-
-		if (DstBmpInfo.bmWidthBytes != CtlBmpInfo.bmWidthBytes
-			|| DstBmpInfo.bmHeight != CtlBmpInfo.bmHeight) {
-			return;
-		}
-
-		BYTE* DstBuffer = new BYTE[DstMemSize];
-		bkBitmap.GetBitmapBits(DstMemSize, DstBuffer);
-		BYTE* CtlBuffer = new BYTE[CtlMemSize];
-		ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
-
-		int baseY = 0;
-		for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
-		{
-			int dn = py * DstLineBytes;
-			int cn = (baseY + py) * CtlLineBytes;
-			for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
-			{
-				BYTE a = CtlBuffer[cn + 3];
-				BYTE na = 255 - a;
-				CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
-				CtlBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
-				CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
-				dn += (DstBmpInfo.bmBitsPixel / 8);
-				cn += (CtlBmpInfo.bmBitsPixel / 8);
-			}
-		}
-
-		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
-
-		delete[] DstBuffer;
-		delete[] CtlBuffer;
+		bk32Bitmap = &bkBitmap;
 	}
+	else
+	{
+		bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
+		::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *m_BkDC, m_X, m_Y, SRCCOPY);
+		bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
+		bk32Image.ReleaseDC();
+	}
+
+	BITMAP CtlBmpInfo, DstBmpInfo;
+	bk32Bitmap->GetBitmap(&DstBmpInfo);
+	DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
+	DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
+	ctrlBitmap.GetBitmap(&CtlBmpInfo);
+	DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
+	DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
+	BYTE* DstBuffer = new BYTE[DstMemSize];
+	bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
+	BYTE* CtlBuffer = new BYTE[CtlMemSize];
+	ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
+
+	int baseY = 0;
+	for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+	{
+		int dn = py * DstLineBytes;
+		int cn = (baseY + py) * CtlLineBytes;
+		for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+		{
+			BYTE a = CtlBuffer[cn + 3];
+			BYTE na = 255 - a;
+			CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+			CtlBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+			CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+			dn += (DstBmpInfo.bmBitsPixel / 8);
+			cn += (CtlBmpInfo.bmBitsPixel / 8);
+		}
+	}
+
+	if (color == 32)
+	{
+		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+	}
+	else
+	{
+		bk32Bitmap->SetBitmapBits(CtlMemSize, CtlBuffer);
+		m_CtrlImage.Detach();
+		m_CtrlImage.Attach(ctrlBitmap);
+		::BitBlt(m_CtrlImage.GetDC(), 0, 0, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1, bk32Image.GetDC(), 1, 1, SRCCOPY);
+		m_CtrlImage.ReleaseDC();
+		bk32Image.ReleaseDC();
+	}
+
+	delete[] DstBuffer;
+	delete[] CtlBuffer;
 }
 
 void CListCtrlFx::OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
@@ -261,12 +278,13 @@ COLORREF CListCtrlFx::GetBkSelected(){return m_BkSelected;}
 COLORREF CListCtrlFx::GetLineColor1(){return m_LineColor1;}
 COLORREF CListCtrlFx::GetLineColor2(){return m_LineColor2;}
 
-void CListCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio)
+void CListCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio, LONG fontWeight, BYTE fontRender)
 {
 	LOGFONT logFont = {0};
 	logFont.lfCharSet = DEFAULT_CHARSET;
 	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
-	logFont.lfQuality = 6;
+	logFont.lfQuality = fontRender;
+	logFont.lfWeight = fontWeight;
 	if(face.GetLength() < 32)
 	{
 		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
@@ -280,7 +298,7 @@ void CListCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fon
 	m_Font.CreateFontIndirect(&logFont);
 	SetFont(&m_Font);
 
-	m_Header.SetFontEx(face, size, zoomRatio, fontRatio);
+	m_Header.SetFontEx(face, size, zoomRatio, fontRatio, fontWeight, fontRender);
 }
 
 void CListCtrlFx::PreSubclassWindow()
