@@ -811,6 +811,10 @@ LRESULT CDiskInfoDlg::OnPlayAlertSound(WPARAM wParam, LPARAM lParam)
 	TCHAR str[256];
 	GetPrivateProfileString(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
 	m_AlertSoundPath = str;
+	if (m_AlertSoundPath.Compare(_T("")) != 0)
+	{
+		id = 601;
+	}
 
 	AlertSound(id, AS_SET_SOUND_ID);
 	AlertSound(1000, AS_PLAY_SOUND);
