@@ -46,4 +46,5 @@ protected:
 	CSliderCtrlFx m_CtrlSlider;
 	CButtonFx m_CtrlDefault;
 	CButtonFx m_CtrlOk;
+	CStaticFx m_CtrlVolume;
 };

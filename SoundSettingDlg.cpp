@@ -44,7 +44,8 @@ void CSoundSettingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_FILE_PATH, m_CtrlFilePath);
 	DDX_Control(pDX, IDC_BUTTON_SELECT_FILE, m_CtrlSelectFile);
 	DDX_Control(pDX, IDC_BUTTON_PLAY, m_CtrlPlay);
-	DDX_Control(pDX, IDC_SLIDER_GAIN, m_CtrlSlider);
+	DDX_Control(pDX, IDC_SLIDER_VOLUME, m_CtrlSlider);
+	DDX_Control(pDX, IDC_STATIC_VOLUME, m_CtrlVolume);
 	DDX_Control(pDX, IDC_BUTTON_DEFAULT, m_CtrlDefault);
 	DDX_Control(pDX, IDC_BUTTON_OK, m_CtrlOk);
 }
@@ -103,7 +104,8 @@ void CSoundSettingDlg::UpdateDialogSize()
 	m_CtrlSelectFile.SetHandCursor();
 	m_CtrlPlay.InitControl(456, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"playSound"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, m_bDarkMode);
 	m_CtrlPlay.SetHandCursor();
-	m_CtrlSlider.InitControl(8, 40, 416, 24, m_ZoomRatio, &m_BkDC, OwnerDrawImage, m_bHighContrast, m_bDarkMode, 0, 100, m_InitialVolume);
+	m_CtrlSlider.InitControl(32, 40, 396, 24, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, m_bDarkMode, 0, 100, m_InitialVolume);
+	m_CtrlVolume.InitControl(8, 40, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"volume"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 	m_CtrlDefault.InitControl(40, 72, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 	m_CtrlOk.InitControl(280, 72, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
