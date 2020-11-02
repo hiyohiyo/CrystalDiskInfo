@@ -44,6 +44,8 @@ void CSoundSettingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_FILE_PATH, m_CtrlFilePath);
 	DDX_Control(pDX, IDC_BUTTON_SELECT_FILE, m_CtrlSelectFile);
 	DDX_Control(pDX, IDC_BUTTON_PLAY, m_CtrlPlay);
+	DDX_Control(pDX, IDC_SLIDER_VOLUME, m_CtrlSlider);
+	DDX_Control(pDX, IDC_STATIC_VOLUME, m_CtrlVolume);
 	DDX_Control(pDX, IDC_BUTTON_DEFAULT, m_CtrlDefault);
 	DDX_Control(pDX, IDC_BUTTON_OK, m_CtrlOk);
 }
@@ -61,6 +63,10 @@ BOOL CSoundSettingDlg::OnInitDialog()
 	m_FilePath = str;
 	UpdateData(FALSE);
 
+	m_InitialVolume = GetPrivateProfileInt(_T("Setting"), _T("AlertSoundVolume"), 80, m_Ini);
+	if (m_InitialVolume < 0 || m_InitialVolume > 100) m_InitialVolume = 80;
+	m_CurrentVolume = m_InitialVolume;
+
 	m_CtrlDefault.SetWindowTextW(i18n(_T("HealthStatus"), _T("DEFAULT")));
 
 	UpdateDialogSize();
@@ -72,6 +78,7 @@ BOOL CSoundSettingDlg::OnInitDialog()
 }
 
 BEGIN_MESSAGE_MAP(CSoundSettingDlg, CDialogFx)
+	ON_WM_CTLCOLOR()
 	ON_BN_CLICKED(IDC_BUTTON_SELECT_FILE, &CSoundSettingDlg::OnSelectFile)
 	ON_BN_CLICKED(IDC_BUTTON_PLAY, &CSoundSettingDlg::OnPlay)
 	ON_BN_CLICKED(IDC_BUTTON_DEFAULT, &CSoundSettingDlg::OnDefault)
@@ -97,8 +104,10 @@ void CSoundSettingDlg::UpdateDialogSize()
 	m_CtrlSelectFile.SetHandCursor();
 	m_CtrlPlay.InitControl(456, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"playSound"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, m_bDarkMode);
 	m_CtrlPlay.SetHandCursor();
-	m_CtrlDefault.InitControl(40, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
-	m_CtrlOk.InitControl(280, 40, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlSlider.InitControl(32, 40, 396, 24, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, m_bDarkMode, 0, 100, m_InitialVolume);
+	m_CtrlVolume.InitControl(8, 40, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"volume"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
+	m_CtrlDefault.InitControl(40, 72, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlOk.InitControl(280, 72, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlFilePath.SetDrawFrame(TRUE);
 
@@ -127,12 +136,23 @@ void CSoundSettingDlg::OnSelectFile()
 
 void CSoundSettingDlg::OnPlay()
 {
+	const int pos = m_CtrlSlider.GetPos();
+	if (pos != m_CurrentVolume)
+	{
+		m_CurrentVolume = pos;
+		CString volume;
+		volume.Format(_T("%d"), m_CurrentVolume);
+		WritePrivateProfileString(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+	}
+
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_PLAY_ALERT_SOUND, NULL, NULL);
 }
 
 
 void CSoundSettingDlg::OnDefault()
 {
+	m_CtrlSlider.SetPos(80);
+
 	m_FilePath = _T("");
 	WritePrivateProfileString(_T("Setting"), _T("AlertSoundPath"), m_FilePath, m_Ini);
 	m_CtrlFilePath.SetToolTipText(m_FilePath);
@@ -141,5 +161,39 @@ void CSoundSettingDlg::OnDefault()
 
 void CSoundSettingDlg::OnOk()
 {
+	CString volume;
+	volume.Format(_T("%d"), m_CtrlSlider.GetPos());
+	WritePrivateProfileString(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+
 	CDialogFx::OnCancel();
+}
+
+void CSoundSettingDlg::OnCancel()
+{
+	// Revert
+	if (m_CurrentVolume != m_InitialVolume)
+	{
+		CString volume;
+		volume.Format(_T("%d"), m_InitialVolume);
+		WritePrivateProfileString(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+	}
+
+	CDialogFx::OnCancel();
+}
+
+HBRUSH CSoundSettingDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogFx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	switch (nCtlColor)
+	{
+	case CTLCOLOR_STATIC:
+		if (pWnd->m_hWnd == m_CtrlSlider.m_hWnd && !m_CtrlSlider.m_bHighContrast)
+		{
+			pDC->SetBkMode(TRANSPARENT);
+			return m_CtrlSlider.m_BkBrush;
+		}
+	default:
+		return hbr;
+	}
 }
