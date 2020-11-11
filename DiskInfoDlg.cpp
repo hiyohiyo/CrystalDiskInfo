@@ -2032,23 +2032,33 @@ void CDiskInfoDlg::OnTimer(UINT_PTR nIDEvent)
 			if(m_SelectDisk < (DWORD)m_Ata.vars.GetCount() && m_Ata.vars[m_SelectDisk].IsSmartCorrect && m_Ata.vars[m_SelectDisk].MeasuredPowerOnHours > 0)
 			{
 				CString IsMinutesT, title;
-				if(m_Ata.vars[m_SelectDisk].MeasuredTimeUnitType == CAtaSmart::POWER_ON_MINUTES)
+				if(m_Ata.vars[m_SelectDisk].MeasuredTimeUnitType == CAtaSmart::POWER_ON_MINUTES && m_Ata.vars[m_SelectDisk].IsMaxtorMinute)
 				{
-					if(m_Ata.vars[m_SelectDisk].IsMaxtorMinute)
-					{
-						
-						IsMinutesT = _T(" (?)");
-					}
-					else
-					{
-						IsMinutesT = _T("");
-					}
+					IsMinutesT = _T(" (?)");
+				}
+				else
+				{
+					IsMinutesT = _T("");
 				}
 
-				title.Format(_T("%d %s %d %s%s"),
-					m_Ata.vars[m_SelectDisk].MeasuredPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[m_SelectDisk].MeasuredPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")), 
-					IsMinutesT);
+				const int years = m_Ata.vars[m_SelectDisk].MeasuredPowerOnHours / (365 * 24);
+				const int days = (m_Ata.vars[m_SelectDisk].MeasuredPowerOnHours - 365 * 24 * years) / 24;
+				const int hours = m_Ata.vars[m_SelectDisk].MeasuredPowerOnHours % 24;
+				if (years > 0)
+				{
+					title.Format(_T("%d %s %d %s %d %s%s"),
+						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
+						IsMinutesT);
+				}
+				else
+				{
+					title.Format(_T("%d %s %d %s%s"),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
+						IsMinutesT);
+				}
 				m_CtrlPowerOnHours.SetToolTipText(title);
 			}
 			else
