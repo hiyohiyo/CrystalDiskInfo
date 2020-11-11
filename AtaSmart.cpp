@@ -9907,12 +9907,18 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		{
 			return DISK_STATUS_GOOD;
 		}
-		else if (vars[i].Life == 10)
+		if (vars[i].Life == 10)
 		{
 			return DISK_STATUS_CAUTION;
 		}
-		else if (vars[i].Life < 10)
+		if (vars[i].Life < 10)
 		{
+			// https://github.com/hiyohiyo/CrystalDiskInfo/issues/99
+			if (vars[i].Model.Compare(_T("Parallels Virtual NVMe Disk")) == 0)
+			{
+				return DISK_STATUS_UNKNOWN;
+			}
+		
 			return DISK_STATUS_BAD;
 		}
 	}
