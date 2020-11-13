@@ -183,7 +183,7 @@ BOOL CDiskInfoApp::InitInstance()
 	// Smart folder
 	TCHAR smartDir[256];
 	GetPrivateProfileString(_T("Setting"), _T("SmartDir"), _T(""), smartDir, 256, m_Ini);
-	if (CreateDirectory(smartDir, nullptr) || GetLastError() == ERROR_ALREADY_EXISTS) {
+	if (_tcscmp(smartDir, _T("")) != 0 || CreateDirectory(smartDir, nullptr) || GetLastError() == ERROR_ALREADY_EXISTS) {
 		m_SmartDir.Format(_T("%s"), smartDir);
 		if (m_SmartDir.Right(1).Compare(_T("\\")) != 0) // Add "\"
 		{
