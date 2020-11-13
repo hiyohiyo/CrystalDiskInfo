@@ -283,6 +283,9 @@ protected:
 	void SetControlFont();
 	virtual void SetClientSize(int sizeX, int sizeY, double zoomRatio);
 
+	void SavePos() const;
+	void RestorePos();
+	
 	void UpdateShareInfo(); // For Sidebar Gadget Support
 	void DeleteShareInfo();
 

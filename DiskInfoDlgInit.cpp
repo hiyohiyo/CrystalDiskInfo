@@ -187,6 +187,31 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	return TRUE; 
 }
 
+void CDiskInfoDlg::RestorePos()
+{
+	const int x = GetPrivateProfileInt(_T("Setting"), _T("X"), INT_MIN, m_Ini);
+	const int y = GetPrivateProfileInt(_T("Setting"), _T("Y"), INT_MIN, m_Ini);
+
+	RECT rw, rc;
+	GetWindowRect(&rw);
+
+	rc.left = x;
+	rc.top = y;
+	rc.right = x + rw.right - rw.left;
+	rc.bottom = y + rw.bottom - rw.top;
+
+	HMONITOR hMonitor = MonitorFromRect(&rc, MONITOR_DEFAULTTONULL);
+	if (hMonitor == nullptr)
+	{
+		DebugPrint(_T("CenterWindow()"));
+		CenterWindow();
+	}
+	else
+	{
+		SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+	}
+}
+
 void CDiskInfoDlg::InitDialogComplete()
 {
 	DebugPrint(_T("InitDialogComplete"));
@@ -211,8 +236,8 @@ void CDiskInfoDlg::InitDialogComplete()
 		CheckPage();
 			
 		m_bShowWindow = TRUE;
-		DebugPrint(_T("CenterWindow()"));
-		CenterWindow();
+		DebugPrint(_T("RestorePos()"));
+		RestorePos();
 
 		if(m_bResident)
 		{

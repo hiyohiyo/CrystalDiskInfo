@@ -397,6 +397,8 @@ void CDiskInfoDlg::OnCancel()
 	}
 	if(! m_bResident)
 	{
+		SavePos();
+
 		KillGraphDlg();
 		if(m_hDevNotify)
 		{
@@ -1521,6 +1523,19 @@ void CDiskInfoDlg::SetClientSize(int sizeX, int sizeY, double zoomRatio)
 
 		SetWindowPos(NULL, 0, 0, (int)(sizeX * zoomRatio) + ncaWidth, (int)(sizeY * zoomRatio) + ncaHeight, SWP_NOMOVE | SWP_NOZORDER);
 	}
+}
+
+void CDiskInfoDlg::SavePos() const
+{
+	WINDOWPLACEMENT place;
+	place.length = sizeof(WINDOWPLACEMENT);
+	GetWindowPlacement(&place);
+
+	CString x, y;
+	x.Format(_T("%d"), place.rcNormalPosition.left);
+	y.Format(_T("%d"), place.rcNormalPosition.top);
+	WritePrivateProfileString(_T("Setting"), _T("X"), x, m_Ini);
+	WritePrivateProfileString(_T("Setting"), _T("Y"), y, m_Ini);
 }
 
 void CDiskInfoDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
