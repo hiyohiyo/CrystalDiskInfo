@@ -1138,17 +1138,18 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	CString IsMinutes;
 	CString IsMinutesT;
 	CString title;	static int prePowerOnHours = -1;
-	if (m_Ata.vars[i].MeasuredPowerOnHours > 0)
+
+	const INT powerOnHours = m_Ata.vars[i].MeasuredPowerOnHours > 0 ? m_Ata.vars[i].MeasuredPowerOnHours : m_Ata.vars[i].DetectedPowerOnHours;
+	const DWORD timeUnitType = m_Ata.vars[i].MeasuredPowerOnHours > 0 ? m_Ata.vars[i].MeasuredTimeUnitType : m_Ata.vars[i].DetectedTimeUnitType;
+
+	if (powerOnHours >= 0)
 	{
-		//	if(flagUpdate || prePowerOnHours != m_Ata.vars[i].MeasuredPowerOnHours)
+		//if(flagUpdate || prePowerOnHours != powerOnHours)
 		{
-			if (m_Ata.vars[i].MeasuredTimeUnitType == CAtaSmart::POWER_ON_MINUTES)
+			if (timeUnitType == CAtaSmart::POWER_ON_MINUTES && m_Ata.vars[i].IsMaxtorMinute)
 			{
-				if (m_Ata.vars[i].IsMaxtorMinute)
-				{
-					IsMinutes = _T("?");
-					IsMinutesT = _T(" (?)");
-				}
+				IsMinutes = _T("?");
+				IsMinutesT = _T(" (?)");
 			}
 			else
 			{
@@ -1156,69 +1157,53 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 				IsMinutesT = _T("");
 			}
 
+			const int years = powerOnHours / (365 * 24);
+			const int days = (powerOnHours - 365 * 24 * years) / 24;
+			const int hours = powerOnHours % 24;
+			
 			if (m_NowDetectingUnitPowerOnHours)
 			{
-				title.Format(_T("%d %s %d %s%s\r\n%s"),
-					m_Ata.vars[i].MeasuredPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[i].MeasuredPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-					IsMinutesT, i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")));
-			}
-			else
-			{
-				title.Format(_T("%d %s %d %s%s"),
-					m_Ata.vars[i].MeasuredPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[i].MeasuredPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-					IsMinutesT);
-			}
-
-			m_PowerOnHours.Format(_T("%d%s%s"),
-				m_Ata.vars[i].MeasuredPowerOnHours, IsMinutes, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")));
-
-			m_CtrlPowerOnHours.SetToolTipText(title);
-
-			prePowerOnHours = m_Ata.vars[i].MeasuredPowerOnHours;
-			flagUpdate = TRUE;
-		}
-	}
-	else if (m_Ata.vars[i].DetectedPowerOnHours >= 0)
-	{
-		//	if(flagUpdate || prePowerOnHours != m_Ata.vars[i].DetectedPowerOnHours)
-		{
-			if (m_Ata.vars[i].DetectedTimeUnitType == CAtaSmart::POWER_ON_MINUTES)
-			{
-				if (m_Ata.vars[i].IsMaxtorMinute)
+				if (years > 0)
 				{
-					IsMinutes = _T("?");
-					IsMinutesT = _T(" (?)");
+					title.Format(_T("%d %s %d %s %d %s%s\r\n%s"),
+						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
+						IsMinutesT, i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")));
+				}
+				else
+				{
+					title.Format(_T("%d %s %d %s%s\r\n%s"),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
+						IsMinutesT, i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")));
 				}
 			}
 			else
 			{
-				IsMinutes = _T(" ");
-				IsMinutesT = _T("");
-			}
-
-			if (m_NowDetectingUnitPowerOnHours)
-			{
-				title.Format(_T("%d %s %d %s%s\r\n%s"),
-					m_Ata.vars[i].DetectedPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[i].DetectedPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-					IsMinutesT, i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")));
-			}
-			else
-			{
-				title.Format(_T("%d %s %d %s%s"),
-					m_Ata.vars[i].DetectedPowerOnHours / 24, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-					m_Ata.vars[i].DetectedPowerOnHours % 24, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-					IsMinutesT);
+				if (years > 0)
+				{
+					title.Format(_T("%d %s %d %s %d %s%s"),
+						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
+						IsMinutesT);
+				}
+				else
+				{
+					title.Format(_T("%d %s %d %s%s"),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
+						IsMinutesT);
+				}
 			}
 
 			m_PowerOnHours.Format(_T("%d%s%s"),
-				m_Ata.vars[i].DetectedPowerOnHours, IsMinutes, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")));
+				powerOnHours, IsMinutes, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")));
 
 			m_CtrlPowerOnHours.SetToolTipText(title);
 
-			prePowerOnHours = m_Ata.vars[i].DetectedPowerOnHours;
+			prePowerOnHours = powerOnHours;
 			flagUpdate = TRUE;
 		}
 	}
