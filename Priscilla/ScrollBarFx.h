@@ -13,22 +13,21 @@
 #pragma comment(lib, "Gdiplus.lib")
 using namespace Gdiplus;
 
-class CSliderCtrlFx : public CSliderCtrl
+class CScrollBarFx : public CScrollBar
 {
-	DECLARE_DYNAMIC(CSliderCtrlFx)
+	DECLARE_DYNAMIC(CScrollBarFx)
 
 public:
-	CSliderCtrlFx();
-	virtual ~CSliderCtrlFx();
+	CScrollBarFx();
+	virtual ~CScrollBarFx();
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, int renderMode, BOOL bHighContrast, BOOL bDarkMode, int min, int max, int pos);
 
 	BOOL m_bHighContrast;
 	CBrush m_BkBrush;
 
 protected:
-	// Image
-	void SetBkReload(void);
-	void LoadCtrlBk(CDC* drawDC);
+	DECLARE_MESSAGE_MAP()
+	afx_msg void HScroll(UINT nSBCode, UINT nPos);
 
 	int m_X;
 	int m_Y;
@@ -36,13 +35,6 @@ protected:
 	CRect m_Margin;
 	int m_RenderMode;
 	BOOL m_bDarkMode;
-
-	// Image
 	CDC* m_BkDC;
-	CBitmap m_BkBitmap;
-	BOOL m_bBkBitmapInit;
-	BOOL m_bBkLoad;
-	CBitmap m_CtrlBitmap;
-	CImage m_CtrlImage;
 };
 

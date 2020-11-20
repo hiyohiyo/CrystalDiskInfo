@@ -1973,7 +1973,7 @@ BOOL CDiskInfoDlg::AlertSound(const CString& alertSoundPath) const
 	MCI_DGV_SETAUDIO_PARMS parms = { 0 };
 	parms.dwItem = MCI_DGV_SETAUDIO_VOLUME;
 	parms.dwValue = volume * 10; // 0-1000
-	error = mciSendCommand(mop.wDeviceID, MCI_SETAUDIO, MCI_DGV_SETAUDIO_ITEM | MCI_DGV_SETAUDIO_VALUE, (DWORD)&parms);
+	error = mciSendCommand(mop.wDeviceID, MCI_SETAUDIO, MCI_DGV_SETAUDIO_ITEM | MCI_DGV_SETAUDIO_VALUE, (DWORD_PTR)&parms);
 
 	// Seek
 	error = mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, reinterpret_cast<DWORD_PTR>(&mgp));
