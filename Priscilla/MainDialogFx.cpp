@@ -24,6 +24,18 @@ CMainDialogFx::CMainDialogFx(UINT dlgResouce, CWnd* pParent)
 	TCHAR ini[MAX_PATH];
 	TCHAR tmp[MAX_PATH];
 
+#ifdef UWP
+	TCHAR appData[MAX_PATH];
+	TCHAR drive[_MAX_DRIVE];
+	TCHAR dir[_MAX_DIR];
+	TCHAR fileName[_MAX_FNAME];
+	TCHAR ext[_MAX_EXT];
+
+	GetModuleFileName(NULL, ini, MAX_PATH);
+	_wsplitpath(ini, drive, dir, fileName, ext);
+	SHGetSpecialFolderPath(NULL, appData, CSIDL_APPDATA, 0);
+	m_Ini.Format(L"%s\\%s.ini", appData, fileName);
+#else
 	GetModuleFileName(NULL, ini, MAX_PATH);
 	if ((ptrEnd = _tcsrchr(ini, '.')) != NULL)
 	{
@@ -31,6 +43,7 @@ CMainDialogFx::CMainDialogFx(UINT dlgResouce, CWnd* pParent)
 		_tcscat_s(ini, MAX_PATH, L".ini");
 		m_Ini = ini;
 	}
+#endif
 
 	GetModuleFileName(NULL, tmp, MAX_PATH);
 	if ((ptrEnd = _tcsrchr(tmp, '\\')) != NULL) { *ptrEnd = '\0'; }

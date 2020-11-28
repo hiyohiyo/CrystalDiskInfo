@@ -326,82 +326,88 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 {
 	int color = m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES);
 
-	CBitmap* bk32Bitmap;
-	CImage bk32Image;
-	if (color == 32)
+	if (!m_CtrlImage.IsNull())
 	{
-		bk32Bitmap = &bkBitmap;
-	}
-	else
-	{	
-		bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
-		::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *m_BkDC, m_X, m_Y, SRCCOPY);
-		bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
-		bk32Image.ReleaseDC();
-	}
-
-	BITMAP CtlBmpInfo, DstBmpInfo;
-	bk32Bitmap->GetBitmap(&DstBmpInfo);
-	DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
-	DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
-	ctrlBitmap.GetBitmap(&CtlBmpInfo);
-	DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
-	DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
-	BYTE* DstBuffer = new BYTE[DstMemSize];
-	bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
-	BYTE* CtlBuffer = new BYTE[CtlMemSize];
-	ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
-
-	int baseY = 0;
-	for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
-	{
-		int dn = py * DstLineBytes;
-		int cn = (baseY + py) * CtlLineBytes;
-		for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+		if (m_CtrlImage.GetBPP() == 32)
 		{
-			BYTE a = CtlBuffer[cn + 3];
-			BYTE na = 255 - a;
-			CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
-			CtlBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
-			CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
-			dn += (DstBmpInfo.bmBitsPixel / 8);
-			cn += (CtlBmpInfo.bmBitsPixel / 8);
+			CBitmap* bk32Bitmap;
+			CImage bk32Image;
+			if (color == 32)
+			{
+				bk32Bitmap = &bkBitmap;
+			}
+			else
+			{
+				bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
+				::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *m_BkDC, m_X, m_Y, SRCCOPY);
+				bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
+				bk32Image.ReleaseDC();
+			}
+
+			BITMAP CtlBmpInfo, DstBmpInfo;
+			bk32Bitmap->GetBitmap(&DstBmpInfo);
+			DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
+			DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
+			ctrlBitmap.GetBitmap(&CtlBmpInfo);
+			DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
+			DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
+			BYTE* DstBuffer = new BYTE[DstMemSize];
+			bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
+			BYTE* CtlBuffer = new BYTE[CtlMemSize];
+			ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
+
+			int baseY = 0;
+			for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+			{
+				int dn = py * DstLineBytes;
+				int cn = (baseY + py) * CtlLineBytes;
+				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+				{
+					BYTE a = CtlBuffer[cn + 3];
+					BYTE na = 255 - a;
+					CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+					CtlBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+					CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+					dn += (DstBmpInfo.bmBitsPixel / 8);
+					cn += (CtlBmpInfo.bmBitsPixel / 8);
+				}
+			}
+
+			if (color == 32)
+			{
+				ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+			}
+			else
+			{
+				bk32Bitmap->SetBitmapBits(CtlMemSize, CtlBuffer);
+				m_CtrlImage.Detach();
+				m_CtrlImage.Attach(ctrlBitmap);
+				::BitBlt(m_CtrlImage.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
+				m_CtrlImage.ReleaseDC();
+				bk32Image.ReleaseDC();
+
+				ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+			}
+
+			if (m_bDrawFrame)
+			{
+				CBrush brush;
+				brush.CreateSolidBrush(m_FrameColor);
+				CRect rect;
+				rect.left = 0;
+				rect.top = 0;
+				rect.right = m_CtrlSize.cx;
+				rect.bottom = m_CtrlSize.cy;
+				::FrameRect(m_CtrlImage.GetDC(), &rect, (HBRUSH)brush.GetSafeHandle());
+				brush.DeleteObject();
+
+				m_CtrlImage.ReleaseDC();
+			}
+
+			delete[] DstBuffer;
+			delete[] CtlBuffer;
 		}
 	}
-
-	if (color == 32)
-	{
-		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
-	}
-	else
-	{
-		bk32Bitmap->SetBitmapBits(CtlMemSize, CtlBuffer);
-		m_CtrlImage.Detach();
-		m_CtrlImage.Attach(ctrlBitmap);
-		::BitBlt(m_CtrlImage.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
-		m_CtrlImage.ReleaseDC();
-		bk32Image.ReleaseDC();
-
-		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
-	}
-
-	if (m_bDrawFrame)
-	{
-		CBrush brush;
-		brush.CreateSolidBrush(m_FrameColor);
-		CRect rect;
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = m_CtrlSize.cx;
-		rect.bottom = m_CtrlSize.cy;
-		::FrameRect(m_CtrlImage.GetDC(), &rect, (HBRUSH)brush.GetSafeHandle());
-		brush.DeleteObject();
-
-		m_CtrlImage.ReleaseDC();
-	}
-
-	delete[] DstBuffer;
-	delete[] CtlBuffer;
 }
 
 //------------------------------------------------

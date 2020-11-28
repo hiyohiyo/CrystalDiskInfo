@@ -63,7 +63,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 	{
 		SetBkImage(L"");
 	}
-	else
+	else if (renderMode & OwnerDrawGlass || renderMode & OwnerDrawTransparent)
 	{
 		m_BkBitmap.DeleteObject();
 		m_BkBitmap.CreateCompatibleBitmap(m_BkDC, maxWidth, maxHeight);
@@ -123,6 +123,20 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		{
 			SetBkImage((HBITMAP)m_CtrlBitmap);
 			m_Header.InitControl(x, y, zoomRatio, bkDC, &m_CtrlBitmap, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
+		}
+		else
+		{
+			SetBkColor(m_BkColor1);
+			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
+		}
+	}
+	else
+	{
+		if(m_bNT6orLater)
+		{
+			SetBkImage(L"");
+			SetBkColor(m_BkColor1);
+			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
 		else
 		{
@@ -280,12 +294,12 @@ COLORREF CListCtrlFx::GetLineColor2(){return m_LineColor2;}
 
 void CListCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio, LONG fontWeight, BYTE fontRender)
 {
-	LOGFONT logFont = {0};
+	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;
 	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
 	logFont.lfQuality = fontRender;
 	logFont.lfWeight = fontWeight;
-	if(face.GetLength() < 32)
+	if (face.GetLength() < 32)
 	{
 		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
 	}
