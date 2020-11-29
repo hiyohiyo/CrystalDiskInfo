@@ -745,11 +745,19 @@
 #define IDC_SCROLLBAR_TEMPERATURE       1103
 
 #define IDC_STATIC_VOLUME               1105
+#define IDC_VALUE_VOLUME                1106
+
 #define IDC_FONT_FACE_COMBO             1201
-#define IDC_FONT_SCALE_COMBO			1203
+#define IDC_FONT_SCALE_COMBO			1202
+#define IDC_FONT_RENDER_COMBO           1203
+
 #define IDC_FONT_FACE					1204
 #define IDC_FONT_SCALE					1205
-#define IDC_SET_DEFAULT					1206
+#define IDC_FONT_RENDER				    1206
+
+#define IDC_OK       					1207
+#define IDC_SET_DEFAULT					1208
+
 
 #define ID_EXIT                         32771
 #define ID_ABOUT                        32772

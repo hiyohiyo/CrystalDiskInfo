@@ -20,9 +20,10 @@ CHealthDlg::CHealthDlg(CWnd* pParent /*=NULL*/)
 	p = (CDiskInfoDlg*)pParent;
 
 	m_ZoomType = p->GetZoomType();
+	m_FontFace = p->GetFontFace();
 	m_FontScale = p->GetFontScale();
 	m_FontRatio = p->GetFontRatio();
-	m_FontFace = p->GetFontFace();
+	m_FontRender = p->GetFontRender();
 	m_CurrentLangPath = p->GetCurrentLangPath();
 	m_DefaultLangPath = p->GetDefaultLangPath();
 	m_ThemeDir = p->GetThemeDir();
@@ -148,20 +149,20 @@ void CHealthDlg::UpdateDialogSize()
 	m_CtrlScrollbarC6.MoveWindow((int)(16 * m_ZoomRatio), (int)(184 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
 	m_CtrlScrollbarFF.MoveWindow((int)(16 * m_ZoomRatio), (int)(240 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
 
-	m_CtrlLabel05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlLabelC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlLabelC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlLabelFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlLabel05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabelC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabelC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabelFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
-	m_CtrlValue05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlValueC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlValueC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlValueFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValue05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValueC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValueC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValueFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
-	m_CtrlValue05X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlValueC5X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlValueC6X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlValueFFX.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlValue05X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValueC5X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValueC6X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValueFFX.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
 	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
@@ -178,13 +179,13 @@ void CHealthDlg::UpdateDialogSize()
 	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 
-	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
 	m_CtrlApply.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 	m_CtrlDefault.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
-	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
 	m_CtrlSelectDisk.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 

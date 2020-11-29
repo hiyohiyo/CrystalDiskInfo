@@ -33,6 +33,7 @@ BOOL CSliderCtrlFx::InitControl(int x, int y, int width, int height, double zoom
 	m_CtrlSize.cx = (int)(width * zoomRatio);
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
+	SendMessage(TBM_SETTHUMBLENGTH, m_CtrlSize.cy, 0);
 
 	m_BkDC = bkDC;
 	m_RenderMode = renderMode;

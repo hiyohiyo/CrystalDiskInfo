@@ -20,9 +20,10 @@ CSoundSettingDlg::CSoundSettingDlg(CWnd* pParent /*=NULL*/)
 	p = (CDiskInfoDlg*)pParent;
 
 	m_ZoomType = p->GetZoomType();
+	m_FontFace = p->GetFontFace();
 	m_FontScale = p->GetFontScale();
 	m_FontRatio = p->GetFontRatio();
-	m_FontFace = p->GetFontFace();
+	m_FontRender = p->GetFontRender();
 	m_CurrentLangPath = p->GetCurrentLangPath();
 	m_DefaultLangPath = p->GetDefaultLangPath();
 	m_ThemeDir = p->GetThemeDir();
@@ -46,6 +47,7 @@ void CSoundSettingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_PLAY, m_CtrlPlay);
 	DDX_Control(pDX, IDC_SLIDER_VOLUME, m_CtrlSlider);
 	DDX_Control(pDX, IDC_STATIC_VOLUME, m_CtrlVolume);
+	DDX_Control(pDX, IDC_VALUE_VOLUME, m_CtrlValueVolume);
 	DDX_Control(pDX, IDC_BUTTON_DEFAULT, m_CtrlDefault);
 	DDX_Control(pDX, IDC_BUTTON_OK, m_CtrlOk);
 }
@@ -64,8 +66,14 @@ BOOL CSoundSettingDlg::OnInitDialog()
 	UpdateData(FALSE);
 
 	m_InitialVolume = GetPrivateProfileInt(_T("Setting"), _T("AlertSoundVolume"), 80, m_Ini);
-	if (m_InitialVolume < 0 || m_InitialVolume > 100) m_InitialVolume = 80;
+	if (m_InitialVolume < 0 || m_InitialVolume > 100)
+	{
+		m_InitialVolume = 80;
+	}
 	m_CurrentVolume = m_InitialVolume;
+	CString cstr;
+	cstr.Format(L"%d", m_CurrentVolume);
+	m_CtrlValueVolume.SetWindowTextW(cstr);
 
 	m_CtrlDefault.SetWindowTextW(i18n(_T("HealthStatus"), _T("DEFAULT")));
 
@@ -79,6 +87,7 @@ BOOL CSoundSettingDlg::OnInitDialog()
 
 BEGIN_MESSAGE_MAP(CSoundSettingDlg, CDialogFx)
 	ON_WM_CTLCOLOR()
+	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_BUTTON_SELECT_FILE, &CSoundSettingDlg::OnSelectFile)
 	ON_BN_CLICKED(IDC_BUTTON_PLAY, &CSoundSettingDlg::OnPlay)
 	ON_BN_CLICKED(IDC_BUTTON_DEFAULT, &CSoundSettingDlg::OnDefault)
@@ -93,11 +102,12 @@ void CSoundSettingDlg::UpdateDialogSize()
 	SetClientSize(SIZE_X, SIZE_Y, m_ZoomRatio);
 	UpdateBackground(FALSE, m_bDarkMode);
 
-	m_CtrlFilePath.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlSelectFile.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlPlay.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlOk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlFilePath.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlSelectFile.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlPlay.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValueVolume.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlOk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
 	m_CtrlFilePath.InitControl(8, 8, 416, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 	m_CtrlSelectFile.InitControl(428, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"selectSound"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, m_bDarkMode);
@@ -105,11 +115,13 @@ void CSoundSettingDlg::UpdateDialogSize()
 	m_CtrlPlay.InitControl(456, 8, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"playSound"), 2, BS_CENTER, OwnerDrawImage, m_bHighContrast, m_bDarkMode);
 	m_CtrlPlay.SetHandCursor();
 	m_CtrlSlider.InitControl(32, 40, 396, 24, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, m_bDarkMode, 0, 100, m_InitialVolume);
-	m_CtrlVolume.InitControl(8, 40, 24, 24, m_ZoomRatio, &m_BkDC, IP(L"volume"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
+	SetVolumeImage();
+	m_CtrlValueVolume.InitControl(428, 40, 52, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 	m_CtrlDefault.InitControl(40, 72, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 	m_CtrlOk.InitControl(280, 72, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlFilePath.SetDrawFrame(TRUE);
+	m_CtrlValueVolume.SetDrawFrame(TRUE);
 
 	SetDarkModeControl(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
 	SetDarkModeControl(m_CtrlDefault.GetSafeHwnd(), m_bDarkMode);
@@ -147,7 +159,6 @@ void CSoundSettingDlg::OnPlay()
 
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_PLAY_ALERT_SOUND, NULL, NULL);
 }
-
 
 void CSoundSettingDlg::OnDefault()
 {
@@ -196,4 +207,37 @@ HBRUSH CSoundSettingDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	default:
 		return hbr;
 	}
+}
+
+void CSoundSettingDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	CDialogFx::OnHScroll(nSBCode, nPos, pScrollBar);
+
+	CString cstr;
+	cstr.Format(L"%d", m_CtrlSlider.GetPos());
+	m_CtrlValueVolume.SetWindowTextW(cstr);
+	SetVolumeImage();
+}
+
+void CSoundSettingDlg::SetVolumeImage()
+{
+	int volume = m_CtrlSlider.GetPos();
+	CString imageName = L"";
+	if (volume > 66)
+	{
+		imageName = L"volumeL";
+	}
+	else if (volume > 33)
+	{
+		imageName = L"volumeM";
+	}
+	else if (volume > 0)
+	{
+		imageName = L"volumeS";
+	}
+	else
+	{
+		imageName = L"volumeZ";
+	}
+	m_CtrlVolume.InitControl(8, 40, 24, 24, m_ZoomRatio, &m_BkDC, IP(imageName), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 }

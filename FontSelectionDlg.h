@@ -17,15 +17,12 @@ class CFontSelectionDlg : public CDialogFx
 	DECLARE_DYNAMIC(CFontSelectionDlg)
 
 	static const int SIZE_X = 480;
-	static const int SIZE_Y = 208;
+	static const int SIZE_Y = 204;
 	enum { IDD = IDD_FONT };
 
 public:
 	CFontSelectionDlg(CWnd* pParent = NULL);
 	virtual ~CFontSelectionDlg();
-
-	CString GetFontFace();
-	int GetFontScale();
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
@@ -40,10 +37,12 @@ protected:
 
 	CStaticFx m_LabelFontFace;
 	CStaticFx m_LabelFontScale;
+	CStaticFx m_LabelFontRender;
 	CButtonFx m_CtrlOk;
-	CButtonFx m_CtrlSetDefault;
+	CButtonFx m_CtrlDefault;
 
 	CFontComboBox m_CtrlFontFace;
 	CComboBoxFx   m_CtrlFontScale;
+	CComboBoxFx   m_CtrlFontRender;
 
 };

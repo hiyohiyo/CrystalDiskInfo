@@ -18,9 +18,10 @@ CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
 	CMainDialogFx* p = (CMainDialogFx*)pParent;
 
 	m_ZoomType = p->GetZoomType();
+	m_FontFace = p->GetFontFace();
 	m_FontScale = p->GetFontScale();
 	m_FontRatio = p->GetFontRatio();
-	m_FontFace = p->GetFontFace();
+	m_FontRender = p->GetFontRender();
 	m_CurrentLangPath = p->GetCurrentLangPath();
 	m_DefaultLangPath = p->GetDefaultLangPath();
 	m_ThemeDir = p->GetThemeDir();
@@ -141,11 +142,11 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 	m_CtrlCrystalDewWorld.SetHandCursor();
 
-	m_CtrlVersion.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
-	m_CtrlEdition.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
-	m_CtrlRelease.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
-	m_CtrlCopyright.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
-	m_CtrlLicense.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL);
+	m_CtrlVersion.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD, m_FontRender);
+	m_CtrlEdition.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD, m_FontRender);
+	m_CtrlRelease.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlCopyright.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlLicense.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 
 	m_CtrlVersion.SetHandCursor();
 	m_CtrlLicense.SetHandCursor();

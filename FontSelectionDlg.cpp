@@ -23,6 +23,7 @@ CFontSelectionDlg::CFontSelectionDlg(CWnd* pParent)
 	m_FontScale = p->GetFontScale();
 	m_FontRatio = 1.0; // p->GetFontRatio();
 	m_FontFace = p->GetFontFace();
+	m_FontRender = p->GetFontRender();
 	m_CurrentLangPath = p->GetCurrentLangPath();
 	m_DefaultLangPath = p->GetDefaultLangPath();
 	m_ThemeDir = p->GetThemeDir();
@@ -40,16 +41,18 @@ CFontSelectionDlg::~CFontSelectionDlg()
 void CFontSelectionDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, ID_OK, m_CtrlOk);
+	DDX_Control(pDX, IDC_OK, m_CtrlOk);
 	DDX_Control(pDX, IDC_FONT_FACE,  m_LabelFontFace);
 	DDX_Control(pDX, IDC_FONT_SCALE, m_LabelFontScale);
+	DDX_Control(pDX, IDC_FONT_RENDER, m_LabelFontRender);
 	DDX_Control(pDX, IDC_FONT_FACE_COMBO, m_CtrlFontFace);
 	DDX_Control(pDX, IDC_FONT_SCALE_COMBO, m_CtrlFontScale);
-	DDX_Control(pDX, IDC_SET_DEFAULT, m_CtrlSetDefault);
+	DDX_Control(pDX, IDC_FONT_RENDER_COMBO, m_CtrlFontRender);
+	DDX_Control(pDX, IDC_SET_DEFAULT, m_CtrlDefault);
 }
 
 BEGIN_MESSAGE_MAP(CFontSelectionDlg, CDialogFx)
-	ON_BN_CLICKED(ID_OK, &CFontSelectionDlg::OnOk)
+	ON_BN_CLICKED(IDC_OK, &CFontSelectionDlg::OnOk)
 	ON_BN_CLICKED(IDC_SET_DEFAULT, &CFontSelectionDlg::OnSetDefault)
 END_MESSAGE_MAP()
 
@@ -69,9 +72,22 @@ BOOL CFontSelectionDlg::OnInitDialog()
 		if (m_FontScale == i) { m_CtrlFontScale.SetCurSel(m_CtrlFontScale.GetCount() - 1);  }
 	}
 
+	m_CtrlFontRender.AddString(i18n(L"Dialog", L"ENABLED"));
+	m_CtrlFontRender.AddString(i18n(L"Dialog", L"DISABLED"));
+
+	if (m_FontRender == CLEARTYPE_NATURAL_QUALITY)
+	{
+		m_CtrlFontRender.SetCurSel(0);
+	}
+	else
+	{
+		m_CtrlFontRender.SetCurSel(1);
+	}
+
 	m_LabelFontFace.SetWindowTextW(i18n(L"Dialog", L"FONT_FACE"));
 	m_LabelFontScale.SetWindowTextW(i18n(L"Dialog", L"FONT_SCALE"));
-	m_CtrlSetDefault.SetWindowTextW(i18n(L"Dialog", L"DEFAULT"));
+	m_LabelFontRender.SetWindowTextW(L"ClearType");
+	m_CtrlDefault.SetWindowTextW(i18n(L"Dialog", L"DEFAULT"));
 
 	UpdateDialogSize();
 
@@ -88,58 +104,60 @@ void CFontSelectionDlg::UpdateDialogSize()
 	ChangeZoomType(m_ZoomType);
 	SetClientSize(SIZE_X, SIZE_Y, m_ZoomRatio);
 
-
 	UpdateBackground(FALSE, m_bDarkMode);
 
+	m_LabelFontFace.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_LabelFontScale.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_LabelFontRender.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+
 	m_LabelFontFace.InitControl(8, 8, 432, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_LabelFontScale.InitControl(8, 76, 432, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlFontFace.InitControl(20, 36, 440, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
-	m_CtrlFontScale.InitControl(20, 104, 440, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
-	m_CtrlSetDefault.InitControl(40, 156, 168, 32, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
-	m_CtrlOk.InitControl(280, 156, 168, 32, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_LabelFontScale.InitControl(8, 80, 208, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_LabelFontRender.InitControl(240, 80, 208, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlFontFace.InitControl(20, 32, 440, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
+	m_CtrlFontScale.InitControl(20, 104, 208, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
+	m_CtrlFontRender.InitControl(252, 104, 208, 360, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
+
+	m_CtrlDefault.InitControl(40, 156, 168, 32, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlOk.InitControl(272, 156, 168, 32, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
 
 	m_CtrlFontFace.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 	m_CtrlFontScale.SetMargin(0, 4, 0, 0, m_ZoomRatio);
-
-	m_LabelFontFace.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio);
-	m_LabelFontScale.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio);
+	m_CtrlFontRender.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
 	m_CtrlFontFace.SetFontHeight(20, m_ZoomRatio, m_FontRatio);
-	m_CtrlFontFace.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL);
-	m_CtrlFontFace.SetItemHeightEx(-1, 32, m_ZoomRatio, m_FontRatio);
+	m_CtrlFontFace.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL, m_FontRender);
+	m_CtrlFontFace.SetItemHeightEx(-1, 36, m_ZoomRatio, m_FontRatio);
 	for (int i = 0; i < m_CtrlFontFace.GetCount(); i++)
 	{
 		m_CtrlFontFace.SetItemHeightEx(i, 32, m_ZoomRatio, m_FontRatio);
 	}
 
-	m_CtrlFontScale.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL);
-	m_CtrlFontScale.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL);
-	m_CtrlFontScale.SetItemHeightEx(-1, 32, m_ZoomRatio, m_FontRatio);
+	m_CtrlFontScale.SetFontHeight(20, m_ZoomRatio, m_FontRatio);
+	m_CtrlFontScale.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL, m_FontRender);
+	m_CtrlFontScale.SetItemHeightEx(-1, 36, m_ZoomRatio, m_FontRatio);
 	for (int i = 0; i < m_CtrlFontScale.GetCount(); i++)
 	{
 		m_CtrlFontScale.SetItemHeightEx(i, 32, m_ZoomRatio, m_FontRatio);
 	}
 
-	m_CtrlSetDefault.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlFontRender.SetFontHeight(20, m_ZoomRatio, m_FontRatio);
+	m_CtrlFontRender.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL, m_FontRender);
+	m_CtrlFontRender.SetItemHeightEx(-1, 36, m_ZoomRatio, m_FontRatio);
+	for (int i = 0; i < m_CtrlFontRender.GetCount(); i++)
+	{
+		m_CtrlFontRender.SetItemHeightEx(i, 32, m_ZoomRatio, m_FontRatio);
+	}
+
+	m_CtrlDefault.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 	m_CtrlOk.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 	
-	m_CtrlSetDefault.SetHandCursor();
+	m_CtrlDefault.SetHandCursor();
 	m_CtrlOk.SetHandCursor();
 
-	SetDarkModeControl(m_CtrlSetDefault.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlDefault.GetSafeHwnd(), m_bDarkMode);
 	SetDarkModeControl(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
 
 	Invalidate();
-}
-
-CString CFontSelectionDlg::GetFontFace()
-{
-	return m_FontFace;
-}
-
-int CFontSelectionDlg::GetFontScale()
-{
-	return m_FontScale;
 }
 
 void CFontSelectionDlg::OnOk()
@@ -149,6 +167,14 @@ void CFontSelectionDlg::OnOk()
 	m_CtrlFontFace.GetLBText(m_CtrlFontFace.GetCurSel(), m_FontFace);
 	m_CtrlFontScale.GetLBText(m_CtrlFontScale.GetCurSel(), cstr);
 	m_FontScale = _wtoi(cstr);
+	if (m_CtrlFontRender.GetCurSel() == 0)
+	{
+		m_FontRender = CLEARTYPE_NATURAL_QUALITY;
+	}
+	else
+	{
+		m_FontRender = ANTIALIASED_QUALITY;
+	}
 
 	CDialog::OnOK();
 }
@@ -170,6 +196,7 @@ void CFontSelectionDlg::OnSetDefault()
 {
 	SetDefaultFont(L"");
 	m_CtrlFontScale.SetCurSel(5);
+	m_CtrlFontRender.SetCurSel(0);
 }
 
 void CFontSelectionDlg::SetDefaultFont(CString fontFace)

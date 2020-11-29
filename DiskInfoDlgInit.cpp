@@ -71,6 +71,12 @@ BOOL CDiskInfoDlg::OnInitDialog()
 		m_FontRatio = m_FontScale / 100.0;
 	}
 
+	m_FontRender = GetPrivateProfileInt(L"Setting", L"FontRender", CLEARTYPE_NATURAL_QUALITY, m_Ini);
+	if (m_FontRender > CLEARTYPE_NATURAL_QUALITY)
+	{
+		m_FontRender = CLEARTYPE_NATURAL_QUALITY;
+	}
+
 	switch(GetPrivateProfileInt(_T("Setting"), _T("AutoRefresh"), 10, m_Ini))
 	{
 	case  1: OnAutoRefresh01Min(); break;

@@ -29,6 +29,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual void UpdateDialogSize();
 	virtual void OnCancel();
+	void SetVolumeImage();
 	
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnSelectFile();
@@ -36,7 +37,8 @@ protected:
 	afx_msg void OnDefault();
 	afx_msg void OnOk();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+
 	CString m_FilePath;
 	CStaticFx m_CtrlFilePath;
 	CButtonFx m_CtrlSelectFile;
@@ -47,4 +49,5 @@ protected:
 	CButtonFx m_CtrlDefault;
 	CButtonFx m_CtrlOk;
 	CStaticFx m_CtrlVolume;
+	CStaticFx m_CtrlValueVolume;
 };

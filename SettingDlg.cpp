@@ -20,9 +20,10 @@ CSettingDlg::CSettingDlg(CWnd* pParent /*=NULL*/)
 	p = (CDiskInfoDlg*)pParent;
 
 	m_ZoomType = p->GetZoomType();
+	m_FontFace = p->GetFontFace();
 	m_FontScale = p->GetFontScale();
 	m_FontRatio = p->GetFontRatio();
-	m_FontFace = p->GetFontFace();
+	m_FontRender = p->GetFontRender();
 	m_CurrentLangPath = p->GetCurrentLangPath();
 	m_DefaultLangPath = p->GetDefaultLangPath();
 	m_ThemeDir = p->GetThemeDir();
@@ -134,25 +135,25 @@ void CSettingDlg::UpdateDialogSize()
 	SetClientSize(SIZE_X, SIZE_Y, m_ZoomRatio);
 	UpdateBackground(FALSE, m_bDarkMode);
 
-	m_CtrlLabelAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlLabelApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlLabelAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabelApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
-	m_CtrlLabelAamLow.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlLabelAamHigh.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlLabelAamRecommend.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlLabelApmLow.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlLabelApmHigh.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlLabelAamLow.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabelAamHigh.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabelAamRecommend.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabelApmLow.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabelApmHigh.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
-	m_CtrlAamStatus.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlCurrentAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlRecommendAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlApmStatus.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlCurrentApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlAamStatus.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlCurrentAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlRecommendAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlApmStatus.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlCurrentApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
-	m_CtrlEnableAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlDisableAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlEnableApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
-	m_CtrlDisableApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
+	m_CtrlEnableAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlDisableAam.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlEnableApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlDisableApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
 	m_CtrlLabelAam.InitControl(8, 44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 	m_CtrlLabelApm.InitControl(8, 188, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
