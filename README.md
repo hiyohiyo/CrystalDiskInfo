@@ -16,7 +16,8 @@ Partially supports:
 
 ## Notification
 This repository does not include resource files, so please download them from below.
-- [Link to download page](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc)
+- [Link to download page for resource files](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc)
+- [Link to download page for CdiResource](https://crystalmark.info/redirect.php?product=CrystalDiskInfo)
 
 ## Building
 
