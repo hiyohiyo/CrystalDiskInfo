@@ -16,15 +16,14 @@ Partially supports:
 
 ## Notification
 This repository does not include resource files, so please download them from below.
-- [Link to download page for resource files](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc)
-- [Link to download page for CdiResource](https://crystalmark.info/redirect.php?product=CrystalDiskInfo)
+- [Download for resource files](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc)
 
 ## Building
 
 Open *DiskInfo.sln* and build.
 
 ### Note
-Copy *CdiResource* folder in the [download files](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc) to *Marginality* folder created in the build. If the *CdiResource* folder does not exist at runtime, the app displays "*Not Found 'Graph.html'*".
+Copy *CdiResource* folder in the [Download CdiResource](https://crystalmark.info/redirect.php?product=CrystalDiskInfo) to *Marginality* folder created in the build. If the *CdiResource* folder does not exist at runtime, the app displays "*Not Found 'Graph.html'*".
 
 ## Project Page
 - [Crystal Dew World](https://crystalmark.info/)
