@@ -3502,12 +3502,6 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.DiskVendorId = SSD_VENDOR_KIOXIA;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
-	else if (IsSsdApacer(asi))
-	{
-		asi.SmartKeyName = _T("SmartApacer");
-		asi.DiskVendorId = SSD_VENDOR_APACER;
-		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
-	}
 	else if (IsSsdSiliconMotion(asi))
 	{
 		asi.SmartKeyName = _T("SmartSiliconMotion");
@@ -3530,6 +3524,12 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 	{
 		asi.SmartKeyName = _T("SmartMaxiotek");
 		asi.DiskVendorId = SSD_VENDOR_MAXIOTEK;
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+	}
+	else if (IsSsdApacer(asi))
+	{
+		asi.SmartKeyName = _T("SmartApacer");
+		asi.DiskVendorId = SSD_VENDOR_APACER;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
 	else if(IsSsdGeneral(asi))
@@ -4962,13 +4962,19 @@ BOOL CAtaSmart::IsSsdSeagate(ATA_SMART_INFO& asi)
 		)
 	{
 		flagSmartType = TRUE;
-		asi.SmartKeyName = _T("SmartSeagate");
-		if (asi.Model.Find(L"HM") >= 0 || asi.Model.Find(L"FP") >= 0)
+		if (asi.Model.Find(L"BarraCuda") >= 0)
 		{
+			asi.SmartKeyName = _T("SmartSeagateBarraCuda");
+			asi.FlagLifeRawValue = TRUE;
+		}
+		else if (asi.Model.Find(L"HM") >= 0 || asi.Model.Find(L"FP") >= 0)
+		{
+			asi.SmartKeyName = _T("SmartSeagate");
 			asi.FlagLifeRawValue = FALSE;
 		}
 		else
 		{
+			asi.SmartKeyName = _T("SmartSeagate");
 			asi.FlagLifeRawValue = TRUE;
 		}
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
@@ -9903,22 +9909,27 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 	// NVMe
 	if (vars[i].DiskVendorId == SSD_VENDOR_NVME)
 	{
+		// https://github.com/hiyohiyo/CrystalDiskInfo/issues/99
+		if (vars[i].Model.Compare(_T("Parallels Virtual NVMe Disk")) == 0)
+		{
+			return DISK_STATUS_GOOD;
+		}
+
+		if (vars[i].Attribute[0].RawValue[0] > 0)
+		{
+			return DISK_STATUS_BAD;
+		}
+
 		if (vars[i].Life > 10)
 		{
 			return DISK_STATUS_GOOD;
 		}
-		if (vars[i].Life == 10)
+		else if (vars[i].Life == 10)
 		{
 			return DISK_STATUS_CAUTION;
 		}
-		if (vars[i].Life < 10)
+		else if (vars[i].Life < 10)
 		{
-			// https://github.com/hiyohiyo/CrystalDiskInfo/issues/99
-			if (vars[i].Model.Compare(_T("Parallels Virtual NVMe Disk")) == 0)
-			{
-				return DISK_STATUS_UNKNOWN;
-			}
-		
 			return DISK_STATUS_BAD;
 		}
 	}

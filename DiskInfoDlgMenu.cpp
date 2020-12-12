@@ -1511,7 +1511,6 @@ void CDiskInfoDlg::OnResidentMinimize()
 	WritePrivateProfileString(_T("Setting"), _T("ResidentMinimize"), _T("1"), m_Ini);
 }
 
-
 void CDiskInfoDlg::OnZoom100()
 {
 	if(CheckRadioZoomType(ID_ZOOM_100, 100))
