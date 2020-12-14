@@ -3907,6 +3907,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
+			/*
 		case 0xB1:
 			if(asi.DiskVendorId == SSD_VENDOR_SAMSUNG)
 			{
@@ -3918,6 +3919,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
+			*/
 		case 0xE7:
 			if (asi.DiskVendorId == SSD_VENDOR_SANDFORCE || asi.DiskVendorId == SSD_VENDOR_CORSAIR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_SKHYNIX || asi.DiskVendorId == SSD_VENDOR_REALTEK
 			||  asi.DiskVendorId == SSD_VENDOR_SANDISK || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_APACER || asi.DiskVendorId == SSD_VENDOR_JMICRON || asi.DiskVendorId == SSD_VENDOR_PHISON || asi.DiskVendorId == SSD_VENDOR_SEAGATE || asi.DiskVendorId == SSD_VENDOR_MAXIOTEK)
@@ -9729,6 +9731,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					if (asi->Life < 0 || asi->Life > 100) { asi->Life = -1; }
 				}
 				break;
+				/*
 			case 0xB1:
 				if(asi->DiskVendorId == SSD_VENDOR_SAMSUNG)
 				{
@@ -9740,6 +9743,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					if (asi->Life < 0 || asi->Life > 100) { asi->Life = -1; }
 				}
 				break;
+				*/
 			case 0xE7:
 				if (asi->DiskVendorId == SSD_VENDOR_SANDFORCE || asi->DiskVendorId == SSD_VENDOR_CORSAIR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_SKHYNIX || asi->DiskVendorId == SSD_VENDOR_REALTEK
 				||  asi->DiskVendorId == SSD_VENDOR_SANDISK || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_APACER || asi->DiskVendorId == SSD_VENDOR_JMICRON || asi->DiskVendorId == SSD_VENDOR_PHISON || asi->DiskVendorId == SSD_VENDOR_SEAGATE || asi->DiskVendorId == SSD_VENDOR_MAXIOTEK)
@@ -10051,7 +10055,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		if(
 		   (vars[i].Attribute[j].Id == 0xA9 && (vars[i].DiskVendorId == SSD_VENDOR_REALTEK || (vars[i].DiskVendorId == SSD_VENDOR_KINGSTON && vars[i].HostReadsWritesUnit == HOST_READS_WRITES_32MB /*KingstonKC600*/)))
 		|| (vars[i].Attribute[j].Id == 0xAD && vars[i].DiskVendorId == SSD_VENDOR_KIOXIA)
-		|| (vars[i].Attribute[j].Id == 0xB1 && vars[i].DiskVendorId == SSD_VENDOR_SAMSUNG)
+//		|| (vars[i].Attribute[j].Id == 0xB1 && vars[i].DiskVendorId == SSD_VENDOR_SAMSUNG)
 		|| (vars[i].Attribute[j].Id == 0xBB && vars[i].DiskVendorId == SSD_VENDOR_MTRON)
 		|| (vars[i].Attribute[j].Id == 0xCA && (vars[i].DiskVendorId == SSD_VENDOR_MICRON || vars[i].DiskVendorId == SSD_VENDOR_MICRON_MU02 || vars[i].DiskVendorId == SSD_VENDOR_INTEL_DC))
 		|| (vars[i].Attribute[j].Id == 0xD1 && vars[i].DiskVendorId == SSD_VENDOR_INDILINX)
