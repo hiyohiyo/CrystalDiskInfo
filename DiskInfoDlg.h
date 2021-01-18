@@ -534,6 +534,7 @@ public:
 	afx_msg void OnUsbCypress();
 	afx_msg void OnUsbMemory();
 	afx_msg void OnUsbASM1352R();
+	afx_msg void OnUsbSat16();
 	afx_msg void OnUsbNVMeJMicron();
 	afx_msg void OnUsbNVMeASMedia();
 	afx_msg void OnUsbNVMeRealtek();

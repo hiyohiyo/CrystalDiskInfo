@@ -879,8 +879,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8, 9, 0, 0
- PRODUCTVERSION 8, 9, 0, 0
+ FILEVERSION 8, 10, 0, 0
+ PRODUCTVERSION 8, 10, 0, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -897,9 +897,9 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.9.0.0"
-            VALUE "LegalCopyright", "(C) 2008-2020 hiyohiyo"
-            VALUE "ProductVersion", "8.9.0.0"
+            VALUE "FileVersion", "8.10.0.0"
+            VALUE "LegalCopyright", "(C) 2008-2021 hiyohiyo"
+            VALUE "ProductVersion", "8.10.0.0"
             VALUE "ProductName", "CrystalDiskInfo"
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "OriginalFilename", "DiskInfo.exe"
@@ -1127,6 +1127,7 @@ BEGIN
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
                 MENUITEM "ASM1352R",                    ID_USB_ASM1352R
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
+                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16
 		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron)",            ID_USB_NVME_JMICRON
 		        MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA
 				MENUITEM "SCSI_NVME_TRANSLATION (Realtek)",            ID_USB_NVME_REALTEK

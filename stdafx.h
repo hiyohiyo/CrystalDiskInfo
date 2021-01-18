@@ -106,10 +106,10 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.9.0"
-#define PRODUCT_RELEASE				L"2020/12/15"
-#define PRODUCT_COPY_YEAR			L"2008-2020"
-#define PRODUCT_COPYRIGHT			L"© 2008-2020 hiyohiyo"
+#define PRODUCT_VERSION				L"8.10.0 Beta1"
+#define PRODUCT_RELEASE				L"2021/01/18"
+#define PRODUCT_COPY_YEAR			L"2008-2021"
+#define PRODUCT_COPYRIGHT			L"© 2008-2021 hiyohiyo"
 #define PRODUCT_LICENSE				L"The MIT License"
 
 #define DEFAULT_FONT_FACE_1			L"Segoe UI"
