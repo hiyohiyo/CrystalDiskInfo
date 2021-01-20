@@ -73,6 +73,8 @@ static const TCHAR* ssdVendorString[] =
 	_T("ph"), // Phison
 	_T("ma"), // Marvell
 	_T("mk"), // Maxiotek
+	_T("ym"), // YMTC
+	_T(""), // 
 };
 
 static const TCHAR* attributeString[] =
@@ -1853,7 +1855,7 @@ public:
 	BOOL FlagUsbJmicron;
 	BOOL FlagUsbCypress;
 	BOOL FlagUsbMemory;
-	BOOL FlagUsbSat16;
+//	BOOL FlagUsbSat16;
 	BOOL FlagUsbNVMeJMicron;
 	BOOL FlagUsbNVMeASMedia;
 	BOOL FlagUsbNVMeRealtek;
@@ -2008,5 +2010,5 @@ protected:
 	static int Compare(const void *p1, const void *p2);
 
 	CString GetModelSerial(CString &model, CString &serialNumber);
-	BOOL GetLifeByGpl(ATA_SMART_INFO& asi);
+//	BOOL GetLifeByGpl(ATA_SMART_INFO& asi);
 };

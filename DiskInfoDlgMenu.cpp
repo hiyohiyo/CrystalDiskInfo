@@ -1218,6 +1218,7 @@ void CDiskInfoDlg::OnUsbMemory()
 	DrawMenuBar();
 }
 
+/*
 void CDiskInfoDlg::OnUsbSat16()
 {
 	CMenu* menu = GetMenu();
@@ -1236,6 +1237,7 @@ void CDiskInfoDlg::OnUsbSat16()
 	SetMenu(menu);
 	DrawMenuBar();
 }
+*/
 
 void CDiskInfoDlg::OnUsbNVMeJMicron()
 {
@@ -1343,7 +1345,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbCypress = FALSE;
 	m_Ata.FlagUsbASM1352R = FALSE;
 	m_Ata.FlagUsbMemory  = FALSE;
-	m_Ata.FlagUsbSat16 = FALSE;
+//	m_Ata.FlagUsbSat16 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron = FALSE;
 	m_Ata.FlagUsbNVMeASMedia = FALSE;
 	m_Ata.FlagUsbNVMeRealtek = FALSE;
@@ -1356,7 +1358,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();
-	OnUsbSat16();
+//	OnUsbSat16();
 	OnUsbASM1352R();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
@@ -1374,7 +1376,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbCypress = TRUE;
 	m_Ata.FlagUsbASM1352R = TRUE;
 	m_Ata.FlagUsbMemory  = TRUE;
-	m_Ata.FlagUsbSat16 = FALSE;
+//	m_Ata.FlagUsbSat16 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron = TRUE;
 	m_Ata.FlagUsbNVMeASMedia = TRUE;
 	m_Ata.FlagUsbNVMeRealtek = TRUE;
@@ -1387,7 +1389,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbMemory();
-	OnUsbSat16();
+//	OnUsbSat16();
 	OnUsbASM1352R();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();

@@ -146,7 +146,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagUsbCypress = ! GetPrivateProfileInt(_T("USB"), _T("Cypress"), 1, m_Ini);
 	m_Ata.FlagUsbASM1352R = !GetPrivateProfileInt(_T("USB"), _T("ASM1352R"), 1, m_Ini);
 	m_Ata.FlagUsbMemory  = ! GetPrivateProfileInt(_T("USB"), _T("UsbMemory"), 0, m_Ini);
-	m_Ata.FlagUsbSat16 = !GetPrivateProfileInt(_T("USB"), _T("UsbSAT16"), 1, m_Ini);
+//	m_Ata.FlagUsbSat16 = !GetPrivateProfileInt(_T("USB"), _T("UsbSAT16"), 1, m_Ini);
 	m_Ata.FlagUsbNVMeJMicron = !GetPrivateProfileInt(_T("USB"), _T("NVMeJMicron"), 1, m_Ini);
 	m_Ata.FlagUsbNVMeASMedia = !GetPrivateProfileInt(_T("USB"), _T("NVMeASMedia"), 1, m_Ini);
 	m_Ata.FlagUsbNVMeRealtek = !GetPrivateProfileInt(_T("USB"), _T("NVMeRealtek"), 1, m_Ini);
@@ -161,7 +161,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnUsbCypress();
 	OnUsbASM1352R();
 	OnUsbMemory();
-	OnUsbSat16();
+//	OnUsbSat16();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
 	OnUsbNVMeRealtek();
@@ -528,7 +528,7 @@ CString CDiskInfoDlg::GetDiskStatusReason(DWORD index)
 			else if(
 			   (m_Ata.vars[index].Attribute[j].Id == 0xA9 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON && m_Ata.vars[index].HostReadsWritesUnit == m_Ata.HOST_READS_WRITES_32MB)))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xAD && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_TOSHIBA || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KIOXIA))
-//			|| (m_Ata.vars[index].Attribute[j].Id == 0xB1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
+			|| (m_Ata.vars[index].Attribute[j].Id == 0xB1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xBB && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xCA && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU02 || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xD1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)

@@ -459,7 +459,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			else if (
 				   (m_Ata.vars[i].Attribute[j].Id == 0xA9 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON && m_Ata.vars[i].HostReadsWritesUnit == m_Ata.HOST_READS_WRITES_32MB)))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xAD && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_TOSHIBA || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KIOXIA))
-//				|| (m_Ata.vars[i].Attribute[j].Id == 0xB1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xB1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xBB && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xCA && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU02 || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xD1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)

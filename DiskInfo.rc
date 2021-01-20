@@ -1127,7 +1127,7 @@ BEGIN
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
                 MENUITEM "ASM1352R",                    ID_USB_ASM1352R
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
-                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16
+//                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16
 		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron)",            ID_USB_NVME_JMICRON
 		        MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA
 				MENUITEM "SCSI_NVME_TRANSLATION (Realtek)",            ID_USB_NVME_REALTEK
