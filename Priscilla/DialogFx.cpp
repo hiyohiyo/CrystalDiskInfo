@@ -555,7 +555,16 @@ afx_msg LRESULT CDialogFx::OnDisplayChange(WPARAM wParam, LPARAM lParam)
 {
 	if (m_bInitializing) { return 0; }
 
-	SetTimer(TimerUpdateDialogSizeDisplayChange, TIMER_UPDATE_DIALOG, NULL);
+	CDC* cdc = GetDC();
+	if (cdc)
+	{
+		int color = cdc->GetDeviceCaps(BITSPIXEL) * cdc->GetDeviceCaps(PLANES);
+		if (color != wParam)
+		{
+			SetTimer(TimerUpdateDialogSizeDisplayChange, TIMER_UPDATE_DIALOG, NULL);
+		}
+		ReleaseDC(cdc);
+	}
 
 	return 0;
 }
