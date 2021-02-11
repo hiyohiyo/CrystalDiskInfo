@@ -36,6 +36,7 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_bModelessDlg = FALSE;
 	m_bHighContrast = FALSE;
 	m_bDarkMode = FALSE;
+	m_bDisableDarkMode = FALSE;
 	m_bBkImage = FALSE;
 	m_MenuId = 0;
 	m_ParentWnd = NULL;
@@ -151,7 +152,15 @@ void CDialogFx::PostNcDestroy()
 
 void CDialogFx::UpdateDialogSize()
 {
-	m_bDarkMode = SetDarkMode(m_hWnd);
+	if (! m_bDisableDarkMode)
+	{
+		m_bDarkMode = SetDarkMode(m_hWnd);
+	}
+	else
+	{
+		UnsetDarkMode(m_hWnd);
+		m_bDarkMode = FALSE;
+	}
 }
 
 void CDialogFx::SetClientSize(int sizeX, int sizeY, double zoomRatio)
@@ -372,6 +381,11 @@ BOOL CDialogFx::IsHighContrast()
 	SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0);
 
 	return hc.dwFlags & HCF_HIGHCONTRASTON;
+}
+
+BOOL CDialogFx::IsDisableDarkMode()
+{
+	return m_bDisableDarkMode;
 }
 
 //------------------------------------------------

@@ -27,6 +27,9 @@ public:
 	double GetFontRatio();
 	CString GetFontFace();
 
+	// Theme
+	BOOL IsDisableDarkMode();
+
 protected:
 	// Dialog
 	virtual BOOL OnInitDialog();
@@ -69,6 +72,7 @@ protected:
 	BOOL m_bModelessDlg;
 	BOOL m_bHighContrast;
 	BOOL m_bDarkMode;
+	BOOL m_bDisableDarkMode;
 	BOOL m_bBkImage;
 	UINT m_MenuId;
 	CWnd* m_ParentWnd;

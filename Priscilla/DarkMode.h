@@ -8,6 +8,7 @@
 #pragma once
 
 BOOL SetDarkMode(HWND hWnd);
+void UnsetDarkMode(HWND hWnd);
 void SetDarkModeControl(HWND hWnd, BOOL bDarkMode);
 
 void FixDarkScrollBar();

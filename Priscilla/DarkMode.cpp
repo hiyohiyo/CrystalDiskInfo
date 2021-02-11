@@ -244,6 +244,16 @@ BOOL SetDarkMode(HWND hWnd)
 	return bDarkMode;
 }
 
+void UnsetDarkMode(HWND hWnd)
+{
+	if (IsDarkModeSupport())
+	{
+		InitDarkMode();
+		AllowDarkModeForWindow(hWnd, FALSE);
+		RefreshTitleBarThemeColor(hWnd);
+	}
+}
+
 void SetDarkModeControl(HWND hWnd, BOOL bDarkMode)
 {
 	if (IsDarkModeSupport())
