@@ -557,7 +557,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			}
 			else if ((m_Ata.vars[i].IsSsd && !m_Ata.vars[i].IsRawValues8)
 				|| ((0x01 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0x0D)
-					//				||	m_Ata.vars[i].Attribute[j].Id == 0xB8
+					||	m_Ata.vars[i].Attribute[j].Id == 0x16
 					|| (0xBB <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xC1)
 					|| (0xC3 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xD1)
 					|| (0xD3 <= m_Ata.vars[i].Attribute[j].Id && m_Ata.vars[i].Attribute[j].Id <= 0xD4)

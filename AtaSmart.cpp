@@ -10140,7 +10140,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		}
 		else if((
 			(0x01 <= vars[i].Attribute[j].Id && vars[i].Attribute[j].Id <= 0x0D)
-//		||	vars[i].Attribute[j].Id == 0xB8
+		||	vars[i].Attribute[j].Id == 0x16
 		||	(0xBB <= vars[i].Attribute[j].Id && vars[i].Attribute[j].Id <= 0xBD)
 		||	(0xBF <= vars[i].Attribute[j].Id && vars[i].Attribute[j].Id <= 0xC1)
 		||	(0xC3 <= vars[i].Attribute[j].Id && vars[i].Attribute[j].Id <= 0xD1)
