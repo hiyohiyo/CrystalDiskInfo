@@ -172,13 +172,13 @@ void CMainDialogFx::InitThemeLang()
 // Set Language
 	GetPrivateProfileString(L"Setting", L"Language", L"", str, 256, m_Ini);
 
-	langPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), str);
-	m_DefaultLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), DEFAULT_LANGUAGE);
+	langPath.Format(L"%s%s.lang", (LPTSTR)m_LangDir.GetString(), str);
+	m_DefaultLangPath.Format(L"%s%s.lang", (LPTSTR)m_LangDir.GetString(), DEFAULT_LANGUAGE);
 
 	if(_tcscmp(str, L"") != 0 && IsFileExist((const TCHAR*)langPath))
 	{
 		m_CurrentLang = str;
-		m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), str);
+		m_CurrentLangPath.Format(L"%s%s.lang", (LPTSTR)m_LangDir.GetString(), str);
 	}
 	else
 	{
@@ -186,7 +186,7 @@ void CMainDialogFx::InitThemeLang()
 		currentLocalID.Format(L"0x%04X", GetUserDefaultLCID());
 		PrimaryLangID = PRIMARYLANGID(GetUserDefaultLCID());
 
-		langPath.Format(L"%s\\*.lang", (LPTSTR)m_LangDir.GetString());
+		langPath.Format(L"%s*.lang", (LPTSTR)m_LangDir.GetString());
 
 		hFind = ::FindFirstFile(langPath, &findData);
 		if(hFind != INVALID_HANDLE_VALUE)
@@ -196,7 +196,7 @@ void CMainDialogFx::InitThemeLang()
 				{
 					i++;
 					CString cstr;
-					cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
+					cstr.Format(L"%s%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
 					GetPrivateProfileString(L"Language", L"LOCALE_ID", L"", str, 256, cstr);
 					if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){*ptrEnd = '\0';}
 
@@ -205,7 +205,7 @@ void CMainDialogFx::InitThemeLang()
 						m_CurrentLang = findData.cFileName;
 						m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
 					}
-					if(PrimaryLangID == PRIMARYLANGID(_tcstol(str, NULL, 16)))
+					if(PrimaryLangID != 0 && PrimaryLangID == PRIMARYLANGID(_tcstol(str, NULL, 16)))
 					{
 						PrimaryLang = findData.cFileName;
 					}
@@ -219,12 +219,12 @@ void CMainDialogFx::InitThemeLang()
 			if(PrimaryLang.IsEmpty())
 			{
 				m_CurrentLang = DEFAULT_LANGUAGE;
-				m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), (LPTSTR)m_CurrentLang.GetString());
+				m_CurrentLangPath.Format(L"%s%s.lang", (LPTSTR)m_LangDir.GetString(), (LPTSTR)m_CurrentLang.GetString());
 			}
 			else
 			{
 				m_CurrentLang = PrimaryLang;
-				m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), (LPTSTR)PrimaryLang.GetString());
+				m_CurrentLangPath.Format(L"%s%s.lang", (LPTSTR)m_LangDir.GetString(), (LPTSTR)PrimaryLang.GetString());
 			}	
 		}
 	}
