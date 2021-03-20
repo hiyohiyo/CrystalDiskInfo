@@ -1994,7 +1994,7 @@ safeRelease:
 		{
 			// None
 		}
-		else if(detectUSBMemory && GetDriveType(cstr) == DRIVE_REMOVABLE && c >= 'C')
+		else if(detectUSBMemory && GetDriveType(cstr) == DRIVE_REMOVABLE)
 		{
 			// None
 		}
@@ -2029,7 +2029,7 @@ safeRelease:
 		cstr.Format(_T("volumeDiskExtents.NumberOfDiskExtents = %d"), volumeDiskExtents.NumberOfDiskExtents);
 		DebugPrint(cstr);
 
-		for (DWORD n = 0; n < volumeDiskExtents.NumberOfDiskExtents && volumeDiskExtents.NumberOfDiskExtents < 4; ++n)
+		for (DWORD n = 0; n < volumeDiskExtents.NumberOfDiskExtents && volumeDiskExtents.NumberOfDiskExtents < 8; ++n)
 		{
 			PDISK_EXTENT pDiskExtent = &volumeDiskExtents.Extents[n];
 

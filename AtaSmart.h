@@ -124,7 +124,7 @@ static const TCHAR* deviceFormFactorString[] =
 
 typedef struct _VOLUME_DISK_EXTENTS_LX {
     DWORD       NumberOfDiskExtents;
-    DISK_EXTENT Extents[4];
+    DISK_EXTENT Extents[8];
 } VOLUME_DISK_EXTENTS_LX, *PVOLUME_DISK_EXTENTS_LX;
 
 class CAtaSmart
