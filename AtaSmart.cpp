@@ -7,24 +7,84 @@
 // Reference : http://www.usefullcode.net/2007/02/hddsmart.html (ja)
 
 #include "stdafx.h"
+#include <comutil.h>
 #include "AtaSmart.h"
+#include "Priscilla/UtilityFx.h"
 #include <wbemcli.h>
 
 #include "DnpService.h"
-#include "OsInfoFx.h"
+//#include "OsInfoFx.h"
 
 #pragma comment(lib, "wbemuuid.lib")
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
 
+#ifndef safeCloseHandle
+#define safeCloseHandle(h) { if( h != NULL ) { ::CloseHandle(h); h = NULL; } }
+#endif
+
+#ifndef safeVirtualFree
+#define safeVirtualFree(h,b,c) { if( h != NULL ) { ::VirtualFree(h, b, c); h = NULL; } }
+#endif
+
+bool IsWindowsVersionOrGreater(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor = 0)
+{
+	OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
+	DWORDLONG        const dwlConditionMask = VerSetConditionMask(
+		VerSetConditionMask(
+			VerSetConditionMask(
+				0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+			VER_MINORVERSION, VER_GREATER_EQUAL),
+		VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
+
+	osvi.dwMajorVersion = wMajorVersion;
+	osvi.dwMinorVersion = wMinorVersion;
+	osvi.wServicePackMajor = wServicePackMajor;
+
+	return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR, dwlConditionMask) != FALSE;
+}
+
+CAtaSmart::CAtaSmart()
+{
+	m_bAtaPassThrough = FALSE;
+	m_bAtaPassThroughSmart = FALSE;
+	m_bNVMeStorageQuery = FALSE;
+
+	if (IsWindowsVersionOrGreater(10, 0)/*m_Os.dwMajorVersion >= 10*/) {
+		m_bAtaPassThrough = TRUE;
+		m_bAtaPassThroughSmart = TRUE;
+		m_bNVMeStorageQuery = TRUE;
+	}
+	else if (
+		IsWindowsVersionOrGreater(6, 0) || IsWindowsVersionOrGreater(5, 2)
+		//m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2)
+		) {
+		m_bAtaPassThrough = TRUE;
+		m_bAtaPassThroughSmart = TRUE;
+	}
+	else if (
+		IsWindowsVersionOrGreater(5, 1)//m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 1
+		) {
+		//CString cstr;
+		//cstr = m_Os.szCSDVersion;
+		//cstr.Replace(_T("Service Pack "), _T(""));
+		if (IsWindowsVersionOrGreater(5, 1, 2)/*_tstoi(cstr) >= 2*/)
+		{
+			m_bAtaPassThrough = TRUE;
+			m_bAtaPassThroughSmart = TRUE;
+		}
+	}
+}
+
+#if 0
 CAtaSmart::CAtaSmart()
 {
 	BOOL bosVersionInfoEx;
 	ZeroMemory(&m_Os, sizeof(OSVERSIONINFOEX));
 	m_Os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	if(!(bosVersionInfoEx = GetVersionEx((OSVERSIONINFO *)&m_Os)))
+	if (!(bosVersionInfoEx = GetVersionEx((OSVERSIONINFO*)&m_Os)))
 	{
 		m_Os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-		GetVersionEx((OSVERSIONINFO *)&m_Os);
+		GetVersionEx((OSVERSIONINFO*)&m_Os);
 	}
 
 	m_bAtaPassThrough = FALSE;
@@ -37,24 +97,24 @@ CAtaSmart::CAtaSmart()
 		m_bAtaPassThroughSmart = TRUE;
 		m_bNVMeStorageQuery = TRUE;
 	}
-	else if(m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2))
+	else if (m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2))
 	{
 		m_bAtaPassThrough = TRUE;
 		m_bAtaPassThroughSmart = TRUE;
 	}
-	else if(m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 1)
+	else if (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 1)
 	{
 		CString cstr;
 		cstr = m_Os.szCSDVersion;
 		cstr.Replace(_T("Service Pack "), _T(""));
-		if(_tstoi(cstr) >= 2)
+		if (_tstoi(cstr) >= 2)
 		{
 			m_bAtaPassThrough = TRUE;
 			m_bAtaPassThroughSmart = TRUE;
 		}
 	}
 }
-
+#endif
 CAtaSmart::~CAtaSmart()
 {
 }
@@ -688,7 +748,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				else 
 				{
 					long securityFlag = 0;
-					if( m_Os.dwMajorVersion >= 6 // Vista or later
+					if(IsWindowsVersionOrGreater(6, 0)//m_Os.dwMajorVersion >= 6 // Vista or later
 				//	|| (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion >= 1) // XP or later
 					)
 					{
@@ -831,7 +891,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 
 					int workaroundDevice = 0;
 					CString mapping;
-					mapping.Format(_T("ASSOCIATORS OF {Win32_IDEController.DeviceID=\"%s\"} WHERE AssocClass = Win32_IDEControllerDevice"), deviceId);
+					mapping.Format(_T("ASSOCIATORS OF {Win32_IDEController.DeviceID=\"%s\"} WHERE AssocClass = Win32_IDEControllerDevice"), deviceId.GetString());
 					pIWbemServices->ExecQuery(_bstr_t(L"WQL"), _bstr_t(mapping), WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, NULL, &pEnumCOMDevs2);
 					while (pEnumCOMDevs2 && SUCCEEDED(pEnumCOMDevs2->Next(10000, 1, &pCOMDev, &uReturned)) && uReturned == 1 && workaroundDevice < 256)
 					{
@@ -1006,7 +1066,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 
 					int workaroundDevice = 0;
 					CString mapping;
-					mapping.Format(_T("ASSOCIATORS OF {Win32_SCSIController.DeviceID=\"%s\"} WHERE AssocClass = Win32_SCSIControllerDevice"), deviceId);
+					mapping.Format(_T("ASSOCIATORS OF {Win32_SCSIController.DeviceID=\"%s\"} WHERE AssocClass = Win32_SCSIControllerDevice"), deviceId.GetString());
 					pIWbemServices->ExecQuery(_bstr_t(L"WQL"), _bstr_t(mapping), WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, NULL, &pEnumCOMDevs2);
 					while (pEnumCOMDevs2 && SUCCEEDED(pEnumCOMDevs2->Next(10000, 1, &pCOMDev, &uReturned)) && uReturned == 1 && workaroundDevice < 256)
 					{
@@ -1100,7 +1160,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 					SAFE_RELEASE(pCOMDev);
 
 					CString mapping, enclosure;
-					mapping.Format(_T("ASSOCIATORS OF {Win32_USBController.DeviceID=\"%s\"} WHERE AssocClass = Win32_USBControllerDevice"), deviceId);
+					mapping.Format(_T("ASSOCIATORS OF {Win32_USBController.DeviceID=\"%s\"} WHERE AssocClass = Win32_USBControllerDevice"), deviceId.GetString());
 					pIWbemServices->ExecQuery(_bstr_t(L"WQL"), _bstr_t(mapping), WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, NULL, &pEnumCOMDevs2);
 					while (pEnumCOMDevs2 && SUCCEEDED(pEnumCOMDevs2->Next(10000, 1, &pCOMDev, &uReturned)) && uReturned == 1)
 					{
@@ -1214,15 +1274,15 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 
 			for (int i = 0; i < MAX_SEARCH_PHYSICAL_DRIVE; i++)
 			{
-				BOOL	bRet;
-				HANDLE	hIoCtrl;
-				DWORD	dwReturned;
+				BOOL	bRet = FALSE;
+				HANDLE	hIoCtrl = NULL;
+				DWORD	dwReturned = 0;
 				DISK_GEOMETRY dg = { 0 };
 				CAtaSmart::INTERFACE_TYPE interfaceType = INTERFACE_TYPE_UNKNOWN;
 				CAtaSmart::VENDOR_ID vendor = VENDOR_UNKNOWN;
 
 				hIoCtrl = GetIoCtrlHandle(i);
-				if (hIoCtrl == INVALID_HANDLE_VALUE)
+				if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 				{
 					///	DebugPrint(_T("INVALID_HANDLE_VALUE - continue"));
 					continue;
@@ -1238,7 +1298,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 					DebugPrint(cstr);
 					WakeUp(i);
 				}
-				::CloseHandle(hIoCtrl);
+				safeCloseHandle(hIoCtrl);
 			}
 
 			///////////////////////////////
@@ -1443,7 +1503,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 					{
 						// GetDiskInfo
 						CString cstr;
-						cstr.Format(_T("DO:GetDiskInfo pd=%d, sp=%d, st=%d, mt=%s"), physicalDriveId, scsiPort, scsiTargetId, mediaType);
+						cstr.Format(_T("DO:GetDiskInfo pd=%d, sp=%d, st=%d, mt=%s"), physicalDriveId, scsiPort, scsiTargetId, mediaType.GetString());
 						DebugPrint(cstr);
 
 						INTERFACE_TYPE interfaceType = INTERFACE_TYPE_UNKNOWN;
@@ -1517,7 +1577,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 							// for ASM1352 support
 							for(int index = (int)vars.GetCount() - 1; index + 1 > previousCount; index--)
 							{
-								debug.Format(L"index=%d, previousCount=%d", vars.GetCount() - 1, previousCount);
+								debug.Format(L"index=%d, previousCount=%d", (int)vars.GetCount() - 1, previousCount);
 								DebugPrint(debug);
 							//	int index = (int)vars.GetCount() - 1;
 								if (!diskSize.IsEmpty())
@@ -1552,7 +1612,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 								if (flagUasp)
 								{
 									flagSkipModelCheck = TRUE;
-									cstr.Format(_T("UASP (%s)"), vars[index].Interface);
+									cstr.Format(_T("UASP (%s)"), vars[index].Interface.GetString());
 									vars[index].Interface = cstr;
 									vars[index].InterfaceType = INTERFACE_TYPE_USB;
 									vars[index].IsUasp = TRUE;
@@ -1571,7 +1631,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 								else if (model.Replace(_T(" USB Device"), _T("")) > 0 || interfaceTypeWmi.Find(_T("USB")) >= 0)
 								{
 									flagSkipModelCheck = TRUE;
-									cstr.Format(_T("USB (%s)"), vars[index].Interface);
+									cstr.Format(_T("USB (%s)"), vars[index].Interface.GetString());
 									vars[index].Interface = cstr;
 									vars[index].InterfaceType = INTERFACE_TYPE_USB;
 
@@ -1588,7 +1648,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 								else if (model.Replace(_T(" IEEE 1394 SBP2 Device"), _T("")) > 0 || interfaceTypeWmi.Find(_T("1394")) >= 0)
 								{
 									flagSkipModelCheck = TRUE;
-									cstr.Format(_T("IEEE 1394 (%s)"), vars[index].Interface);
+									cstr.Format(_T("IEEE 1394 (%s)"), vars[index].Interface.GetString());
 									vars[index].Interface = cstr;
 									vars[index].InterfaceType = INTERFACE_TYPE_IEEE1394;
 									for (int i = 0; i < externals.GetCount(); i++)
@@ -1764,9 +1824,9 @@ safeRelease:
 	for(int i = 0; i < MAX_SEARCH_PHYSICAL_DRIVE; i++)
 	{
 		BOOL	flagChecked = FALSE;
-		BOOL	bRet;
-		HANDLE	hIoCtrl;
-		DWORD	dwReturned;
+		BOOL	bRet = FALSE;
+		HANDLE	hIoCtrl = NULL;
+		DWORD	dwReturned = 0;
 		DISK_GEOMETRY dg;
 		CAtaSmart::INTERFACE_TYPE interfaceType = INTERFACE_TYPE_UNKNOWN;
 		CAtaSmart::COMMAND_TYPE commandType = CMD_TYPE_UNKNOWN;
@@ -1796,7 +1856,7 @@ safeRelease:
 
 ///		DebugPrint(_T("GetIoCtrlHandle"));
 		hIoCtrl = GetIoCtrlHandle(i);
-		if(hIoCtrl == INVALID_HANDLE_VALUE)
+		if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 		{
 ///			DebugPrint(_T("INVALID_HANDLE_VALUE - continue"));
 			continue;
@@ -1808,7 +1868,7 @@ safeRelease:
 		if(bRet == FALSE || dwReturned != sizeof(DISK_GEOMETRY) || dg.MediaType != FixedMedia)
 		{
 ///			DebugPrint(_T("CloseHandle - continue"));
-			::CloseHandle(hIoCtrl);
+			safeCloseHandle(hIoCtrl);
 			continue;
 		}
 		// [2010/12/05] Workaround for SAMSUNG HD204UI
@@ -1836,7 +1896,7 @@ safeRelease:
 		if(bRet == FALSE)
 		{
 			delete [] pcbData;
-			::CloseHandle(hIoCtrl);
+			safeCloseHandle(hIoCtrl);
 			continue;
 		}
 
@@ -1850,7 +1910,11 @@ safeRelease:
 			firmware	= (char*)pDescriptor + pDescriptor->ProductRevisionOffset;
 		}
 		// [2019/10/28] Workaround for NVMe SSD on MS Storage Space
+#ifdef _WIN64
 		if(pDescriptor->BusType == BusTypeNvme)
+#else
+		if (pDescriptor->BusType == 17/*BusTypeNvme*/)
+#endif
 		{
 			interfaceType = INTERFACE_TYPE_NVME;
 		}
@@ -1903,7 +1967,7 @@ safeRelease:
 			}
 		}
 ///		DebugPrint(_T("CloseHandle"));
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 
 		DebugPrint(_T("DO:GetDiskInfo"));
 		if(GetDiskInfo(i, -1, -1, interfaceType, commandType, vendor))
@@ -1933,7 +1997,7 @@ safeRelease:
 
 			if(interfaceType == INTERFACE_TYPE_USB)
 			{
-				cstr.Format(_T("USB (%s)"), vars[index].Interface);
+				cstr.Format(_T("USB (%s)"), vars[index].Interface.GetString());
 				vars[index].Interface = cstr;
 			}
 		}
@@ -1994,7 +2058,7 @@ safeRelease:
 		{
 			// None
 		}
-		else if(detectUSBMemory && GetDriveType(cstr) == DRIVE_REMOVABLE)
+		else if(detectUSBMemory && GetDriveType(cstr) == DRIVE_REMOVABLE && c >= 'C')
 		{
 			// None
 		}
@@ -2019,7 +2083,7 @@ safeRelease:
 		DWORD dwBytesReturned = 0;
 		BOOL bResult = DeviceIoControl(hHandle, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, NULL, 0,
 			&volumeDiskExtents, sizeof(volumeDiskExtents), &dwBytesReturned, NULL);
-		CloseHandle(hHandle);
+		safeCloseHandle(hHandle);
 		if(!bResult)
 		{
 			DebugPrint(_T("Drive Letter Mapping - bResult == FALSE"));
@@ -2029,7 +2093,7 @@ safeRelease:
 		cstr.Format(_T("volumeDiskExtents.NumberOfDiskExtents = %d"), volumeDiskExtents.NumberOfDiskExtents);
 		DebugPrint(cstr);
 
-		for (DWORD n = 0; n < volumeDiskExtents.NumberOfDiskExtents && volumeDiskExtents.NumberOfDiskExtents < 8; ++n)
+		for (DWORD n = 0; n < volumeDiskExtents.NumberOfDiskExtents && volumeDiskExtents.NumberOfDiskExtents < 4; ++n)
 		{
 			PDISK_EXTENT pDiskExtent = &volumeDiskExtents.Extents[n];
 
@@ -2145,8 +2209,8 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		return FALSE;
 	}
 
-	ATA_SMART_INFO asi = {0};
-	ATA_SMART_INFO asiCheck = {0};
+	ATA_SMART_INFO asi = {};
+	ATA_SMART_INFO asiCheck = {};
 
 	memcpy(&(asi.IdentifyDevice), identify, sizeof(ATA_IDENTIFY_DEVICE));
 	asi.PhysicalDriveId = physicalDriveId;
@@ -2176,7 +2240,8 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	}
 	else
 	{
-		asi.CommandTypeString = commandTypeString[commandType];
+		if (commandType >= COMMAND_TYPE::CMD_TYPE_UNKNOWN && commandType <= COMMAND_TYPE::CMD_TYPE_DEBUG)  asi.CommandTypeString = commandTypeString[(UINT)commandType];
+		else  asi.CommandTypeString = L"";//unknown
 	}
 
 	for(int i = 0; i < MAX_ATTRIBUTE; i++)
@@ -5218,7 +5283,7 @@ VOID CAtaSmart::WakeUp(INT physicalDriveId)
 		DWORD readSize = 0;
 		SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
 		ReadFile(hFile, buf, bufSize, &readSize, NULL);
-		CloseHandle(hFile);
+		safeCloseHandle(hFile);
 	}
 }
 
@@ -5710,8 +5775,8 @@ HANDLE CAtaSmart::GetIoCtrlHandle(BYTE index)
 BOOL CAtaSmart::DoIdentifyDevicePd(INT physicalDriveId, BYTE target, IDENTIFY_DEVICE* data)
 {
 	BOOL	bRet = FALSE;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	CString cstr;
 
 	IDENTIFY_DEVICE_OUTDATA	sendCmdOutParam;
@@ -5733,7 +5798,7 @@ BOOL CAtaSmart::DoIdentifyDevicePd(INT physicalDriveId, BYTE target, IDENTIFY_DE
 	{
 		::ZeroMemory(data, sizeof(ATA_IDENTIFY_DEVICE));
 		hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-		if(hIoCtrl == INVALID_HANDLE_VALUE)
+		if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 		{
 			return	FALSE;
 		}
@@ -5752,7 +5817,7 @@ BOOL CAtaSmart::DoIdentifyDevicePd(INT physicalDriveId, BYTE target, IDENTIFY_DE
 			&sendCmdOutParam, sizeof(IDENTIFY_DEVICE_OUTDATA),
 			&dwReturned, NULL);
 
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		
 		if(bRet == FALSE || dwReturned != sizeof(IDENTIFY_DEVICE_OUTDATA))
 		{
@@ -5768,8 +5833,8 @@ BOOL CAtaSmart::DoIdentifyDevicePd(INT physicalDriveId, BYTE target, IDENTIFY_DE
 BOOL CAtaSmart::GetSmartAttributePd(INT physicalDriveId, BYTE target, ATA_SMART_INFO* asi)
 {
 	BOOL	bRet = FALSE;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 
 	SMART_READ_DATA_OUTDATA	sendCmdOutParam;
 	SENDCMDINPARAMS	sendCmd;
@@ -5784,7 +5849,7 @@ BOOL CAtaSmart::GetSmartAttributePd(INT physicalDriveId, BYTE target, ATA_SMART_
 	if(! bRet)
 	{
 		hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-		if(hIoCtrl == INVALID_HANDLE_VALUE)
+		if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 		{
 			return	FALSE;
 		}
@@ -5807,7 +5872,7 @@ BOOL CAtaSmart::GetSmartAttributePd(INT physicalDriveId, BYTE target, ATA_SMART_
 			&sendCmdOutParam, sizeof(SMART_READ_DATA_OUTDATA),
 			&dwReturned, NULL);
 
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 	
 		if(bRet == FALSE || dwReturned != sizeof(SMART_READ_DATA_OUTDATA))
 		{
@@ -5824,7 +5889,7 @@ BOOL CAtaSmart::GetSmartThresholdPd(INT physicalDriveId, BYTE target, ATA_SMART_
 {
 	BOOL	bRet = FALSE;
 	HANDLE	hIoCtrl = INVALID_HANDLE_VALUE;
-	DWORD	dwReturned;
+	DWORD	dwReturned = 0;
 
 	SMART_READ_DATA_OUTDATA	sendCmdOutParam;
 	SENDCMDINPARAMS	sendCmd;
@@ -5839,7 +5904,7 @@ BOOL CAtaSmart::GetSmartThresholdPd(INT physicalDriveId, BYTE target, ATA_SMART_
 	if(! bRet)
 	{
 		hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-		if(hIoCtrl == INVALID_HANDLE_VALUE)
+		if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 		{
 			return	FALSE;
 		}
@@ -5862,7 +5927,7 @@ BOOL CAtaSmart::GetSmartThresholdPd(INT physicalDriveId, BYTE target, ATA_SMART_
 			&sendCmdOutParam, sizeof(SMART_READ_DATA_OUTDATA),
 			&dwReturned, NULL);
 
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 	
 		if(bRet == FALSE || dwReturned != sizeof(SMART_READ_DATA_OUTDATA))
 		{
@@ -5878,8 +5943,8 @@ BOOL CAtaSmart::GetSmartThresholdPd(INT physicalDriveId, BYTE target, ATA_SMART_
 BOOL CAtaSmart::ControlSmartStatusPd(INT physicalDriveId, BYTE target, BYTE command)
 {
 	BOOL	bRet = FALSE;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 
 	SENDCMDINPARAMS		sendCmd;
 	SENDCMDOUTPARAMS	sendCmdOutParam;
@@ -5894,7 +5959,7 @@ BOOL CAtaSmart::ControlSmartStatusPd(INT physicalDriveId, BYTE target, BYTE comm
 	{
 		DebugPrint(_T("SendAtaCommandPd - SMART_CONTROL_STATUS"));
 		hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-		if(hIoCtrl == INVALID_HANDLE_VALUE)
+		if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 		{
 			return	FALSE;
 		}
@@ -5916,7 +5981,7 @@ BOOL CAtaSmart::ControlSmartStatusPd(INT physicalDriveId, BYTE target, BYTE comm
 			&sendCmdOutParam, sizeof(SENDCMDOUTPARAMS) -1,
 			&dwReturned, NULL);
 
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 	}
 	
 	return	bRet;
@@ -5924,12 +5989,12 @@ BOOL CAtaSmart::ControlSmartStatusPd(INT physicalDriveId, BYTE target, BYTE comm
 
 BOOL CAtaSmart::ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, BYTE logPage, PBYTE data, DWORD dataSize)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -5973,13 +6038,13 @@ BOOL CAtaSmart::ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, 
 
 		bRet = ::DeviceIoControl(hIoCtrl, IOCTL_ATA_PASS_THROUGH,
 			&ab, size, &ab, size, &dwReturned, NULL);
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		if (bRet && dataSize && data != NULL)
 		{
 			memcpy_s(data, dataSize, ab.Buf, dataSize);
 		}
 	}
-	else if (m_Os.dwMajorVersion <= 4)
+	else if (!IsWindowsVersionOrGreater(5, 0)/*m_Os.dwMajorVersion <= 4*/)
 	{
 		return FALSE;
 	}
@@ -5988,12 +6053,12 @@ BOOL CAtaSmart::ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, 
 }
 BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6034,13 +6099,13 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 
 		bRet = ::DeviceIoControl(hIoCtrl, IOCTL_ATA_PASS_THROUGH,
 			&ab, size, &ab, size, &dwReturned, NULL);
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		if (bRet && dataSize && data != NULL)
 		{
 			memcpy_s(data, dataSize, ab.Buf, dataSize);
 		}
 	}
-	else if (m_Os.dwMajorVersion <= 4)
+	else if (!IsWindowsVersionOrGreater(5, 0)/*m_Os.dwMajorVersion <= 4*/)
 	{
 		return FALSE;
 	}
@@ -6048,25 +6113,26 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 	{
 		DWORD size = sizeof(CMD_IDE_PATH_THROUGH) - 1 + dataSize;
 		CMD_IDE_PATH_THROUGH* buf = (CMD_IDE_PATH_THROUGH*)VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);
+		if (buf != NULL) {
+			buf->reg.bFeaturesReg = sub;
+			buf->reg.bSectorCountReg = param;
+			buf->reg.bSectorNumberReg = 0;
+			buf->reg.bCylLowReg = 0;
+			buf->reg.bCylHighReg = 0;
+			buf->reg.bDriveHeadReg = target;
+			buf->reg.bCommandReg = main;
+			buf->reg.bReserved = 0;
+			buf->length = dataSize;
 
-		buf->reg.bFeaturesReg = sub;
-		buf->reg.bSectorCountReg = param;
-		buf->reg.bSectorNumberReg = 0;
-		buf->reg.bCylLowReg = 0;
-		buf->reg.bCylHighReg = 0;
-		buf->reg.bDriveHeadReg = target;
-		buf->reg.bCommandReg = main;
-		buf->reg.bReserved = 0;
-		buf->length = dataSize;
-
-		bRet = ::DeviceIoControl(hIoCtrl, IOCTL_IDE_PASS_THROUGH,
-			buf, size, buf, size, &dwReturned, NULL);
-		::CloseHandle(hIoCtrl);
+			bRet = ::DeviceIoControl(hIoCtrl, IOCTL_IDE_PASS_THROUGH,
+				buf, size, buf, size, &dwReturned, NULL);
+		}
+		safeCloseHandle(hIoCtrl);
 		if (bRet && dataSize && data != NULL)
 		{
 			memcpy_s(data, dataSize, buf->buffer, dataSize);
 		}
-		VirtualFree(buf, 0, MEM_RELEASE);
+		safeVirtualFree(buf, 0, MEM_RELEASE);
 	}
 
 	return	bRet;
@@ -6078,9 +6144,9 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 
 BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS24 sptwb;
@@ -6094,7 +6160,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6141,7 +6207,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6180,7 +6246,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6191,29 +6257,29 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	}
 	if (count == 0 || count == 317)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(data, sizeof(NVME_IDENTIFY_DEVICE), sptwb.DataBuf, sizeof(NVME_IDENTIFY_DEVICE));
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return TRUE;
 }
 
 BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS24 sptwb;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6267,7 +6333,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6303,7 +6369,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6314,12 +6380,12 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(&(asi->SmartReadData), 512, sptwb.DataBuf, 512);
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return TRUE;
 }
@@ -6330,9 +6396,9 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 
 BOOL CAtaSmart::DoIdentifyDeviceNVMeASMedia(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
@@ -6346,7 +6412,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeASMedia(INT physicalDriveId, INT scsiPort, I
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6377,7 +6443,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeASMedia(INT physicalDriveId, INT scsiPort, I
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6388,29 +6454,29 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeASMedia(INT physicalDriveId, INT scsiPort, I
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(data, sizeof(NVME_IDENTIFY_DEVICE), sptwb.DataBuf, sizeof(NVME_IDENTIFY_DEVICE));
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return TRUE;
 }
 
 BOOL CAtaSmart::GetSmartAttributeNVMeASMedia(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6442,7 +6508,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeASMedia(INT physicalDriveId, INT scsiPort, 
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6453,13 +6519,13 @@ BOOL CAtaSmart::GetSmartAttributeNVMeASMedia(INT physicalDriveId, INT scsiPort, 
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(&(asi->SmartReadData), 512, sptwb.DataBuf, 512);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return TRUE;
 }
@@ -6469,9 +6535,9 @@ BOOL CAtaSmart::GetSmartAttributeNVMeASMedia(INT physicalDriveId, INT scsiPort, 
 /*---------------------------------------------------------------------------*/
 BOOL CAtaSmart::DoIdentifyDeviceNVMeRealtek(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
@@ -6485,7 +6551,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeRealtek(INT physicalDriveId, INT scsiPort, I
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6517,7 +6583,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeRealtek(INT physicalDriveId, INT scsiPort, I
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6528,22 +6594,22 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeRealtek(INT physicalDriveId, INT scsiPort, I
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(data, sizeof(NVME_IDENTIFY_DEVICE), sptwb.DataBuf, sizeof(NVME_IDENTIFY_DEVICE));
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return TRUE;
 }
 
 BOOL CAtaSmart::GetSmartAttributeNVMeRealtek(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
@@ -6552,7 +6618,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeRealtek(INT physicalDriveId, INT scsiPort, 
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6583,7 +6649,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeRealtek(INT physicalDriveId, INT scsiPort, 
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6594,13 +6660,13 @@ BOOL CAtaSmart::GetSmartAttributeNVMeRealtek(INT physicalDriveId, INT scsiPort, 
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(&(asi->SmartReadData), 512, sptwb.DataBuf, 512);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return TRUE;
 }
@@ -6611,9 +6677,9 @@ BOOL CAtaSmart::GetSmartAttributeNVMeRealtek(INT physicalDriveId, INT scsiPort, 
 
 BOOL CAtaSmart::DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS24 sptwb;
@@ -6627,7 +6693,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, I
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6668,7 +6734,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, I
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6693,7 +6759,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, I
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6704,22 +6770,22 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, I
 	}
 	if(count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(data, sizeof(NVME_IDENTIFY_DEVICE), sptwb.DataBuf, sizeof(NVME_IDENTIFY_DEVICE));
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return TRUE;
 }
 
 BOOL CAtaSmart::GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS24 sptwb;
@@ -6727,7 +6793,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
 
 
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -6772,7 +6838,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, 
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6797,7 +6863,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, 
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6808,13 +6874,13 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, 
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(&(asi->SmartReadData), 512, sptwb.DataBuf, 512);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return TRUE;
 }
@@ -6851,7 +6917,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung951(INT physicalDriveId, INT scsiPor
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6862,13 +6928,13 @@ BOOL CAtaSmart::GetSmartAttributeNVMeSamsung951(INT physicalDriveId, INT scsiPor
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(&(asi->SmartReadData), 512, nptwb.DataBuffer, 512);
 
-	CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 	return bRet;
 }
 
@@ -6892,7 +6958,7 @@ CString CAtaSmart::GetScsiPath(const TCHAR* Path)
 	CString result;
 	result.Format(L"\\\\.\\SCSI%d:", sadr.PortNumber);
 
-	CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 	return result;
 }
 
@@ -6927,7 +6993,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6938,13 +7004,13 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(data, sizeof(NVME_IDENTIFY_DEVICE), nptwb.DataBuffer, sizeof(NVME_IDENTIFY_DEVICE));
 
-	CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 	return bRet;
 }
 
@@ -6980,7 +7046,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, IN
 
 	if (bRet == FALSE)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
@@ -6991,13 +7057,13 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, IN
 	}
 	if (count == 0)
 	{
-		::CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
 	memcpy_s(&(asi->SmartReadData), 512, nptwb.DataBuffer, 512);
 
-	CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 	return bRet;
 }
 
@@ -7019,7 +7085,7 @@ BOOL CAtaSmart::GetScsiAddress(const TCHAR* Path, BYTE* PortNumber, BYTE* PathId
 	BOOL bRet = DeviceIoControl(hDevice, IOCTL_SCSI_GET_ADDRESS,
 		nullptr, 0, &ScsiAddr, sizeof(ScsiAddr), &dwReturned, NULL);
 
-	CloseHandle(hDevice);
+	safeCloseHandle(hDevice);
 
 	*PortNumber = ScsiAddr.PortNumber;
 	*PathId = ScsiAddr.PathId;
@@ -7106,11 +7172,11 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, 
 		{
 			memcpy_s(data, sizeof(NVME_IDENTIFY_DEVICE), NVMeData.DataBuffer, sizeof(NVME_IDENTIFY_DEVICE));
 			
-			CloseHandle(hIoCtrl);
+			safeCloseHandle(hIoCtrl);
 			return TRUE;
 		}
 
-		CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 	}
 	return FALSE;
 }
@@ -7169,10 +7235,10 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntelRst(INT physicalDriveId, INT scsiPort,
 			&dummy, nullptr))
 		{
 			memcpy_s(&(asi->SmartReadData), 512, NVMeData.DataBuffer, 512);
-			CloseHandle(hIoCtrl);
+			safeCloseHandle(hIoCtrl);
 			return TRUE;
 		}
-		CloseHandle(hIoCtrl);
+		safeCloseHandle(hIoCtrl);
 	}
 	return FALSE;
 }
@@ -7206,7 +7272,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPo
 
 	bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
 		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
-	CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	memcpy_s(data, sizeof(NVME_IDENTIFY_DEVICE), nptwb.Buffer, sizeof(NVME_IDENTIFY_DEVICE));
 
@@ -7244,7 +7310,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiP
 			&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
 	}
 
-	CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	memcpy_s(&(asi->SmartReadData), 512, nptwb.Buffer, 512);
 
@@ -7293,7 +7359,7 @@ BOOL CAtaSmart::DoIdentifyDeviceScsi(INT scsiPort, INT scsiTargetId, IDENTIFY_DE
 				memcpy_s(data, sizeof(ATA_IDENTIFY_DEVICE), pOut->bBuffer, sizeof(ATA_IDENTIFY_DEVICE));
 			}
 		}
-		CloseHandle(hScsiDriveIOCTL);
+		safeCloseHandle(hScsiDriveIOCTL);
 	}
 	return done;
 }
@@ -7334,7 +7400,7 @@ BOOL CAtaSmart::GetSmartAttributeScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_
 			SENDCMDOUTPARAMS *pOut = (SENDCMDOUTPARAMS *)(buffer + sizeof(SRB_IO_CONTROL));
 
 			memcpy_s(&(asi->SmartReadData), 512, &(pOut->bBuffer), 512);
-			CloseHandle(hScsiDriveIOCTL);
+			safeCloseHandle(hScsiDriveIOCTL);
 			return FillSmartData(asi);
 		}
 	}
@@ -7379,7 +7445,7 @@ BOOL CAtaSmart::GetSmartThresholdScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_
 			{
 				
 				memcpy_s(&(asi->SmartReadThreshold), 512, &(pOut->bBuffer), 512);
-				CloseHandle (hScsiDriveIOCTL);
+				safeCloseHandle(hScsiDriveIOCTL);
 				return FillSmartThreshold(asi);
 			}
 		}
@@ -7389,7 +7455,7 @@ BOOL CAtaSmart::GetSmartThresholdScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_
 
 BOOL CAtaSmart::ControlSmartStatusScsi(INT scsiPort, INT scsiTargetId, BYTE command)
 {
-	BOOL	bRet;
+	BOOL	bRet = FALSE;
 	HANDLE hScsiDriveIOCTL = 0;
 	CString driveName;
 	driveName.Format(_T("\\\\.\\Scsi%d:"), scsiPort);
@@ -7427,7 +7493,7 @@ BOOL CAtaSmart::ControlSmartStatusScsi(INT scsiPort, INT scsiTargetId, BYTE comm
 								buffer, sizeof(SRB_IO_CONTROL) + sizeof(SENDCMDINPARAMS) - 1,
 								buffer, sizeof(SRB_IO_CONTROL) + sizeof(SENDCMDOUTPARAMS) + SCSI_MINIPORT_BUFFER_SIZE,
 								&dummy, NULL);
-		CloseHandle(hScsiDriveIOCTL);
+		safeCloseHandle(hScsiDriveIOCTL);
 		return bRet;
 	}
 
@@ -7438,7 +7504,7 @@ BOOL CAtaSmart::ControlSmartStatusScsi(INT scsiPort, INT scsiTargetId, BYTE comm
 BOOL CAtaSmart::SendAtaCommandScsi(INT scsiPort, INT scsiTargetId, BYTE main, BYTE sub, BYTE param)
 {
 /** Does not work...
-	BOOL	bRet;
+	BOOL	bRet = FALSE;
 	HANDLE hScsiDriveIOCTL = 0;
 	CString driveName;
 	driveName.Format(_T("\\\\.\\Scsi%d:"), scsiPort);
@@ -7473,7 +7539,7 @@ BOOL CAtaSmart::SendAtaCommandScsi(INT scsiPort, INT scsiTargetId, BYTE main, BY
 								&capt, size,
 								&dummy, NULL);
 	}
-	CloseHandle(hScsiDriveIOCTL);
+	safeCloseHandle(hScsiDriveIOCTL);
 
 	return bRet;
 */
@@ -7490,9 +7556,9 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 	debug.Format(L"DoIdentifyDeviceSat pd=%d, tt=%d, ct=%d", physicalDriveId, target, type);
 	DebugPrint(debug);
 
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD	length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
@@ -7506,9 +7572,9 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 	::ZeroMemory(data, sizeof(ATA_IDENTIFY_DEVICE));
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
-		DebugPrint(L"hIoCtrl == INVALID_HANDLE_VALUE");
+		DebugPrint(L"! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE");
 		return	FALSE;
 	}
 
@@ -7690,7 +7756,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 	cstr.Format(_T("i = %d, j = %d"), i, j);
 	AfxMessageBox(cstr);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 	memcpy_s(data, sizeof(ATA_IDENTIFY_DEVICE), sptwb.DataBuf, sizeof(ATA_IDENTIFY_DEVICE));
 
 	return TRUE;
@@ -7710,7 +7776,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 		&sptwb, sizeof(SCSI_PASS_THROUGH),
 		&sptwb, length, &dwReturned, NULL);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	if (bRet == FALSE || dwReturned != length)
 	{
@@ -7739,15 +7805,15 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 
 BOOL CAtaSmart::GetSmartAttributeSat(INT PhysicalDriveId, BYTE target, ATA_SMART_INFO* asi)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
 
 	hIoCtrl = GetIoCtrlHandle(PhysicalDriveId);
-	if(hIoCtrl == INVALID_HANDLE_VALUE)
+	if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -7912,7 +7978,7 @@ BOOL CAtaSmart::GetSmartAttributeSat(INT PhysicalDriveId, BYTE target, ATA_SMART
 		&sptwb, sizeof(SCSI_PASS_THROUGH),
 		&sptwb, length,	&dwReturned, NULL);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 	
 	if(bRet == FALSE || dwReturned != length)
 	{
@@ -7935,15 +8001,15 @@ BOOL CAtaSmart::GetSmartAttributeSat(INT PhysicalDriveId, BYTE target, ATA_SMART
 
 BOOL CAtaSmart::GetSmartThresholdSat(INT physicalDriveId, BYTE target, ATA_SMART_INFO* asi)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 	DWORD length;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-	if(hIoCtrl == INVALID_HANDLE_VALUE)
+	if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -8108,7 +8174,7 @@ BOOL CAtaSmart::GetSmartThresholdSat(INT physicalDriveId, BYTE target, ATA_SMART
 		&sptwb, sizeof(SCSI_PASS_THROUGH),
 		&sptwb, length,	&dwReturned, NULL);
 	
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 	
 	if(bRet == FALSE || dwReturned != length)
 	{
@@ -8121,14 +8187,14 @@ BOOL CAtaSmart::GetSmartThresholdSat(INT physicalDriveId, BYTE target, ATA_SMART
 
 BOOL CAtaSmart::ControlSmartStatusSat(INT physicalDriveId, BYTE target, BYTE command, COMMAND_TYPE type)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-	if(hIoCtrl == INVALID_HANDLE_VALUE)
+	if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -8287,21 +8353,21 @@ BOOL CAtaSmart::ControlSmartStatusSat(INT physicalDriveId, BYTE target, BYTE com
 		&sptwb, sizeof(SCSI_PASS_THROUGH),
 		&sptwb, length,	&dwReturned, NULL);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return	bRet;
 }
 
 BOOL CAtaSmart::SendAtaCommandSat(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, COMMAND_TYPE type)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-	if(hIoCtrl == INVALID_HANDLE_VALUE)
+	if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -8463,21 +8529,21 @@ BOOL CAtaSmart::SendAtaCommandSat(INT physicalDriveId, BYTE target, BYTE main, B
 		&sptwb, sizeof(SCSI_PASS_THROUGH),
 		&sptwb, length,	&dwReturned, NULL);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	return	bRet;
 }
 
 BOOL CAtaSmart::ReadLogExtSat(INT physicalDriveId, BYTE target, BYTE logAddress, BYTE logPage, PBYTE data, DWORD dataSize, COMMAND_TYPE type)
 {
-	BOOL	bRet;
-	HANDLE	hIoCtrl;
-	DWORD	dwReturned;
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb;
 
 	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
-	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
@@ -8524,7 +8590,7 @@ BOOL CAtaSmart::ReadLogExtSat(INT physicalDriveId, BYTE target, BYTE logAddress,
 		&sptwb, sizeof(SCSI_PASS_THROUGH),
 		&sptwb, length, &dwReturned, NULL);
 
-	::CloseHandle(hIoCtrl);
+	safeCloseHandle(hIoCtrl);
 
 	if (bRet == FALSE || dwReturned != length)
 	{
@@ -8602,7 +8668,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSi(INT physicalDriveId, INT scsiPort, INT scsiBu
 			memcpy_s(data, sizeof(ATA_IDENTIFY_DEVICE), &sid.id_data, sizeof(ATA_IDENTIFY_DEVICE));
 		}
 
-		CloseHandle(hScsiDriveIOCTL);
+		safeCloseHandle(hScsiDriveIOCTL);
 	}
 	return done;
 }
@@ -8624,10 +8690,10 @@ BOOL CAtaSmart::GetSmartAttributeSi(INT physicalDriveId, ATA_SMART_INFO* asi)
 			&spf, sizeof(spf), &spf, sizeof(spf), &dwRetBytes, NULL))
 		{
 			memcpy_s(&(asi->SmartReadData), 512, &(spf.VendorSpecific), 512);
-			CloseHandle(hScsiDriveIOCTL);
+			safeCloseHandle(hScsiDriveIOCTL);
 			return FillSmartData(asi);
 		}
-		CloseHandle(hScsiDriveIOCTL);
+		safeCloseHandle(hScsiDriveIOCTL);
 	}
 	return GetSmartAttributeWmi(asi);
 }
@@ -8648,7 +8714,7 @@ BOOL CAtaSmart::GetSmartAttributeWmi(ATA_SMART_INFO* asi)
 
 BOOL CAtaSmart::GetSmartThresholdWmi(ATA_SMART_INFO* asi)
 {
-	if(m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 0)
+	if(!IsWindowsVersionOrGreater(5, 1)/*m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 0*/)
 	{
 		return FALSE;
 	}
@@ -8687,7 +8753,7 @@ BOOL CAtaSmart::GetSmartInfoWmi(DWORD type, ATA_SMART_INFO* asi)
 				IID_IWbemLocator, (LPVOID *)&pIWbemLocator)))
 		{
 			long securityFlag = 0;
-			if(m_Os.dwMajorVersion >= 6){securityFlag = WBEM_FLAG_CONNECT_USE_MAX_WAIT;}
+			if(IsWindowsVersionOrGreater(6, 0)/*m_Os.dwMajorVersion >= 6*/){securityFlag = WBEM_FLAG_CONNECT_USE_MAX_WAIT;}
 			if(SUCCEEDED(pIWbemLocator->ConnectServer(_bstr_t(L"\\\\.\\root\\WMI"), 
 				NULL, NULL, 0L, securityFlag, NULL, NULL, &pIWbemServices)))
 			{
@@ -8788,7 +8854,7 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 	CSMI_SAS_DRIVER_INFO_BUFFER driverInfoBuf = {0};
 	if(! CsmiIoctl(hHandle, CC_CSMI_SAS_GET_DRIVER_INFO, &driverInfoBuf.IoctlHeader, sizeof(driverInfoBuf)))
 	{
-		CloseHandle(hHandle);
+		safeCloseHandle(hHandle);
 		DebugPrint(_T("FAILED: CC_CSMI_SAS_GET_DRIVER_INFO"));
 		return FALSE;
 	}
@@ -8797,7 +8863,7 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 	CSMI_SAS_RAID_INFO_BUFFER raidInfoBuf = {0};
 	if(! CsmiIoctl(hHandle, CC_CSMI_SAS_GET_RAID_INFO, &raidInfoBuf.IoctlHeader, sizeof(raidInfoBuf)))
 	{
-		CloseHandle(hHandle);
+		safeCloseHandle(hHandle);
 		DebugPrint(_T("FAILED: CC_CSMI_SAS_GET_RAID_INFO"));
 		return FALSE;
 	}
@@ -8812,9 +8878,9 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 		buf->Configuration.uRaidSetIndex = i;
 		if(! CsmiIoctl(hHandle, CC_CSMI_SAS_GET_RAID_CONFIG, &(buf->IoctlHeader), size))
 		{
-			CloseHandle(hHandle);
+			safeCloseHandle(hHandle);
 			DebugPrint(_T("FAILED: CC_CSMI_SAS_GET_RAID_CONFIG"));
-			VirtualFree(buf, 0, MEM_RELEASE);
+			safeVirtualFree(buf, 0, MEM_RELEASE);
 			return FALSE;
 		}
 		else
@@ -8829,13 +8895,13 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 			}
 		}
 	}
-	VirtualFree(buf, 0, MEM_RELEASE);
+	safeVirtualFree(buf, 0, MEM_RELEASE);
 
 	CSMI_SAS_PHY_INFO phyInfo = {0};
 	CSMI_SAS_PHY_INFO_BUFFER phyInfoBuf = {0};
 	if (! CsmiIoctl(hHandle, CC_CSMI_SAS_GET_PHY_INFO, &phyInfoBuf.IoctlHeader, sizeof(phyInfoBuf)))
 	{
-		CloseHandle(hHandle);
+		safeCloseHandle(hHandle);
 		DebugPrint(_T("FAILED: CC_CSMI_SAS_GET_PHY_INFO"));
 		return FALSE;
 	}
@@ -8902,7 +8968,7 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 		}
 	}	
 
-	CloseHandle(hHandle);
+	safeCloseHandle(hHandle);
 	return TRUE;
 }
 
@@ -8997,14 +9063,14 @@ BOOL CAtaSmart::ControlSmartStatusCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhy
 BOOL CAtaSmart::SendAtaCommandCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEntity, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize)
 {
 	HANDLE hIoCtrl = GetIoCtrlHandleCsmi(scsiPort);
-	if(hIoCtrl == INVALID_HANDLE_VALUE)
+	if(! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return	FALSE;
 	}
 
 	DWORD size = sizeof(CSMI_SAS_STP_PASSTHRU_BUFFER) + dataSize;
 	CSMI_SAS_STP_PASSTHRU_BUFFER* buf = (CSMI_SAS_STP_PASSTHRU_BUFFER*)VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);
-
+	if (buf == NULL)  return FALSE;
 	buf->Parameters.bPhyIdentifier = sasPhyEntity->Attached.bPhyIdentifier;
 	buf->Parameters.bPortIdentifier = sasPhyEntity->bPortIdentifier;
 	memcpy(&(buf->Parameters.bDestinationSASAddress), sasPhyEntity->Attached.bSASAddress, sizeof(sasPhyEntity->Attached.bSASAddress));
@@ -9056,8 +9122,8 @@ BOOL CAtaSmart::SendAtaCommandCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEnti
 
 	if(! CsmiIoctl(hIoCtrl, CC_CSMI_SAS_STP_PASSTHRU, &buf->IoctlHeader, size))
 	{
-		CloseHandle(hIoCtrl);
-		VirtualFree(buf, 0, MEM_RELEASE);
+		safeCloseHandle(hIoCtrl);
+		safeVirtualFree(buf, 0, MEM_RELEASE);
 		return FALSE;
 	}
 
@@ -9066,8 +9132,8 @@ BOOL CAtaSmart::SendAtaCommandCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEnti
 		memcpy_s(data, dataSize, buf->bDataBuffer, dataSize);
 	}
 	
-	CloseHandle(hIoCtrl);
-	VirtualFree(buf, 0, MEM_RELEASE);
+	safeCloseHandle(hIoCtrl);
+	safeVirtualFree(buf, 0, MEM_RELEASE);
 	
 	return	TRUE;
 }
@@ -9189,25 +9255,25 @@ BOOL CAtaSmart::SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, v
 		sizeof(mpti),
 		&read_size, nullptr))
 	{
-		CloseHandle(hHandle);
+		safeCloseHandle(hHandle);
 		return FALSE;
 	}
 
 	if (read_size < sizeof(SRB_IO_CONTROL) + sizeof(MEGARAID_DCOMD))
 	{
-		CloseHandle(hHandle);
+		safeCloseHandle(hHandle);
 		return FALSE;
 	}
 
 	if (mpti.Mpt.CmdStatus != MFI_STAT_OK)
 	{
-		CloseHandle(hHandle);
+		safeCloseHandle(hHandle);
 		return FALSE;
 	}
 
 	if (read_size - (sizeof(mpti) - sizeof(mpti.DataBuf)) < mpti.Mpt.DataTransferLength)
 	{
-		CloseHandle(hHandle);
+		safeCloseHandle(hHandle);
 		return FALSE;
 	}
 
@@ -9216,7 +9282,7 @@ BOOL CAtaSmart::SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, v
 		memcpy_s(buf, bufsize, mpti.DataBuf, mpti.Mpt.DataTransferLength);
 	}
 
-	CloseHandle(hHandle);
+	safeCloseHandle(hHandle);
 	return TRUE;
 }
 
@@ -9239,15 +9305,15 @@ BOOL CAtaSmart::AddDiskMegaRAID(INT scsiPort)
 		list = (MEGARAID_PHYSICAL_DRIVE_LIST*)VirtualAlloc(NULL, listSize, MEM_COMMIT, PAGE_READWRITE);
 		if (!list)
 		{
-			CloseHandle(hHandle);
+			safeCloseHandle(hHandle);
 			return FALSE;
 		}
 
 		memset(list, 0, listSize);
 		if (!SendDCommandMegaRAID(hHandle, MFI_DCMD_PD_GET_LIST, list, listSize, NULL, 0))
 		{
-			CloseHandle(hHandle);
-			VirtualFree(list, 0, MEM_RELEASE);
+			safeCloseHandle(hHandle);
+			safeVirtualFree(list, 0, MEM_RELEASE);
 			return FALSE;
 		}
 
@@ -9257,7 +9323,7 @@ BOOL CAtaSmart::AddDiskMegaRAID(INT scsiPort)
 		}
 		listSize = list->Size;
 
-		VirtualFree(list, 0, MEM_RELEASE);
+		safeVirtualFree(list, 0, MEM_RELEASE);
 		list = NULL;
 	}
 
@@ -9275,8 +9341,8 @@ BOOL CAtaSmart::AddDiskMegaRAID(INT scsiPort)
 		}
 	}
 
-	CloseHandle(hHandle);
-	VirtualFree(list, 0, MEM_RELEASE);
+	safeCloseHandle(hHandle);
+	safeVirtualFree(list, 0, MEM_RELEASE);
 
 	return TRUE;
 }

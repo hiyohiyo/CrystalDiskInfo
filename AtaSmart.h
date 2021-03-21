@@ -124,7 +124,7 @@ static const TCHAR* deviceFormFactorString[] =
 
 typedef struct _VOLUME_DISK_EXTENTS_LX {
     DWORD       NumberOfDiskExtents;
-    DISK_EXTENT Extents[8];
+    DISK_EXTENT Extents[4];
 } VOLUME_DISK_EXTENTS_LX, *PVOLUME_DISK_EXTENTS_LX;
 
 class CAtaSmart
@@ -1868,7 +1868,7 @@ public:
 	DWORD CheckDiskStatus(DWORD index);
 
 protected:
-	OSVERSIONINFOEX m_Os;
+	//OSVERSIONINFOEX m_Os;
 	CString m_SerialNumberA_Z[26];
 	BOOL m_bAtaPassThrough;
 	BOOL m_bAtaPassThroughSmart;
@@ -2009,7 +2009,7 @@ protected:
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
-	static int Compare(const void *p1, const void *p2);
+	static int __cdecl Compare(const void *p1, const void *p2);
 
 	CString GetModelSerial(CString &model, CString &serialNumber);
 //	BOOL GetLifeByGpl(ATA_SMART_INFO& asi);
