@@ -42,6 +42,7 @@ protected:
 	BYTE GetControlAlpha(CString name, BYTE defaultAlpha, CString theme);
 	BYTE GetCharacterPosition(CString theme);
 	CString GetParentTheme(int i, CString theme);
+	CString GetRandomTheme();
 	void SaveImageDlg(CImage* image);
 
 	virtual BOOL OnInitDialog();
