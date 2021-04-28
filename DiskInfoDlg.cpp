@@ -122,6 +122,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_RecommendTheme = L"Default";
 	m_ThemeKeyName = L"Theme";
 #endif
+	m_RandomThemeLabel = L"Random";
 
 	m_BackgroundName = L"Background";
 

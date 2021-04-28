@@ -16,7 +16,7 @@ CrystalDiskInfo は以下に対応しています:
 
 ## 通知
 このリポジトリにはリソースファイルは含まれていないので、以下のリンクからダウンロードして下さい。
-- [ダウンロードページへのリンク](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc)
+- [ダウンロードページへのリンク](https://crystalmark.info/redirect.php?product=CrystalDiskInfo)
 
 ## ビルド
 
@@ -24,7 +24,7 @@ CrystalDiskInfo は以下に対応しています:
 
 ### ノート
 
-[ダウンロードファイル](https://crystalmark.info/redirect.php?product=CrystalDiskInfoSrc) にある *CdiResource* フォルダーをビルド時に作られた *Marginality* フォルダーへコピーします。実行時に *CdiResource* フォルダーがない場合、「Not Found "Graph.html"」と表示されます。
+[ダウンロードファイル](https://crystalmark.info/redirect.php?product=CrystalDiskInfo) にある *CdiResource* フォルダーをビルド時に作られた *Marginality* フォルダーへコピーします。実行時に *CdiResource* フォルダーがない場合、「Not Found "Graph.html"」と表示されます。
 
 
 ## プロジェクトのページ

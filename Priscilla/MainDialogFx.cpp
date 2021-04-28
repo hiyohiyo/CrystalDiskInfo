@@ -7,6 +7,7 @@
 
 #include "../stdafx.h"
 #include "MainDialogFx.h"
+#include <ctime>
 
 CMainDialogFx::CMainDialogFx(UINT dlgResouce, CWnd* pParent)
 		:CDialogFx(dlgResouce, pParent)
@@ -251,11 +252,18 @@ void CMainDialogFx::InitMenu()
 	int i = 0;
 	TCHAR *ptrEnd = NULL;
 	TCHAR str[256];
-	
+
+	std::srand((unsigned int)std::time(nullptr));
+
 	menu.Attach(GetMenu()->GetSafeHmenu());
 	subMenu.Attach(menu.GetSubMenu(MENU_THEME_INDEX)->GetSafeHmenu());
 
 	themePath.Format(L"%s\\*.*", (LPTSTR)m_ThemeDir.GetString());
+
+	// Add Random as first choice.
+	subMenu.AppendMenu(MF_STRING, (UINT_PTR)WM_THEME_ID + i, m_RandomThemeLabel);
+	i++;
+	m_MenuArrayTheme.Add(m_RandomThemeLabel);
 
 	hFind = ::FindFirstFile(themePath, &findData);
 	if(hFind != INVALID_HANDLE_VALUE)
@@ -288,7 +296,12 @@ void CMainDialogFx::InitMenu()
 	}
 	FindClose(hFind);
 
-	if(! FlagHitTheme)
+	if(m_CurrentTheme.Compare(m_RandomThemeLabel) == 0)
+	{
+		m_CurrentTheme = GetRandomTheme();
+		// Keep currentItemID the same as the first item if "Random".
+		currentItemID = WM_THEME_ID;
+	} else if(! FlagHitTheme)
 	{
 		currentItemID = defaultStyleItemID;
 		m_CurrentTheme = m_DefaultTheme;
@@ -389,7 +402,17 @@ BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam)
 		subMenu.Attach(menu.GetSubMenu(MENU_THEME_INDEX)->GetSafeHmenu());
 
 		m_CurrentTheme = m_MenuArrayTheme.GetAt(wParam - WM_THEME_ID);
-		ChangeTheme(m_MenuArrayTheme.GetAt(wParam - WM_THEME_ID));
+		if (m_CurrentTheme.Compare(m_RandomThemeLabel) == 0)
+		{
+			m_CurrentTheme = GetRandomTheme();
+			// ChangeTheme save the theme configuration to profile; so if we are on
+			// Random, then save Random to profile.
+			ChangeTheme(m_RandomThemeLabel);
+		}
+		else
+		{
+			ChangeTheme(m_MenuArrayTheme.GetAt(wParam - WM_THEME_ID));
+		}
 		subMenu.CheckMenuRadioItem(WM_THEME_ID, WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize(),
 									(UINT)wParam, MF_BYCOMMAND);
 		subMenu.Detach();
@@ -501,6 +524,12 @@ CString CMainDialogFx::GetParentTheme(int i, CString theme)
 	cstr = str;
 
 	return cstr;
+}
+
+CString CMainDialogFx::GetRandomTheme() {
+	// We need to add/subtract one to exclude first item ("Random").
+	UINT i = 1 + std::rand() % ((UINT)m_MenuArrayTheme.GetSize() - 1);
+	return m_MenuArrayTheme.GetAt(i);
 }
 
 void CMainDialogFx::SaveImage()
