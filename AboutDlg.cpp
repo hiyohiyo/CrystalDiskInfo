@@ -115,6 +115,12 @@ void CAboutDlg::UpdateDialogSize()
 	UpdateBackground(TRUE, m_bDarkMode);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
+	m_CtrlProjectSite1.SetHandCursor();
+	m_CtrlProjectSite2.SetHandCursor();
+	m_CtrlProjectSite3.SetHandCursor();
+	m_CtrlProjectSite4.SetHandCursor();
+	m_CtrlProjectSite5.SetHandCursor();
+	m_CtrlSecretVoice.SetHandCursor();
 #ifdef KUREI_KEI_SUPPORT
 	m_CtrlProjectSite1.InitControl(340, 232, 268, 100, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 	m_CtrlProjectSite2.InitControl(386, 376, 48, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
@@ -123,6 +129,7 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlProjectSite5.InitControl(0, 0, 0, 0, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 	m_CtrlProjectSite5.ShowWindow(SW_HIDE);
 	m_CtrlSecretVoice.InitControl(132, 324, 48, 28, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 #else
 	m_CtrlProjectSite1.InitControl(340, 324, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 	m_CtrlProjectSite2.InitControl(340, 368, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
@@ -130,16 +137,12 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlProjectSite4.InitControl(340, 416, 292, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 	m_CtrlProjectSite5.InitControl(320, 192, 292, 92, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 	m_CtrlSecretVoice.InitControl(200, 412, 40, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlCrystalDewWorld.InitControl(80, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 #endif
-	m_CtrlProjectSite1.SetHandCursor();
-	m_CtrlProjectSite2.SetHandCursor();
-	m_CtrlProjectSite3.SetHandCursor();
-	m_CtrlProjectSite4.SetHandCursor();
-	m_CtrlProjectSite5.SetHandCursor();
-	m_CtrlSecretVoice.SetHandCursor();
+#else
+	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 #endif
 
-	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 	m_CtrlCrystalDewWorld.SetHandCursor();
 
 	m_CtrlVersion.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD, m_FontRender);
@@ -152,11 +155,11 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlLicense.SetHandCursor();
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_CtrlVersion.InitControl(152, 12, 476, 36, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
-	m_CtrlEdition.InitControl(152, 48, 476, 36, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
-	m_CtrlRelease.InitControl(152, 88, 476, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
-	m_CtrlCopyright.InitControl(152, 112, 476, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
-	m_CtrlLicense.InitControl(152, 136, 476, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlVersion.InitControl(8, 160, 272, 28, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlEdition.InitControl(8, 188, 272, 28, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlRelease.InitControl(8, 228, 272, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlCopyright.InitControl(8, 252, 272, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
+	m_CtrlLicense.InitControl(8, 276, 272, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE);
 #else
 	m_CtrlVersion.InitControl(152, 12, 316, 36, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 	m_CtrlEdition.InitControl(152, 48, 316, 36, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);

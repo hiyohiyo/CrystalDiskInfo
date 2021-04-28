@@ -35,7 +35,7 @@ public:
 protected:
 	void InitMenu();
 	void InitThemeLang();
-	void ChangeTheme(CString ThemeName);
+	void ChangeTheme(CString themeName);
 	void SetWindowTitle(CString message);
 	void UpdateThemeInfo();
 	COLORREF GetControlColor(CString name, BYTE defaultColor, CString theme);

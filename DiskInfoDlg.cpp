@@ -404,7 +404,7 @@ void CDiskInfoDlg::OnCancel()
 		{
 			UnregisterDeviceNotification(m_hDevNotify);
 		}
-	CMainDialogFx::OnCancel();
+		CMainDialogFx::OnCancel();
 	}
 }
 
@@ -431,6 +431,8 @@ void CDiskInfoDlg::OnSaveImage()
 
 void CDiskInfoDlg::OnExit()
 {
+	SavePos();
+
 	ShowWindow(SW_HIDE);
 	RemoveTrayMainIcon();
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
@@ -905,6 +907,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	// Task Tray Menu
 	else if(wParam == MY_EXIT)
 	{
+		SavePos();
 		RemoveTrayMainIcon();
 		for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 		{
