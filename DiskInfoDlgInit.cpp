@@ -38,6 +38,9 @@ BOOL CDiskInfoDlg::OnInitDialog()
 
 	InitThemeLang();
 	InitMenu();
+	ChangeTheme(m_CurrentTheme);
+	UpdateThemeInfo();
+//	ChangeLang(m_CurrentLang);
 
 	TCHAR str[256];
 	
@@ -226,6 +229,9 @@ void CDiskInfoDlg::InitDialogComplete()
 	static BOOL once = FALSE;
 	if(! once)
 	{
+		DebugPrint(_T("RestorePos()"));
+		RestorePos();
+
 		DebugPrint(_T("CheckStartup"));
 		CheckStartup();
 		// CheckResident();
@@ -244,8 +250,6 @@ void CDiskInfoDlg::InitDialogComplete()
 		CheckPage();
 			
 		m_bShowWindow = TRUE;
-		DebugPrint(_T("RestorePos()"));
-		RestorePos();
 
 		if(m_bResident)
 		{

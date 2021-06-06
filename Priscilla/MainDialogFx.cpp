@@ -261,7 +261,7 @@ void CMainDialogFx::InitMenu()
 	themePath.Format(L"%s\\*.*", (LPTSTR)m_ThemeDir.GetString());
 
 	// Add Random as first choice.
-	subMenu.AppendMenu(MF_STRING, (UINT_PTR)WM_THEME_ID + i, m_RandomThemeLabel);
+	subMenu.AppendMenu(MF_STRING, (UINT_PTR)WM_THEME_ID + i, m_RandomThemeLabel + m_RandomThemeName);
 	i++;
 	m_MenuArrayTheme.Add(m_RandomThemeLabel);
 
@@ -299,9 +299,13 @@ void CMainDialogFx::InitMenu()
 	if(m_CurrentTheme.Compare(m_RandomThemeLabel) == 0)
 	{
 		m_CurrentTheme = GetRandomTheme();
+		m_RandomThemeName = L" (" + m_CurrentTheme + L")";
 		// Keep currentItemID the same as the first item if "Random".
 		currentItemID = WM_THEME_ID;
-	} else if(! FlagHitTheme)
+
+		subMenu.ModifyMenu(WM_THEME_ID, MF_STRING, WM_THEME_ID, m_RandomThemeLabel + m_RandomThemeName);
+	}
+	else if(! FlagHitTheme)
 	{
 		currentItemID = defaultStyleItemID;
 		m_CurrentTheme = m_DefaultTheme;
@@ -405,6 +409,9 @@ BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam)
 		if (m_CurrentTheme.Compare(m_RandomThemeLabel) == 0)
 		{
 			m_CurrentTheme = GetRandomTheme();
+			m_RandomThemeLabel = L"Random";
+			m_RandomThemeName = L" (" + m_CurrentTheme + L")";
+
 			// ChangeTheme save the theme configuration to profile; so if we are on
 			// Random, then save Random to profile.
 			ChangeTheme(m_RandomThemeLabel);
@@ -412,9 +419,12 @@ BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam)
 		else
 		{
 			ChangeTheme(m_MenuArrayTheme.GetAt(wParam - WM_THEME_ID));
+			m_RandomThemeName = L"";
 		}
+
+		subMenu.ModifyMenu(WM_THEME_ID, MF_STRING, WM_THEME_ID, m_RandomThemeLabel + m_RandomThemeName);
 		subMenu.CheckMenuRadioItem(WM_THEME_ID, WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize(),
-									(UINT)wParam, MF_BYCOMMAND);
+			(UINT)wParam, MF_BYCOMMAND);
 		subMenu.Detach();
 		menu.Detach();
 

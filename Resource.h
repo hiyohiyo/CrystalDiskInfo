@@ -705,7 +705,7 @@
 #define IDC_SECRET_VOICE                1070
 #define IDC_VERSION                     1071
 #define IDC_RELEASE                     1072
-#define IDC_COPYRIGHT                   1073
+#define IDC_COPYRIGHT1                  1073
 #define IDC_LICENSE                     1074
 #define IDC_EDITION                     1075
 #define IDC_PROJECT_SITE_1              1076
@@ -737,15 +737,16 @@
 #define IDC_LABEL_05                    1098
 #define IDC_LABEL_C6                    1099
 #define IDC_LABEL_C5                    1100
+#define IDC_COPYRIGHT2                  1101
 
 
-#define IDC_VALUE_TEMPERATURE           1101
-#define IDC_SLIDER_VOLUME               1101
-#define IDC_VALUE_TEMPERATURE_F         1102
-#define IDC_SCROLLBAR_TEMPERATURE       1103
+#define IDC_VALUE_TEMPERATURE           1102
+#define IDC_SLIDER_VOLUME               1103
+#define IDC_VALUE_TEMPERATURE_F         1104
+#define IDC_SCROLLBAR_TEMPERATURE       1105
 
-#define IDC_STATIC_VOLUME               1105
-#define IDC_VALUE_VOLUME                1106
+#define IDC_STATIC_VOLUME               1106
+#define IDC_VALUE_VOLUME                1107
 
 #define IDC_FONT_FACE_COMBO             1201
 #define IDC_FONT_SCALE_COMBO			1202

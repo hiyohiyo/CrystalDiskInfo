@@ -106,17 +106,30 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.12.0"
-#define PRODUCT_RELEASE				L"2021/03/21"
+#define PRODUCT_VERSION				L"8.12.1"
+#define PRODUCT_RELEASE				L"2021/06/01"
 #define PRODUCT_COPY_YEAR			L"2008-2021"
-#define PRODUCT_COPYRIGHT			L"© 2008-2021 hiyohiyo"
 #define PRODUCT_LICENSE				L"The MIT License"
+
+#ifdef KUREI_KEI_SUPPORT
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2021 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2017-2021 Pronama LLC"
+
+#elif SUISHO_SHIZUKU_SUPPORT
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2021 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2012-2021 kirino kasumu"
+#else
+#define PRODUCT_COPYRIGHT_1			L"© 2008-2021 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2			L""
+#endif
+
+
+
 
 #define DEFAULT_FONT_FACE_1			L"Segoe UI"
 #define DEFAULT_FONT_FACE_2			L"Tahoma"
 
 #define THEME_DIR					L"CdiResource\\themes\\"
-#define LANGUAGE_DIR				L"CdiResource\\language\\"
 #define LANGUAGE_DIR				L"CdiResource\\language\\"
 
 #define MENU_THEME_INDEX			3
@@ -133,7 +146,7 @@
 #define	URL_PROJECT_SHIZUKU_JA		L"https://suishoshizuku.com/ja/"
 #define	URL_PROJECT_SHIZUKU_EN		L"https://suishoshizuku.com/en/"
 
-#define URL_PRONAMA	                L"https://pronama.jp/crystaldiskinfo"
+#define URL_PRONAMA	                L"https://pronama.jp/2017/08/04/crystaldiskinfo-kurei-kei-edition-release/"
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 
@@ -145,7 +158,7 @@
 #define URL_PROJECT_SITE_5			L""
 #else
 #define	URL_PROJECT_SITE_1		    L"https://twitter.com/kirinokasumu"
-#define URL_PROJECT_SITE_2		    L"https://linux-ha.sourceforge.jp/wp/"
+#define URL_PROJECT_SITE_2		    L"https://linux-ha.osdn.jp/wp/"
 #define URL_PROJECT_SITE_3	        L"https://ch.nicovideo.jp/oss"
 #define URL_PROJECT_SITE_4			L"https://twitter.com/bellche"
 #define URL_PROJECT_SITE_5			L"https://suishoshizuku.com/"

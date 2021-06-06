@@ -130,6 +130,7 @@ protected:
 	CString m_ParentTheme1;
 	CString m_ParentTheme2;
 	CString m_RandomThemeLabel;
+	CString m_RandomThemeName;
 
 	// Language for SubClass
 	CString m_LangDir;

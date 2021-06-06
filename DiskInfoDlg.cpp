@@ -114,7 +114,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_ThemeKeyName = L"ThemeKureiKei";
 	#else 
 	m_DefaultTheme = L"Shizuku";
-	m_RecommendTheme = L"ShizukuHotaru";
+	m_RecommendTheme = L"ShizukuIdol";
 	m_ThemeKeyName = L"ThemeShizuku";
 #endif
 #else
@@ -579,7 +579,6 @@ void CDiskInfoDlg::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Control(pDX, IDC_BUTTON_VOICE, m_CtrlVoice);
 	DDX_Control(pDX, IDC_BUTTON_COPYRIGHT, m_CtrlCopyright);
-
 }
 
 BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)

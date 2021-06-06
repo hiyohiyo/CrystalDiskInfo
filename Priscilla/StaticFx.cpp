@@ -422,6 +422,7 @@ void CStaticFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	drawDC->SetBkMode(TRANSPARENT);
 	CRect rect = (CRect)(lpDrawItemStruct->rcItem);
+	CRect rectControl = (CRect)(lpDrawItemStruct->rcItem);
 	rect.top += m_Margin.top;
 	rect.left += m_Margin.left;
 	rect.bottom -= m_Margin.bottom;
@@ -450,7 +451,7 @@ void CStaticFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	if (!m_Label.IsEmpty())
 	{
-		drawDC->DrawText(title, title.GetLength(), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		drawDC->DrawText(title, title.GetLength(), rectControl, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		drawDC->SelectObject(oldFont);
 
 		oldFont = drawDC->SelectObject(m_FontToolTip);
