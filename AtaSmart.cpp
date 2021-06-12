@@ -5020,6 +5020,10 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 		{
 			asi.FlagLifeRawValueIncrement = TRUE;
 		}
+		else if (asi.Model.Find(_T("WT200")) == 0)
+		{
+
+		}
 		else
 		{
 			asi.FlagLifeRawValue = TRUE;
