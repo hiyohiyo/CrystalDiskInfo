@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=丹楓, chriszxl (小良奇), haobinnan
-VERSION=8.10.0
+TRANSLATOR=謝慶憲, chriszxl (小良奇), haobinnan
+VERSION=8.11.0
 
 [Language]
 LANGUAGE=正體中文
@@ -194,8 +194,8 @@ FONT_SCALE=字型縮放 (%)
 DEFAULT=預設
 
 ;8.9.0
-ENABLED=Enabled
-DISABLED=Disabled
+ENABLED=已啟用
+DISABLED=已停用
 
 [Message]
 DETECT_UNIT_POWER_ON_HOURS=正在偵測 [已用時間總計](需要大約 130 秒)
@@ -409,6 +409,7 @@ E9=介質耗損指標
 EA=熱節流狀態
 F1=LBA(邏輯區塊定址)寫入總數
 F2=LBA(邏輯區塊定址)讀取總數
+F3=NAND 累計寫入
 F9=NAND 累計寫入
 [SmartSamsung] ;Updated 6.6
 05=重定位磁區計數
@@ -532,6 +533,14 @@ F5=累計程式 NAND 頁
 F6=總計主機磁區寫入
 F7=主機程式頁面計數
 F8=FTL 程式頁面計數
+; Updated 8.11.0
+F9=總重新整理 ISP 計數
+FA=總 Do RefCal 計數
+FB=總 NAND 讀取平面計數 (低 4 位元組)
+FC=總 NAND 讀取平面計數 (高 4 位元組)
+FD=總區塊重新對應成功計數
+FE=總背景掃描超過限制計數
+DF=總背景掃描
 
 [SmartMicronMU02] ;Updated 6.6.0
 ; RAIN = Redundant Array of Independent NAND
@@ -594,6 +603,14 @@ F2=總計 LBA 讀取
 F5=總計 TLC 寫入次數 
 F6=總計 SLC 寫入次數 
 F7=RAID 復原次數 
+; Updated 8.10.0
+F9=總重新整理 ISP 計數
+FA=總 Do RefCal 計數
+FB=總 NAND 讀取平面計數 (低 4 位元組)
+FC=總 NAND 讀取平面計數 (高 4 位元組)
+FD=總區塊重新對應成功計數
+FE=總背景掃描超過限制計數
+DF=總背景掃描
 [SmartOcz] ;Added 4.5.0
 01=原始讀取錯誤率
 03=碟片啟動時間
@@ -628,6 +645,7 @@ FB=NAND 讀取次數
 ;Updated 6.7.0
 F1=對 SSD 累計寫入
 F2=對 SSD 累計讀取
+
 [SmartPlextor] ;Added 5.1.0
 01=底層資料讀取錯誤率
 05=重定位磁區計數
@@ -643,21 +661,21 @@ F2=對 SSD 累計讀取
 ;Updated 5.4.0
 B1=顆粒平均擦寫次數
 B2=已使用的保留區塊數(最遭狀況)
-B5=程式失敗次數(總計)
-B6=抹除失敗次數(總計)
+B5=程式失敗次數
+B6=抹除失敗次數
 BB=無法校正的錯誤次數
 C7=Ultra 高速傳輸模式錯誤次數
 E8=可用的保留空間
 
 ;Added 6.2.0
 AA=增長的損壞區塊
-AB=程式失敗次數(總計)
-AC=抹除失敗次數(總計)
-AD=平均程式/抹除次數(總計)
+AB=程式失敗次數
+AC=抹除失敗次數
+AD=平均程式/抹除次數
 AE=未預期的電源中斷次數
 AF=程式失敗次數(最糟狀況)
 B0=抹除失敗次數(最糟狀況)
-B3=已使用的保留區塊數(總計)
+B3=已使用的保留區塊數
 B4=未使用的保留區塊數(總計)
 B7=SATA 介面降級
 B8=終端校驗資料出錯已校正

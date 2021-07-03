@@ -56,7 +56,7 @@ protected:
 	// MessageMap
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnDisplayChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSysColorChange(WPARAM wParam, LPARAM lParam);

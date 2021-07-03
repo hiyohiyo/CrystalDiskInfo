@@ -658,21 +658,21 @@ F2=Totaal Host Lezen
 ;Updated 5.4.0
 B1=Slijtage Egalisaties
 B2=Gebruikte Gereserveerde Block's (slechtste geval)
-B5=Program Fail Count (Total)
-B6=Wis Fouten (Totaal)
+B5=Program Fail Count
+B6=Wis Fouten
 BB=Niet Corrigeerbare Fouten
 C7=Ultra CRC Fouten
 E8=Beschikbare Gereserveerde Ruimte
 
 ;Added 6.2.0
 AA=Groeiende Slechte Block's
-AB=Programma Fouten (Totaal)
-AC=Wis Fouten (Totaal)
-AD=Gemiddeld Programma/Wissen (Totaal)
+AB=Programma Fouten
+AC=Wis Fouten
+AD=Gemiddeld Programma/Wissen
 AE=Onverwachte Power Onderbrekingen
 AF=Programma Fouten (Worst Case)
 B0=Wis Fouten (Worst Case)
-B3=Niet gebruikte Block's (Totaal)
+B3=Niet gebruikte Block's
 B4=Ongebruikte Gereserveerde Block's (Totaal)
 B7=SATA Interface Terug Geschakeld
 B8=End-to-End Data Fouten Gecorrigeerd

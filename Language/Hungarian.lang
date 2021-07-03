@@ -669,21 +669,21 @@ F2=Összes olvasás
 ;Updated (5.4.0)
 B1=Wear Leveling Count
 B2=Used Reserved Block Count (Worst Case)
-B5=Program Fail Count (Total)
-B6=Törlési hibák száma (Total)
+B5=Program Fail Count
+B6=Törlési hibák száma
 BB=Jelentett javíthatatlan hibák
 C7=Ultra CRC hibák száma
 E8=Available Reserved Space
 
 ;Added 6.2.0
 AA=Grown Bad Blocks
-AB=Programhibák száma (Total)
-AC=Törlési hibák száma (Total)
-AD=Törlések száma (Total)
+AB=Programhibák száma
+AC=Törlési hibák száma
+AD=Törlések száma
 AE=Váratlan feszültségkimaradás
 AF=Program Fail Count (Worst Case)
 B0=Törlési hibák száma (Worst Case)
-B3=Used Reserved Block Count (Total)
+B3=Used Reserved Block Count
 B4=UnUsed Reserved Block Count (Total)
 B7=SATA sebességesés
 B8=Paritáshibák száma

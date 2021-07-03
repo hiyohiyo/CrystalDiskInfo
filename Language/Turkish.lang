@@ -669,21 +669,21 @@ F2=LBA Okunan
 ;Updated 5.4.0
 B1=Aşınma Düzeylemesi Sayısı
 B2=Kullanılmış Ayrılmış Blok Sayısı (En Kötü Durum)
-B5=Programlama Başarısızlığı Sayısı (Toplam)
-B6=Silme Başarısızlığı Sayısı (Toplam)
+B5=Programlama Başarısızlığı Sayısı
+B6=Silme Başarısızlığı Sayısı
 BB=Düzeltilemeyen Hata Sayısı
 C7=CRC Hatası Sayısı
 E8=Kullanılabilecek Ayrılmış Alan
 
 ;Added 6.2.0
 AA=Büyüyen Bozuk Bloklar
-AB=Programlama Başarısızlığı Sayısı (Toplam)
-AC=Silme Başarısızlığı Sayısı (Toplam)
-AD=Ortalama Programlama/Silme Sayısı (Toplam)
+AB=Programlama Başarısızlığı Sayısı
+AC=Silme Başarısızlığı Sayısı
+AD=Ortalama Programlama/Silme Sayısı
 AE=Beklenmeyen Enerji Kesintisi Sayısı
 AF=Programlama Başarısızlığı Sayısı (En Kötü Durum)
 B0=Silme Başarısızlığı Sayısı (En Kötü Durum)
-B3=Kullanılmış Ayrılmış Blok Sayısı (Toplam)
+B3=Kullanılmış Ayrılmış Blok Sayısı
 B4=Kullanılmamış Ayrılmış Blok Sayısı (Toplam)
 B7=SATA Arabirimi Aşağı Kaydırma
 B8=Düzeltilen Uçtan Uca Veri Hatası Sayısı

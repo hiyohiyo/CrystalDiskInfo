@@ -65,7 +65,7 @@ CComboBoxFx::~CComboBoxFx()
 IMPLEMENT_DYNAMIC(CComboBoxFx, CComboBox)
 
 BEGIN_MESSAGE_MAP(CComboBoxFx, CComboBox)
-	//{{AFX_MSG_MAP(CComboBoxCx)
+	//{{AFX_MSG_MAP(CComboBoxFx)
 	ON_WM_CTLCOLOR()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEHOVER()

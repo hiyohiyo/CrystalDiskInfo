@@ -670,21 +670,21 @@ F2=Skupno branj LBA
 ;Updated 5.4.0
 B1=Število izravnave obrabe
 B2=Število uporabljenih rezerviranih blokov (najslabši primer)
-B5=Število neuspelih programov (Skupno)
-B6=Število neuspelih brisanj (Skupno)
+B5=Število neuspelih programov
+B6=Število neuspelih brisanj
 BB=Število nepopravljivih napak
 C7=Ultra Število napak CRC
 E8=Razpoložljivi rezerviran prostor
 
 ;Added 6.2.0
 AA=Odraščenih slabih blokov
-AB=Število neuspelih programov (Skupno)
-AC=Število neuspelih brisanj (Skupno)
-AD=Povprečno število programov/brisanj (Skupno)
+AB=Število neuspelih programov
+AC=Število neuspelih brisanj
+AD=Povprečno število programov/brisanj
 AE=Število nepričakovanih izgub napajanja
 AF=Število neuspelih programov (najslabši primer)
 B0=Število neuspelih brisanj (najslabši primer)
-B3=Število uporabljenih rezerviranih blokov (Skupno)
+B3=Število uporabljenih rezerviranih blokov
 B4=Število neuporabljenih rezerviranih blokov (Skupno)
 B7=Upadanje vmesnika SATA
 B8=Število podatkovnik napak 'od konca-do konca'

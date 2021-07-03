@@ -570,6 +570,7 @@ void CMainDialogFx::SaveImage()
 			HDC hImage1DC = image1->GetDC();
 			if (IsWin81orLater())
 			{
+				::PrintWindow(m_hWnd, hImage1DC, 1); // Improved Compatibility
 				::PrintWindow(m_hWnd, hImage1DC, 2); // PW_RENDERFULLCONTENT, Windows 8.1 or later
 			}
 			else

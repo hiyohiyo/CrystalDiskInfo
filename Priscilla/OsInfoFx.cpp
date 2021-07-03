@@ -606,11 +606,15 @@ void GetOsName(CString& OsFullName)
 			}
 		}
 		else if ((osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 4)
-			|| (osvi.dwMajorVersion == 10 && osvi.dwMinorVersion == 0))
+			|| (osvi.dwMajorVersion >= 10 && osvi.dwMinorVersion >= 0))
 		{
 			if (osvi.wProductType != VER_NT_WORKSTATION)
 			{
-				if(osvi.dwBuildNumber >= 17763)
+				if (osvi.dwBuildNumber >= 20344)
+				{
+					osName = L"Windows Server 2022";
+				}
+				else if(osvi.dwBuildNumber >= 17763)
 				{
 					osName = L"Windows Server 2019";
 				}
@@ -621,7 +625,14 @@ void GetOsName(CString& OsFullName)
 			}
 			else
 			{
-				osName = L"Windows 10";
+				if (osvi.dwBuildNumber >= 21996)
+				{
+					osName = L"Windows 11";
+				}
+				else
+				{
+					osName = L"Windows 10";
+				}
 			}
 		}
 		else

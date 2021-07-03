@@ -659,21 +659,21 @@ F2=Celkový počet prečítaných LBA
 ;Updated 5.4.0
 B1=Počet korekcií údaja o opotrebovaní
 B2=Počet využitých rezervných blokov (najhorší prípad)
-B5=Počet zlyhaní programu (celkovo)
-B6=Počet zlyhaní pri vymazávaní (celkovo)
+B5=Počet zlyhaní programu
+B6=Počet zlyhaní pri vymazávaní
 BB=Počet neopraviteľných chýb
 C7=Počet chýb CRC
 E8=Dostupné rezervované miesto
 
 ;Added 6.2.0
 AA=Vzniknuté zlé bloky
-AB=Počet zlyhaní programu (celkovo)
-AC=Počet zlyhaní pri vymazávaní (celkovo)
-AD=Priemerný počet pre program/vymazanie (celkovo)
+AB=Počet zlyhaní programu
+AC=Počet zlyhaní pri vymazávaní
+AD=Priemerný počet pre program/vymazanie
 AE=Počet neočakávaných strát napájania
 AF=Počet zlyhaní programu (najhorší prípad)
 B0=Počet zlyhaní pri vymazávaní (najhorší prípad)
-B3=Počet využitých rezervných blokov (celkovo)
+B3=Počet využitých rezervných blokov
 B4=Počet nevyužitých rezervných blokov (celkovo)
 B7=Spomalenie rozhrania SATA
 B8=Opravené dátové chyby typu End-to-End

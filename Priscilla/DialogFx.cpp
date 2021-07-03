@@ -64,7 +64,7 @@ CDialogFx::~CDialogFx()
 
 BEGIN_MESSAGE_MAP(CDialogFx, CDialog)
 	ON_WM_TIMER()
-	ON_WM_CTLCOLOR()
+	ON_WM_ERASEBKGND()
 	ON_MESSAGE(WM_DPICHANGED, &CDialogFx::OnDpiChanged)
 	ON_MESSAGE(WM_DISPLAYCHANGE, &CDialogFx::OnDisplayChange)
 	ON_MESSAGE(WM_SYSCOLORCHANGE, &CDialogFx::OnSysColorChange)
@@ -507,26 +507,14 @@ void CDialogFx::OnTimer(UINT_PTR nIDEvent)
 	}
 }
 
-HBRUSH CDialogFx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+BOOL CDialogFx::OnEraseBkgnd(CDC* pDC)
 {
-	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+	CRect rect;
+	GetClientRect(&rect);
+		
+	pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &m_BkDC, 0, 0, SRCCOPY);
 
-	switch (nCtlColor) {
-	case CTLCOLOR_DLG:
-		if (m_bHighContrast && !m_bBkImage)
-		{
-			return hbr;
-		}
-		else
-		{
-			return (HBRUSH)m_BrushDlg;
-		}
-		break;
-	default:
-		break;
-	}
-
-	return hbr;
+	return TRUE;
 }
 
 afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)

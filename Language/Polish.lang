@@ -639,42 +639,37 @@ FB=NAND Read Count
 F1=Total Host Writes
 F2=Total Host Reads
 
-[SmartPlextor] ;Added 5.1.0/Updated (5.4.0)
+[SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=Read Error Rate
 05=Reallocated Sectors Count
 09=Power-On Hours
 0C=Power Cycle Count
-C0=Unsafe Shutdown Count
-C2=Temperature
-C4=Reallocation Event Count
-C6=Uncorrectable Sector Count
-F1=Total Host Writes
-F2=Total Host Reads
-
-;Updated (5.4.0)
-B1=Wear Leveling Count
-B2=Used Reserved Block Count (Worst Case)
-B5=Program Fail Count (Total)
-B6=Erase Fail Count (Total)
-BB=Uncorrectable Error Count
-C7=CRC Error Count
-E8=Available Reserved Space
-
-;Added 6.2.0
 AA=Grown Bad Blocks
-AB=Program Fail Count (Total)
-AC=Erase Fail Count (Total)
-AD=Average Program/Erase Count (Total)
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Average Program/Erase Count
 AE=Unexpected Power Loss Count
 AF=Program Fail Count (Worst Case)
 B0=Erase Fail Count (Worst Case)
-B3=Used Reserved Block Count (Total)
+B1=Wear Leveling Count
+B2=Used Reserved Block Count (Worst Case)
+B3=Used Reserved Block Count
 B4=UnUsed Reserved Block Count (Total)
+B5=Program Fail Count
+B6=Erase Fail Count
 B7=SATA Interface Down Shift
 B8=End-to-End Data Errors Corrected
+BB=Uncorrectable Error Count
 BC=Command Time out
+C0=Unsafe Shutdown Count
 C3=ECC rate
+C4=Reallocation Event Count
+C6=Uncorrectable Sector Count
+C7=Ultra CRC Error Count
+E8=Available Reserved Space
 E9=NAND GB written
+F1=Total Host Writes
+F2=Total Host Reads
 
 [SmartSanDisk] ;Added (5.2.0)
 05=Retired Block Count

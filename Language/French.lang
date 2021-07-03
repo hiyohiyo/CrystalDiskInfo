@@ -669,21 +669,21 @@ F2=Total Lecture Hôte
 ;Updated 5.4.0
 B1=Nombre de mise à niveau
 B2=Nombre de Blocs utilisés (pire éventualité)
-B5=Taux d'Echec du Programme (Total)
-B6=Taux d'échec d'éffacement (Total)
+B5=Taux d'Echec du Programme
+B6=Taux d'échec d'éffacement
 BB=Taux d'Erreur incorrigible
 C7=Taux Erreur Ultra CRC
 E8=Espace Réservé Disponible
 
 ;Added 6.2.0
 AA=Mauvais blocs Utilisés
-AB=Nombre d'échecs du programme (Total)
-AC=Nombre d'Echecs en Effacement (Total)
-AD=Nombre Moyen de Programmes/Effacements (Total)
+AB=Nombre d'échecs du programme
+AC=Nombre d'Echecs en Effacement
+AD=Nombre Moyen de Programmes/Effacements
 AE=Nombre de Pertes de Puissance Inattendues
 AF=Nombre d'Echecs du Programme (Pire Cas)
 B0=Nombre d'Echecs en Effacement (Pire Cas)
-B3=Nombre de Blocs Réservés Utilisés(Total)
+B3=Nombre de Blocs Réservés Utilisés
 B4=Nombre de Blocs Réservés Inutilisés (Total)
 B7=Décalage Vers le Bas de l'Interface SATA
 B8=Erreurs de Données de Bout en Bout Corrigées
