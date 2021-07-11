@@ -86,7 +86,7 @@ BOOL CHealthDlg::OnInitDialog()
 {
 	CDialogFx::OnInitDialog();
 
-	SetWindowText(i18n(_T("WindowTitle"), _T("HEALTH_STATUS_SETTING"))
+	SetWindowTitle(i18n(_T("WindowTitle"), _T("HEALTH_STATUS_SETTING"))
 		+ _T(" - ") + i18n(_T("HealthStatus"), _T("THRESHOLD_OF_CAUTION"))
 		+ _T(" (") + i18n(_T("Dialog"), _T("LIST_RAW_VALUES")) + _T(")"));
 
@@ -149,43 +149,43 @@ void CHealthDlg::UpdateDialogSize()
 	m_CtrlScrollbarC6.MoveWindow((int)(16 * m_ZoomRatio), (int)(184 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
 	m_CtrlScrollbarFF.MoveWindow((int)(16 * m_ZoomRatio), (int)(240 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
 
-	m_CtrlLabel05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlLabelC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlLabelC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlLabelFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlLabel05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlLabelC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlLabelC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlLabelFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 
-	m_CtrlValue05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlValueC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlValueC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlValueFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValue05.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlValueC5.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlValueC6.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlValueFF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 
-	m_CtrlValue05X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlValueC5X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlValueC6X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlValueFFX.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlValue05X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlValueC5X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlValueC6X.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlValueFFX.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 
-	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlLabelC6.InitControl(8, 156, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlLabelFF.InitControl(8, 212, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlLabel05.InitControl(8,  44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, CStaticFx::Border::UNDERLINE);
+	m_CtrlLabelC5.InitControl(8, 100, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, CStaticFx::Border::UNDERLINE);
+	m_CtrlLabelC6.InitControl(8, 156, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, CStaticFx::Border::UNDERLINE);
+	m_CtrlLabelFF.InitControl(8, 212, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, CStaticFx::Border::UNDERLINE);
 
-	m_CtrlValue05.InitControl(300,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlValueC5.InitControl(300, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlValueC6.InitControl(300, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlValueFF.InitControl(300, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValue05.InitControl(300,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlValueC5.InitControl(300, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlValueC6.InitControl(300, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlValueFF.InitControl(300, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
 
-	m_CtrlValue05X.InitControl(344,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlValueC5X.InitControl(344, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
-	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
+	m_CtrlValue05X.InitControl(344,  72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlValueC5X.InitControl(344, 128, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlValueC6X.InitControl(344, 184, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlValueFFX.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
 
-	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
-	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 
-	m_CtrlApply.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
-	m_CtrlDefault.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode);
+	m_CtrlApply.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlDefault.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
 
-	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
+	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
 	m_CtrlSelectDisk.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
@@ -197,6 +197,9 @@ void CHealthDlg::UpdateDialogSize()
 	m_CtrlValueC5X.SetDrawFrame(TRUE);
 	m_CtrlValueC6X.SetDrawFrame(TRUE);
 	m_CtrlValueFFX.SetDrawFrame(TRUE);
+
+	m_CtrlApply.SetHandCursor();
+	m_CtrlDefault.SetHandCursor();
 
 	SetDarkModeControl(m_CtrlApply.GetSafeHwnd(), m_bDarkMode);
 	SetDarkModeControl(m_CtrlDefault.GetSafeHwnd(), m_bDarkMode);
@@ -256,9 +259,9 @@ void CHealthDlg::InitSelectDisk()
 		}
 		else
 		{
-			driveLetter.Format(_T("(%s)"), p->m_Ata.vars[i].DriveMap);
+			driveLetter.Format(_T("(%s)"), p->m_Ata.vars[i].DriveMap.GetString());
 		}
-		cstr.Format(_T("(%02d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model, temp, driveLetter);
+		cstr.Format(_T("(%02d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model.GetString(), temp, driveLetter);
 
 		m_CtrlSelectDisk.AddString(cstr);
 

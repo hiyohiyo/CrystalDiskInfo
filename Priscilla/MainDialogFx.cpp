@@ -134,11 +134,11 @@ void CMainDialogFx::SetWindowTitle(CString message)
 
 	if(! message.IsEmpty())
 	{
-		title.Format(L"%s - %s", PRODUCT_SHORT_NAME, message.GetString());
+		title.Format(L" %s - %s", PRODUCT_SHORT_NAME, message.GetString());
 	}
 	else
 	{
-		title.Format(L"%s %s %s", PRODUCT_NAME, PRODUCT_VERSION, PRODUCT_EDITION);
+		title.Format(L" %s %s %s", PRODUCT_NAME, PRODUCT_VERSION, PRODUCT_EDITION);
 	}
 
 	SetWindowText(title);
@@ -558,9 +558,11 @@ void CMainDialogFx::SaveImage()
 
 	CRect rc1;
 	CRect rc2;
+	CRect rc3;
 
 	CImage* image1 = new CImage();
 	CImage* image2 = new CImage();
+	CImage* image3 = new CImage();
 
 	if (bDwmEnabled)
 	{
@@ -570,8 +572,57 @@ void CMainDialogFx::SaveImage()
 			HDC hImage1DC = image1->GetDC();
 			if (IsWin81orLater())
 			{
-				::PrintWindow(m_hWnd, hImage1DC, 1); // Improved Compatibility
 				::PrintWindow(m_hWnd, hImage1DC, 2); // PW_RENDERFULLCONTENT, Windows 8.1 or later
+
+				GetClientRect(&rc3);
+				if (image3->Create(rc3.Width(), rc3.Height(), 32))
+				{
+					HDC hImage3DC = image3->GetDC();
+					::PrintWindow(m_hWnd, hImage3DC, 1); // PW_CLIENTONLY
+					int targetY = 0;
+					int offsetX = (rc1.Width() - rc3.Width()) / 2;
+					int offsetY = (rc1.Height() - rc3.Height()) / 2;
+
+					// Compare Screenshot
+					for (int y = offsetY; y < rc1.Height() - rc3.Height(); y++)
+					{
+						for (int x = 0; x < rc3.Width(); x++)
+						{
+							if (image1->GetPixel(offsetX + x, y) == image3->GetPixel(x, 0))
+							{
+								if (x == rc3.Width() / 2)
+								{
+									for (int yy = 0; yy < rc3.Height(); yy++)
+									{
+										if (image1->GetPixel(offsetX, y + yy) == image3->GetPixel(0, yy))
+										{
+											if (yy == rc3.Height() / 2)
+											{
+												targetY = y;
+												goto loopEnd;
+											}
+										}
+										else
+										{
+											break;
+										}
+									}
+								}
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+
+				loopEnd:
+					if (targetY > 0)
+					{
+						::BitBlt(hImage1DC, (rc1.Width() - rc3.Width()) / 2, targetY, rc3.Width(), rc3.Height(), hImage3DC, 0, 0, SRCCOPY);
+					}
+					image3->ReleaseDC();
+				}
 			}
 			else
 			{
@@ -605,20 +656,10 @@ void CMainDialogFx::SaveImage()
 	else
 	{
 		GetWindowRect(&rc1);
-		// CString cstr;
-		// cstr.Format(L"Width=%d, Height=%d", rc1.Width(), rc1.Height());
-		// AfxMessageBox(cstr);
 		if (image1->Create(rc1.Width(), rc1.Height(), 32))
 		{
 			HDC hImage1DC = image1->GetDC();
-			if (IsWin81orLater())
-			{
-				::PrintWindow(m_hWnd, hImage1DC, 2); // PW_RENDERFULLCONTENT, Windows 8.1 or later
-			}
-			else
-			{
-				::PrintWindow(m_hWnd, hImage1DC, 0);
-			}
+			::PrintWindow(m_hWnd, hImage1DC, 0);
 			SaveImageDlg(image1);
 			image1->ReleaseDC();
 		}
@@ -626,6 +667,7 @@ void CMainDialogFx::SaveImage()
 
 	SAFE_DELETE(image1);
 	SAFE_DELETE(image2);
+	SAFE_DELETE(image3);
 }
 
 void CMainDialogFx::SaveImageDlg(CImage* image)

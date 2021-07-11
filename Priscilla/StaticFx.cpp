@@ -20,7 +20,8 @@ CStaticFx::CStaticFx()
 	m_RenderMode = SystemDraw;
 	m_bHighContrast = FALSE;
 	m_bDarkMode = FALSE;
-	m_bDrawFrame = FALSE;
+	m_DrawFrame = FALSE;
+	m_bDrawFrameEx = FALSE;
 	m_FrameColor = RGB(128, 128, 128);
 
 	// Glass
@@ -71,7 +72,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
-	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
+	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -102,6 +103,7 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 
 	m_bHighContrast = bHighContrast;
 	m_bDarkMode = bDarkMode;
+	m_DrawFrame = drawFrame;
 
 	if (m_bHighContrast)
 	{
@@ -188,9 +190,9 @@ CSize CStaticFx::GetSize(void)
 	return m_CtrlSize;
 }
 
-void CStaticFx::SetDrawFrame(BOOL bDrawFrame)
+void CStaticFx::SetDrawFrame(BOOL drawFrame)
 {
-	if (bDrawFrame)
+	if (drawFrame && m_bHighContrast)
 	{
 		ModifyStyleEx(0, WS_EX_STATICEDGE, SWP_DRAWFRAME);
 	}
@@ -198,11 +200,12 @@ void CStaticFx::SetDrawFrame(BOOL bDrawFrame)
 	{
 		ModifyStyleEx(WS_EX_STATICEDGE, 0, SWP_DRAWFRAME);
 	}
+	m_DrawFrame = drawFrame;
 }
 
-void CStaticFx::SetDrawFrameEx(BOOL bDrawFrame, COLORREF frameColor)
+void CStaticFx::SetDrawFrameEx(BOOL bDrawFrameEx, COLORREF frameColor)
 {
-	m_bDrawFrame = bDrawFrame;
+	m_bDrawFrameEx = bDrawFrameEx;
 	m_FrameColor = frameColor;
 }
 
@@ -391,6 +394,47 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 	}
 
+
+	if (m_DrawFrame == Border::UNDERLINE)
+	{
+		HGDIOBJ oldPen;
+		POINT point;
+		CPen pen1;
+		COLORREF frameColor;
+		if (m_bDarkMode){frameColor = RGB(0x29, 0x2B, 0x2F);} // Windows 11 color
+		else{	 		 frameColor = RGB(0xCC, 0xCC, 0xCC);}
+		pen1.CreatePen(PS_SOLID, 1, frameColor);
+
+		oldPen = SelectObject(drawDC->m_hDC, pen1);
+		MoveToEx(drawDC->m_hDC, 0, m_CtrlSize.cy - 1, &point);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+		LineTo(drawDC->m_hDC, 0, m_CtrlSize.cy - 1);
+		SelectObject(drawDC->m_hDC, oldPen);
+
+		pen1.DeleteObject();
+	}
+	else if (m_DrawFrame)
+	{
+		HGDIOBJ oldPen;
+		POINT point;
+		CPen pen1; pen1.CreatePen(PS_SOLID, 1, RGB(0xF8, 0xF8, 0xF8));
+		CPen pen2; pen2.CreatePen(PS_SOLID, 1, RGB(0x98, 0x98, 0x98));
+
+		oldPen = SelectObject(drawDC->m_hDC, pen1);
+		MoveToEx(drawDC->m_hDC, 0, m_CtrlSize.cy - 1, &point);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, 0);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+		SelectObject(drawDC->m_hDC, pen2);
+		MoveToEx(drawDC->m_hDC, 0, m_CtrlSize.cy - 2, &point);
+		LineTo(drawDC->m_hDC, 0, 0);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, 0);
+		SelectObject(drawDC->m_hDC, oldPen);
+
+		pen1.DeleteObject();
+		pen2.DeleteObject();
+	}
+
 	pDrawBmpDC->SelectObject(&pOldDrawBitmap);
 	pDrawBmpDC->DeleteDC();
 	delete pDrawBmpDC;
@@ -401,7 +445,7 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 	pBkDC->DeleteDC();
 	delete pBkDC;
 
-	if (m_bDrawFrame)
+	if (m_bDrawFrameEx)
 	{
 		CBrush brush;
 		brush.CreateSolidBrush(m_FrameColor);

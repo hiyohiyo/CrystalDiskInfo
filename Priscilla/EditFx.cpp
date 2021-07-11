@@ -61,7 +61,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, 
-	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
+	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -93,6 +93,7 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 
 	m_bHighContrast = bHighContrast;
 	m_bDarkMode = bDarkMode;
+	m_bDrawFrame = bDrawFrame;
 
 	if (m_bHighContrast)
 	{
@@ -179,7 +180,7 @@ CSize CEditFx::GetSize(void)
 
 void CEditFx::SetDrawFrame(BOOL bDrawFrame)
 {
-	if (bDrawFrame)
+	if (bDrawFrame && m_bHighContrast)
 	{
 		ModifyStyleEx(0, WS_EX_STATICEDGE, SWP_DRAWFRAME);
 	}
@@ -187,12 +188,7 @@ void CEditFx::SetDrawFrame(BOOL bDrawFrame)
 	{
 		ModifyStyleEx(WS_EX_STATICEDGE, 0, SWP_DRAWFRAME);
 	}
-}
-
-void CEditFx::SetDrawFrameEx(BOOL bDrawFrame, COLORREF frameColor)
-{
 	m_bDrawFrame = bDrawFrame;
-	m_FrameColor = frameColor;
 }
 
 void CEditFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
@@ -391,16 +387,26 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 
 			if (m_bDrawFrame)
 			{
-				CBrush brush;
-				brush.CreateSolidBrush(m_FrameColor);
-				CRect rect;
-				rect.left = 0;
-				rect.top = 0;
-				rect.right = m_CtrlSize.cx;
-				rect.bottom = m_CtrlSize.cy;
-				::FrameRect(m_CtrlImage.GetDC(), &rect, (HBRUSH)brush.GetSafeHandle());
-				brush.DeleteObject();
+				HGDIOBJ oldPen;
+				POINT point;
+				CPen pen1; pen1.CreatePen(PS_SOLID, 1, RGB(0xF8, 0xF8, 0xF8));
+				CPen pen2; pen2.CreatePen(PS_SOLID, 1, RGB(0x98, 0x98, 0x98));
 
+				HDC hDC = m_CtrlImage.GetDC();
+
+				oldPen = SelectObject(hDC, pen1);
+				MoveToEx(hDC, 0, m_CtrlSize.cy - 1, &point);
+				LineTo(hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+				LineTo(hDC, m_CtrlSize.cx - 1, 0);
+				LineTo(hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+				SelectObject(hDC, pen2);
+				MoveToEx(hDC, 0, m_CtrlSize.cy - 2, &point);
+				LineTo(hDC, 0, 0);
+				LineTo(hDC, m_CtrlSize.cx - 1, 0);
+				SelectObject(hDC, oldPen);
+
+				pen1.DeleteObject();
+				pen2.DeleteObject();
 				m_CtrlImage.ReleaseDC();
 			}
 

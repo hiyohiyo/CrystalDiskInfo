@@ -42,8 +42,8 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		bkColor = GetBkColor(lpDrawItemStruct->hDC);
 		bkColorSelected = RGB(0, 255, 255);
 
-		if (bkColor == RGB(0, 0, 0)) { textColor = RGB(255, 255, 255); }
-		else if (bkColor == RGB(255, 255, 255)) { textColor = RGB(0, 0, 0); }
+		if (bkColor <= RGB(0x80, 0x80, 0x80)) { textColor = RGB(255, 255, 255); }
+		else { textColor = RGB(0, 0, 0); }
 	}
 	else if (m_bDarkMode)
 	{

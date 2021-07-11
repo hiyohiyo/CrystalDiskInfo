@@ -17,6 +17,13 @@ class CStaticFx : public CStatic
 {
 	DECLARE_DYNAMIC(CStaticFx);
 
+	enum Border
+	{
+		NO_BORDER = 0, // FALSE
+		SYSTEM_BORDER = 1, // TRUE
+		UNDERLINE = 2,
+	};
+
 public:
 	// Constructors
 	CStaticFx();
@@ -24,7 +31,7 @@ public:
 
 	// Control
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
-		LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode);
+		LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);
@@ -82,7 +89,8 @@ protected:
 	int m_RenderMode;
 	BOOL m_bHighContrast;
 	BOOL m_bDarkMode;
-	BOOL m_bDrawFrame;
+	DWORD m_DrawFrame;
+	BOOL m_bDrawFrameEx;
 	COLORREF m_FrameColor;
 
 	CString m_Label;

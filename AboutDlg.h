@@ -34,6 +34,8 @@ protected:
 	virtual void UpdateDialogSize();
 
 	DECLARE_MESSAGE_MAP()
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	afx_msg void OnSecretVoice();
 #endif

@@ -193,7 +193,7 @@ void CComboBoxFx::SetItemHeightEx(int nIndex, int height, double zoomRatio, doub
 {
 	if (nIndex == -1)
 	{
-		CRect rc = { 0 };
+		CRect rc;
 		GetWindowRect(&rc);
 		CComboBox::SetItemHeight(-1, (UINT)(height * zoomRatio - rc.Height() + GetItemHeight(-1)));
 	}
@@ -279,6 +279,7 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	static COLORREF bkColor;
 	static COLORREF bkColorSelected;
 
+	static int count = 0;
 	if (m_bHighContrast)
 	{
 		textColor = GetTextColor(lpDrawItemStruct->hDC);
@@ -286,8 +287,8 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		bkColor =  GetBkColor(lpDrawItemStruct->hDC);
 		bkColorSelected = RGB(0, 255, 255);
 
-		if (bkColor == RGB(0, 0, 0)) {	textColor = RGB(255, 255, 255); }
-		else if (bkColor == RGB(255, 255, 255)) { textColor = RGB(0, 0, 0); }
+		if (bkColor <= RGB(0x80, 0x80, 0x80)) {	textColor = RGB(255, 255, 255); }
+		else { textColor = RGB(0, 0, 0); }
 	}
 	else if (m_bDarkMode)
 	{

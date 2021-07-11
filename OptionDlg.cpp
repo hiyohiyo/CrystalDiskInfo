@@ -96,7 +96,7 @@ BOOL COptionDlg::OnInitDialog()
 {
 	CDHtmlDialogEx::OnInitDialog();
 
-	SetWindowText(i18n(_T("WindowTitle"), _T("CUSTOMIZE")));
+	SetWindowText(L"  " + i18n(_T("WindowTitle"), _T("CUSTOMIZE")));
 
 	EnableDpiAware();
 	InitDialogEx(SIZE_X, SIZE_Y, ((CDiskInfoApp*)AfxGetApp())->m_OptionDlgPath);

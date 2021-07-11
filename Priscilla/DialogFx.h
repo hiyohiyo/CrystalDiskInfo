@@ -38,6 +38,7 @@ protected:
 	virtual void UpdateDialogSize();
 	virtual void SetClientSize(int sizeX, int sizeY, double zoomRatio);
 	virtual void UpdateBackground(BOOL resize, BOOL darkMode);
+	virtual void SetWindowTitle(CString title);
 	virtual void OnOK();
 	virtual void OnCancel();
 

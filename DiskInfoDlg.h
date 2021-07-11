@@ -161,6 +161,7 @@ protected:
 	CButtonFx			m_CtrlTemperature;
 	CButtonFx			m_CtrlLife;
 	CButtonFx			m_CtrlVoice;
+	CButtonFx			m_CtrlVoiceHide;
 	CButtonFx			m_CtrlCopyright;
 
 	HDEVNOTIFY m_hDevNotify;

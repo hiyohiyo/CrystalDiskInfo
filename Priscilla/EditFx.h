@@ -24,11 +24,10 @@ public:
 
 	// Control
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, LPCWSTR imagePath,
-		 int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode);
+		 int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);
-	void SetDrawFrameEx(BOOL bDrawFrame, COLORREF frameColor = RGB(128, 128, 128));
 	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);
 	void Adjust();
 

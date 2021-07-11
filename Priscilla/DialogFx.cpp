@@ -282,6 +282,11 @@ void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 	}
 }
 
+void CDialogFx::SetWindowTitle(CString title)
+{
+	SetWindowText(L" " + title + L" ");
+}
+
 void CDialogFx::OnOK()
 {
 }
@@ -378,7 +383,7 @@ BOOL CDialogFx::IsHighContrast()
 {
 	HIGHCONTRAST hc;
 	hc.cbSize = sizeof(HIGHCONTRAST);
-	SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0);
+	SystemParametersInfoW(SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0);
 
 	return hc.dwFlags & HCF_HIGHCONTRASTON;
 }
@@ -509,12 +514,15 @@ void CDialogFx::OnTimer(UINT_PTR nIDEvent)
 
 BOOL CDialogFx::OnEraseBkgnd(CDC* pDC)
 {
+	if (m_bHighContrast)
+	{
+		return CDialog::OnEraseBkgnd(pDC);
+	}
+
 	CRect rect;
 	GetClientRect(&rect);
 		
-	pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &m_BkDC, 0, 0, SRCCOPY);
-
-	return TRUE;
+	return pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &m_BkDC, 0, 0, SRCCOPY);
 }
 
 afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)

@@ -68,7 +68,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
-	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
+	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -99,6 +99,7 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 
 	m_bHighContrast = bHighContrast;
 	m_bDarkMode = bDarkMode;
+	m_bDrawFrame = bDrawFrame;
 
 	if (m_bHighContrast)
 	{
@@ -203,7 +204,7 @@ CSize CButtonFx::GetSize(void)
 
 void CButtonFx::SetDrawFrame(BOOL bDrawFrame)
 {
-	if (bDrawFrame)
+	if (bDrawFrame && m_bHighContrast)
 	{
 		ModifyStyleEx(0, WS_EX_STATICEDGE, SWP_DRAWFRAME);
 	}
@@ -211,12 +212,7 @@ void CButtonFx::SetDrawFrame(BOOL bDrawFrame)
 	{
 		ModifyStyleEx(WS_EX_STATICEDGE, 0, SWP_DRAWFRAME);
 	}
-}
-
-void CButtonFx::SetDrawFrameEx(BOOL bDrawFrame, COLORREF frameColor)
-{
 	m_bDrawFrame = bDrawFrame;
-	m_FrameColor = frameColor;
 }
 
 void CButtonFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
@@ -364,6 +360,44 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 	}
 
+	if (m_bDrawFrame)
+	{
+		HGDIOBJ oldPen;
+		POINT point;
+
+		COLORREF color1;
+		COLORREF color2;
+
+		if (m_bHover)
+		{
+			color1 = RGB(0x20, 0x98, 0xF4);
+			color2 = RGB(0x20, 0x8B, 0xDE);
+		}
+		else
+		{
+		// Windows 11 color
+			color1 = RGB(0x00, 0x78, 0xD4);
+			color2 = RGB(0x00, 0x6B, 0xBE);
+		}
+
+		CPen pen1; pen1.CreatePen(PS_SOLID, 1, color1);
+		CPen pen2; pen2.CreatePen(PS_SOLID, 1, color2);
+
+		oldPen = SelectObject(drawDC->m_hDC, pen1);
+		MoveToEx(drawDC->m_hDC, 0, m_CtrlSize.cy - 1, &point);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, 0);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+		SelectObject(drawDC->m_hDC, pen2);
+		MoveToEx(drawDC->m_hDC, 0, m_CtrlSize.cy - 2, &point);
+		LineTo(drawDC->m_hDC, 0, 0);
+		LineTo(drawDC->m_hDC, m_CtrlSize.cx - 1, 0);
+		SelectObject(drawDC->m_hDC, oldPen);
+
+		pen1.DeleteObject();
+		pen2.DeleteObject();
+	}
+
 	pDrawBmpDC->SelectObject(&pOldDrawBitmap);
 	pDrawBmpDC->DeleteDC();
 	delete pDrawBmpDC;
@@ -373,14 +407,6 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 	pBkDC->SelectObject(&pOldBkBitmap);
 	pBkDC->DeleteDC();
 	delete pBkDC;
-
-	if (m_bDrawFrame)
-	{
-		CBrush brush;
-		brush.CreateSolidBrush(m_FrameColor);
-		drawDC->FrameRect(&(lpDrawItemStruct->rcItem), &brush);
-		brush.DeleteObject();
-	}
 }
 
 void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)

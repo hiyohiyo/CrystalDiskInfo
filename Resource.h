@@ -739,7 +739,6 @@
 #define IDC_LABEL_C5                    1100
 #define IDC_COPYRIGHT2                  1101
 
-
 #define IDC_VALUE_TEMPERATURE           1102
 #define IDC_SLIDER_VOLUME               1103
 #define IDC_VALUE_TEMPERATURE_F         1104
@@ -747,6 +746,8 @@
 
 #define IDC_STATIC_VOLUME               1106
 #define IDC_VALUE_VOLUME                1107
+
+#define IDC_BUTTON_VOICE_HIDE           1108
 
 #define IDC_FONT_FACE_COMBO             1201
 #define IDC_FONT_SCALE_COMBO			1202
