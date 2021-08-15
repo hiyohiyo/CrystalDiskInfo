@@ -322,6 +322,10 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			{
 				icon = ICON_BAD;
 			}
+			else if (m_Ata.vars[i].Attribute[j].Id == 0x02 && ((MAKEWORD(m_Ata.vars[i].Attribute[1].RawValue[0], m_Ata.vars[i].Attribute[1].RawValue[1]) - 273) >= m_Ata.vars[i].AlarmTemperature))
+			{
+				icon = ICON_BAD;
+			}
 			else if(m_Ata.vars[i].Attribute[j].Id == 0x03 && (m_Ata.vars[i].Attribute[2].RawValue[0] < m_Ata.vars[i].Attribute[3].RawValue[0]))
 			{
 				icon = ICON_BAD;
