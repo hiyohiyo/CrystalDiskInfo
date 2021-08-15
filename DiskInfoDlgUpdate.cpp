@@ -314,7 +314,37 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			continue;
 		}
 
-		if (m_Ata.vars[i].IsSmartCorrect && m_Ata.vars[i].IsThresholdCorrect && !m_Ata.vars[i].IsThresholdBug)
+		if (m_Ata.vars[i].IsNVMe)
+		{
+			UINT icon = ICON_GOOD + m_bGreenMode;
+
+			if (m_Ata.vars[i].Attribute[j].Id == 0x01 && m_Ata.vars[i].Attribute[j].RawValue[0])
+			{
+				icon = ICON_BAD;
+			}
+			else if(m_Ata.vars[i].Attribute[j].Id == 0x03 && (m_Ata.vars[i].Attribute[2].RawValue[0] < m_Ata.vars[i].Attribute[3].RawValue[0]))
+			{
+				icon = ICON_BAD;
+			}
+			else if (m_Ata.vars[i].Attribute[j].Id == 0x03 && (m_Ata.vars[i].Attribute[2].RawValue[0] == m_Ata.vars[i].Attribute[3].RawValue[0]))
+			{
+				icon = ICON_CAUTION;
+			}
+			else if (m_Ata.vars[i].Attribute[j].Id == 0x05 && ((100 - m_Ata.vars[i].Attribute[j].RawValue[0]) <= m_Ata.vars[i].ThresholdFF))
+			{
+				icon = ICON_CAUTION;
+			}
+
+			if (flag)
+			{
+				m_List.SetItem(k, 0, mask, _T(""), icon, 0, 0, 0, 0);
+			}
+			else
+			{
+				m_List.InsertItem(k, _T(""), icon);
+			}
+		}
+		else if (m_Ata.vars[i].IsSmartCorrect && m_Ata.vars[i].IsThresholdCorrect && !m_Ata.vars[i].IsThresholdBug)
 		{
 			if (!m_Ata.vars[i].IsSsd &&
 				(m_Ata.vars[i].Attribute[j].Id == 0x05 // Reallocated Sectors Count

@@ -10142,17 +10142,22 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			return DISK_STATUS_BAD;
 		}
 
-		if (vars[i].Life > 10)
+		if (vars[i].Attribute[2].RawValue[0] < vars[i].Attribute[3].RawValue[0])
 		{
-			return DISK_STATUS_GOOD;
+			return DISK_STATUS_BAD;
 		}
-		else if (vars[i].Life == 10)
+		else if (vars[i].Attribute[2].RawValue[0] == vars[i].Attribute[3].RawValue[0])
 		{
 			return DISK_STATUS_CAUTION;
 		}
-		else if (vars[i].Life < 10)
+
+		if (vars[i].Life > vars[i].ThresholdFF)
 		{
-			return DISK_STATUS_BAD;
+			return DISK_STATUS_GOOD;
+		}
+		else if (vars[i].Life <= vars[i].ThresholdFF)
+		{
+			return DISK_STATUS_CAUTION;
 		}
 	}
 
