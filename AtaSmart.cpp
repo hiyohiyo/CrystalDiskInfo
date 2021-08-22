@@ -4889,7 +4889,12 @@ BOOL CAtaSmart::IsSsdKioxia(ATA_SMART_INFO& asi)
 BOOL CAtaSmart::IsSsdApacer(ATA_SMART_INFO& asi)
 {
 	BOOL flagSmartType = FALSE;
-	if (asi.Model.Find(_T("Apacer")) >= 0)
+	if (asi.Model.Find(_T("Apacer")) == 0
+	||  asi.Model.Find(_T("ZADAK")) == 0
+	||  asi.FirmwareRev.Find(L"AP") == 0 
+	||  asi.FirmwareRev.Find(L"SF") == 0
+	||  asi.FirmwareRev.Find(L"PN") == 0
+	)
 	{
 		flagSmartType = TRUE;
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
