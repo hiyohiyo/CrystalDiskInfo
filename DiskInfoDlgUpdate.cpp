@@ -318,7 +318,14 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 		{
 			UINT icon = ICON_GOOD + m_bGreenMode;
 
-			if (m_Ata.vars[i].Attribute[j].Id == 0x01 && m_Ata.vars[i].Attribute[j].RawValue[0])
+			if (m_Ata.vars[i].Model.Compare(_T("Parallels")) == 0
+			||  m_Ata.vars[i].Model.Compare(_T("VMWare")) == 0
+			||  m_Ata.vars[i].Model.Compare(_T("QEMU")) == 0
+				)
+			{
+				icon = ICON_UNKNOWN;
+			}
+			else if (m_Ata.vars[i].Attribute[j].Id == 0x01 && m_Ata.vars[i].Attribute[j].RawValue[0])
 			{
 				icon = ICON_BAD;
 			}

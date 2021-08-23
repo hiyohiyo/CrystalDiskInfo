@@ -150,7 +150,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			)
 		{
 			vars[i].Temperature = vars[i].SmartReadData[0x2] * 256 + vars[i].SmartReadData[0x1] - 273;
-			if (vars[i].Temperature == -273)
+			if (vars[i].Temperature == -273 || vars[i].Temperature > 200)
 			{
 				vars[i].Temperature = -1000;
 			}
@@ -10150,9 +10150,12 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 	if (vars[i].DiskVendorId == SSD_VENDOR_NVME)
 	{
 		// https://github.com/hiyohiyo/CrystalDiskInfo/issues/99
-		if (vars[i].Model.Compare(_T("Parallels Virtual NVMe Disk")) == 0)
+		if (vars[i].Model.Compare(_T("Parallels")) == 0
+		||  vars[i].Model.Compare(_T("VMWare")) == 0
+		||  vars[i].Model.Compare(_T("QEMU")) == 0
+		)
 		{
-			return DISK_STATUS_GOOD;
+			return DISK_STATUS_UNKNOWN;
 		}
 
 		if (vars[i].Attribute[0].RawValue[0] > 0)
