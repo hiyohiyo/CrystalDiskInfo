@@ -10150,9 +10150,9 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 	if (vars[i].DiskVendorId == SSD_VENDOR_NVME)
 	{
 		// https://github.com/hiyohiyo/CrystalDiskInfo/issues/99
-		if (vars[i].Model.Compare(_T("Parallels")) == 0
-		||  vars[i].Model.Compare(_T("VMWare")) == 0
-		||  vars[i].Model.Compare(_T("QEMU")) == 0
+		if (vars[i].Model.Find(_T("Parallels")) == 0
+		||  vars[i].Model.Find(_T("VMware")) == 0
+		||  vars[i].Model.Find(_T("QEMU")) == 0
 		)
 		{
 			return DISK_STATUS_UNKNOWN;
