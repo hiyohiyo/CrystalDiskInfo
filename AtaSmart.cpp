@@ -3995,7 +3995,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			}
 			break;
 		case 0xF3:
-			if (asi.DiskVendorId == SSD_VENDOR_YMTC)
+			if (asi.DiskVendorId == SSD_VENDOR_YMTC || asi.DiskVendorId == SSD_VENDOR_MAXIOTEK)
 			{
 				if (asi.Attribute[j].RawValue[0] > 0)
 				{
@@ -9559,7 +9559,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 			case 0xC2: // Temperature
 				if(asi->Model.Find(_T("SAMSUNG SV")) == 0 && (asi->Attribute[j].RawValue[1] != 0 || asi->Attribute[j].RawValue[0] > 70))
 				{
-					asi->Temperature = MAKEWORD(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1]) / 10;			
+					asi->Temperature = MAKEWORD(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1]) / 10;
 				}
 				else if(asi->Attribute[j].RawValue[0] > 0 && asi->TemperatureMultiplier < 1.0)//(asi->DiskVendorId == SSD_VENDOR_SANDFORCE)
 				{
@@ -9575,8 +9575,8 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					asi->Temperature = -1000;
 				}
 				break;
-			case 0xF3: // Temperature for YMTC
-				if (asi->DiskVendorId == SSD_VENDOR_YMTC)
+			case 0xF3: // Temperature for YMTC & Maxiotek
+				if (asi->DiskVendorId == SSD_VENDOR_YMTC || asi->DiskVendorId == SSD_VENDOR_MAXIOTEK)
 				{
 					if (asi->Attribute[j].RawValue[0] > 0)
 					{
