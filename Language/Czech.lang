@@ -9,7 +9,7 @@ CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x0405
 
 [Url]
-WIKIPEDIA_SMART=http://cz.wikipedia.org/wiki/S.M.A.R.T.
+WIKIPEDIA_SMART=https://cz.wikipedia.org/wiki/S.M.A.R.T.
 
 [Menu]
 FILE=&Soubor

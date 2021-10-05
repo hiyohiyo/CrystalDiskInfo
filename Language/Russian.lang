@@ -10,7 +10,7 @@ CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x0419, 0x819
 
 [Url]
-WIKIPEDIA_SMART=http://en.wikipedia.org/wiki/Self-Monitoring%2C_Analysis_and_Reporting_Technology
+WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/Self-Monitoring%2C_Analysis_and_Reporting_Technology
 
 [Menu]
 FILE=&Файл

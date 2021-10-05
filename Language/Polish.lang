@@ -9,7 +9,7 @@ CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x0415
 
 [Url]
-WIKIPEDIA_SMART=http://pl.wikipedia.org/wiki/S.M.A.R.T._%28informatyka%29
+WIKIPEDIA_SMART=https://pl.wikipedia.org/wiki/S.M.A.R.T._%28informatyka%29
 
 [Menu]
 FILE=&Plik
