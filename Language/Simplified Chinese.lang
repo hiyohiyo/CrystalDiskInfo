@@ -1,16 +1,16 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=Huoxingdawang, haobinnan, Intervenor, CrcbAk, chriszxl (小良奇), Ericus, 赵然, zby
-VERSION=8.11.1
+TRANSLATOR=Huoxingdawang, haobinnan, Intervenor, CrcbAk, chriszxl (小良奇), Ericus, 赵然, zby, yfdyh000
+VERSION=8.12.7
 
 [Language]
 LANGUAGE=简体中文
 CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
-; Local ID : http://msdn.microsoft.com/en-us/library/ms912047(WinEmbedded.10).aspx
+; Locale ID: https://docs.microsoft.com/previous-versions/windows/embedded/ms912047(v=winembedded.10)
 LOCALE_ID=0x0004, 0x0804, 0x1004, 0x7804
 
 [Url]
-WIKIPEDIA_SMART=http://en.wikipedia.org/wiki/Self-Monitoring%2C_Analysis_and_Reporting_Technology
+WIKIPEDIA_SMART=https://zh.wikipedia.org/wiki/S.M.A.R.T.
 
 [Menu]
 FILE=文件(&F)
@@ -26,32 +26,32 @@ ADVANCED_DISK_SEARCH=高级硬盘搜索(&A)
 EVENT_LOG=日志(&V)
 AAM_APM_CONTROL=AAM/APM 控制(&M)
 AUTO_AAM_APM_ADAPTION=自适应 AAM/A&PM(&PM)
-RESIDENT=常驻(&I)
+RESIDENT=关闭窗口不退出(常驻)(&I)
 STARTUP=开机时自动启动(&S)
 OPEN_DISK_MANAGEMENT=打开“磁盘管理”(&D)
 OPEN_DEVICE_MANAGER=打开“设备管理器”(&M)
-ADVANCED_FEATURE=高级特征(&F)
+ADVANCED_FEATURE=高级设置(&F)
 REFRESH=刷新(&R)
 RESCAN=重新扫描(&C)
 DISABLE=禁用(&D)
 AUTO_REFRESH=自动刷新间隔(&A)
 AUTO_REFRESH_TARGET=自动刷新对象(&T)
-AUTO_REFRESH_TARGET_ALL_DISK=自动刷新 - 选择所有硬盘(&G)
-AUTO_REFRESH_UNTARGET_ALL_DISK=自动刷新 - 取消选择所有硬盘(&U)
-WAIT_TIME_AT_STARTUP=开机自动运行延迟时间(&W)
+AUTO_REFRESH_TARGET_ALL_DISK=自动刷新 - 选中所有硬盘(&G)
+AUTO_REFRESH_UNTARGET_ALL_DISK=自动刷新 - 取消所有硬盘(&U)
+WAIT_TIME_AT_STARTUP=开机自动运行后延迟(&W)
 GRAPH=图表(&G)
 THEME=主题(&T)
 DISK=硬盘(&D)
 HELP=帮助(&H)
 HELP_WEB=帮助 [网页](&H)
 HELP_ABOUT=关于 CrystalDiskInfo (&A)
-HELP_ABOUT_SMART=关于 S.M.A.R.T. (Wikipedia) [网页](&S)
+HELP_ABOUT_SMART=关于 S.M.A.R.T. (维基百科) [网页](&S)
 LANGUAGE=语言(&L)
 ITEM=项目(&I)
 TEMPERATURE_TYPE=温度类型(&E)
 CELSIUS=摄氏(°C)
 FAHRENHEIT=华氏(°F)
-HEALTH_STATUS_SETTING=健康状态阙值设置(&H)
+HEALTH_STATUS_SETTING=健康状态门限设置(&H)
 
 ;Graph
 OPTION=选项(&O)
@@ -67,7 +67,7 @@ ALL=全部(&A)
 
 ;2.7.0
 COPY_OPTION=复制选项(&O)
-RESIDENT_STYLE=常驻样式(&Y)
+RESIDENT_STYLE=常驻模式(&Y)
 MINIMIZE=最小化
 HIDE=隐藏
 
@@ -77,19 +77,19 @@ AUTO=自动(&A)
 ATTRIBUTE=属性(&A)
 
 ;3.5.0
-ASCII_VIEW=以 ASCII 显示
+ASCII_VIEW=解析 ASCII 内容
 AUTO_DTECTION=自动检测
 SECOND=秒
 MINUTE=分钟
 HOUR=小时
 
 :3.9.4
-WORKAROUND=解决方案(&O)
+WORKAROUND=特殊方案(&O)
 
 ;4.0.0
 ALERT_MAIL=警告邮件
 MAIL_SETTINGS=邮件设置
-SMART_IN_ENGLISH=用英文显示 S.M.A.R.T.
+SMART_IN_ENGLISH=用英文显示 S.M.A.R.T. 属性
 FONT_SETTING=字体设置
 
 ;5.0.0
@@ -127,15 +127,15 @@ AUTO_REFRESH_10_MIN=10 分钟
 AUTO_REFRESH_30_MIN=30 分钟
 AUTO_REFRESH_60_MIN=60 分钟
 AUTO_REFRESH_TARGET=自动刷新对象
-AUTO_REFRESH_TARGET_ALL_DISK=自动刷新 - 选择所有硬盘
-AUTO_REFRESH_UNTARGET_ALL_DISK=自动刷新 - 取消选择所有硬盘
+AUTO_REFRESH_TARGET_ALL_DISK=自动刷新 - 选中所有硬盘
+AUTO_REFRESH_UNTARGET_ALL_DISK=自动刷新 - 取消所有硬盘
 ALARM_SETTING_TEMPERATURE=警报设置 - 温度
 ALARM_SETTING_HEALTH_STATUS=警报设置 - 健康状态
 SHOW_MAIN_WINDOW=显示主窗口
 SHOW_TEMPERATURE_ICON=显示温度图标
 SHOW_ALL_TEMPERATURE_ICON=显示所有温度图标
 HIDE_ALL_TEMPERATURE_ICON=隐藏所有温度图标
-COLLECTIVE_SETTING=通用设置
+COLLECTIVE_SETTING=总体设置
 GRAPH=图表
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=仅显示温度图标
@@ -178,12 +178,12 @@ POWER_ON_DAYS_UNIT=天
 POWER_ON_YEARS_UNIT=年
 
 ;4.3
-TOTAL_HOST_WRITES=主机写入量总计
-TOTAL_HOST_READS=主机读取量总计
-TOTAL_NAND_WRITES=对 NAND 写入量总计
+TOTAL_HOST_WRITES=主机总计写入
+TOTAL_HOST_READS=主机总计读取
+TOTAL_NAND_WRITES=NAND 总计写入
 
 ;4.5
-WEAR_LEVELING_COUNT=闪存磨损平均计数
+WEAR_LEVELING_COUNT=平均磨损计数
 
 ;6.1
 CURRENT_MODE_SUPPORTED_MODE=当前的传输模式 | 支持的传输模式
@@ -199,7 +199,7 @@ ENABLED=启用
 DISABLED=停用
 
 [Message]
-DETECT_UNIT_POWER_ON_HOURS=正在检测“通电时间”项目的单位(需要大约 130 秒)
+DETECT_UNIT_POWER_ON_HOURS=正在检测“通电时间”属性的单位(需要约 130 秒)
 DETECT_DISK=正在检测硬盘
 PLEASE_ENABLE_WMI=请启用 WMI (Windows 管理规范)
 PLEASE_RESTART_THIS_APPLICATION=请重新启动程序以更换主题
@@ -208,23 +208,23 @@ DISK_NOT_FOUND=没有找到硬盘
 [Alarm]
 ALARM_TEMPERATURE=警报 - 温度
 ALARM_HEALTH_STATUS=警报 - 健康状态
-DEGRADATION=性能降级
+DEGRADATION=老化
 RECOVERY=恢复
 ;3.5.0
 INFO_HEALTH_STATUS=信息 - 健康状态
 
 [Graph]
 PLEASE_SELECT_ITEM=请选择项目
-ACTUAL_VALUE=真实值(原始值)
-NORMALIZED_VALUE=规范化值(当前值)
-ALL_ON=打开全部
-ALL_OFF=关闭全部
+ACTUAL_VALUE=原始数据值
+NORMALIZED_VALUE=规范化当前值
+ALL_ON=全开
+ALL_OFF=全关
 RESET=重置
 
 [Customize]
 LINE_COLOR=线颜色
 BACKGROUND_IMAGE=背景图片
-SUPPORTED_IMAGE_FORMAT=支持的图片格式
+SUPPORTED_IMAGE_FORMAT=支持的图像格式
 ALL_FILES=所有文件
 
 ;5.0.0
@@ -237,15 +237,15 @@ AAM_RECOMMEND=推荐值
 APM_LOW=<- 省电模式 (01h)
 APM_HIGH=性能模式 (FEh) ->
 ;3.5.0
-AUTOMATIC_ACOUSTIC_MANAGEMENT=自动噪音管理(AAM)
-ADVANCED_POWER_MANAGEMENT=高级电源管理(APM)
+AUTOMATIC_ACOUSTIC_MANAGEMENT=自动噪音管理 (AAM)
+ADVANCED_POWER_MANAGEMENT=高级电源管理 (APM)
 
 [WindowTitle]
 ABOUT=关于 CrystalDiskInfo
 GRAPH=图表
 CUSTOMIZE=自定义
 VERSION_INFORMATION=版本信息
-AAM_APM_CONTROL=AAM/APM 控制项
+AAM_APM_CONTROL=AAM/APM 控制
 HEALTH_STATUS_SETTING=健康状态设置
 
 ;5.0.0
@@ -256,28 +256,29 @@ SOUND_SETTINGS=声音设置
 FONT_SETTING=字体设置
 
 [HealthStatus]
-THRESHOLD_OF_CAUTION=警告临界值
+THRESHOLD_OF_CAUTION=告警门限
 APPLY=应用
 DEFAULT=默认
 
 [Smart]
 UNKNOWN=未知项目
-VENDOR_SPECIFIC=厂商特定项目
+VENDOR_SPECIFIC=由厂商定义
 01=读取错误率
 02=吞吐性能
-03=起转时间
-04=启动-停止次数
-05=重新分配扇区计数
+03=起转用时
+04=启停次数
+05=重新分配扇区数
 06=读取通道余量
 07=寻道错误率
 08=寻道时间性能
-09=通电时间
+09=通电时间(小时)
 0A=起转重试次数
 0B=重新校准重试次数
-0C=启动-关闭循环次数
+0C=通电次数
 0D=软读取错误率探针
+16=目前氦气水平
 B8=端到端错误
-BB=报告的无法修正错误
+BB=报告的无法校正错误
 BC=命令超时
 BD=磁头非正常高度写入
 BE=气流温度
@@ -285,30 +286,30 @@ BF=加速度感应错误率
 C0=断电磁头缩回计数
 C1=磁头加载/卸载循环计数
 C2=温度
-C3=硬件 ECC 已修复错误计数
-C4=重新分配扇区物理位置事件计数(与坏道有关)
-C5=当前等待中扇区数(状态存疑/不稳定-等待后续判断)
-C6=无法修正的扇区总数
-C7=UltraDMA CRC 错误计数(与接口/线材质量有关)
+C3=硬件 ECC 校正计数
+C4=扇区物理位置重分配事件计数(与坏道相关)
+C5=有待处置扇区数(状态存疑-需保持关注)
+C6=无法校正的扇区数
+C7=UltraDMA CRC 错误计数(与数据线或接口相关)
 C8=写入错误率
 C9=软读取错误率
 CA=数据地址标记错误
-CB=ECC 错误率
+CB=校验和错误
 CC=软 ECC 校正
-CD=热骚动率(极端高温导致的错误)
+CD=热骚动率(高温导致的出错)
 CE=磁头飞行高度
 CF=起转最大电流
 D0=起转蜂鸣/起转阶梯(欠压启动时马达加速的流程数)
 D1=离线寻道性能
-D3=写入时的振动(振荡)
-D4=写入时的震动(冲击)
+D3=写入期间振动(振荡)
+D4=写入期间震动(冲击)
 DC=盘片位移
 DD=加速度感应错误率
-DE=负载小时数(磁头架移动中的时间)
+DE=加载所用小时数(磁头电机运转)
 DF=加载/卸载重试计数
 E0=加载摩擦
 E1=加载/卸载循环计数
-E2=加载的时间(磁头架在工作位置的时间)
+E2=磁头待命时间总计(磁头从停泊区伸出)
 E3=扭矩放大计数
 E4=断电磁头缩回计数
 E6=巨磁阻磁头振幅
@@ -318,8 +319,8 @@ FA=读取错误重试率
 FE=自由落体保护
 
 ;Updated 5.4.0
-F1=主机写入量总计
-F2=主机读取量总计
+F1=主机总计写入
+F2=主机总计读取
 
 [SmartSsd]
 01=读取错误率
@@ -330,30 +331,30 @@ F2=主机读取量总计
 06=读取通道余量
 07=寻址错误率
 08=寻址时间性能
-09=通电时间
+09=通电时间(小时)
 0A=启动重试次数
 0B=重新校准重试次数
-0C=启动-关闭循环次数
+0C=通电次数
 0D=软读取错误率探针
 C0=不安全关机计数
 C2=温度
-C4=重新分配扇区物理位置事件计数
-C5=当前等待中扇区数(状态存疑/不稳定-等待后续判断)
-C6=无法修正的扇区总数
+C4=扇区位置重分配事件计数
+C5=有待处置扇区数
+C6=无法校正的扇区数
 ; CrystalDiskInfo assign
 FF=剩余寿命
 
 ;Updated 5.4.0
-F1=主机写入量总计
-F2=主机读取量总计
+F1=主机总计写入
+F2=主机总计读取
 
 [SmartMtron]
 BB=擦除次数总计
 
 [SmartIndlinx]
 01=读取错误率
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 B8=出厂坏块计数
 C2=温度
 C3=编程失败块数
@@ -363,20 +364,20 @@ C6=读取扇区数总计
 C7=写入扇区数总计
 C8=读取命令数总计
 C9=写入命令数总计
-CA=来自闪存的错误数总计
-CB=读取含可修正错误的扇区数总计
+CA=闪存比特位出错数总计
+CB=读取扇区遇可校正比特位错误总计
 CC=坏块满标志
-CD=最大 P/E 次数规格
+CD=最大 PE(编程/擦除) 次数规格
 CE=最小擦除次数
 CF=最大擦除次数
 D0=平均擦除次数
 D1=剩余使用寿命
 
 [SmartJMicron60x]
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 C2=温度
-E5=中止系统 ID，闪存 ID
+E5=Half 系统 ID，闪存 ID
 E8=固件版本信息
 E9=ECC 失败记录
 EA=平均擦除次数，最大擦除次数
@@ -384,47 +385,38 @@ EB=良好块计数，系统块计数
 
 [SmartIntel]
 03=启动时间
-04=启动-停止次数
+04=启动停止次数
 05=重新分配扇区计数
 09=通电时间
-0C=启动-关闭循环次数
-C0=不安全关闭计数
-E1=主机写入
-E8=可用保留空间
-E9=介质磨损指示器
-B8=端到端错误检测计数
-
-;Updated 4.1.0
+0C=通电次数
 AA=可用保留空间
 AB=编程失败计数
 AC=擦除失败计数
-BB=无法校正错误计数
-
-;Updated 4.3.0
 AE=意外断电
-E2=单次工作介质磨损
-E3=单次工作主机读写中“读操作”占的比率
-E4=单次工作计时器
+AF=掉电保护失败
+B7=SATA 接口性能降级计数
+B8=端到端错误检测计数
+BB=无法校正错误计数
+BE=温度
+C0=不安全关闭计数
+C2=温度
+C5=有待处置扇区数
+C7=CRC 错误计数
+E1=主机写入
+E2=周期内负载介质磨损
+E3=周期内负载主机读/写比率 (读操作占比)
+E4=周期内负载计时器
+E8=可用保留空间
+E9=介质磨损指示器
+EA=温控状态
 F1=LBA(逻辑区块地址)写入量总计
 F2=LBA(逻辑区块地址)读取量总计
+F3=NAND 写入量总计
 F9=NAND 写入量总计
 
-;Updated 5.5.0
-B7=SATA 性能降级计数
-BE=温度
-C7=CRC 错误计数
-
-;Updated 5.6.1
-AF=掉电保护失败
-C2=温度
-C5=当前等待中扇区数(状态存疑/不稳定-等待后续判断)
-
-;Added 6.6.0
-EA=温控状态
-
-[SmartSamsung]
+[SmartSamsung] ;Updated 6.6
 05=重新分配扇区计数
-09=通电时间
+09=通电时间(小时)
 0C=通电次数
 AF=编程失败计数(芯片)
 B0=擦除失败计数(芯片)
@@ -458,11 +450,11 @@ E9=标准化后的介质磨损
 
 [SmartSandForce] ;Updated 3.7.0
 01=原始读取错误率
-05=已隔离老化块计数
-09=通电时间
-0C=启动-关闭循环次数
+05=老化块数
+09=通电时间(小时)
+0C=通电次数
 0D=软读取错误率
-64=已擦除 GB 数
+64=已擦除 GiB
 AA=保留块计数
 AB=编程失败计数
 AC=擦除失败计数
@@ -474,17 +466,17 @@ B8=已报告的 I/O 检错码错误
 BB=已报告的无法校正错误
 C2=温度
 C3=自适应 ECC 无法校正错误计数
-C4=重新分配扇区物理位置事件计数
+C4=重新分配事件计数
 C6=无法校正扇区计数
 C7=SATA 除错(CRC)错误计数
 C9=无法校正的软读取错误率
 CC=软 ECC 校正率
-E6=寿命曲线状态
+E6=驱动器寿命保护状态
 E7=SSD 剩余寿命
 E8=可用保留空间
 EB=超级电容健康状态
-F1=全周期主机写入量总计
-F2=全周期主机读取量总计
+F1=全周期主机总计写入
+F2=全周期主机总计读取
 
 [SmartJMicron61x] ;Added 3.9.0
 01=读取错误率
@@ -493,23 +485,23 @@ F2=全周期主机读取量总计
 05=重新分配扇区计数
 07=寻址错误率
 08=寻址时间性能
-09=通电时间
+09=通电时间(小时)
 0A=启动重试次数
-0C=启动-关闭循环次数
+0C=通电次数
 A8=SATA 物理层错误计数
 AF=坏簇表计数(ECC 失败计数)
 C0=意外断电次数
 C2=温度
-C5=当前等待中扇区数(状态存疑/不稳定-等待后续判断)
+C5=有待处置扇区数
 AA=坏块计数
 AD=擦除计数
 
-[SmartMicron] ;Added 4.0.0/ Updated 6.1.0
+[SmartMicron] ;Added 4.0.0/ Updated 6.6.0
 ; RAIN = Redundant Array of Independent NAND (独立 NAND 冗余阵列)
 01=底层读取错误率
 05=重新分配扇区计数
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 0D=软错误率
 0E=设备容量(NAND)
 0F=用户可用容量
@@ -529,9 +521,9 @@ BB=报告的无法校正错误
 BC=命令超时计数
 BD=出厂坏块计数
 C2=温度
-C3=ECC 校正累计 
-C4=重新分配扇区物理位置事件计数
-C5=当前等待中扇区数(状态存疑/不稳定-等待后续判断)
+C3=累计 ECC 比特位校正次数
+C4=重新分配事件计数
+C5=有待处置扇区数
 C6=智能离线扫描无法校正的错误计数
 C7=Ultra DMA CRC 错误率
 CA=已使用寿命百分比
@@ -544,13 +536,22 @@ F4=ECC 临界事件数累计(错误率达到/超过ECC校正能力极限的次�
 F5=累计编程 NAND 页数
 F6=主机扇区写入总计
 F7=主机编程页数
-F8=FTL(闪存转换层)编程页数
+F8=后台编程页数
+
+; Updated 8.11.0
+F9=总计刷新 ISP 计数
+FA=总计执行 RefCal 计数
+FB=总计 NAND Read Plane 计数 (Low 4Bytes)
+FC=总计 NAND Read Plane 计数 (High 4Bytes)
+FD=总计块重映射计数
+FE=总计后台扫描超过限制计数
+DF=总计后台扫描
 
 [SmartMicronMU02] ;Updated 6.6.0
 ; RAIN = Redundant Array of Independent NAND
 01=底层读取错误率
 05=重新分配扇区计数
-09=通电时间
+09=通电时间(小时)
 0C=通电次数
 0D=软错误率
 0E=设备容量(NAND)
@@ -570,9 +571,9 @@ BB=报告的无法校正错误
 BC=命令超时计数
 BD=出厂坏块计数
 C2=温度
-C3=ECC 校正累计
-C4=重新分配扇区物理位置事件计数
-C5=当前等待中扇区数(状态存疑/不稳定-等待后续判断)
+C3=累计 ECC 比特位校正计数
+C4=重新分配事件计数
+C5=有待处置扇区数
 C6=智能离线扫描无法校正的错误计数
 C7=Ultra DMA CRC 错误率
 CA=已使用寿命百分比
@@ -587,17 +588,17 @@ F7=主机编程页数
 F8=FTL(闪存转换层)编程页数
 
 ; Updated 6.6.0
-A0=无法修正的扇区总数
-A1=有效空闲块计数
-A3=初始无效块计数
-94=SLC 擦除总计
-95=SLC 擦除最大值
-96=SLC 擦除最小值
-97=SLC 擦除平均数
-A4=TLC 擦除总计
-A5=TLC 擦除最大值
-A6=TLC 擦除最小值
-A7=TLC 擦除平均数
+A0=无法校正扇区计数
+A1=有效备用块数
+A3=初始无效块数
+94=SLC 总计擦除
+95=SLC 最大擦除
+96=SLC 最小擦除
+97=SLC 平均擦除
+A4=NAND 总计擦除
+A5=NAND 最大擦除
+A6=NAND 最小擦除
+A7=NAND 平均擦除
 A9=剩余寿命百分比
 B5=编程失败计数
 B6=擦除失败计数
@@ -605,9 +606,18 @@ C0=断电磁头缩回计数
 E8=可用保留空间
 F1=LBA(逻辑区块地址)写入量总计
 F2=LBA(逻辑区块地址)读取量总计
-F5=TLC 写入总计
+F5=NAND 写入总计
 F6=SLC 写入总计
 F7=RAID 恢复计数
+
+; Updated 8.10.0
+F9=总计刷新 ISP 计数
+FA=总计执行 RefCal 计数
+FB=总计 NAND Read Plane 计数 (Low 4Bytes)
+FC=总计 NAND Read Plane 计数 (High 4Bytes)
+FD=总计块重映射计数
+FE=总计后台扫描超过限制计数
+DF=总计后台扫描
 
 [SmartOcz] ;Added 4.5.0
 01=原始读取错误率
@@ -615,28 +625,28 @@ F7=RAID 恢复计数
 04=启动-停止次数
 05=重新分配扇区计数
 09=通电小时
-0C=启动-关闭循环次数
+0C=通电次数
 C2=温度
 E8=写入扇区数总计
 E9=剩余寿命
 
 ; Added 6.6.0
-64=块擦除总计
-A7=固态硬盘保护模式
+64=总计擦除块
+A7=固态硬盘保护模式 (只读不写)
 A8=SATA 物理层错误计数
 A9=坏块计数
 AD=擦除计数
 B8=出厂坏块计数
 C0=意外断电计数
 CA=校正成功比特位总计
-CD=编程/擦除(P/E)计数估算最大值
-CE=擦除计数最小值
-CF=擦除计数最大值
+CD=额定最大 PE(编程/擦除) 次数
+CE=最小擦除次数
+CF=最大擦除次数
 D3=SATA 无法校正错误数
 D4=重试期间 NAND 页读取数
 D5=简单重读尝试数
 D6=自适应重读尝试数
-DD=内部数据通路无法校正的错误数
+DD=内部数据路径无法校正的错误数
 DE=RAID 恢复计数
 E6=掉电保护
 FB=NAND 读取计数
@@ -645,113 +655,111 @@ FB=NAND 读取计数
 F1=主机总写入
 F2=主机总读取
 
-[SmartPlextor] ;Added 5.1.0
+[SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=读取错误率
 05=重新分配扇区计数
-09=通电时间
-0C=启动-关闭循环次数
-C0=不安全关机次数
-C2=温度
-C4=重新分配扇区物理位置事件计数
-C6=不可校正扇区计数
-F1=主机写入量总计
-F2=主机读取量总计
-
-;Updated 5.4.0
-B1=闪存磨损平均计数
-B2=已使用保留区块计数(最坏情况)
-B5=编程失败计数
-B6=擦除失败计数
-BB=无法校正错误计数
-C7=Ultra DMA CRC 错误计数
-E8=可用保留空间
-
-;Added 6.2.0
+09=通电时间(小时)
+0C=通电次数
 AA=新增坏块
 AB=编程失败计数
 AC=擦除失败计数
-AD=平均编程/擦除(P/E)计数
+AD=平均 PE(编程/擦除) 次数
 AE=意外断电计数
 AF=编程失败计数(最坏情况)
 B0=擦除失败计数(最坏情况)
+B1=闪存磨损平均计数
+B2=已使用保留区块计数(最坏情况)
 B3=已使用保留块计数
 B4=未使用保留块计数(总计)
-B7=SATA 界面性能降级
+B5=编程失败计数
+B6=擦除失败计数
+B7=SATA 接口性能降级
 B8=已校正的端到端数据错误
+BB=无法校正错误计数
 BC=命令超时
-C3=纠错码(ECC) 等级
-E9=写入 NAND 的 GB 数
+C0=不安全关机次数
+C3=ECC 率
+C4=重新分配事件计数
+C6=无法校正扇区计数
+C7=Ultra CRC 错误计数
+E8=可用保留空间
+E9=NAND 已写入 (GB)
+F1=主机总计写入
+F2=主机总计读取
 
 [SmartSanDisk] ;Added 5.2.0
-05=已隔离的老化块计数
-09=通电时间
-0C=启动-关闭循环次数
+05=已重分配的块数
+09=通电时间(小时)
+0C=通电次数
 AA=保留块计数
 AB=编程失败计数
 AC=擦除失败计数
+AD=平均写入/擦除计数
 AE=意外断电计数
 BB=报告的无法校正错误
 C2=温度
+E6=总计写入/擦除计数的百分比
 E8=剩余寿命
-F1=主机写入量总计
-F2=主机读取量总计
+EA=总计写入/擦除计数的百分比 (BC块)
+F1=主机总计写入
+F2=主机总计读取
 
 [SmartOczVector] ;Added 5.3.0
 05=运行中坏块累计
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 AB=可用冗余块计数
 AE=启动-关闭循环次数(意外)
-BB=NAND 无法校正读取总计
+BB=NAND 读取无法校正总计
 C2=温度
 C3=编程失败总计
 C4=擦除失败总计
 C5=读取失败总计(无法校正)
 C6=主控读取
 C7=主控写入
-D0=擦除计数平均值
+D0=平均擦除次数
 D2=SATA CRC 错误计数
 E9=剩余寿命
-F9=NAND 编程次数总计
+F9=NAND 编程总计次数
 
 ;Updated 5.5.0
-F1=主机写入量总计
-F2=主机读取量总计
+F1=主机总计写入
+F2=主机总计读取
 
 ;Updated 6.6.0
-64=块擦除总计
+64=擦除块数总计
 B8=出厂坏块总计
-CA=校正成功比特位总计
-CD=编程/擦除(P/E)计数估算最大值
-CE=擦除计数最小值
-CF=擦除计数最大值
-D4=需要重试的 NAND 页读取数
-D5=简单重读尝试总计
-D6=自适应重读尝试总计
-DD=内部数据通路保护无法校正的错误数
+CA=读取成功校正比特位总计
+CD=额定最大 PE(编程/擦除) 次数
+CE=最小擦除次数
+CF=最大擦除次数
+D4=NAND 页读取需要重试总计
+D5=简单重读总计尝试
+D6=自适应重读总计尝试
+DD=内部数据路径保护无法校正的错误数
 DE=RAID 恢复计数
-E0=在保修内标记
+E0=保修状态
 E1=DAS 极性
 E2=部分电源失效(Pfail)
-E6=写入控制激活标记
-F9=NAND 编程页面数总计
+E6=写入控制激活标志
+F9=NAND 编程总计 (页)
 FB=NAND 读取总计
 
 [SmartCorsair] ;Added 6.2.0
 01=原始读取错误率
-05=已隔离的老化块计数
-09=通电时间
-0C=启动-关闭循环次数
+05=老化块数
+09=通电时间(小时)
+0C=通电次数
 AA=保留块计数
 AC=擦除失败计数
 AE=意外断电计数
 B5=编程失败计数
 BB=报告的无法校正错误
 C2=温度
-C4=重新分配扇区物理位置事件计数
+C4=重新分配事件计数
 E7=固态硬盘剩余寿命
-F1=全周期写入量(GB 数)
-F2=全周期读取量(GB 数)
+F1=全周期写入量 (GB)
+F2=全周期读取量 (GB)
 
 [SmartToshiba] ;Added 6.2.0
 01=读取错误率
@@ -764,69 +772,81 @@ F2=全周期读取量(GB 数)
 09=通电小时数
 0A=启动重试次数
 0B=重新校准重试次数
-0C=启动-关闭循环次数
-A7=固态硬盘保护模式
+0C=通电次数
+A7=固态硬盘保护模式 (只读不写)
 A8=SATA 物理层错误计数
 A9=坏块数总计
 AD=擦除计数
 C0=意外断电计数
 C2=温度
-C4=重新分配扇区物理位置事件计数(与坏块有关)
-C5=当前等待中扇区数(状态存疑/不稳定-等待后续判断)
-C6=无法修正的扇区总数
-F1=主机写入量总计
-F2=主机读取量总计
+C4=重新分配事件计数
+C5=有待处置扇区数
+C6=无法校正扇区计数
+F1=主机总计写入
+F2=主机总计读取
 
 [SmartSanDiskGb] ;Added 6.2.0
+01=读取错误率
 05=重新分配块计数
-09=通电时间
-0C=启动-关闭循环次数
-A6=最小写入/擦除循环数
+09=通电时间(小时)
+0C=通电次数
+A5=SLC 块擦除计数
+A6=最小 PE(编程/擦除) 次数
 A7=裸片中最大坏块数
 A8=最大擦除循环
 A9=坏块总计
+AA=增长坏块
 AB=编程失败计数
 AC=擦除失败计数
-AD=平均擦除循环
+AD=平均 PE(编程/擦除) 次数
 AE=意外断电计数
+B8=端到端错误检测/校正计数
 BB=报告的无法校正错误
+BC=命令超时计数
 C2=温度
+C7=CRC 错误计数
 D4=SATA 物理层错误计数
-E6=编程/擦除(P/E)总计 (百分比)
+E6=介质磨损指示器
+E7=SSD 剩余寿命
 E8=剩余备用块
-E9=对 NAND 写入量总计(GB 数)
-F1=写入量总计(GB 数)
-F2=读取量总计(GB 数)
+E9=NAND 已写入 (GB)
+EA=NAND 已写入 (SLC) (GB)
+EE=介质磨损指示器 (剩余循环次数)
+F1=总计写入 (GB)
+F2=总计读取 (GB)
+F4=温度门限状态
+F9=NAND 已写入 (GB)
 
 [SmartKingston] ;Added 6.6.0
+;https://media.kingston.com/support/downloads/MKP_521_Phison_SMART_attribute.pdf
 01=读取错误率
 02=吞吐性能
 03=起转时间
 05=重新分配扇区计数
 07=寻道错误率
 08=寻道时间性能
-09=通电时间
+09=通电时间(小时)
 0A=起转重试次数
-0C=启动-关闭循环次数
+0C=通电次数
 A8=SATA 物理层错误计数
 AA=坏块计数
 AD=擦除计数
 AF=坏簇表计数
-BB=无法修正的错误数
+BB=无法校正错误计数
 C0=不安全关机计数
 C2=温度
 C4=出厂后坏块
-C5=当前等待中扇区数(状态存疑/不稳定-等待后续判断)
+C5=有待处置扇区数
 C7=CRC 错误计数
 DA=CRC 错误计数
 E7=固态硬盘剩余寿命
-E9=闪存写入总计
+E9=总计写入闪存
 F0=写头
-F1=主机写入量总计
-F2=主机读取量总计
-F4=擦除计数平均值
-F5=擦除计数最大值
-F6=擦除计数总计
+F1=主机总计写入
+F2=主机总计读取
+F4=平均擦除次数
+F5=最大擦除次数
+F6=总计擦除次数
 
 [SmartNVMe] ;Added 6.7.0
 01=严重警告标志
@@ -840,7 +860,7 @@ F6=擦除计数总计
 09=主机写命令计数
 0A=控制器忙状态时间
 0B=启动-关闭循环次数
-0C=通电时间
+0C=通电时间(小时)
 0D=不安全关机计数
 0E=媒体与数据完整性错误计数
 0F=错误日志项数
@@ -848,15 +868,15 @@ F6=擦除计数总计
 [SmartRealtek] ;Added by Realtek
 01=原始数据错误率
 05=重新分配扇区计数
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 A1=GDN
 A2=擦除计数总计
-A3=编程/擦除(P/E)计数最大值
-A4=擦除计数平均值
+A3=最大 PE(编程/擦除) 次数
+A4=平均擦除次数
 A5=初始坏块数
-A6=总坏块数
-A7=固态硬盘保护模式
+A6=总计坏块数
+A7=固态硬盘保护模式 (只读不写)
 A8=SATA 物理层错误计数
 A9=健康状态
 AB=编程失败计数
@@ -866,24 +886,27 @@ AF=ECC 校正失败计数
 B5=未对齐访问计数
 BB=报告的无法校正错误
 C2=外壳温度
-C3=错误校正累计
-C4=重新分配扇区事件计数
+C3=ECC 成功校正累计
+C4=重新分配事件计数
 C7=Ultra DMA CRC 错误计数
-CE=擦除计数最小值
-CF=擦除计数最大值
+CE=最小擦除次数
+CF=最大擦除次数
 E7=剩余寿命
 E8=可用保留空间
 F1=写入寿命
 F2=读取寿命
-F9=对 TLC NAND 写入量总计(GB 数)
-FA=对 SLC NAND 写入量总计(GB 数)
+F9=NAND 总计写入 (GB)
+FA=NAND 总计写入 (GB) (SLC)
 
-[SmartSKhynix] ; Add 2019-05-14 (ex. SC308)
+[SmartSKhynix] ; Updated 8.8.0
 01=读取错误率
 05=重新分配扇区计数
-09=通电时间
-0C=启动-关闭循环次数
-64=擦除计数总计
+09=通电时间(小时)
+0C=通电次数
+64=总计擦除次数
+A8=最小擦除次数
+A9=最大擦除次数
+AA=保留块数
 AB=编程失败计数
 AC=擦除失败计数
 AE=意外断电计数
@@ -895,38 +918,33 @@ B3=已用保留块计数 (SSD 总计)
 B4=未用保留块计数 (SSD 总计)
 B5=编程失败计数 (SSD 总计)
 B6=擦除失败计数 (SSD 总计)
-B7=SATA 性能降级计数
+B7=SATA 接口性能降级计数
+B8=端到端错误检测计数
 BB=已报告的无法校正错误
 BC=命令超时计数
 BF=Op Shock 事件计数
 C2=温度
-C3=ECC 校正率
+C3=ECC 率
+C4=重新分配事件计数
+C6=无法校正扇区计数
 C7=CRC 错误计数
 C9=无法校正的软读取错误率
 CC=软 ECC 校正
+D4=物理层错误计数
 E7=SSD 剩余寿命
+E9=SSD 剩余寿命
 EA=NAND 写入量
-F1=LBA(逻辑区块地址)写入量总计
-F2=LBA(逻辑区块地址)读取量总计
+F1=LBA(逻辑区块地址)写入总计
+F2=LBA(逻辑区块地址)读取总计
 FA=NAND 读取重试总计
 
-; Updated 8.8.0
-A8=擦除计数最小值
-A9=擦除计数最大值
-AA=保留块计数
-B8=端到端错误检测计数
-C4=重新分配扇区物理位置事件计数(与坏块有关)
-C6=无法修正的扇区总数
-D4=物理层错误计数
-E9=SSD 剩余寿命
-
-[SmartKioxia]
-09=通电时间
-0C=启动-关闭循环次数
-A7=固态硬盘保护模式
+[SmartKioxia] ; Added 8.8.0
+09=通电时间(小时)
+0C=通电次数
+A7=固态硬盘保护模式 (只读不写)
 A8=SATA 物理层错误计数
 A9=坏块计数
-AD=擦除计数(用户数据)
+AD=擦除计数 (用户数据)
 C0=意外断电计数
 C2=温度
 F1=主机写入
@@ -934,39 +952,42 @@ F1=主机写入
 [SmartWdc]
 01=读取错误率
 05=重新分配块计数
-09=通电时间
-0C=启动-关闭循环次数
-A5=块擦除计数(SLC)
-A6=最小写入/擦除循环数
+09=通电时间(小时)
+0C=通电次数
+A5=块擦除计数 (SLC)
+A6=最小 PE(编程/擦除) 次数
 A7=裸片中最大坏块数
-A8=最大擦除循环
+A8=最大 PE(编程/擦除) 次数
 A9=坏块总计
 AA=新增坏块
 AB=编程失败计数
 AC=擦除失败计数
-AD=平均擦除循环
+AD=平均 PE(编程/擦除) 次数
 AE=意外断电计数
 B8=端到端错误检测/校正计数
-BB=报告的无法修正错误
+BB=报告的无法校正的错误
 BC=命令超时计数
 C2=温度
 C7=CRC 错误计数
 D4=SATA 物理层错误计数
 E6=介质磨损指示器
 E8=剩余备用块
-E9=写入 NAND 的 GB 数
-EA=写入 NAND 的 GB 数(SLC)
-EE=介质磨损指示器(剩余周期)
-F1=写入量总计(GB 数)
-F2=读取量总计(GB 数)
+E9=NAND 总计写入
+EA=NAND 总计写入 (SLC)
+EE=介质磨损指示器 (剩余循环)
+F1=总计写入 (GB)
+F2=总计读取 (GB)
+F3=NAND 总计写入
 F4=温控状态
-F9=写入 NAND 的 GB 数
+F9=NAND 已写入 (GB)
 
 [SmartKingstonSuv]
+; https://media.kingston.com/support/downloads/UV400-SMART-attribute.pdf
+; https://media.kingston.com/support/downloads/UV500_SMART_attribute.pdf
 01=读取错误率
 05=重新分配扇区计数
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 AA=已使用的保留块计数
 AB=编程失败计数
 AC=擦除失败计数
@@ -974,33 +995,34 @@ AE=意外断电计数
 AF=编程失败计数最差值
 B0=擦除失败计数最差值
 B1=闪存磨损平均计数
-B2=未使用的保留块计数最差值
-B4=未使用的保留块计数(SSD Total)
-BB=报告的无法修正错误
+B2=最差 Die 上已使用的保留块计数
+B4=未使用的保留块计数 (整个SSD)
+BB=报告的无法校正的错误
 C2=温度
-C3=实时ECC错误计数
-C4=重新分配扇区物理位置事件计数(与坏块有关)
-C5=等待中扇区数
+C3=动态 ECC 错误计数
+C4=重新分配事件计数
+C5=有待处置扇区数
 C7=UDMA CRC 错误计数
-C9=无法修正读取错误率
+C9=无法校正的读取错误率
 CC=软 ECC 校正率
 E7=SSD 剩余寿命
-EA=全周期Nand写入
+EA=全周期 NAND 写入
 F1=全周期主机写入
 F2=全周期主机读取
 FA=NAND 读取重试总计
 
 [SmartKingstonKC600]
+;https://media.kingston.com/support/downloads/KC600-SMART-attribute.pdf
 01=读取错误率
-05=重新分配的NAND块计数
-09=通电时间
-0C=启动-关闭循环次数
+05=重新分配的 NAND 块数
+09=通电时间(小时)
+0C=通电次数
 94=预留
 95=预留
 96=预留
 97=SLC 平均擦除次数
-9F=DRAM 1 bit 错误计数
-A0=报告的 UECC(无法修正)错误
+9F=DRAM 1 比特位错误计数
+A0=报告的 UECC(无法校正)错误
 A1=可用保留空间
 A4=预留
 A5=预留
@@ -1014,7 +1036,7 @@ B6=擦除失败计数
 C0=意外断电计数
 C2=温度
 C3=硬件 ECC 已修复错误计数
-C4=重新分配扇区物理位置事件计数(与坏块有关)
+C4=重新分配事件计数
 C7=UDMA CRC 错误计数
 E7=额定寿命剩余百分比
 E8=未使用的保留块计数
@@ -1023,10 +1045,11 @@ F2=LBA(逻辑区块地址)读取量总计
 F5=介质总写入
 
 [SmartKingstonDC500]
-01=主机UNC错误计数
-09=通电时间
-0C=通电/断电循环
-A7=固态硬盘保护模式
+;https://media.kingston.com/support/pdf/MKP_521-7_SMART-DC500_attribute_hr.pdf
+01=主机无法校正错误计数
+09=通电时间(小时)
+0C=通电次数
+A7=保护模式 (只读不写)
 A8=SATA 物理层错误计数
 A9=坏块率
 AA=坏块信息
@@ -1034,26 +1057,27 @@ AC=擦除失败计数
 AD=擦除计数
 B5=编程失败计数
 B6=擦除失败计数
-BB=主机UNC错误计数
+BB=主机无法校正错误计数
 C0=意外断电计数
 C2=温度
 C4=出厂后坏块总计
 C7=CRC 错误计数
 CF=温控计数
 DA=CRC 错误计数
-E7=SSD剩余寿命
+E7=SSD 剩余寿命
 E8=读取失败计数
-E9=NAND写入
+E9=NAND 写入
 F1=主机写入
 F2=主机读取
-F4=Avg擦除计数
-F5=擦除计数最大值
-F6=擦除计数总计
+F4=平均擦除次数
+F5=最大擦除次数
+F6=最小擦除次数
 
 [SmartKingstonSA400]
-01=无法修正的错误数
-09=通电时间
-0C=启动-关闭循环次数
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/20
+01=无法校正错误数
+09=通电时间(小时)
+0C=通电次数
 94=厂商特定项目
 95=厂商特定项目
 A7=厂商特定项目
@@ -1064,24 +1088,24 @@ AC=厂商特定项目
 AD=擦除计数
 B5=厂商特定项目
 B6=厂商特定项目
-BB=无法修正ECC错误
+BB=无法校正的 ECC 错误
 C2=温度
 C4=重新分配事件
 C7=SATA CRC 错误计数
 DA=CRC 错误计数
-E7=SSD磨损指示器
-E9=全周期Nand写入
+E7=SSD 磨损指示器
+E9=全周期 NAND 写入
 F1=全周期主机写入
 F2=全周期主机读取
 F4=平均擦除次数
-F5=擦除计数最大值
-F6=擦除计数总计
+F5=最大擦除次数
+F6=总计擦除次数
 
 [SmartSsstc]
 01=原始读取错误率
 05=重新分配块计数
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 AA=可用保留空间
 AB=编程失败计数
 AC=擦除失败计数
@@ -1093,7 +1117,7 @@ B1=闪存磨损平均计数
 B2=已使用的保留块计数(最坏情况)
 B3=已使用的保留块计数(总计)
 B4=未使用的保留块计数(总计)
-B7=SATA界面性能降级
+B7=SATA 接口性能降级
 B8=端到端数据错误计数
 BB=无法校正错误计数
 BC=命令超时
@@ -1104,16 +1128,17 @@ C7=SATA CRC 错误计数
 E5=掉电保护失败
 E7=剩余寿命百分比
 E8=可用保留空间 
-E9=写入 NAND 的 GB 数
+E9=NAND 已写入 (GB)
 F1=主机总写入
 F2=主机总读取
-F3=写入 NAND 的 GB 数
+F3=NAND 已写入 (GB)
 
 [SmartIntelDc]
-01=Raw读取错误计数
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/18
+01=原始数据读取错误计数
 05=重新分配闪存块计数
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 0E=设备容量
 0F=用户容量
 10=可用备用块
@@ -1127,24 +1152,24 @@ B5=块程序失败总计
 B8=端到端错误检测计数
 BB=无法校正错误计数
 C2=温度
-C5=等待中扇区计数
+C5=有待处置扇区数
 C6=离线无法校正错误计数
 C7=CRC 错误计数
 CA=已使用寿命百分比
-E2=定时工作负载 - 介质磨损
-E3=定时工作负载 - 主机读/写比率
-E4=定时工作负载定时器
-EA=主机字节读取总计
-EB=主机字节/扇区写入总计
-F1=Nand字节/扇区写入总计
+E2=周期内负载 - 介质磨损
+E3=周期内负载 - 主机读/写比率
+E4=周期内负载计时器
+EA=温控状态
+EB=主机总计写入字节/扇区
+F1=NAND 总计写入字节/扇区
 
 [SmartApacer]
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 A3=最大擦除次数
 A4=平均擦除次数
 A6=出厂后坏块数总计
-A7=固态硬盘保护模式
+A7=固态硬盘保护模式 (只读不写)
 A8=SATA 物理层错误计数
 AB=编程失败计数
 AC=擦除失败计数
@@ -1157,14 +1182,14 @@ F1=扇区写入总计
 [SmartSiliconMotion]
 01=读取错误率
 05=重新分配扇区计数
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 94=SLC 擦除计数总计
 95=SLC 最大擦除计数
 96=SLC 最小擦除计数
 97=SLC 平均擦除次数
-9F=DRAM 1 bit 错误计数
-A0=读/写时无法修正的扇区计数
+9F=DRAM 1 比特位错误计数
+A0=读/写时无法校正的扇区计数
 A1=有效备用块数
 A2=缓存数据块数
 A3=初始无效块数
@@ -1183,10 +1208,10 @@ B6=擦除失败计数
 BB=无法校正错误计数
 C0=断电重启计数
 C2=温度
-C3=硬件 ECC 已修复错误计数
-C4=重新分配扇区物理位置事件计数(与坏块有关)
-C5=当前等待中扇区数
-C6=离线无法修正的错误计数
+C3=硬件 ECC 已校正错误计数
+C4=重新分配事件计数
+C5=有待处置扇区数
+C6=离线无法校正的错误计数
 C7=Ultra DMA CRC 错误计数
 E8=可用保留空间
 F1=LBA 写入总计
@@ -1200,9 +1225,10 @@ F5=闪存写入扇区计数
 05=重新分配扇区计数
 07=寻址错误率
 08=寻址时间性能
-09=通电时间
+09=通电时间(小时)
 0A=起转重试次数
-0C=启动-关闭循环次数
+0C=通电次数
+A7=固态硬盘保护模式 (只读不写)
 A8=SATA 物理层错误计数
 AA=坏块计数
 AD=擦除计数
@@ -1210,17 +1236,17 @@ AF=坏簇表计数
 B4=备用块计数
 C0=意外断电计数
 C2=温度
-C5=当前等待中扇区数
+C5=有待处置扇区数
 E7=使用寿命
-E9=写入扇区计数(NAND)
+E9=写入扇区计数 (NAND)
 F0=写磁头
 F1=主机总写入
 F2=主机总读取
 
 [SmartPhison]
 01=读取错误率
-09=通电时间
-0C=启动-关闭循环次数
+09=通电时间(小时)
+0C=通电次数
 A8=SATA 物理层错误计数
 AA=坏块计数
 AD=擦除计数
@@ -1231,10 +1257,11 @@ E7=SSD 剩余寿命
 F1=主机写入
 
 [SmartSeagate]
+; https://crystalmark.info/board/c-board.cgi?cmd=one;no=1818;id=#1818
 01=读取错误率
-05=老化的扇区计数
-09=通电时间
-0C=启动-关闭循环次数
+05=老化扇区数
+09=通电时间(小时)
+0C=通电次数
 10=可用备用块
 11=剩余备用块
 A8=SATA 物理层错误计数
@@ -1253,7 +1280,7 @@ CC=软 ECC 校正率
 DA=CRC 错误计数
 E7=SSD 剩余寿命
 E8=读取失败块数
-E9=NAND GiB 写入
+E9=NAND 写入 (GiB)
 EA=全周期闪存写入
 EB=NAND 扇区写入
 F1=全周期主机写入
@@ -1261,25 +1288,26 @@ F2=全周期主机读取
 FA=全周期 NAND 读取老化
 
 [SmartSeagateIronWolf]
+; https://www.seagate.com/cn/zh/support/internal-hard-drives/nas-drives/ironwolf-ssd/#specs
 01=原始读取错误率
 05=重新分配扇区计数
-09=通电时间
-0C=启动-关闭循环次数
-64=闪存已擦除GB数
-66=全周期PS4入口计数
-67=全周期PS3出口计数
-AA=Grown 坏块计数
+09=通电时间(小时)
+0C=通电次数
+64=闪存已擦除 (GiB)
+66=全周期 PS4 电源状态进入次数
+67=全周期 PS3 电源状态进入次数
+AA=增长坏块计数
 AB=编程失败计数
 AC=擦除失败计数
 AD=平均编程/擦除(P/E)计数
 AE=意外断电计数
 B1=磨损范围增量
 B7=SATA/PCIe 接口性能降级计数
-BB=无法修正 ECC 计数
+BB=无法校正 ECC 错误计数
 C2=温度
-C3=提高ECC修正计数
-C6=无法修正读取错误计数
-C7=SATA R-错误(CRC)错误计数
+C3=希捷 RAISE 阵列成功恢复 ECC 错误计数
+C6=无法校正的读取错误计数
+C7=SATA 读取 CRC 错误计数
 E6=寿命保护状态
 E7=SSD 剩余寿命
 E8=可用保留空间
@@ -1290,7 +1318,7 @@ F3=空闲空间
 
 [SmartMarvell] ; Added 8.8.3
 05=新增坏块数
-09=通电时间
+09=通电时间(小时)
 0C=启动-关闭循环次数
 A4=擦除计数总计
 A5=最大擦除计数
@@ -1303,10 +1331,10 @@ F1=主机总写入
 F2=主机总读取
 
 [SmartMaxiotek] ; Added 8.8.6
-05=重新分配扇区计数
-09=通电时间
-0C=通电循环计数
-A7=固态硬盘保护模式
+05=重新分配扇区数
+09=通电时间(小时)
+0C=通电次数
+A7=固态硬盘保护模式 (只读不写)
 A8=物理层错误计数
 A9=坏块计数
 AB=编程失败计数
@@ -1315,7 +1343,7 @@ AD=擦除计数
 AF=坏簇表计数
 B1=读取重试计数
 B4=剩余备用块计数
-BB=报告的UNC错误
+BB=报告的无法校正错误计数
 C0=意外断电计数
 C2=温度
 C4=重新分配事件计数
@@ -1323,21 +1351,21 @@ C7=UDMA CRC 错误计数
 CE=最小擦除计数
 CF=最大擦除计数
 D0=平均擦除次数
-D1=SLC块最小擦除计数
-D2=SLC块最大擦除计数
-D3=SLC 平均擦除次数
+D1=SLC 块最小擦除计数
+D2=SLC 块最大擦除计数
+D3=SLC 块平均擦除计数
 E7=SSD 剩余寿命
-E9=扇区到Nand写入计数
-EA=扇区从Nand读取计数
+E9=扇区到 NAND 写入计数
+EA=扇区从 NAND 读取计数
 F1=写入扇区计数
 F2=读取扇区计数
 F5=Bit 错误计数
 
 [SmartSeagateBarraCuda] ; Added 8.9.0
-01=UECC Error Count
-05=老化的扇区计数
-09=通电时间
-0C=启动-关闭循环次数
+01=UECC 无法校正错误计数
+05=老化扇区数
+09=通电时间(小时)
+0C=通电次数
 10=可用备用块
 11=剩余备用块
 A8=SATA 物理层错误计数
@@ -1356,17 +1384,17 @@ CC=软 ECC 校正率
 DA=CRC 错误计数
 E7=SSD 剩余寿命
 E8=读取失败块数
-E9=NAND GiB 写入
+E9=NAND 已写入 (GiB)
 EA=全周期闪存写入
 EB=NAND 扇区写入
 F1=全周期主机写入
 F2=全周期主机读取
-FA=全周期 NAND 读取老化
+FA=全周期 NAND 读取重试
 
 [SmartYmtc] ; Added 8.10.0
-05=新的坏块计数
-09=通电时间
-0C=启动-关闭循环次数
+05=新增坏块计数
+09=通电时间(小时)
+0C=通电次数
 AA=最大坏块计数
 A8=SATA 物理层错误计数
 A9=坏块计数
@@ -1379,17 +1407,17 @@ B8=端到端错误检测/校正计数
 BB=无法校正错误计数
 BE=温度
 C0=意外断电计数
-C4=重新分配的事件计数
+C4=重新分配事件计数
 C7=CRC 错误计数
 CE=最小擦除计数
 CF=最大擦除计数
 D0=平均擦除次数
-D1=SLC 最小擦除计数
-D2=SLC 最大擦除计数
-D3=SLC 平均擦除计数
+D1=SLC 块最小擦除计数
+D2=SLC 块最大擦除计数
+D3=SLC 块平均擦除计数
 E7=SSD 剩余寿命
-E9=向NAND写入扇区计数
-EA=从NAND读取扇区计数
+E9=扇区到 NAND 写入计数
+EA=扇区从 NAND 读取计数
 F1=主机总写入
 F2=主机总读取
 F3=NAND 温度
