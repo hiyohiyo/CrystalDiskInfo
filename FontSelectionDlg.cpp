@@ -88,6 +88,7 @@ BOOL CFontSelectionDlg::OnInitDialog()
 	m_LabelFontScale.SetWindowTextW(i18n(L"Dialog", L"FONT_SCALE"));
 	m_LabelFontRender.SetWindowTextW(L"ClearType");
 	m_CtrlDefault.SetWindowTextW(i18n(L"Dialog", L"DEFAULT"));
+	m_CtrlOk.SetWindowTextW(i18n(L"Dialog", L"OK"));
 
 	UpdateDialogSize();
 

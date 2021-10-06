@@ -76,6 +76,7 @@ BOOL CSoundSettingDlg::OnInitDialog()
 	m_CtrlValueVolume.SetWindowTextW(cstr);
 
 	m_CtrlDefault.SetWindowTextW(i18n(_T("HealthStatus"), _T("DEFAULT")));
+	m_CtrlOk.SetWindowTextW(i18n(_T("Dialog"), _T("OK")));
 
 	UpdateDialogSize();
 
