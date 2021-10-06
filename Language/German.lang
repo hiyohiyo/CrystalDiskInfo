@@ -11,7 +11,7 @@ CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x0407, 0x0807, 0x0C07, 0x1007, 0x1407
 
 [Url]
-WIKIPEDIA_SMART=http://de.wikipedia.org/wiki/S.M.A.R.T.
+WIKIPEDIA_SMART=https://de.wikipedia.org/wiki/S.M.A.R.T.
 
 [Menu]
 FILE=&Datei
