@@ -193,6 +193,7 @@ MAJOR_VERSION_MINOR_VERSION=Major Version | Minor Version
 FONT_FACE=Font Face
 FONT_SCALE=Font Scale (%)
 DEFAULT=Default
+OK=OK
 
 ;8.9.0
 ENABLED=Enabled

@@ -193,10 +193,11 @@ MAJOR_VERSION_MINOR_VERSION=主要版本 | 次要版本
 FONT_FACE=字体
 FONT_SCALE=显示比例 (%)
 DEFAULT=默认
+OK=确定
 
 ;8.9.0
 ENABLED=启用
-DISABLED=停用
+DISABLED=禁用
 
 [Message]
 DETECT_UNIT_POWER_ON_HOURS=正在检测“通电时间”属性的单位(需要约 130 秒)
