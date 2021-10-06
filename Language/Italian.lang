@@ -1212,7 +1212,7 @@ C0=Unexpected Power Loss Count
 C2=Temperature
 C5=Current Pending Sector Count
 E7=Drive Life
-E9＝Write Sector Count (NAND)
+E9=Write Sector Count (NAND)
 F0=Write Head
 F1=Total LBA Written
 F2=Total LBA Read
@@ -1267,7 +1267,7 @@ FA=Lifetime NAND Read Retries
 0C=Power Cycle Count
 64=Flash Gigabytes Erased
 66=Lifetime PS4 Entry Count
-67=Lifetime PS3 Exit Count
+67=Lifetime PS3 Entry Count
 AA=Grown Bad Block Count
 AB=Program Fail Count
 AC=Erase Fail Count

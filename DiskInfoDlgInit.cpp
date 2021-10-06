@@ -38,7 +38,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 
 	InitThemeLang();
 	InitMenu();
-	ChangeTheme(m_CurrentTheme);
+//	ChangeTheme(m_CurrentTheme);
 	UpdateThemeInfo();
 //	ChangeLang(m_CurrentLang);
 

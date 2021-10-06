@@ -108,8 +108,8 @@ HIDE_NO_SMART_DISK=&S.M.A.R.T. Olmayan Diskleri Gizle
 GREEN_MODE=&Yeşil Kip
 
 ;8.6.0
-SAVE_TEXT=Kaydet （&metin）
-SAVE_IMAGE=Kaydet （&görsel）
+SAVE_TEXT=Kaydet (&metin)
+SAVE_IMAGE=Kaydet (&görsel)
 
 [TrayMenu]
 EXIT=Çıkış
@@ -942,7 +942,7 @@ F1=LBA Yazılan
 F2=LBA Okunan
 FA=NAND Okuma Yinelemesi Toplamı
 
-[SmartKioxia] ; Added ８．８．０
+[SmartKioxia] ; Added 8.8.0
 09=Çalışılan Saat Sayısı
 0C=Enerji Durumu Değişikliği Sayısı
 A7=SSD Koruma Kipi
@@ -953,7 +953,7 @@ C0=Beklenmeyen Enerji Kesintisi Sayısı
 C2=Sıcaklık
 F1=Yazılan
 
-[SmartWdc] ; Added ８．８．０
+[SmartWdc] ; Added 8.8.0
 01=Okuma Hatası Oranı
 05=Yeniden Atanmış Blok Sayısı
 09=Enerjilendirilmiş Saat Sayısı
@@ -1241,7 +1241,7 @@ C0=Beklenmeyen Enerji Kesintisi Sayısı
 C2=Sıcaklık
 C5=Geçerli Bekleyen Kesim Sayısı
 E7=Sürücü Ömrü
-E9＝Yazılan Kesim Sayısı (NAND)
+E9=Yazılan Kesim Sayısı (NAND)
 F0=Yazma Kafası
 F1=LBA Yazılan
 F2=LBA Okunan

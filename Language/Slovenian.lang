@@ -108,8 +108,8 @@ HIDE_NO_SMART_DISK=&Skrij ne S.M.A.R.T. diske
 GREEN_MODE=&Zeleni način
 
 ;8.6.0
-SAVE_TEXT=Shrani （&besedilo）
-SAVE_IMAGE=&Shrani （slika）
+SAVE_TEXT=Shrani (&besedilo)
+SAVE_IMAGE=&Shrani (slika)
 
 [TrayMenu]
 EXIT=Izhod
@@ -943,7 +943,7 @@ F1=Skupno zapisano LBA
 F2=Skupno prebrano LBA
 FA=Skupno število ponovitev branja NAND
 
-[SmartKioxia] ; Added ８．８．０
+[SmartKioxia] ; Added 8.8.0
 09=Število ur napajanja
 0C=Število ciklov napajanja
 A7=Način zaščite SSD
@@ -1243,7 +1243,7 @@ C0=Število nepričakovanih izgub napajanja
 C2=Temperatura
 C5=Število trenutno čakajočih sektorjev
 E7=Življenje pogona
-E9＝Število pisanj sektorjev (NAND)
+E9=Število pisanj sektorjev (NAND)
 F0=Pisanje glave
 F1=Skupno zapisano LBA
 F2=Skupno prebrano LBA

@@ -107,8 +107,8 @@ HIDE_NO_SMART_DISK=&Nem S.M.A.R.T.-képes meghajtók rejtése
 GREEN_MODE=Zöld lámpák (ki:kék)
 
 ;8.6.0
-SAVE_TEXT=Mentés （&szövegként）
-SAVE_IMAGE=&Mentés （képként）
+SAVE_TEXT=Mentés (&szövegként)
+SAVE_IMAGE=&Mentés (képként)
 
 [TrayMenu]
 EXIT=Kilépés
@@ -942,7 +942,7 @@ F1=Összes írás
 F2=Összes olvasás
 FA=Olvasási újrapróbálkozások száma
 
-[SmartKioxia] ; Added ８．８．０
+[SmartKioxia] ; Added 8.8.0
 09=Bekapcsolva töltött órák
 0C=Ki/be kapcsolások száma
 A7=SSD Protect Mode
@@ -953,7 +953,7 @@ C0=Kikapcsolási visszahúzások száma
 C2=Hőmérséklet
 F1=Összes írás
 
-[SmartWdc] ; Added ８．８．０
+[SmartWdc] ; Added 8.8.0
 01=Olvasási hibák száma
 05=Áthelyezett szektorok száma
 09=Bekapcsolva töltött órák
@@ -1242,7 +1242,7 @@ C0=Kikapcsolási visszahúzások száma
 C2=Hőmérséklet
 C5=Függőben levő szektorok száma
 E7=Drive Life
-E9＝Write Sector Count (NAND)
+E9=Write Sector Count (NAND)
 F0=Write Head
 F1=Összes írás
 F2=Összes olvasás
@@ -1299,7 +1299,7 @@ FA=Olvasási újrapróbálkozások száma
 0C=Ki-be kapcsolások száma
 64=Flash Gigabytes Erased
 66=Lifetime PS4 Entry Count
-67=Lifetime PS3 Exit Count
+67=Lifetime PS3 Entry Count
 AA=Grown Bad Block Count
 AB=Programhibák száma
 AC=Törlési hibák száma

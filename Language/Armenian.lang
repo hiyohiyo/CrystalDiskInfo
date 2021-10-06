@@ -108,8 +108,8 @@ HIDE_NO_SMART_DISK=&Թաքցնել ոչ S.M.A.R.T. հիշասարքը
 GREEN_MODE=&Կանաչ կերպ
 
 ;8.6.0
-SAVE_TEXT=Պահպանել （&text）
-SAVE_IMAGE=&Պահպանել （image）
+SAVE_TEXT=Պահպանել (&text)
+SAVE_IMAGE=&Պահպանել (image)
 
 [TrayMenu]
 EXIT=Փակել
@@ -918,7 +918,7 @@ B3=Used Reseved Block Count(SSD Total)
 B4=UnUsed Reseved Block Count(SSD Total)
 B5=Program Fail Count(SSD Total)
 B6=Erase Fail Count(SSD Total)
-B7=SATA Downshift　Count
+B7=SATA Downshift Count
 B8=End-to-End Error Detection Count
 BB=Uncorrectable Error Count
 BC=Command Timeout Count
@@ -938,7 +938,7 @@ F1=Total LBA Written
 F2=Total LBA Read
 FA=Total Number of NAND Read Retries
 
-[SmartKioxia] ; Added ８．８．０
+[SmartKioxia] ; Added 8.8.0
 09=Power-On Hours Count
 0C=Device Power Cycle Count
 A7=SSD Protect Mode
@@ -949,7 +949,7 @@ C0=Unexpected Power Loss Count
 C2=Temperature
 F1=Host Writes
 
-[SmartWdc] ; Added ８．８．０
+[SmartWdc] ; Added 8.8.0
 01=Read Error Rate
 05=Reassigned Block Count
 09=Power On Hours
@@ -1237,7 +1237,7 @@ C0=Unexpected Power Loss Count
 C2=Temperature
 C5=Current Pending Sector Count
 E7=Drive Life
-E9＝Write Sector Count (NAND)
+E9=Write Sector Count (NAND)
 F0=Write Head
 F1=Total LBA Written
 F2=Total LBA Read
@@ -1294,7 +1294,7 @@ FA=Lifetime NAND Read Retries
 0C=Power Cycle Count
 64=Flash Gigabytes Erased
 66=Lifetime PS4 Entry Count
-67=Lifetime PS3 Exit Count
+67=Lifetime PS3 Entry Count
 AA=Grown Bad Block Count
 AB=Program Fail Count
 AC=Erase Fail Count

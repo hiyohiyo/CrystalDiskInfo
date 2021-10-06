@@ -107,8 +107,8 @@ HIDE_NO_SMART_DISK=隱藏沒有 S.M.A.R.T. 的磁碟(&H)
 GREEN_MODE=綠色模式(&G)
 
 ;8.6.0
-SAVE_TEXT=儲存 （文字）
-SAVE_IMAGE=儲存 （圖片）
+SAVE_TEXT=儲存 (文字)
+SAVE_IMAGE=儲存 (圖片)
 
 [TrayMenu]
 EXIT=結束
@@ -930,7 +930,7 @@ EA=NAND 已寫入
 F1=對 SSD 累計寫入
 F2=對 SSD 累計讀取
 FA=NAND 讀取重試次數總數
-[SmartKioxia] ; Added ８．８．０
+[SmartKioxia] ; Added 8.8.0
 09=總通電時間
 0C=裝置開關電源次數
 A7=SSD 保護模式
@@ -941,7 +941,7 @@ C0=未預期的電源中斷次數
 C2=硬碟溫度
 F1=對 SSD 累計寫入
 
-[SmartWdc] ; Added ８．８．０
+[SmartWdc] ; Added 8.8.0
 01=底層資料讀取錯誤率
 05=已淘汰區塊數
 09=總通電時間
@@ -1229,7 +1229,7 @@ C0=未預期的電源中斷次數
 C2=硬碟溫度
 C5=等候重定的磁區計數
 E7=磁碟壽命
-E9＝寫入磁區計數 (NAND)
+E9=寫入磁區計數 (NAND)
 F0=磁性寫頭
 F1=對 SSD 累計寫入
 F2=對 SSD 累計讀取
