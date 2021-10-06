@@ -369,6 +369,7 @@ protected:
 
 	void Refresh(DWORD flagForceUpdate);
 	BOOL AppendLog(CString dir, CString disk, CString file, CTime time, int value, BOOL firstTime = FALSE, int threshold = 0);
+	BOOL AppendLog_WAF(CString dir, CString disk, CString file, CTime time, double value, BOOL flagFirst, int threshold = 0);
 	BOOL AddEventLog(DWORD eventId, WORD eventType, CString message);
 	BOOL SendMail(DWORD eventId, CString title, CString message);
 	BOOL AddAlarmHistory(DWORD eventId, CString disk, CString message);

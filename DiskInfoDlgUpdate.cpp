@@ -2471,6 +2471,12 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 		AppendLog(dir, disk, _T("GBytesErased"), time, m_Ata.vars[i].GBytesErased, flagFirst);
 	}
 
+	if (m_Ata.vars[i].HostWrites > 1 && m_Ata.vars[i].NandWrites > 0)
+	{
+		double d_waf = static_cast<double>(m_Ata.vars[i].NandWrites) / static_cast<double>(m_Ata.vars[i].HostWrites);
+		AppendLog_WAF(dir, disk, _T("WAF"), time, d_waf, flagFirst);
+	}
+
 	if (m_Ata.vars[i].WearLevelingCount >= 0)
 	{
 		AppendLog(dir, disk, _T("WearLevelingCount"), time, m_Ata.vars[i].WearLevelingCount, flagFirst);
@@ -2548,6 +2554,58 @@ BOOL CDiskInfoDlg::AppendLog(CString dir, CString disk, CString file, CTime time
 				}
 			}
 			catch (CFileException * e)
+			{
+				DebugPrint(L"CFileException");
+				e->Delete();
+			}
+			outFile.Close();
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+BOOL CDiskInfoDlg::AppendLog_WAF(CString dir, CString disk, CString file, CTime time, double value, BOOL flagFirst, int threshold)
+{
+	TCHAR str[256];
+
+	// First Time
+	if (flagFirst)
+	{
+		wsprintf(str, _T("%f"), value);
+		WritePrivateProfileString(disk + _T("FIRST"), file, str, dir + _T("\\") + SMART_INI);
+
+		if (file.GetLength() == 2)
+		{
+			wsprintf(str, _T("%f"), threshold);
+			WritePrivateProfileString(disk + _T("THRESHOLD"), file, str, dir + _T("\\") + SMART_INI);
+		}
+	}
+
+	GetPrivateProfileString(disk, file, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
+	int pre = _tstoi(str);
+
+	if (pre != value)
+	{
+		// Update
+		wsprintf(str, _T("%f"), value);
+		WritePrivateProfileString(disk, file, str, dir + _T("\\") + SMART_INI);
+
+		CString line;
+		line.Format(_T("%s,%f\n"), time.Format(_T("%Y/%m/%d %H:%M:%S")), value);
+
+		CStdioFile outFile;
+		if (outFile.Open(dir + _T("\\") + file + _T(".csv"),
+			CFile::modeCreate | CFile::modeNoTruncate | CFile::modeReadWrite | CFile::typeText))
+		{
+			ULONGLONG fileLength = outFile.GetLength();
+			try
+			{
+				if (outFile.SeekToEnd() == fileLength)
+				{
+					outFile.WriteString(line);
+				}
+			}
+			catch (CFileException* e)
 			{
 				DebugPrint(L"CFileException");
 				e->Delete();
