@@ -6,7 +6,7 @@ VERSION=8.13.0
 [Language]
 LANGUAGE=English
 CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
-; Locale ID: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c?redirectedfrom=MSDN
+; Locale ID: https://docs.microsoft.com/previous-versions/windows/embedded/ms912047(v=winembedded.10)
 LOCALE_ID=0x0009, 0x0409, 0x0809, 0x0C09, 0x1009, 0x1409, 0x1809, 0x1C09, 0x2009, 0x2409, 0x2809, 0x2C09, 0x3009, 0x3409,  0x3809, 0x3C09, 0x4409, 0x4809, 0x4C09
 
 [Url]
@@ -108,8 +108,8 @@ HIDE_NO_SMART_DISK=&Hide No S.M.A.R.T. Disk
 GREEN_MODE=&Green Mode
 
 ;8.6.0
-SAVE_TEXT=Save （&text）
-SAVE_IMAGE=&Save （image）
+SAVE_TEXT=Save (&text)
+SAVE_IMAGE=&Save (image)
 
 [TrayMenu]
 EXIT=Exit
@@ -918,7 +918,7 @@ B3=Used Reseved Block Count(SSD Total)
 B4=UnUsed Reseved Block Count(SSD Total)
 B5=Program Fail Count(SSD Total)
 B6=Erase Fail Count(SSD Total)
-B7=SATA Downshift　Count
+B7=SATA Downshift Count
 B8=End-to-End Error Detection Count
 BB=Uncorrectable Error Count
 BC=Command Timeout Count
@@ -938,7 +938,7 @@ F1=Total LBA Written
 F2=Total LBA Read
 FA=Total Number of NAND Read Retries
 
-[SmartKioxia] ; Added ８．８．０
+[SmartKioxia] ; Added 8.8.0
 09=Power-On Hours Count
 0C=Power Cycle Count
 A7=SSD Protect Mode
@@ -949,7 +949,7 @@ C0=Unexpected Power Loss Count
 C2=Temperature
 F1=Host Writes
 
-[SmartWdc] ; Added ８．８．０
+[SmartWdc] ; Added 8.8.0
 01=Read Error Rate
 05=Reassigned Block Count
 09=Power On Hours
@@ -1238,7 +1238,7 @@ C0=Unexpected Power Loss Count
 C2=Temperature
 C5=Current Pending Sector Count
 E7=Drive Life
-E9＝Write Sector Count (NAND)
+E9=Write Sector Count (NAND)
 F0=Write Head
 F1=Total LBA Written
 F2=Total LBA Read
@@ -1288,14 +1288,14 @@ F2=Lifetime Reads From Host
 FA=Lifetime NAND Read Retries
 
 [SmartSeagateIronWolf]
-; https://www.seagate.com/jp/ja/internal-hard-drives/ssd/ironwolf-nas-ssd/#specs
+; https://www.seagate.com/www-content/manuals/ironwolf-110-ssd/pdf/IronWolf_110_SSD_PM-100841919_B.pdf
 01=Raw Read Error Rate
 05=Reallocated Sector Count
 09=Power On Hours
 0C=Power Cycle Count
 64=Flash Gigabytes Erased
 66=Lifetime PS4 Entry Count
-67=Lifetime PS3 Exit Count
+67=Lifetime PS3 Entry Count
 AA=Grown Bad Block Count
 AB=Program Fail Count
 AC=Erase Fail Count
