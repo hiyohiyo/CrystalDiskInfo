@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=Mr.
-VERSION=3.0.0
+TRANSLATOR=LUKISO2, Mr.
+VERSION=8.0.0
 
 [Language]
 LANGUAGE=Česky
@@ -61,12 +61,12 @@ SOUTH_WEST=Jiho-&západ
 SOUTH_EAST=Jiho-&východ
 MAX_PLOT_POINT=&Max Plot Point
 TIME_FORMAT=Formát &času
-PAINT_WEEKEND=&Stínovat víkend
+PAINT_WEEKEND=Stínovat víkend
 ALL=&Všechny
 
 ;2.7.0
-COPY_OPTION=Nastavení &kopírování
-RESIDENT_STYLE=Způsob &rezidentnosti
+COPY_OPTION=Nastavení kopírování
+RESIDENT_STYLE=Způsob rezidentnosti
 MINIMIZE=Minimalizovat
 HIDE=Skrýt
 
@@ -76,39 +76,35 @@ AUTO=&Auto
 ATTRIBUTE=&Atribut
 
 ;3.5.0
-ASCII_VIEW=ASCII View
-AUTO_DTECTION=Auto Detection
+ASCII_VIEW=Zobrazení ASCII
+AUTO_DTECTION=Auto Detekce
 SECOND=sek.
 MINUTE=min.
-HOUR=hour
+HOUR=hod.
 
 :3.9.4
-WORKAROUND=W&orkaround
+WORKAROUND=Obpracování
 
 ;4.0.0
-ALERT_MAIL=Alert Mail
-MAIL_SETTINGS=Mail Settings
-SMART_IN_ENGLISH=S.M.A.R.T. in English
-FONT_SETTING=Font Setting
+ALERT_MAIL=Upozorňení mailem
+MAIL_SETTINGS=Nastavení mailu
+SMART_IN_ENGLISH=S.M.A.R.T. vždy Anglicky
+FONT_SETTING=Nastavení písma
 
 ;5.0.0
-ALERT_FEATURES=A&lert Features
-ALARM_HISTORY=Alarm History
-ALERT_SOUND=Alert Sound
-SOUND_SETTINGS=Sound Settings
-GADGET_SUPPORT=Gadget Support
-INSTALL_GADGET=Install Gadget
-ENABLE_AUTO=Enable (Auto Detection)
-ENABLE_ALL=Enable (All Disks)
-ENABLE_RAID=Enable (RAID Volume Only)
+ALERT_FEATURES=N&astavení Upozornění
+ALARM_HISTORY=Historie Upozornění
+ALERT_SOUND=Zvuk Upozornění
+SOUND_SETTINGS=Nastavení zvuku
+GADGET_SUPPORT=Nastavení Strojku
+INSTALL_GADGET=Stáhnout Strojek
+ENABLE_AUTO=Zapnout (Auto-Detekce)
+ENABLE_ALL=Zapnout (Všechny Disky)
+ENABLE_RAID=Zapnout (Pouze RAIDy)
 
 ;6.0.0
-HIDE_NO_SMART_DISK=&Hide No S.M.A.R.T. Disk
-GREEN_MODE=&Green Mode
-
-;8.6.0
-SAVE_TEXT=Save （&text）
-SAVE_IMAGE=&Save （image）
+HIDE_NO_SMART_DISK=Schovat Ne S.M.A.R.T. Disky
+GREEN_MODE=&Zelená verze
 
 [TrayMenu]
 EXIT=Ukončit
@@ -166,30 +162,20 @@ HEALTH_STATUS=Stav disku :
 
 UNKNOWN=Neznámy údaj
 POWER_ON_COUNT_UNIT=krát
-POWER_ON_HOURS_UNIT=hod.
+POWER_ON_HOURS_UNIT=hodin
 POWER_ON_DAYS_UNIT=dnů
-POWER_ON_YEARS_UNIT=let
 
 ;4.3
-TOTAL_HOST_WRITES=Total Host Writes
-TOTAL_HOST_READS=Total Host Reads
-TOTAL_NAND_WRITES=Total NAND Writes
+TOTAL_HOST_WRITES=Celkový Zápis
+TOTAL_HOST_READS=Celkový Čtení
+TOTAL_NAND_WRITES=Celkový NAND zápis
 
 ;4.5
-WEAR_LEVELING_COUNT=Wear Leveling Count
+WEAR_LEVELING_COUNT=Počet Distribucí Opotřebování
 
 ;6.1
-CURRENT_MODE_SUPPORTED_MODE=Current Mode | Supported Mode
-MAJOR_VERSION_MINOR_VERSION=Major Version | Minor Version
-
-;8.5.0
-FONT_FACE=Font Face
-FONT_SCALE=Font Scale (%)
-DEFAULT=Default
-
-;8.9.0
-ENABLED=Enabled
-DISABLED=Disabled
+CURRENT_MODE_SUPPORTED_MODE=Aktuální režim | Podporovaný Režim
+MAJOR_VERSION_MINOR_VERSION=Hlavní Verze | Vedlejší Verze
 
 [Message]
 DETECT_UNIT_POWER_ON_HOURS=Zjištování oddílů a jejich "Hodin činnosti" (zjišťování trvá až 130 sekund)
@@ -204,7 +190,7 @@ ALARM_HEALTH_STATUS=Alarm - stav disku
 DEGRADATION=Degradace
 RECOVERY=Obnova
 ;3.5.0
-INFO_HEALTH_STATUS=Info - Health Status
+INFO_HEALTH_STATUS=Info - Status Zdraví
 
 [Graph]
 PLEASE_SELECT_ITEM=Vyber položku
@@ -212,7 +198,7 @@ ACTUAL_VALUE=Aktuální hodnota (prvotní)
 NORMALIZED_VALUE=Normalizovaná hodnota (současná)
 ALL_ON=Vše zapnuté
 ALL_OFF=Vše vypnuté
-RESET=Reset
+RESET=Obnovit
 
 [Customize]
 LINE_COLOR=Barva čáry
@@ -221,7 +207,7 @@ SUPPORTED_IMAGE_FORMAT=Podporovaný formát obrázku
 ALL_FILES=Všechny soubory
 
 ;5.0.0
-SUPPORTED_SOUND_FORMAT=Supported Sound Format
+SUPPORTED_SOUND_FORMAT=Podporovaný Zvukový Formát
 
 [AamApm]
 AAM_LOW=<- Potichu (80h)
@@ -230,8 +216,8 @@ AAM_RECOMMEND=Doporučená hodnota
 APM_LOW=<- Min. energie (01h)
 APM_HIGH=Výkon (FEh) ->
 ;3.5.0
-AUTOMATIC_ACOUSTIC_MANAGEMENT=Automatic Acoustic Management (AAM)
-ADVANCED_POWER_MANAGEMENT=Advanced Power Management (APM)
+AUTOMATIC_ACOUSTIC_MANAGEMENT=Automatický Akustický Menežr (AAM)
+ADVANCED_POWER_MANAGEMENT=Pokročilé Řízení Proudu (APM)
 
 [WindowTitle]
 ABOUT=O programu CrystalDiskInfo
@@ -242,11 +228,11 @@ AAM_APM_CONTROL=Ovládání AAM/APM
 HEALTH_STATUS_SETTING=Nastavení stavu disku
 
 ;5.0.0
-ALARM_HISTORY=Alarm History
-SOUND_SETTINGS=Sound Settings
+ALARM_HISTORY=Historie Upozornění
+SOUND_SETTINGS=Nastavení Zvuku
 
 ;5.1.0
-FONT_SETTING=Font Setting
+FONT_SETTING=Nastavení písma
 
 [HealthStatus]
 THRESHOLD_OF_CAUTION=Hranice upozorňování
@@ -311,8 +297,8 @@ FA= Počet chyb po dobu čtení z disku
 FE=Ochrana proti pádu
 
 ;Updated 5.4.0
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Celkový zápis
+F2=Celkový čtení
 
 [SmartSsd]
 01= Počet chyb čtení 
@@ -328,17 +314,17 @@ F2=Total Host Reads
 0B= Počet pokusů o překalibrování 
 0C= Počet cyklů zapnutí zařízení 
 0D= Počet pokusů o softvérové opravení chyb při čtení programů z disku 
-C0=Unsafe Shutdown Count
+C0=Počet nebezpečných vypnutí
 C2= Teplota 
 C4= Počet udalostí s číslem realokování sektorů 
 C5= Počet podezřelých sektorů
 C6= Počet neopravitelných sektorů
 ; CrystalDiskInfo assign
-FF=Remaining Life
+FF=Zbývající životnost
 
 ;Updated 5.4.0
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Celkový zápis
+F2=Celkový čtení
 
 [SmartMtron]
 BB=Celkem smazáno
@@ -348,6 +334,7 @@ BB=Celkem smazáno
 09=Zapnuto hodin
 0C=Počet pracovních cyklů
 B8=Výchozí počet vadných bloků
+C2=Teplota
 C3=Počet selhání bloků programu
 C4=Počet selhnání výmazu bloků
 C5=Počet selhání čtení bloků
@@ -357,7 +344,7 @@ C8=Souhrnný počet příkazů čtení
 C9=Souhrnný počet příkazů zápisu
 CA=Souhrnný počet chybných bitů z flashe
 CB=Souhrnný počet sektorů čtení s opravitelnými chybami bitů
-CC=Vadný blok plný znaků
+CC=Vadný blok plný znaků					  
 CD=Maximum PE počet údajů
 CE=Minimum počet mazání
 CF=Maximum počet mazání
@@ -375,48 +362,48 @@ EA=Průměrný počet mazání, Max počet mazání
 EB=Dobrý počet bloků, počet bloků systému
 
 [SmartIntel]
-03=Čas na roztočení ploten 
-04=Počet spuštění/zastavení 
+03=Čas na roztočení ploten
+04=Počet spuštění/zastavení
 05=Počet přemapovaných sektorů
 09=Zapnuto hodin
 0C=Počet cyklů zapnutí zařízení
-C0=Unsafe Shutdown Count
-E1=Host Writes
+C0=Počet nebezpečných vypnutí
+E1=Zápisů
 E8=Dostupný vyhrazený prostor
 E9=Mediální indikátor poruch
-B8=End to End Error Detection Count
+B8=Počet konec-konec chyb
 
 ;Updated 4.1
-AA=Available Reserved Space
-AB=Program Fail Count
-AC=Erase Fail Count
-BB=Uncorrectable Error Count
+AA=Zbývající vyhrazený prostor
+AB=Počet pádů
+AC=Počet selhaných smazání
+BB=Počet neopravitelných chyb
 
 ;Updated 4.3
-AE=Unexpected Power Loss
-E2=Timed Workload Media Wear
-E3=Timed Workload Host Read/Write Ratio
-E4=Timed Workload Timer
-F1=Total LBAs Written
-F2=Total LBAs Read
-F9=Total NAND Writes
+AE=Neočekávaná ztráta napájení
+E2=Časované opotřebení média
+E3=Poměr časového pracovního vytížení hostitele čtení/zápis
+E4=Časovaný časovač pracovní zátěže
+F1=Celkem zapsáno LBA
+F2=Celkem LBA čtení
+F9=Celkem zápisů NAND
 
 ;Updated 5.5.0
-B7=SATA Downshift Count
-BE=Temperature
-C7=CRC Error Count
+B7=Počet posunutí SATA
+BE=Teplota
+C7=Počet chyb CRC
 
 ;Updated 5.6.1
-AF=Power Loss Protection Failure
-C2=Temperature
-C5=Pending Sector Count
+AF=Selhání ochrany proti ztrátě napájení
+C2=Teplota
+C5=Počet čekajících sektorů
 
 ;Added 6.6.0
-EA=Thermal Throttle Status
+EA=Stav tepelného zpomalení
 
 ;[SmartIntel] ;Preliminary Support (3.0)
-;04=Start/Stop Count
-;05=Reallocated Sectors Count
+;04=Počet Začátků/Konců
+;05=Počet přemapovaných sektorů
 ;09=Zapnuto hodin
 ;0C=Počet cyklů zapnutí zařízení
 ;C2=Teplota
@@ -426,452 +413,460 @@ EA=Thermal Throttle Status
 ;B8=Konečný počet chyb neporušenosti dat
 
 [SmartSamsung]
-05=Reallocated Sector Count
-09=Power-on Hours
-0C=Power-on Count
-AF=Program Fail Count (Chip)
-B0=Erase Fail Count (Chip)
-B1=Wear Leveling Count
-B2=Used Reserved Block Count (Chip)
-B3=Used Reserved Block Count (Total)
-B4=Unused Reserved Block Count (Total)
-B5=Program Fail Count (Total)
-B6=Erase Fail Count (Total)
-B7=Runtime Bad Block (Total)
-BB=Uncorrectable Error Count
-BE=Airflow Temperature
-C2=Temperature
-C3=ECC Error Rate
-C6=Off-Line Uncorrectable Error Count
-C7=CRC Error Count
-C9=Super cap Status
-CA=SSD Mode Status
-EB=POR Recovery Count
-F1=Total LBA Written
-F2=Total LBA Read
+05=Počet přerozdělených sektorů
+09=Hodiny zapnutí
+0C=Počet zapnutí
+AF=Počet chyb programu (čip)
+B0=Počet chyb při mazání (čip)
+B1=Počet opotřebení
+B2=Počet použitých rezervovaných bloků (čip)
+B3=Počet použitých rezervovaných bloků (celkem)
+B4=Počet nevyužitých rezervovaných bloků (celkem)
+B5=Počet selhání programu (celkem)
+B6=Počet chyb při mazání (celkem)
+B7=Chybný běhový blok (celkem)
+BB=Počet neopravitelných chyb
+BE=Teplota proudění vzduchu
+C2=Teplota
+C3=ECC míra chyb
+C6=Počet neopravitelných chyb offline
+C7=Počet chyb CRC
+C9=Stav Super capu
+CA=Stav režimu SSD
+EB=Počet obnovení POR
+F1=Celkem zapsáno LBA
+F2=Celkem LBA čtení
 
 ;Added 6.6
-AA=Unused Reserved Block Count (Chip) 
-AB=Program Fail Count (Chip)
-AC=Erase Fail Count (Chip)
-AD=Wear Leveling Count
-AE=Unexpected Power Loss Count
-B8=Error Detection
-E9=Normalized Media Wear-out
+AA=Počet nevyužitých rezervovaných bloků (čip)
+AB=Počet chyb programu (čip)
+AC=Počet chyb při mazání (čip)
+AD=Počet vyrovnání opotřebení
+AE=Neočekávaný počet ztrát napájení
+B8=Detekce chyb
+E9=Normalizované opotřebení média
 
 [SmartSandForce] ;Updated (3.7.0)
-01=Raw Read Error Rate
-05=Retired Block Count
-09=Power-on Hours
-0C=Power Cycle Count
-0D=Soft Read Error Rate
-64=Gigabytes Erased
-AA=Reserve Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AE=Unexpected Power Loss Count
-B1=Wear Range Delta
-B5=Program Fail Count
-B6=Erase Fail Count
-B8=Reported I/O Error Detection Code Errors
-BB=Reported Uncorrectable Errors
-C2=Temperature
-C3=On-the-Fly ECC Uncorrectable Error Count
-C4=Reallocation Event Count
-C6=Uncorrectable Sector Count
-C7=SATA R-Errors (CRC) Error Count
-C9=Uncorrectable Soft Read Error Rate
-CC=Soft ECC Correction Rate
-E6=Life Curve Status
-E7=SSD Life Left
-E8=Available Reserved Space
+01=Míra chybovosti čtení RAW
+05=Počet bloků v důchodu
+09=Hodiny zapnutí
+0C=Počet cyklů napájení
+0D=Míra chybovosti čtení softwarem
+64=Vymazány gigabajty
+AA=Počet rezervních bloků
+AB=Počet selhání programu
+AC=Počet chyb při mazání
+AE=Neočekávaný počet ztrát napájení
+B1=Rozdíl v rozsahu opotřebení
+B5=Počet selhání programu
+B6=Počet chyb při mazání
+B8=Chyby kódu hlášení I/O chyb
+BB=Nahlášené neopravitelné chyby
+C2=Teplota
+C3=Počet neopravitelných chyb ECC za běhu
+C4=Počet událostí přerozdělení
+C6=Neopravitelný počet sektorů
+C7=Počet chyb SATA R-Errors (CRC)
+C9=Neopravitelná míra chyb softwarového čtení
+CC=Měkká míra korekce ECC
+E6=Stav křivky životnosti
+E7=Životnost SSD
+E8=Rezervované místo k dispozici
 EB=SuperCap health
-F1=Lifetime Writes from Host
-F2=Lifetime Reads from Host
+F1=Doživotní zápisy z hostitele
+F2=Doživotní čtení z hostitele
 
 [SmartJMicron61x] ;Added (3.9)
-01=Read Error Rate
-02=Throughput Performance
-03=Spin-Up Time
-05=Reallocated Sectors Count
-07=Seek Error Rate
-08=Seek Time Performance
-09=Power-On Hours
-0A=Spin Retry Count
-0C=Power Cycle Count
-A8=SATA PHY Error Count
-AF=Bad Cluster Table Count (ECC Fail Count)
-C0=Unexpected Power Loss Count
-C2=Temperature
-C5=Current Pending Sector Count
-AA=Bad Block Count
-AD=Erase Count
+01=Míra chyb čtení
+02=Výkon propustnosti
+03=Čas otočení
+05=Počet přerozdělených sektorů
+07=Rychlost hledání chyb
+08=Vyhledat časový výkon
+09=Hodiny zapnutí
+0A=Počet opakování otočení
+0C=Počet cyklů napájení
+A8=Počet chyb SATA PHY
+AF=Chybný počet tabulky clusterů (ECC Fail Count)
+C0=Neočekávaný počet ztrát napájení
+C2=Teplota
+C5=Aktuální počet čekajících sektorů
+AA=Chybný počet bloků
+AD=Počet vymazání
 
 [SmartMicron] ;Added 4.0.0/ Updated 6.6.0
-; RAIN = Redundant Array of Independent NAND
-01=Raw Read Error Rate
-05=Reallocated NAND Blocks
-09=Power On Hours
-0C=Power Cycle Count
-0D=Soft Error Rate
-0E=Device Capacity (NAND)
-0F=User Capacity
-10=Spare Blocks Available
-11=Remaining Spare Blocks
-64=Total Erase Count
-AA=Reserved Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Average Block-Erase Count
-AE=Unexpected Power Loss Count
-B4=Unused Reserve NAND Blocks
-B5=Unaligned Access Count
-B7=SATA Interface Downshift
-B8=Error Correction Count
-BB=Reported Uncorrectable Errors
-BC=Command Timeout Count
-BD=Factory Bad Block Count
-C2=Temperature
-C3=Cumulative ECC Bit Correction Count
-C4=Reallocation Event Count
-C5=Current Pending Sector Count
-C6=Smart Off-line Scan Uncorrectable Error Count
-C7=Ultra DMA CRC Error Rate
-CA=Percent Lifetime Used
-CE=Write Error Rate
-D2=Successful RAIN Recovery Count
-EA=Total Bytes Read
-F2=Write Protect Progress
-F3=ECC Bits Corrected
-F4=ECC Cumulative Threshold Events
-F5=Cumulative Program NAND Pages
-F6=Total Host Sector Writes
-F7=Host Program Page Count
-F8=Background Program Page Count
+; RAIN = Nadbytečná soustava samostatných NANDů
+01=Míra chybovosti čtení RAW
+05=Přerozdělené bloky NAND
+09=Hodiny napájení
+0C=Počet cyklů napájení
+0D=Míra měkkých chyb
+0E=Kapacita zařízení (NAND)
+0F=Uživatelská kapacita
+10=Volné bloky k dispozici
+11=Zbývající náhradní bloky
+64=Celkový počet vymazání
+AA=Počet rezervovaných bloků
+AB=Počet selhání programu
+AC=Počet chyb při mazání
+AD=Průměrný počet vymazání bloku
+AE=Neočekávaný počet ztrát napájení
+B4=Nevyužité rezervní bloky NAND
+B5=Počet nezařazených přístupů
+B7=Zpětný posun rozhraní SATA
+B8=Počet korekcí chyb
+BB=Nahlášené neopravitelné chyby
+BC=Počet vypršení časového limitu příkazu
+BD=Počet chybných bloků ve výrobě
+C2=Teplota
+C3=Kumulativní počet korekcí ECC bitů
+C4=Počet událostí přerozdělení
+C5=Aktuální počet čekajících sektorů
+C6=Inteligentní offline skenování Počet neopravitelných chyb
+C7=Míra chyb CRC Ultra DMA
+CA=Procento využité doby života
+CE=Míra chyb při zápisu
+D2=Počet úspěšných obnovení RAIN
+EA=Celkem přečtených bajtů
+F2=Průběh ochrany proti zápisu
+F3=Opravené ECC bity
+F4=Kumulativní prahové události dle ECC
+F5=Kumulativní stránky NAND programu
+F6=Celkový počet zápisů hostitelského sektoru
+F7=Počet stránek programu hostitele
+F8=Počet stránek programu na pozadí
 
 [SmartMicronMU02] ;Updated 6.6.0
-; RAIN = Redundant Array of Independent NAND
-01=Raw Read Error Rate
-05=Reallocated Sectors Count
-09=Power-On Hours
-0C=Power Cycle Count
-0D=Soft Error Rate
-0E=Device Capacity (NAND)
-0F=User Capacity
-10=Spare Blocks Available
-11=Remaining Spare Blocks
-64=Total Erase Count
-AA=Reserved Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Average Block-Erase Count
-AE=Unexpected Power Loss Count
-B4=Unused Reserve NAND Blocks
-B7=SATA Interface Downshift
-B8=Error Correction Count
-BB=Reported Uncorrectable Errors
-BC=Command Timeout Count
-BD=Factory Bad Block Count
-C2=Temperature
-C3=Cumulative ECC Bit Correction Count
-C4=Reallocation Event Count
-C5=Current Pending Sector Count
-C6=Smart Off-line Scan Uncorrectable Error Count
-C7=Ultra DMA CRC Error Rate
-CA=Percent Lifetime Used
-CE=Write Error Rate
-D2=Successful RAIN Recovery Count
-EA=Total Bytes Read
-F3=ECC Bits Corrected
-F4=ECC Cumulative Threshold Events
-F5=Cumulative Program NAND Pages
-F6=Total Host Sector Writes
-F7=Host Program Page Count
-F8=Background Program Page Count
+; RAIN = Nadbytečná soustava samostatných NANDů
+01=Míra chybovosti čtení RAW
+05=Počet přerozdělených sektorů
+09=Hodiny zapnutí
+0C=Počet cyklů napájení
+0D=Míra měkkých chyb
+0E=Kapacita zařízení (NAND)
+0F=Uživatelská kapacita
+10=Volné bloky k dispozici
+11=Zbývající náhradní bloky
+64=Celkový počet vymazání
+AA=Počet rezervovaných bloků
+AB=Počet selhání programu
+AC=Počet chyb při mazání
+AD=Průměrný počet vymazání bloku
+AE=Neočekávaný počet ztrát napájení
+B4=Nevyužité rezervní bloky NAND
+B7=Zpětný posun rozhraní SATA
+B8=Počet korekcí chyb
+BB=Nahlášené neopravitelné chyby
+BC=Počet vypršení časového limitu příkazu
+BD=Počet chybných bloků ve výrobě
+C2=Teplota
+C3=Kumulativní počet korekcí ECC bitů
+C4=Počet událostí přerozdělení
+C5=Aktuální počet čekajících sektorů
+C6=Inteligentní offline skenování Počet neopravitelných chyb
+C7=Míra chyb CRC Ultra DMA
+CA=Procento využité doby života
+CE=Míra chyb při zápisu
+D2=Počet úspěšných obnovení RAIN
+EA=Celkem přečtených bajtů
+F3=Opravené ECC bity
+F4=Kumulativní prahové události dle ECC
+F5=Kumulativní stránky NAND programu
+F6=Celkový počet zápisů hostitelského sektoru
+F7=Počet stránek programu hostitele
+F8=Počet stránek programu na pozadí
 
 ; Updated 6.6.0
-A0=Uncorrectable Sector Count
-A1=Valid Spare Blocks
-A3=Initial Invalid Blocks
-94=Total SLC Erase Count
-95=Maximum SLC Erase Count
-96=Minimum SLC Erase Count
-97=Average SLC Erase Count
-A4=Total TLC Erase Count
-A5=Maximum TLC Erase Count
-A6=Minimum TLC Erase Count
-A7=Average TLC Erase Count
-A9=Percentage Lifetime Remaining
-B5=Program Fail Count
-B6=Erase Fail Count
+A0=Neopravitelný počet sektorů
+A1=Platné náhradní bloky
+A3=Počáteční neplatné bloky
+94=Celkový počet vymazání SLC
+95=Maximální počet vymazání SLC
+96=Minimální počet vymazání SLC
+97=Průměrný počet vymazání SLC
+A4=Celkový počet smazání TLC
+A5=Maximální počet vymazání TLC
+A6=Minimální počet vymazání TLC
+A7=Průměrný počet vymazání TLC
+A9=Zbývající doba života v procentech
+B5=Počet selhání programu
+B6=Počet chyb při mazání
 C0=Power-off Retract Count
-E8=Available Reserved Space
-F1=Total LBA Write
-F2=Total LBA Read
-F5=Total TLC Write Count
-F6=Total SLC Write Count
-F7=RAID Recovery Count
+E8=Rezervované místo k dispozici
+F1=Celkem LBA Write
+F2=Celkem čtení LBA
+F5=Celkový počet zápisů TLC
+F6=Celkový počet zápisů SLC
+F7=Počet obnovení RAIDu
 
 [SmartOcz] ;Added (4.5)
-01=Raw Read Error Rate
-03=Spin Up Time
-04=Start Stop Count
-05=Reallocated Sectors Count
-09=Power-On Hours
-0C=Power Cycle Count
-E8=Total Count of Write Sectors
-E9=Remaining Life
+01=Míra chybovosti čtení RAW
+03=Čas spinningu
+04=Počet spuštění zastavení
+05=Počet přerozdělených sektorů
+09=Hodiny zapnutí
+0C=Počet cyklů napájení
+C2=Teplota
+E8=Celkový počet oborů zápisu
+E9=Zbývající životnost
 
 ; Added 6.6.0
-64=Total Blocks Erased
-A7=SSD Protect Mode
-A8=SATA PHY Error Count
-A9=Bad Block Count
-AD=Erase Count
-B8=Factory Bad Block Count
-C0=Unexpected Power Loss Count
-CA=Total Number of Corrected Bits
-CD=Max Rated PE Counts
-CE=Minimum Erase Counts
-CF=Maximum Erase Counts
-D3=SATA Uncorrectable Error Count
-D4=NAND Page Reads During Retry
-D5=Simple Read Retry Attempts
-D6=Adaptive Read Retry Attempts
-DD=Internal Data Path Uncorrectable Errors
-DE=RAID Recovery Count
-E6=Power Loss Protection
-FB=NAND Read Count
+64=Celkem smazaných bloků
+A7=SSD ochranný režim
+A8=Počet chyb SATA PHY
+A9=Chybný počet bloků
+AD=Počet vymazání
+B8=Počet chybných bloků ve výrobě
+C0=Neočekávaný počet ztrát napájení
+CA=Celkový počet opravených bitů
+CD=Maximální počet hodnocených PE
+CE=Minimální počet vymazání
+CF=Maximální počet vymazání
+D3=Počet neopravitelných chyb SATA
+D4=Čtení stránek NAND během opakování
+D5=Jednoduché pokusy o opakování čtení
+D6=Adaptivní pokusy o opakování čtení
+DD=Neopravitelné chyby vnitřní cesty dat
+DE=Počet obnovení RAIDu
+E6=Ochrana proti ztrátě napájení
+FB=Počet čtení NAND
 
 ;Updated 6.7.0
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Celkový zápis
+F2=Celkový čtení
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
-01=Read Error Rate
-05=Reallocated Sectors Count
-09=Power-On Hours
-0C=Power Cycle Count
+01=Míra chyb čtení
+05=Počet přerozdělených sektorů
+09=Hodiny zapnutí
+0C=Počet cyklů napájení
+C0=Nebezpečný počet vypnutí
+C2=Temperatoure
+C4=Počet událostí přerozdělení
+C6=Neopravitelný počet sektorů
+F1=Celkový zápis
+F2=Celkový čtení
+
+;Updated (5.4.0)
+B1=Počet opotřebení
+B2=Počet použitých rezervovaných bloků (nejhorší případ)
+B5=Počet selhání programu (celkem)
+B6=Počet chyb při mazání (celkem)
+BB=Počet neopravitelných chyb
+C7=Počet chyb Ultra CRC
+E8=Rezervované místo k dispozici
+
+;Added 6.2.0
 AA=Grown Bad Blocks
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Average Program/Erase Count
-AE=Unexpected Power Loss Count
-AF=Program Fail Count (Worst Case)
-B0=Erase Fail Count (Worst Case)
-B1=Wear Leveling Count
-B2=Used Reserved Block Count (Worst Case)
-B3=Used Reserved Block Count
-B4=UnUsed Reserved Block Count (Total)
-B5=Program Fail Count
-B6=Erase Fail Count
-B7=SATA Interface Down Shift
-B8=End-to-End Data Errors Corrected
-BB=Uncorrectable Error Count
-BC=Command Time out
-C0=Unsafe Shutdown Count
-C3=ECC rate
-C4=Reallocation Event Count
-C6=Uncorrectable Sector Count
-C7=Ultra CRC Error Count
-E8=Available Reserved Space
-E9=NAND GB written
-F1=Total Host Writes
-F2=Total Host Reads
+AB=Počet selhání programu (celkem)
+AC=Počet chyb při mazání (celkem)
+AD=Průměrný počet programů/mazání (celkem)
+AE=Neočekávaný počet ztrát napájení
+AF=Počet selhání programu (nejhorší případ)
+B0=Počet chyb při mazání (nejhorší případ)
+B3=Počet použitých rezervovaných bloků (celkem)
+B4=Počet nevyužitých rezervovaných bloků (celkem)
+B7=Posun rozhraní SATA dolů
+B8=Opravené chyby dat od konce ke konci
+BC=Vypršení časového limitu příkazu
+C3=ECC frekvence
+E9=NAND GB zapsáno
 
 [SmartSanDisk] ;Added (5.2.0)
-05=Retired Block Count
-09=Power-On Hours
-0C=Power Cycle Count
-AA=Reserve Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AE=Unexpected Power Loss Count
-BB=Reported Uncorrectable Errors
-E8=Remaining Life
-F1=Total Host Writes
-F2=Total Host Reads
+05=Počet bloků v důchodu
+09=Hodiny zapnutí
+0C=Počet cyklů napájení
+AA=Počet rezervních bloků
+AB=Počet selhání programu
+AC=Počet chyb při mazání
+AE=Neočekávaný počet ztrát napájení
+BB=Nahlášené neopravitelné chyby
+C2=Teplota
+E8=Zbývající život
+F1=Celkový zápis
+F2=Celkový čtení
 
 [SmartOczVector] ;Added (5.3.0)
-05=Accumulated Runtime Bad Blocks
-09=Power-On Hours Count
-0C=Power Cycle Count
-AB=Available Over-Provisioned Block Count
-AE=Power Cycle Count (Unplanned)
-BB=Total Uncorrectable NAND Reads
-C3=Total Programming Failures
-C4=Total Erase Failures
-C5=Total Read Failures (Uncorrectable)
-C6=Host Reads
-C7=Host Writes
-D0=Average Erase Count
-D2=SATA CRC Error Count
-E9=Remaining Life
-F9=Total NAND Programming Count
+05=Kumulované špatné běhové bloky
+09=Počet hodin zapnutí
+0C=Počet cyklů napájení
+AB=Počet dostupných nadzásobených bloků
+AE=Počet cyklů napájení (neplánováno)
+BB=Celkový počet neopravitelných čtení NAND
+C2=Temperatoure
+C3=Celkový počet chyb v programování
+C4=Celkový počet chyb při mazání
+C5=Celkový počet chyb čtení (neopravitelný)
+C6=Hostitelské čtení
+C7=Zápisy hostitelů
+D0=Průměrný počet vymazání
+D2=Počet chyb SATA CRC
+E9=Zbývající život
+F9=Celkový počet programů NAND
 
 ;Updated 5.5.0
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Celkový zápis
+F2=Celkový čtení
 
 ;Updated 6.6.0
-64=Total Blocks Erased
-B8=Factory Bad Block Count Total
-CA=Total Number Of Read Bits Corrected
-CD=Max Rated PE Count
-CE=Min Erase Count
-CF=Max Erase Count
-D4=Total Count NAND Pages Reads Requiring Read Retry
-D5=Total Count of Simple Read Retry Attempts
-D6=Total Count of Adaptive Read Retry Attempts
-DD=Internal Data Path Protection Uncorrectable Errors
-DE=RAID Recovery Count
-E0=In Warranty
-E1=DAS Polarity
-E2=Partial Pfail
-E6=Write Throttling Activation Flag
-F9=Total NAND Programming Count (pages)
-FB=Total NAND Read Count
+64=Celkem smazaných bloků
+B8=Celkový počet chybných bloků ve výrobě
+CA=Celkový počet opravených bitů čtení
+CD=Max. hodnocený počet PE
+CE=Minimální počet vymazání
+CF=Maximální počet vymazání
+D4=Celkový počet čtení NAND stránek vyžadujících opakované čtení
+D5=Celkový počet pokusů o opakování jednoduchého čtení
+D6=Celkový počet pokusů o opakování adaptivního čtení
+DD=Neopravitelné chyby ochrany vnitřní cesty dat
+DE=Počet obnovení RAIDu
+E0=V záruce
+E1=DAS polarita
+E2=Parciální Pfail
+E6=Zapsat příznak aktivace omezení
+F9=Celkový počet programování NAND (stránky)
+FB=Celkový počet čtení NAND
 
 [SmartCorsair] ;Added 6.2.0
-01=Raw Read Error Rate
-05=Retired Block Count
-09=Power On Hours
-0C=Power Cycle Count
-AA=Reserve Block Count
-AC=Erase Fail Count
-AE=Unexpected Power Loss Count
-B5=Program Fail Count
-BB=Reported Uncorrectable Errors
-C2=Temperature
-C4=Reallocation Event Count
-E7=SSD Life Left
-F1=Lifetime GB Written
-F2=Lifetime GB Read
+01=Míra chybovosti čtení RAW
+05=Počet bloků v důchodu
+09=Hodiny napájení
+0C=Počet cyklů napájení
+AA=Počet rezervních bloků
+AC=Počet chyb při mazání
+AE=Neočekávaný počet ztrát napájení
+B5=Počet selhání programu
+BB=Nahlášené neopravitelné chyby
+C2=Teplota
+C4=Počet událostí přerozdělení
+E7=Životnost SSD
+F1=Psáno celoživotně GB
+F2=Doživotní GB čtení
 
 [SmartToshiba] ;Added 6.2.0
-01=Read Error Rate
-02=Throughput Performance
-03=Spin-Up Time
-04=Start/Stop Count
-05=Reallocated Sectors Count
-07=Seek Error Rate
-08=Seek Time Performance
-09=Power-On Hours
-0A=Spin Retry Count
-0B=Recalibration Retries
-0C=Power Cycle Count
-A7=SSD Protect Mode
-A8=SATA PHY Error Count
-A9=Total Bad Block Count
-AD=Erase Count
-C0=Unexpected Power Loss Count
-C2=Temperature
-C4=Reallocation Event Count
-C5=Current Pending Sector Count
-C6=Uncorrectable Sector Count
-F1=Total Host Writes
-F2=Total Host Reads
+01=Míra chyb čtení
+02=Výkon propustnosti
+03=Čas otočení
+04=Počet spuštění/zastavení
+05=Počet přerozdělených sektorů
+07=Rychlost hledání chyb
+08=Vyhledat časový výkon
+09=Hodiny zapnutí
+0A=Počet opakování otočení
+0B=Opakované kalibrace
+0C=Počet cyklů napájení
+A7=SSD ochranný režim
+A8=Počet chyb SATA PHY
+A9=Celkový počet chybných bloků
+AD=Počet vymazání
+C0=Neočekávaný počet ztrát napájení
+C2=Teplota
+C4=Počet událostí přerozdělení
+C5=Aktuální počet čekajících sektorů
+C6=Neopravitelný počet sektorů
+F1=Celkový zápis
+F2=Celkový čtení
 
 [SmartSanDiskGb] ;Added 6.2.0
-05=Reallocated Block Count
-09=Power On Hours
-0C=Power Cycle Count
-A6=Min W/E Cycle
+05=Přerozdělený počet bloků
+09=Hodiny napájení
+0C=Počet cyklů napájení
+A6=Min. cyklus W/E
 A7=Max Bad Block/Die
-A8=Maximum Erase Cycle
-A9=Total Bad Block
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Average Erase Cycle
-AE=Unexpected Power Loss Count
-BB=Reported Uncorrectable Errors
-C2=Temperature
-D4=SATA PHY Error
-E6=Percentage Total P/E Count
-E8=Spare Block Remaining
-E9=Total GB Written To NAND
-F1=Total GB Written
-F2=Total GB Read
+A8=Maximální mazací cyklus
+A9=Celkový chybný blok
+AB=Počet selhání programu
+AC=Počet chyb při mazání
+AD=Průměrný cyklus mazání
+AE=Neočekávaný počet ztrát napájení
+BB=Nahlášené neopravitelné chyby
+C2=Teplota
+D4=Chyba SATA PHY
+E6=Procento součtu P/E
+E8=Zbývající rezervní blok
+E9=Celkový počet GB zapsaných do NAND
+F1=Celkem zapsáno GB
+F2=Celkem přečteno GB
 
 [SmartKingston] ;Added 6.6.0
-01=Read Error Rate
-02=Throughput Performance
-03=Spin Up Time
-05=Reallocated Sectors Count
-07=Seek Error Rate
-08=Seek Time Performance
-09=Power-On Hours
-0A=Spin Retry Count
-0C=Power Cycle Count
-A8=SATA PHY Error Count
-AA=Bad Block Count
-AD=Erase count
-AF=Bad Cluster Table Count
-BB=Uncorrectable Errors
-C0=Unsafe Shutdown Count
-C2=Temperature
-C4=Later Bad Block Count
-C5=Current Pending Sector Count
-C7=CRC Error Count
-DA=CRC Error Count
-E7=SSD Life Left
-E9=Lifetime Writes to Flash
-F0=Write Head
-F1=Host Writes
-F2=Host Reads
-F4=Average Erase Count
-F5=Max Erase Count
-F6=Total Erase Count
+01=Míra chyb čtení
+02=Výkon propustnosti
+03=Čas spinningu
+05=Počet přerozdělených sektorů
+07=Rychlost hledání chyb
+08=Vyhledat časový výkon
+09=Hodiny zapnutí
+0A=Počet opakování otočení
+0C=Počet cyklů napájení
+A8=Počet chyb SATA PHY
+AA=Chybný počet bloků
+AD=Vymazat počet
+AF=Chybný počet tabulky clusterů
+BB=Neopravitelné chyby
+C0=Nebezpečný počet vypnutí
+C2=Teplota
+C4=Později chybný počet bloků
+C5=Aktuální počet čekajících sektorů
+C7=Počet chyb CRC
+DA=Počet chyb CRC
+E7=Životnost SSD
+E9=Doživotní zápisy do Flashe
+F0=Zápis hlavičky
+F1=Zápisy hostitelů
+F2=Hostitelské čtení
+F4=Průměrný počet vymazání
+F5=Maximální počet vymazání
+F6=Celkový počet vymazání
 
 [SmartNVMe] ;Added 6.7.0
-01=Critical Warning
-02=Composite Temperature
-03=Available Spare
-04=Available Spare Threshold
-05=Percentage Used
-06=Data Units Read
-07=Data Units Written
-08=Host Read Commands
-09=Host Write Commands
-0A=Controller Busy Time
-0B=Power Cycles
-0C=Power On Hours
-0D=Unsafe Shutdowns
-0E=Media and Data Integrity Errors
-0F=Number of Error Information Log Entries
+01=Kritické varování
+02=Složená teplota
+03=Rezerva k dispozici
+04=Dostupná náhradní prahová hodnota
+05=Použité procento
+06=Čtení datových jednotek
+07=Zapsané datové jednotky
+08=Příkazy pro hostitelské čtení
+09=Příkazy pro zápis hostitele
+0A=Čas obsazení řadiče
+0B=Napájecí cykly
+0C=Hodiny napájení
+0D=Nebezpečné vypnutí
+0E=Chyby v médiích a integritě dat
+0F=Počet položek protokolu chybových informací
 
 [SmartRealtek] ;Added by Realtek
-01=Raw data error rate
-05=Reallocated sector count
-09=Power on hour count
-0C=Power cycle count
+01=Hrubá chybovost dat
+05=Počet přerozdělených sektorů
+09=Napájení při počítání hodin
+0C=Počet cyklů napájení
 A1=GDN
-A2=Total erase count
-A3=Max PE cycle
-A4=Average erase count
-A5=Initial bad block count
-A6=Total bad block count
-A7=SSD protect mode
-A8=SATA Phy error count
-A9=Health
-AB=Program fail count
-AC=Erase fail count
-AE=Unexpected power loss count
-AF=ECC fail count
-B5=Unaligned access count
-BB=Reported uncorrectable error
-C2=Enclosure temperature
-C3=Cumulative corrected ecc
-C4=Reallocation event count
-C7=Ultra DMA CRC error count
-CE=Min. erase count
-CF=Max erase count
-E7=Lifetime left
-E8=Available reserved space
-F1=Write life time
-F2=Read life time
-F9=Total GB written to NAND (TLC)
-FA=Total GB written to NAND (SLC)
+A2=Celkový počet vymazání
+A3=Max PE cyklus
+A4=Průměrný počet vymazání
+A5=Počet chybných bloků
+A6=Celkový počet chybných bloků
+A7=Režim ochrany SSD
+A8=Počet chyb SATA Phy
+A9=Zdraví
+AB=Počet selhání programu
+AC=Počet neúspěšných mazání
+AE=Neočekávaný počet ztrát energie
+AF=Počet selhání ECC
+B5=Počet nezařazených přístupů
+BB=Nahlášená neopravitelná chyba
+C2=Teplota uzavřeného prostoru
+C3=Kumulativně korigovaný ecc
+C4=Počet událostí přerozdělení
+C7=Počet chyb CRC Ultra DMA
+CE=Min. počet vymazání
+CF=Max. počet vymazání
+E7=Zbývá doživotí
+E8=Rezervované místo k dispozici
+F1=Životnost zápisu
+F2=Životnost čtení
+F9=Celkem GB zapsáno do NAND (TLC)
+FA=Celkový počet GB zapsaných do NAND (SLC)
 
 [SmartSKhynix] ; Updated 8.8.0
 01=Read Error Rate
@@ -913,9 +908,9 @@ F1=Total LBA Written
 F2=Total LBA Read
 FA=Total Number of NAND Read Retries
 
-[SmartKioxia]
+[SmartKioxia] ; Added ８．８．０
 09=Power-On Hours Count
-0C=Device Power Cycle Count
+0C=Power Cycle Count
 A7=SSD Protect Mode
 A8=SATA PHY Error Count
 A9=Bad Block Count
@@ -924,7 +919,7 @@ C0=Unexpected Power Loss Count
 C2=Temperature
 F1=Host Writes
 
-[SmartWdc]
+[SmartWdc] ; Added ８．８．０
 01=Read Error Rate
 05=Reassigned Block Count
 09=Power On Hours
@@ -952,10 +947,13 @@ EA=NAND GB Written (SLC)
 EE=Media Wearout Indicator (Cycles Remaining)
 F1=Total GB Written
 F2=Total GB Read
+F3=Total NAND Writes
 F4=Temperature Throttle Status
 F9=NAND GB Written
 
 [SmartKingstonSuv]
+; https://media.kingston.com/support/downloads/UV400-SMART-attribute.pdf
+; https://media.kingston.com/support/downloads/UV500_SMART_attribute.pdf
 01=Read Error Rate
 05=Reallocated Sector Count
 09=Power On Hours
@@ -984,6 +982,7 @@ F2=Lifetime Host Reads
 FA=Total Number of NAND Read Retries
 
 [SmartKingstonKC600]
+;https://media.kingston.com/support/downloads/KC600-SMART-attribute.pdf
 01=Read Error Rate
 05=Re-Allocated NAND Block Count
 09=Power-On Hours
@@ -1016,6 +1015,7 @@ F2=Total LBAs Read
 F5=Total Media Writes
 
 [SmartKingstonDC500]
+;https://media.kingston.com/support/pdf/MKP_521-7_SMART-DC500_attribute_hr.pdf
 01=Host UNC Error Count
 09=Power on Hours
 0C=Power On / Off Cycle
@@ -1044,6 +1044,7 @@ F5=Max Erase Count
 F6=Total Erase Count
 
 [SmartKingstonSA400]
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/20
 01=Uncorrectable Errors
 09=Power On Hours
 0C=Power Cycles
@@ -1103,6 +1104,7 @@ F2=Total Host Read
 F3=NAND GB Written
 
 [SmartIntelDc]
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/18
 01=Raw Read Error Count
 05=Reallocated Flash Block Count
 09=Power-On Hours Count
@@ -1127,7 +1129,7 @@ CA=Percentage of Drive Life Used
 E2=Timed Workload - Media Wear
 E3=Timed Workload - Host Read/Write Ratio
 E4=Timed Workload Timer
-EA=Total Host Bytes Read
+EA=Thermal Throttle Status
 EB=Total Host Bytes/Sectors Written
 F1=Total Nand Bytes/Sectors Written
 
@@ -1196,6 +1198,7 @@ F5=Flash Write Sector Count
 09=Power-On Hours
 0A=Spin Retry Count
 0C=Power Cycle Count
+A7=SSD Protect Mode
 A8=SATA PHY Error Count
 AA=Bad Block Count
 AD=Erase Count
@@ -1224,6 +1227,7 @@ E7=SSD Life Left
 F1=Host Writes
 
 [SmartSeagate]
+; https://crystalmark.info/board/c-board.cgi?cmd=one;no=1818;id=#1818
 01=Read Error Rate
 05=Retired Sectors Count
 09=Power On Hours
@@ -1254,6 +1258,7 @@ F2=Lifetime Reads From Host
 FA=Lifetime NAND Read Retries
 
 [SmartSeagateIronWolf]
+; https://www.seagate.com/jp/ja/internal-hard-drives/ssd/ironwolf-nas-ssd/#specs
 01=Raw Read Error Rate
 05=Reallocated Sector Count
 09=Power On Hours
@@ -1298,7 +1303,7 @@ F2=Total Read
 [SmartMaxiotek] ; Added 8.8.6
 05=Reallocated Sector Count
 09=Power-On Hours
-0C=Drive Power Cycle Count
+0C=Power Cycle Count
 A7=SSD Protect Mode
 A8=PHY Error Count
 A9=Bad Block Count
@@ -1387,3 +1392,28 @@ F1=Total LBA written
 F2=Total LBA Read
 F3=NAND Temperature
 F5=Bit Error Count
+
+[SmartScy] ;Added 8.12.8
+01=Raw Read Error Rate
+05=Reallocated Sector Count
+07=Seek Error Rate
+09=Power-On Hours
+0C=Drive Power Cycle Count
+A7=Average Erase Count
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Erase Count
+B1=Read Retry Count
+B4=Spare Block Count Left
+B7=Runtime Bad Block
+BB=Reported UNC Errors
+C0=Unexpected Power Loss Count
+C2=Controlled Temperature
+C3=Cumulative ECC Bit Correction Count
+C4=Reallocated Event Count
+C5=Current Pending Sector
+C7=UDMA CRC Error Count
+E7=SSD Life Left
+F1=Total LBAs Written
+F2=Total LBAs Read
+F5=Total Nand Flash Written

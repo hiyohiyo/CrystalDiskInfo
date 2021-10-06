@@ -74,6 +74,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("ma"), // Marvell
 	_T("mk"), // Maxiotek
 	_T("ym"), // YMTC
+	_T("sc"), // SCY
 	_T(""), // 
 };
 
@@ -110,6 +111,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartMarvell"),
 	_T("SmartMaxiotek"),
 	_T("SmartYmtc"),
+	_T("SmartScy"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -177,6 +179,7 @@ public:
 		SSD_VENDOR_MARVELL = 28,
 		SSD_VENDOR_MAXIOTEK = 29,
 		SSD_VENDOR_YMTC = 30,
+		SSD_VENDOR_SCY = 31,
 		SSD_VENDOR_MAX = 99,
 
 		VENDOR_UNKNOWN = 0x0000,
@@ -2005,6 +2008,7 @@ protected:
 	BOOL IsSsdMarvell(ATA_SMART_INFO& asi);
 	BOOL IsSsdMaxiotek(ATA_SMART_INFO& asi);
 	BOOL IsSsdYmtc(ATA_SMART_INFO& asi);
+	BOOL IsSsdScy(ATA_SMART_INFO& asi);
 	BOOL IsSsdGeneral(ATA_SMART_INFO& asi);
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
