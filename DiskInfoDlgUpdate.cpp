@@ -1265,11 +1265,11 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 
 		if(m_Ata.vars[i].HostReads > 1024 * 1024)
 		{
-			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
+			cstr.Format(_T("%.3f PB  "), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].HostReads > 1024)
 		{
-			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostReads / 1024.0);
+			cstr.Format(_T("%.3f TB  "), m_Ata.vars[i].HostReads / 1024.0);
 		}
 
 		m_BufferSize.Format(_T("%d GB"), m_Ata.vars[i].HostReads);
@@ -1305,11 +1305,11 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 
 		if(m_Ata.vars[i].HostWrites > 1024 * 1024)
 		{
-			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
+			cstr.Format(_T("%.3f PB  "), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].HostWrites > 1024)
 		{
-			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostWrites / 1024.0);
+			cstr.Format(_T("%.3f TB  "), m_Ata.vars[i].HostWrites / 1024.0);
 		}
 
 		m_NvCacheSize.Format(_T("%d GB"), m_Ata.vars[i].HostWrites);
