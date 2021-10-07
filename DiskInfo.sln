@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiskInfo", "DiskInfo.vcxproj", "{5496C268-D510-449C-8471-DE2B34898C28}"
 EndProject
@@ -11,6 +11,10 @@ Global
 		Debug|ARM64 = Debug|ARM64
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
+		DebugGraph|ARM = DebugGraph|ARM
+		DebugGraph|ARM64 = DebugGraph|ARM64
+		DebugGraph|Win32 = DebugGraph|Win32
+		DebugGraph|x64 = DebugGraph|x64
 		Release|ARM = Release|ARM
 		Release|ARM64 = Release|ARM64
 		Release|Win32 = Release|Win32
@@ -33,6 +37,14 @@ Global
 		{5496C268-D510-449C-8471-DE2B34898C28}.Debug|Win32.Build.0 = Debug|Win32
 		{5496C268-D510-449C-8471-DE2B34898C28}.Debug|x64.ActiveCfg = Debug|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.Debug|x64.Build.0 = Debug|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.DebugGraph|ARM.ActiveCfg = DebugGraph|ARM
+		{5496C268-D510-449C-8471-DE2B34898C28}.DebugGraph|ARM.Build.0 = DebugGraph|ARM
+		{5496C268-D510-449C-8471-DE2B34898C28}.DebugGraph|ARM64.ActiveCfg = DebugGraph|ARM64
+		{5496C268-D510-449C-8471-DE2B34898C28}.DebugGraph|ARM64.Build.0 = DebugGraph|ARM64
+		{5496C268-D510-449C-8471-DE2B34898C28}.DebugGraph|Win32.ActiveCfg = DebugGraph|Win32
+		{5496C268-D510-449C-8471-DE2B34898C28}.DebugGraph|Win32.Build.0 = DebugGraph|Win32
+		{5496C268-D510-449C-8471-DE2B34898C28}.DebugGraph|x64.ActiveCfg = DebugGraph|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.DebugGraph|x64.Build.0 = DebugGraph|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|ARM.ActiveCfg = Release|ARM
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|ARM.Build.0 = Release|ARM
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|ARM64.ActiveCfg = Release|ARM64
