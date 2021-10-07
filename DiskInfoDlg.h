@@ -183,6 +183,7 @@ protected:
 	DWORD m_WaitTimeStatus;
 	DWORD m_AutoDetectionStatus;
 	DWORD m_RawValues;
+	BOOL m_RecordRawValues;
 	BOOL m_NowDetectingUnitPowerOnHours;
 
 	CArray<DWORD, DWORD> m_GraphProcessId;
@@ -560,6 +561,7 @@ public:
 	afx_msg void OnRawValues10All();
 	afx_msg void OnRawValues2byte();
 	afx_msg void OnRawValues1byte();
+	afx_msg void OnRecordRawValues();
 //	afx_msg void OnAutoDetection();
 	afx_msg void OnAsciiView();
 	afx_msg void OnAlertMail();

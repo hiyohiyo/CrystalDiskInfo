@@ -484,6 +484,22 @@ void CDiskInfoDlg::CheckRadioRawValues()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::OnRecordRawValues()
+{
+	m_RecordRawValues = !((BOOL)GetPrivateProfileInt(_T("Setting"), _T("RecordRawValues"), 0, m_Ini));
+
+	CMenu* menu = GetMenu();
+	menu->CheckMenuItem(ID_RECORD_RAW_VALUES, m_RecordRawValues ? MF_CHECKED : MF_UNCHECKED);
+	SetMenu(menu);
+
+	CString cstr;
+	cstr.Format(_T("%d"), (INT)m_RecordRawValues);
+	WritePrivateProfileString(_T("Setting"), _T("RecordRawValues"), cstr, m_Ini);
+
+	DrawMenuBar();
+	Refresh(TRUE); // SaveSmartInfo(i) does not work due to SAVE_SMART_PERIOD when initial stage
+}
+
 void CDiskInfoDlg::OnOpenDiskManagement()
 {
 	ShellExecute(NULL, NULL, _T("diskmgmt.msc"), NULL, NULL, SW_SHOWNORMAL);	

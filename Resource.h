@@ -963,6 +963,7 @@
 #define ID_RAW_VALUES_10_ALL            33111
 #define ID_RAW_VALUES_2BYTE             33112
 #define ID_RAW_VALUES_1BYTE             33113
+#define ID_RECORD_RAW_VALUES            33120
 #define ID_AUTO_DETECTION_05_SEC        33125
 #define ID_AUTO_DETECTION_10_SEC        33126
 #define ID_AUTO_DETECTION_20_SEC        33127

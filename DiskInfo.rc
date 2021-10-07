@@ -1103,6 +1103,8 @@ BEGIN
                 MENUITEM "10 [DEC]",                ID_RAW_VALUES_10_ALL
                 MENUITEM "10 [DEC] - 2byte",        ID_RAW_VALUES_2BYTE
                 MENUITEM "10 [DEC] - 1byte",        ID_RAW_VALUES_1BYTE
+                MENUITEM SEPARATOR
+                MENUITEM "Record Raw Values [DEC]", ID_RECORD_RAW_VALUES
             END
             POPUP "Wait Time at Startup"
             BEGIN

@@ -52,6 +52,7 @@ TEMPERATURE_TYPE=T&emperature Type
 CELSIUS=Celsius (°C)
 FAHRENHEIT=Fahrenheit (°F)
 HEALTH_STATUS_SETTING=&Health Status Setting
+RECORD_RAW_VALUES=Record Raw Values [DEC]
 
 ;Graph
 OPTION=&Option
