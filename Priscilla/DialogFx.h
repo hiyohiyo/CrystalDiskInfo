@@ -125,6 +125,7 @@ protected:
 
 	// Theme for SubClass
 	int m_OffsetX;
+	int m_OffsetY_WAF;
 	CString m_ThemeDir;
 	CString m_CurrentTheme;
 	CString m_DefaultTheme;

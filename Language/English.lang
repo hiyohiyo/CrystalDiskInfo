@@ -170,6 +170,8 @@ POWER_ON_COUNT=Power On Count
 DRIVE_LETTER=Drive Letter
 FEATURE=Features
 HEALTH_STATUS=Health Status
+WAF=WAF
+WAF_TOOLTIP=Write amplification factor
 
 UNKNOWN=Unknown
 POWER_ON_COUNT_UNIT=count
@@ -344,6 +346,7 @@ C5=Current Pending Sector Count
 C6=Uncorrectable Sector Count
 ; CrystalDiskInfo assign
 FF=Remaining Life
+WAF=Write amplification factor
 
 ;Updated 5.4.0
 F1=Total Host Writes

@@ -749,6 +749,9 @@
 
 #define IDC_BUTTON_VOICE_HIDE           1108
 
+#define IDC_LABEL_WAF                   1109
+#define IDC_VALUE_WAF                   1110
+
 #define IDC_FONT_FACE_COMBO             1201
 #define IDC_FONT_SCALE_COMBO			1202
 #define IDC_FONT_RENDER_COMBO           1203

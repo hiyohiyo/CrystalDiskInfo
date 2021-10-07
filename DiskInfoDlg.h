@@ -139,6 +139,7 @@ protected:
 	CStaticFx			m_CtrlLabelRotationRate;
 	CStaticFx			m_CtrlLabelPowerOnCount;
 	CStaticFx			m_CtrlLabelPowerOnHours;
+	CStaticFx			m_CtrlLabelWAF;
 	CStaticFx			m_CtrlLabelAtaAtapi;
 	CStaticFx			m_CtrlLabelFeature;
 	CStaticFx			m_CtrlLabelDiskStatus;
@@ -153,6 +154,7 @@ protected:
 	CEditFx				m_CtrlBufferSize;
 	CEditFx				m_CtrlNvCacheSize;
 	CEditFx				m_CtrlRotationRate;
+	CEditFx				m_CtrlWAF;
 	CEditFx				m_CtrlPowerOnCount;
 	CEditFx				m_CtrlPowerOnHours;
 	CEditFx				m_CtrlAtaAtapi;
@@ -236,6 +238,7 @@ protected:
 	CString m_Life;
 	CString m_PowerOnHours;
 	CString m_PowerOnCount;
+	CString m_WAF;
 	CString m_Feature;
 	CString m_BufferSize;
 	CString m_NvCacheSize;
@@ -254,6 +257,7 @@ protected:
 	CString m_LabelTemperature;
 	CString m_LabelPowerOnHours;
 	CString m_LabelPowerOnCount;
+	CString m_LabelWAF;
 	CString m_LabelFeature;
 	CString m_LabelBufferSize;
 	CString m_LabelNvCacheSize;
@@ -365,6 +369,7 @@ protected:
 
 	void Refresh(DWORD flagForceUpdate);
 	BOOL AppendLog(CString dir, CString disk, CString file, CTime time, int value, BOOL firstTime = FALSE, int threshold = 0);
+	BOOL AppendLog_WAF(CString dir, CString disk, CString file, CTime time, double value, BOOL flagFirst, int threshold = 0);
 	BOOL AddEventLog(DWORD eventId, WORD eventType, CString message);
 	BOOL SendMail(DWORD eventId, CString title, CString message);
 	BOOL AddAlarmHistory(DWORD eventId, CString disk, CString message);

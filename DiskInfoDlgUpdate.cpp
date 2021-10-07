@@ -974,6 +974,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	m_CtrlModel.SetToolTipText(L"");
 	m_CtrlPowerOnHours.SetToolTipText(L"");
 	m_CtrlPowerOnCount.SetToolTipText(L"");
+	m_CtrlWAF.SetToolTipText(L"");
 	m_CtrlBufferSize.SetToolTipText(L"");
 	m_CtrlNvCacheSize.SetToolTipText(L"");
 	m_CtrlRotationRate.SetToolTipText(L"");
@@ -986,6 +987,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		m_ModelCapacity = i18n(_T("Message"), _T("DISK_NOT_FOUND"));
 		m_Firmware = _T("");
 		m_SerialNumber = _T("");
+		m_WAF = _T("");
 		m_PowerOnCount = _T("");
 		m_PowerOnHours = _T("");
 		m_BufferSize = _T("");
@@ -1354,9 +1356,10 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		}
 		*/
 
-		m_LabelRotationRate = i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES"));
+		SetLabel(m_CtrlLabelRotationRate, m_LabelRotationRate, i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES")));
 		m_CtrlRotationRate.SetToolTipText(cstr);
-		m_CtrlLabelRotationRate.SetToolTipText(i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES")));
+
+		SetLabel(m_CtrlLabelWAF, m_LabelWAF, i18n(_T("Dialog"), _T("WAF")));
 	}
 	else if (m_Ata.vars[i].GBytesErased >= 0)
 	{
@@ -1402,9 +1405,23 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	{
 		m_RotationRate = _T("----");
 		m_LabelRotationRate = _T("----");
+		m_WAF = _T("----");
 		m_CtrlRotationRate.SetToolTipText(L"");
 		m_CtrlLabelRotationRate.SetToolTipText(L"");
 	}
+	if (m_Ata.vars[i].HostWrites > 10 && m_Ata.vars[i].NandWrites > 0)
+	{
+		double d_waf = static_cast<double>(m_Ata.vars[i].NandWrites) / static_cast<double>(m_Ata.vars[i].HostWrites);
+		m_WAF.Format(_T("%.4f"), d_waf);
+		m_CtrlLabelWAF.SetToolTipText(i18n(_T("Dialog"), _T("WAF_TOOLTIP")));
+	}
+	else // refuse to a new or unsupported device
+	{
+		SetLabel(m_CtrlLabelWAF, m_LabelWAF, L"----");
+		m_WAF = _T("----");
+		m_CtrlLabelWAF.SetToolTipText(L"");
+	}
+
 
 	if (m_Ata.vars[i].DiskSizeLba48 >= m_Ata.vars[i].DiskSizeLba28)
 	{
@@ -2179,6 +2196,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	SetLabel(m_CtrlLabelTemperature, m_LabelTemperature, i18n(_T("Dialog"), _T("TEMPERATURE")));
 	SetLabel(m_CtrlLabelPowerOnHours, m_LabelPowerOnHours, i18n(_T("Dialog"), _T("POWER_ON_HOURS")));
 	SetLabel(m_CtrlLabelPowerOnCount, m_LabelPowerOnCount, i18n(_T("Dialog"), _T("POWER_ON_COUNT")));
+	SetLabel(m_CtrlLabelWAF, m_LabelWAF, i18n(_T("Dialog"), _T("WAF")));
 	SetLabel(m_CtrlLabelFeature, m_LabelFeature, i18n(_T("Dialog"), _T("FEATURE")));
 	SetLabel(m_CtrlLabelDriveMap, m_LabelDriveMap, i18n(_T("Dialog"), _T("DRIVE_LETTER")));
 	SetLabel(m_CtrlLabelInterface, m_LabelInterface, i18n(_T("Dialog"), _T("INTERFACE")));
@@ -2216,6 +2234,11 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		SetLabel(m_LabelRotationRate, _T("LabelRotationRate"), i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT")));
 		}
 		*/
+		if (m_Ata.vars[m_SelectDisk].HostWrites >= 0 && m_Ata.vars[m_SelectDisk].NandWrites >= 0)
+		{
+			SetLabel(m_CtrlLabelWAF, m_LabelWAF, i18n(_T("Dialog"), _T("WAF")));
+		}
+
 	}
 
 	UpdateData(FALSE);
@@ -2448,6 +2471,12 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 		AppendLog(dir, disk, _T("GBytesErased"), time, m_Ata.vars[i].GBytesErased, flagFirst);
 	}
 
+	if (m_Ata.vars[i].HostWrites > 1 && m_Ata.vars[i].NandWrites > 0)
+	{
+		double d_waf = static_cast<double>(m_Ata.vars[i].NandWrites) / static_cast<double>(m_Ata.vars[i].HostWrites);
+		AppendLog_WAF(dir, disk, _T("WAF"), time, d_waf, flagFirst);
+	}
+
 	if (m_Ata.vars[i].WearLevelingCount >= 0)
 	{
 		AppendLog(dir, disk, _T("WearLevelingCount"), time, m_Ata.vars[i].WearLevelingCount, flagFirst);
@@ -2525,6 +2554,58 @@ BOOL CDiskInfoDlg::AppendLog(CString dir, CString disk, CString file, CTime time
 				}
 			}
 			catch (CFileException * e)
+			{
+				DebugPrint(L"CFileException");
+				e->Delete();
+			}
+			outFile.Close();
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+BOOL CDiskInfoDlg::AppendLog_WAF(CString dir, CString disk, CString file, CTime time, double value, BOOL flagFirst, int threshold)
+{
+	TCHAR str[256];
+
+	// First Time
+	if (flagFirst)
+	{
+		wsprintf(str, _T("%f"), value);
+		WritePrivateProfileString(disk + _T("FIRST"), file, str, dir + _T("\\") + SMART_INI);
+
+		if (file.GetLength() == 2)
+		{
+			wsprintf(str, _T("%f"), threshold);
+			WritePrivateProfileString(disk + _T("THRESHOLD"), file, str, dir + _T("\\") + SMART_INI);
+		}
+	}
+
+	GetPrivateProfileString(disk, file, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
+	int pre = _tstoi(str);
+
+	if (pre != value)
+	{
+		// Update
+		wsprintf(str, _T("%f"), value);
+		WritePrivateProfileString(disk, file, str, dir + _T("\\") + SMART_INI);
+
+		CString line;
+		line.Format(_T("%s,%f\n"), time.Format(_T("%Y/%m/%d %H:%M:%S")), value);
+
+		CStdioFile outFile;
+		if (outFile.Open(dir + _T("\\") + file + _T(".csv"),
+			CFile::modeCreate | CFile::modeNoTruncate | CFile::modeReadWrite | CFile::typeText))
+		{
+			ULONGLONG fileLength = outFile.GetLength();
+			try
+			{
+				if (outFile.SeekToEnd() == fileLength)
+				{
+					outFile.WriteString(line);
+				}
+			}
+			catch (CFileException* e)
 			{
 				DebugPrint(L"CFileException");
 				e->Delete();

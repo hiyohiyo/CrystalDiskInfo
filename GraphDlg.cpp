@@ -5,6 +5,7 @@
 //      License : The MIT License
 /*---------------------------------------------------------------------------*/
 
+#include <afxpriv.h>
 #include "stdafx.h"
 #include "AtaSmart.h"
 #include "DiskInfo.h"
@@ -27,6 +28,7 @@
 #define SMART_NAND_ERASED                  310
 #define SMART_WEAR_LEVELING_COUNT          311
 #define SMART_LIFE                         312
+#define NAND_WAF                           400
 
 IMPLEMENT_DYNCREATE(CGraphDlg, CDHtmlDialog)
 
@@ -848,6 +850,10 @@ void CGraphDlg::InitMenuBar()
 		select += cstr; if (SelectedAttributeId == SMART_WEAR_LEVELING_COUNT) { index = counter; }counter++;
 	}
 
+	// NAND WAF based on the computed Host writes and NAND writes.
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[WAF] %s</option>"), NAND_WAF, i18n(_T("SmartSsd"), _T("WAF")  , m_bSmartEnglish));
+	select += cstr; if (SelectedAttributeId == NAND_WAF) { index = counter; }counter++;
+
 	if (m_Attribute != CAtaSmart::SSD_VENDOR_NVME)
 	{
 		if (m_IeVersion >= 700)
@@ -904,7 +910,7 @@ BOOL CGraphDlg::UpdateGraph()
 	CString smartFile, fileName;
 	CStdioFile inFile;
 	DWORD threshold = 0;
-	int max = -1, min = -1;
+	int max = -1, min = -1, tickDecimals = 0;
 
 	if(m_AttributeId > 0x200)
 	{
@@ -936,6 +942,7 @@ BOOL CGraphDlg::UpdateGraph()
 		case SMART_NAND_ERASED:                  fileName = _T("GBytesErased");				min = 0; break;
 		case SMART_WEAR_LEVELING_COUNT:          fileName = _T("WearLevelingCount");		min = 0; break;
 		case SMART_LIFE:                         fileName = _T("Life");						max = 100;	min = 0; break;
+		case NAND_WAF:                           fileName = _T("WAF");						tickDecimals = 2; break;
 		default:
 			return FALSE;
 			break;
@@ -952,6 +959,7 @@ BOOL CGraphDlg::UpdateGraph()
 	UpdateColor();
 
 	DWORD value = 0;
+	double value_d = 0;
 	time_t dateTime;
 	ULONGLONG startTime = 0;
 	int count = 0;
@@ -1057,6 +1065,20 @@ BOOL CGraphDlg::UpdateGraph()
 					count++;
 				}
 			}
+			else if (m_AttributeId == NAND_WAF)
+			{
+				for (int i = 0; i < end; i++)
+				{
+					line = lines.GetAt(i);
+					dateTime = GetTimeT(line.Left(19));
+
+					value_d = _tstof(line.Mid(20));
+					cstr.Format(_T("[%I64d, %2f], "), dateTime * 1000, value_d);
+
+					values += cstr;
+					count++;
+				}
+			}
 			else
 			{
 				for(int i = 0; i < end; i++)
@@ -1088,6 +1110,10 @@ BOOL CGraphDlg::UpdateGraph()
 		if(m_AttributeId == 0x1C3) // Fahrenheit
 		{
 			cstr.Format(_T("[%I64d, %d]"), (ULONGLONG)(time(&dateTime) - m_TimeZoneInformation.Bias * 60) * 1000, value * 9 / 5 + 32);
+		}
+		else if (m_AttributeId == NAND_WAF)
+		{
+			cstr.Format(_T("[%I64d, %2f], "), dateTime * 1000, value_d);
 		}
 		else
 		{
@@ -1161,7 +1187,18 @@ BOOL CGraphDlg::UpdateGraph()
 	}
 
 	// Options
-	if(max == -1 && min == -1) // Auto
+	if (tickDecimals > 0) // WAF
+	{
+		options.Format(_T("{\
+xaxis: { mode: \"time\", ticks: 4, timeformat: \"%s\", minTickSize: [60, \"minute\"]},\
+yaxis: { minTickSize: 0.01, min: null, max: null, tickDecimals: %d },\
+selection: { mode: \"xy\" },\
+%s\
+legend: { position: \"%s\", margin: 20 },\
+lines: { show: true }\
+}"), m_TimeFormat, tickDecimals, grid, m_LegendPositon);
+	}
+	else if(max == -1 && min == -1) // Auto
 	{
 	options.Format(_T("{\
 xaxis: { mode: \"time\", ticks: 4, timeformat: \"%s\", minTickSize: [60, \"minute\"]},\

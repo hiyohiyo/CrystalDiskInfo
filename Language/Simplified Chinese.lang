@@ -170,6 +170,8 @@ POWER_ON_COUNT=通电次数
 DRIVE_LETTER=驱动器号
 FEATURE=支持的功能
 HEALTH_STATUS=健康状态
+WAF=写入放大
+WAF_TOOLTIP=写入放大
 
 UNKNOWN=未知
 POWER_ON_COUNT_UNIT=次
@@ -344,6 +346,7 @@ C5=有待处置扇区数
 C6=无法校正的扇区数
 ; CrystalDiskInfo assign
 FF=剩余寿命
+WAF=写入放大
 
 ;Updated 5.4.0
 F1=主机总计写入
