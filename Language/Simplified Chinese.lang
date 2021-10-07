@@ -346,6 +346,7 @@ C5=有待处置扇区数
 C6=无法校正的扇区数
 ; CrystalDiskInfo assign
 FF=剩余寿命
+WAF=写入放大
 
 ;Updated 5.4.0
 F1=主机总计写入

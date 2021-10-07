@@ -346,6 +346,7 @@ C5=Current Pending Sector Count
 C6=Uncorrectable Sector Count
 ; CrystalDiskInfo assign
 FF=Remaining Life
+WAF=Write amplification factor
 
 ;Updated 5.4.0
 F1=Total Host Writes
