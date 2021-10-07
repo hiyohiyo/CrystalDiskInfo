@@ -174,6 +174,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 %HOST_WRITES%\
 %NAND_WRITES%\
 %GBYTES_ERASED%\
+%WAF%\
 %WEAR_LEVELING_COUNT%\
      Temperature : %TEMPERATURE%\r\n\
    Health Status : %DISK_STATUS%\r\n\
@@ -363,6 +364,18 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		{
 			cstr.Format(_T("   GBytes Erased : %d GB\r\n"), m_Ata.vars[i].GBytesErased);	
 			drive.Replace(_T("%GBYTES_ERASED%"), cstr);
+		}
+
+		if (m_Ata.vars[i].HostWrites > 10 && m_Ata.vars[i].NandWrites > 0)
+		{
+			double d_waf = static_cast<double>(m_Ata.vars[i].NandWrites) / static_cast<double>(m_Ata.vars[i].HostWrites);
+			cstr.Format(_T("             WAF : %.4f\r\n"), d_waf);
+			// cstr.Format(_T("             WAF : %.2f %%\r\n"), d_waf * 100); // better?
+			drive.Replace(_T("%WAF%"), cstr);
+		}
+		else
+		{
+			drive.Replace(_T("%WAF%"), _T(""));
 		}
 
 		if(m_Ata.vars[i].WearLevelingCount == -1)
