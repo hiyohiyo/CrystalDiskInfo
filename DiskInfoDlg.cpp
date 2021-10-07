@@ -297,10 +297,11 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 		m_AutoDetectionStatus = 0;
 	}
 
-	m_RawValues = GetPrivateProfileInt(_T("Setting"), _T("RawValues"), 0, m_Ini);
+	const int RAW_VALUES_SYSTEM_DEFAULT = 1; // Decimal by default
+	m_RawValues = GetPrivateProfileInt(_T("Setting"), _T("RawValues"), RAW_VALUES_SYSTEM_DEFAULT, m_Ini);
 	if(m_RawValues < 0 || m_RawValues > 3)
 	{
-		m_RawValues = 0;
+		m_RawValues = RAW_VALUES_SYSTEM_DEFAULT;
 	}
 
 	m_ZoomType = GetPrivateProfileInt(_T("Setting"), _T("ZoomType"), ZoomTypeAuto, m_Ini);
