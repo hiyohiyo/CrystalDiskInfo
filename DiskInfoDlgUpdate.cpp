@@ -1115,7 +1115,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	//	if(preLogicalDriveInfo.Compare(logicalDriveInfo) != 0)
 	{
 		preLogicalDriveInfo = logicalDriveInfo;
-		m_CtrlDriveMap.SetToolTipText(logicalDriveInfo);
+		m_CtrlDriveMap.SetToolTipText(logicalDriveInfo + L"  ");
 	}
 
 	/*
@@ -1242,7 +1242,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 			m_PowerOnHours.Format(_T("%d%s%s"),
 				powerOnHours, IsMinutes, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")));
 
-			m_CtrlPowerOnHours.SetToolTipText(title);
+			m_CtrlPowerOnHours.SetToolTipText(title + L"  ");
 
 			prePowerOnHours = powerOnHours;
 			flagUpdate = TRUE;
@@ -1265,16 +1265,16 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 
 		if(m_Ata.vars[i].HostReads > 1024 * 1024)
 		{
-			cstr.Format(_T("%.3f PB  "), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
+			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostReads / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].HostReads > 1024)
 		{
-			cstr.Format(_T("%.3f TB  "), m_Ata.vars[i].HostReads / 1024.0);
+			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostReads / 1024.0);
 		}
 
 		m_BufferSize.Format(_T("%d GB"), m_Ata.vars[i].HostReads);
 		m_LabelBufferSize = i18n(_T("Dialog"), _T("TOTAL_HOST_READS"));
-		m_CtrlBufferSize.SetToolTipText(cstr);
+		m_CtrlBufferSize.SetToolTipText(cstr + L"  ");
 		m_CtrlLabelBufferSize.SetToolTipText(i18n(_T("Dialog"), _T("TOTAL_HOST_READS")));
 	}
 	else if (m_Ata.vars[i].BufferSize == 0xFFFF * 512)
@@ -1305,16 +1305,16 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 
 		if(m_Ata.vars[i].HostWrites > 1024 * 1024)
 		{
-			cstr.Format(_T("%.3f PB  "), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
+			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].HostWrites / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].HostWrites > 1024)
 		{
-			cstr.Format(_T("%.3f TB  "), m_Ata.vars[i].HostWrites / 1024.0);
+			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostWrites / 1024.0);
 		}
 
 		m_NvCacheSize.Format(_T("%d GB"), m_Ata.vars[i].HostWrites);
 		m_LabelNvCacheSize = i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES"));
-		m_CtrlNvCacheSize.SetToolTipText(cstr);
+		m_CtrlNvCacheSize.SetToolTipText(cstr + L"  ");
 		m_CtrlLabelNvCacheSize.SetToolTipText(i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES")));
 	}
 	else if (m_Ata.vars[i].NvCacheSize > 0)
