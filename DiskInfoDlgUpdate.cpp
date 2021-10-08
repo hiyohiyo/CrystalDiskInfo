@@ -1412,7 +1412,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	if (m_Ata.vars[i].HostWrites > 10 && m_Ata.vars[i].NandWrites > 0)
 	{
 		double d_waf = static_cast<double>(m_Ata.vars[i].NandWrites) / static_cast<double>(m_Ata.vars[i].HostWrites);
-		m_WAF.Format(_T("%.4f"), d_waf);
+		m_WAF.Format(_T("%.2f"), d_waf);
 		m_CtrlLabelWAF.SetToolTipText(i18n(_T("Dialog"), _T("WAF_TOOLTIP")));
 	}
 	else // refuse to a new or unsupported device
