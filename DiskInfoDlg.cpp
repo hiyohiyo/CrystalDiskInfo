@@ -2081,7 +2081,7 @@ void CDiskInfoDlg::OnTimer(UINT_PTR nIDEvent)
 						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
 						IsMinutesT);
 				}
-				m_CtrlPowerOnHours.SetToolTipText(title);
+				m_CtrlPowerOnHours.SetToolTipText(title + L"  ");
 			}
 			else
 			{
