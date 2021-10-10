@@ -2081,7 +2081,7 @@ void CDiskInfoDlg::OnTimer(UINT_PTR nIDEvent)
 						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
 						IsMinutesT);
 				}
-				m_CtrlPowerOnHours.SetToolTipText(title + L"  ");
+				m_CtrlPowerOnHours.SetToolTipText(title);
 			}
 			else
 			{
@@ -2381,11 +2381,11 @@ void CDiskInfoDlg::SetControlFont()
 
 	if (m_bHighContrast)
 	{
-		m_CtrlModel.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
+		m_CtrlModel.SetFontEx(m_FontFace, 20, 26, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	}
 	else
 	{
-		m_CtrlModel.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
+		m_CtrlModel.SetFontEx(m_FontFace, 24, 26, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	}
 
 	m_CtrlButtonPreDisk.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
@@ -2395,12 +2395,12 @@ void CDiskInfoDlg::SetControlFont()
 	m_CtrlLabelSerialNumber.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	m_CtrlLabelInterface.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	m_CtrlLabelTransferMode.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
-	m_CtrlLabelDriveMap.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
-	m_CtrlLabelBufferSize.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
-	m_CtrlLabelNvCacheSize.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
+	m_CtrlLabelDriveMap.SetFontEx(m_FontFace, 12, 14, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
+	m_CtrlLabelBufferSize.SetFontEx(m_FontFace, 12, 14, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
+	m_CtrlLabelNvCacheSize.SetFontEx(m_FontFace, 12, 14, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	m_CtrlLabelRotationRate.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	m_CtrlLabelPowerOnCount.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
-	m_CtrlLabelPowerOnHours.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
+	m_CtrlLabelPowerOnHours.SetFontEx(m_FontFace, 12, 14, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	m_CtrlLabelAtaAtapi.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	m_CtrlLabelFeature.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	m_CtrlLabelDiskStatus.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
