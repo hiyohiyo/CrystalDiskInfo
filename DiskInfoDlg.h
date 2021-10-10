@@ -312,6 +312,7 @@ protected:
 	void CheckRadioWaitTime();
 	void CheckRadioZoomType();
 	void CheckRadioRawValues();
+	void CheckRecordRawValues();
 	void CheckRadioAutoDetection();
 	void CheckRadioCsmiType(int id, int value);
 	void CheckRadioCsmiType();

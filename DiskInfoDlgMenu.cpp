@@ -484,6 +484,15 @@ void CDiskInfoDlg::CheckRadioRawValues()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::CheckRecordRawValues()
+{
+	m_RecordRawValues = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("RecordRawValues"), 0, m_Ini);
+
+	CMenu* menu = GetMenu();
+	menu->CheckMenuItem(ID_RECORD_RAW_VALUES, m_RecordRawValues ? MF_CHECKED : MF_UNCHECKED);
+	SetMenu(menu);
+}
+
 void CDiskInfoDlg::OnRecordRawValues()
 {
 	m_RecordRawValues = !((BOOL)GetPrivateProfileInt(_T("Setting"), _T("RecordRawValues"), 0, m_Ini));
