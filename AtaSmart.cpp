@@ -3734,12 +3734,26 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				asi.NandWrites = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_JMICRON || asi.DiskVendorId == SSD_VENDOR_MAXIOTEK)
+			else if (asi.DiskVendorId == SSD_VENDOR_JMICRON)
 			{
 				asi.NandWrites = (INT)(
 					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
 						asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
 					/ 2 / 1024 / 1024);
+			}
+			else if (asi.DiskVendorId == SSD_VENDOR_MAXIOTEK)
+			{
+				if (asi.HostReadsWritesUnit == HOST_READS_WRITES_512B)
+				{
+					asi.NandWrites = (INT)(
+						B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
+							asi.Attribute[j].RawValue[3], asi.Attribute[j].RawValue[4], asi.Attribute[j].RawValue[5])
+						/ 2 / 1024 / 1024);
+				}
+				else
+				{
+					asi.NandWrites = (INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
+				}
 			}
 			break;
 		case 0xE1:
@@ -5243,7 +5257,21 @@ BOOL CAtaSmart::IsSsdMaxiotek(ATA_SMART_INFO& asi)
 {
 	BOOL flagSmartType = FALSE;
 
-	if (   asi.Attribute[0].Id == 0x05
+	CString modelUpper = asi.Model;
+	modelUpper.MakeUpper();
+
+	if (modelUpper.Find(_T("MAXIO")) == 0)
+	{
+		flagSmartType = TRUE;
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+	}
+	else if (modelUpper.Find(_T("CUSO C5S-EVO")) == 0)
+	{
+		flagSmartType = TRUE;
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
+	}
+	else if (
+		   asi.Attribute[0].Id == 0x05
 		&& asi.Attribute[1].Id == 0x09
 		&& asi.Attribute[2].Id == 0x0C
 		&& asi.Attribute[3].Id == 0xA7
@@ -5252,15 +5280,6 @@ BOOL CAtaSmart::IsSsdMaxiotek(ATA_SMART_INFO& asi)
 		)
 	{
 		flagSmartType = TRUE;
-	}
-	else if (asi.Model.Find(_T("Maxio")) == 0)
-	{
-		flagSmartType = TRUE;
-	}
-
-	if (flagSmartType)
-	{
-		asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
 	}
 
 	return flagSmartType;
@@ -9700,12 +9719,26 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				{
 					asi->NandWrites = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_JMICRON || asi->DiskVendorId == SSD_VENDOR_MAXIOTEK)
+				else if (asi->DiskVendorId == SSD_VENDOR_JMICRON)
 				{
 					asi->NandWrites = (INT)(
 						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
 							asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
 						/ 2 / 1024 / 1024);
+				}
+				else if (asi->DiskVendorId == SSD_VENDOR_MAXIOTEK)
+				{
+					if (asi->HostReadsWritesUnit == HOST_READS_WRITES_512B)
+					{
+						asi->NandWrites = (INT)(
+							B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
+								asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
+							/ 2 / 1024 / 1024);
+					}
+					else
+					{
+						asi->NandWrites = (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
+					}
 				}
 				break;
 			case 0xE1:

@@ -1271,6 +1271,10 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		{
 			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostReads / 1024.0);
 		}
+		else if (m_Ata.vars[i].HostReads)
+		{
+			cstr.Format(_T("%d GB"), m_Ata.vars[i].HostReads);
+		}
 
 		m_BufferSize.Format(_T("%d GB"), m_Ata.vars[i].HostReads);
 		m_LabelBufferSize = i18n(_T("Dialog"), _T("TOTAL_HOST_READS"));
@@ -1311,6 +1315,10 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		{
 			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].HostWrites / 1024.0);
 		}
+		else if (m_Ata.vars[i].HostWrites)
+		{
+			cstr.Format(_T("%d GB"), m_Ata.vars[i].HostWrites);
+		}
 
 		m_NvCacheSize.Format(_T("%d GB"), m_Ata.vars[i].HostWrites);
 		m_LabelNvCacheSize = i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES"));
@@ -1335,16 +1343,20 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	if (m_Ata.vars[i].NandWrites >= 0)
 	{
 		cstr = L"";
-		/*
+
 		if(m_Ata.vars[i].NandWrites > 1024 * 1024)
 		{
-		cstr.Format(_T("%.3f PB"), m_Ata.vars[i].NandWrites / 1024.0 / 1024.0);
+			cstr.Format(_T("%.3f PB"), m_Ata.vars[i].NandWrites / 1024.0 / 1024.0);
 		}
 		else if(m_Ata.vars[i].NandWrites > 1024)
 		{
-		cstr.Format(_T("%.3f TB"), m_Ata.vars[i].NandWrites / 1024.0);
+			cstr.Format(_T("%.3f TB"), m_Ata.vars[i].NandWrites / 1024.0);
 		}
-		*/
+		else if (m_Ata.vars[i].NandWrites)
+		{
+			cstr.Format(_T("%d GB"), m_Ata.vars[i].NandWrites);
+		}
+
 		m_RotationRate.Format(_T("%d GB"), m_Ata.vars[i].NandWrites);
 		/*
 		if (m_Ata.vars[i].PlextorNandWritesUnit)
@@ -1355,7 +1367,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 		*/
 
 		m_LabelRotationRate = i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES"));
-		m_CtrlRotationRate.SetToolTipText(cstr);
+		m_CtrlRotationRate.SetToolTipText(cstr + L"  ");
 		m_CtrlLabelRotationRate.SetToolTipText(i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES")));
 	}
 	else if (m_Ata.vars[i].GBytesErased >= 0)
