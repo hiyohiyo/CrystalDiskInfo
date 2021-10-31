@@ -191,9 +191,9 @@ CURRENT_MODE_SUPPORTED_MODE=Obecny tryb | Obsługiwany tryb
 MAJOR_VERSION_MINOR_VERSION=Wersja główna | Wersja poboczna
 
 ;8.5.0
-FONT_FACE=Font Face
-FONT_SCALE=Font Scale (%)
-DEFAULT=Default
+FONT_FACE=Czcionka
+FONT_SCALE=Skalowanie (%)
+DEFAULT=Domyślne
 OK=OK
 
 ;8.9.0
