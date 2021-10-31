@@ -3,7 +3,7 @@
 TRANSLATOR=Mateusz Kruszewski, ToServeAndProtect
 LATEST TRANSLATOR=Adam i Dariusz Bodzęta
 VERSION=8.13.0
-LATEST CHANGINGS=NVMe SMART
+LATEST CHANGINGS=NVMe SMART, ordered to 8.13.0 en version
 
 [Language]
 LANGUAGE=Polish
@@ -120,13 +120,13 @@ ENABLE=Włącz
 DISABLE=Wyłącz
 ENABLE_ALL=Włącz wszystko
 DISABLE_ALL=Wyłącz wszystko
+AUTO_REFRESH=Automatyczne odświeżanie
 AUTO_REFRESH_01_MIN=1 min.
 AUTO_REFRESH_03_MIN=3 min.
 AUTO_REFRESH_05_MIN=5 min.
 AUTO_REFRESH_10_MIN=10 min.
 AUTO_REFRESH_30_MIN=30 min.
 AUTO_REFRESH_60_MIN=60 min.
-AUTO_REFRESH=Automatyczne odświeżanie
 AUTO_REFRESH_TARGET=&Element docelowy automatycznego odświeżania
 AUTO_REFRESH_TARGET_ALL_DISK=&Automatyczne odświeżanie - zaznacz wszystkie dyski
 AUTO_REFRESH_UNTARGET_ALL_DISK=&Automatyczne odświeżanie - odznacz wszystkie dyski
