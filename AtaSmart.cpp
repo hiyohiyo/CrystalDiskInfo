@@ -2079,7 +2079,7 @@ safeRelease:
 			DebugPrint(_T("Drive Letter Mapping - INVALID_HANDLE_VALUE"));
 			continue;
 		}
-		VOLUME_DISK_EXTENTS_LX volumeDiskExtents;
+		VOLUME_DISK_EXTENTS_LX volumeDiskExtents = {};
 		DWORD dwBytesReturned = 0;
 		BOOL bResult = DeviceIoControl(hHandle, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, NULL, 0,
 			&volumeDiskExtents, sizeof(volumeDiskExtents), &dwBytesReturned, NULL);
@@ -3287,6 +3287,11 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.Model = asi.IdentifyDevice.N.Model;
 	asi.Model = asi.Model.Mid(0, 40);
 	asi.Model.TrimRight();
+
+	if (asi.Model.IsEmpty())
+	{
+		return FALSE;
+	}
 
 	asi.SerialNumber = asi.IdentifyDevice.N.SerialNumber;
 	asi.SerialNumber = asi.SerialNumber.Mid(0, 20);
