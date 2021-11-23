@@ -3159,7 +3159,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	// GetLifeByGpl(asi);
 
 	vars.Add(asi);
-	
+
 	return TRUE;
 }
 

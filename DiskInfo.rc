@@ -881,8 +881,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8, 12, 13, 0
- PRODUCTVERSION 8, 12, 13, 0
+ FILEVERSION 8, 13, 0, 0
+ PRODUCTVERSION 8, 13, 0, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -899,8 +899,8 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.12.13.0"
-            VALUE "ProductVersion", "8.12.13.0"
+            VALUE "FileVersion", "8.13.0.0"
+            VALUE "ProductVersion", "8.13.0.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 #ifdef SUISHO_SHIZUKU_SUPPORT
@@ -1275,10 +1275,28 @@ BEGIN
             MENUITEM "SSD - SandForce",             ID_SSD_SANDFORCE
             MENUITEM "SSD - Micron",                ID_SSD_MICRON
             MENUITEM "SSD - OCZ",                   ID_SSD_OCZ
+            MENUITEM "SSD - Seagate",               ID_SSD_SEAGATE
+            MENUITEM "SSD - WDC",                   ID_SSD_WDC
             MENUITEM "SSD - Plextor",               ID_SSD_PLEXTOR
             MENUITEM "SSD - SanDisk",               ID_SSD_SANDISK
             MENUITEM "SSD - OCZ VECTOR",            ID_SSD_OCZ_VECTOR
+            MENUITEM "SSD - TOSHIBA",               ID_SSD_TOSHIBA
+            MENUITEM "SSD - CORSAIR",               ID_SSD_CORSAIR
+            MENUITEM "SSD - Kingston",              ID_SSD_KINGSTON
+            MENUITEM "SSD - Micron MU02",           ID_SSD_MICRON_MU02
 			MENUITEM "SSD - Realtek",               ID_SSD_REALTEK
+            MENUITEM "SSD - SK Hynix",              ID_SSD_SKHYNIX
+            MENUITEM "SSD - KIOXIA",                ID_SSD_KIOXIA
+            MENUITEM "SSD - SSSTC",                 ID_SSD_SSSTC
+            MENUITEM "SSD - Intel DC",              ID_SSD_INTEL_DC
+            MENUITEM "SSD - Apacer",                ID_SSD_APACER
+            MENUITEM "SSD - Silicon Motion",        ID_SSD_SILICONMOTION
+            MENUITEM "SSD - PHISON",                ID_SSD_PHISON
+            MENUITEM "SSD - Marvell",               ID_SSD_MARVELL
+            MENUITEM "SSD - Maxiotek",              ID_SSD_MAXIOTEK
+            MENUITEM "SSD - YMTC",                  ID_SSD_YMTC
+            MENUITEM "SSD - SCY",                   ID_SSD_SCY
+
         END
         MENUITEM "Paint Weekend",               ID_PAINT_WEEKEND
     END

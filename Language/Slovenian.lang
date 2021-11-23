@@ -1,7 +1,8 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Jadran Rudec, Boris Urbančič
-VERSION=8.11.2
+VERSION=8.12.13
+; 'Updated' and 'Added' notes removed if older than 6.0 .
 
 [Language]
 LANGUAGE=Slovenščina
@@ -823,7 +824,6 @@ F4=Stanje dušenja temperature
 F9=Zapisano GB v NAND
 
 [SmartKingston] ;Added 6.6.0
-;https://media.kingston.com/support/downloads/MKP_521_Phison_SMART_attribute.pdf
 01=Ocena napak pri branju
 02=Izvedba pretočnosti
 03=Čas vrtenja
@@ -929,7 +929,7 @@ BB=Število nepopravljivih napak
 BC=Število prekinitev ukaza
 BF=Število dogodkov 'Op-shock'
 C2=Temperatura
-C3=Ocena ECC
+C3=Stopnja ECC
 C4=Število dogodkov prerazporeditve
 C6=Število nepopravljivih sektorjev
 C7=Število napak CRC
@@ -982,13 +982,10 @@ EA=Zapisano GB v NAND (SLC)
 EE=Kazalnik obrabe medija (Preostali cikli)
 F1=Skupno zapisano GB
 F2=Skupno prebrano GB
-F3=Skupno pisanj v NAND
 F4=Stanje dušenja temperature
 F9=Zapisano GB v NAND
 
 [SmartKingstonSuv]
-; https://media.kingston.com/support/downloads/UV400-SMART-attribute.pdf
-; https://media.kingston.com/support/downloads/UV500_SMART_attribute.pdf
 01=Ocena napak pri branju
 05=Število prerazporejenih sektorjev
 09=Ur napajanja
@@ -1017,7 +1014,6 @@ F2=Doživljenskih branj gostitelja
 FA=Skupno število ponovitev branja NAND
 
 [SmartKingstonKC600]
-;https://media.kingston.com/support/downloads/KC600-SMART-attribute.pdf
 01=Ocena napak pri branju
 05=Število ponovno dodeljenih blokov NAND
 09=Ur napajanja
@@ -1050,7 +1046,6 @@ F2=Skupno branj LBA-jev
 F5=Skupno pisanj na medij
 
 [SmartKingstonDC500]
-;https://media.kingston.com/support/pdf/MKP_521-7_SMART-DC500_attribute_hr.pdf
 01=Število nakap UNC gostitelja
 09=Ur napajanja
 0C=Cikel vklopov/izklopov napajanja
@@ -1079,7 +1074,6 @@ F5=Največje število brisanj
 F6=Skupno število brisanj
 
 [SmartKingstonSA400]
-;https://github.com/hiyohiyo/CrystalDiskInfo/issues/20
 01=Nepopravljivih napak
 09=Ur napajanja
 0C=Ciklov napajanja
@@ -1139,7 +1133,6 @@ F2=Skupno branj gostitelja
 F3=Zapisano GB v NAND
 
 [SmartIntelDc]
-;https://github.com/hiyohiyo/CrystalDiskInfo/issues/18
 01=Število surovih napak pri branju
 05=Prerazporejeno število blokov Flasha
 09=Število ur napajanja
@@ -1233,7 +1226,6 @@ F5=Število pisanj sektorjav Flasha
 09=Ur napajanja
 0A=Število ponovitev vrtenja
 0C=Število ciklov napajanja
-A7=Način zaščite SSD
 A8=Število PHY napak SATA
 AA=Število slabih blokov
 AD=Število brisanj
@@ -1245,8 +1237,8 @@ C5=Število trenutno čakajočih sektorjev
 E7=Življenje pogona
 E9=Število pisanj sektorjev (NAND)
 F0=Pisanje glave
-F1=Skupno zapisano LBA
-F2=Skupno prebrano LBA
+F1=Skupno pisanj LBA
+F2=Skupno branj LBA
 
 [SmartPhison]
 01=Ocena napak pri branju
@@ -1262,7 +1254,6 @@ E7=Preostalo življenje SSD
 F1=Pisanj gostitelja
 
 [SmartSeagate]
-; https://crystalmark.info/board/c-board.cgi?cmd=one;no=1818;id=#1818
 01=Ocena napak pri branju
 05=Število upokojenih sektorjev
 09=Ur napajanja
@@ -1293,7 +1284,6 @@ F2=Doživljenskih branj gostitelja
 FA=Doživljenskih ponovitev branja NAND
 
 [SmartSeagateIronWolf]
-; https://www.seagate.com/jp/ja/internal-hard-drives/ssd/ironwolf-nas-ssd/#specs
 01=Ocena surovih napak pri branju
 05=Število prerazporejenih sektorjev
 09=Ur napajanja
@@ -1429,26 +1419,26 @@ F3=Temperatura NAND
 F5=Število napak bita
 
 [SmartScy] ;Added 8.12.8
-01=Raw Read Error Rate
-05=Reallocated Sector Count
-07=Seek Error Rate
-09=Power-On Hours
-0C=Drive Power Cycle Count
-A7=Average Erase Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Erase Count
-B1=Read Retry Count
-B4=Spare Block Count Left
-B7=Runtime Bad Block
-BB=Reported UNC Errors
-C0=Unexpected Power Loss Count
-C2=Controlled Temperature
-C3=Cumulative ECC Bit Correction Count
-C4=Reallocated Event Count
-C5=Current Pending Sector
-C7=UDMA CRC Error Count
-E7=SSD Life Left
-F1=Total LBAs Written
-F2=Total LBAs Read
-F5=Total Nand Flash Written
+01=Stopnja surovih bralnih napak
+05=Število prerazporejenih sektorjev
+07=Stopnja napak iskanja
+09=Ur napajanja
+0C=Število ciklov napajanja pogona
+A7=Povprečno število brisanj
+AB=Število napak v programu
+AC=Število napak brisanja
+AD=Število brisanj
+B1=Število ponovnih poskusov branja
+B4=Preostalo število rezervnih blokov
+B7=Napačen blok med izvajanjem
+BB=Prijavljenih napak UNC
+C0=Število nepričakovanih izgub napajanja
+C2=Nadzorovana temperatura
+C3=Kumulativno število popravkov bitov ECC
+C4=Število prerazporejenih dogodkov
+C5=Trenutni sektor v čakanju
+C7=Število napak UDMA CRC
+E7=Preostalo življenje SSD
+F1=Skupno pisanj LBA
+F2=Skupno branj LBA
+F5=Skupno pisanj Nand Flash 

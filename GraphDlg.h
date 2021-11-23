@@ -220,9 +220,27 @@ public:
 	afx_msg void OnSsdSandforce();
 	afx_msg void OnSsdMicron();
 	afx_msg void OnSsdOcz();
+	afx_msg void OnSsdSeagate();
+	afx_msg void OnSsdWdc();
 	afx_msg void OnSsdPlextor();
 	afx_msg void OnSsdSanDisk();
 	afx_msg void OnSsdOczVector();
+	afx_msg void OnSsdToshiba();
+	afx_msg void OnSsdCorsair();
+	afx_msg void OnSsdKingston();
+	afx_msg void OnSsdMicronMU02();
 	afx_msg void OnSsdRealtek();
 	afx_msg void OnSsdNVMe();
+	afx_msg void OnSsdSkHynix();
+	afx_msg void OnSsdKioxia();
+	afx_msg void OnSsdSsstc();
+	afx_msg void OnSsdIntelDc();
+	afx_msg void OnSsdApacer();
+	afx_msg void OnSsdSiliconMotion();
+	afx_msg void OnSsdPhison();
+	afx_msg void OnSsdMarvell();
+	afx_msg void OnSsdMaxiotek();
+	afx_msg void OnSsdYmtc();
+	afx_msg void OnSsdScy();
+
 };

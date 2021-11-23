@@ -133,7 +133,7 @@ class CAtaSmart
 {
 
 public:
-	static const int MAX_DISK = 64;// FIX
+	static const int MAX_DISK = 128;// FIX
 	static const int MAX_ATTRIBUTE = 30; // FIX
 	static const int MAX_SEARCH_PHYSICAL_DRIVE = 56;
 	static const int MAX_SEARCH_SCSI_PORT = 16;

@@ -14,7 +14,7 @@ class COptionDlg : public CDHtmlDialogEx
 	DECLARE_DYNCREATE(COptionDlg)
 
 	static const int SIZE_X = 480;
-	static const int SIZE_Y = 480;
+	static const int SIZE_Y = 580;
 
 public:
 	COptionDlg(CWnd* pParent = NULL);
@@ -100,7 +100,7 @@ protected:
 	HRESULT OnSelect61(IHTMLElement *pElement);
 	HRESULT OnSelect62(IHTMLElement *pElement);
 	HRESULT OnSelect63(IHTMLElement *pElement);
-	HRESULT OnSelect64(IHTMLElement *pElement);
+	HRESULT OnSelect128(IHTMLElement *pElement);
 
 	HRESULT OnSelectBkImage(IHTMLElement *pElement);
 	HRESULT OnNoBkImage(IHTMLElement *pElement);

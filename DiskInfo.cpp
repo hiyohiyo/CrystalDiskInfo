@@ -161,7 +161,9 @@ BOOL CDiskInfoApp::InitInstance()
 		if(GetLastError() == ERROR_ALREADY_EXISTS)
 		{
 			DebugPrint(_T("ERROR_ALREADY_EXISTS"));
+#ifndef _DEBUG
 			return FALSE;
+#endif
 		}
 	}
 

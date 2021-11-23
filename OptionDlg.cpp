@@ -90,6 +90,22 @@ void COptionDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode46"), m_ColorCode[46]);
 	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode47"), m_ColorCode[47]);
 	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode48"), m_ColorCode[48]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode49"), m_ColorCode[49]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode50"), m_ColorCode[50]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode51"), m_ColorCode[51]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode52"), m_ColorCode[52]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode53"), m_ColorCode[53]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode54"), m_ColorCode[54]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode55"), m_ColorCode[55]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode56"), m_ColorCode[56]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode57"), m_ColorCode[57]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode58"), m_ColorCode[58]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode59"), m_ColorCode[59]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode60"), m_ColorCode[60]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode61"), m_ColorCode[61]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode62"), m_ColorCode[62]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode63"), m_ColorCode[63]);
+	DDX_DHtml_ElementInnerText(pDX, _T("ColorCode128"), m_ColorCode[128]);
 }
 
 BOOL COptionDlg::OnInitDialog()
@@ -172,7 +188,7 @@ BEGIN_DHTML_EVENT_MAP(COptionDlg)
 	DHTML_EVENT_ONCLICK(_T("Select61"), OnSelect61)
 	DHTML_EVENT_ONCLICK(_T("Select62"), OnSelect62)
 	DHTML_EVENT_ONCLICK(_T("Select63"), OnSelect63)
-	DHTML_EVENT_ONCLICK(_T("Select64"), OnSelect64)
+	DHTML_EVENT_ONCLICK(_T("Select128"), OnSelect128)
 
 
 
@@ -279,7 +295,7 @@ HRESULT COptionDlg::OnSelect60(IHTMLElement* /*pElement*/){ SelectColor(60); ret
 HRESULT COptionDlg::OnSelect61(IHTMLElement* /*pElement*/){ SelectColor(61); return S_FALSE; }
 HRESULT COptionDlg::OnSelect62(IHTMLElement* /*pElement*/){ SelectColor(62); return S_FALSE; }
 HRESULT COptionDlg::OnSelect63(IHTMLElement* /*pElement*/){ SelectColor(63); return S_FALSE; }
-HRESULT COptionDlg::OnSelect64(IHTMLElement* /*pElement*/){ SelectColor(64); return S_FALSE; }
+HRESULT COptionDlg::OnSelect128(IHTMLElement* /*pElement*/){ SelectColor(128); return S_FALSE; }
 
 void COptionDlg::SelectColor(DWORD i)
 {
