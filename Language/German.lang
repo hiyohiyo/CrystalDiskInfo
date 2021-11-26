@@ -327,7 +327,7 @@ FF=Verbleibende Lebensdauer
 [SmartMtron]
 BB=Komplettlöschvorgänge
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Lesefehlerrate
 09=Betriebsstunden
 0C=Geräte-Einschaltvorgänge

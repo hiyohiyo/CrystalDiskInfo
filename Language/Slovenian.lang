@@ -352,7 +352,7 @@ F2=Skupno branj gostitelja
 [SmartMtron]
 BB=Skupno število brisanj
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Ocena napak pri branju
 09=Ur napajanja
 0C=Število ciklov napajanja

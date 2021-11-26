@@ -350,7 +350,7 @@ F2=Total Host Reads
 [SmartMtron]
 BB=عدد المحو الكلي
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=معدل خطأ القراءة
 09=ساعات توصيل الطاقة
 0C=عدد دورات الطاقة

@@ -350,7 +350,7 @@ F2=Total Host Reads
 [SmartMtron]
 BB=Збир брисања
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Износ грешке при читању
 09=Сати рада
 0C=Број циклуса покретања

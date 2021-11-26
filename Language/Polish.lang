@@ -1,9 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=Mateusz Kruszewski, ToServeAndProtect
-LATEST TRANSLATOR=Adam i Dariusz Bodzęta
+TRANSLATOR=Adam i Dariusz Bodzęta, ToServeAndProtect, Mateusz Kruszewski
 VERSION=8.13.0
-LATEST CHANGINGS=NVMe SMART, ordered to 8.13.0 en version
 
 [Language]
 LANGUAGE=Polish
@@ -356,7 +354,7 @@ FF=Pozostały czas pracy
 [SmartMtron]
 BB=Całkowita ilość kasowań
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Liczba błędów odczytu
 09=Liczba godzin pracy dysku
 0C=Ilość włączeń dysku

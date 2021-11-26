@@ -352,7 +352,7 @@ F2=主机总计读取
 [SmartMtron]
 BB=擦除次数总计
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=读取错误率
 09=通电时间(小时)
 0C=通电次数

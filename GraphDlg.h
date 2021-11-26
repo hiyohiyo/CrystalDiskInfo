@@ -243,4 +243,15 @@ public:
 	afx_msg void OnSsdYmtc();
 	afx_msg void OnSsdScy();
 
+	afx_msg void OnSsdJmicron60x();
+	afx_msg void OnSsdJmicron61x();
+	afx_msg void OnSsdJmicron66x();
+	afx_msg void OnSsdSeagateIronWolf();
+	afx_msg void OnSsdSeagateBarraCuda();
+	afx_msg void OnSsdSanDiskGb();
+	afx_msg void OnSsdKingstonSuv();
+	afx_msg void OnSsdKingstonKC600();
+	afx_msg void OnSsdKingstonDC500();
+	afx_msg void OnSsdKingstonSA400();
+
 };

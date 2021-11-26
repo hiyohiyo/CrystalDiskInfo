@@ -75,6 +75,16 @@ static const TCHAR* ssdVendorString[] =
 	_T("mk"), // Maxiotek
 	_T("ym"), // YMTC
 	_T("sc"), // SCY
+	_T(""),	  // _T("SmartJMicron60x"),
+	_T(""),	  // _T("SmartJMicron61x"),
+	_T(""),	  // _T("SmartJMicron66x"),
+	_T(""),	  // _T("SmartSeagateIronWolf"),
+	_T(""),	  // _T("SmartSeagateBarraCuda"),
+	_T(""),	  // _T("SmartSanDiskGb"),
+	_T(""),	  // _T("SmartKingstonSuv"),
+	_T(""),	  // _T("SmartKingstonKC600"),
+	_T(""),	  // _T("SmartKingstonDC500"),
+	_T(""),	  // _T("SmartKingstonSA400"),
 	_T(""), // 
 };
 
@@ -83,7 +93,7 @@ static const TCHAR* attributeString[] =
 	_T("Smart"),
 	_T("SmartSsd"),
 	_T("SmartMtron"),
-	_T("SmartIndlinx"),
+	_T("SmartIndilinx"),
 	_T("SmartJMicron"),
 	_T("SmartIntel"),
 	_T("SmartSamsung"),
@@ -112,6 +122,16 @@ static const TCHAR* attributeString[] =
 	_T("SmartMaxiotek"),
 	_T("SmartYmtc"),
 	_T("SmartScy"),
+	_T("SmartJMicron60x"),
+	_T("SmartJMicron61x"),
+	_T("SmartJMicron66x"),
+	_T("SmartSeagateIronWolf"),
+	_T("SmartSeagateBarraCuda"),
+	_T("SmartSanDiskGb"),
+	_T("SmartKingstonSuv"),
+	_T("SmartKingstonKC600"),
+	_T("SmartKingstonDC500"),
+	_T("SmartKingstonSA400"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -180,6 +200,18 @@ public:
 		SSD_VENDOR_MAXIOTEK = 29,
 		SSD_VENDOR_YMTC = 30,
 		SSD_VENDOR_SCY = 31,
+
+		SSD_VENDOR_JMICRON_60X = 32,
+		SSD_VENDOR_JMICRON_61X = 33,
+		SSD_VENDOR_JMICRON_66X = 34,
+		SSD_VENDOR_SEAGATE_IRON_WOLF = 35,
+		SSD_VENDOR_SEAGATE_BARRA_CUDA = 36,
+		SSD_VENDOR_SANDISK_GB = 37,
+		SSD_VENDOR_KINGSTON_SUV = 38,
+		SSD_VENDOR_KINGSTON_KC600 = 39,
+		SSD_VENDOR_KINGSTON_DC500 = 40,
+		SSD_VENDOR_KINGSTON_SA400 = 41,
+
 		SSD_VENDOR_MAX = 99,
 
 		VENDOR_UNKNOWN = 0x0000,

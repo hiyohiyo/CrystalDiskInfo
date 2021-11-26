@@ -351,7 +351,7 @@ F2=Total Host Reads
 [SmartMtron]
 BB=Общ брой на изтриванията
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Грешки при четене
 09=Отработени часове
 0C=Включвания/Изключвания

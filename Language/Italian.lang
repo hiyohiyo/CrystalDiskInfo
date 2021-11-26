@@ -350,7 +350,7 @@ F2=Letture totali host
 [SmartMtron]
 BB=Cancellazioni totali
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Errori lettura
 09=Ore accensione
 0C=Cicli accensione

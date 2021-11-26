@@ -349,7 +349,7 @@ F2=對 SSD 累計讀取
 [SmartMtron]
 BB=抹除次數總計
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=底層資料讀取錯誤率
 09=總通電時間
 0C=關閉電源次數

@@ -197,20 +197,38 @@ BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_COMMAND(ID_SSD, &CGraphDlg::OnSsd)
 	ON_COMMAND(ID_SSD_MTRON, &CGraphDlg::OnSsdMtron)
 	ON_COMMAND(ID_SSD_INDILINX, &CGraphDlg::OnSsdIndilinx)
+
 	ON_COMMAND(ID_SSD_JMICRON, &CGraphDlg::OnSsdJmicron)
+	ON_COMMAND(ID_SSD_JMICRON_60X, &CGraphDlg::OnSsdJmicron60x)
+	ON_COMMAND(ID_SSD_JMICRON_61X, &CGraphDlg::OnSsdJmicron61x)
+	ON_COMMAND(ID_SSD_JMICRON_66X, &CGraphDlg::OnSsdJmicron66x)
+
 	ON_COMMAND(ID_SSD_INTEL, &CGraphDlg::OnSsdIntel)
 	ON_COMMAND(ID_SSD_SAMSUNG, &CGraphDlg::OnSsdSamsung)
 	ON_COMMAND(ID_SSD_SANDFORCE, &CGraphDlg::OnSsdSandforce)
 	ON_COMMAND(ID_SSD_MICRON, &CGraphDlg::OnSsdMicron)
 	ON_COMMAND(ID_SSD_OCZ, &CGraphDlg::OnSsdOcz)
 	ON_COMMAND(ID_SSD_SEAGATE, &CGraphDlg::OnSsdSeagate)
+
+	ON_COMMAND(ID_SSD_SEAGATE_IRON_WOLF, &CGraphDlg::OnSsdSeagateIronWolf)
+	ON_COMMAND(ID_SSD_SEAGATE_BARRA_CUDA, &CGraphDlg::OnSsdSeagateBarraCuda)
+
 	ON_COMMAND(ID_SSD_WDC, &CGraphDlg::OnSsdWdc)
 	ON_COMMAND(ID_SSD_PLEXTOR, &CGraphDlg::OnSsdPlextor)
 	ON_COMMAND(ID_SSD_SANDISK, &CGraphDlg::OnSsdSanDisk)
+
+	ON_COMMAND(ID_SSD_SANDISK_GB, &CGraphDlg::OnSsdSanDiskGb)
+
 	ON_COMMAND(ID_SSD_OCZ_VECTOR, &CGraphDlg::OnSsdOczVector)
 	ON_COMMAND(ID_SSD_TOSHIBA, &CGraphDlg::OnSsdToshiba)
 	ON_COMMAND(ID_SSD_CORSAIR, &CGraphDlg::OnSsdCorsair)
 	ON_COMMAND(ID_SSD_KINGSTON, &CGraphDlg::OnSsdKingston)
+
+	ON_COMMAND(ID_SSD_KINGSTON_SUV, &CGraphDlg::OnSsdKingstonSuv)
+	ON_COMMAND(ID_SSD_KINGSTON_KC600, &CGraphDlg::OnSsdKingstonKC600)
+	ON_COMMAND(ID_SSD_KINGSTON_DC500, &CGraphDlg::OnSsdKingstonDC500)
+	ON_COMMAND(ID_SSD_KINGSTON_SA400, &CGraphDlg::OnSsdKingstonSA400)
+
 	ON_COMMAND(ID_SSD_MICRON_MU02, &CGraphDlg::OnSsdMicronMU02)
 	ON_COMMAND(ID_SSD_REALTEK, &CGraphDlg::OnSsdRealtek)
 	ON_COMMAND(ID_SSD_NVME, &CGraphDlg::OnSsdNVMe)
@@ -1412,6 +1430,17 @@ void CGraphDlg::InitMenu()
 	case CAtaSmart::SSD_VENDOR_YMTC: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_YMTC, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_SCY: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SCY, MF_BYCOMMAND); break;
 
+	case CAtaSmart::SSD_VENDOR_JMICRON_60X: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_JMICRON_60X, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_JMICRON_61X: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_JMICRON_61X, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_JMICRON_66X: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_JMICRON_66X, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_SEAGATE_IRON_WOLF: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SEAGATE_IRON_WOLF, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_SEAGATE_BARRA_CUDA: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SEAGATE_BARRA_CUDA, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_SANDISK_GB: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SANDISK_GB, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_KINGSTON_SUV: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_KINGSTON_SUV, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_KINGSTON_KC600: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_KINGSTON_KC600, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_KINGSTON_DC500: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_KINGSTON_DC500, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_KINGSTON_SA400: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_KINGSTON_SA400, MF_BYCOMMAND); break;
+
 	default:
 		m_Attribute = CAtaSmart::HDD_GENERAL;
 		menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_HDD, MF_BYCOMMAND);
@@ -1691,6 +1720,17 @@ void CGraphDlg::OnSsdMarvell() { SetAttribute(ID_SSD_MARVELL, CAtaSmart::SSD_VEN
 void CGraphDlg::OnSsdMaxiotek() { SetAttribute(ID_SSD_MAXIOTEK, CAtaSmart::SSD_VENDOR_MAXIOTEK); }
 void CGraphDlg::OnSsdYmtc() { SetAttribute(ID_SSD_YMTC, CAtaSmart::SSD_VENDOR_YMTC); }
 void CGraphDlg::OnSsdScy() { SetAttribute(ID_SSD_SCY, CAtaSmart::SSD_VENDOR_SCY); }
+
+void CGraphDlg::OnSsdJmicron60x() { SetAttribute(ID_SSD_JMICRON_60X, CAtaSmart::SSD_VENDOR_JMICRON_60X); }
+void CGraphDlg::OnSsdJmicron61x() { SetAttribute(ID_SSD_JMICRON_61X, CAtaSmart::SSD_VENDOR_JMICRON_61X); }
+void CGraphDlg::OnSsdJmicron66x() { SetAttribute(ID_SSD_JMICRON_66X, CAtaSmart::SSD_VENDOR_JMICRON_66X); }
+void CGraphDlg::OnSsdSeagateIronWolf() { SetAttribute(ID_SSD_SEAGATE_IRON_WOLF, CAtaSmart::SSD_VENDOR_SEAGATE_IRON_WOLF); }
+void CGraphDlg::OnSsdSeagateBarraCuda() { SetAttribute(ID_SSD_SEAGATE_BARRA_CUDA, CAtaSmart::SSD_VENDOR_SEAGATE_BARRA_CUDA); }
+void CGraphDlg::OnSsdSanDiskGb() { SetAttribute(ID_SSD_SANDISK_GB, CAtaSmart::SSD_VENDOR_SANDISK_GB); };
+void CGraphDlg::OnSsdKingstonSuv() { SetAttribute(ID_SSD_KINGSTON_SUV, CAtaSmart::SSD_VENDOR_KINGSTON_SUV); }
+void CGraphDlg::OnSsdKingstonKC600() { SetAttribute(ID_SSD_KINGSTON_KC600, CAtaSmart::SSD_VENDOR_KINGSTON_KC600); }
+void CGraphDlg::OnSsdKingstonDC500() { SetAttribute(ID_SSD_KINGSTON_DC500, CAtaSmart::SSD_VENDOR_KINGSTON_DC500); }
+void CGraphDlg::OnSsdKingstonSA400() { SetAttribute(ID_SSD_KINGSTON_SA400, CAtaSmart::SSD_VENDOR_KINGSTON_SA400); }
 
 void CGraphDlg::SetAttribute(DWORD id, DWORD type)
 {

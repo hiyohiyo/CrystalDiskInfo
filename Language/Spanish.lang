@@ -344,7 +344,7 @@ F2=Total Host Reads
 [SmartMtron]
 BB=Total Erase Count
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Read Error Rate
 09=Horas encendido
 0C=Nº de ciclos de encendido del dispositivo

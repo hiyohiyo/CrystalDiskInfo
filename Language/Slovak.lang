@@ -349,7 +349,7 @@ F2=Celkový počet čítaní hostiteľa
 [SmartMtron]
 BB=Počet úplných vymazaní
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Miera chybných čítaní
 09=Hodiny napájania
 0C=Počet cyklov napájania
@@ -1082,8 +1082,8 @@ F6=Total Erase Count
 09=Power On Hours
 0C=Power Cycle Count
 AA=Available Reserved Space
-AB=Program Fail Count(Total)
-AC=Erase Fail Count(Total)
+AB=Program Fail Count (Total)
+AC=Erase Fail Count (Total)
 AD=Average Program/Erase Count
 AE=Unexpected Power Loss Count
 AF=Program Fail count (Worst case)

@@ -348,7 +348,7 @@ F2=Total Host Reads
 [SmartMtron]
 BB=Συνολικές διαγραφές
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=Σφάλματα ανάγνωσης
 09=Ώρες λειτουργίας
 0C=Κύκλοι λειτουργίας

@@ -1265,38 +1265,46 @@ BEGIN
         POPUP "Attribute"
         BEGIN
             MENUITEM "HDD",                         ID_HDD
-            MENUITEM "SSD",                         ID_SSD
+            MENUITEM "SSD - ATA",                   ID_SSD
 			MENUITEM "SSD - NVMe",                  ID_SSD_NVME
-            MENUITEM "SSD - MTRON",                 ID_SSD_MTRON
-            MENUITEM "SSD - Indilinx",              ID_SSD_INDILINX
-            MENUITEM "SSD - JMicron",               ID_SSD_JMICRON
-            MENUITEM "SSD - Intel",                 ID_SSD_INTEL
-            MENUITEM "SSD - SAMSUNG",               ID_SSD_SAMSUNG
-            MENUITEM "SSD - SandForce",             ID_SSD_SANDFORCE
-            MENUITEM "SSD - Micron",                ID_SSD_MICRON
-            MENUITEM "SSD - OCZ",                   ID_SSD_OCZ
-            MENUITEM "SSD - Seagate",               ID_SSD_SEAGATE
-            MENUITEM "SSD - WDC",                   ID_SSD_WDC
-            MENUITEM "SSD - Plextor",               ID_SSD_PLEXTOR
-            MENUITEM "SSD - SanDisk",               ID_SSD_SANDISK
-            MENUITEM "SSD - OCZ VECTOR",            ID_SSD_OCZ_VECTOR
-            MENUITEM "SSD - TOSHIBA",               ID_SSD_TOSHIBA
-            MENUITEM "SSD - CORSAIR",               ID_SSD_CORSAIR
-            MENUITEM "SSD - Kingston",              ID_SSD_KINGSTON
-            MENUITEM "SSD - Micron MU02",           ID_SSD_MICRON_MU02
-			MENUITEM "SSD - Realtek",               ID_SSD_REALTEK
-            MENUITEM "SSD - SK Hynix",              ID_SSD_SKHYNIX
-            MENUITEM "SSD - KIOXIA",                ID_SSD_KIOXIA
-            MENUITEM "SSD - SSSTC",                 ID_SSD_SSSTC
-            MENUITEM "SSD - Intel DC",              ID_SSD_INTEL_DC
             MENUITEM "SSD - Apacer",                ID_SSD_APACER
-            MENUITEM "SSD - Silicon Motion",        ID_SSD_SILICONMOTION
-            MENUITEM "SSD - PHISON",                ID_SSD_PHISON
+            MENUITEM "SSD - CORSAIR",               ID_SSD_CORSAIR
+            MENUITEM "SSD - Indilinx",              ID_SSD_INDILINX
+            MENUITEM "SSD - Intel",                 ID_SSD_INTEL
+            MENUITEM "SSD - Intel DC",              ID_SSD_INTEL_DC
+            MENUITEM "SSD - JMicron 60x",           ID_SSD_JMICRON_60X
+            MENUITEM "SSD - JMicron 61x",           ID_SSD_JMICRON_61X
+            MENUITEM "SSD - JMicron 66x",           ID_SSD_JMICRON_66X
+            MENUITEM "SSD - Kingston",              ID_SSD_KINGSTON
+            MENUITEM "SSD - Kingston DC500",        ID_SSD_KINGSTON_DC500
+            MENUITEM "SSD - Kingston KC600",        ID_SSD_KINGSTON_KC600
+            MENUITEM "SSD - Kingston SA400",        ID_SSD_KINGSTON_SA400
+            MENUITEM "SSD - Kingston SUV",          ID_SSD_KINGSTON_SUV
+            MENUITEM "SSD - KIOXIA",                ID_SSD_KIOXIA
             MENUITEM "SSD - Marvell",               ID_SSD_MARVELL
             MENUITEM "SSD - Maxiotek",              ID_SSD_MAXIOTEK
-            MENUITEM "SSD - YMTC",                  ID_SSD_YMTC
+            MENUITEM "SSD - Micron",                ID_SSD_MICRON
+            MENUITEM "SSD - Micron MU02",           ID_SSD_MICRON_MU02
+            MENUITEM "SSD - MTRON",                 ID_SSD_MTRON
+            MENUITEM "SSD - OCZ",                   ID_SSD_OCZ
+            MENUITEM "SSD - OCZ VECTOR",            ID_SSD_OCZ_VECTOR
+            MENUITEM "SSD - PHISON",                ID_SSD_PHISON
+            MENUITEM "SSD - Plextor",               ID_SSD_PLEXTOR
+			MENUITEM "SSD - Realtek",               ID_SSD_REALTEK
+            MENUITEM "SSD - SAMSUNG",               ID_SSD_SAMSUNG
+            MENUITEM "SSD - SandForce",             ID_SSD_SANDFORCE
+            MENUITEM "SSD - SanDisk",               ID_SSD_SANDISK
+            MENUITEM "SSD - SanDisk GB",            ID_SSD_SANDISK_GB
+            MENUITEM "SSD - Seagate",               ID_SSD_SEAGATE
+            MENUITEM "SSD - Seagate Barra Cuda",    ID_SSD_SEAGATE_BARRA_CUDA
+            MENUITEM "SSD - Seagate IronWolf",      ID_SSD_SEAGATE_IRON_WOLF
             MENUITEM "SSD - SCY",                   ID_SSD_SCY
-
+            MENUITEM "SSD - Silicon Motion",        ID_SSD_SILICONMOTION
+            MENUITEM "SSD - SK Hynix",              ID_SSD_SKHYNIX
+            MENUITEM "SSD - SSSTC",                 ID_SSD_SSSTC
+            MENUITEM "SSD - TOSHIBA",               ID_SSD_TOSHIBA
+            MENUITEM "SSD - WDC",                   ID_SSD_WDC
+            MENUITEM "SSD - YMTC",                  ID_SSD_YMTC
         END
         MENUITEM "Paint Weekend",               ID_PAINT_WEEKEND
     END

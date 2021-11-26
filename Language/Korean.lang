@@ -350,7 +350,7 @@ F2=총 읽기량 (호스트)
 [SmartMtron]
 BB=전체 삭제 수
 
-[SmartIndlinx]
+[SmartIndilinx]
 01=읽기 오류율
 09=사용 시간
 0C=사용 횟수
