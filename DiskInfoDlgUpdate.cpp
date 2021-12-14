@@ -344,7 +344,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			{
 				icon = ICON_BAD;
 			}
-			else if (m_Ata.vars[i].Attribute[j].Id == 0x03 && (m_Ata.vars[i].Attribute[2].RawValue[0] == m_Ata.vars[i].Attribute[3].RawValue[0]))
+			else if (m_Ata.vars[i].Attribute[j].Id == 0x03 && (m_Ata.vars[i].Attribute[2].RawValue[0] == m_Ata.vars[i].Attribute[3].RawValue[0] && m_Ata.vars[i].Attribute[3].RawValue[0] != 100))
 			{
 				icon = ICON_CAUTION;
 			}
@@ -457,11 +457,23 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			// Life for WDC/SanDisk
 			else if (m_Ata.vars[i].Attribute[j].Id == 0xE6 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_WDC || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK))
 			{
-				int life;
+				int life = -1;
 
-				if (m_Ata.vars[i].FlagLifeSanDisk0_1)
+				if (m_Ata.vars[i].FlagLifeSanDiskUsbMemory)
+				{
+					life = -1;
+				}
+				else if (m_Ata.vars[i].FlagLifeSanDisk0_1)
 				{
 					life = 100 - (m_Ata.vars[i].Attribute[j].RawValue[1] * 256 + m_Ata.vars[i].Attribute[j].RawValue[0]) / 100;
+				}
+				else if (m_Ata.vars[i].FlagLifeSanDisk1)
+				{
+					life = 100 - m_Ata.vars[i].Attribute[j].RawValue[1];
+				}
+				else if (m_Ata.vars[i].FlagLifeSanDiskLenovo)
+				{
+					life = m_Ata.vars[i].Attribute[j].CurrentValue;
 				}
 				else
 				{
@@ -469,7 +481,19 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				}
 
 				if (life <= 0) { life = 0; }
-				if (life == 0)
+
+				if(m_Ata.vars[i].FlagLifeSanDiskUsbMemory)
+				{
+					if (flag)
+					{
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
+					}
+					else
+					{
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
+					}
+				}
+				else if (life == 0)
 				{
 					if (flag)
 					{

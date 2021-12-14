@@ -2316,6 +2316,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.Life = -1;
 	asi.FlagLifeRawValue = FALSE;
 	asi.FlagLifeRawValueIncrement = FALSE;
+	asi.FlagLifeSanDiskUsbMemory = FALSE;
 	asi.FlagLifeSanDisk0_1 = FALSE;
 	asi.FlagLifeSanDisk1 = FALSE;
 	asi.FlagLifeSanDiskLenovo = FALSE;
@@ -3681,7 +3682,12 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			if (asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SANDISK)
 			{
 				int life = -1;
-				if (asi.FlagLifeSanDisk0_1)
+
+				if (asi.FlagLifeSanDiskUsbMemory)
+				{
+					life = -1;
+				}
+				else if (asi.FlagLifeSanDisk0_1)
 				{
 					life = 100 - (asi.Attribute[j].RawValue[1] * 256 + asi.Attribute[j].RawValue[0])/100;
 				}
@@ -4758,16 +4764,23 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 			asi.SmartKeyName = _T("SmartSanDiskGb");
 		}
 		else if (
+		   asi.Model.Find(_T("SDSSDP")) >= 0
+		|| asi.Model.Find(_T("SDSSDRC")) >= 0 
+		)
+		{
+			asi.FlagLifeSanDisk0_1 = TRUE;
+			asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
+			asi.SmartKeyName = _T("SmartSanDisk");
+		}
+		else if (
 		   asi.Model.Find(_T("SSD U100")) >= 0
 		|| asi.Model.Find(_T("SSD U110")) >= 0
 		|| asi.Model.Find(_T("SSD i100")) >= 0
 		|| asi.Model.Find(_T("SSD i110")) >= 0
-		|| asi.Model.Find(_T("SDSSDP")) >= 0
-		|| asi.Model.Find(_T("SDSSDRC")) >= 0 
 		|| asi.Model.Find(_T("pSSD")) >= 0
-		)
+			)
 		{
-			asi.FlagLifeSanDisk0_1 = TRUE;
+			asi.FlagLifeSanDiskUsbMemory = TRUE;
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
 			asi.SmartKeyName = _T("SmartSanDisk");
 		}
@@ -9670,15 +9683,24 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 			case 0xE6:
 				if (asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SANDISK)
 				{
-					int life = 0;
-					if (asi->FlagLifeSanDisk0_1)
+					int life = -1;
+					if (asi->FlagLifeSanDiskUsbMemory)
+					{
+						life = -1;
+					}
+					else if (asi->FlagLifeSanDisk0_1)
 					{
 						life = 100 - (asi->Attribute[j].RawValue[1]*256+asi->Attribute[j].RawValue[0])/100;
 					}
-					else
+					else if (asi->FlagLifeSanDisk1)
 					{
 						life = 100 - asi->Attribute[j].RawValue[1];
 					}
+					else if (asi->FlagLifeSanDiskLenovo)
+					{
+						life = asi->Attribute[j].CurrentValue;
+					}
+
 					if (life < 0 || life > 100) { life = -1; }
 
 					asi->Life = life;
@@ -10238,7 +10260,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		{
 			return DISK_STATUS_BAD;
 		}
-		else if (vars[i].Attribute[2].RawValue[0] == vars[i].Attribute[3].RawValue[0])
+		else if (vars[i].Attribute[2].RawValue[0] == vars[i].Attribute[3].RawValue[0] && vars[i].Attribute[3].RawValue[0] != 100)
 		{
 			return DISK_STATUS_CAUTION;
 		}
@@ -10412,9 +10434,13 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			int life = 0;
 			flagUnknown = FALSE;
 
-			if (vars[i].HostReadsWritesUnit == HOST_READS_WRITES_32MB)
+			if (vars[i].FlagLifeSanDisk0_1)
 			{
 				life = 100 - (vars[i].Attribute[j].RawValue[1]*256 + vars[i].Attribute[j].RawValue[0])/100;
+			}
+			else if (vars[i].FlagLifeSanDisk1)
+			{
+				life = 100 - vars[i].Attribute[j].RawValue[1];
 			}
 			else
 			{
@@ -10423,7 +10449,11 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			if (life <= 0) { life = 0; }
 			if (life > 100) { life = 100; }
 
-			if (life == 0)
+			if (vars[i].FlagLifeSanDiskUsbMemory)
+			{
+
+			}
+			else if (life == 0)
 			{
 				error = 1;
 			}

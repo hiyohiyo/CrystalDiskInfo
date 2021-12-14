@@ -1800,6 +1800,7 @@ public:
 		INT					Life;
 		BOOL				FlagLifeRawValue;
 		BOOL				FlagLifeRawValueIncrement;
+		BOOL				FlagLifeSanDiskUsbMemory;
 		BOOL				FlagLifeSanDisk0_1;
 		BOOL				FlagLifeSanDisk1;
 		BOOL				FlagLifeSanDiskLenovo;

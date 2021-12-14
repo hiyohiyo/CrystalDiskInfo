@@ -106,8 +106,8 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.13.0"
-#define PRODUCT_RELEASE				L"2021/11/26"
+#define PRODUCT_VERSION				L"8.13.1"
+#define PRODUCT_RELEASE				L"2021/12/18"
 #define PRODUCT_COPY_YEAR			L"2008-2021"
 #define PRODUCT_LICENSE				L"The MIT License"
 
@@ -122,9 +122,6 @@
 #define PRODUCT_COPYRIGHT_1			L"© 2008-2021 hiyohiyo"
 #define PRODUCT_COPYRIGHT_2			L""
 #endif
-
-
-
 
 #define DEFAULT_FONT_FACE_1			L"Segoe UI"
 #define DEFAULT_FONT_FACE_2			L"Tahoma"
