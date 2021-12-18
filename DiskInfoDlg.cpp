@@ -30,71 +30,7 @@
 	// Task Tray
 	UINT gRegMessageId = ::RegisterWindowMessage(_T("CrystalDiskInfo"));
 	UINT gRegIconId = ::RegisterWindowMessage(_T("CrystalDiskInfoIcon"));
-
-	UINT gTempIcon0  = ::RegisterWindowMessage(_T("TempIcon0"));
-	UINT gTempIcon1  = ::RegisterWindowMessage(_T("TempIcon1"));
-	UINT gTempIcon2  = ::RegisterWindowMessage(_T("TempIcon2"));
-	UINT gTempIcon3  = ::RegisterWindowMessage(_T("TempIcon3"));
-	UINT gTempIcon4  = ::RegisterWindowMessage(_T("TempIcon4"));
-	UINT gTempIcon5  = ::RegisterWindowMessage(_T("TempIcon5"));
-	UINT gTempIcon6  = ::RegisterWindowMessage(_T("TempIcon6"));
-	UINT gTempIcon7  = ::RegisterWindowMessage(_T("TempIcon7"));
-	UINT gTempIcon8  = ::RegisterWindowMessage(_T("TempIcon8"));
-	UINT gTempIcon9  = ::RegisterWindowMessage(_T("TempIcon9"));
-	UINT gTempIcon10 = ::RegisterWindowMessage(_T("TempIcon10"));
-	UINT gTempIcon11 = ::RegisterWindowMessage(_T("TempIcon11"));
-	UINT gTempIcon12 = ::RegisterWindowMessage(_T("TempIcon12"));
-	UINT gTempIcon13 = ::RegisterWindowMessage(_T("TempIcon13"));
-	UINT gTempIcon14 = ::RegisterWindowMessage(_T("TempIcon14"));
-	UINT gTempIcon15 = ::RegisterWindowMessage(_T("TempIcon15"));
-	UINT gTempIcon16 = ::RegisterWindowMessage(_T("TempIcon16"));
-	UINT gTempIcon17 = ::RegisterWindowMessage(_T("TempIcon17"));
-	UINT gTempIcon18 = ::RegisterWindowMessage(_T("TempIcon18"));
-	UINT gTempIcon19 = ::RegisterWindowMessage(_T("TempIcon19"));
-	UINT gTempIcon20 = ::RegisterWindowMessage(_T("TempIcon20"));
-	UINT gTempIcon21 = ::RegisterWindowMessage(_T("TempIcon21"));
-	UINT gTempIcon22 = ::RegisterWindowMessage(_T("TempIcon22"));
-	UINT gTempIcon23 = ::RegisterWindowMessage(_T("TempIcon23"));
-	UINT gTempIcon24 = ::RegisterWindowMessage(_T("TempIcon24"));
-	UINT gTempIcon25 = ::RegisterWindowMessage(_T("TempIcon25"));
-	UINT gTempIcon26 = ::RegisterWindowMessage(_T("TempIcon26"));
-	UINT gTempIcon27 = ::RegisterWindowMessage(_T("TempIcon27"));
-	UINT gTempIcon28 = ::RegisterWindowMessage(_T("TempIcon28"));
-	UINT gTempIcon29 = ::RegisterWindowMessage(_T("TempIcon29"));
-	UINT gTempIcon30 = ::RegisterWindowMessage(_T("TempIcon30"));
-	UINT gTempIcon31 = ::RegisterWindowMessage(_T("TempIcon31"));
-	UINT gTempIcon32 = ::RegisterWindowMessage(_T("TempIcon32"));
-	UINT gTempIcon33 = ::RegisterWindowMessage(_T("TempIcon33"));
-	UINT gTempIcon34 = ::RegisterWindowMessage(_T("TempIcon34"));
-	UINT gTempIcon35 = ::RegisterWindowMessage(_T("TempIcon35"));
-	UINT gTempIcon36 = ::RegisterWindowMessage(_T("TempIcon36"));
-	UINT gTempIcon37 = ::RegisterWindowMessage(_T("TempIcon37"));
-	UINT gTempIcon38 = ::RegisterWindowMessage(_T("TempIcon38"));
-	UINT gTempIcon39 = ::RegisterWindowMessage(_T("TempIcon39"));
-	UINT gTempIcon40 = ::RegisterWindowMessage(_T("TempIcon40"));
-	UINT gTempIcon41 = ::RegisterWindowMessage(_T("TempIcon41"));
-	UINT gTempIcon42 = ::RegisterWindowMessage(_T("TempIcon42"));
-	UINT gTempIcon43 = ::RegisterWindowMessage(_T("TempIcon43"));
-	UINT gTempIcon44 = ::RegisterWindowMessage(_T("TempIcon44"));
-	UINT gTempIcon45 = ::RegisterWindowMessage(_T("TempIcon45"));
-	UINT gTempIcon46 = ::RegisterWindowMessage(_T("TempIcon46"));
-	UINT gTempIcon47 = ::RegisterWindowMessage(_T("TempIcon47"));
-	UINT gTempIcon48 = ::RegisterWindowMessage(_T("TempIcon48"));
-	UINT gTempIcon49 = ::RegisterWindowMessage(_T("TempIcon49"));
-	UINT gTempIcon50 = ::RegisterWindowMessage(_T("TempIcon50"));
-	UINT gTempIcon51 = ::RegisterWindowMessage(_T("TempIcon51"));
-	UINT gTempIcon52 = ::RegisterWindowMessage(_T("TempIcon52"));
-	UINT gTempIcon53 = ::RegisterWindowMessage(_T("TempIcon53"));
-	UINT gTempIcon54 = ::RegisterWindowMessage(_T("TempIcon54"));
-	UINT gTempIcon55 = ::RegisterWindowMessage(_T("TempIcon55"));
-	UINT gTempIcon56 = ::RegisterWindowMessage(_T("TempIcon56"));
-	UINT gTempIcon57 = ::RegisterWindowMessage(_T("TempIcon57"));
-	UINT gTempIcon58 = ::RegisterWindowMessage(_T("TempIcon58"));
-	UINT gTempIcon59 = ::RegisterWindowMessage(_T("TempIcon59"));
-	UINT gTempIcon60 = ::RegisterWindowMessage(_T("TempIcon60"));
-	UINT gTempIcon61 = ::RegisterWindowMessage(_T("TempIcon61"));
-	UINT gTempIcon62 = ::RegisterWindowMessage(_T("TempIcon62"));
-	UINT gTempIcon63 = ::RegisterWindowMessage(_T("TempIcon63"));
+	UINT gTempIcon[CAtaSmart::MAX_DISK];
 
 	extern const GUID StrageGUID = { 0x53F56307, 0xB6BF, 0x11D0, 
 					  0x94,0xF2,0x00,0xA0,0xC9,0x1E,0xFB,0x8B };
@@ -165,70 +101,13 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 		m_hTempIcon[1][i] = NULL;
 	}
 
-	m_TempIconIndex[0]  = gTempIcon0;
-	m_TempIconIndex[1]  = gTempIcon1;
-	m_TempIconIndex[2]  = gTempIcon2;
-	m_TempIconIndex[3]  = gTempIcon3;
-	m_TempIconIndex[4]  = gTempIcon4;
-	m_TempIconIndex[5]  = gTempIcon5;
-	m_TempIconIndex[6]  = gTempIcon6;
-	m_TempIconIndex[7]  = gTempIcon7;
-	m_TempIconIndex[8]  = gTempIcon8;
-	m_TempIconIndex[9]  = gTempIcon9;
-	m_TempIconIndex[10] = gTempIcon10;
-	m_TempIconIndex[11] = gTempIcon11;
-	m_TempIconIndex[12] = gTempIcon12;
-	m_TempIconIndex[13] = gTempIcon13;
-	m_TempIconIndex[14] = gTempIcon14;
-	m_TempIconIndex[15] = gTempIcon15;
-	m_TempIconIndex[16] = gTempIcon16;
-	m_TempIconIndex[17] = gTempIcon17;
-	m_TempIconIndex[18] = gTempIcon18;
-	m_TempIconIndex[19] = gTempIcon19;
-	m_TempIconIndex[20] = gTempIcon20;
-	m_TempIconIndex[21] = gTempIcon21;
-	m_TempIconIndex[22] = gTempIcon22;
-	m_TempIconIndex[23] = gTempIcon23;
-	m_TempIconIndex[24] = gTempIcon24;
-	m_TempIconIndex[25] = gTempIcon25;
-	m_TempIconIndex[26] = gTempIcon26;
-	m_TempIconIndex[27] = gTempIcon27;
-	m_TempIconIndex[28] = gTempIcon28;
-	m_TempIconIndex[29] = gTempIcon29;
-	m_TempIconIndex[30] = gTempIcon30;
-	m_TempIconIndex[31] = gTempIcon31;
-	m_TempIconIndex[32] = gTempIcon32;
-	m_TempIconIndex[33] = gTempIcon33;
-	m_TempIconIndex[34] = gTempIcon34;
-	m_TempIconIndex[35] = gTempIcon35;
-	m_TempIconIndex[36] = gTempIcon36;
-	m_TempIconIndex[37] = gTempIcon37;
-	m_TempIconIndex[38] = gTempIcon38;
-	m_TempIconIndex[39] = gTempIcon39;
-	m_TempIconIndex[40] = gTempIcon40;
-	m_TempIconIndex[41] = gTempIcon41;
-	m_TempIconIndex[42] = gTempIcon42;
-	m_TempIconIndex[43] = gTempIcon43;
-	m_TempIconIndex[44] = gTempIcon44;
-	m_TempIconIndex[45] = gTempIcon45;
-	m_TempIconIndex[46] = gTempIcon46;
-	m_TempIconIndex[47] = gTempIcon47;
-	m_TempIconIndex[48] = gTempIcon48;
-	m_TempIconIndex[49] = gTempIcon49;
-	m_TempIconIndex[50] = gTempIcon50;
-	m_TempIconIndex[51] = gTempIcon51;
-	m_TempIconIndex[52] = gTempIcon52;
-	m_TempIconIndex[53] = gTempIcon53;
-	m_TempIconIndex[54] = gTempIcon54;
-	m_TempIconIndex[55] = gTempIcon55;
-	m_TempIconIndex[56] = gTempIcon56;
-	m_TempIconIndex[57] = gTempIcon57;
-	m_TempIconIndex[58] = gTempIcon58;
-	m_TempIconIndex[59] = gTempIcon59;
-	m_TempIconIndex[60] = gTempIcon60;
-	m_TempIconIndex[61] = gTempIcon61;
-	m_TempIconIndex[62] = gTempIcon62;
-	m_TempIconIndex[63] = gTempIcon63;
+	CString cstr;
+	for (int i = 0; i < CAtaSmart::MAX_DISK; i++)
+	{
+		cstr.Format(L"TempIcon%d", i);
+		gTempIcon[i] = ::RegisterWindowMessage(cstr);
+		m_TempIconIndex[i] = gTempIcon[i];
+	}
 
 	m_bTrayMainIcon = FALSE;
 	for(int i = 0; i < CAtaSmart::MAX_DISK; i++)
@@ -631,70 +510,134 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_REGISTERED_MESSAGE(gRegMessageId, OnRegMessage)
 	ON_REGISTERED_MESSAGE(wmTaskbarCreated, OnTaskbarCreated)
 
-	ON_REGISTERED_MESSAGE(gTempIcon0,  OnTempIcon0)
-	ON_REGISTERED_MESSAGE(gTempIcon1,  OnTempIcon1)
-	ON_REGISTERED_MESSAGE(gTempIcon2,  OnTempIcon2)
-	ON_REGISTERED_MESSAGE(gTempIcon3,  OnTempIcon3)
-	ON_REGISTERED_MESSAGE(gTempIcon4,  OnTempIcon4)
-	ON_REGISTERED_MESSAGE(gTempIcon5,  OnTempIcon5)
-	ON_REGISTERED_MESSAGE(gTempIcon6,  OnTempIcon6)
-	ON_REGISTERED_MESSAGE(gTempIcon7,  OnTempIcon7)
-	ON_REGISTERED_MESSAGE(gTempIcon8,  OnTempIcon8)
-	ON_REGISTERED_MESSAGE(gTempIcon9,  OnTempIcon9)
-	ON_REGISTERED_MESSAGE(gTempIcon10, OnTempIcon10)
-	ON_REGISTERED_MESSAGE(gTempIcon11, OnTempIcon11)
-	ON_REGISTERED_MESSAGE(gTempIcon12, OnTempIcon12)
-	ON_REGISTERED_MESSAGE(gTempIcon13, OnTempIcon13)
-	ON_REGISTERED_MESSAGE(gTempIcon14, OnTempIcon14)
-	ON_REGISTERED_MESSAGE(gTempIcon15, OnTempIcon15)
-	ON_REGISTERED_MESSAGE(gTempIcon16, OnTempIcon16)
-	ON_REGISTERED_MESSAGE(gTempIcon17, OnTempIcon17)
-	ON_REGISTERED_MESSAGE(gTempIcon18, OnTempIcon18)
-	ON_REGISTERED_MESSAGE(gTempIcon19, OnTempIcon19)
-	ON_REGISTERED_MESSAGE(gTempIcon20, OnTempIcon20)
-	ON_REGISTERED_MESSAGE(gTempIcon21, OnTempIcon21)
-	ON_REGISTERED_MESSAGE(gTempIcon22, OnTempIcon22)
-	ON_REGISTERED_MESSAGE(gTempIcon23, OnTempIcon23)
-	ON_REGISTERED_MESSAGE(gTempIcon24, OnTempIcon24)
-	ON_REGISTERED_MESSAGE(gTempIcon25, OnTempIcon25)
-	ON_REGISTERED_MESSAGE(gTempIcon26, OnTempIcon26)
-	ON_REGISTERED_MESSAGE(gTempIcon27, OnTempIcon27)
-	ON_REGISTERED_MESSAGE(gTempIcon28, OnTempIcon28)
-	ON_REGISTERED_MESSAGE(gTempIcon29, OnTempIcon29)
-	ON_REGISTERED_MESSAGE(gTempIcon30, OnTempIcon30)
-	ON_REGISTERED_MESSAGE(gTempIcon31, OnTempIcon31)
-	ON_REGISTERED_MESSAGE(gTempIcon32, OnTempIcon32)
-	ON_REGISTERED_MESSAGE(gTempIcon33, OnTempIcon33)
-	ON_REGISTERED_MESSAGE(gTempIcon34, OnTempIcon34)
-	ON_REGISTERED_MESSAGE(gTempIcon35, OnTempIcon35)
-	ON_REGISTERED_MESSAGE(gTempIcon36, OnTempIcon36)
-	ON_REGISTERED_MESSAGE(gTempIcon37, OnTempIcon37)
-	ON_REGISTERED_MESSAGE(gTempIcon38, OnTempIcon38)
-	ON_REGISTERED_MESSAGE(gTempIcon39, OnTempIcon39)
-	ON_REGISTERED_MESSAGE(gTempIcon40, OnTempIcon40)
-	ON_REGISTERED_MESSAGE(gTempIcon41, OnTempIcon41)
-	ON_REGISTERED_MESSAGE(gTempIcon42, OnTempIcon42)
-	ON_REGISTERED_MESSAGE(gTempIcon43, OnTempIcon43)
-	ON_REGISTERED_MESSAGE(gTempIcon44, OnTempIcon44)
-	ON_REGISTERED_MESSAGE(gTempIcon45, OnTempIcon45)
-	ON_REGISTERED_MESSAGE(gTempIcon46, OnTempIcon46)
-	ON_REGISTERED_MESSAGE(gTempIcon47, OnTempIcon47)
-	ON_REGISTERED_MESSAGE(gTempIcon48, OnTempIcon48)
-	ON_REGISTERED_MESSAGE(gTempIcon49, OnTempIcon49)
-	ON_REGISTERED_MESSAGE(gTempIcon50, OnTempIcon50)
-	ON_REGISTERED_MESSAGE(gTempIcon51, OnTempIcon51)
-	ON_REGISTERED_MESSAGE(gTempIcon52, OnTempIcon52)
-	ON_REGISTERED_MESSAGE(gTempIcon53, OnTempIcon53)
-	ON_REGISTERED_MESSAGE(gTempIcon54, OnTempIcon54)
-	ON_REGISTERED_MESSAGE(gTempIcon55, OnTempIcon55)
-	ON_REGISTERED_MESSAGE(gTempIcon56, OnTempIcon56)
-	ON_REGISTERED_MESSAGE(gTempIcon57, OnTempIcon57)
-	ON_REGISTERED_MESSAGE(gTempIcon58, OnTempIcon58)
-	ON_REGISTERED_MESSAGE(gTempIcon59, OnTempIcon59)
-	ON_REGISTERED_MESSAGE(gTempIcon60, OnTempIcon60)
-	ON_REGISTERED_MESSAGE(gTempIcon61, OnTempIcon61)
-	ON_REGISTERED_MESSAGE(gTempIcon62, OnTempIcon62)
-	ON_REGISTERED_MESSAGE(gTempIcon63, OnTempIcon63)
+	ON_REGISTERED_MESSAGE(gTempIcon[0], OnTempIcon0)
+	ON_REGISTERED_MESSAGE(gTempIcon[1], OnTempIcon1)
+	ON_REGISTERED_MESSAGE(gTempIcon[2], OnTempIcon2)
+	ON_REGISTERED_MESSAGE(gTempIcon[3], OnTempIcon3)
+	ON_REGISTERED_MESSAGE(gTempIcon[4], OnTempIcon4)
+	ON_REGISTERED_MESSAGE(gTempIcon[5], OnTempIcon5)
+	ON_REGISTERED_MESSAGE(gTempIcon[6], OnTempIcon6)
+	ON_REGISTERED_MESSAGE(gTempIcon[7], OnTempIcon7)
+	ON_REGISTERED_MESSAGE(gTempIcon[8], OnTempIcon8)
+	ON_REGISTERED_MESSAGE(gTempIcon[9], OnTempIcon9)
+	ON_REGISTERED_MESSAGE(gTempIcon[10], OnTempIcon10)
+	ON_REGISTERED_MESSAGE(gTempIcon[11], OnTempIcon11)
+	ON_REGISTERED_MESSAGE(gTempIcon[12], OnTempIcon12)
+	ON_REGISTERED_MESSAGE(gTempIcon[13], OnTempIcon13)
+	ON_REGISTERED_MESSAGE(gTempIcon[14], OnTempIcon14)
+	ON_REGISTERED_MESSAGE(gTempIcon[15], OnTempIcon15)
+	ON_REGISTERED_MESSAGE(gTempIcon[16], OnTempIcon16)
+	ON_REGISTERED_MESSAGE(gTempIcon[17], OnTempIcon17)
+	ON_REGISTERED_MESSAGE(gTempIcon[18], OnTempIcon18)
+	ON_REGISTERED_MESSAGE(gTempIcon[19], OnTempIcon19)
+	ON_REGISTERED_MESSAGE(gTempIcon[20], OnTempIcon20)
+	ON_REGISTERED_MESSAGE(gTempIcon[21], OnTempIcon21)
+	ON_REGISTERED_MESSAGE(gTempIcon[22], OnTempIcon22)
+	ON_REGISTERED_MESSAGE(gTempIcon[23], OnTempIcon23)
+	ON_REGISTERED_MESSAGE(gTempIcon[24], OnTempIcon24)
+	ON_REGISTERED_MESSAGE(gTempIcon[25], OnTempIcon25)
+	ON_REGISTERED_MESSAGE(gTempIcon[26], OnTempIcon26)
+	ON_REGISTERED_MESSAGE(gTempIcon[27], OnTempIcon27)
+	ON_REGISTERED_MESSAGE(gTempIcon[28], OnTempIcon28)
+	ON_REGISTERED_MESSAGE(gTempIcon[29], OnTempIcon29)
+	ON_REGISTERED_MESSAGE(gTempIcon[30], OnTempIcon30)
+	ON_REGISTERED_MESSAGE(gTempIcon[31], OnTempIcon31)
+	ON_REGISTERED_MESSAGE(gTempIcon[32], OnTempIcon32)
+	ON_REGISTERED_MESSAGE(gTempIcon[33], OnTempIcon33)
+	ON_REGISTERED_MESSAGE(gTempIcon[34], OnTempIcon34)
+	ON_REGISTERED_MESSAGE(gTempIcon[35], OnTempIcon35)
+	ON_REGISTERED_MESSAGE(gTempIcon[36], OnTempIcon36)
+	ON_REGISTERED_MESSAGE(gTempIcon[37], OnTempIcon37)
+	ON_REGISTERED_MESSAGE(gTempIcon[38], OnTempIcon38)
+	ON_REGISTERED_MESSAGE(gTempIcon[39], OnTempIcon39)
+	ON_REGISTERED_MESSAGE(gTempIcon[40], OnTempIcon40)
+	ON_REGISTERED_MESSAGE(gTempIcon[41], OnTempIcon41)
+	ON_REGISTERED_MESSAGE(gTempIcon[42], OnTempIcon42)
+	ON_REGISTERED_MESSAGE(gTempIcon[43], OnTempIcon43)
+	ON_REGISTERED_MESSAGE(gTempIcon[44], OnTempIcon44)
+	ON_REGISTERED_MESSAGE(gTempIcon[45], OnTempIcon45)
+	ON_REGISTERED_MESSAGE(gTempIcon[46], OnTempIcon46)
+	ON_REGISTERED_MESSAGE(gTempIcon[47], OnTempIcon47)
+	ON_REGISTERED_MESSAGE(gTempIcon[48], OnTempIcon48)
+	ON_REGISTERED_MESSAGE(gTempIcon[49], OnTempIcon49)
+	ON_REGISTERED_MESSAGE(gTempIcon[50], OnTempIcon50)
+	ON_REGISTERED_MESSAGE(gTempIcon[51], OnTempIcon51)
+	ON_REGISTERED_MESSAGE(gTempIcon[52], OnTempIcon52)
+	ON_REGISTERED_MESSAGE(gTempIcon[53], OnTempIcon53)
+	ON_REGISTERED_MESSAGE(gTempIcon[54], OnTempIcon54)
+	ON_REGISTERED_MESSAGE(gTempIcon[55], OnTempIcon55)
+	ON_REGISTERED_MESSAGE(gTempIcon[56], OnTempIcon56)
+	ON_REGISTERED_MESSAGE(gTempIcon[57], OnTempIcon57)
+	ON_REGISTERED_MESSAGE(gTempIcon[58], OnTempIcon58)
+	ON_REGISTERED_MESSAGE(gTempIcon[59], OnTempIcon59)
+	ON_REGISTERED_MESSAGE(gTempIcon[60], OnTempIcon60)
+	ON_REGISTERED_MESSAGE(gTempIcon[61], OnTempIcon61)
+	ON_REGISTERED_MESSAGE(gTempIcon[62], OnTempIcon62)
+	ON_REGISTERED_MESSAGE(gTempIcon[63], OnTempIcon63)
+	ON_REGISTERED_MESSAGE(gTempIcon[64], OnTempIcon64)
+	ON_REGISTERED_MESSAGE(gTempIcon[65], OnTempIcon65)
+	ON_REGISTERED_MESSAGE(gTempIcon[66], OnTempIcon66)
+	ON_REGISTERED_MESSAGE(gTempIcon[67], OnTempIcon67)
+	ON_REGISTERED_MESSAGE(gTempIcon[68], OnTempIcon68)
+	ON_REGISTERED_MESSAGE(gTempIcon[69], OnTempIcon69)
+	ON_REGISTERED_MESSAGE(gTempIcon[70], OnTempIcon70)
+	ON_REGISTERED_MESSAGE(gTempIcon[71], OnTempIcon71)
+	ON_REGISTERED_MESSAGE(gTempIcon[72], OnTempIcon72)
+	ON_REGISTERED_MESSAGE(gTempIcon[73], OnTempIcon73)
+	ON_REGISTERED_MESSAGE(gTempIcon[74], OnTempIcon74)
+	ON_REGISTERED_MESSAGE(gTempIcon[75], OnTempIcon75)
+	ON_REGISTERED_MESSAGE(gTempIcon[76], OnTempIcon76)
+	ON_REGISTERED_MESSAGE(gTempIcon[77], OnTempIcon77)
+	ON_REGISTERED_MESSAGE(gTempIcon[78], OnTempIcon78)
+	ON_REGISTERED_MESSAGE(gTempIcon[79], OnTempIcon79)
+	ON_REGISTERED_MESSAGE(gTempIcon[80], OnTempIcon80)
+	ON_REGISTERED_MESSAGE(gTempIcon[81], OnTempIcon81)
+	ON_REGISTERED_MESSAGE(gTempIcon[82], OnTempIcon82)
+	ON_REGISTERED_MESSAGE(gTempIcon[83], OnTempIcon83)
+	ON_REGISTERED_MESSAGE(gTempIcon[84], OnTempIcon84)
+	ON_REGISTERED_MESSAGE(gTempIcon[85], OnTempIcon85)
+	ON_REGISTERED_MESSAGE(gTempIcon[86], OnTempIcon86)
+	ON_REGISTERED_MESSAGE(gTempIcon[87], OnTempIcon87)
+	ON_REGISTERED_MESSAGE(gTempIcon[88], OnTempIcon88)
+	ON_REGISTERED_MESSAGE(gTempIcon[89], OnTempIcon89)
+	ON_REGISTERED_MESSAGE(gTempIcon[90], OnTempIcon90)
+	ON_REGISTERED_MESSAGE(gTempIcon[91], OnTempIcon91)
+	ON_REGISTERED_MESSAGE(gTempIcon[92], OnTempIcon92)
+	ON_REGISTERED_MESSAGE(gTempIcon[93], OnTempIcon93)
+	ON_REGISTERED_MESSAGE(gTempIcon[94], OnTempIcon94)
+	ON_REGISTERED_MESSAGE(gTempIcon[95], OnTempIcon95)
+	ON_REGISTERED_MESSAGE(gTempIcon[96], OnTempIcon96)
+	ON_REGISTERED_MESSAGE(gTempIcon[97], OnTempIcon97)
+	ON_REGISTERED_MESSAGE(gTempIcon[98], OnTempIcon98)
+	ON_REGISTERED_MESSAGE(gTempIcon[99], OnTempIcon99)
+	ON_REGISTERED_MESSAGE(gTempIcon[100], OnTempIcon100)
+	ON_REGISTERED_MESSAGE(gTempIcon[101], OnTempIcon101)
+	ON_REGISTERED_MESSAGE(gTempIcon[102], OnTempIcon102)
+	ON_REGISTERED_MESSAGE(gTempIcon[103], OnTempIcon103)
+	ON_REGISTERED_MESSAGE(gTempIcon[104], OnTempIcon104)
+	ON_REGISTERED_MESSAGE(gTempIcon[105], OnTempIcon105)
+	ON_REGISTERED_MESSAGE(gTempIcon[106], OnTempIcon106)
+	ON_REGISTERED_MESSAGE(gTempIcon[107], OnTempIcon107)
+	ON_REGISTERED_MESSAGE(gTempIcon[108], OnTempIcon108)
+	ON_REGISTERED_MESSAGE(gTempIcon[109], OnTempIcon109)
+	ON_REGISTERED_MESSAGE(gTempIcon[110], OnTempIcon110)
+	ON_REGISTERED_MESSAGE(gTempIcon[111], OnTempIcon111)
+	ON_REGISTERED_MESSAGE(gTempIcon[112], OnTempIcon112)
+	ON_REGISTERED_MESSAGE(gTempIcon[113], OnTempIcon113)
+	ON_REGISTERED_MESSAGE(gTempIcon[114], OnTempIcon114)
+	ON_REGISTERED_MESSAGE(gTempIcon[115], OnTempIcon115)
+	ON_REGISTERED_MESSAGE(gTempIcon[116], OnTempIcon116)
+	ON_REGISTERED_MESSAGE(gTempIcon[117], OnTempIcon117)
+	ON_REGISTERED_MESSAGE(gTempIcon[118], OnTempIcon118)
+	ON_REGISTERED_MESSAGE(gTempIcon[119], OnTempIcon119)
+	ON_REGISTERED_MESSAGE(gTempIcon[120], OnTempIcon120)
+	ON_REGISTERED_MESSAGE(gTempIcon[121], OnTempIcon121)
+	ON_REGISTERED_MESSAGE(gTempIcon[122], OnTempIcon122)
+	ON_REGISTERED_MESSAGE(gTempIcon[123], OnTempIcon123)
+	ON_REGISTERED_MESSAGE(gTempIcon[124], OnTempIcon124)
+	ON_REGISTERED_MESSAGE(gTempIcon[125], OnTempIcon125)
+	ON_REGISTERED_MESSAGE(gTempIcon[126], OnTempIcon126)
+	ON_REGISTERED_MESSAGE(gTempIcon[127], OnTempIcon127)
 
 	ON_COMMAND(ID_GRAPH, &CDiskInfoDlg::OnGraph)
 	ON_COMMAND(ID_HELP, &CDiskInfoDlg::OnHelp)
@@ -1761,6 +1704,10 @@ BOOL CDiskInfoDlg::SendMail(DWORD eventId, CString title, CString message)
 
 BOOL CDiskInfoDlg::AddAlarmHistory(DWORD eventId, CString disk, CString message)
 {
+	CString cstr;
+	cstr.Format(L"[Alarm] EventID=%d, Disk=%s, Message=%s", eventId, disk, message);
+	cstr.Replace(L"\n", L"");
+	DebugPrint(cstr);
 	return FALSE;
 // 2012/5/26 - 
 /*

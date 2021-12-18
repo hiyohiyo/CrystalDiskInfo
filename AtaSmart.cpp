@@ -10314,6 +10314,11 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			&& vars[i].Attribute[j].CurrentValue == 0 && vars[i].Attribute[j].RawValue[0] == 0 && vars[i].Attribute[j].RawValue[1] == 0)
 		{
 		}
+		// [2021/12/15] Workaround for SanDisk USB Memory
+		else if (vars[i].Attribute[j].Id == 0xE8 && vars[i].FlagLifeSanDiskUsbMemory)
+		{
+
+		}
 		// Temperature Threshold Bug
 		else if(vars[i].Attribute[j].Id == 0xC2)
 		{

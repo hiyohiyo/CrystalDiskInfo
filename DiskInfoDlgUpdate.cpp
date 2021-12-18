@@ -428,6 +428,18 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					}
 				}
 			}
+			// [2021/12/15] Workaround for SanDisk USB Memory
+			else if (m_Ata.vars[i].Attribute[j].Id == 0xE8 && m_Ata.vars[i].FlagLifeSanDiskUsbMemory)
+			{
+				if (flag)
+				{
+					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
+				}
+				else
+				{
+					m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
+				}
+			}
 			// Temperature
 			else if (m_Ata.vars[i].Attribute[j].Id == 0xC2)
 			{
