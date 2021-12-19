@@ -120,6 +120,7 @@ LRESULT CDiskInfoDlg::OnTempIcon76(WPARAM w, LPARAM l) { return TempIcon(76, w, 
 LRESULT CDiskInfoDlg::OnTempIcon77(WPARAM w, LPARAM l) { return TempIcon(77, w, l); }
 LRESULT CDiskInfoDlg::OnTempIcon78(WPARAM w, LPARAM l) { return TempIcon(78, w, l); }
 LRESULT CDiskInfoDlg::OnTempIcon79(WPARAM w, LPARAM l) { return TempIcon(79, w, l); }
+/*
 LRESULT CDiskInfoDlg::OnTempIcon80(WPARAM w, LPARAM l) { return TempIcon(80, w, l); }
 LRESULT CDiskInfoDlg::OnTempIcon81(WPARAM w, LPARAM l) { return TempIcon(81, w, l); }
 LRESULT CDiskInfoDlg::OnTempIcon82(WPARAM w, LPARAM l) { return TempIcon(82, w, l); }
@@ -168,7 +169,7 @@ LRESULT CDiskInfoDlg::OnTempIcon124(WPARAM w, LPARAM l) { return TempIcon(124, w
 LRESULT CDiskInfoDlg::OnTempIcon125(WPARAM w, LPARAM l) { return TempIcon(125, w, l); }
 LRESULT CDiskInfoDlg::OnTempIcon126(WPARAM w, LPARAM l) { return TempIcon(126, w, l); }
 LRESULT CDiskInfoDlg::OnTempIcon127(WPARAM w, LPARAM l) { return TempIcon(127, w, l); }
-
+*/
 LRESULT CDiskInfoDlg::OnRegMessage(WPARAM wParam, LPARAM lParam)
 {
 	if(lParam == WM_LBUTTONDOWN && m_bResidentMinimize)

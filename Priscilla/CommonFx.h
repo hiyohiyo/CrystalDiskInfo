@@ -33,14 +33,15 @@
 //------------------------------------------------
 // WM_APP
 //------------------------------------------------
-// WM_APP + 0x0000-0x0FFF: Project Priscilla
-     // WM_APP + 0x0000-0x00FF: Common
-     // WM_APP + 0x0100-0x01FF: Theme
-     // WM_APP + 0x0200-0x02FF: Language
+// WM_APP + 0x0000-0x0BFF: User Application
+// WM_APP + 0x0C00-0x0FFF: Project Priscilla
+     // WM_APP + 0x0C00-0x0CFF: Theme
+     // WM_APP + 0x0D00-0x0DFF: Language
+     // WP_APP + 0x0E00-0x0FFF: Reserved
 // WM_APP + 0x1000-0x3FFF: User Application
 
-#define WM_THEME_ID				(WM_APP + 0x0100)
-#define WM_LANGUAGE_ID			(WM_APP + 0x0200)
+#define WM_THEME_ID				(WM_APP + 0x0C00)
+#define WM_LANGUAGE_ID			(WM_APP + 0x0D00)
 
 //------------------------------------------------
 // TIMER ID

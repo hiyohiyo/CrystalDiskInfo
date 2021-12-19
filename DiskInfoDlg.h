@@ -507,6 +507,7 @@ public:
 	afx_msg LRESULT OnTempIcon77(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnTempIcon78(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnTempIcon79(WPARAM wParam, LPARAM lParam);
+/*
 	afx_msg LRESULT OnTempIcon80(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnTempIcon81(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnTempIcon82(WPARAM wParam, LPARAM lParam);
@@ -555,6 +556,7 @@ public:
 	afx_msg LRESULT OnTempIcon125(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnTempIcon126(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnTempIcon127(WPARAM wParam, LPARAM lParam);
+*/
 	afx_msg LRESULT OnPlayAlertSound(WPARAM wParam, LPARAM lParam);
 
 	afx_msg void OnGraph();
