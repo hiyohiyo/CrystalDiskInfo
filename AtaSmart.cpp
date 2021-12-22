@@ -3699,6 +3699,10 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				{
 					life = asi.Attribute[j].CurrentValue;
 				}
+				else
+				{
+					life = 100 - asi.Attribute[j].RawValue[1];
+				}
 
 				if (life < 0) { life = -1; }
 
@@ -9699,6 +9703,10 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					else if (asi->FlagLifeSanDiskLenovo)
 					{
 						life = asi->Attribute[j].CurrentValue;
+					}
+					else
+					{
+						life = 100 - asi->Attribute[j].RawValue[1];
 					}
 
 					if (life < 0 || life > 100) { life = -1; }
