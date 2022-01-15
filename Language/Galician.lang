@@ -1,11 +1,11 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=pabero
+TRANSLATOR=Pablo Ocampo
 VERSION=8.8.6
 
 [Language]
 LANGUAGE=Galego
-CHARACTER_CODE=Unicode(UTF-16)
+CHARACTER_CODE=(UTF-16, LE, w/ BOM)
 LOCALE_ID=0x456
 
 [Url]
@@ -1315,3 +1315,113 @@ EA=Reconto de lectura de sectores dende NAND
 F1=Reconto de sectores de escritura
 F2=Reconto de sectores de lectura
 F5=Reconto de erros de bit
+
+[SmartSeagateBarraCuda] ; Added 8.9.0
+01=UECC Error Count
+05=Retired Sectors Count
+09=Power On Hours
+0C=Power Cycle Count
+10=Spare Blocks Available
+11=Remaining Spare Blocks
+A8=SATA PHY Error Count
+AA=Bad Block Count
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Erase Count
+AE=Unexpected Power Loss Count
+B1=Wear Range Delta
+B5=Program Fail Count
+B6=Erase Fail Count
+C0=Unexpected Power loss Count
+C2=Temperature
+C9=Soft Error Rate
+CC=Soft ECC Correction Rate
+DA=CRC Error Count
+E7=SSD Life Left
+E8=Read Failure Block Count
+E9=NAND GiB Written
+EA=Lifetime Writes To Flash
+EB=NAND sectors Written
+F1=Lifetime Writes From Host
+F2=Lifetime Reads From Host
+FA=Lifetime NAND Read Retries
+
+[SmartYmtc] ; Added 8.10.0
+05=New Bad Block Count
+09=Power-On Hours Count
+0C=Power Cycle Count
+AA=Max Bad Block Count
+A8=SATA PHY Error Count
+A9=Bad Block Count
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Erase Count
+AF=Bad Cluster Count
+B7=SATA Interface Downshift
+B8=End to End Error Detection/Correction Count
+BB=Uncorrectable Error Count
+BE=Temperature
+C0=Unexpected Power Loss Count
+C4=Re-allocated Event Count
+C7=CRC Error Count
+CE=Minimum Erase Count
+CF=Maximum Erase Count
+D0=Average Erase Count
+D1=SLC Minimum Erase Count
+D2=SLC Maximum Erase Count
+D3=SLC Average Erase Count
+E7=SSD Life Left
+E9=Write sector count to NAND
+EA=Read sector count to NAND
+F1=Total LBA written
+F2=Total LBA Read
+F3=NAND Temperature
+F5=Bit Error Count
+
+[SmartScy] ;Added 8.12.8
+01=Raw Read Error Rate
+05=Reallocated Sector Count
+07=Seek Error Rate
+09=Power-On Hours
+0C=Drive Power Cycle Count
+A7=Average Erase Count
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Erase Count
+B1=Read Retry Count
+B4=Spare Block Count Left
+B7=Runtime Bad Block
+BB=Reported UNC Errors
+C0=Unexpected Power Loss Count
+C2=Controlled Temperature
+C3=Cumulative ECC Bit Correction Count
+C4=Reallocated Event Count
+C5=Current Pending Sector
+C7=UDMA CRC Error Count
+E7=SSD Life Left
+F1=Total LBAs Written
+F2=Total LBAs Read
+F5=Total Nand Flash Written
+
+[SmartRecadata] ;Added 8.14.0
+07=Seek Error Rate
+09=Power-On Hours
+0C=Drive Power Cycle Count
+A7=Average erase count
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Erase Count
+B1=Read Retry Count
+B4=Spare Block Count Left
+B7=Runtime Bad Block
+BB=Reported UNC Errors
+C0=Unexpected Power Loss Count
+C2=Controlled temperature
+C3=Cumulative ECC Bit Correction Count
+C4=Reallocated Event Count
+C5=Current Pending Sector
+C7=UDMA CRC Error Count
+E7=SSD Life Left
+F1=Total LBAs written
+F2=Total LBAs read
+F5=Total Nand Flash Written

@@ -949,6 +949,7 @@
 #define ID_SSD_KINGSTON_KC600			33040
 #define ID_SSD_KINGSTON_DC500			33041
 #define ID_SSD_KINGSTON_SA400			33042
+#define ID_SSD_RECADATA			        33043
 
 #define ID_SSD_MAX                      33049
 #define ID_ATA_PASS_THROUGH_SMART       33050

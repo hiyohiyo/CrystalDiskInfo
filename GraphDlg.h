@@ -242,6 +242,7 @@ public:
 	afx_msg void OnSsdMaxiotek();
 	afx_msg void OnSsdYmtc();
 	afx_msg void OnSsdScy();
+	afx_msg void OnSsdRecadata();
 
 	afx_msg void OnSsdJmicron60x();
 	afx_msg void OnSsdJmicron61x();

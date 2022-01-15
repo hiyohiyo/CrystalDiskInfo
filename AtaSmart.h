@@ -39,6 +39,7 @@ static const TCHAR* commandTypeString[] =
 	_T("nr"), // NVMe Realtek
 	_T("nt"), // NVMe Intel RST
 	_T("mr"), // MegaRAID SAS
+	_T("rc"), // +AMD RC2
 };
 
 static const TCHAR* ssdVendorString[] =
@@ -85,7 +86,7 @@ static const TCHAR* ssdVendorString[] =
 	_T(""),	  // _T("SmartKingstonKC600"),
 	_T(""),	  // _T("SmartKingstonDC500"),
 	_T(""),	  // _T("SmartKingstonSA400"),
-	_T(""), // 
+	_T("re"), // RECADATA
 };
 
 static const TCHAR* attributeString[] =
@@ -132,6 +133,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartKingstonKC600"),
 	_T("SmartKingstonDC500"),
 	_T("SmartKingstonSA400"),
+	_T("SmartRecadata"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -211,6 +213,8 @@ public:
 		SSD_VENDOR_KINGSTON_KC600 = 39,
 		SSD_VENDOR_KINGSTON_DC500 = 40,
 		SSD_VENDOR_KINGSTON_SA400 = 41,
+
+		SSD_VENDOR_RECADATA = 42,
 
 		SSD_VENDOR_MAX = 99,
 
@@ -306,6 +310,7 @@ public:
 		CMD_TYPE_NVME_REALTEK,
 		CMD_TYPE_NVME_INTEL_RST,
 		CMD_TYPE_MEGARAID,
+		CMD_TYPE_AMD_RC2,// +AMD_RC2
 		CMD_TYPE_DEBUG
 	};
 
@@ -333,6 +338,7 @@ public:
 	//	INTERFACE_TYPE_UASP,
 		INTERFACE_TYPE_SCSI, 
 		INTERFACE_TYPE_NVME,
+		INTERFACE_TYPE_AMD_RC2,// +AMD_RC2
 	//	INTERFACE_TYPE_USB_NVME,
 	};
 
@@ -1874,32 +1880,34 @@ public:
 	CArray<DWORD, DWORD> m_SiliconImageControllerType;
 	CArray<INT, INT> m_BlackPhysicalDrive;
 
-	BOOL IsAdvancedDiskSearch;
-	BOOL IsEnabledWmi;
+	BOOL IsAdvancedDiskSearch = FALSE;
+	BOOL IsEnabledWmi = FALSE;
 
-	BOOL IsWorkaroundHD204UI;
-	BOOL IsWorkaroundAdataSsd;
+	BOOL IsWorkaroundHD204UI = FALSE;
+	BOOL IsWorkaroundAdataSsd = FALSE;
 
-	ULONGLONG MeasuredGetTickCount;
+	ULONGLONG MeasuredGetTickCount = 0;
 
-	BOOL FlagNvidiaController;
-	BOOL FlagMarvellController;
-	BOOL FlagUsbSat;
-	BOOL FlagUsbSunplus;
-	BOOL FlagUsbIodata;
-	BOOL FlagUsbLogitec;
-	BOOL FlagUsbProlific;
-	BOOL FlagUsbJmicron;
-	BOOL FlagUsbCypress;
-	BOOL FlagUsbMemory;
-//	BOOL FlagUsbSat16;
-	BOOL FlagUsbNVMeJMicron;
-	BOOL FlagUsbNVMeASMedia;
-	BOOL FlagUsbNVMeRealtek;
-	BOOL FlagMegaRAID;
-	BOOL FlagUsbASM1352R;
+	BOOL FlagNvidiaController = FALSE;
+	BOOL FlagMarvellController = FALSE;
+	BOOL FlagUsbSat = FALSE;
+	BOOL FlagUsbSunplus = FALSE;
+	BOOL FlagUsbIodata = FALSE;
+	BOOL FlagUsbLogitec = FALSE;
+	BOOL FlagUsbProlific = FALSE;
+	BOOL FlagUsbJmicron = FALSE;
+	BOOL FlagUsbCypress = FALSE;
+	BOOL FlagUsbMemory = FALSE;
+//	BOOL FlagUsbSat16 = FALSE;
+	BOOL FlagUsbNVMeJMicron = FALSE;
+	BOOL FlagUsbNVMeASMedia = FALSE;
+	BOOL FlagUsbNVMeRealtek = FALSE;
+	BOOL FlagMegaRAID = FALSE;
+	BOOL FlagUsbASM1352R = FALSE;
+	BOOL FlagAMD_RC2 = FALSE;// +AMD_RC2
+	BOOL FlagNoWakeUp = FALSE;// +M 20211216
 
-	DWORD CsmiType;
+	DWORD CsmiType = 0;
 
 	DWORD CheckDiskStatus(DWORD index);
 
@@ -1911,7 +1919,9 @@ protected:
 	BOOL m_bNVMeStorageQuery;
 
 	BOOL GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INTERFACE_TYPE interfaceType, COMMAND_TYPE commandType, VENDOR_ID vendorId, DWORD productId = 0, INT scsiBus = -1, DWORD siliconImageId = 0, BOOL FlagNvidiaController = 0, BOOL FlagMarvellController = 0, CString pnpDeviceId = _T(""), BOOL FlagNVMe = FALSE, BOOL FlagUasp = FALSE);
-	BOOL AddDisk(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, INT siliconImageType = -1, PCSMI_SAS_PHY_ENTITY sasPhyEntity = NULL, CString pnpDeviceId = _T(""));
+	BOOL AddDisk(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, INT siliconImageType = -1, PCSMI_SAS_PHY_ENTITY sasPhyEntity = NULL, CString pnpDeviceId = _T("")
+		, DWORD TotalDiskSize = 0// +AMD_RC2
+	);
 	DWORD CheckSmartAttributeUpdate(DWORD index, SMART_ATTRIBUTE* pre, SMART_ATTRIBUTE* cur);
 
 	BOOL CheckSmartAttributeCorrect(ATA_SMART_INFO* asi1, ATA_SMART_INFO* asi2);
@@ -2042,6 +2052,7 @@ protected:
 	BOOL IsSsdMaxiotek(ATA_SMART_INFO& asi);
 	BOOL IsSsdYmtc(ATA_SMART_INFO& asi);
 	BOOL IsSsdScy(ATA_SMART_INFO& asi);
+	BOOL IsSsdRecadata(ATA_SMART_INFO& asi);
 	BOOL IsSsdGeneral(ATA_SMART_INFO& asi);
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
@@ -2050,4 +2061,12 @@ protected:
 
 	CString GetModelSerial(CString &model, CString &serialNumber);
 //	BOOL GetLifeByGpl(ATA_SMART_INFO& asi);
+
+	// +AMD_RC2 >>>>>>>>
+	BOOL AddDiskAMD_RC2();
+	BOOL DoIdentifyDeviceAMD_RC2(INT diskNum, INT* phy, DWORD* TotalDiskSize, IDENTIFY_DEVICE* data, BOOL* isSSD, BOOL* isNVME);
+	BOOL GetSmartDataAMD_RC2(INT diskNum, ATA_SMART_INFO* asi);
+	BOOL GetSmartThresholdAMD_RC2(INT diskNum, ATA_SMART_INFO* asi);
+	// +AMD_RC2 <<<<<<<<
+
 };

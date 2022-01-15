@@ -106,20 +106,20 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.13.3"
-#define PRODUCT_RELEASE				L"2021/12/22"
-#define PRODUCT_COPY_YEAR			L"2008-2021"
+#define PRODUCT_VERSION				L"8.14.0"
+#define PRODUCT_RELEASE				L"2022/01/15"
+#define PRODUCT_COPY_YEAR			L"2008-2022"
 #define PRODUCT_LICENSE				L"The MIT License"
 
 #ifdef KUREI_KEI_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2021 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2017-2021 Pronama LLC"
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2022 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2017-2022 Pronama LLC"
 
 #elif SUISHO_SHIZUKU_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2021 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2012-2021 kirino kasumu"
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2022 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2012-2022 kirino kasumu"
 #else
-#define PRODUCT_COPYRIGHT_1			L"© 2008-2021 hiyohiyo"
+#define PRODUCT_COPYRIGHT_1			L"© 2008-2022 hiyohiyo"
 #define PRODUCT_COPYRIGHT_2			L""
 #endif
 

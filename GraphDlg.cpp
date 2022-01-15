@@ -243,6 +243,7 @@ BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_COMMAND(ID_SSD_MAXIOTEK, &CGraphDlg::OnSsdMaxiotek)
 	ON_COMMAND(ID_SSD_YMTC, &CGraphDlg::OnSsdYmtc)
 	ON_COMMAND(ID_SSD_SCY, &CGraphDlg::OnSsdScy)
+	ON_COMMAND(ID_SSD_RECADATA, &CGraphDlg::OnSsdRecadata)
 
 END_MESSAGE_MAP()
 
@@ -1441,6 +1442,8 @@ void CGraphDlg::InitMenu()
 	case CAtaSmart::SSD_VENDOR_KINGSTON_DC500: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_KINGSTON_DC500, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_KINGSTON_SA400: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_KINGSTON_SA400, MF_BYCOMMAND); break;
 
+	case CAtaSmart::SSD_VENDOR_RECADATA: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_RECADATA, MF_BYCOMMAND); break;
+
 	default:
 		m_Attribute = CAtaSmart::HDD_GENERAL;
 		menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_HDD, MF_BYCOMMAND);
@@ -1720,6 +1723,7 @@ void CGraphDlg::OnSsdMarvell() { SetAttribute(ID_SSD_MARVELL, CAtaSmart::SSD_VEN
 void CGraphDlg::OnSsdMaxiotek() { SetAttribute(ID_SSD_MAXIOTEK, CAtaSmart::SSD_VENDOR_MAXIOTEK); }
 void CGraphDlg::OnSsdYmtc() { SetAttribute(ID_SSD_YMTC, CAtaSmart::SSD_VENDOR_YMTC); }
 void CGraphDlg::OnSsdScy() { SetAttribute(ID_SSD_SCY, CAtaSmart::SSD_VENDOR_SCY); }
+void CGraphDlg::OnSsdRecadata() { SetAttribute(ID_SSD_RECADATA, CAtaSmart::SSD_VENDOR_RECADATA); }
 
 void CGraphDlg::OnSsdJmicron60x() { SetAttribute(ID_SSD_JMICRON_60X, CAtaSmart::SSD_VENDOR_JMICRON_60X); }
 void CGraphDlg::OnSsdJmicron61x() { SetAttribute(ID_SSD_JMICRON_61X, CAtaSmart::SSD_VENDOR_JMICRON_61X); }

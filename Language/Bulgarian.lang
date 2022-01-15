@@ -1453,3 +1453,26 @@ E7=SSD Life Left
 F1=Total LBAs Written
 F2=Total LBAs Read
 F5=Total Nand Flash Written
+
+[SmartRecadata] ;Added 8.14.0
+07=Seek Error Rate
+09=Power-On Hours
+0C=Drive Power Cycle Count
+A7=Average erase count
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Erase Count
+B1=Read Retry Count
+B4=Spare Block Count Left
+B7=Runtime Bad Block
+BB=Reported UNC Errors
+C0=Unexpected Power Loss Count
+C2=Controlled temperature
+C3=Cumulative ECC Bit Correction Count
+C4=Reallocated Event Count
+C5=Current Pending Sector
+C7=UDMA CRC Error Count
+E7=SSD Life Left
+F1=Total LBAs written
+F2=Total LBAs read
+F5=Total Nand Flash Written

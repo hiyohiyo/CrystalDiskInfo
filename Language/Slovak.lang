@@ -1448,3 +1448,26 @@ E7=Zostávajúca životnosť SSD
 F1=Zapísané LBA (adresy logických blokov) celkovo
 F2=Prečítané LBA (adresy logických blokov) celkovo
 F5=NAND Flash - celkovo zapísané
+
+[SmartRecadata] ;Added 8.14.0
+07=Miera chýb pri vyhľadávaní
+09=Hodiny napájania
+0C=Počet cyklov napájania zariadenia
+A7=Priemerný počet vymazaní
+AB=Počet prog. zlyhaní
+AC=Počet zlyhaní pri vymazávaní
+AD=Počet vymazaní
+B1=Počet opätovných pokusov o čítanie
+B4=Zostávajúci počet náhradných blokov
+B7=Zlý blok počas doby chodu
+BB=Zaznamenané chyby UNC
+C0=Počet neočakávaných strát napájania
+C2=Kontrolovaná teplota
+C3=Kumulatívny počet opráv ECC bitu
+C4=Počet udalostí realokovania
+C5=Aktuálne podozrivý sektor
+C7=Počet chýb UDMA CRC
+E7=Zostávajúca životnosť SSD
+F1=Zapísané LBA (adresy logických blokov) celkovo
+F2=Prečítané LBA (adresy logických blokov) celkovo
+F5=NAND Flash - celkovo zapísané

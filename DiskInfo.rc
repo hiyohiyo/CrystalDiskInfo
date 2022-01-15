@@ -881,8 +881,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8, 13, 3, 0
- PRODUCTVERSION 8, 13, 3, 0
+ FILEVERSION 8, 14, 0, 0
+ PRODUCTVERSION 8, 14, 0, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -899,24 +899,24 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "8.13.3.0"
-            VALUE "ProductVersion", "8.13.3.0"
+            VALUE "FileVersion", "8.14.0.0"
+            VALUE "ProductVersion", "8.14.0.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 #ifdef SUISHO_SHIZUKU_SUPPORT
 #ifdef KUREI_KEI_SUPPORT
         VALUE "FileDescription", "CrystalDiskInfo 8 Kurei Kei Edition"
         VALUE "ProductName", "CrystalDiskInfo 8 Kurei Kei Edition"
-        VALUE "LegalCopyright", "(C) 2008-2021 hiyohiyo, (C) 2017-2021 Pronama LLC"
+        VALUE "LegalCopyright", "(C) 2008-2022 hiyohiyo, (C) 2017-2022 Pronama LLC"
 #else
         VALUE "FileDescription", "CrystalDiskInfo 8 Shizuku Edition"
         VALUE "ProductName", "CrystalDiskInfo 8 Shizuku Edition"
-        VALUE "LegalCopyright", "(C) 2008-2021 hiyohiyo, (C) 2012-2021 kirino kasumu"
+        VALUE "LegalCopyright", "(C) 2008-2022 hiyohiyo, (C) 2012-2022 kirino kasumu"
 #endif
 #else
         VALUE "FileDescription", "CrystalDiskInfo 8"
         VALUE "ProductName", "CrystalDiskInfo 8"
-        VALUE "LegalCopyright", "(C) 2008-2021 hiyohiyo"
+        VALUE "LegalCopyright", "(C) 2008-2022 hiyohiyo"
 #endif
         END
     END
@@ -1291,6 +1291,7 @@ BEGIN
             MENUITEM "SSD - PHISON",                ID_SSD_PHISON
             MENUITEM "SSD - Plextor",               ID_SSD_PLEXTOR
 			MENUITEM "SSD - Realtek",               ID_SSD_REALTEK
+            MENUITEM "SSD - RECADATA",              ID_SSD_RECADATA
             MENUITEM "SSD - SAMSUNG",               ID_SSD_SAMSUNG
             MENUITEM "SSD - SandForce",             ID_SSD_SANDFORCE
             MENUITEM "SSD - SanDisk",               ID_SSD_SANDISK
