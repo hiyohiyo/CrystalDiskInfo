@@ -2653,8 +2653,11 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.Is9126MB = TRUE;
 	}
 
-	if (COMMAND_TYPE::CMD_TYPE_AMD_RC2) { asi.DiskSizeChs = TotalDiskSize; } else// +AMD_RC2
-	if(identify->A.LogicalCylinders == 0 || identify->A.LogicalHeads == 0 || identify->A.LogicalSectors == 0)
+	if (commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2) // +AMD_RC2
+	{
+		asi.DiskSizeChs = TotalDiskSize;
+	}
+	else if(identify->A.LogicalCylinders == 0 || identify->A.LogicalHeads == 0 || identify->A.LogicalSectors == 0)
 	{
 		return FALSE;
 	//	asi.DiskSizeChs   = 0;
