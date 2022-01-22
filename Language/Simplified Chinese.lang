@@ -52,6 +52,7 @@ TEMPERATURE_TYPE=温度类型(&E)
 CELSIUS=摄氏(°C)
 FAHRENHEIT=华氏(°F)
 HEALTH_STATUS_SETTING=健康状态门限设置(&H)
+RECORD_RAW_VALUES=记录原始值 [十进制]
 
 ;Graph
 OPTION=选项(&O)

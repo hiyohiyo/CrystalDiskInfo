@@ -1743,6 +1743,10 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	menuState = menu->GetMenuState(ID_TEMPERATURE, MF_BYCOMMAND);
 	menu->ModifyMenu(ID_TEMPERATURE, MF_STRING, ID_TEMPERATURE, cstr);
 
+	cstr = i18n(_T("Menu"), _T("RECORD_RAW_VALUES"));
+	menuState = menu->GetMenuState(ID_RECORD_RAW_VALUES, MF_BYCOMMAND);
+	menu->ModifyMenu(ID_RECORD_RAW_VALUES, MF_STRING, ID_RECORD_RAW_VALUES, cstr);
+
 	/*
 	if(m_Ata.vars.GetCount() && menuState != MF_GRAYED)
 	{
@@ -1857,6 +1861,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 	CheckRadioAutoDetection();
 	CheckRadioRawValues();
+	CheckRecordRawValues();
 	CheckRadioCsmiType();
 
 	cstr = i18n(_T("Menu"), _T("CELSIUS"));
@@ -2516,6 +2521,23 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 		cstr.Format(_T("%02X"), m_Ata.vars[i].Attribute[j].Id);
 		AppendLog(dir, disk, cstr, time, m_Ata.vars[i].Attribute[j].CurrentValue,
 			flagFirst, m_Ata.vars[i].Threshold[j].ThresholdValue);
+
+		if (m_RecordRawValues)
+		{
+			CString csid = cstr + L"_int"; // alternative: "_RAW", "_int", "_DEC", etc.
+			CString csval;
+			csval.Format(_T("%I64u"),
+				((UINT64)m_Ata.vars[i].Attribute[j].Reserved << 48) +
+				((UINT64)m_Ata.vars[i].Attribute[j].RawValue[5] << 40) +
+				((UINT64)m_Ata.vars[i].Attribute[j].RawValue[4] << 32) +
+				((UINT64)m_Ata.vars[i].Attribute[j].RawValue[3] << 24) +
+				((UINT64)m_Ata.vars[i].Attribute[j].RawValue[2] << 16) +
+				((UINT64)m_Ata.vars[i].Attribute[j].RawValue[1] << 8) +
+				(UINT64)m_Ata.vars[i].Attribute[j].RawValue[0]);
+			int intout = _ttoi(csval);
+			AppendLog(dir, disk, csid, time, intout,
+				flagFirst, m_Ata.vars[i].Threshold[j].ThresholdValue);
+		}
 
 		switch (m_Ata.vars[i].Attribute[j].Id)
 		{
