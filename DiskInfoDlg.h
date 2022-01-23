@@ -218,6 +218,7 @@ protected:
 	BOOL m_bSmartEnglish;
 	BOOL m_bGadget;
 	BOOL m_bGreenMode;
+	BOOL m_bWinDarkMode;
 	BOOL m_bAlertSound;
 	BOOL m_bHideNoSmartDisk;
 
@@ -421,6 +422,7 @@ public:
 	afx_msg void OnWorkaroundAdataSsd();
 	afx_msg void OnWorkaroundIgnoreC4();
 	afx_msg void OnGreenMode();
+	afx_msg void OnDisableDarkMode();
 	afx_msg void OnResident();
 
 	// Task Tray

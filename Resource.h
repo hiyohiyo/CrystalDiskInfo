@@ -1004,12 +1004,14 @@
 #define ID_USB_NVME_REALTEK             33134
 #define ID_MEGA_RAID                    33135
 #define ID_USB_ASM1352R                 33136
+#define ID_DISABLE_DARK_MODE            33137
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        171
-#define _APS_NEXT_COMMAND_VALUE         33137
+#define _APS_NEXT_COMMAND_VALUE         33138
 #define _APS_NEXT_CONTROL_VALUE         1101
 #define _APS_NEXT_SYMED_VALUE           111
 #endif

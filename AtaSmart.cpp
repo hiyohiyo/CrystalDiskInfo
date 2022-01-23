@@ -2345,6 +2345,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.Life = -1;
 	asi.FlagLifeRawValue = FALSE;
 	asi.FlagLifeRawValueIncrement = FALSE;
+	asi.FlagLifeRawValueKingstonSA400 = FALSE;
 	asi.FlagLifeSanDiskUsbMemory = FALSE;
 	asi.FlagLifeSanDisk0_1 = FALSE;
 	asi.FlagLifeSanDisk1 = FALSE;
@@ -3407,7 +3408,6 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			+ (((ULONG64)asi.IdentifyDevice.B.Bin[10]));
 	*/
 
-
 	// Check duplicate device
 	for (int i = 0; i < vars.GetCount(); i++)
 	{
@@ -3415,6 +3415,11 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			return FALSE;
 		}
+	}
+
+	if (asi.Model.IsEmpty())
+	{
+		return FALSE;
 	}
 
 	if (
@@ -4187,6 +4192,17 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				{
 					asi.Life = 100 - asi.Attribute[j].RawValue[0];
 				}
+				else if (asi.FlagLifeRawValueKingstonSA400)
+				{
+					if (asi.Attribute[j].CurrentValue == 100 && asi.Attribute[j].RawValue[0] == 0)
+					{
+						asi.Life = 100;
+					}
+					else
+					{
+						asi.Life = asi.Attribute[j].RawValue[0];
+					}
+				}
 				else if (asi.FlagLifeRawValue)
 				{
 					asi.Life = asi.Attribute[j].RawValue[0];
@@ -4905,6 +4921,7 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 		{
 			flagSmartType = TRUE;
 			asi.FlagLifeRawValue = TRUE;
+			asi.FlagLifeRawValueKingstonSA400 = TRUE;
 			asi.SmartKeyName = _T("SmartKingstonSA400");
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 		}
@@ -10193,6 +10210,17 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					if (asi->FlagLifeRawValueIncrement)
 					{
 						asi->Life = 100 - asi->Attribute[j].RawValue[0];
+					}
+					else if (asi->FlagLifeRawValueKingstonSA400)
+					{
+						if (asi->Attribute[j].CurrentValue == 100 && asi->Attribute[j].RawValue[0] == 0)
+						{
+							asi->Life = 100;
+						}
+						else
+						{
+							asi->Life = asi->Attribute[j].RawValue[0];
+						}
 					}
 					else if (asi->FlagLifeRawValue)
 					{

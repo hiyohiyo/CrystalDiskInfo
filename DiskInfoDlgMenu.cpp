@@ -195,6 +195,27 @@ void CDiskInfoDlg::OnGreenMode()
 	UpdateDialogSize();
 }
 
+void CDiskInfoDlg::OnDisableDarkMode()
+{
+	CMenu* menu = GetMenu();
+	if (menu->GetMenuState(ID_DISABLE_DARK_MODE, MF_BYCOMMAND) & MFS_CHECKED)
+	{
+		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_UNCHECKED);
+		m_bDisableDarkMode = FALSE;
+		WritePrivateProfileStringW(_T("Setting"), _T("DisableDarkMode"), _T("0"), m_Ini);
+	}
+	else
+	{
+		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_CHECKED);
+		m_bDisableDarkMode = TRUE;
+		WritePrivateProfileStringW(_T("Setting"), _T("DisableDarkMode"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+
+	UpdateDialogSize();
+}
+
 void CDiskInfoDlg::CheckHideSerialNumber()
 {
 	CMenu *menu = GetMenu();

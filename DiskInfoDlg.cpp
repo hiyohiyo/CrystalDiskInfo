@@ -154,6 +154,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_bAlertSound = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("AlertSound"), 1, m_Ini);
 	m_bHideNoSmartDisk = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("HideNoSmartDisk"), 0, m_Ini);
 	m_bGreenMode = (BOOL) GetPrivateProfileInt(_T("Setting"), _T("GreenMode"), 0, m_Ini);
+	m_bDisableDarkMode = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("DisableDarkMode"), 0, m_Ini);
 
 	if((BOOL)GetPrivateProfileInt(_T("Workaround"), _T("ExecFailed"), 0, m_Ini))
 	{
@@ -495,6 +496,7 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_WORKAROUND_HD204UI, &CDiskInfoDlg::OnWorkaroundHD204UI)
 	ON_COMMAND(ID_WORKAROUND_IE8MODE, &CDiskInfoDlg::OnWorkaroundIE8MODE)
 	ON_COMMAND(ID_GREEN_MODE, &CDiskInfoDlg::OnGreenMode)
+	ON_COMMAND(ID_DISABLE_DARK_MODE, &CDiskInfoDlg::OnDisableDarkMode)
 
 	ON_COMMAND(ID_WORKAROUND_ADATA_SSD, &CDiskInfoDlg::OnWorkaroundAdataSsd)
 	ON_COMMAND(ID_WORKAROUND_IGNORE_C4, &CDiskInfoDlg::OnWorkaroundIgnoreC4)

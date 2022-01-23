@@ -1806,6 +1806,7 @@ public:
 		INT					Life;
 		BOOL				FlagLifeRawValue;
 		BOOL				FlagLifeRawValueIncrement;
+		BOOL				FlagLifeRawValueKingstonSA400;
 		BOOL				FlagLifeSanDiskUsbMemory;
 		BOOL				FlagLifeSanDisk0_1;
 		BOOL				FlagLifeSanDisk1;
