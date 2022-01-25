@@ -4920,7 +4920,6 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 		else if (asi.Model.Find(L"SA400") >= 0)
 		{
 			flagSmartType = TRUE;
-			asi.FlagLifeRawValue = TRUE;
 			asi.FlagLifeRawValueKingstonSA400 = TRUE;
 			asi.SmartKeyName = _T("SmartKingstonSA400");
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
@@ -10570,10 +10569,22 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			{
 				life = 100 - vars[i].Attribute[j].RawValue[0];
 			}
+			else if (vars[i].FlagLifeRawValueKingstonSA400)
+			{
+				if (vars[i].Attribute[j].CurrentValue == 100 && vars[i].Attribute[j].RawValue[0] == 0)
+				{
+					life = 100;
+				}
+				else
+				{
+					life = vars[i].Attribute[j].RawValue[0];
+				}
+			}
 			else if (vars[i].FlagLifeRawValue)
 			{
 				life = vars[i].Attribute[j].RawValue[0];
 			}
+
 			else
 			{
 				life = vars[i].Attribute[j].CurrentValue;
@@ -10581,7 +10592,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			if (life <= 0) { life = 0; }
 			if (life > 100) { life = 100; }
 		
-			if(life == 0 || (!vars[i].FlagLifeRawValue && life < vars[i].Threshold[j].ThresholdValue))
+			if(life == 0 || ((!vars[i].FlagLifeRawValue && !vars[i].FlagLifeRawValueKingstonSA400) && life < vars[i].Threshold[j].ThresholdValue))
 			{
 				error = 1;
 			}
