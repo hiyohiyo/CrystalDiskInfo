@@ -1806,7 +1806,6 @@ public:
 		INT					Life;
 		BOOL				FlagLifeRawValue;
 		BOOL				FlagLifeRawValueIncrement;
-		BOOL				FlagLifeRawValueKingstonSA400;
 		BOOL				FlagLifeSanDiskUsbMemory;
 		BOOL				FlagLifeSanDisk0_1;
 		BOOL				FlagLifeSanDisk1;
@@ -1905,7 +1904,7 @@ public:
 	BOOL FlagUsbNVMeRealtek = FALSE;
 	BOOL FlagMegaRAID = FALSE;
 	BOOL FlagUsbASM1352R = FALSE;
-	BOOL FlagAMD_RC2 = FALSE;// +AMD_RC2
+	BOOL FlagAMD_RC2 = TRUE;// +AMD_RC2
 	BOOL FlagNoWakeUp = FALSE;// +M 20211216
 
 	DWORD CsmiType = 0;

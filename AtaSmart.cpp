@@ -1331,7 +1331,10 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			///////////////////////////////
 			
 			//AMD RAIDXpert2 9.3.x// +AMD_RC2
-			if (FlagAMD_RC2 && AmdRaidDriverVersion >= 93)  AddDiskAMD_RC2();// +AMD_RC2
+			if (FlagAMD_RC2 && AmdRaidDriverVersion >= 93)
+			{
+				AddDiskAMD_RC2();// +AMD_RC2
+			}
 			else// +AMD_RC2
 			// AMD RAIDXpert2 9.2.0.x may cause BSoD
 			if (AmdRaidDriverVersion != 92)// -2021/11/06
@@ -2345,7 +2348,6 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.Life = -1;
 	asi.FlagLifeRawValue = FALSE;
 	asi.FlagLifeRawValueIncrement = FALSE;
-	asi.FlagLifeRawValueKingstonSA400 = FALSE;
 	asi.FlagLifeSanDiskUsbMemory = FALSE;
 	asi.FlagLifeSanDisk0_1 = FALSE;
 	asi.FlagLifeSanDisk1 = FALSE;
@@ -4192,17 +4194,6 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				{
 					asi.Life = 100 - asi.Attribute[j].RawValue[0];
 				}
-				else if (asi.FlagLifeRawValueKingstonSA400)
-				{
-					if (asi.Attribute[j].CurrentValue == 100 && asi.Attribute[j].RawValue[0] == 0)
-					{
-						asi.Life = 100;
-					}
-					else
-					{
-						asi.Life = asi.Attribute[j].RawValue[0];
-					}
-				}
 				else if (asi.FlagLifeRawValue)
 				{
 					asi.Life = asi.Attribute[j].RawValue[0];
@@ -4920,7 +4911,11 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 		else if (asi.Model.Find(L"SA400") >= 0)
 		{
 			flagSmartType = TRUE;
-			asi.FlagLifeRawValueKingstonSA400 = TRUE;
+			// https://github.com/hiyohiyo/CrystalDiskInfo/issues/162
+			if (asi.FirmwareRev.Find(L"SBFKB1E1") != 0)
+			{
+				asi.FlagLifeRawValue = TRUE;
+			}
 			asi.SmartKeyName = _T("SmartKingstonSA400");
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 		}
@@ -10210,17 +10205,6 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					{
 						asi->Life = 100 - asi->Attribute[j].RawValue[0];
 					}
-					else if (asi->FlagLifeRawValueKingstonSA400)
-					{
-						if (asi->Attribute[j].CurrentValue == 100 && asi->Attribute[j].RawValue[0] == 0)
-						{
-							asi->Life = 100;
-						}
-						else
-						{
-							asi->Life = asi->Attribute[j].RawValue[0];
-						}
-					}
 					else if (asi->FlagLifeRawValue)
 					{
 						asi->Life = asi->Attribute[j].RawValue[0];
@@ -10569,30 +10553,19 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			{
 				life = 100 - vars[i].Attribute[j].RawValue[0];
 			}
-			else if (vars[i].FlagLifeRawValueKingstonSA400)
-			{
-				if (vars[i].Attribute[j].CurrentValue == 100 && vars[i].Attribute[j].RawValue[0] == 0)
-				{
-					life = 100;
-				}
-				else
-				{
-					life = vars[i].Attribute[j].RawValue[0];
-				}
-			}
 			else if (vars[i].FlagLifeRawValue)
 			{
 				life = vars[i].Attribute[j].RawValue[0];
 			}
-
 			else
 			{
 				life = vars[i].Attribute[j].CurrentValue;
 			}
+
 			if (life <= 0) { life = 0; }
 			if (life > 100) { life = 100; }
 		
-			if(life == 0 || ((!vars[i].FlagLifeRawValue && !vars[i].FlagLifeRawValueKingstonSA400) && life < vars[i].Threshold[j].ThresholdValue))
+			if(life == 0 || (!vars[i].FlagLifeRawValue && life < vars[i].Threshold[j].ThresholdValue))
 			{
 				error = 1;
 			}
@@ -11091,40 +11064,227 @@ BOOL CAtaSmart::GetLifeByGpl(ATA_SMART_INFO& asi)
 
 
 // +AMD_RC2 >>>>>>>>>>>>>>>>>>>>>>>
-// Will support in the future
+
+//#define _M_ARM
+//#undef AMD_RC2
+
+#ifndef _M_ARM
+
+enum AMD_RC2_ERROR_CODE {
+	AMD_RC2_uninitial,
+	AMD_RC2_loaded,
+	AMD_RC2_unloaded,
+	AMD_RC2_failed_signature,
+	AMD_RC2_driver_not_found,
+	AMD_RC2_cannot_open,
+	AMD_RC2_failed_memory_alloc,
+	AMD_RC2_offset_overflow,
+	AMD_RC2_driver_version_old,
+	AMD_RC2_not_admin,
+	AMD_RC2_name_failed,
+};
+
+typedef struct {
+	UINT uStructSize;
+	UINT uStructVersion;
+	UINT uDiskNum;
+	int iPhysicalDrive;
+	UINT64 uDriveSize64;
+	DWORD uDriveSize;
+	BYTE isSSD;
+	BYTE isNVMe;
+	BYTE reserved1;
+	BYTE reserved2;
+	char sModel[41];
+	char sSerialNumber[21];
+	char sFirmwareRev[9];
+	char sSpeed[60];
+	BYTE reserved3[93];
+} AMD_RC2_IDENTIFY;
 
 #ifdef AMD_RC2
-BOOL AMD_RC2_GetIdentify(int diskNum, int* phy, char* Model, int ModelLen, char* SerialNumber, int SerialNumberLen, char* FirmwareRev, int FirmwareRevLen,
-	DWORD* drive_size, char* Speed, int SpeedLen, BOOL* isSSD, BOOL* isNVMe);
-BOOL AMD_RC2_GetSmartData(int diskNum, BYTE* SmartReadData, int SmartReadDataLen, BYTE* SmartReadThreshold, int SmartReadThresholdLen);
+BOOL AMD_RC2_GetIdentify(AMD_RC2_IDENTIFY* st_id);
+BOOL AMD_RC2_GetSmartData(UINT diskNum, BYTE* SmartReadData, UINT SmartReadDataLen, BYTE* SmartReadThreshold, UINT SmartReadThresholdLen);
+UINT AMD_RC2_GetDrives();
 #else
-BOOL AMD_RC2_GetIdentify(int diskNum, int* phy, char* Model, int ModelLen, char* SerialNumber, int SerialNumberLen, char* FirmwareRev, int FirmwareRevLen,
-	DWORD* drive_size, char* Speed, int SpeedLen, BOOL* isSSD, BOOL* isNVMe) {
-	// Will support in the future
-	return FALSE;
+
+BOOL g_AMD_RC2_init = FALSE;
+BOOL g_AMD_RC2_load = FALSE;
+HMODULE g_AMD_RC2_hmodule = NULL;
+
+typedef UINT(__stdcall* A_AMD_RC2_UINT)();
+A_AMD_RC2_UINT AMD_RC2_GetStatus = NULL;
+A_AMD_RC2_UINT AMD_RC2_GetDrives = NULL;
+A_AMD_RC2_UINT AMD_RC2_Reload = NULL;
+
+typedef BOOL(__stdcall* A_AMD_RC2_GetIdentify)(AMD_RC2_IDENTIFY* st_id);
+A_AMD_RC2_GetIdentify AMD_RC2_GetIdentify = NULL;
+
+typedef BOOL(__stdcall* A_AMD_RC2_GetSmartData)(UINT diskNum, BYTE* SmartReadData, UINT SmartReadDataLen, BYTE* SmartReadThreshold, UINT SmartReadThresholdLen);
+A_AMD_RC2_GetSmartData AMD_RC2_GetSmartData = NULL;
+
+
+
+#include <Softpub.h>
+#pragma comment(lib, "Wintrust.lib")
+#pragma comment(lib, "Crypt32.lib")
+
+BOOL AMD_RC2_DLL_Load() {
+
+	wchar_t	buffer1[261] = {}, dir1[261] = {}, buffer3[261] = {};
+
+	GetModuleFileNameW(NULL, buffer1, 261);
+	_wsplitpath_s(buffer1, dir1, 261, buffer3, 261, NULL, 0, NULL, 0);
+	wcscat_s(dir1, 261, buffer3);
+
+	wcscpy_s(buffer1, 261, dir1);
+#ifdef _M_AMD64
+	wcscat_s(buffer1, 261, L"AMD_RC2t7x64.dll");
+#else
+	wcscat_s(buffer1, 261, L"AMD_RC2t7x86.dll");
+#endif
+
+	// check sign
+
+	WINTRUST_FILE_INFO FileData = { sizeof(WINTRUST_FILE_INFO) };
+	FileData.pcwszFilePath = buffer1;
+
+	GUID WVTPolicyGUID = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+	WINTRUST_DATA WinTrustData = { sizeof(WinTrustData) };
+	WinTrustData.dwUIChoice = WTD_UI_NONE;
+	WinTrustData.fdwRevocationChecks = WTD_REVOKE_NONE;
+	WinTrustData.dwUnionChoice = WTD_CHOICE_FILE;
+	WinTrustData.dwStateAction = WTD_STATEACTION_VERIFY;
+	WinTrustData.pFile = &FileData;
+
+	const LONG ret = WinVerifyTrust(NULL, &WVTPolicyGUID, &WinTrustData);
+
+	bool cert_chk = false;
+
+	if (ret == ERROR_SUCCESS) {
+		// retreive the signer certificate and display its information
+		CRYPT_PROVIDER_DATA const* psProvData = NULL;
+		CRYPT_PROVIDER_SGNR* psProvSigner = NULL;
+		CRYPT_PROVIDER_CERT* psProvCert = NULL;
+
+		psProvData = WTHelperProvDataFromStateData(WinTrustData.hWVTStateData);
+		if (psProvData) {
+			psProvSigner = WTHelperGetProvSignerFromChain((PCRYPT_PROVIDER_DATA)psProvData, 0, FALSE, 0);
+			if (psProvSigner) {
+				psProvCert = WTHelperGetProvCertFromChain(psProvSigner, 0);
+				if (psProvCert) {
+					wchar_t szCertName[200] = {};
+					DWORD dwStrType = CERT_X500_NAME_STR;
+					CertGetNameStringW(psProvCert->pCert, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, &dwStrType, szCertName, 200);
+					cert_chk = !(szCertName[0] == '\0' || wcscmp(szCertName, L"Gakuto Matsumura") != 0);
+				}
+			}
+		}
+	}
+	WinTrustData.dwStateAction = WTD_STATEACTION_CLOSE;
+	(void)WinVerifyTrust(NULL, &WVTPolicyGUID, &WinTrustData);
+	if (!cert_chk)  return FALSE;
+
+	// DLL load
+
+	g_AMD_RC2_hmodule = LoadLibraryW(buffer1);
+	if (!g_AMD_RC2_hmodule)  return FALSE;
+
+	// get functions
+
+	AMD_RC2_GetStatus = (A_AMD_RC2_UINT)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_GetStatus");
+	AMD_RC2_GetDrives = (A_AMD_RC2_UINT)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_GetDrives");
+	AMD_RC2_Reload = (A_AMD_RC2_UINT)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_Reload");
+	AMD_RC2_GetIdentify = (A_AMD_RC2_GetIdentify)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_GetIdentify");
+	AMD_RC2_GetSmartData = (A_AMD_RC2_GetSmartData)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_GetSmartData");
+	if (!AMD_RC2_GetStatus || !AMD_RC2_GetDrives || !AMD_RC2_Reload || !AMD_RC2_GetIdentify || !AMD_RC2_GetSmartData) {
+		return FALSE;
+	}
+
+	// wait 1st load
+	// for (INT_PTR i = 0; i < 1000 && ( AMD_RC2_GetStatus() == AMD_RC2_ERROR_CODE::AMD_RC2_uninitial ); ++i) Sleep(1);
+
+	int waitCount = 10;
+	for (int i = 0; i < waitCount; i++)
+	{
+		if (AMD_RC2_GetStatus() == AMD_RC2_ERROR_CODE::AMD_RC2_uninitial)
+		{
+			break;
+		}
+		Sleep(100 * i);
+	}
+
+	// check status
+
+	const UINT status = AMD_RC2_GetStatus();
+	g_AMD_RC2_load = ( status == AMD_RC2_ERROR_CODE::AMD_RC2_loaded );
+	if (!g_AMD_RC2_load) {
+		switch (status) {
+		case AMD_RC2_ERROR_CODE::AMD_RC2_uninitial:
+			DebugPrint(_T("AMD_RC2_uninitial"));
+			break;
+		case AMD_RC2_ERROR_CODE::AMD_RC2_unloaded:
+			DebugPrint(_T("AMD_RC2_unloaded"));
+			break;
+		case AMD_RC2_ERROR_CODE::AMD_RC2_failed_signature:
+			DebugPrint(_T("AMD_RC2_failed_signature"));
+			break;
+		case AMD_RC2_ERROR_CODE::AMD_RC2_driver_not_found:
+			DebugPrint(_T("AMD_RC2_driver_not_found"));
+			break;
+		case AMD_RC2_ERROR_CODE::AMD_RC2_cannot_open:
+			DebugPrint(_T("AMD_RC2_cannot_open"));
+			break;
+		case AMD_RC2_ERROR_CODE::AMD_RC2_failed_memory_alloc:
+			DebugPrint(_T("AMD_RC2_failed_memory_alloc"));
+			break;
+		case AMD_RC2_ERROR_CODE::AMD_RC2_offset_overflow:
+			DebugPrint(_T("AMD_RC2_offset_overflow"));
+			break;
+		case AMD_RC2_ERROR_CODE::AMD_RC2_driver_version_old:
+			DebugPrint(_T("AMD_RC2_driver_version_old"));
+			break;
+		case AMD_RC2_not_admin:
+			DebugPrint(_T("AMD_RC2_not_admin"));
+			break;
+		case AMD_RC2_name_failed:
+			DebugPrint(_T("AMD_RC2_name_failed"));
+			break;
+		}
+	}
+	g_AMD_RC2_init = TRUE;
+	return g_AMD_RC2_load;
 }
-BOOL AMD_RC2_GetSmartData(int diskNum, BYTE* SmartReadData, int SmartReadDataLen, BYTE* SmartReadThreshold, int SmartReadThresholdLen) {
-	// Will support in the future
-	return FALSE;
-}
+#endif
 #endif
 
 
 BOOL CAtaSmart::AddDiskAMD_RC2()
 {
+#ifndef AMD_RC2
+	if (!g_AMD_RC2_init)
+	{
+		AMD_RC2_DLL_Load();
+	}
+	else if (g_AMD_RC2_load)
+	{
+		AMD_RC2_Reload();
+	}
+	if (!g_AMD_RC2_load) return FALSE;
+#endif
 	IDENTIFY_DEVICE identify = {};
 	INT phy = 0;
 	DWORD TotalDiskSize = 0;
-	DebugPrint(L"DoIdentifyDeviceAMD_RC2:begin");
-	for (int i = 0; i < 40; ++i) {
+	const int Drives = AMD_RC2_GetDrives();
+	DebugPrint(_T("DoIdentifyDeviceAMD_RC2:begin"));
+	for (int i = 0; i < Drives; ++i) {
 		BOOL isSSD = FALSE;
 		BOOL isNVMe = FALSE;
 		if (DoIdentifyDeviceAMD_RC2(i, &phy, &TotalDiskSize, &identify, &isSSD, &isNVMe)) {
-			//identify.A.NvCacheCapabilities
 			if (isNVMe) {//NVMe
 #ifdef DEBUG_PRINT
 				CString cs;
-				cs.Format(L"DoIdentifyDeviceAMD_RC2: %d > Maybe NVMe. not support.", i);
+				cs.Format(_T("DoIdentifyDeviceAMD_RC2: %d > Maybe NVMe. not support."), i);
 				DebugPrint(cs.GetBuffer());
 #endif
 				IDENTIFY_DEVICE identify2 = {};
@@ -11140,7 +11300,7 @@ BOOL CAtaSmart::AddDiskAMD_RC2()
 			else {
 #ifdef DEBUG_PRINT
 				CString cs;
-				cs.Format(L"DoIdentifyDeviceAMD_RC2:ok %d > AddDisk / disksize:%u / PhysicalID:%d / Model:%hs", i, TotalDiskSize, phy, identify.A.Model);
+				cs.Format(_T("DoIdentifyDeviceAMD_RC2:ok %d > AddDisk / disksize:%u / PhysicalID:%d / Model:%hs"), i, TotalDiskSize, phy, identify.A.Model);
 				DebugPrint(cs.GetBuffer());
 #endif
 				if (isSSD) identify.A.SerialAtaCapabilities = 1;
@@ -11151,7 +11311,7 @@ BOOL CAtaSmart::AddDiskAMD_RC2()
 			}
 #ifdef DEBUG_PRINT
 			CString cs;
-			cs.Format(L"DoIdentifyDeviceAMD_RC2:%d > AddDisk:end", i);
+			cs.Format(_T("DoIdentifyDeviceAMD_RC2:%d > AddDisk:end"), i);
 			DebugPrint(cs.GetBuffer());
 #endif
 		}
@@ -11160,38 +11320,61 @@ BOOL CAtaSmart::AddDiskAMD_RC2()
 }
 
 BOOL CAtaSmart::DoIdentifyDeviceAMD_RC2(INT diskNum, INT* phy, DWORD* TotalDiskSize, IDENTIFY_DEVICE* data, BOOL* isSSD, BOOL* isNVMe) {
-	return AMD_RC2_GetIdentify(diskNum, phy, data->A.Model, 40, data->A.SerialNumber, 20, data->A.FirmwareRev, 8, TotalDiskSize, data->A.CurrentMediaSerialNo, 60, isSSD, isNVMe);
+#ifndef _M_ARM
+#ifndef AMD_RC2
+	if (!g_AMD_RC2_init)  AMD_RC2_DLL_Load();
+	if (!AMD_RC2_GetIdentify) return FALSE;
+#endif
+	AMD_RC2_IDENTIFY st_id = { sizeof(AMD_RC2_IDENTIFY), 1 };
+	st_id.uDiskNum = diskNum;
+	const BOOL ret = AMD_RC2_GetIdentify(&st_id);
+	if (ret) {
+		if (phy)  *phy = st_id.iPhysicalDrive;
+		if (TotalDiskSize)  *TotalDiskSize = st_id.uDriveSize;
+		if (isSSD)  *isSSD = st_id.isSSD;
+		if (isNVMe)  *isNVMe = st_id.isNVMe;
+		if (data) {
+			memcpy_s(data->A.Model, 40, st_id.sModel, 40);
+			memcpy_s(data->A.SerialNumber, 20, st_id.sSerialNumber, 20);
+			memcpy_s(data->A.FirmwareRev, 8, st_id.sFirmwareRev, 8);
+			strcpy_s(data->A.CurrentMediaSerialNo, 60, st_id.sSpeed);
+		}
+	}
+	return ret;
+#else
+	return FALSE;
+#endif
 }
-
-
 
 BOOL CAtaSmart::GetSmartDataAMD_RC2(INT diskNum, ATA_SMART_INFO* asi)
 {
-#ifdef DEBUG_PRINT
-	CString cs;
-	cs.Format(L"AMD_RC2_GetSmartData:%d", diskNum);
-	DebugPrint(cs.GetBuffer());
+#ifndef _M_ARM
+#ifndef AMD_RC2
+	if (!g_AMD_RC2_init)  AMD_RC2_DLL_Load();
+	if (!AMD_RC2_GetSmartData) return FALSE;
 #endif
 	if (!AMD_RC2_GetSmartData(diskNum, asi->SmartReadData, READ_ATTRIBUTE_BUFFER_SIZE, asi->SmartReadThreshold, READ_THRESHOLD_BUFFER_SIZE))
 	{
-#ifdef DEBUG_PRINT
-		CString cs;
-		cs.Format(L"AMD_RC2_GetSmartData:%d FALSE!", diskNum);
-		DebugPrint(cs.GetBuffer());
-#endif
 		return FALSE;
 	}
-	if (asi->IsNVMe) return true;
+	if (asi->IsNVMe) return TRUE;
 	return FillSmartData(asi);
+#else
+	return FALSE;
+#endif
 }
 
 BOOL CAtaSmart::GetSmartThresholdAMD_RC2(INT diskNum, ATA_SMART_INFO* asi)
 {
+#ifndef _M_ARM
 	if (!AMD_RC2_GetSmartData(diskNum, asi->SmartReadThreshold, READ_THRESHOLD_BUFFER_SIZE, asi->SmartReadThreshold, READ_THRESHOLD_BUFFER_SIZE))
 	{
 		return FALSE;
 	}
 	return FillSmartThreshold(asi);
+#else
+	return FALSE;
+#endif
 }
 
 // +AMD_RC2 <<<<<<<<<<<<<<<<<<<<<<<
