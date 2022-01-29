@@ -1084,8 +1084,6 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	static CString preLogicalDriveInfo = _T("");
 	static BOOL preFlagHideSerialNumber = FALSE;
 
-	m_Ata.vars[i].SmartReadData[0] = 0xFF;
-
 	diskStatus = GetDiskStatus(m_Ata.vars[i].DiskStatus);
 	className = GetDiskStatusClass(m_Ata.vars[i].DiskStatus);
 	diskStatusReason = GetDiskStatusReason(i);
