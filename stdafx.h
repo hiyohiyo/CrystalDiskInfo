@@ -106,7 +106,7 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.15.0 Dev4"
+#define PRODUCT_VERSION				L"8.15.0 Beta1"
 #define PRODUCT_RELEASE				L"2022/01/29"
 #define PRODUCT_COPY_YEAR			L"2008-2022"
 #define PRODUCT_LICENSE				L"The MIT License"
@@ -170,6 +170,9 @@
 
 #define URL_HTML_HELP_JA			L"https://crystalmark.info/ja/software/crystaldiskinfo/"
 #define URL_HTML_HELP_EN 			L"https://crystalmark.info/en/software/crystaldiskinfo/"
+
+#define URL_AMD_RC2T7_JA			L"https://thilmera.com/project/AMD_RC2t7/?lang=ja"
+#define URL_AMD_RC2T7_EN 			L"https://thilmera.com/project/AMD_RC2t7/?lang=en"
 
 // Command
 static const int TRAY_TEMPERATURE_ICON_BASE = WM_APP + 0x1200;

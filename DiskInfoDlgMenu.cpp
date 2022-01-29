@@ -266,6 +266,18 @@ void CDiskInfoDlg::OnCrystalDewWorld()
 	}	
 }
 
+void CDiskInfoDlg::OnAmdRc2t7()
+{
+	if (GetUserDefaultLCID() == 0x0411) // Japanese
+	{
+		OpenUrl(URL_AMD_RC2T7_JA);
+	}
+	else // Other Language
+	{
+		OpenUrl(URL_AMD_RC2T7_EN);
+	}
+}
+
 void CDiskInfoDlg::OnHelp()
 {
 	if(GetUserDefaultLCID() == 0x0411) // Japanese

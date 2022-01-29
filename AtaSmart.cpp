@@ -143,7 +143,9 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
 
 		if (
+#ifndef _M_ARM
 			(vars[i].CommandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2 && GetSmartDataAMD_RC2(vars[i].ScsiBus, &(vars[i]))) ||// +AMD_RC2
+#endif
 			(m_bNVMeStorageQuery && vars[i].CommandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_INTEL_RST && GetSmartAttributeNVMeIntelRst(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
@@ -299,6 +301,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			}
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
+#ifndef _M_ARM
 		case CMD_TYPE_AMD_RC2:// +AMD_RC2
 			if (!GetSmartDataAMD_RC2(vars[i].ScsiBus, &(vars[i])))
 			{
@@ -306,6 +309,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			}
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
+#endif
 		default:
 			return SMART_STATUS_NO_CHANGE;
 		}
@@ -348,9 +352,11 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 	case CMD_TYPE_MEGARAID:
 		flag =  DoIdentifyDeviceMegaRAID(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i].IdentifyDevice));
 		break;
+#ifndef _M_ARM
 	case CMD_TYPE_AMD_RC2:// +AMD_RC2
 		flag = DoIdentifyDeviceAMD_RC2(vars[i].ScsiBus, NULL, NULL, &(vars[i].IdentifyDevice), NULL, NULL);
 		break;
+#endif
 	default:
 		return FALSE;
 		break;
@@ -1329,13 +1335,14 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			///////////////////////////////
 			// Intel/AMD RAID support
 			///////////////////////////////
-			
+#ifndef _M_ARM
 			//AMD RAIDXpert2 9.3.x// +AMD_RC2
 			if (FlagAMD_RC2 && AmdRaidDriverVersion >= 93)
 			{
 				AddDiskAMD_RC2();// +AMD_RC2
 			}
-			else// +AMD_RC2
+			else // +AMD_RC2
+#endif
 			// AMD RAIDXpert2 9.2.0.x may cause BSoD
 			if (AmdRaidDriverVersion != 92)// -2021/11/06
 			{
@@ -2496,9 +2503,6 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.TemperatureMultiplier = 0.5;
 	}
 
-// DEBUG
-//	asi.Model = _T(" MTRON ") + asi.Model; 
-
 	asi.ModelSerial = GetModelSerial(asi.Model, asi.SerialNumber);
 
 	// +AMD_RC2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -2507,8 +2511,18 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.IsSsd = (identify->A.SerialAtaCapabilities & 1);
 		asi.IsSmartSupported = TRUE;
 		asi.Interface = (identify->A.CurrentMediaSerialNo[0] == 'N' ? _T("N/A - on AMD_RC2") : _T("SATA - on AMD_RC2"));
-		//asi.CurrentTransferMode = identify->A.CurrentMediaSerialNo;//tmp
-		asi.MajorVersion = identify->A.CurrentMediaSerialNo;//tmp
+		asi.CurrentTransferMode = identify->A.CurrentMediaSerialNo;//tmp
+		asi.CurrentTransferMode.Replace(L"HDD", L"");
+		asi.CurrentTransferMode.Replace(L"SSD", L"");
+		asi.CurrentTransferMode.Replace(L"SATA", L"");
+		asi.CurrentTransferMode.Replace(L"6Gb", L"SATA/600");
+		asi.CurrentTransferMode.Replace(L"3Gb", L"SATA/300");
+		asi.CurrentTransferMode.Replace(L"1.5Gb", L"SATA/150");
+		asi.CurrentTransferMode.Replace(L"1Gb", L"SATA/150");
+		asi.CurrentTransferMode.Replace(L" ", L"");
+		asi.MaxTransferMode = L"----";
+
+		// asi.MajorVersion = identify->A.CurrentMediaSerialNo;//tmp
 		identify->A.CurrentMediaSerialNo[0] = '\0';
 		identify->A.SerialAtaCapabilities = 0;
 	}
@@ -3089,6 +3103,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				}
 			}
 			break;
+#ifndef _M_ARM
 		case CMD_TYPE_AMD_RC2:// +AMD_RC2
 			if (GetSmartDataAMD_RC2(scsiBus, &asi))
 			{
@@ -3104,6 +3119,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				asi.IsSmartEnabled = TRUE;
 			}
 			break;
+#endif
 		default:
 			return FALSE;
 			break;
@@ -3425,7 +3441,9 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	}
 
 	if (
+#ifndef _M_ARM
 		(commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2 && GetSmartDataAMD_RC2(scsiBus, &asi)) ||// +AMD_RC2
+#endif
 		(m_bNVMeStorageQuery && commandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_INTEL && GetSmartAttributeNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_INTEL_RST && GetSmartAttributeNVMeIntelRst(physicalDriveId, scsiPort, scsiTargetId, &asi))
@@ -3482,7 +3500,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				+ ((ULONG64)asi.SmartReadData[0x71] << 8)
 				+ ((ULONG64)asi.SmartReadData[0x70]));*/
 
-		asi.MeasuredPowerOnHours = (INT)*((UINT64*)&asi.SmartReadData[0x80]);
+		asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (INT)*((UINT64*)&asi.SmartReadData[0x80]);
 		/*asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (ULONG64)
 				 (((ULONG64)asi.SmartReadData[0x87] << 56)
 				+ ((ULONG64)asi.SmartReadData[0x86] << 48)
@@ -3512,7 +3530,19 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		}
 		// +AMD_RC2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		if (commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2) {
-			asi.MajorVersion = identify->N.Reserved3;//tmp
+			asi.MajorVersion = L"";
+			asi.CurrentTransferMode = identify->N.Reserved3;//tmp
+			asi.CurrentTransferMode.Replace(L"NVMe", L"PCIe");
+			asi.CurrentTransferMode.Replace(L"Gen1", L"1.0");
+			asi.CurrentTransferMode.Replace(L"Gen2", L"2.0");
+			asi.CurrentTransferMode.Replace(L"Gen3", L"3.0");
+			asi.CurrentTransferMode.Replace(L"Gen4", L"4.0");
+			asi.CurrentTransferMode.Replace(L"Gen5", L"5.0");
+			asi.CurrentTransferMode.Replace(L"Gen6", L"6.0");
+			asi.CurrentTransferMode.Replace(L"Gen7", L"7.0");
+			asi.CurrentTransferMode.Replace(L"Gen8", L"8.0");
+			asi.CurrentTransferMode.Replace(L"Gen9", L"9.0");
+
 			identify->N.Reserved3[0] = '\0';
 			asi.Interface += _T(" - on AMD_RC2");
 		}
@@ -11113,6 +11143,7 @@ BOOL g_AMD_RC2_load = FALSE;
 HMODULE g_AMD_RC2_hmodule = NULL;
 
 typedef UINT(__stdcall* A_AMD_RC2_UINT)();
+A_AMD_RC2_UINT AMD_RC2_Init = NULL;
 A_AMD_RC2_UINT AMD_RC2_GetStatus = NULL;
 A_AMD_RC2_UINT AMD_RC2_GetDrives = NULL;
 A_AMD_RC2_UINT AMD_RC2_Reload = NULL;
@@ -11192,31 +11223,22 @@ BOOL AMD_RC2_DLL_Load() {
 
 	// get functions
 
+	AMD_RC2_Init = (A_AMD_RC2_UINT)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_Init");
 	AMD_RC2_GetStatus = (A_AMD_RC2_UINT)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_GetStatus");
 	AMD_RC2_GetDrives = (A_AMD_RC2_UINT)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_GetDrives");
 	AMD_RC2_Reload = (A_AMD_RC2_UINT)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_Reload");
 	AMD_RC2_GetIdentify = (A_AMD_RC2_GetIdentify)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_GetIdentify");
 	AMD_RC2_GetSmartData = (A_AMD_RC2_GetSmartData)GetProcAddress(g_AMD_RC2_hmodule, "AMD_RC2_GetSmartData");
-	if (!AMD_RC2_GetStatus || !AMD_RC2_GetDrives || !AMD_RC2_Reload || !AMD_RC2_GetIdentify || !AMD_RC2_GetSmartData) {
+	if (!AMD_RC2_Init || !AMD_RC2_GetStatus || !AMD_RC2_GetDrives || !AMD_RC2_Reload || !AMD_RC2_GetIdentify || !AMD_RC2_GetSmartData) {
 		return FALSE;
 	}
 
-	// wait 1st load
-	// for (INT_PTR i = 0; i < 1000 && ( AMD_RC2_GetStatus() == AMD_RC2_ERROR_CODE::AMD_RC2_uninitial ); ++i) Sleep(1);
+	// init
 
-	int waitCount = 10;
-	for (int i = 0; i < waitCount; i++)
-	{
-		if (AMD_RC2_GetStatus() == AMD_RC2_ERROR_CODE::AMD_RC2_uninitial)
-		{
-			break;
-		}
-		Sleep(100 * i);
-	}
+	const UINT status = AMD_RC2_Init();
 
 	// check status
 
-	const UINT status = AMD_RC2_GetStatus();
 	g_AMD_RC2_load = ( status == AMD_RC2_ERROR_CODE::AMD_RC2_loaded );
 	if (!g_AMD_RC2_load) {
 		switch (status) {
@@ -11244,10 +11266,10 @@ BOOL AMD_RC2_DLL_Load() {
 		case AMD_RC2_ERROR_CODE::AMD_RC2_driver_version_old:
 			DebugPrint(_T("AMD_RC2_driver_version_old"));
 			break;
-		case AMD_RC2_not_admin:
+		case AMD_RC2_ERROR_CODE::AMD_RC2_not_admin:
 			DebugPrint(_T("AMD_RC2_not_admin"));
 			break;
-		case AMD_RC2_name_failed:
+		case AMD_RC2_ERROR_CODE::AMD_RC2_name_failed:
 			DebugPrint(_T("AMD_RC2_name_failed"));
 			break;
 		}
@@ -11256,18 +11278,12 @@ BOOL AMD_RC2_DLL_Load() {
 	return g_AMD_RC2_load;
 }
 #endif
-#endif
-
 
 BOOL CAtaSmart::AddDiskAMD_RC2()
 {
 #ifndef AMD_RC2
-	if (!g_AMD_RC2_init)
-	{
-		AMD_RC2_DLL_Load();
-	}
-	else if (g_AMD_RC2_load)
-	{
+	if (!g_AMD_RC2_init)  AMD_RC2_DLL_Load();
+	else if (g_AMD_RC2_load) {
 		AMD_RC2_Reload();
 	}
 	if (!g_AMD_RC2_load) return FALSE;
@@ -11376,6 +11392,8 @@ BOOL CAtaSmart::GetSmartThresholdAMD_RC2(INT diskNum, ATA_SMART_INFO* asi)
 	return FALSE;
 #endif
 }
+
+#endif
 
 // +AMD_RC2 <<<<<<<<<<<<<<<<<<<<<<<
 

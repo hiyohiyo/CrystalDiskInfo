@@ -150,7 +150,35 @@ void CDiskInfoDlg::SaveText(CString fileName)
 	}
 	clip.Replace(_T("%DISK_LIST%"), cstr);
 
-	driveTemplate = _T("\
+	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+	{
+		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
+		{
+			driveTemplate = _T("\
+----------------------------------------------------------------------------\r\n\
+ (%I%) %MODEL%\r\n\
+----------------------------------------------------------------------------\r\n\
+%ENCLOSURE%\
+           Model : %MODEL%\r\n\
+        Firmware : %FIRMWARE%\r\n\
+   Serial Number : %SERIAL_NUMBER%\r\n\
+       Disk Size : %TOTAL_DISK_SIZE%\r\n\
+       Interface : %INTERFACE%\r\n\
+        Standard : %MAJOR_VERSION%\r\n\
+   Transfer Mode : %TRANSFER_MODE%\r\n\
+  Power On Hours : %POWER_ON_HOURS%\r\n\
+  Power On Count : %POWER_ON_COUNT%\r\n\
+%HOST_READS%\
+%HOST_WRITES%\
+     Temperature : %TEMPERATURE%\r\n\
+   Health Status : %DISK_STATUS%\r\n\
+        Features : %SUPPORTED_FEATURE%\r\n\
+    Drive Letter : %DRIVE_LETTER%\r\n\
+");
+		}
+		else
+		{
+			driveTemplate = _T("\
 ----------------------------------------------------------------------------\r\n\
  (%I%) %MODEL%\r\n\
 ----------------------------------------------------------------------------\r\n\
@@ -182,10 +210,10 @@ void CDiskInfoDlg::SaveText(CString fileName)
        AAM Level : %AAM_LEVEL%\r\n\
     Drive Letter : %DRIVE_LETTER%\r\n\
 ");
-	driveTemplate += _T("\r\n");
+		}
 
-	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
-	{
+		driveTemplate += _T("\r\n");
+
 		drive = driveTemplate;
 		cstr.Format(_T("%02d"), i + 1);
 		drive.Replace(_T("%I%"), cstr);
@@ -221,15 +249,29 @@ void CDiskInfoDlg::SaveText(CString fileName)
 			drive.Replace(_T("%SERIAL_NUMBER%"), m_Ata.vars[i].SerialNumber);
 		}
 		drive.Replace(_T("%INTERFACE%"), m_Ata.vars[i].Interface);
-		drive.Replace(_T("%MAJOR_VERSION%"), m_Ata.vars[i].MajorVersion);
-		drive.Replace(_T("%MINOR_VERSION%"), m_Ata.vars[i].MinorVersion);
+		if (m_Ata.vars[i].MajorVersion.IsEmpty())
+		{
+			drive.Replace(_T("%MAJOR_VERSION%"), i18n(_T("Dialog"), _T("UNKNOWN")));
+		}
+		else
+		{
+			drive.Replace(_T("%MAJOR_VERSION%"), m_Ata.vars[i].MajorVersion);
+		}
+		if (m_Ata.vars[i].MajorVersion.IsEmpty())
+		{
+			drive.Replace(_T("%MINOR_VERSION%"), i18n(_T("Dialog"), _T("UNKNOWN")));
+		}
+		else
+		{
+			drive.Replace(_T("%MINOR_VERSION%"), m_Ata.vars[i].MinorVersion);
+		}		
 
 		temp.Format(_T("%s | %s"), m_Ata.vars[i].CurrentTransferMode, m_Ata.vars[i].MaxTransferMode);
 		drive.Replace(_T("%TRANSFER_MODE%"), temp);
 
-		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
+		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
 		{
-			temp = L"";
+			temp = i18n(_T("Dialog"), _T("UNKNOWN"));
 		}
 		else
 		{
@@ -385,7 +427,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		}
 		drive.Replace(_T("%TEMPERATURE%"), cstr);
 
-		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
+		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
 		{
 			cstr.Format(_T("%.1f GB"), m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
@@ -458,9 +500,9 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		drive.Replace(_T("%BUFFER_SIZE%"), cstr);
 
 
-		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME)
+		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
 		{
-			cstr = _T("");
+			cstr.Format(_T("     Queue Depth : %s\r\n"), i18n(_T("Dialog"), _T("UNKNOWN")));
 		}
 		else if(0 <= m_Ata.vars[i].IdentifyDevice.A.QueueDepth && m_Ata.vars[i].IdentifyDevice.A.QueueDepth < 32)
 		{
@@ -472,7 +514,11 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		}
 		drive.Replace(_T("%QUEUE_DEPTH%"), cstr);
 
-		if(m_Ata.vars[i].NominalMediaRotationRate == 1)
+		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
+		{
+			cstr = i18n(_T("Dialog"), _T("UNKNOWN"));
+		}
+		else if(m_Ata.vars[i].NominalMediaRotationRate == 1)
 		{
 			cstr = _T("---- (SSD)");
 		}
@@ -532,6 +578,12 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		{
 			feature.Delete(feature.GetLength() - 2, 2);
 		}
+
+		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
+		{
+			feature = i18n(_T("Dialog"), _T("UNKNOWN"));
+		}
+
 		drive.Replace(_T("%SUPPORTED_FEATURE%"), feature);
 
 		if(m_Ata.vars[i].IsAamSupported)

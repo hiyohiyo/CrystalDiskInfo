@@ -1149,12 +1149,16 @@ BEGIN
                 MENUITEM "Enable All",                  ID_USB_ENABLE_ALL
                 MENUITEM "Disable All",                 ID_USB_DISABLE_ALL
             END
-            POPUP "Intel/AMD RAID (CSMI)"
+            POPUP "Intel RAID (CSMI)"
             BEGIN
                 MENUITEM "Enable (Auto Detection, default)", ID_CSMI_ENABLE_AUTO
                 MENUITEM "Enable (Access RAID Disks only)", ID_CSMI_ENABLE_RAID
                 MENUITEM "Enable (Access All Disks)",   ID_CSMI_ENABLE_ALL
                 MENUITEM "Disable",                     ID_CSMI_DISABLE
+            END
+            POPUP "AMD RAID"
+            BEGIN
+                MENUITEM "Plug-in: AMD_RC2t7 [Web]", ID_AMD_RC2T7
             END
 			MENUITEM "MegaRAID", ID_MEGA_RAID
 

@@ -456,6 +456,20 @@ CString CDiskInfoDlg::GetDiskStatusReason(DWORD index)
 {
 	CString result, cstr;
 	DWORD value = 0;
+
+	if (m_Ata.vars[index].IsNVMe)
+	{
+		BYTE cw = m_Ata.vars[index].SmartReadData[0];
+		if (cw & 0x01) { result += L"NG: Available spare capacity has fallen below the threshold.\r\n"; };
+		if (cw & 0x02) { result += L"NG: Temperature Error (Overheat or Overcool)\r\n"; };
+		if (cw & 0x04) { result += L"NG: NVM subsystem reliability has been Degraded.\r\n"; };
+		if (cw & 0x08) { result += L"NG: Media has been placed in Read Only Mode.\r\n"; };
+		if (cw & 0x10) { result += L"NG: Volatile Memory Backup Device has Failed.\r\n"; };
+		if (cw & 0x20) { result += L"NG: Persistent Memory Region has become Read-Only.\r\n"; };
+
+		result.TrimRight();
+		return result;
+	}
 	
 	if(m_Ata.vars[index].DiskStatus == CAtaSmart::DISK_STATUS_BAD)
 	{

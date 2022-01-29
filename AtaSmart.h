@@ -2062,11 +2062,12 @@ protected:
 	CString GetModelSerial(CString &model, CString &serialNumber);
 //	BOOL GetLifeByGpl(ATA_SMART_INFO& asi);
 
+#ifndef _M_ARM
 	// +AMD_RC2 >>>>>>>>
 	BOOL AddDiskAMD_RC2();
 	BOOL DoIdentifyDeviceAMD_RC2(INT diskNum, INT* phy, DWORD* TotalDiskSize, IDENTIFY_DEVICE* data, BOOL* isSSD, BOOL* isNVME);
 	BOOL GetSmartDataAMD_RC2(INT diskNum, ATA_SMART_INFO* asi);
 	BOOL GetSmartThresholdAMD_RC2(INT diskNum, ATA_SMART_INFO* asi);
 	// +AMD_RC2 <<<<<<<<
-
+#endif
 };

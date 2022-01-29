@@ -1084,6 +1084,8 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	static CString preLogicalDriveInfo = _T("");
 	static BOOL preFlagHideSerialNumber = FALSE;
 
+	m_Ata.vars[i].SmartReadData[0] = 0xFF;
+
 	diskStatus = GetDiskStatus(m_Ata.vars[i].DiskStatus);
 	className = GetDiskStatusClass(m_Ata.vars[i].DiskStatus);
 	diskStatusReason = GetDiskStatusReason(i);
@@ -1577,6 +1579,11 @@ DevSleep: Device Sleep\
 	if (!m_Feature.IsEmpty())
 	{
 		m_Feature.Delete(m_Feature.GetLength() - 2, 2);
+	}
+
+	if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
+	{
+		m_Feature = L"";
 	}
 
 	m_ModelCapacity = m_Model + _T(" ") + m_Capacity;
@@ -2124,6 +2131,9 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	cstr = i18n(_T("Menu"), _T("GREEN_MODE"));
 	menu->ModifyMenu(ID_GREEN_MODE, MF_STRING, ID_GREEN_MODE, cstr);
 
+//	cstr = i18n(_T("Menu"), _T("DISABLE_DARK_MODE"));
+//	menu->ModifyMenu(ID_DISABLE_DARK_MODE, MF_STRING, ID_DISABLE_DARK_MODE, cstr);
+
 	CheckRadioZoomType();
 
 	if (m_bGreenMode)
@@ -2133,6 +2143,15 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	else
 	{
 		menu->CheckMenuItem(ID_GREEN_MODE, MF_UNCHECKED);
+	}
+
+	if (m_bDisableDarkMode)
+	{
+		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_CHECKED);
+	}
+	else
+	{
+		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_UNCHECKED);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////
