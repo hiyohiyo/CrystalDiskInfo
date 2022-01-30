@@ -1775,7 +1775,9 @@ void CDiskInfoDlg::CheckRadioCsmiType()
 	DrawMenuBar();
 }
 
+/*
 void CDiskInfoDlg::OnInstallGadget()
 {
 	ShellExecute(NULL, _T("open"), m_GadgetDir, NULL, NULL, SW_SHOWNORMAL);
 }
+*/

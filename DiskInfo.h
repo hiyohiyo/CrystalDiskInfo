@@ -15,7 +15,7 @@
 // #define THEME_DIR					_T("CdiResource\\themes\\")
 // #define LANGUAGE_DIR				_T("CdiResource\\language\\")
 #define DIALOG_DIR					_T("CdiResource\\dialog\\")
-#define GADGET_DIR					_T("CdiResource\\gadget\\")
+// #define GADGET_DIR					_T("CdiResource\\gadget\\")
 #define SMART_DIR					_T("Smart\\")
 #define SMART_INI					_T("Smart.ini")
 #define EXCHANGE_INI				_T("Exchange.ini")
@@ -52,7 +52,7 @@ public:
 	CString m_OptionDlgPath;
 	CString m_SmartDir;
 	CString m_ExeDir;
-	CString m_GadgetDir;
+//	CString m_GadgetDir;
 	CString m_AlertMailPath;
 	CString m_OpusDecPath;
 #ifdef SUISHO_SHIZUKU_SUPPORT

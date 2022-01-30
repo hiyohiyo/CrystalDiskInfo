@@ -1164,7 +1164,7 @@ BEGIN
 
             MENUITEM SEPARATOR
             MENUITEM "Gadget Support",              ID_GADGET_SUPPORT
-            MENUITEM "Install Gadget",              ID_INSTALL_GADGET
+//            MENUITEM "Install Gadget",              ID_INSTALL_GADGET
             MENUITEM SEPARATOR
             MENUITEM "Hide S.M.A.R.T. Information", ID_HIDE_SMART_INFO
             MENUITEM "Hide No S.M.A.R.T. Disk",     ID_HIDE_NO_SMART_DISK

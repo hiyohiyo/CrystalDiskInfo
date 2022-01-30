@@ -167,7 +167,7 @@ protected:
 	HDEVNOTIFY m_hDevNotify;
 
 	CString		m_SmartDir;
-	CString		m_GadgetDir;
+//	CString		m_GadgetDir;
 	CString		m_ExeDir;
 	CString		m_AlertMailPath;
 	CString		m_OpusDecPath;
@@ -639,7 +639,7 @@ public:
 	afx_msg void OnCsmiEnableAuto();
 	afx_msg void OnCsmiEnableRaid();
 	afx_msg void OnCsmiEnableAll();
-	afx_msg void OnInstallGadget();
+//	afx_msg void OnInstallGadget();
 //	afx_msg void OnAlarmHistory();
 	afx_msg void OnAlertSound();
 	afx_msg void OnHideNoSmartDisk();

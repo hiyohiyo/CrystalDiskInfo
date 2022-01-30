@@ -68,7 +68,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_MainIconId = gRegIconId;
 
 	m_SmartDir = ((CDiskInfoApp*)AfxGetApp())->m_SmartDir;
-	m_GadgetDir = ((CDiskInfoApp*)AfxGetApp())->m_GadgetDir;
+//	m_GadgetDir = ((CDiskInfoApp*)AfxGetApp())->m_GadgetDir;
 	m_ExeDir = ((CDiskInfoApp*)AfxGetApp())->m_ExeDir;
 	m_AlertMailPath = ((CDiskInfoApp*)AfxGetApp())->m_AlertMailPath;
 	m_OpusDecPath = ((CDiskInfoApp*)AfxGetApp())->m_OpusDecPath;
@@ -723,7 +723,7 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_CSMI_ENABLE_AUTO, &CDiskInfoDlg::OnCsmiEnableAuto)
 	ON_COMMAND(ID_CSMI_ENABLE_RAID, &CDiskInfoDlg::OnCsmiEnableRaid)
 	ON_COMMAND(ID_CSMI_ENABLE_ALL, &CDiskInfoDlg::OnCsmiEnableAll)
-	ON_COMMAND(ID_INSTALL_GADGET, &CDiskInfoDlg::OnInstallGadget)
+//	ON_COMMAND(ID_INSTALL_GADGET, &CDiskInfoDlg::OnInstallGadget)
 //	ON_COMMAND(ID_ALARM_HISTORY, &CDiskInfoDlg::OnAlarmHistory)
 	ON_COMMAND(ID_ALERT_SOUND, &CDiskInfoDlg::OnAlertSound)
 	ON_COMMAND(ID_HIDE_NO_SMART_DISK, &CDiskInfoDlg::OnHideNoSmartDisk)

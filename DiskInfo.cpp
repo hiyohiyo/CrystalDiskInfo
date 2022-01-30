@@ -180,7 +180,7 @@ BOOL CDiskInfoApp::InitInstance()
 	m_ExeDir.Format(_T("%s\\"), tmp);
 	m_ThemeDir.Format(_T("%s\\%s"), tmp, THEME_DIR);
 	m_LangDir.Format(_T("%s\\%s"), tmp, LANGUAGE_DIR);
-	m_GadgetDir.Format(_T("%s\\%s"), tmp, GADGET_DIR);
+//	m_GadgetDir.Format(_T("%s\\%s"), tmp, GADGET_DIR);
 
 	// Smart folder
 	TCHAR smartDir[256];

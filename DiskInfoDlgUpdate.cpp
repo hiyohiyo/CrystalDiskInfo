@@ -1706,8 +1706,9 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	menu->ModifyMenu(ID_CSMI_ENABLE_RAID, MF_STRING, ID_CSMI_ENABLE_RAID, cstr);
 	cstr = i18n(_T("Menu"), _T("ENABLE_ALL"));
 	menu->ModifyMenu(ID_CSMI_ENABLE_ALL, MF_STRING, ID_CSMI_ENABLE_ALL, cstr);
-	cstr = i18n(_T("Menu"), _T("INSTALL_GADGET"));
-	menu->ModifyMenu(ID_INSTALL_GADGET, MF_STRING, ID_INSTALL_GADGET, cstr);
+//	cstr = i18n(_T("Menu"), _T("INSTALL_GADGET"));
+//	menu->ModifyMenu(ID_INSTALL_GADGET, MF_STRING, ID_INSTALL_GADGET, cstr);
+/*
 	if (HasSidebar())
 	{
 		menu->EnableMenuItem(ID_INSTALL_GADGET, MF_ENABLED);
@@ -1716,6 +1717,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	{
 		menu->EnableMenuItem(ID_INSTALL_GADGET, MF_GRAYED);
 	}
+*/
 
 	if (IsDotNet4() || IsDotNet2())
 	{
