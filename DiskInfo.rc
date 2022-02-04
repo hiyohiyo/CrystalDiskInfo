@@ -1192,7 +1192,7 @@ BEGIN
             MENUITEM "Auto",                        ID_ZOOM_AUTO
         END
         MENUITEM "Green Mode",                  ID_GREEN_MODE
-        MENUITEM "Disable Dark Mode",           ID_DISABLE_DARK_MODE
+//        MENUITEM "Disable Dark Mode",           ID_DISABLE_DARK_MODE
         MENUITEM "Font Setting",                ID_FONT_SETTING
         MENUITEM SEPARATOR
     END

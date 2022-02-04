@@ -221,6 +221,7 @@ protected:
 	BOOL m_bWinDarkMode;
 	BOOL m_bAlertSound;
 	BOOL m_bHideNoSmartDisk;
+	BOOL m_bForceDisableDarkMode;
 
 	BOOL AddTemperatureIcon(DWORD index);
 	BOOL RemoveTemperatureIcon(DWORD index);

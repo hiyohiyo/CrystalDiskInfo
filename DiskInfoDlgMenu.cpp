@@ -201,13 +201,13 @@ void CDiskInfoDlg::OnDisableDarkMode()
 	if (menu->GetMenuState(ID_DISABLE_DARK_MODE, MF_BYCOMMAND) & MFS_CHECKED)
 	{
 		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_UNCHECKED);
-		m_bDisableDarkMode = FALSE;
+		m_bForceDisableDarkMode = FALSE;
 		WritePrivateProfileStringW(_T("Setting"), _T("DisableDarkMode"), _T("0"), m_Ini);
 	}
 	else
 	{
 		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_CHECKED);
-		m_bDisableDarkMode = TRUE;
+		m_bForceDisableDarkMode = TRUE;
 		WritePrivateProfileStringW(_T("Setting"), _T("DisableDarkMode"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);

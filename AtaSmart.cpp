@@ -2510,7 +2510,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.Major = 3;
 		asi.IsSsd = (identify->A.SerialAtaCapabilities & 1);
 		asi.IsSmartSupported = TRUE;
-		asi.Interface = (identify->A.CurrentMediaSerialNo[0] == 'N' ? _T("N/A - on AMD_RC2") : _T("SATA - on AMD_RC2"));
+		asi.Interface = (identify->A.CurrentMediaSerialNo[0] == 'N' ? _T("AMD_RC2") : _T("AMD_RC2 (Serial ATA)"));
 		asi.CurrentTransferMode = identify->A.CurrentMediaSerialNo;//tmp
 		asi.CurrentTransferMode.Replace(L"HDD", L"");
 		asi.CurrentTransferMode.Replace(L"SSD", L"");
@@ -3544,7 +3544,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			asi.CurrentTransferMode.Replace(L"Gen9", L"9.0");
 
 			identify->N.Reserved3[0] = '\0';
-			asi.Interface += _T(" - on AMD_RC2");
+			asi.Interface = _T("AMD_RC2 (NVMe)");
 		}
 		// +AMD_RC2 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	}

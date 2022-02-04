@@ -2145,7 +2145,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->CheckMenuItem(ID_GREEN_MODE, MF_UNCHECKED);
 	}
 
-	if (m_bDisableDarkMode)
+	if (m_bForceDisableDarkMode)
 	{
 		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_CHECKED);
 	}
