@@ -10543,7 +10543,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			else
 			{
 				WORD raw = MAKEWORD(vars[i].Attribute[j].RawValue[0], vars[i].Attribute[j].RawValue[1]);
-				WORD threshold; 
+				WORD threshold = 0; 
 				switch(vars[i].Attribute[j].Id)
 				{
 				case 0x05:

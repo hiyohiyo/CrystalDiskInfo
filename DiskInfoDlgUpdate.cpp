@@ -371,7 +371,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					))
 			{
 				WORD raw = MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]);
-				WORD threshold;
+				WORD threshold = 0;
 				switch (m_Ata.vars[i].Attribute[j].Id)
 				{
 				case 0x05:
