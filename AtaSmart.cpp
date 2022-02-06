@@ -2279,8 +2279,14 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	}
 	else
 	{
-		if (commandType >= COMMAND_TYPE::CMD_TYPE_UNKNOWN && commandType <= COMMAND_TYPE::CMD_TYPE_DEBUG)  asi.CommandTypeString = commandTypeString[(UINT)commandType];
-		else  asi.CommandTypeString = L"";//unknown
+		if (commandType >= COMMAND_TYPE::CMD_TYPE_UNKNOWN && commandType <= COMMAND_TYPE::CMD_TYPE_DEBUG)
+		{
+			asi.CommandTypeString = commandTypeString[(UINT)commandType];
+		}
+		else
+		{
+			asi.CommandTypeString = L"";//unknown
+		}
 	}
 
 	for(int i = 0; i < MAX_ATTRIBUTE; i++)

@@ -100,7 +100,7 @@ protected:
 	HRESULT OnSelect61(IHTMLElement *pElement);
 	HRESULT OnSelect62(IHTMLElement *pElement);
 	HRESULT OnSelect63(IHTMLElement *pElement);
-	HRESULT OnSelect128(IHTMLElement *pElement);
+	HRESULT OnSelect80(IHTMLElement *pElement);
 
 	HRESULT OnSelectBkImage(IHTMLElement *pElement);
 	HRESULT OnNoBkImage(IHTMLElement *pElement);

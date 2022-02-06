@@ -40,6 +40,8 @@ static const TCHAR* commandTypeString[] =
 	_T("nt"), // NVMe Intel RST
 	_T("mr"), // MegaRAID SAS
 	_T("rc"), // +AMD RC2
+
+	_T("dg"), // Debug
 };
 
 static const TCHAR* ssdVendorString[] =
