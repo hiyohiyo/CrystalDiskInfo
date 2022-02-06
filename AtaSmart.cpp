@@ -855,9 +855,23 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 					if (pCOMDev->Get(L"DeviceName", 0L, &pVal, NULL, NULL) == WBEM_S_NO_ERROR && pVal.vt > VT_NULL)
 					{
 						deviceName = pVal.bstrVal;
-						if (deviceName.Find(L"AMD-RAID") >= 0)
+						if (deviceName.Find(L"AMD-RAID Config") >= 0)
 						{
-							AmdRaidDriverVersion = (int)(_wtof(driverVersion) * 10);
+							DebugPrint(deviceName + L" " + driverVersion);
+							CString cstr;
+							cstr.Format(L"_wtof(driverVersion) * 10=%d", (int)(_wtof(driverVersion) * 10));
+							DebugPrint(cstr);
+							int major = 0, minor = 0, revision = 0, build = 0;
+							AfxExtractSubString(cstr, driverVersion, 0, L'.'); 	major = _wtoi(cstr);
+							AfxExtractSubString(cstr, driverVersion, 1, L'.'); 	minor = _wtoi(cstr);
+							AfxExtractSubString(cstr, driverVersion, 2, L'.'); 	revision = _wtoi(cstr);
+							AfxExtractSubString(cstr, driverVersion, 3, L'.'); 	build = _wtoi(cstr);
+
+							AmdRaidDriverVersion = major * 10 + minor;
+							cstr.Format(L"driverVersion=%d.%d.%d.%d", major, minor, revision, build);
+							DebugPrint(cstr);
+							cstr.Format(L"AmdRaidDriverVersion=%d", AmdRaidDriverVersion);
+							DebugPrint(cstr);
 						}
 						VariantClear(&pVal);
 					}
@@ -10543,7 +10557,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			else
 			{
 				WORD raw = MAKEWORD(vars[i].Attribute[j].RawValue[0], vars[i].Attribute[j].RawValue[1]);
-				WORD threshold; 
+				WORD threshold = 0; 
 				switch(vars[i].Attribute[j].Id)
 				{
 				case 0x05:
