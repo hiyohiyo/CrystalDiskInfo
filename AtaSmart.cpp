@@ -859,8 +859,6 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 						{
 							DebugPrint(deviceName + L" " + driverVersion);
 							CString cstr;
-							cstr.Format(L"_wtof(driverVersion) * 10=%d", (int)(_wtof(driverVersion) * 10));
-							DebugPrint(cstr);
 							int major = 0, minor = 0, revision = 0, build = 0;
 							AfxExtractSubString(cstr, driverVersion, 0, L'.'); 	major = _wtoi(cstr);
 							AfxExtractSubString(cstr, driverVersion, 1, L'.'); 	minor = _wtoi(cstr);
@@ -4962,7 +4960,7 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 		{
 			flagSmartType = TRUE;
 			// https://github.com/hiyohiyo/CrystalDiskInfo/issues/162
-			if (asi.FirmwareRev.Find(L"SBFKB1E1") != 0)
+			if (asi.FirmwareRev.Find(L"SBFKB1E1") == 0)
 			{
 				asi.FlagLifeRawValue = TRUE;
 			}
@@ -10462,18 +10460,21 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		}
 	}
 
-	if(! vars[i].IsSmartCorrect)
+	// Workaround for KINGSTON SA400
+	// https://github.com/hiyohiyo/CrystalDiskInfo/issues/162
+	if (vars[i].FirmwareRev.Find(L"SBFKB1E1") == 0)
+	{
+
+	}
+	else if(! vars[i].IsSmartCorrect)
 	{
 		return DISK_STATUS_UNKNOWN;
 	}
-
-	// HDD
-	if(! vars[i].IsSsd && ! vars[i].IsThresholdCorrect)
+	else if(! vars[i].IsSsd && ! vars[i].IsThresholdCorrect) // HDD
 	{
 		return DISK_STATUS_UNKNOWN;
 	}
-
-	if(vars[i].IsThresholdBug)
+	else if(vars[i].IsThresholdBug)
 	{
 		return DISK_STATUS_UNKNOWN;
 	}
@@ -10615,7 +10616,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			if (life <= 0) { life = 0; }
 			if (life > 100) { life = 100; }
 		
-			if(life == 0 || (!vars[i].FlagLifeRawValue && life < vars[i].Threshold[j].ThresholdValue))
+			if(life == 0 || (! (vars[i].FlagLifeRawValue || vars[i].FlagLifeRawValueIncrement) && life < vars[i].Threshold[j].ThresholdValue))
 			{
 				error = 1;
 			}

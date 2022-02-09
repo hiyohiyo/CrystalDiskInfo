@@ -556,7 +556,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE9 && m_Ata.vars[i].FlagLifeSanDiskLenovo)
 				)
 			{
-				if (m_Ata.vars[i].FlagLifeRawValue)
+				if (m_Ata.vars[i].FlagLifeRawValue || m_Ata.vars[i].FlagLifeRawValueIncrement)
 				{
 					if (flag)
 					{
