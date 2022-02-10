@@ -10460,13 +10460,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		}
 	}
 
-	// Workaround for KINGSTON SA400
-	// https://github.com/hiyohiyo/CrystalDiskInfo/issues/162
-	if (vars[i].FirmwareRev.Find(L"SBFKB1E1") == 0)
-	{
-
-	}
-	else if(! vars[i].IsSmartCorrect)
+	if(! vars[i].IsSmartCorrect)
 	{
 		return DISK_STATUS_UNKNOWN;
 	}
@@ -10486,7 +10480,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 	int caution = 0;
 	BOOL flagUnknown = TRUE;
 
-	for(DWORD j = 0; j < vars[i].AttributeCount; j++)
+	for (DWORD j = 0; j < vars[i].AttributeCount; j++)
 	{
 		// Check overlap
 		for(DWORD k = 0; k < j; k++)
