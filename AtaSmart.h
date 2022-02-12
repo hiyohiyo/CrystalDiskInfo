@@ -2025,7 +2025,7 @@ protected:
 	VOID CheckSsdSupport(ATA_SMART_INFO &asi);
 	BOOL IsSsdOld(ATA_SMART_INFO &asi);
 	BOOL IsSsdMtron(ATA_SMART_INFO &asi);
-	BOOL IsSsdIndlinx(ATA_SMART_INFO &asi);
+	BOOL IsSsdIndilinx(ATA_SMART_INFO &asi);
 	BOOL IsSsdJMicron60x(ATA_SMART_INFO &asi);
 	BOOL IsSsdJMicron61x(ATA_SMART_INFO &asi);
 	BOOL IsSsdJMicron66x(ATA_SMART_INFO& asi);

@@ -3621,9 +3621,9 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 		asi.IsRawValues8 = TRUE;
 	}
-	else if(IsSsdIndlinx(asi))
+	else if(IsSsdIndilinx(asi))
 	{
-		asi.SmartKeyName = _T("SmartIndlinx");
+		asi.SmartKeyName = _T("SmartIndilinx");
 		asi.DiskVendorId = SSD_VENDOR_INDILINX;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 		asi.IsRawValues8 = TRUE;
@@ -4474,7 +4474,7 @@ BOOL CAtaSmart::IsSsdJMicron66x(ATA_SMART_INFO& asi)
 	return flagSmartType;
 }
 
-BOOL CAtaSmart::IsSsdIndlinx(ATA_SMART_INFO &asi)
+BOOL CAtaSmart::IsSsdIndilinx(ATA_SMART_INFO &asi)
 {
 	BOOL flagSmartType = FALSE;
 
