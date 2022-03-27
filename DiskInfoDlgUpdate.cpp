@@ -340,6 +340,11 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					icon = ICON_CAUTION;
 				}
 			}
+			// 2022/03/26 Workaround for WD_BLACK AN1500 (No support Available Spare/Available Spare Threshold)
+			else if (m_Ata.vars[i].Attribute[j].Id == 0x03 && (m_Ata.vars[i].Attribute[2].RawValue[0] == 0 && m_Ata.vars[i].Attribute[3].RawValue[0] == 0))
+			{
+				icon = ICON_GOOD;
+			}
 			else if(m_Ata.vars[i].Attribute[j].Id == 0x03 && (m_Ata.vars[i].Attribute[2].RawValue[0] < m_Ata.vars[i].Attribute[3].RawValue[0]))
 			{
 				icon = ICON_BAD;

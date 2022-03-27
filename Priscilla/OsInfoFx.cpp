@@ -135,7 +135,7 @@ BOOL IsDotNet2()
 		DWORD buf = 0;
 
 		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727", 0, KEY_READ, &hKey) == ERROR_SUCCESS
-			|| RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Wow6432Node\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+		||  RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Wow6432Node\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
 		{
 			if (RegQueryValueEx(hKey, L"Install", NULL, &type, (LPBYTE)&buf, &size) == ERROR_SUCCESS)
 			{
@@ -164,13 +164,48 @@ BOOL IsDotNet4()
 		DWORD buf = 0;
 
 		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Client", 0, KEY_READ, &hKey) == ERROR_SUCCESS
-			|| RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+		||  RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
 		{
 			if (RegQueryValueEx(hKey, L"Install", NULL, &type, (LPBYTE)&buf, &size) == ERROR_SUCCESS)
 			{
 				if (buf == 1)
 				{
 					b = TRUE;
+				}
+			}
+			RegCloseKey(hKey);
+		}
+	}
+
+	return b;
+}
+
+BOOL IsDotNet48()
+{
+	static BOOL b = -1;
+
+	if (b == -1)
+	{
+		b = FALSE;
+		DWORD type = REG_DWORD;
+		ULONG size = sizeof(DWORD);
+		HKEY  hKey = NULL;
+		DWORD buf = 0;
+
+		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Client", 0, KEY_READ, &hKey) == ERROR_SUCCESS
+		||  RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+		{
+			if (RegQueryValueEx(hKey, L"Install", NULL, &type, (LPBYTE)&buf, &size) == ERROR_SUCCESS)
+			{
+				if (buf == 1)
+				{
+					if (RegQueryValueEx(hKey, L"Release", NULL, &type, (LPBYTE)&buf, &size) == ERROR_SUCCESS)
+					{
+						if (buf >= 528040)
+						{
+							b = TRUE;
+						}
+					}
 				}
 			}
 			RegCloseKey(hKey);

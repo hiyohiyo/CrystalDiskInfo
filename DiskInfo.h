@@ -22,6 +22,7 @@
 #define ALARM_HISTORY_CSV			_T("AlarmHistory.csv")
 #define ALERT_MAIL_PATH				_T("CdiResource\\AlertMail.exe")
 #define ALERT_MAIL_4_PATH			_T("CdiResource\\AlertMail4.exe")
+#define ALERT_MAIL_48_PATH			_T("CdiResource\\AlertMail48.exe")
 #define OPUS_DEC_PATH				_T("CdiResource\\opus\\opusdec.exe")
 #define SHIZUKU_VOICE_PATH			_T("CdiResource\\voice\\ShizukuVoice.dll")
 #define KUREI_KEI_VOICE_PATH		_T("CdiResource\\voice\\KureiKeiVoice.dll")

@@ -21,6 +21,7 @@ BOOL IsWow64();
 BOOL IsIe556();
 BOOL IsDotNet2();
 BOOL IsDotNet4();
+BOOL IsDotNet48();
 BOOL IsNT5();
 BOOL IsNT6orLater();
 BOOL IsWin2k();

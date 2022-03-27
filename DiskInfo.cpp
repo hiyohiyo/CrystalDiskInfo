@@ -198,7 +198,11 @@ BOOL CDiskInfoApp::InitInstance()
 		m_SmartDir.Format(_T("%s\\%s"), tmp, SMART_DIR);
 	}
 
-	if(IsDotNet4())
+	if (IsDotNet48())
+	{
+		m_AlertMailPath.Format(_T("%s\\%s"), tmp, ALERT_MAIL_48_PATH);
+	}
+	else if(IsDotNet4())
 	{
 		m_AlertMailPath.Format(_T("%s\\%s"), tmp, ALERT_MAIL_4_PATH);
 	}
