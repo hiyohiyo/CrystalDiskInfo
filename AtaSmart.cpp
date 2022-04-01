@@ -3580,6 +3580,10 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.IsSsd = TRUE;
 	}
 
+	asi.Model = L"KINGSTON SA400S37480G";
+	asi.FirmwareRev = L"SBFKB1D1";
+
+
 	if(! asi.IsSsd) // HDD
 	{
 		asi.SmartKeyName = _T("Smart");
@@ -4960,7 +4964,11 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 		{
 			flagSmartType = TRUE;
 			// https://github.com/hiyohiyo/CrystalDiskInfo/issues/162
-			if (asi.FirmwareRev.Find(L"SBFKB1E1") == 0)
+			if (asi.FirmwareRev.Find(L"03070009") == 0)
+			{
+				asi.FlagLifeRawValue = FALSE;
+			}
+			else
 			{
 				asi.FlagLifeRawValue = TRUE;
 			}
