@@ -3580,10 +3580,6 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.IsSsd = TRUE;
 	}
 
-	asi.Model = L"KINGSTON SA400S37480G";
-	asi.FirmwareRev = L"SBFKB1D1";
-
-
 	if(! asi.IsSsd) // HDD
 	{
 		asi.SmartKeyName = _T("Smart");
