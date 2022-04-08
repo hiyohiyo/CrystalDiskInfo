@@ -306,7 +306,7 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 	DWORD errorCount = 0;
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
-		int unitType = GetPrivateProfileInt(_T("PowerOnUnit"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
+		int unitType = GetPrivateProfileIntFx(_T("PowerOnUnit"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
 		if(unitType >= 0)
 		{
 			if(m_Ata.vars[i].DetectedTimeUnitType == m_Ata.POWER_ON_MILLI_SECONDS)
@@ -325,21 +325,21 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 			errorCount++;
 		}
 
-		m_bAutoRefreshTarget[i] = GetPrivateProfileInt(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_bAutoRefreshTarget[i] = GetPrivateProfileIntFx(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
 		if (m_Ata.vars[i].IsSsd)
 		{
-			m_Ata.vars[i].AlarmTemperature = GetPrivateProfileInt(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, 60, m_Ini);
+			m_Ata.vars[i].AlarmTemperature = GetPrivateProfileIntFx(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, 60, m_Ini);
 		}
 		else
 		{
-			m_Ata.vars[i].AlarmTemperature = GetPrivateProfileInt(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, 50, m_Ini);
+			m_Ata.vars[i].AlarmTemperature = GetPrivateProfileIntFx(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, 50, m_Ini);
 		}
-		m_Ata.vars[i].AlarmHealthStatus = GetPrivateProfileInt(_T("AlarmHealthStatus"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_Ata.vars[i].AlarmHealthStatus = GetPrivateProfileIntFx(_T("AlarmHealthStatus"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
 
-		m_Ata.vars[i].Threshold05     = GetPrivateProfileInt(_T("ThreasholdOfCaution05"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
-		m_Ata.vars[i].ThresholdC5     = GetPrivateProfileInt(_T("ThreasholdOfCautionC5"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
-		m_Ata.vars[i].ThresholdC6     = GetPrivateProfileInt(_T("ThreasholdOfCautionC6"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
-		m_Ata.vars[i].ThresholdFF     = GetPrivateProfileInt(_T("ThreasholdOfCautionFF"), m_Ata.vars[i].ModelSerial, 10, m_Ini);
+		m_Ata.vars[i].Threshold05     = GetPrivateProfileIntFx(_T("ThreasholdOfCaution05"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_Ata.vars[i].ThresholdC5     = GetPrivateProfileIntFx(_T("ThreasholdOfCautionC5"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_Ata.vars[i].ThresholdC6     = GetPrivateProfileIntFx(_T("ThreasholdOfCautionC6"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_Ata.vars[i].ThresholdFF     = GetPrivateProfileIntFx(_T("ThreasholdOfCautionFF"), m_Ata.vars[i].ModelSerial, 10, m_Ini);
 
 		m_Ata.vars[i].DiskStatus = m_Ata.CheckDiskStatus(i);
 		DebugPrint(_T("SaveSmartInfo(i)"));

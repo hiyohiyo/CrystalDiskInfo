@@ -908,7 +908,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			for(int j = 0; j < m_Ata.vars.GetCount(); j++)
 			{
 				m_Ata.vars[j].AlarmHealthStatus = FALSE;
-				WritePrivateProfileString(_T("AlarmHealthStatus"), m_Ata.vars[j].ModelSerial, _T("0"), m_Ini);
+				WritePrivateProfileStringFx(_T("AlarmHealthStatus"), m_Ata.vars[j].ModelSerial, _T("0"), m_Ini);
 			}
 		}
 		else if(i == CAtaSmart::MAX_DISK) // Enable All
@@ -916,7 +916,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			for(int j = 0; j < m_Ata.vars.GetCount(); j++)
 			{
 				m_Ata.vars[j].AlarmHealthStatus = TRUE;
-				WritePrivateProfileString(_T("AlarmHealthStatus"), m_Ata.vars[j].ModelSerial, _T("1"), m_Ini);
+				WritePrivateProfileStringFx(_T("AlarmHealthStatus"), m_Ata.vars[j].ModelSerial, _T("1"), m_Ini);
 			}
 		}
 		else
@@ -932,7 +932,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 				m_Ata.vars[i].AlarmHealthStatus = TRUE;
 				alarm.Format(_T("%d"), TRUE);
 			}
-			WritePrivateProfileString(_T("AlarmHealthStatus"), m_Ata.vars[i].ModelSerial, alarm, m_Ini);
+			WritePrivateProfileStringFx(_T("AlarmHealthStatus"), m_Ata.vars[i].ModelSerial, alarm, m_Ini);
 		}
 	}
 	else if(ALARM_SETTING_TEMPERATURE_BASE <= wParam && wParam <= ALARM_SETTING_TEMPERATURE_BASE + (CAtaSmart::MAX_DISK + 1) * 100)
@@ -955,7 +955,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			m_Ata.vars[i].AlarmTemperature = j;
 			CString temperature;
 			temperature.Format(_T("%d"), j);
-			WritePrivateProfileString(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, temperature, m_Ini);
+			WritePrivateProfileStringFx(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, temperature, m_Ini);
 		}
 	}
 	else if(TRAY_TEMPERATURE_ICON_BASE <= wParam && wParam <= TRAY_TEMPERATURE_ICON_BASE + CAtaSmart::MAX_DISK + 1)
@@ -972,7 +972,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 					{
 						CString cstr;
 						cstr.Format(_T("%d"), 0);
-						WritePrivateProfileString(_T("TemperatureIcon"), m_Ata.vars[j].ModelSerial, cstr, m_Ini);
+						WritePrivateProfileStringFx(_T("TemperatureIcon"), m_Ata.vars[j].ModelSerial, cstr, m_Ini);
 					}
 				}
 			}
@@ -992,7 +992,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 					{
 						CString cstr;
 						cstr.Format(_T("%d"), 1);
-						WritePrivateProfileString(_T("TemperatureIcon"), m_Ata.vars[j].ModelSerial, cstr, m_Ini);
+						WritePrivateProfileStringFx(_T("TemperatureIcon"), m_Ata.vars[j].ModelSerial, cstr, m_Ini);
 						max = TRAY_TEMPERATURE_ICON_BASE + j;
 					}
 				}
@@ -1017,7 +1017,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 				{
 					CString cstr;
 					cstr.Format(_T("%d"), 0);
-					WritePrivateProfileString(_T("TemperatureIcon"), m_Ata.vars[i].ModelSerial, cstr, m_Ini);
+					WritePrivateProfileStringFx(_T("TemperatureIcon"), m_Ata.vars[i].ModelSerial, cstr, m_Ini);
 					
 					if(! IsTemperatureIconExist())
 					{
@@ -1029,7 +1029,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			{
 				CString cstr;
 				cstr.Format(_T("%d"), 1);
-				WritePrivateProfileString(_T("TemperatureIcon"), m_Ata.vars[i].ModelSerial, cstr, m_Ini);
+				WritePrivateProfileStringFx(_T("TemperatureIcon"), m_Ata.vars[i].ModelSerial, cstr, m_Ini);
 
 				if(m_bShowTemperatureIconOnly && IsTemperatureIconExist())
 				{
@@ -1059,7 +1059,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			{
 				m_bAutoRefreshTarget[j] = TRUE;
 				menu->CheckMenuItem(AUTO_REFRESH_TARGET_BASE + j, MF_CHECKED);
-				WritePrivateProfileString(_T("AutoRefreshTarget"), m_Ata.vars[j].ModelSerial, _T("1"), m_Ini);
+				WritePrivateProfileStringFx(_T("AutoRefreshTarget"), m_Ata.vars[j].ModelSerial, _T("1"), m_Ini);
 			}
 		}
 		else if(i == CAtaSmart::MAX_DISK + 1) // Unarget All Disk
@@ -1068,7 +1068,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			{
 				m_bAutoRefreshTarget[j] = FALSE;
 				menu->CheckMenuItem(AUTO_REFRESH_TARGET_BASE + j, MF_UNCHECKED);
-				WritePrivateProfileString(_T("AutoRefreshTarget"), m_Ata.vars[j].ModelSerial, _T("0"), m_Ini);
+				WritePrivateProfileStringFx(_T("AutoRefreshTarget"), m_Ata.vars[j].ModelSerial, _T("0"), m_Ini);
 			}
 		}
 		else
@@ -1077,13 +1077,13 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			{
 				m_bAutoRefreshTarget[i] = FALSE;
 				menu->CheckMenuItem(AUTO_REFRESH_TARGET_BASE + i, MF_UNCHECKED);
-				WritePrivateProfileString(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, _T("0"), m_Ini);
+				WritePrivateProfileStringFx(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, _T("0"), m_Ini);
 			}
 			else
 			{
 				m_bAutoRefreshTarget[i] = TRUE;
 				menu->CheckMenuItem(AUTO_REFRESH_TARGET_BASE + i, MF_CHECKED);
-				WritePrivateProfileString(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, _T("1"), m_Ini);
+				WritePrivateProfileStringFx(_T("AutoRefreshTarget"), m_Ata.vars[i].ModelSerial, _T("1"), m_Ini);
 			}
 		}
 		SetMenu(menu);
@@ -1997,7 +1997,7 @@ void CDiskInfoDlg::OnTimer(UINT_PTR nIDEvent)
 				
 				CString cstr;
 				cstr.Format(_T("%d"), m_Ata.vars[i].MeasuredTimeUnitType);
-				WritePrivateProfileString(_T("PowerOnUnit"), m_Ata.vars[i].ModelSerial, cstr, m_Ini);
+				WritePrivateProfileStringFx(_T("PowerOnUnit"), m_Ata.vars[i].ModelSerial, cstr, m_Ini);
 				SaveSmartInfo(i);
 			}
 
@@ -2243,8 +2243,8 @@ void CDiskInfoDlg::AutoAamApmAdaption()
 			continue;
 		}
 
-		status = GetPrivateProfileInt(_T("AamStatus"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
-		value =  GetPrivateProfileInt(_T("AamValue"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
+		status = GetPrivateProfileIntFx(_T("AamStatus"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
+		value =  GetPrivateProfileIntFx(_T("AamValue"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
 		if(status == 1 /* Enabled */ && value != -1)
 		{
 			m_Ata.EnableAam(i, value);
@@ -2267,8 +2267,8 @@ void CDiskInfoDlg::AutoAamApmAdaption()
 			continue;
 		}
 
-		status = GetPrivateProfileInt(_T("ApmStatus"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
-		value  = GetPrivateProfileInt(_T("ApmValue"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
+		status = GetPrivateProfileIntFx(_T("ApmStatus"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
+		value  = GetPrivateProfileIntFx(_T("ApmValue"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
 		if(status == 1 /* Enabled */ && value != -1)
 		{
 			m_Ata.EnableApm(i, value);

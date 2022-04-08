@@ -746,7 +746,7 @@ void CDiskInfoDlg::CheckTrayTemperatureIcon()
 {
 	for(int i = (int)m_Ata.vars.GetCount() - 1; i >= 0; i--)
 	{
-		if(GetPrivateProfileInt(_T("TemperatureIcon"), m_Ata.vars[i].ModelSerial, 1, m_Ini))
+		if(GetPrivateProfileIntFx(_T("TemperatureIcon"), m_Ata.vars[i].ModelSerial, 1, m_Ini))
 		{
 			if(m_Ata.vars[i].Temperature > -300)
 			{

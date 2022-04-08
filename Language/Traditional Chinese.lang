@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=謝慶憲, chriszxl (小良奇), haobinnan
-VERSION=8.12.8
+VERSION=8.16.3
 
 [Language]
 LANGUAGE=正體中文
@@ -192,6 +192,7 @@ MAJOR_VERSION_MINOR_VERSION=主要版本 | 次要版本
 FONT_FACE=字體
 FONT_SCALE=字型縮放 (%)
 DEFAULT=預設
+OK=確定
 
 ;8.9.0
 ENABLED=已啟用
@@ -646,28 +647,11 @@ FB=NAND 讀取次數
 F1=對 SSD 累計寫入
 F2=對 SSD 累計讀取
 
-[SmartPlextor] ;Added 5.1.0
+[SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=底層資料讀取錯誤率
 05=重定位磁區計數
 09=總通電時間
 0C=開關電源次數
-C0=不安全關機次數
-C2=外殼溫度
-C4=重定位事件計數
-C6=無法校正的磁區總數
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
-
-;Updated 5.4.0
-B1=顆粒平均擦寫次數
-B2=已使用的保留區塊數(最遭狀況)
-B5=程式失敗次數
-B6=抹除失敗次數
-BB=無法校正的錯誤次數
-C7=Ultra 高速傳輸模式錯誤次數
-E8=可用的保留空間
-
-;Added 6.2.0
 AA=增長的損壞區塊
 AB=程式失敗次數
 AC=抹除失敗次數
@@ -675,13 +659,25 @@ AD=平均程式/抹除次數
 AE=未預期的電源中斷次數
 AF=程式失敗次數(最糟狀況)
 B0=抹除失敗次數(最糟狀況)
+B1=顆粒平均擦寫次數
+B2=已使用的保留區塊數(最遭狀況)
 B3=已使用的保留區塊數
 B4=未使用的保留區塊數(總計)
+B5=程式失敗次數
+B6=抹除失敗次數
 B7=SATA 介面降級
 B8=終端校驗資料出錯已校正
+BB=無法校正的錯誤次數
 BC=通訊超時
+C0=不安全關機次數
 C3=ECC 錯誤率
+C4=重定位事件計數
+C6=無法校正的磁區總數
+C7=Ultra 高速傳輸模式錯誤次數
+E8=可用的保留空間
 E9=NAND GB 已寫入
+F1=對 SSD 累計寫入
+F2=對 SSD 累計讀取
 
 [SmartSanDisk] ;Added 5.2.0
 05=已淘汰區塊數
@@ -969,6 +965,7 @@ EA=總計 GB 寫入 NAND (SLC)
 EE=介質耗損指標 (剩餘週期)
 F1=總計 GB 寫入
 F2=總計 GB 讀取
+F3=總計 NAND 寫入
 F4=硬碟溫度節流狀態
 F9=NAND GB 已寫入
 

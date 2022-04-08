@@ -181,3 +181,28 @@ DWORD B8toB32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 
 	return data;
 }
+
+////------------------------------------------------
+//   .ini support function
+////------------------------------------------------
+
+DWORD GetPrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpDefault, LPTSTR  lpReturnedString, DWORD nSize, LPCTSTR lpFileName)
+{
+	CString cstr = lpKeyName;
+	cstr.Replace(L"=", L"%#3D");
+	return GetPrivateProfileString(lpAppName, cstr, lpDefault, lpReturnedString, nSize, lpFileName);
+}
+
+UINT GetPrivateProfileIntFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, INT nDefault, LPCTSTR lpFileName)
+{
+	CString cstr = lpKeyName;
+	cstr.Replace(L"=", L"%#3D");
+	return GetPrivateProfileInt(lpAppName, cstr, nDefault, lpFileName);
+}
+
+BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpString, LPCTSTR lpFileName)
+{
+	CString cstr = lpKeyName;
+	cstr.Replace(L"=", L"%#3D");
+	return WritePrivateProfileString(lpAppName, cstr, lpString, lpFileName);
+}

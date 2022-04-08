@@ -347,7 +347,7 @@ void CHealthDlg::UpdateSelectDisk(DWORD index)
 		}
 		else
 		{
-			m_CtrlScrollbarFF.SetScrollPos(GetPrivateProfileInt(_T("ThreasholdOfCautionFF"), p->m_Ata.vars[index].ModelSerial, 10, m_Ini));
+			m_CtrlScrollbarFF.SetScrollPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionFF"), p->m_Ata.vars[index].ModelSerial, 10, m_Ini));
 			m_CtrlScrollbarFF.EnableWindow(TRUE);
 			m_ValueFF.Format(_T("%d"), m_CtrlScrollbarFF.GetScrollPos());
 			m_ValueFFX.Format(_T("%02Xh"), m_CtrlScrollbarFF.GetScrollPos());
@@ -364,9 +364,9 @@ void CHealthDlg::UpdateSelectDisk(DWORD index)
 	}
 	else
 	{
-		m_CtrlScrollbar05.SetScrollPos(GetPrivateProfileInt(_T("ThreasholdOfCaution05"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
-		m_CtrlScrollbarC5.SetScrollPos(GetPrivateProfileInt(_T("ThreasholdOfCautionC5"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
-		m_CtrlScrollbarC6.SetScrollPos(GetPrivateProfileInt(_T("ThreasholdOfCautionC6"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
+		m_CtrlScrollbar05.SetScrollPos(GetPrivateProfileIntFx(_T("ThreasholdOfCaution05"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
+		m_CtrlScrollbarC5.SetScrollPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionC5"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
+		m_CtrlScrollbarC6.SetScrollPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionC6"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
 		m_CtrlScrollbarFF.SetScrollPos(0);
 
 		m_CtrlScrollbar05.EnableWindow(TRUE);
@@ -391,9 +391,9 @@ void CHealthDlg::OnApply()
 
 	if(! p->m_Ata.vars[m_DiskIndex].IsSsd)
 	{
-		WritePrivateProfileString(_T("ThreasholdOfCaution05"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_Value05, m_Ini);
-		WritePrivateProfileString(_T("ThreasholdOfCautionC5"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueC5, m_Ini);
-		WritePrivateProfileString(_T("ThreasholdOfCautionC6"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueC6, m_Ini);
+		WritePrivateProfileStringFx(_T("ThreasholdOfCaution05"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_Value05, m_Ini);
+		WritePrivateProfileStringFx(_T("ThreasholdOfCautionC5"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueC5, m_Ini);
+		WritePrivateProfileStringFx(_T("ThreasholdOfCautionC6"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueC6, m_Ini);
 
 		p->m_Ata.vars[m_DiskIndex].Threshold05 = _tstoi(m_Value05);
 		p->m_Ata.vars[m_DiskIndex].ThresholdC5 = _tstoi(m_ValueC5);
@@ -401,7 +401,7 @@ void CHealthDlg::OnApply()
 	}
 	else if(p->m_Ata.vars[m_DiskIndex].Life >= 0)
 	{
-		WritePrivateProfileString(_T("ThreasholdOfCautionFF"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueFF, m_Ini);
+		WritePrivateProfileStringFx(_T("ThreasholdOfCautionFF"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueFF, m_Ini);
 		p->m_Ata.vars[m_DiskIndex].ThresholdFF = _tstoi(m_ValueFF);
 	}
 	p->SendMessage(WM_COMMAND, ID_REFRESH);

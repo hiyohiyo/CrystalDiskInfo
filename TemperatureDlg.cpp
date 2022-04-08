@@ -220,11 +220,11 @@ void CTemperatureDlg::UpdateSelectDisk(DWORD index)
 {
 	if (p->m_Ata.vars[index].IsSsd)
 	{
-		m_CtrlScrollbarTemperature.SetScrollPos(GetPrivateProfileInt(_T("AlarmTemperature"), p->m_Ata.vars[index].ModelSerial, 60, m_Ini));
+		m_CtrlScrollbarTemperature.SetScrollPos(GetPrivateProfileIntFx(_T("AlarmTemperature"), p->m_Ata.vars[index].ModelSerial, 60, m_Ini));
 	}
 	else
 	{
-		m_CtrlScrollbarTemperature.SetScrollPos(GetPrivateProfileInt(_T("AlarmTemperature"), p->m_Ata.vars[index].ModelSerial, 50, m_Ini));
+		m_CtrlScrollbarTemperature.SetScrollPos(GetPrivateProfileIntFx(_T("AlarmTemperature"), p->m_Ata.vars[index].ModelSerial, 50, m_Ini));
 	}
 	m_CtrlScrollbarTemperature.EnableWindow(TRUE);
 
@@ -237,7 +237,7 @@ void CTemperatureDlg::OnApply()
 {
 	UpdateData(TRUE);
 
-	WritePrivateProfileString(_T("AlarmTemperature"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueTemperature, m_Ini);
+	WritePrivateProfileStringFx(_T("AlarmTemperature"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueTemperature, m_Ini);
 	p->m_Ata.vars[m_DiskIndex].AlarmTemperature = _tstoi(m_ValueTemperature);
 	p->SendMessage(WM_COMMAND, ID_REFRESH);
 }

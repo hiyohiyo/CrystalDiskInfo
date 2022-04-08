@@ -320,8 +320,8 @@ void CSettingDlg::OnEnableAam()
 	// Save Settings
 	CString cstr;
 	cstr.Format(_T("%d"), targetValue);
-	WritePrivateProfileString(_T("AamStatus"), p->m_Ata.vars[m_DiskIndex].ModelSerial, _T("1"), m_Ini);
-	WritePrivateProfileString(_T("AamValue"), p->m_Ata.vars[m_DiskIndex].ModelSerial, cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("AamStatus"), p->m_Ata.vars[m_DiskIndex].ModelSerial, _T("1"), m_Ini);
+	WritePrivateProfileStringFx(_T("AamValue"), p->m_Ata.vars[m_DiskIndex].ModelSerial, cstr, m_Ini);
 }
 
 void  CSettingDlg::OnDisableAam()
@@ -346,8 +346,8 @@ void  CSettingDlg::OnDisableAam()
 	// Save Settings
 //	CString cstr;
 //	cstr.Format(_T("%d"), m_AamScrollbar.GetScrollPos());
-	WritePrivateProfileString(_T("AamStatus"), p->m_Ata.vars[m_DiskIndex].ModelSerial, _T("0"), m_Ini);
-//	WritePrivateProfileString(_T("AamValue"), p->m_Ata.vars[m_DiskIndex].ModelSerial, cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("AamStatus"), p->m_Ata.vars[m_DiskIndex].ModelSerial, _T("0"), m_Ini);
+//	WritePrivateProfileStringFx(_T("AamValue"), p->m_Ata.vars[m_DiskIndex].ModelSerial, cstr, m_Ini);
 }
 
 void  CSettingDlg::OnEnableApm()
@@ -372,8 +372,8 @@ void  CSettingDlg::OnEnableApm()
 	// Save Settings
 	CString cstr;
 	cstr.Format(_T("%d"), targetValue);
-	WritePrivateProfileString(_T("ApmStatus"), p->m_Ata.vars[m_DiskIndex].ModelSerial, _T("1"), m_Ini);
-	WritePrivateProfileString(_T("ApmValue"), p->m_Ata.vars[m_DiskIndex].ModelSerial, cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("ApmStatus"), p->m_Ata.vars[m_DiskIndex].ModelSerial, _T("1"), m_Ini);
+	WritePrivateProfileStringFx(_T("ApmValue"), p->m_Ata.vars[m_DiskIndex].ModelSerial, cstr, m_Ini);
 }
 
 void  CSettingDlg::OnDisableApm()
@@ -397,8 +397,8 @@ void  CSettingDlg::OnDisableApm()
 	// Save Settings
 //	CString cstr;
 //	cstr.Format(_T("%d"), m_ApmScrollbar.GetScrollPos());
-	WritePrivateProfileString(_T("ApmStatus"), p->m_Ata.vars[m_DiskIndex].ModelSerial, _T("0"), m_Ini);
-//	WritePrivateProfileString(_T("ApmValue"), p->m_Ata.vars[m_DiskIndex].ModelSerial, cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("ApmStatus"), p->m_Ata.vars[m_DiskIndex].ModelSerial, _T("0"), m_Ini);
+//	WritePrivateProfileStringFx(_T("ApmValue"), p->m_Ata.vars[m_DiskIndex].ModelSerial, cstr, m_Ini);
 }
 
 void CSettingDlg::UpdateSelectDisk(DWORD index)
