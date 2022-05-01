@@ -8,5 +8,5 @@
 #pragma once
 
 BOOL InstallEventSource();
-BOOL WriteEventLog(DWORD eventId, WORD eventType, PTCHAR source, CString message);
+BOOL WriteEventLog(DWORD eventId, WORD eventType, const TCHAR*/* PTCHAR*/ source, CString message);
 BOOL UninstallEventSource();

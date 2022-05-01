@@ -113,9 +113,8 @@ void CDiskInfoDlg::ShowGraphDlg(int index)
 	CString cstr;
 	GetModuleFileName(NULL, path, MAX_PATH);
 
-	STARTUPINFO si = {0};
-	PROCESS_INFORMATION pi = {0};
-	si.cb			= sizeof(STARTUPINFO);
+	STARTUPINFO si = { sizeof(STARTUPINFO) };
+	PROCESS_INFORMATION pi = {};
 	si.dwFlags		= STARTF_USESHOWWINDOW;
 	si.wShowWindow	= SW_SHOWNORMAL;
 	cstr.Format(_T("\"%s\" /Earthlight %d"), path, index); 
@@ -130,7 +129,7 @@ void CDiskInfoDlg::ShowGraphDlg(int index)
 void CDiskInfoDlg::CreateExchangeInfo()
 {
 	CString cstr;
-	cstr.Format(_T("%d"), m_Ata.vars.GetCount());
+	cstr.Format(_T("%d"), (DWORD)m_Ata.vars.GetCount());
 	WritePrivateProfileString(_T("EXCHANGE"), _T("DetectedDisk"), cstr, m_SmartDir + EXCHANGE_INI);
 
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
@@ -914,7 +913,7 @@ void CDiskInfoDlg::OnStartup()
 
 BOOL CDiskInfoDlg::RegisterStartup()
 {
-	OSVERSIONINFOEX osvi;
+	/*OSVERSIONINFOEX osvi;
 	BOOL bosVersionInfoEx;
 
 	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -923,13 +922,13 @@ BOOL CDiskInfoDlg::RegisterStartup()
 	{
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 		GetVersionEx((OSVERSIONINFO *)&osvi);
-	}
+	}*/
 
 	TCHAR path[MAX_PATH];
 	GetModuleFileName(NULL, path, MAX_PATH);
 	CString cstr;
 
-	if(osvi.dwMajorVersion >= 6)
+	if(UtilityFx__IsWindowsVersionOrGreater(6, 0)/*osvi.dwMajorVersion >= 6*/)
 	{
 		STARTUPINFO si = {0};
 		PROCESS_INFORMATION pi = {0};
@@ -994,8 +993,9 @@ BOOL CDiskInfoDlg::RegisterStartup()
 		HKEY hKey;
 		DWORD disposition;
 		LONG result;
+		TCHAR lpClass[1]{};
 		result = ::RegCreateKeyEx(HKEY_CURRENT_USER, 
-			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, _T(""),
+			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, lpClass/*_T("")*/,
 			REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &disposition);
 		if(result == ERROR_SUCCESS)
 		{
@@ -1012,7 +1012,7 @@ BOOL CDiskInfoDlg::RegisterStartup()
 
 BOOL CDiskInfoDlg::UnregisterStartup()
 {
-	OSVERSIONINFOEX osvi;
+	/*OSVERSIONINFOEX osvi;
 	BOOL bosVersionInfoEx;
 
 	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -1021,15 +1021,15 @@ BOOL CDiskInfoDlg::UnregisterStartup()
 	{
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 		GetVersionEx((OSVERSIONINFO *)&osvi);
-	}
+	}*/
 
-	if(osvi.dwMajorVersion >= 6)
+	if(UtilityFx__IsWindowsVersionOrGreater(6, 0)/*osvi.dwMajorVersion >= 6*/)
 	{
 		CString cstr;
 
-		STARTUPINFO si = {0};
-		PROCESS_INFORMATION pi = {0};
-		si.cb			= sizeof(STARTUPINFO);
+		STARTUPINFO si = { sizeof(STARTUPINFO) };
+		PROCESS_INFORMATION pi = {};
+		//si.cb			= sizeof(STARTUPINFO);
 		si.dwFlags		= STARTF_USESHOWWINDOW;
 		si.wShowWindow	= SW_HIDE;
 		cstr.Format(_T("schtasks.exe /Delete /tn CrystalDiskInfo /F")); 
@@ -1043,8 +1043,9 @@ BOOL CDiskInfoDlg::UnregisterStartup()
 		HKEY hKey;
 		DWORD disposition;
 		LONG result;
+		TCHAR lpClass[1]{};
 		result = ::RegCreateKeyEx(HKEY_CURRENT_USER, 
-			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, _T(""),
+			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, lpClass/*_T("")*/,
 			REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &disposition);
 		if(result == ERROR_SUCCESS)
 		{

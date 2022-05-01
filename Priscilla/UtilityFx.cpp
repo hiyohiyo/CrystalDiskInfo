@@ -85,11 +85,11 @@ void DebugPrint(CString cstr)
 int GetFileVersion(const TCHAR* file, TCHAR* version)
 {
 	ULONG reserved = 0;
-	VS_FIXEDFILEINFO vffi;
+	VS_FIXEDFILEINFO vffi{};
 	TCHAR* buf = NULL;
 	int  Locale = 0;
-	TCHAR str[256];
-	str[0] = '\0';
+	TCHAR str[256]{};
+	//str[0] = '\0';
 
 	UINT size = GetFileVersionInfoSize((TCHAR*)file, &reserved);
 	TCHAR* vbuf = new TCHAR[size];
@@ -152,7 +152,9 @@ ULONGLONG GetTickCountFx()
 	}
 	else
 	{
+#pragma warning( disable : 28159 )
 		return (ULONGLONG)GetTickCount();
+#pragma warning( error : 28159 )
 	}
 }
 
@@ -181,6 +183,38 @@ DWORD B8toB32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 
 	return data;
 }
+
+
+//+ 20220502
+/*
+need manifest
+      <!-- Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!-- Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+      <!-- Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}"/>
+      <!-- Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/>
+      <!-- Windows 10 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
+*/
+bool UtilityFx__IsWindowsVersionOrGreater(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor) {
+	OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
+	DWORDLONG        const dwlConditionMask = VerSetConditionMask(
+		VerSetConditionMask(
+			VerSetConditionMask(
+				0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+			VER_MINORVERSION, VER_GREATER_EQUAL),
+		VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
+
+	osvi.dwMajorVersion = wMajorVersion;
+	osvi.dwMinorVersion = wMinorVersion;
+	osvi.wServicePackMajor = wServicePackMajor;
+
+	return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR, dwlConditionMask) != FALSE;
+}
+
 
 ////------------------------------------------------
 //   .ini support function

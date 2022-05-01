@@ -13,9 +13,9 @@
 BOOL InstallEventSource()
 {
     HKEY hk = NULL;
-    DWORD level;
+	DWORD level{};
     DWORD length = MAX_PATH;
-    TCHAR fileName[MAX_PATH];
+	TCHAR fileName[MAX_PATH]{};
 
     if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGISTRY_KEY, 0, KEY_ALL_ACCESS, &hk) != ERROR_SUCCESS)
 	{
@@ -60,7 +60,7 @@ BOOL InstallEventSource()
 	}
 }
 
-BOOL WriteEventLog(DWORD eventId, WORD eventType, PTCHAR source, CString message)
+BOOL WriteEventLog(DWORD eventId, WORD eventType, const TCHAR*/*PTCHAR*/ source, CString message)
 {
 	HANDLE hEventLog = NULL;
 	DWORD flag = 0;
@@ -72,7 +72,7 @@ BOOL WriteEventLog(DWORD eventId, WORD eventType, PTCHAR source, CString message
 		return FALSE;
 	}
 
-	LPCTSTR str[1];
+	LPCTSTR str[1]{};
 	str[0] = message.GetString();
 
 	if(600 <= eventId && eventId < 700)

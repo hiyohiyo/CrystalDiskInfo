@@ -1727,114 +1727,114 @@ public:
 
 	struct ATA_SMART_INFO
 	{
-		IDENTIFY_DEVICE		IdentifyDevice;
-		BYTE				SmartReadData[512];
-		BYTE				SmartReadThreshold[512];
-		SMART_ATTRIBUTE		Attribute[MAX_ATTRIBUTE];
-		SMART_THRESHOLD		Threshold[MAX_ATTRIBUTE];
+		IDENTIFY_DEVICE		IdentifyDevice{};
+		BYTE				SmartReadData[512]{};
+		BYTE				SmartReadThreshold[512]{};
+		SMART_ATTRIBUTE		Attribute[MAX_ATTRIBUTE]{};
+		SMART_THRESHOLD		Threshold[MAX_ATTRIBUTE]{};
 
-		BOOL				IsSmartEnabled;
-		BOOL				IsIdInfoIncorrect;
-		BOOL				IsSmartCorrect;
-		BOOL				IsThresholdCorrect;
-		BOOL				IsCheckSumError;
-		BOOL				IsWord88;
-		BOOL				IsWord64_76;
-		BOOL				IsRawValues8;
-		BOOL				IsRawValues7;
-		BOOL				Is9126MB;
-		BOOL				IsThresholdBug;
+		BOOL				IsSmartEnabled{};
+		BOOL				IsIdInfoIncorrect{};
+		BOOL				IsSmartCorrect{};
+		BOOL				IsThresholdCorrect{};
+		BOOL				IsCheckSumError{};
+		BOOL				IsWord88{};
+		BOOL				IsWord64_76{};
+		BOOL				IsRawValues8{};
+		BOOL				IsRawValues7{};
+		BOOL				Is9126MB{};
+		BOOL				IsThresholdBug{};
 
-		BOOL				IsSmartSupported;
-		BOOL				IsLba48Supported;
-		BOOL				IsAamSupported;
-		BOOL				IsApmSupported;
-		BOOL				IsAamEnabled;
-		BOOL				IsApmEnabled;
-		BOOL				IsNcqSupported;
-		BOOL				IsNvCacheSupported;
-		BOOL				IsDeviceSleepSupported;
-		BOOL				IsMaxtorMinute;
-		BOOL				IsSsd;
-		BOOL				IsTrimSupported;
-		BOOL				IsVolatileWriteCachePresent;
+		BOOL				IsSmartSupported{};
+		BOOL				IsLba48Supported{};
+		BOOL				IsAamSupported{};
+		BOOL				IsApmSupported{};
+		BOOL				IsAamEnabled{};
+		BOOL				IsApmEnabled{};
+		BOOL				IsNcqSupported{};
+		BOOL				IsNvCacheSupported{};
+		BOOL				IsDeviceSleepSupported{};
+		BOOL				IsMaxtorMinute{};
+		BOOL				IsSsd{};
+		BOOL				IsTrimSupported{};
+		BOOL				IsVolatileWriteCachePresent{};
 
-		BOOL				IsNVMe;
-		BOOL				IsUasp;
+		BOOL				IsNVMe{};
+		BOOL				IsUasp{};
 
-		INT					PhysicalDriveId;
-		INT					ScsiPort;
-		INT					ScsiTargetId;
-		INT					ScsiBus;
-		INT					SiliconImageType;
+		INT					PhysicalDriveId{};
+		INT					ScsiPort{};
+		INT					ScsiTargetId{};
+		INT					ScsiBus{};
+		INT					SiliconImageType{};
 //		INT					AccessType;
 
-		DWORD				TotalDiskSize;
-		DWORD				Cylinder;
-		DWORD				Head;
-		DWORD				Sector;
-		DWORD				Sector28;
-		ULONGLONG			Sector48;
-		ULONGLONG			NumberOfSectors;
-		DWORD				DiskSizeChs;
-		DWORD				DiskSizeLba28;
-		DWORD				DiskSizeLba48;
-		DWORD				LogicalSectorSize;
-		DWORD				PhysicalSectorSize;
-		DWORD				DiskSizeWmi;
-		DWORD				BufferSize;
-		ULONGLONG			NvCacheSize;
-		DWORD				TransferModeType;
-		DWORD				DetectedTimeUnitType;
-		DWORD				MeasuredTimeUnitType;
-		DWORD				AttributeCount;
-		INT					DetectedPowerOnHours;
-		INT					MeasuredPowerOnHours;
-		INT					PowerOnRawValue;
-		INT					PowerOnStartRawValue;
-		DWORD				PowerOnCount;
-		INT					Temperature;
-		double				TemperatureMultiplier;
-		DWORD				NominalMediaRotationRate;
+		DWORD				TotalDiskSize{};
+		DWORD				Cylinder{};
+		DWORD				Head{};
+		DWORD				Sector{};
+		DWORD				Sector28{};
+		ULONGLONG			Sector48{};
+		ULONGLONG			NumberOfSectors{};
+		DWORD				DiskSizeChs{};
+		DWORD				DiskSizeLba28{};
+		DWORD				DiskSizeLba48{};
+		DWORD				LogicalSectorSize{};
+		DWORD				PhysicalSectorSize{};
+		DWORD				DiskSizeWmi{};
+		DWORD				BufferSize{};
+		ULONGLONG			NvCacheSize{};
+		DWORD				TransferModeType{};
+		DWORD				DetectedTimeUnitType{};
+		DWORD				MeasuredTimeUnitType{};
+		DWORD				AttributeCount{};
+		INT					DetectedPowerOnHours{};
+		INT					MeasuredPowerOnHours{};
+		INT					PowerOnRawValue{};
+		INT					PowerOnStartRawValue{};
+		DWORD				PowerOnCount{};
+		INT					Temperature{};
+		double				TemperatureMultiplier{};
+		DWORD				NominalMediaRotationRate{};
 //		double				Speed;
-		INT					HostWrites;
-		INT					HostReads;
-		INT					GBytesErased;
-		INT					NandWrites;
-		INT					WearLevelingCount;
+		INT					HostWrites{};
+		INT					HostReads{};
+		INT					GBytesErased{};
+		INT					NandWrites{};
+		INT					WearLevelingCount{};
 
 //		INT					PlextorNandWritesUnit;
 
-		INT					Life;
-		BOOL				FlagLifeRawValue;
-		BOOL				FlagLifeRawValueIncrement;
-		BOOL				FlagLifeSanDiskUsbMemory;
-		BOOL				FlagLifeSanDisk0_1;
-		BOOL				FlagLifeSanDisk1;
-		BOOL				FlagLifeSanDiskLenovo;
+		INT					Life{};
+		BOOL				FlagLifeRawValue{};
+		BOOL				FlagLifeRawValueIncrement{};
+		BOOL				FlagLifeSanDiskUsbMemory{};
+		BOOL				FlagLifeSanDisk0_1{};
+		BOOL				FlagLifeSanDisk1{};
+		BOOL				FlagLifeSanDiskLenovo{};
 
-		DWORD				Major;
-		DWORD				Minor;
+		DWORD				Major{};
+		DWORD				Minor{};
 
-		DWORD				DiskStatus;
-		DWORD				DriveLetterMap;
+		DWORD				DiskStatus{};
+		DWORD				DriveLetterMap{};
 		// 
-		INT 				AlarmTemperature;
-		BOOL				AlarmHealthStatus;
+		INT 				AlarmTemperature{};
+		BOOL				AlarmHealthStatus{};
 
 		INTERFACE_TYPE		InterfaceType;
 		COMMAND_TYPE		CommandType;
 		HOST_READS_WRITES_UNIT HostReadsWritesUnit;
 
-		DWORD				DiskVendorId;
-		DWORD				UsbVendorId;
-		DWORD				UsbProductId;
-		BYTE				Target;
+		DWORD				DiskVendorId{};
+		DWORD				UsbVendorId{};
+		DWORD				UsbProductId{};
+		BYTE				Target{};
 
-		WORD				Threshold05;
-		WORD				ThresholdC5;
-		WORD				ThresholdC6;
-		WORD				ThresholdFF;
+		WORD				Threshold05{};
+		WORD				ThresholdC5{};
+		WORD				ThresholdC6{};
+		WORD				ThresholdFF{};
 
 		CSMI_SAS_PHY_ENTITY sasPhyEntity;
 
@@ -1864,8 +1864,8 @@ public:
 	struct EXTERNAL_DISK_INFO
 	{
 		CString Enclosure;
-		DWORD	UsbVendorId;
-		DWORD	UsbProductId;
+		DWORD	UsbVendorId{};
+		DWORD	UsbProductId{};
 	};
 
 	CArray<ATA_SMART_INFO, ATA_SMART_INFO> vars;

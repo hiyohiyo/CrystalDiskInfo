@@ -75,10 +75,11 @@ void CDiskInfoDlg::UpdateShareInfo()
 	CString key, cstr;
 	DWORD result;
 	DWORD value;
-	TCHAR str[256];
+	TCHAR str[256]{};
+	TCHAR lpClass[1]{};
 
 	SHDeleteKey(HKEY_CURRENT_USER, REGISTRY_PATH);
-	result = RegCreateKeyEx(HKEY_CURRENT_USER, REGISTRY_PATH, 0, _T(""),
+	result = RegCreateKeyEx(HKEY_CURRENT_USER, REGISTRY_PATH, 0, lpClass/*_T("")*/,
 		REG_OPTION_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL);
 
 	if (result != ERROR_SUCCESS)
@@ -88,11 +89,12 @@ void CDiskInfoDlg::UpdateShareInfo()
 
 	value = 1;
 	RegSetValueEx(hKey, _T("Version"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD));
-	value = GetTickCount();
+	value = (DWORD)GetTickCountFx();
 	RegSetValueEx(hKey, _T("LastUpdate"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD));
 	value = (DWORD)m_Ata.vars.GetCount();
 	RegSetValueEx(hKey, _T("DiskCount"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD));
 
+	constexpr DWORD sizeof_TCHAR = sizeof(TCHAR);
 	for (int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
 		result = RegCreateKeyEx(hKey, m_Ata.vars[i].ModelSerial, 0, NULL,
@@ -105,15 +107,15 @@ void CDiskInfoDlg::UpdateShareInfo()
 		key.Format(_T("Disk%d"), i);
 		wsprintf(str, m_Ata.vars[i].ModelSerial);
 		RegSetValueEx(hKey, key, 0, REG_SZ,
-			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
+			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof_TCHAR);
 
 
 		wsprintf(str, m_Ata.vars[i].DriveMap);
 		RegSetValueEx(hSubKey, _T("DriveLetter"), 0, REG_SZ,
-			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
+			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof_TCHAR);
 		wsprintf(str, m_Ata.vars[i].Model);
 		RegSetValueEx(hSubKey, _T("Model"), 0, REG_SZ,
-			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
+			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof_TCHAR);
 
 		if (m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
@@ -124,7 +126,7 @@ void CDiskInfoDlg::UpdateShareInfo()
 			_stprintf_s(str, 256, _T("%d MB"), m_Ata.vars[i].TotalDiskSize);
 		}
 		RegSetValueEx(hSubKey, _T("DiskSize"), 0, REG_SZ,
-			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
+			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof_TCHAR);
 
 		if (m_bFahrenheit)
 		{
@@ -157,13 +159,13 @@ void CDiskInfoDlg::UpdateShareInfo()
 			}
 		}
 		RegSetValueEx(hSubKey, _T("Temperature"), 0, REG_SZ,
-			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
+			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof_TCHAR);
 
 		cstr = GetTemperatureClass(m_Ata.vars[i].Temperature, m_Ata.vars[i].AlarmTemperature);
 		cstr.Replace(L"Green", L"");
 		_stprintf_s(str, 256, _T("%s"), (LPCTSTR)cstr);
 		RegSetValueEx(hSubKey, _T("TemperatureClass"), 0, REG_SZ,
-			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof(TCHAR));
+			(CONST BYTE*)&str, (DWORD)(_tcslen(str) + 1) * sizeof_TCHAR);
 
 		value = m_Ata.vars[i].DiskStatus;
 		RegSetValueEx(hSubKey, _T("DiskStatus"), 0, REG_DWORD, (CONST BYTE*)&value, sizeof(DWORD));
@@ -1109,11 +1111,11 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 #else
 		cstr.Format(_T("\n%d %%"), m_Ata.vars[i].Life);
 #endif
-		m_DiskStatus.Format(_T("%s %s"), diskStatus, cstr);
+		m_DiskStatus.Format(_T("%s %s"), diskStatus.GetString(), cstr.GetString());
 	}
 	else
 	{
-		m_DiskStatus.Format(_T("%s"), diskStatus);
+		m_DiskStatus.Format(_T("%s"), diskStatus.GetString());
 	}
 	m_CtrlDiskStatus.SetToolTipText(diskStatusReason);
 	m_CtrlDiskStatus.ReloadImage(IP(className), 1);
@@ -1217,7 +1219,7 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	{
 		if (m_Ata.vars[i].PowerOnCount > 0)
 		{
-			m_PowerOnCount.Format(_T("%d %s"), m_Ata.vars[i].PowerOnCount, i18n(_T("Dialog"), _T("POWER_ON_COUNT_UNIT")));
+			m_PowerOnCount.Format(_T("%d %s"), m_Ata.vars[i].PowerOnCount, i18n(_T("Dialog"), _T("POWER_ON_COUNT_UNIT")).GetString());
 		}
 		else
 		{
@@ -1258,17 +1260,17 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 				if (years > 0)
 				{
 					title.Format(_T("%d %s %d %s %d %s%s\r\n%s"),
-						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")),
-						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-						IsMinutesT, i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")));
+						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")).GetString(),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")).GetString(),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString(),
+						IsMinutesT.GetString(), i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")).GetString());
 				}
 				else
 				{
 					title.Format(_T("%d %s %d %s%s\r\n%s"),
-						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-						IsMinutesT, i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")));
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")).GetString(),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString(),
+						IsMinutesT.GetString(), i18n(_T("Message"), _T("DETECT_UNIT_POWER_ON_HOURS")).GetString());
 				}
 			}
 			else
@@ -1276,22 +1278,22 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 				if (years > 0)
 				{
 					title.Format(_T("%d %s %d %s %d %s%s"),
-						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")),
-						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-						IsMinutesT);
+						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")).GetString(),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")).GetString(),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString(),
+						IsMinutesT.GetString());
 				}
 				else
 				{
 					title.Format(_T("%d %s %d %s%s"),
-						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-						IsMinutesT);
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")).GetString(),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString(),
+						IsMinutesT.GetString());
 				}
 			}
 
 			m_PowerOnHours.Format(_T("%d%s%s"),
-				powerOnHours, IsMinutes, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")));
+				powerOnHours, IsMinutes.GetString(), i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString());
 
 			m_CtrlPowerOnHours.SetToolTipText(title + L"  ");
 
@@ -1616,7 +1618,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		m_SelectDisk = 0;
 	}
 
-	m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, LangName);
+	m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), LangName.GetString());
 	CString cstr;
 	CMenu *menu = GetMenu();
 	CMenu subMenu;
@@ -2179,17 +2181,17 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		CString cstr;
 		if (m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
-			cstr.Format(_T("(%d) %s %.1f GB"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize / 1000.0);
+			cstr.Format(_T("(%d) %s %.1f GB"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
 		else
 		{
-			cstr.Format(_T("(%d) %s %d MB"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize);
+			cstr.Format(_T("(%d) %s %d MB"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize);
 		}
 		subMenuInfo.wID = SELECT_DISK_BASE + i;
 		subMenuInfo.dwTypeData = (LPWSTR)cstr.GetString();
 		subMenu.InsertMenuItem(-1, &subMenuInfo);
 
-		if (i % 8 == 7 && i + 1 != m_Ata.vars.GetCount())
+		if (i % 8 == 7 && i + (INT_PTR)1 != m_Ata.vars.GetCount())
 		{
 			subMenu.AppendMenu(MF_SEPARATOR);
 		}
@@ -2224,11 +2226,11 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	{
 		if (m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
-			cstr.Format(_T("(%d) %s %.1f GB"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize / 1000.0);
+			cstr.Format(_T("(%d) %s %.1f GB"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
 		else
 		{
-			cstr.Format(_T("(%d) %s %d MB"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize);
+			cstr.Format(_T("(%d) %s %d MB"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize);
 		}
 		subSubMenuInfo.wID = AUTO_REFRESH_TARGET_BASE + i;
 		subSubMenuInfo.dwTypeData = (LPWSTR)cstr.GetString();
@@ -2243,7 +2245,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 		subSubMenu.InsertMenuItem(-1, &subSubMenuInfo);
 
-		if (i % 8 == 7 && i + 1 != m_Ata.vars.GetCount())
+		if (i % 8 == 7 && i + (INT_PTR)1 != m_Ata.vars.GetCount())
 		{
 			subSubMenu.AppendMenu(MF_SEPARATOR);
 		}
@@ -2592,7 +2594,7 @@ BOOL CDiskInfoDlg::AppendLog(CString dir, CString disk, CString file, CTime time
 		WritePrivateProfileString(disk, file, str, dir + _T("\\") + SMART_INI);
 
 		CString line;
-		line.Format(_T("%s,%d\n"), time.Format(_T("%Y/%m/%d %H:%M:%S")), value);
+		line.Format(_T("%s,%d\n"), time.Format(_T("%Y/%m/%d %H:%M:%S")).GetString(), value);
 
 		CStdioFile outFile;
 		if (outFile.Open(dir + _T("\\") + file + _T(".csv"),
