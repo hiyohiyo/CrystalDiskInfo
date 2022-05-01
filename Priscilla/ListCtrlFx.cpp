@@ -112,7 +112,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 			for (int x = 0; x < maxWidth; x++)
 			{
 				const DWORD p = (y * maxWidth + x) * 4;
-				if (p + 4 >= length)  continue;//buffer over run
+				if (p + 4 > length)  continue;//buffer over run
 				bitmapBits[p + 0] = b;
 				bitmapBits[p + 1] = g;
 				bitmapBits[p + 2] = r;
@@ -193,7 +193,7 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 		int cn = (baseY + py) * CtlLineBytes;
 		for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 		{
-			if (cn >= buffer_max - 4 || dn >= buffer_max - 4 )  continue;//buffer over run
+			if (cn + 4 > buffer_max || dn + 4 > buffer_max )  continue;//buffer over run
 			BYTE a = CtlBuffer[cn + 3];
 			BYTE na = 255 - a;
 			CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
