@@ -191,7 +191,7 @@ void CDialogFx::SetClientSize(int sizeX, int sizeY, double zoomRatio)
 void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 {
 	HRESULT hr;
-	//BOOL    br = FALSE;
+	BOOL    br = FALSE;
 	CImage srcBitmap;
 	double ratio = m_ZoomRatio;
 	m_bBkImage = FALSE;

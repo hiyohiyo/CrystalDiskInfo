@@ -629,7 +629,7 @@ void CDiskInfoDlg::OnWorkaroundHD204UI()
 void CDiskInfoDlg::OnWorkaroundIE8MODE()
 {
 	CWaitCursor wait;
-	//BOOL flagChangeDisk = FALSE;
+	BOOL flagChangeDisk = FALSE;
 
 	if(m_bWorkaroundIE8MODE)
 	{
@@ -704,7 +704,7 @@ void CDiskInfoDlg::OnWorkaroundAdataSsd()
 void CDiskInfoDlg::OnWorkaroundIgnoreC4()
 {
 	CWaitCursor wait;
-	//BOOL flagChangeDisk = FALSE;
+	BOOL flagChangeDisk = FALSE;
 
 	if (m_bWorkaroundIgnoreC4)
 	{

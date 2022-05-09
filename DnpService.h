@@ -58,7 +58,7 @@ class	CDnpService
 		//
 		bool EasyStartStop(LPCTSTR pszName, bool b)
 		{
-			//bool			ret = false;
+			bool			ret = false;
 			BOOL			bRet = FALSE;
 			SC_HANDLE		hManager = NULL;
 			SC_HANDLE		hService = NULL;

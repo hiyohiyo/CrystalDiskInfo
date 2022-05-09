@@ -93,12 +93,12 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		if(m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
 			temp.Format(_T(" (%02d) %s : %.1f GB"), i + 1,
-				m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0);
+				m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
 		else
 		{
 			temp.Format(_T(" (%02d) %s : %d MB"), i + 1,
-				m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize);
+				m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize);
 		}
 
 		cstr += temp;
@@ -107,36 +107,36 @@ void CDiskInfoDlg::SaveText(CString fileName)
 			if(m_Ata.vars[i].PhysicalDriveId < 0)
 			{
 				temp.Format(_T(" [X/%d/%d, %s]"),
-					m_Ata.vars[i].ScsiPort, m_Ata.vars[i].sasPhyEntity.bPortIdentifier, m_Ata.vars[i].CommandTypeString.GetString());
+					m_Ata.vars[i].ScsiPort, m_Ata.vars[i].sasPhyEntity.bPortIdentifier, m_Ata.vars[i].CommandTypeString);
 			}
 			else
 			{
 				temp.Format(_T(" [%d/%d/%d, %s]"),
-					m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].ScsiPort, m_Ata.vars[i].sasPhyEntity.bPortIdentifier, m_Ata.vars[i].CommandTypeString.GetString());
+					m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].ScsiPort, m_Ata.vars[i].sasPhyEntity.bPortIdentifier, m_Ata.vars[i].CommandTypeString);
 			}
 		}
 		else if(m_Ata.vars[i].PhysicalDriveId < 0)
 		{
 			temp.Format(_T(" [X/%d/%d, %s]"),
-				m_Ata.vars[i].ScsiPort, m_Ata.vars[i].ScsiTargetId, m_Ata.vars[i].CommandTypeString.GetString());
+				m_Ata.vars[i].ScsiPort, m_Ata.vars[i].ScsiTargetId, m_Ata.vars[i].CommandTypeString);
 		}
 		else if(m_Ata.vars[i].ScsiPort < 0)
 		{
 			if(m_Ata.vars[i].UsbVendorId > 0 && m_Ata.vars[i].UsbProductId > 0)
 			{
 				temp.Format(_T(" [%d/X/X, %s] (V=%04X, P=%04X)"),
-					m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].CommandTypeString.GetString(), m_Ata.vars[i].UsbVendorId, m_Ata.vars[i].UsbProductId);
+					m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].CommandTypeString, m_Ata.vars[i].UsbVendorId, m_Ata.vars[i].UsbProductId);
 			}
 			else
 			{
 				temp.Format(_T(" [%d/X/X, %s]"),
-					m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].CommandTypeString.GetString());
+					m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].CommandTypeString);
 			}
 		}
 		else
 		{
 			temp.Format(_T(" [%d/%d/%d, %s]"),
-				m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].ScsiPort, m_Ata.vars[i].ScsiTargetId, m_Ata.vars[i].CommandTypeString.GetString());
+				m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].ScsiPort, m_Ata.vars[i].ScsiTargetId, m_Ata.vars[i].CommandTypeString);
 		}
 
 		cstr += temp;
@@ -224,7 +224,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		else
 		{
 			cstr.Format(_T("       Enclosure : %s (V=%04X, P=%04X, %s)"),
-				m_Ata.vars[i].Enclosure.GetString(), m_Ata.vars[i].UsbVendorId, m_Ata.vars[i].UsbProductId, m_Ata.vars[i].CommandTypeString.GetString());
+				m_Ata.vars[i].Enclosure, m_Ata.vars[i].UsbVendorId, m_Ata.vars[i].UsbProductId, m_Ata.vars[i].CommandTypeString);		
 			if(! m_Ata.vars[i].SsdVendorString.IsEmpty())
 			{
 				cstr += _T(" - ") + m_Ata.vars[i].SsdVendorString;
@@ -266,7 +266,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 			drive.Replace(_T("%MINOR_VERSION%"), m_Ata.vars[i].MinorVersion);
 		}		
 
-		temp.Format(_T("%s | %s"), m_Ata.vars[i].CurrentTransferMode.GetString(), m_Ata.vars[i].MaxTransferMode.GetString());
+		temp.Format(_T("%s | %s"), m_Ata.vars[i].CurrentTransferMode, m_Ata.vars[i].MaxTransferMode);
 		drive.Replace(_T("%TRANSFER_MODE%"), temp);
 
 		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
@@ -305,7 +305,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 			{
 				IsMinutes = _T("");
 			}
-			cstr.Format(_T("%d %s%s"), m_Ata.vars[i].MeasuredPowerOnHours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString(), IsMinutes.GetString());
+			cstr.Format(_T("%d %s%s"), m_Ata.vars[i].MeasuredPowerOnHours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")), IsMinutes);
 		}
 		else if(m_Ata.vars[i].DetectedPowerOnHours >= 0)
 		{
@@ -320,7 +320,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 			{
 				IsMinutes = _T("");
 			}
-			cstr.Format(_T("%d %s%s"), m_Ata.vars[i].DetectedPowerOnHours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString(), IsMinutes.GetString());
+			cstr.Format(_T("%d %s%s"), m_Ata.vars[i].DetectedPowerOnHours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")), IsMinutes);
 		}
 		else
 		{
@@ -330,7 +330,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 
 		if(m_Ata.vars[i].PowerOnCount > 0)
 		{
-			cstr.Format(_T("%d %s"), m_Ata.vars[i].PowerOnCount, i18n(_T("Dialog"), _T("POWER_ON_COUNT_UNIT")).GetString());
+			cstr.Format(_T("%d %s"), m_Ata.vars[i].PowerOnCount, i18n(_T("Dialog"), _T("POWER_ON_COUNT_UNIT")));
 		}
 		else
 		{
@@ -502,7 +502,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 
 		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
 		{
-			cstr.Format(_T("     Queue Depth : %s\r\n"), i18n(_T("Dialog"), _T("UNKNOWN")).GetString());
+			cstr.Format(_T("     Queue Depth : %s\r\n"), i18n(_T("Dialog"), _T("UNKNOWN")));
 		}
 		else if(0 <= m_Ata.vars[i].IdentifyDevice.A.QueueDepth && m_Ata.vars[i].IdentifyDevice.A.QueueDepth < 32)
 		{
@@ -698,9 +698,9 @@ void CDiskInfoDlg::SaveText(CString fileName)
 				{
 					cstr.Format(_T("%02X %s %s %s %02X%02X%02X%02X%02X%02X%02X %s\r\n"),
 						m_Ata.vars[i].Attribute[j].Id,
-						__Number(m_Ata.vars[i].Attribute[j].CurrentValue).GetString(),
-						__Number(m_Ata.vars[i].Attribute[j].WorstValue).GetString(),
-						__Number(m_Ata.vars[i].Threshold[j].ThresholdValue).GetString(),
+						__Number(m_Ata.vars[i].Attribute[j].CurrentValue),
+						__Number(m_Ata.vars[i].Attribute[j].WorstValue),
+						__Number(m_Ata.vars[i].Threshold[j].ThresholdValue),
 						m_Ata.vars[i].Attribute[j].Reserved,
 						m_Ata.vars[i].Attribute[j].RawValue[5],
 						m_Ata.vars[i].Attribute[j].RawValue[4],
@@ -716,7 +716,7 @@ void CDiskInfoDlg::SaveText(CString fileName)
 				{
 					cstr.Format(_T("%02X %s %02X%02X%02X%02X%02X%02X%02X%02X %s\r\n"),
 						m_Ata.vars[i].Attribute[j].Id,
-						__Number(m_Ata.vars[i].Attribute[j].CurrentValue).GetString(),
+						__Number(m_Ata.vars[i].Attribute[j].CurrentValue),
 						m_Ata.vars[i].Attribute[j].Reserved,
 						m_Ata.vars[i].Attribute[j].RawValue[5],
 						m_Ata.vars[i].Attribute[j].RawValue[4],
@@ -749,9 +749,9 @@ void CDiskInfoDlg::SaveText(CString fileName)
 					{
 						cstr.Format(_T("%02X %s %s %s %02X%02X%02X%02X%02X%02X %s\r\n"),
 							m_Ata.vars[i].Attribute[j].Id,
-							__Number(m_Ata.vars[i].Attribute[j].CurrentValue).GetString(),
-							__Number(m_Ata.vars[i].Attribute[j].WorstValue).GetString(),
-							__Number(m_Ata.vars[i].Threshold[j].ThresholdValue).GetString(),
+							__Number(m_Ata.vars[i].Attribute[j].CurrentValue),
+							__Number(m_Ata.vars[i].Attribute[j].WorstValue),
+							__Number(m_Ata.vars[i].Threshold[j].ThresholdValue),
 							m_Ata.vars[i].Attribute[j].RawValue[5],
 							m_Ata.vars[i].Attribute[j].RawValue[4],
 							m_Ata.vars[i].Attribute[j].RawValue[3],
@@ -765,8 +765,8 @@ void CDiskInfoDlg::SaveText(CString fileName)
 					{
 						cstr.Format(_T("%02X %s %s --- %02X%02X%02X%02X%02X%02X %s\r\n"),
 							m_Ata.vars[i].Attribute[j].Id,
-							__Number(m_Ata.vars[i].Attribute[j].CurrentValue).GetString(),
-							__Number(m_Ata.vars[i].Attribute[j].WorstValue).GetString(),
+							__Number(m_Ata.vars[i].Attribute[j].CurrentValue),
+							__Number(m_Ata.vars[i].Attribute[j].WorstValue),
 							m_Ata.vars[i].Attribute[j].RawValue[5],
 							m_Ata.vars[i].Attribute[j].RawValue[4],
 							m_Ata.vars[i].Attribute[j].RawValue[3],
@@ -954,20 +954,16 @@ void CDiskInfoDlg::SaveText(CString fileName)
 			HGLOBAL clipbuffer;
 			TCHAR* buffer;
 			EmptyClipboard();
-			clipbuffer = GlobalAlloc(GMEM_DDESHARE, sizeof(TCHAR) * ((size_t)clip.GetLength() + 1));
-			if (clipbuffer) {
-				buffer = (TCHAR*)GlobalLock(clipbuffer);
-				if (buffer) {
-					_tcscpy_s(buffer, (size_t)clip.GetLength() + 1, LPCTSTR(clip));
-					GlobalUnlock(clipbuffer);
+			clipbuffer = GlobalAlloc(GMEM_DDESHARE, sizeof(TCHAR) * (clip.GetLength() + 1));
+			buffer = (TCHAR*)GlobalLock(clipbuffer);
+			_tcscpy_s(buffer, clip.GetLength() + 1, LPCTSTR(clip));
+			GlobalUnlock(clipbuffer);
 #ifdef _UNICODE
-					SetClipboardData(CF_UNICODETEXT, clipbuffer);
+			SetClipboardData(CF_UNICODETEXT, clipbuffer);
 #else
-					SetClipboardData(CF_OEMTEXT, clipbuffer);
+			SetClipboardData(CF_OEMTEXT, clipbuffer);
 #endif
-					CloseClipboard();
-				}
-			}
+			CloseClipboard();
 		}
 	}
 	else

@@ -242,7 +242,7 @@ void CMainDialogFx::InitMenu()
 	UINT newItemID = 0;
 	UINT currentItemID = 0;
 	UINT defaultStyleItemID = 0;
-	//UINT defaultLanguageItemID = 0;
+	UINT defaultLanguageItemID = 0;
 	WIN32_FIND_DATA findData;
 	 
 	HANDLE hFind;
@@ -398,7 +398,7 @@ void CMainDialogFx::ChangeTheme(CString themeName)
 BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
 	// Select Theme
-	if(WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (WPARAM)m_MenuArrayTheme.GetSize())
+	if(WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize())
 	{
 		CMenu menu;
 		CMenu subMenu;
@@ -513,14 +513,14 @@ COLORREF CMainDialogFx::GetControlColor(CString name, BYTE defaultColor, CString
 
 BYTE CMainDialogFx::GetControlAlpha(CString name, BYTE defaultAlpha, CString theme)
 {
-	BYTE alpha = (BYTE)GetPrivateProfileInt(L"Alpha", name, defaultAlpha, theme);
+	BYTE alpha = GetPrivateProfileInt(L"Alpha", name, defaultAlpha, theme);
 	
 	return alpha;
 }
 
 BYTE CMainDialogFx::GetCharacterPosition(CString theme)
 {
-	BYTE position = (BYTE)GetPrivateProfileInt(L"Character", L"Position", 0, theme);
+	BYTE position = GetPrivateProfileInt(L"Character", L"Position", 0, theme);
 
 	return position;
 }

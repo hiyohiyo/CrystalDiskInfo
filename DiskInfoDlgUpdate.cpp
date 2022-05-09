@@ -185,7 +185,7 @@ typedef UINT(WINAPI* FuncGetDpiForWindow) (HWND hWnd);
 
 void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 {
-	static DWORD preVendorId = (DWORD)-1;
+	static DWORD preVendorId = -1;
 	int width = 0;
 
 	static FuncGetSystemMetricsForDpi pGetSystemMetricsForDpi = (FuncGetSystemMetricsForDpi)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetSystemMetricsForDpi");
@@ -713,7 +713,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 		cstr.Format(_T("%02X"), m_Ata.vars[i].Attribute[j].Id);
 		m_List.SetItemText(k, 1, cstr);
 
-		//BYTE id = m_Ata.vars[i].Attribute[j].Id;
+		BYTE id = m_Ata.vars[i].Attribute[j].Id;
 
 		if (m_bSmartEnglish)
 		{

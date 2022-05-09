@@ -57,7 +57,7 @@ CGraphDlg::~CGraphDlg()
 	for(int i = 0; i < m_DetectedDisk; i++)
 	{
 		index.Format(_T("Disk%d"), i);
-		value.Format(_T("%d"), ( ! m_bGraph[i] ? 1 : 0 ) );
+		value.Format(_T("%d"), ! m_bGraph[i]);
 		WritePrivateProfileString(_T("GraphHideDisk"), index, value, m_Ini);
 	}
 }
@@ -715,7 +715,7 @@ BOOL CGraphDlg::CheckDisk(DWORD disk)
 {
 	CString cstr;
 
-	m_bGraph[disk] = ( ! m_bGraph[disk] ? TRUE : FALSE );
+	m_bGraph[disk] = ! m_bGraph[disk];
 
 	cstr.Format(_T("Disk%d"), disk);
 	if(m_bGraph[disk])
@@ -752,7 +752,7 @@ void CGraphDlg::InitMenuBar()
 		cstr.Format(_T("Disk%d"), i);
 		SetElementPropertyEx(cstr, DISPID_IHTMLELEMENT_CLASSNAME, _T("visible"));
 		
-		temp.Format(_T("%s\r\n%s"), m_Model[i].GetString(), m_Serial[i].GetString());
+		temp.Format(_T("%s\r\n%s"), m_Model[i], m_Serial[i]);
 		if(! m_Drive[i].IsEmpty())
 		{
 			temp += (_T("\r\n") + m_Drive[i]);
@@ -766,17 +766,17 @@ void CGraphDlg::InitMenuBar()
 
 	CString select;
 
-	cstr.Format(_T("<select id=\"SelectAttributeId\" title=\"%s\" onchange=\"this.click()\">"), i18n(_T("Graph"), _T("PLEASE_SELECT_ITEM"), m_bSmartEnglish).GetString());
+	cstr.Format(_T("<select id=\"SelectAttributeId\" title=\"%s\" onchange=\"this.click()\">"), i18n(_T("Graph"), _T("PLEASE_SELECT_ITEM"), m_bSmartEnglish));
 	select = cstr;
 
 	if(m_IeVersion >= 700)
 	{
-		cstr.Format(_T("<optgroup label=\"%s\">"), i18n(_T("Graph"), _T("ACTUAL_VALUE"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<optgroup label=\"%s\">"), i18n(_T("Graph"), _T("ACTUAL_VALUE"), m_bSmartEnglish));
 		select += cstr;
 	}
 	else
 	{
-		cstr.Format(_T("<option value=\"513\">%s</option>"), i18n(_T("Graph"), _T("ACTUAL_VALUE"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"513\">%s</option>"), i18n(_T("Graph"), _T("ACTUAL_VALUE"), m_bSmartEnglish));
 		select += cstr;
 		space = _T("&nbsp;&nbsp;");
 		if(SelectedAttributeId == 513)
@@ -808,69 +808,69 @@ void CGraphDlg::InitMenuBar()
 	if (m_Attribute != CAtaSmart::SSD_VENDOR_NVME)
 	{
 		// Reallocated Sectors Count
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[05] %s</option>"), SMART_REALLOCATED_SECTORS_COUNT, i18n(_T("Smart"), _T("05"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[05] %s</option>"), SMART_REALLOCATED_SECTORS_COUNT, i18n(_T("Smart"), _T("05"), m_bSmartEnglish));
 		select += cstr; if (SelectedAttributeId == SMART_REALLOCATED_SECTORS_COUNT) { index = counter; }counter++;
 	}
 
 	// PowerOnHours
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[09] %s</option>"), SMART_POWER_ON_HOURS, i18n(_T("Smart"), _T("09"), m_bSmartEnglish).GetString());
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[09] %s</option>"), SMART_POWER_ON_HOURS, i18n(_T("Smart"), _T("09"), m_bSmartEnglish));
 	select += cstr;if(SelectedAttributeId == SMART_POWER_ON_HOURS){index = counter;}counter++;
 
 	// PowerOnCount
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[0C] %s</option>"), SMART_POWER_ON_COUNT, i18n(_T("Smart"), _T("0C"), m_bSmartEnglish).GetString());
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[0C] %s</option>"), SMART_POWER_ON_COUNT, i18n(_T("Smart"), _T("0C"), m_bSmartEnglish));
 	select += cstr;if(SelectedAttributeId == SMART_POWER_ON_COUNT){index = counter;}counter++;
 
 	// Temperature
 	if(m_bFahrenheit)
 	{
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (&deg;F)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (&deg;F)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_bSmartEnglish));
 	}
 	else
 	{
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (&deg;C)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C2] %s (&deg;C)</option>"), SMART_TEMPERATURE, i18n(_T("Smart"), _T("C2"), m_bSmartEnglish));
 	}
 	select += cstr;if(SelectedAttributeId == SMART_TEMPERATURE){index = counter;}counter++;
 	
 	if (m_Attribute != CAtaSmart::SSD_VENDOR_NVME)
 	{
 		// Reallocation Event Count
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C4] %s</option>"), SMART_REALLOCATED_EVENT_COUNT, i18n(_T("Smart"), _T("C4"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C4] %s</option>"), SMART_REALLOCATED_EVENT_COUNT, i18n(_T("Smart"), _T("C4"), m_bSmartEnglish));
 		select += cstr; if (SelectedAttributeId == SMART_REALLOCATED_EVENT_COUNT) { index = counter; }counter++;
 
 		// Current Pending Sector Count
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C5] %s</option>"), SMART_CURRENT_PENDING_SECTOR_COUNT, i18n(_T("Smart"), _T("C5"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C5] %s</option>"), SMART_CURRENT_PENDING_SECTOR_COUNT, i18n(_T("Smart"), _T("C5"), m_bSmartEnglish));
 		select += cstr; if (SelectedAttributeId == SMART_CURRENT_PENDING_SECTOR_COUNT) { index = counter; }counter++;
 
 		// Off-Line Scan Uncorrectable Sector Count
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C6] %s</option>"), SMART_UNCORRECTABLE_SECTOR_COUNT, i18n(_T("Smart"), _T("C6"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[C6] %s</option>"), SMART_UNCORRECTABLE_SECTOR_COUNT, i18n(_T("Smart"), _T("C6"), m_bSmartEnglish));
 		select += cstr; if (SelectedAttributeId == SMART_UNCORRECTABLE_SECTOR_COUNT) { index = counter; }counter++;
 	}
 
 	// Life
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s</option>"), SMART_LIFE, i18n(_T("SmartSsd"), _T("FF"), m_bSmartEnglish).GetString());
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s</option>"), SMART_LIFE, i18n(_T("SmartSsd"), _T("FF"), m_bSmartEnglish));
 	select += cstr;if(SelectedAttributeId == SMART_LIFE){index = counter;}counter++;
 	
 	// HostWrites
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_HOST_WRITES, i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES"), m_bSmartEnglish).GetString());
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_HOST_WRITES, i18n(_T("Dialog"), _T("TOTAL_HOST_WRITES"), m_bSmartEnglish));
 	select += cstr;if(SelectedAttributeId == SMART_HOST_WRITES){index = counter;}counter++;
 	
 	// HostReads
-	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_HOST_READS, i18n(_T("Dialog"), _T("TOTAL_HOST_READS"), m_bSmartEnglish).GetString());
+	cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_HOST_READS, i18n(_T("Dialog"), _T("TOTAL_HOST_READS"), m_bSmartEnglish));
 	select += cstr;if(SelectedAttributeId == SMART_HOST_READS){index = counter;}counter++;
 
 	if (m_Attribute != CAtaSmart::SSD_VENDOR_NVME)
 	{
 		// NandWrites
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_NAND_WRITES, i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_NAND_WRITES, i18n(_T("Dialog"), _T("TOTAL_NAND_WRITES"), m_bSmartEnglish));
 		select += cstr; if (SelectedAttributeId == SMART_NAND_WRITES) { index = counter; }counter++;
 
 
 		// GBytes Erased
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_NAND_ERASED, i18n(_T("SmartSandForce"), _T("64"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s (GB)</option>"), SMART_NAND_ERASED, i18n(_T("SmartSandForce"), _T("64"), m_bSmartEnglish));
 		select += cstr; if (SelectedAttributeId == SMART_NAND_ERASED) { index = counter; }counter++;
 
 		// Wear Leveling Count for Micron
-		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s</option>"), SMART_WEAR_LEVELING_COUNT, i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT"), m_bSmartEnglish).GetString());
+		cstr.Format(_T("<option value=\"%d\" selected=\"selected\">[XX] %s</option>"), SMART_WEAR_LEVELING_COUNT, i18n(_T("Dialog"), _T("WEAR_LEVELING_COUNT"), m_bSmartEnglish));
 		select += cstr; if (SelectedAttributeId == SMART_WEAR_LEVELING_COUNT) { index = counter; }counter++;
 	}
 
@@ -878,12 +878,12 @@ void CGraphDlg::InitMenuBar()
 	{
 		if (m_IeVersion >= 700)
 		{
-			cstr.Format(_T("<optgroup label=\"%s\">"), i18n(_T("Graph"), _T("NORMALIZED_VALUE"), m_bSmartEnglish).GetString());
+			cstr.Format(_T("<optgroup label=\"%s\">"), i18n(_T("Graph"), _T("NORMALIZED_VALUE"), m_bSmartEnglish));
 			select += cstr;
 		}
 		else
 		{
-			cstr.Format(_T("<option value=\"514\">%s</option>"), i18n(_T("Graph"), _T("NORMALIZED_VALUE"), m_bSmartEnglish).GetString());
+			cstr.Format(_T("<option value=\"514\">%s</option>"), i18n(_T("Graph"), _T("NORMALIZED_VALUE"), m_bSmartEnglish));
 			select += cstr;
 			if (SelectedAttributeId == 514)
 			{
@@ -901,11 +901,11 @@ void CGraphDlg::InitMenuBar()
 				cstr.Format(_T("%02X"), i);
 				if (i18n(sectionName, cstr).IsEmpty())
 				{
-					cstr.Format(_T("<option value=\"%d\">%s(%02X) %s</option>"), i, space.GetString(), i, i18n(_T("Smart"), _T("UNKNOWN"), m_bSmartEnglish).GetString());
+					cstr.Format(_T("<option value=\"%d\">%s(%02X) %s</option>"), i, space, i, i18n(_T("Smart"), _T("UNKNOWN"), m_bSmartEnglish));
 				}
 				else
 				{
-					cstr.Format(_T("<option value=\"%d\">%s(%02X) %s</option>"), i, space.GetString(), i, i18n(sectionName, cstr, m_bSmartEnglish).GetString());
+					cstr.Format(_T("<option value=\"%d\">%s(%02X) %s</option>"), i, space, i, i18n(sectionName, cstr, m_bSmartEnglish));
 				}
 				if (SelectedAttributeId == i)
 				{
@@ -1113,11 +1113,11 @@ BOOL CGraphDlg::UpdateGraph()
 		_tzset();
 		if(m_AttributeId == 0x1C3) // Fahrenheit
 		{
-			cstr.Format(_T("[%I64d, %d]"), (ULONGLONG)(time(&dateTime) - (time_t)m_TimeZoneInformation.Bias * 60) * 1000, value * 9 / 5 + 32);
+			cstr.Format(_T("[%I64d, %d]"), (ULONGLONG)(time(&dateTime) - m_TimeZoneInformation.Bias * 60) * 1000, value * 9 / 5 + 32);
 		}
 		else
 		{
-			cstr.Format(_T("[%I64d, %d]"), (ULONGLONG)(time(&dateTime) - (time_t)m_TimeZoneInformation.Bias * 60) * 1000, value);
+			cstr.Format(_T("[%I64d, %d]"), (ULONGLONG)(time(&dateTime) - m_TimeZoneInformation.Bias * 60) * 1000, value);
 		}
 		values += cstr;
 /*		cstr.Format(_T("{label: \"(%d) %s\", data:[%s]}, "),
@@ -1127,14 +1127,14 @@ BOOL CGraphDlg::UpdateGraph()
 		if(m_Drive[i].IsEmpty())
 		{
 			cstr.Format(_T("{label: \"(%d) %s\", color: \"rgb(%d, %d, %d)\", data:[%s]}, "),
-				i + 1, m_ModelEscape[i].GetString(),
-				GetRValue(m_LineColor[i]), GetGValue(m_LineColor[i]), GetBValue(m_LineColor[i]), values.GetString());
+				i + 1, m_ModelEscape[i], 
+				GetRValue(m_LineColor[i]), GetGValue(m_LineColor[i]), GetBValue(m_LineColor[i]), values);
 		}
 		else
 		{
 			cstr.Format(_T("{label: \"(%d) %s [%s]\", color: \"rgb(%d, %d, %d)\", data:[%s]}, "),
-				i + 1, m_ModelEscape[i].GetString(), m_Drive[i].GetString(),
-				GetRValue(m_LineColor[i]), GetGValue(m_LineColor[i]), GetBValue(m_LineColor[i]), values.GetString());
+				i + 1, m_ModelEscape[i], m_Drive[i],
+				GetRValue(m_LineColor[i]), GetGValue(m_LineColor[i]), GetBValue(m_LineColor[i]), values);
 		}
 
 	//	cstr.Format(_T("{label: \"%s\", color: \"rgb(%d, %d, %d)\", data:[%s]}, "),
@@ -1155,7 +1155,7 @@ BOOL CGraphDlg::UpdateGraph()
 		if(threshold >= 0)
 		{
 			cstr.Format(_T("{label: \"%s\", color: \"rgb(%d, %d, %d)\", data:["),
-				i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_bSmartEnglish).GetString(),
+				i18n(_T("Dialog"), _T("LIST_THRESHOLD"), m_bSmartEnglish),
 				GetRValue(m_LineColor[CAtaSmart::MAX_DISK]),
 				GetGValue(m_LineColor[CAtaSmart::MAX_DISK]),
 				GetBValue(m_LineColor[CAtaSmart::MAX_DISK])
@@ -1163,7 +1163,7 @@ BOOL CGraphDlg::UpdateGraph()
 			arg += cstr;
 			cstr.Format(_T("[%I64d, %d], "), startTime, threshold); 
 			arg += cstr; 
-			cstr.Format(_T("[%I64d, %d]"), (ULONGLONG)(time(&dateTime) - (time_t)m_TimeZoneInformation.Bias * 60) * 1000, threshold);
+			cstr.Format(_T("[%I64d, %d]"), (ULONGLONG)(time(&dateTime) - m_TimeZoneInformation.Bias * 60) * 1000, threshold); 
 			arg += cstr;
 			arg += _T("]}, ");
 		}
@@ -1196,7 +1196,7 @@ selection: { mode: \"xy\" },\
 %s\
 legend: { position: \"%s\", margin: 20 },\
 lines: { show: true }\
-}"), m_TimeFormat.GetString(), grid.GetString(), m_LegendPositon.GetString());
+}"), m_TimeFormat, grid, m_LegendPositon);
 	}
 	else if(max == -1)
 	{
@@ -1208,7 +1208,7 @@ selection: { mode: \"xy\" },\
 legend: { position: \"%s\", margin: 20 },\
 lines: { show: true }\
 %s\
-}"), m_TimeFormat.GetString(), min, grid.GetString(), m_LegendPositon.GetString(), points.GetString());
+}"), m_TimeFormat, min, grid, m_LegendPositon, points);
 	}
 	else
 	{
@@ -1220,7 +1220,7 @@ selection: { mode: \"xy\" },\
 legend: { position: \"%s\", margin: 20 },\
 lines: { show: true }\
 %s\
-}"), m_TimeFormat.GetString(), min, max, grid.GetString(), m_LegendPositon.GetString(), points.GetString());
+}"), m_TimeFormat, min, max, grid, m_LegendPositon, points);
 	}
 
 	// overViewOptions
@@ -1233,7 +1233,7 @@ selection: { mode: \"x\" },\
 %s\
 legend: { show: false },\
 lines: { show: true }\
-}"), grid.GetString());
+}"), grid);
 	}
 	else if(max == -1)
 	{
@@ -1244,7 +1244,7 @@ selection: { mode: \"x\" },\
 %s\
 legend: { show: false },\
 lines: { show: true }\
-}"), grid.GetString());
+}"), grid);
 	}
 	else
 	{
@@ -1255,7 +1255,7 @@ selection: { mode: \"x\" },\
 %s\
 legend: { show: false },\
 lines: { show: true }\
-}"), min, max, grid.GetString());
+}"), min, max, grid);
 	}
 	CallScript(_T("updateData"), arg);
 	CallScript(_T("updateMainViewOptions"), options);
@@ -1266,12 +1266,12 @@ lines: { show: true }\
 	if(m_AttributeId >= 0x100)
 	{
 		cstr.Format(_T("%02X"), m_AttributeId % 256);
-		m_Title.Format(_T("%s"), i18n(_T("Smart"), cstr, m_bSmartEnglish).GetString());
+		m_Title.Format(_T("%s"), i18n(_T("Smart"), cstr, m_bSmartEnglish));
 	}
 	else
 	{
 		cstr.Format(_T("%02X"), m_AttributeId);
-		m_Title.Format(_T("(%02X) %s"), m_AttributeId, i18n(_T("Smart"), cstr, m_bSmartEnglish).GetString());
+		m_Title.Format(_T("(%02X) %s"), m_AttributeId, i18n(_T("Smart"), cstr, m_bSmartEnglish));
 	}
 
 	UpdateData(FALSE);
@@ -1458,8 +1458,8 @@ BOOL CGraphDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 {
 	if(GRAPH_DISK_INDEX <= wParam && wParam <= GRAPH_DISK_INDEX + (CAtaSmart::MAX_DISK + 1) * 100)
 	{
-		//int i = (int)(wParam - GRAPH_DISK_INDEX) / 100;
-		//int j = (int)(wParam - GRAPH_DISK_INDEX) % 100;
+		int i = (int)(wParam - GRAPH_DISK_INDEX) / 100;
+		int j = (int)(wParam - GRAPH_DISK_INDEX) % 100;
 
 		UpdateGraph();
 	}
@@ -1504,7 +1504,7 @@ time_t CGraphDlg::GetTimeT(CString time)
 		index++;
 	}
 
-	return mktime(&t) - (time_t)m_TimeZoneInformation.Bias * 60;
+	return mktime(&t) - m_TimeZoneInformation.Bias * 60;
 }
 
 void CGraphDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
@@ -1548,9 +1548,9 @@ void CGraphDlg::OnSize(UINT nType, int cx, int cy)
 		RECT rect;
 		CString cstr;
 		GetClientRect(&rect);
-		cstr.Format(_T("%d"), (DWORD)(((double)rect.bottom - rect.top) / m_ZoomRatio));
+		cstr.Format(_T("%d"), (DWORD)((rect.bottom - rect.top) / m_ZoomRatio));
 		WritePrivateProfileString(_T("Setting"), _T("GraphHeight"), cstr, m_Ini);	
-		cstr.Format(_T("%d"), (DWORD)(((double)rect.right - rect.left) / m_ZoomRatio));
+		cstr.Format(_T("%d"), (DWORD)((rect.right - rect.left) / m_ZoomRatio));
 		WritePrivateProfileString(_T("Setting"), _T("GraphWidth"), cstr, m_Ini);
 	}
 }

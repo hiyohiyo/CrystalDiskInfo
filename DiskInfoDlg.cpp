@@ -2255,7 +2255,7 @@ void CDiskInfoDlg::AutoAamApmAdaption()
 		value =  GetPrivateProfileIntFx(_T("AamValue"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
 		if(status == 1 /* Enabled */ && value != -1)
 		{
-			m_Ata.EnableAam(i, (BYTE)value);
+			m_Ata.EnableAam(i, value);
 			m_Ata.UpdateIdInfo(i);
 			DebugPrint(_T("m_Ata.EnableAam"));
 		}
@@ -2279,7 +2279,7 @@ void CDiskInfoDlg::AutoAamApmAdaption()
 		value  = GetPrivateProfileIntFx(_T("ApmValue"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
 		if(status == 1 /* Enabled */ && value != -1)
 		{
-			m_Ata.EnableApm(i, (BYTE)value);
+			m_Ata.EnableApm(i, value);
 			m_Ata.UpdateIdInfo(i);
 			DebugPrint(_T("m_Ata.EnableApm"));
 		}
@@ -2324,12 +2324,12 @@ void CDiskInfoDlg::OnBnClickedButtonDisk7(){SelectDrive(7 + m_DriveMenuPage * 8)
 void CDiskInfoDlg::SetControlFont()
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	//BYTE textAlpha = TEXT_ALPHA;
+	BYTE textAlpha = TEXT_ALPHA;
 //	COLORREF textColor = RGB(77, 77, 77);
-	//COLORREF textColor = m_LabelText;
+	COLORREF textColor = m_LabelText;
 #else
-	///BYTE textAlpha = 255;
-	//COLORREF textColor = m_LabelText;
+	BYTE textAlpha = 255;
+	COLORREF textColor = m_LabelText;
 #endif
 
 	m_List.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);

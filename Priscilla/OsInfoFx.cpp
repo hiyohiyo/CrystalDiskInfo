@@ -19,17 +19,14 @@ BOOL IsX64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(dll_kernel32, "GetNativeSystemInfo");
-			if (pGetNativeSystemInfo != NULL)
+		SYSTEM_INFO si = { 0 };
+		FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(GetModuleHandle(L"kernel32"), "GetNativeSystemInfo");
+		if (pGetNativeSystemInfo != NULL)
+		{
+			pGetNativeSystemInfo(&si);
+			if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
 			{
-				SYSTEM_INFO si{};
-				pGetNativeSystemInfo(&si);
-				if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)
-				{
-					b = TRUE;
-				}
+				b = TRUE;
 			}
 		}
 	}
@@ -42,17 +39,14 @@ BOOL IsIa64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(dll_kernel32, "GetNativeSystemInfo");
-			if (pGetNativeSystemInfo != NULL)
+		SYSTEM_INFO si = { 0 };
+		FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(GetModuleHandle(L"kernel32"), "GetNativeSystemInfo");
+		if (pGetNativeSystemInfo != NULL)
+		{
+			pGetNativeSystemInfo(&si);
+			if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)
 			{
-				SYSTEM_INFO si{};
-				pGetNativeSystemInfo(&si);
-				if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)
-				{
-					b = TRUE;
-				}
+				b = TRUE;
 			}
 		}
 	}
@@ -65,17 +59,14 @@ BOOL IsArm32()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(dll_kernel32, "GetNativeSystemInfo");
-			if (pGetNativeSystemInfo != NULL)
+		SYSTEM_INFO si = { 0 };
+		FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(GetModuleHandle(L"kernel32"), "GetNativeSystemInfo");
+		if (pGetNativeSystemInfo != NULL)
+		{
+			pGetNativeSystemInfo(&si);
+			if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM)
 			{
-				SYSTEM_INFO si{};
-				pGetNativeSystemInfo(&si);
-				if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM)
-				{
-					b = TRUE;
-				}
+				b = TRUE;
 			}
 		}
 	}
@@ -88,17 +79,14 @@ BOOL IsArm64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(dll_kernel32, "GetNativeSystemInfo");
-			if (pGetNativeSystemInfo != NULL)
+		SYSTEM_INFO si = { 0 };
+		FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(GetModuleHandle(L"kernel32"), "GetNativeSystemInfo");
+		if (pGetNativeSystemInfo != NULL)
+		{
+			pGetNativeSystemInfo(&si);
+			if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64)
 			{
-				SYSTEM_INFO si{};
-				pGetNativeSystemInfo(&si);
-				if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64)
-				{
-					b = TRUE;
-				}
+				b = TRUE;
 			}
 		}
 	}
@@ -111,13 +99,10 @@ BOOL IsWow64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncIsWow64Process pIsWow64Process = (FuncIsWow64Process)GetProcAddress(dll_kernel32, "IsWow64Process");
-			if (pIsWow64Process != NULL)
-			{
-				pIsWow64Process(GetCurrentProcess(), &b);
-			}
+		FuncIsWow64Process pIsWow64Process = (FuncIsWow64Process)GetProcAddress(GetModuleHandle(L"kernel32"), "IsWow64Process");
+		if (pIsWow64Process != NULL)
+		{
+			pIsWow64Process(GetCurrentProcess(), &b);
 		}
 	}
 	return b;
@@ -235,7 +220,7 @@ BOOL IsNT5()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
+		b = FALSE;
 		OSVERSIONINFOEX osvi;
 		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -244,9 +229,7 @@ BOOL IsNT5()
 		if (osvi.dwMajorVersion == 5)
 		{
 			b = TRUE;
-		}*/
-
-		b = !UtilityFx__IsWindowsVersionOrGreater(6, 0) && UtilityFx__IsWindowsVersionOrGreater(5, 0) ? TRUE : FALSE;
+		}
 	}
 	return b;
 }
@@ -256,7 +239,7 @@ BOOL IsNT6orLater()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
+		b = FALSE;
 		OSVERSIONINFOEX osvi;
 		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -265,8 +248,7 @@ BOOL IsNT6orLater()
 		if (osvi.dwMajorVersion >= 6)
 		{
 			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(6, 0) ? TRUE : FALSE;
+		}
 	}
 	return b;
 }
@@ -276,7 +258,7 @@ BOOL IsWin2k()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
+		b = FALSE;
 		OSVERSIONINFOEX osvi;
 		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -285,8 +267,7 @@ BOOL IsWin2k()
 		if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)
 		{
 			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(5, 0) && !UtilityFx__IsWindowsVersionOrGreater(5, 1) ? TRUE : FALSE;
+		}
 	}
 	return b;
 }
@@ -296,7 +277,7 @@ BOOL IsWinXpOrLater()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
+		b = FALSE;
 		OSVERSIONINFOEX osvi;
 		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -309,8 +290,7 @@ BOOL IsWinXpOrLater()
 		else if (osvi.dwMajorVersion >= 6)
 		{
 			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(5, 1) ? TRUE : FALSE;
+		}
 	}
 	return b;
 }
@@ -321,7 +301,7 @@ BOOL IsWinXpLuna()
 	BOOL b = FALSE;
 	if (xp == -1)
 	{
-		/*xp = FALSE;
+		xp = FALSE;
 		OSVERSIONINFOEX osvi;
 		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -330,8 +310,7 @@ BOOL IsWinXpLuna()
 		if (osvi.dwMajorVersion == 5)
 		{
 			xp = TRUE;
-		}*/
-		xp = UtilityFx__IsWindowsVersionOrGreater(5, 0) && !UtilityFx__IsWindowsVersionOrGreater(6, 0) ? TRUE : FALSE;
+		}
 	}
 	if (xp == FALSE)
 	{ 
@@ -365,7 +344,7 @@ BOOL IsWin8orLater()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
+		b = FALSE;
 		OSVERSIONINFOEX osvi;
 		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -375,15 +354,14 @@ BOOL IsWin8orLater()
 		{
 			b = FALSE;
 		}
-		else if (/osvi.dwMajorVersion == 6 && osvi.dwMinorVersion <= 1)
+		else if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion <= 1)
 		{
 			b = FALSE;
 		}
 		else
 		{
 			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(6, 2) ? TRUE : FALSE;
+		}
 	}
 	return b;
 }
@@ -393,7 +371,7 @@ BOOL IsWin81orLater()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
+		b = FALSE;
 		OSVERSIONINFOEX osvi;
 		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -410,8 +388,7 @@ BOOL IsWin81orLater()
 		else
 		{
 			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(6, 3) ? TRUE : FALSE;
+		}
 	}
 	return b;
 }
@@ -421,8 +398,7 @@ BOOL IsDarkModeSupport()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		b = UtilityFx__IsWindowBuildOrNewer(17763) ? TRUE : FALSE;
-		/*b = FALSE;
+		b = FALSE;
 		OSVERSIONINFOEX osvi;
 		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -431,7 +407,7 @@ BOOL IsDarkModeSupport()
 		if (osvi.dwBuildNumber >= 17763) // Windows 10 Ver.1809 or later
 		{
 			b = TRUE;
-		}*/
+		}
 	}
 	return b;
 }
@@ -505,7 +481,7 @@ DWORD GetIeVersion()
 
 DWORD GetWin10Version()
 {
-	/*OSVERSIONINFOEX osvi;
+	OSVERSIONINFOEX osvi;
 	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 	GetVersionEx((OSVERSIONINFO*)&osvi);
@@ -520,18 +496,6 @@ DWORD GetWin10Version()
 	else if (osvi.dwBuildNumber >= 14393) { return 1607; }
 	else if (osvi.dwBuildNumber >= 10586) { return 1511; }
 	else if (osvi.dwBuildNumber >= 10240) { return 1507; }
-	else { return 0; }*/
-
-	if (UtilityFx__IsWindowBuildOrNewer(19041)) { return 2004; }
-	else if (UtilityFx__IsWindowBuildOrNewer(18363)) { return 1909; }
-	else if (UtilityFx__IsWindowBuildOrNewer(18362)) { return 1903; }
-	else if (UtilityFx__IsWindowBuildOrNewer(17763)) { return 1809; }
-	else if (UtilityFx__IsWindowBuildOrNewer(17134)) { return 1803; }
-	else if (UtilityFx__IsWindowBuildOrNewer(16299)) { return 1709; }
-	else if (UtilityFx__IsWindowBuildOrNewer(15063)) { return 1703; }
-	else if (UtilityFx__IsWindowBuildOrNewer(14393)) { return 1607; }
-	else if (UtilityFx__IsWindowBuildOrNewer(10586)) { return 1511; }
-	else if (UtilityFx__IsWindowBuildOrNewer(10240)) { return 1507; }
 	else { return 0; }
 }
 

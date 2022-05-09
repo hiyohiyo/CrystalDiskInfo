@@ -179,10 +179,7 @@ void FixDarkScrollBar()
 
 BOOL InitDarkMode()
 {
-	HMODULE dll_ntdll = GetModuleHandleW(L"ntdll.dll");
-	HMODULE dll_user32 = GetModuleHandleW(L"user32.dll");
-	if (!dll_ntdll || !dll_user32) return FALSE;
-	auto RtlGetNtVersionNumbers = reinterpret_cast<fnRtlGetNtVersionNumbers>(GetProcAddress(dll_ntdll, "RtlGetNtVersionNumbers"));
+	auto RtlGetNtVersionNumbers = reinterpret_cast<fnRtlGetNtVersionNumbers>(GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlGetNtVersionNumbers"));
 	if (RtlGetNtVersionNumbers)
 	{
 		DWORD major, minor;
@@ -208,7 +205,7 @@ BOOL InitDarkMode()
 				//_FlushMenuThemes = reinterpret_cast<fnFlushMenuThemes>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(136)));
 				_IsDarkModeAllowedForWindow = reinterpret_cast<fnIsDarkModeAllowedForWindow>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(137)));
 
-				_SetWindowCompositionAttribute = reinterpret_cast<fnSetWindowCompositionAttribute>(GetProcAddress(dll_user32, "SetWindowCompositionAttribute"));
+				_SetWindowCompositionAttribute = reinterpret_cast<fnSetWindowCompositionAttribute>(GetProcAddress(GetModuleHandleW(L"user32.dll"), "SetWindowCompositionAttribute"));
 
 				if (_OpenNcThemeData &&
 					_RefreshImmersiveColorPolicyState &&

@@ -29,7 +29,7 @@ int CALLBACK EnumFontFamExProcDefaultFont(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX
 
 BOOL CDiskInfoDlg::OnInitDialog()
 {
-	//BOOL result = FALSE;
+	BOOL result = FALSE;
 
 	CMainDialogFx::OnInitDialog();
 
@@ -74,7 +74,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 		m_FontRatio = m_FontScale / 100.0;
 	}
 
-	m_FontRender = (BYTE)GetPrivateProfileInt(L"Setting", L"FontRender", CLEARTYPE_NATURAL_QUALITY, m_Ini);
+	m_FontRender = GetPrivateProfileInt(L"Setting", L"FontRender", CLEARTYPE_NATURAL_QUALITY, m_Ini);
 	if (m_FontRender > CLEARTYPE_NATURAL_QUALITY)
 	{
 		m_FontRender = CLEARTYPE_NATURAL_QUALITY;
@@ -336,10 +336,10 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 		}
 		m_Ata.vars[i].AlarmHealthStatus = GetPrivateProfileIntFx(_T("AlarmHealthStatus"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
 
-		m_Ata.vars[i].Threshold05     = (WORD)GetPrivateProfileIntFx(_T("ThreasholdOfCaution05"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
-		m_Ata.vars[i].ThresholdC5     = (WORD)GetPrivateProfileIntFx(_T("ThreasholdOfCautionC5"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
-		m_Ata.vars[i].ThresholdC6     = (WORD)GetPrivateProfileIntFx(_T("ThreasholdOfCautionC6"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
-		m_Ata.vars[i].ThresholdFF     = (WORD)GetPrivateProfileIntFx(_T("ThreasholdOfCautionFF"), m_Ata.vars[i].ModelSerial, 10, m_Ini);
+		m_Ata.vars[i].Threshold05     = GetPrivateProfileIntFx(_T("ThreasholdOfCaution05"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_Ata.vars[i].ThresholdC5     = GetPrivateProfileIntFx(_T("ThreasholdOfCautionC5"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_Ata.vars[i].ThresholdC6     = GetPrivateProfileIntFx(_T("ThreasholdOfCautionC6"), m_Ata.vars[i].ModelSerial, 1, m_Ini);
+		m_Ata.vars[i].ThresholdFF     = GetPrivateProfileIntFx(_T("ThreasholdOfCautionFF"), m_Ata.vars[i].ModelSerial, 10, m_Ini);
 
 		m_Ata.vars[i].DiskStatus = m_Ata.CheckDiskStatus(i);
 		DebugPrint(_T("SaveSmartInfo(i)"));
@@ -702,12 +702,12 @@ void CDiskInfoDlg::InitDriveList()
 				if (m_bFahrenheit)
 				{
 					m_LiDisk[i % 8].Format(_T("%s%s%d °F%s%s"),
-						diskStatus.GetString(), delimiter.GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter.GetString(), driveLetter.GetString());
+						diskStatus, delimiter, m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter, driveLetter);
 				}
 				else
 				{
 					m_LiDisk[i % 8].Format(_T("%s%s%d °C%s%s"),
-						diskStatus.GetString(), delimiter.GetString(), m_Ata.vars[i].Temperature, delimiter.GetString(), driveLetter.GetString());
+						diskStatus, delimiter, m_Ata.vars[i].Temperature, delimiter, driveLetter);
 				}
 			}
 			else if(m_Ata.vars[i].IsSmartEnabled && m_Ata.vars[i].Temperature > -300)
@@ -715,44 +715,44 @@ void CDiskInfoDlg::InitDriveList()
 				if(m_bFahrenheit)
 				{
 					m_LiDisk[i % 8].Format(_T("%s%s%d °F%s%s"), 
-								diskStatus.GetString(), delimiter.GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter.GetString(), driveLetter.GetString());
+								diskStatus, delimiter, m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter, driveLetter);
 				}
 				else
 				{
 					m_LiDisk[i % 8].Format(_T("%s%s%d °C%s%s"), 
-								diskStatus.GetString(), delimiter.GetString(), m_Ata.vars[i].Temperature, delimiter.GetString(), driveLetter.GetString());
+								diskStatus, delimiter, m_Ata.vars[i].Temperature, delimiter, driveLetter);
 				}
 			}
 			else if(m_Ata.vars[i].IsSmartEnabled)
 			{
 				if(m_bFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s-- °F%s%s"), diskStatus.GetString(), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
+					m_LiDisk[i % 8].Format(_T("%s%s-- °F%s%s"), diskStatus, delimiter, delimiter, driveLetter);
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s-- °C%s%s"), diskStatus.GetString(), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
+					m_LiDisk[i % 8].Format(_T("%s%s-- °C%s%s"), diskStatus, delimiter, delimiter, driveLetter);
 				}
 			}
 			else
 			{
 				if(m_bFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("----%s-- °F%s%s"), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
+					m_LiDisk[i % 8].Format(_T("----%s-- °F%s%s"), delimiter, delimiter, driveLetter);
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("----%s-- °C%s%s"), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
+					m_LiDisk[i % 8].Format(_T("----%s-- °C%s%s"), delimiter, delimiter, driveLetter);
 				}
 			}
 
 			if(m_Ata.vars[i].PhysicalDriveId >= 0)
 			{
-				cstr.Format(_T("Disk %d : %s %.1f GB\n%s"), m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i).GetString());
+				cstr.Format(_T("Disk %d : %s %.1f GB\n%s"), m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i));
 			}
 			else
 			{
-				cstr.Format(_T("Disk -- : %s %.1f GB\n%s"), m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i).GetString());
+				cstr.Format(_T("Disk -- : %s %.1f GB\n%s"), m_Ata.vars[i].Model, m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i));
 			}
 			
 			m_ButtonDisk[i % 8].SetToolTipText(cstr);

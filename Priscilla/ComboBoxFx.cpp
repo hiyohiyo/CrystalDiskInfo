@@ -163,13 +163,10 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 			a = 0;
 		}
 
-		const int max_length = length;
-
 		for (int y = 0; y < (int)(m_CtrlSize.cy * m_ImageCount); y++)
 		{
 			for (int x = 0; x < m_CtrlSize.cx; x++)
 			{
-				if ((y * m_CtrlSize.cx + x) * 4 + 4 > max_length) continue;//over run
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = b;
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
@@ -210,7 +207,7 @@ void CComboBoxFx::SetItemHeightAll(int height, double zoomRatio, double fontRati
 {
 	m_FontHeight = (LONG)(-1 * height * zoomRatio * fontRatio);
 
-	CRect rc;//CRect rc = { 0 }; // CRect = { 0 } is bad
+	CRect rc = { 0 };
 	GetWindowRect(&rc);
 	CComboBox::SetItemHeight(-1, (UINT)(height * zoomRatio - rc.Height() + GetItemHeight(-1)));
 
@@ -404,7 +401,6 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 			BYTE* CtlBuffer = new BYTE[CtlMemSize];
 			ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
-			const int buffer_max = (int)(CtlMemSize > DstMemSize ? DstMemSize : CtlMemSize);
 			int baseY = m_CtrlSize.cy * no;
 			for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
 			{
@@ -412,7 +408,6 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 				int cn = (baseY + py) * CtlLineBytes;
 				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 				{
-					if (cn + 4 > buffer_max || dn + 4 > buffer_max)  continue;//buffer over run
 					BYTE a = CtlBuffer[cn + 3];
 					BYTE na = 255 - a;
 					DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);

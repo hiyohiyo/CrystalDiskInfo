@@ -261,7 +261,7 @@ void CHealthDlg::InitSelectDisk()
 		{
 			driveLetter.Format(_T("(%s)"), p->m_Ata.vars[i].DriveMap.GetString());
 		}
-		cstr.Format(_T("(%02d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model.GetString(), temp.GetString(), driveLetter.GetString());
+		cstr.Format(_T("(%02d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model.GetString(), temp, driveLetter);
 
 		m_CtrlSelectDisk.AddString(cstr);
 
@@ -395,14 +395,14 @@ void CHealthDlg::OnApply()
 		WritePrivateProfileStringFx(_T("ThreasholdOfCautionC5"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueC5, m_Ini);
 		WritePrivateProfileStringFx(_T("ThreasholdOfCautionC6"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueC6, m_Ini);
 
-		p->m_Ata.vars[m_DiskIndex].Threshold05 = (WORD)_tstoi(m_Value05);
-		p->m_Ata.vars[m_DiskIndex].ThresholdC5 = (WORD)_tstoi(m_ValueC5);
-		p->m_Ata.vars[m_DiskIndex].ThresholdC6 = (WORD)_tstoi(m_ValueC6);
+		p->m_Ata.vars[m_DiskIndex].Threshold05 = _tstoi(m_Value05);
+		p->m_Ata.vars[m_DiskIndex].ThresholdC5 = _tstoi(m_ValueC5);
+		p->m_Ata.vars[m_DiskIndex].ThresholdC6 = _tstoi(m_ValueC6);
 	}
 	else if(p->m_Ata.vars[m_DiskIndex].Life >= 0)
 	{
 		WritePrivateProfileStringFx(_T("ThreasholdOfCautionFF"), p->m_Ata.vars[m_DiskIndex].ModelSerial, m_ValueFF, m_Ini);
-		p->m_Ata.vars[m_DiskIndex].ThresholdFF = (WORD)_tstoi(m_ValueFF);
+		p->m_Ata.vars[m_DiskIndex].ThresholdFF = _tstoi(m_ValueFF);
 	}
 	p->SendMessage(WM_COMMAND, ID_REFRESH);
 }

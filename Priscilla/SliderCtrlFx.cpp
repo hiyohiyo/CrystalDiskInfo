@@ -19,7 +19,6 @@ CSliderCtrlFx::CSliderCtrlFx()
 	m_RenderMode = SystemDraw;
 	m_bHighContrast = FALSE;
 	m_bDarkMode = FALSE;
-	m_bBkBitmapInit = FALSE;
 }
 
 CSliderCtrlFx::~CSliderCtrlFx()

@@ -377,7 +377,7 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 		InsertMenuItem(hDiskMenu[i], -1, TRUE, &subMenuInfo);
 
 		CString cstr;
-		cstr.Format(_T("(%d) %s"), i + 1, m_Ata.vars[i].Model.GetString());
+		cstr.Format(_T("(%d) %s"), i + 1, m_Ata.vars[i].Model);
 		menuInfo.dwTypeData = (LPWSTR)cstr.GetString();
 		menuInfo.wID = 0;
 		menuInfo.hSubMenu = hDiskMenu[i];
@@ -663,7 +663,7 @@ BOOL CDiskInfoDlg::AddTemperatureIcon(DWORD i)
 	CString cstr;
 	CString diskStatus;
 	diskStatus = GetDiskStatus(m_Ata.vars[i].DiskStatus);
-	cstr.Format(_T("(%d) %s [%s]\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), diskStatus.GetString());
+	cstr.Format(_T("(%d) %s [%s]\r\n"), i + 1, m_Ata.vars[i].Model, diskStatus);
 
 	cstr += GetLogicalDriveInfo(i, 128);
 	cstr.TrimRight();
@@ -715,7 +715,7 @@ BOOL CDiskInfoDlg::ModifyTemperatureIcon(DWORD i)
 	CString cstr;
 	CString diskStatus;
 	diskStatus = GetDiskStatus(m_Ata.vars[i].DiskStatus);
-	cstr.Format(_T("(%d) %s [%s]\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), diskStatus.GetString());
+	cstr.Format(_T("(%d) %s [%s]\r\n"), i + 1, m_Ata.vars[i].Model, diskStatus);
 	cstr += GetLogicalDriveInfo(i, 128);
 	cstr.TrimRight();
 
@@ -793,16 +793,16 @@ void CDiskInfoDlg::UpdateToolTip()
 				{
 					if(m_Ata.vars[i].TotalDiskSize >= 1000)
 					{
-						cstr.Format(_T("(%d) %s %.1f GB [%s] %d F\r\n"), i + 1, m_Ata.vars[i].Model.GetString(),
-							m_Ata.vars[i].TotalDiskSize / 1000.0, diskStatus.GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32);
+						cstr.Format(_T("(%d) %s %.1f GB [%s] %d F\r\n"), i + 1, m_Ata.vars[i].Model,
+							m_Ata.vars[i].TotalDiskSize / 1000.0, diskStatus, m_Ata.vars[i].Temperature * 9 / 5 + 32);
 					}
 					else
 					{
-						cstr.Format(_T("(%d) %s %d MB [%s] %d F\r\n"), i + 1, m_Ata.vars[i].Model.GetString(),
-							m_Ata.vars[i].TotalDiskSize, diskStatus.GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32);
+						cstr.Format(_T("(%d) %s %d MB [%s] %d F\r\n"), i + 1, m_Ata.vars[i].Model,
+							m_Ata.vars[i].TotalDiskSize, diskStatus, m_Ata.vars[i].Temperature * 9 / 5 + 32);
 					}
 					tipFull += cstr;
-					cstr.Format(_T("(%d) %s %d F\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32);
+					cstr.Format(_T("(%d) %s %d F\r\n"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].Temperature * 9 / 5 + 32);
 					tipMid += cstr;
 					cstr.Format(_T("(%d)%dF\r\n"), i + 1, m_Ata.vars[i].Temperature * 9 / 5 + 32);
 					tipShort += cstr;
@@ -811,16 +811,16 @@ void CDiskInfoDlg::UpdateToolTip()
 				{
 					if(m_Ata.vars[i].TotalDiskSize >= 1000)
 					{
-						cstr.Format(_T("(%d) %s %.1f GB [%s] %d C\r\n"), i + 1, m_Ata.vars[i].Model.GetString(),
-							m_Ata.vars[i].TotalDiskSize / 1000.0, diskStatus.GetString(), m_Ata.vars[i].Temperature);
+						cstr.Format(_T("(%d) %s %.1f GB [%s] %d C\r\n"), i + 1, m_Ata.vars[i].Model,
+							m_Ata.vars[i].TotalDiskSize / 1000.0, diskStatus, m_Ata.vars[i].Temperature);
 					}
 					else
 					{
-						cstr.Format(_T("(%d) %s %d MB [%s] %d C\r\n"), i + 1, m_Ata.vars[i].Model.GetString(),
-							m_Ata.vars[i].TotalDiskSize, diskStatus.GetString(), m_Ata.vars[i].Temperature);
+						cstr.Format(_T("(%d) %s %d MB [%s] %d C\r\n"), i + 1, m_Ata.vars[i].Model,
+							m_Ata.vars[i].TotalDiskSize, diskStatus, m_Ata.vars[i].Temperature);
 					}
 					tipFull += cstr;
-					cstr.Format(_T("(%d) %s %d C\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].Temperature);
+					cstr.Format(_T("(%d) %s %d C\r\n"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].Temperature);
 					tipMid += cstr;
 					cstr.Format(_T("(%d)%dC\r\n"), i + 1, m_Ata.vars[i].Temperature);
 					tipShort += cstr;
@@ -830,18 +830,18 @@ void CDiskInfoDlg::UpdateToolTip()
 			{
 				if(m_Ata.vars[i].TotalDiskSize >= 1000)
 				{
-					cstr.Format(_T("(%d) %s %.1f GB [%s]\r\n"), i + 1, m_Ata.vars[i].Model.GetString(),
-						m_Ata.vars[i].TotalDiskSize / 1000.0, diskStatus.GetString());
+					cstr.Format(_T("(%d) %s %.1f GB [%s]\r\n"), i + 1, m_Ata.vars[i].Model,
+						m_Ata.vars[i].TotalDiskSize / 1000.0, diskStatus);
 				}
 				else
 				{
-					cstr.Format(_T("(%d) %s %d MB [%s]\r\n"), i + 1, m_Ata.vars[i].Model.GetString(),
-						m_Ata.vars[i].TotalDiskSize, diskStatus.GetString());
+					cstr.Format(_T("(%d) %s %d MB [%s]\r\n"), i + 1, m_Ata.vars[i].Model,
+						m_Ata.vars[i].TotalDiskSize, diskStatus);
 				}
 				tipFull += cstr;
-				cstr.Format(_T("(%d) %s [%s]\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), diskStatus.GetString());
+				cstr.Format(_T("(%d) %s [%s]\r\n"), i + 1, m_Ata.vars[i].Model, diskStatus);
 				tipMid += cstr;
-				cstr.Format(_T("(%d)[%s]\r\n"), i + 1, diskStatus.GetString());
+				cstr.Format(_T("(%d)[%s]\r\n"), i + 1, diskStatus);
 				tipShort += cstr;
 			}
 		}
