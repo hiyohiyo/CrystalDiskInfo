@@ -1934,7 +1934,7 @@ protected:
 //	VOID InitStruct();
 	VOID ChangeByteOrder(PCHAR str, DWORD length);
 	BOOL CheckAsciiStringError(PCHAR str, DWORD length);
-	HANDLE GetIoCtrlHandle(BYTE index);
+	HANDLE GetIoCtrlHandle(INT/*BYTE*/ index);
 	HANDLE GetIoCtrlHandle(INT scsiPort, DWORD siliconImageType);
 	HANDLE GetIoCtrlHandleCsmi(INT scsiPort);
 	HANDLE GetIoCtrlHandleMegaRAID(INT scsiPort);

@@ -154,7 +154,7 @@ ULONGLONG GetTickCountFx()
 	{
 #pragma warning( disable : 28159 )
 		return (ULONGLONG)GetTickCount();
-#pragma warning( error : 28159 )
+#pragma warning( default : 28159 )
 	}
 }
 
@@ -214,6 +214,12 @@ bool UtilityFx__IsWindowsVersionOrGreater(WORD wMajorVersion, WORD wMinorVersion
 
 	return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR, dwlConditionMask) != FALSE;
 }
+bool UtilityFx__IsWindowBuildOrNewer(DWORD v) {
+	OSVERSIONINFOEXW osver = { sizeof(OSVERSIONINFOEXW) };
+	osver.dwBuildNumber = v;
+	return (VerifyVersionInfoW(&osver, VER_BUILDNUMBER, VerSetConditionMask(0, VER_BUILDNUMBER, VER_GREATER_EQUAL)) == TRUE);
+}
+
 
 
 ////------------------------------------------------

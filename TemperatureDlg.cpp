@@ -160,9 +160,9 @@ void CTemperatureDlg::InitSelectDisk()
 		}
 		else
 		{
-			driveLetter.Format(_T("(%s)"), p->m_Ata.vars[i].DriveMap);
+			driveLetter.Format(_T("(%s)"), p->m_Ata.vars[i].DriveMap.GetString());
 		}
-		cstr.Format(_T("(%02d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model, temp, driveLetter);
+		cstr.Format(_T("(%02d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model.GetString(), temp.GetString(), driveLetter.GetString());
 
 		m_CtrlSelectDisk.AddString(cstr);
 		if (i == p->GetSelectedDrive())

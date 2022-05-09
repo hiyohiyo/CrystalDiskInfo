@@ -138,10 +138,13 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 			a = 0;
 		}
 
+		const int max_length = length;
+
 		for (int y = 0; y < (int)(m_CtrlSize.cy * m_ImageCount); y++)
 		{
 			for (int x = 0; x < m_CtrlSize.cx; x++)
 			{
+				if ((y * m_CtrlSize.cx + x) * 4 + 4 > max_length) continue;//over run
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = b;
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
@@ -352,6 +355,7 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 			BYTE* CtlBuffer = new BYTE[CtlMemSize];
 			ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
+			const int buffer_max = (int)(CtlMemSize > DstMemSize ? DstMemSize : CtlMemSize);
 			int baseY = 0;
 			for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
 			{
@@ -359,6 +363,7 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 				int cn = (baseY + py) * CtlLineBytes;
 				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 				{
+					if (cn + 4 > buffer_max || dn + 4 > buffer_max)  continue;//buffer over run
 					BYTE a = CtlBuffer[cn + 3];
 					BYTE na = 255 - a;
 					CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
