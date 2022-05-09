@@ -62,12 +62,12 @@ public:
 	CString m_Ini;
 	CString m_Txt;
 	CString m_SaveAsText;
-	BOOL m_bCopyExit;
+	BOOL m_bCopyExit{};
 
 	CString m_ThemeDir;
 	CString m_LangDir;
-	DWORD m_ThemeIndex;
-	DWORD m_LangIndex;
+	DWORD m_ThemeIndex{};
+	DWORD m_LangIndex{};
 
 // Overrides
 	public:

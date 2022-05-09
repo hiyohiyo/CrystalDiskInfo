@@ -22,6 +22,8 @@ CDHtmlDialogEx::CDHtmlDialogEx(UINT dlgResouce, UINT dlgHtml, CWnd* pParent)
 	m_ParentWnd = NULL;
 	m_DlgWnd = NULL;
 	m_MenuId = 0;
+	m_hAccelerator = NULL;
+	m_Ini[0] = '\0';
 
 	m_ZoomRatio = 1.0;
 	m_ZoomType = ZoomTypeAuto;
@@ -121,8 +123,8 @@ void CDHtmlDialogEx::EnableDpiAware()
 {
 	if(GetIeVersion() >= 800)
 	{
-		DOCHOSTUIINFO info;
-		info.cbSize = sizeof(info);
+		DOCHOSTUIINFO info = { sizeof(info) };
+		//info.cbSize = sizeof(info);
 		GetHostInfo(&info);
 		SetHostFlags(info.dwFlags | DOCHOSTUIFLAG_DIALOG | DOCHOSTUIFLAG_THEME | DOCHOSTUIFLAG_DPI_AWARE);
 	}
@@ -178,8 +180,8 @@ DWORD CDHtmlDialogEx::ChangeZoomType(DWORD zoomType)
 void CDHtmlDialogEx::InitDialogEx(DWORD sizeX, DWORD sizeY, CString dialogPath)
 {
 // Enabled Visual Style
-	DOCHOSTUIINFO info;
-	info.cbSize = sizeof(info);
+	DOCHOSTUIINFO info = { sizeof(info) };
+	//info.cbSize = sizeof(info);
 	GetHostInfo(&info);
 	SetHostFlags(info.dwFlags | DOCHOSTUIFLAG_DIALOG | DOCHOSTUIFLAG_THEME);
 
@@ -202,7 +204,7 @@ void CDHtmlDialogEx::InitDialogEx(DWORD sizeX, DWORD sizeY, CString dialogPath)
 // 2008/1/19 //
 void CDHtmlDialogEx::SetClientRect(DWORD sizeX, DWORD sizeY, DWORD menuLine)
 {
-	RECT rc;
+	RECT rc{};
 	RECT clientRc;
 	rc.left = 0;
 	rc.top = 0;
@@ -422,21 +424,22 @@ CString CDHtmlDialogEx::i18n(CString section, CString key, BOOL inEnglish)
 
 STDMETHODIMP CDHtmlDialogEx::GetOptionKeyPath(LPOLESTR *pchKey, DWORD dw)
 {
-    HRESULT hr;
-    WCHAR* szKey = L"Software";
+	HRESULT hr{};
+    WCHAR szKey[] = L"Software";
 	
-    size_t cbLength;
+	size_t cbLength{};
     hr = StringCbLengthW(szKey, 1280, &cbLength);
     //  TODO: Add error handling code here.
-    
-    if (pchKey)
-    {
-        *pchKey = (LPOLESTR)CoTaskMemAlloc(cbLength + sizeof(WCHAR));
-        if (*pchKey)
-            hr = StringCbCopyW(*pchKey, cbLength + sizeof(WCHAR), szKey);
-    }
-    else
-        hr = E_INVALIDARG;
+	if (SUCCEEDED(hr)) {
+		if (pchKey)
+		{
+			*pchKey = (LPOLESTR)CoTaskMemAlloc(cbLength + sizeof(WCHAR));
+				if (*pchKey)
+					hr = StringCbCopyW(*pchKey, cbLength + sizeof(WCHAR), szKey);
+		}
+		else
+			hr = E_INVALIDARG;
+	}
 
     return hr;
 }

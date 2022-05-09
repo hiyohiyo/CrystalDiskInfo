@@ -96,8 +96,8 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	rect.top = rect.bottom - 1;
 	drawDC->FillRect(&rect, &br);
 
-	HDITEM hi;
-	TCHAR str[256];
+	HDITEM hi{};
+	TCHAR str[256]{};
 	hi.mask = HDI_TEXT | HDI_FORMAT;
 	hi.pszText = str;
 	hi.cchTextMax = 256;
@@ -134,7 +134,7 @@ void CHeaderCtrlFx::OnPaint()
 	int iItemCount = Header_GetItemCount(this->m_hWnd);
 	if (iItemCount > 0)
 	{
-		Header_GetItemRect(this->m_hWnd, iItemCount - 1, &rectRightItem);
+		Header_GetItemRect(this->m_hWnd, (WPARAM)iItemCount - 1, &rectRightItem);
 		RECT rectClient;
 		GetClientRect(&rectClient);
 		if (rectRightItem.right < rectClient.right)

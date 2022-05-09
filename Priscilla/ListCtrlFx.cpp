@@ -40,9 +40,11 @@ CListCtrlFx::~CListCtrlFx()
 {
 }
 
+#pragma warning( disable : 26454 )
 BEGIN_MESSAGE_MAP(CListCtrlFx, CListCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CListCtrlFx::OnCustomdraw)
 END_MESSAGE_MAP()
+#pragma warning( default : 26454 )
 
 BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bkDC, int renderMode, BOOL bHighContrast, BOOL bDarkMode)
 {
@@ -61,7 +63,8 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 
 	if (m_bHighContrast)
 	{
-		SetBkImage(L"");
+		TCHAR lpchar[1]{};
+		SetBkImage(lpchar/*L""*/);
 	}
 	else if (renderMode & OwnerDrawGlass || renderMode & OwnerDrawTransparent)
 	{
@@ -75,7 +78,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		m_CtrlImage.Destroy();
 		m_CtrlImage.Create(maxWidth, maxHeight, 32);
 
-		RECT rect;
+		RECT rect{};
 		rect.top = 0;
 		rect.left = 0;
 		rect.right = maxWidth;
@@ -108,10 +111,12 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		{
 			for (int x = 0; x < maxWidth; x++)
 			{
-				bitmapBits[(y * maxWidth + x) * 4 + 0] = b;
-				bitmapBits[(y * maxWidth + x) * 4 + 1] = g;
-				bitmapBits[(y * maxWidth + x) * 4 + 2] = r;
-				bitmapBits[(y * maxWidth + x) * 4 + 3] = a;
+				const DWORD p = (y * maxWidth + x) * 4;
+				if (p + 4 > length)  continue;//buffer over run
+				bitmapBits[p + 0] = b;
+				bitmapBits[p + 1] = g;
+				bitmapBits[p + 2] = r;
+				bitmapBits[p + 3] = a;
 			}
 		}
 
@@ -134,7 +139,8 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 	{
 		if(m_bNT6orLater)
 		{
-			SetBkImage(L"");
+			TCHAR lpchar[1]{};
+			SetBkImage(lpchar/*L""*/);
 			SetBkColor(m_BkColor1);
 			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
@@ -178,6 +184,8 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 	BYTE* CtlBuffer = new BYTE[CtlMemSize];
 	ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
+	const int buffer_max = (int)(CtlMemSize > DstMemSize ? DstMemSize : CtlMemSize);
+
 	int baseY = 0;
 	for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
 	{
@@ -185,6 +193,7 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 		int cn = (baseY + py) * CtlLineBytes;
 		for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 		{
+			if (cn + 4 > buffer_max || dn + 4 > buffer_max )  continue;//buffer over run
 			BYTE a = CtlBuffer[cn + 3];
 			BYTE na = 255 - a;
 			CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
@@ -237,7 +246,7 @@ void CListCtrlFx::OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 		break;
 	case CDDS_ITEMPOSTPAINT | CDDS_SUBITEM:
 		{
-			RECT rc;
+			RECT rc{};
 			CBrush br1(m_LineColor1);
 			CBrush br2(m_LineColor2);
 

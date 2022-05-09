@@ -6,8 +6,6 @@
 /*---------------------------------------------------------------------------*/
 // Reference : http://www.usefullcode.net/2007/02/hddsmart.html (ja)
 
-//warning : enum3, enum class
-#pragma warning(disable : 26812)
 
 #include "stdafx.h"
 #include <comutil.h>
@@ -17,6 +15,9 @@
 
 #include "DnpService.h"
 //#include "OsInfoFx.h"
+
+//warning : enum3, enum class
+#pragma warning(disable : 26812)
 
 #pragma comment(lib, "wbemuuid.lib")
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
@@ -29,22 +30,6 @@
 #define safeVirtualFree(h,b,c) { if( h != NULL ) { ::VirtualFree(h, b, c); h = NULL; } }
 #endif
 
-bool IsWindowsVersionOrGreater(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor = 0)
-{
-	OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
-	DWORDLONG        const dwlConditionMask = VerSetConditionMask(
-		VerSetConditionMask(
-			VerSetConditionMask(
-				0, VER_MAJORVERSION, VER_GREATER_EQUAL),
-			VER_MINORVERSION, VER_GREATER_EQUAL),
-		VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
-
-	osvi.dwMajorVersion = wMajorVersion;
-	osvi.dwMinorVersion = wMinorVersion;
-	osvi.wServicePackMajor = wServicePackMajor;
-
-	return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR, dwlConditionMask) != FALSE;
-}
 
 CAtaSmart::CAtaSmart()
 {
@@ -52,25 +37,25 @@ CAtaSmart::CAtaSmart()
 	m_bAtaPassThroughSmart = FALSE;
 	m_bNVMeStorageQuery = FALSE;
 
-	if (IsWindowsVersionOrGreater(10, 0)/*m_Os.dwMajorVersion >= 10*/) {
+	if (UtilityFx__IsWindowsVersionOrGreater(10, 0)/*m_Os.dwMajorVersion >= 10*/) {
 		m_bAtaPassThrough = TRUE;
 		m_bAtaPassThroughSmart = TRUE;
 		m_bNVMeStorageQuery = TRUE;
 	}
 	else if (
-		IsWindowsVersionOrGreater(6, 0) || IsWindowsVersionOrGreater(5, 2)
+		UtilityFx__IsWindowsVersionOrGreater(6, 0) || UtilityFx__IsWindowsVersionOrGreater(5, 2)
 		//m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2)
 		) {
 		m_bAtaPassThrough = TRUE;
 		m_bAtaPassThroughSmart = TRUE;
 	}
 	else if (
-		IsWindowsVersionOrGreater(5, 1)//m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 1
+		UtilityFx__IsWindowsVersionOrGreater(5, 1)//m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 1
 		) {
 		//CString cstr;
 		//cstr = m_Os.szCSDVersion;
 		//cstr.Replace(_T("Service Pack "), _T(""));
-		if (IsWindowsVersionOrGreater(5, 1, 2)/*_tstoi(cstr) >= 2*/)
+		if (UtilityFx__IsWindowsVersionOrGreater(5, 1, 2)/*_tstoi(cstr) >= 2*/)
 		{
 			m_bAtaPassThrough = TRUE;
 			m_bAtaPassThroughSmart = TRUE;
@@ -143,7 +128,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
 
 		if (
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 			(vars[i].CommandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2 && GetSmartDataAMD_RC2(vars[i].ScsiBus, &(vars[i]))) ||// +AMD_RC2
 #endif
 			(m_bNVMeStorageQuery && vars[i].CommandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
@@ -301,7 +286,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			}
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 		case CMD_TYPE_AMD_RC2:// +AMD_RC2
 			if (!GetSmartDataAMD_RC2(vars[i].ScsiBus, &(vars[i])))
 			{
@@ -352,7 +337,7 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 	case CMD_TYPE_MEGARAID:
 		flag =  DoIdentifyDeviceMegaRAID(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i].IdentifyDevice));
 		break;
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 	case CMD_TYPE_AMD_RC2:// +AMD_RC2
 		flag = DoIdentifyDeviceAMD_RC2(vars[i].ScsiBus, NULL, NULL, &(vars[i].IdentifyDevice), NULL, NULL);
 		break;
@@ -710,10 +695,10 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 		*flagChangeDisk = FALSE;
 		for(int i = 0; i < vars.GetCount(); i++)
 		{
-			DISK_POSITION dp;
-			dp.PhysicalDriveId = vars[i].PhysicalDriveId;
-			dp.ScsiTargetId = vars[i].ScsiTargetId;
-			dp.ScsiPort = vars[i].ScsiPort;
+			DISK_POSITION dp = { vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId };
+			//dp.PhysicalDriveId = vars[i].PhysicalDriveId;
+			//dp.ScsiTargetId = vars[i].ScsiTargetId;
+			//dp.ScsiPort = vars[i].ScsiPort;
 			memcpy(&(dp.sasPhyEntity), &(vars[i].sasPhyEntity), sizeof(CSMI_SAS_PHY_ENTITY));
 
 			previous.Add(dp);
@@ -779,7 +764,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				else 
 				{
 					long securityFlag = 0;
-					if(IsWindowsVersionOrGreater(6, 0)//m_Os.dwMajorVersion >= 6 // Vista or later
+					if(UtilityFx__IsWindowsVersionOrGreater(6, 0)//m_Os.dwMajorVersion >= 6 // Vista or later
 				//	|| (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion >= 1) // XP or later
 					)
 					{
@@ -1321,8 +1306,8 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				HANDLE	hIoCtrl = NULL;
 				DWORD	dwReturned = 0;
 				DISK_GEOMETRY dg = { 0 };
-				CAtaSmart::INTERFACE_TYPE interfaceType = CAtaSmart::INTERFACE_TYPE::INTERFACE_TYPE_UNKNOWN;
-				CAtaSmart::VENDOR_ID vendor = CAtaSmart::VENDOR_ID::VENDOR_UNKNOWN;
+				//CAtaSmart::INTERFACE_TYPE interfaceType = CAtaSmart::INTERFACE_TYPE::INTERFACE_TYPE_UNKNOWN;
+				//CAtaSmart::VENDOR_ID vendor = CAtaSmart::VENDOR_ID::VENDOR_UNKNOWN;
 
 				hIoCtrl = GetIoCtrlHandle(i);
 				if (! hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
@@ -1347,7 +1332,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			///////////////////////////////
 			// Intel/AMD RAID support
 			///////////////////////////////
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 			//AMD RAIDXpert2 9.3.x// +AMD_RC2
 			if (FlagAMD_RC2 && AmdRaidDriverVersion >= 93)
 			{
@@ -3121,7 +3106,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				}
 			}
 			break;
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 		case CMD_TYPE_AMD_RC2:// +AMD_RC2
 			if (GetSmartDataAMD_RC2(scsiBus, &asi))
 			{
@@ -3459,7 +3444,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	}
 
 	if (
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 		(commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2 && GetSmartDataAMD_RC2(scsiBus, &asi)) ||// +AMD_RC2
 #endif
 		(m_bNVMeStorageQuery && commandType == CMD_TYPE_NVME_STORAGE_QUERY && GetSmartAttributeNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &asi))
@@ -4673,7 +4658,7 @@ BOOL CAtaSmart::IsSsdSandForce(ATA_SMART_INFO &asi)
 		flagSmartType = TRUE;
 	}
 
-	return (asi.Model.Find(_T("SandForce")) >= 0 || flagSmartType);
+	return (asi.Model.Find(_T("SandForce")) >= 0 || flagSmartType == TRUE);
 }
 
 // Micron Crucial
@@ -4745,7 +4730,7 @@ BOOL CAtaSmart::IsSsdMicron(ATA_SMART_INFO &asi)
 		|| (modelUpper.Find(_T("CT")) == 0 && modelUpper.Find(_T("SSD")) != -1)
 		|| modelUpper.Find(_T("CRUCIAL")) == 0 || modelUpper.Find(_T("MICRON")) == 0
 		|| modelUpper.Find(L"MTFD") == 0
-		|| flagSmartType;
+		|| flagSmartType == TRUE;
 }
 
 BOOL CAtaSmart::IsSsdOcz(ATA_SMART_INFO &asi)
@@ -4776,7 +4761,7 @@ BOOL CAtaSmart::IsSsdOcz(ATA_SMART_INFO &asi)
 		flagSmartType = TRUE;
 	}
 	
-	return (modelUpper.Find(_T("OCZ")) == 0 && flagSmartType);
+	return (modelUpper.Find(_T("OCZ")) == 0 && flagSmartType == TRUE);
 }
 
 BOOL CAtaSmart::IsSsdOczVector(ATA_SMART_INFO &asi)
@@ -4837,7 +4822,7 @@ BOOL CAtaSmart::IsSsdOczVector(ATA_SMART_INFO &asi)
 		flagSmartType = TRUE;
 	}
 	
-	return (modelUpper.Find(_T("OCZ")) == 0 || flagSmartType);
+	return (modelUpper.Find(_T("OCZ")) == 0 || flagSmartType == TRUE);
 }
 
 BOOL CAtaSmart::IsSsdSsstc(ATA_SMART_INFO& asi)
@@ -4875,7 +4860,7 @@ BOOL CAtaSmart::IsSsdPlextor(ATA_SMART_INFO &asi)
 	// Added CFD's SSD
 	// Added LITEON CV6-CQ (2018/9/17)
 	return 	asi.Model.Find(_T("PLEXTOR")) == 0 || asi.Model.Find(_T("LITEON")) == 0 || asi.Model.Find(_T("CV6-CQ")) == 0 || asi.Model.Find(_T("CSSD-S6T128NM3PQ")) == 0 || asi.Model.Find(_T("CSSD-S6T256NM3PQ")) == 0
-		|| flagSmartType;
+		|| flagSmartType == TRUE;
 }
 
 BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
@@ -5533,7 +5518,7 @@ VOID CAtaSmart::WakeUp(INT physicalDriveId)
 	hFile = ::CreateFile(strDevice, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 	if(hFile != INVALID_HANDLE_VALUE)
 	{
-		BYTE buf[512];
+		BYTE buf[512] = {};
 		const DWORD bufSize = 512;
 		DWORD readSize = 0;
 		SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
@@ -5655,7 +5640,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_STORAGE_QUERY"));
 			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify)){return TRUE; }
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify)){return TRUE; }
 		}
 		
 		debug.Format(_T("DoIdentifyDeviceNVMeIntelRst"));
@@ -5665,7 +5650,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL_RST"));
 			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_INTEL_RST, &identify)) { return TRUE; }
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_INTEL_RST, &identify)) { return TRUE; }
 		}
 
 		debug.Format(_T("DoIdentifyDeviceNVMeSamsung"));
@@ -5674,7 +5659,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_SAMSUNG"));
 			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_SAMSUNG, &identify)){return TRUE; }
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_SAMSUNG, &identify)){return TRUE; }
 		}
 
 		debug.Format(_T("DoIdentifyDeviceNVMeIntel"));
@@ -5684,7 +5669,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL"));
 			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_INTEL, &identify)){return TRUE; }
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_INTEL, &identify)){return TRUE; }
 		}
 
 
@@ -5743,7 +5728,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)){return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)){return TRUE; }
 			}
 			if (FlagUsbNVMeASMedia && DoIdentifyDeviceNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &identify))
 			{
@@ -5751,7 +5736,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_ASMEDIA"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_ASMEDIA, &identify)){return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_ASMEDIA, &identify)){return TRUE; }
 			}
 			
 			DebugPrint(_T("FALSE - USB0"));
@@ -5766,7 +5751,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)){return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)){return TRUE; }
 			}
 		}
 
@@ -5874,7 +5859,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)) { return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)) { return TRUE; }
 			}
 			// USB-NVMe
 			if (DoIdentifyDeviceNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &identify))
@@ -5883,7 +5868,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_ASMEDIA"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_ASMEDIA, &identify)) { return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_ASMEDIA, &identify)) { return TRUE; }
 			}
 			if (DoIdentifyDeviceNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &identify))
 			{
@@ -5891,7 +5876,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)) { return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)) { return TRUE; }
 			}
 		}
 
@@ -5988,7 +5973,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)) { return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)) { return TRUE; }
 			}
 			// USB-NVMe
 			if (FlagUsbNVMeASMedia && DoIdentifyDeviceNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &identify))
@@ -5997,7 +5982,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_ASMEDIA"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_ASMEDIA, &identify)) { return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_ASMEDIA, &identify)) { return TRUE; }
 			}
 			// USB-NVMe
 			if (FlagUsbNVMeRealtek && DoIdentifyDeviceNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &identify))
@@ -6006,7 +5991,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)) { return TRUE; }
+				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)) { return TRUE; }
 			}
 		}
 	}
@@ -6017,7 +6002,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 /*---------------------------------------------------------------------------*/
 // \\\\.\\PhysicalDriveX
 /*---------------------------------------------------------------------------*/
-HANDLE CAtaSmart::GetIoCtrlHandle(BYTE index)
+HANDLE CAtaSmart::GetIoCtrlHandle(INT/*BYTE*/ index)
 {
 	CString	strDevice;
 	strDevice.Format(_T("\\\\.\\PhysicalDrive%d"), index);
@@ -6299,7 +6284,7 @@ BOOL CAtaSmart::ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, 
 			memcpy_s(data, dataSize, ab.Buf, dataSize);
 		}
 	}
-	else if (!IsWindowsVersionOrGreater(5, 0)/*m_Os.dwMajorVersion <= 4*/)
+	else if (!UtilityFx__IsWindowsVersionOrGreater(5, 0)/*m_Os.dwMajorVersion <= 4*/)
 	{
 		return FALSE;
 	}
@@ -6360,7 +6345,7 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 			memcpy_s(data, dataSize, ab.Buf, dataSize);
 		}
 	}
-	else if (!IsWindowsVersionOrGreater(5, 0)/*m_Os.dwMajorVersion <= 4*/)
+	else if (!UtilityFx__IsWindowsVersionOrGreater(5, 0)/*m_Os.dwMajorVersion <= 4*/)
 	{
 		return FALSE;
 	}
@@ -7357,8 +7342,8 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, 
 
 	if (physicalDriveId == -1)
 	{
-		portNumber = scsiPort;
-		pathId = scsiTargetId;
+		portNumber = (BYTE)scsiPort;
+		pathId = (BYTE)scsiTargetId;
 	}
 	else
 	{
@@ -7443,8 +7428,8 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntelRst(INT physicalDriveId, INT scsiPort,
 
 	if (physicalDriveId == -1)
 	{
-		portNumber = scsiPort;
-		pathId = scsiTargetId;
+		portNumber = (BYTE)scsiPort;
+		pathId = (BYTE)scsiTargetId;
 	}
 	else
 	{
@@ -7578,8 +7563,8 @@ BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiP
 BOOL CAtaSmart::DoIdentifyDeviceScsi(INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
 {
 	int done = FALSE;
-	int controller = 0;
-	int current = 0;
+	//int controller = 0;
+	//int current = 0;
 	HANDLE hScsiDriveIOCTL = 0;
 	CString driveName;
 	driveName.Format(_T("\\\\.\\Scsi%d:"), scsiPort);
@@ -7599,7 +7584,7 @@ BOOL CAtaSmart::DoIdentifyDeviceScsi(INT scsiPort, INT scsiTargetId, IDENTIFY_DE
 		p->ControlCode = IOCTL_SCSI_MINIPORT_IDENTIFY;
 		memcpy((char *)p->Signature, "SCSIDISK", 8);
 		pin->irDriveRegs.bCommandReg = ID_CMD;
-		pin->bDriveNumber = scsiTargetId;
+		pin->bDriveNumber = (BYTE)scsiTargetId;
 		
 		if(DeviceIoControl(hScsiDriveIOCTL, IOCTL_SCSI_MINIPORT, 
 								buffer, sizeof(SRB_IO_CONTROL) + sizeof(SENDCMDINPARAMS) - 1,
@@ -7644,7 +7629,7 @@ BOOL CAtaSmart::GetSmartAttributeScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_
 		pin->irDriveRegs.bCylHighReg		= SMART_CYL_HI;
 		pin->irDriveRegs.bCommandReg		= SMART_CMD;
 		pin->cBufferSize					= READ_ATTRIBUTE_BUFFER_SIZE;
-		pin->bDriveNumber					= scsiTargetId;
+		pin->bDriveNumber					= (BYTE)scsiTargetId;
 
 		if(DeviceIoControl(hScsiDriveIOCTL, IOCTL_SCSI_MINIPORT, 
 								buffer, sizeof(SRB_IO_CONTROL) + sizeof(SENDCMDINPARAMS) - 1,
@@ -7687,7 +7672,7 @@ BOOL CAtaSmart::GetSmartThresholdScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_
 		pin->irDriveRegs.bCylHighReg		= SMART_CYL_HI;
 		pin->irDriveRegs.bCommandReg		= SMART_CMD;
 		pin->cBufferSize					= READ_THRESHOLD_BUFFER_SIZE;
-		pin->bDriveNumber					= scsiTargetId;
+		pin->bDriveNumber					= (BYTE)scsiTargetId;
 
 		if(DeviceIoControl(hScsiDriveIOCTL, IOCTL_SCSI_MINIPORT, 
 								buffer, sizeof(SRB_IO_CONTROL) + sizeof(SENDCMDINPARAMS) - 1,
@@ -7741,7 +7726,7 @@ BOOL CAtaSmart::ControlSmartStatusScsi(INT scsiPort, INT scsiTargetId, BYTE comm
 		pin->irDriveRegs.bCylHighReg		= SMART_CYL_HI;
 		pin->irDriveRegs.bCommandReg		= SMART_CMD;
 		pin->cBufferSize					= SCSI_MINIPORT_BUFFER_SIZE;
-		pin->bDriveNumber					= scsiTargetId;
+		pin->bDriveNumber					= (BYTE)scsiTargetId;
 
 		bRet = DeviceIoControl(hScsiDriveIOCTL, IOCTL_SCSI_MINIPORT, 
 								buffer, sizeof(SRB_IO_CONTROL) + sizeof(SENDCMDINPARAMS) - 1,
@@ -8895,8 +8880,8 @@ HANDLE CAtaSmart::GetIoCtrlHandle(INT scsiPort, DWORD siliconImageType)
 BOOL CAtaSmart::DoIdentifyDeviceSi(INT physicalDriveId, INT scsiPort, INT scsiBus, DWORD siliconImageType, IDENTIFY_DEVICE* data)
 {
 	int done = FALSE;
-	int controller = 0;
-	int current = 0;
+	//int controller = 0;
+	//int current = 0;
 	HANDLE hScsiDriveIOCTL = 0;
 
 	hScsiDriveIOCTL = GetIoCtrlHandle(scsiPort, siliconImageType);
@@ -8912,7 +8897,7 @@ BOOL CAtaSmart::DoIdentifyDeviceSi(INT physicalDriveId, INT scsiPort, INT scsiBu
 		sid.sic.ControlCode = CTL_CODE(FILE_DEVICE_CONTROLLER, 0x802, METHOD_BUFFERED, FILE_ANY_ACCESS);
 		sid.sic.ReturnCode = 0xffffffff;
 		sid.sic.Length = sizeof(sid) - offsetof(SilIdentDev, port);
-		sid.port = scsiBus;
+		sid.port = (USHORT)scsiBus;
 		sid.maybe_always1 = 1 ;
 
 		DWORD dwReturnBytes;
@@ -8968,7 +8953,7 @@ BOOL CAtaSmart::GetSmartAttributeWmi(ATA_SMART_INFO* asi)
 
 BOOL CAtaSmart::GetSmartThresholdWmi(ATA_SMART_INFO* asi)
 {
-	if(!IsWindowsVersionOrGreater(5, 1)/*m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 0*/)
+	if(!UtilityFx__IsWindowsVersionOrGreater(5, 1)/*m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 0*/)
 	{
 		return FALSE;
 	}
@@ -9007,7 +8992,7 @@ BOOL CAtaSmart::GetSmartInfoWmi(DWORD type, ATA_SMART_INFO* asi)
 				IID_IWbemLocator, (LPVOID *)&pIWbemLocator)))
 		{
 			long securityFlag = 0;
-			if(IsWindowsVersionOrGreater(6, 0)/*m_Os.dwMajorVersion >= 6*/){securityFlag = WBEM_FLAG_CONNECT_USE_MAX_WAIT;}
+			if(UtilityFx__IsWindowsVersionOrGreater(6, 0)/*m_Os.dwMajorVersion >= 6*/){securityFlag = WBEM_FLAG_CONNECT_USE_MAX_WAIT;}
 			if(SUCCEEDED(pIWbemLocator->ConnectServer(_bstr_t(L"\\\\.\\root\\WMI"), 
 				NULL, NULL, 0L, securityFlag, NULL, NULL, &pIWbemServices)))
 			{
@@ -9179,9 +9164,9 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 			{
 				memcpy(&phyInfo.Phy[i], &phyInfo.Phy[0], sizeof(phyInfo.Phy[i]));
 			}
-			phyInfo.Phy[i].Attached.bPhyIdentifier = phyInfo.Phy[i].bPortIdentifier = i;
+			phyInfo.Phy[i].Attached.bPhyIdentifier = phyInfo.Phy[i].bPortIdentifier = (UCHAR)i;
 		}
-		phyInfo.bNumberOfPhys = raidInfoBuf.Information.uMaxPhysicalDrives;
+		phyInfo.bNumberOfPhys = (UCHAR)raidInfoBuf.Information.uMaxPhysicalDrives;
 	}
 	else
 	{
@@ -9281,7 +9266,7 @@ BOOL CAtaSmart::CsmiIoctl(HANDLE hHandle, UINT code, SRB_IO_CONTROL *csmiBuf, UI
 
 BOOL CAtaSmart::DoIdentifyDeviceCsmi(INT scsiPort, PCSMI_SAS_PHY_ENTITY sasPhyEntity, IDENTIFY_DEVICE* data)
 {
-	BOOL flag = FALSE;
+	//BOOL flag = FALSE;
 	DebugPrint(_T("DoIdentifyDeviceCsmi"));
 	return SendAtaCommandCsmi(scsiPort, sasPhyEntity, 0xEC, 0x00, 0x00, (PBYTE)data, sizeof(ATA_IDENTIFY_DEVICE));
 }
@@ -9498,7 +9483,7 @@ BOOL CAtaSmart::SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, v
 	mpti.Mpt.Cmd = MFI_CMD_PD_SCSI_IO;
 	mpti.Mpt.CmdStatus = 0xFF;
 	mpti.Mpt.ScsiStatus = 0x00;
-	mpti.Mpt.TargetId = scsiTargetId;
+	mpti.Mpt.TargetId = (UCHAR)scsiTargetId;
 	mpti.Mpt.Lun = 0;
 	mpti.Mpt.CdbLength = CdbLength;
 	mpti.Mpt.TimeOutValue = 0;
@@ -11120,7 +11105,7 @@ BOOL CAtaSmart::GetLifeByGpl(ATA_SMART_INFO& asi)
 //#define _M_ARM
 //#undef AMD_RC2
 
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 
 enum AMD_RC2_ERROR_CODE {
 	AMD_RC2_uninitial,
@@ -11134,6 +11119,7 @@ enum AMD_RC2_ERROR_CODE {
 	AMD_RC2_driver_version_old,
 	AMD_RC2_not_admin,
 	AMD_RC2_name_failed,
+	AMD_RC2_MAX
 };
 
 typedef struct {
@@ -11257,44 +11243,30 @@ BOOL AMD_RC2_DLL_Load() {
 
 	// init
 
-	const UINT status = AMD_RC2_Init();
+	UINT status = AMD_RC2_Init();
 
 	// check status
 
 	g_AMD_RC2_load = ( status == AMD_RC2_ERROR_CODE::AMD_RC2_loaded );
 	if (!g_AMD_RC2_load) {
-		switch (status) {
-		case AMD_RC2_ERROR_CODE::AMD_RC2_uninitial:
-			DebugPrint(_T("AMD_RC2_uninitial"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_unloaded:
-			DebugPrint(_T("AMD_RC2_unloaded"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_failed_signature:
-			DebugPrint(_T("AMD_RC2_failed_signature"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_driver_not_found:
-			DebugPrint(_T("AMD_RC2_driver_not_found"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_cannot_open:
-			DebugPrint(_T("AMD_RC2_cannot_open"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_failed_memory_alloc:
-			DebugPrint(_T("AMD_RC2_failed_memory_alloc"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_offset_overflow:
-			DebugPrint(_T("AMD_RC2_offset_overflow"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_driver_version_old:
-			DebugPrint(_T("AMD_RC2_driver_version_old"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_not_admin:
-			DebugPrint(_T("AMD_RC2_not_admin"));
-			break;
-		case AMD_RC2_ERROR_CODE::AMD_RC2_name_failed:
-			DebugPrint(_T("AMD_RC2_name_failed"));
-			break;
-		}
+		if (status > AMD_RC2_ERROR_CODE::AMD_RC2_MAX)  status = AMD_RC2_ERROR_CODE::AMD_RC2_MAX;
+
+		constexpr const TCHAR* error_msg[] = {
+			_T("AMD_RC2_uninitial"),
+			_T("AMD_RC2_loaded"),
+			_T("AMD_RC2_unloaded"),
+			_T("AMD_RC2_failed_signature"),
+			_T("AMD_RC2_driver_not_found"),
+			_T("AMD_RC2_cannot_open"),
+			_T("AMD_RC2_failed_memory_alloc"),
+			_T("AMD_RC2_offset_overflow"),
+			_T("AMD_RC2_driver_version_old"),
+			_T("AMD_RC2_not_admin"),
+			_T("AMD_RC2_name_failed"),
+			_T("AMD_RC2_unknown")
+		};
+		DebugPrint(error_msg[status]);
+
 	}
 	g_AMD_RC2_init = TRUE;
 	return g_AMD_RC2_load;
@@ -11358,7 +11330,7 @@ BOOL CAtaSmart::AddDiskAMD_RC2()
 }
 
 BOOL CAtaSmart::DoIdentifyDeviceAMD_RC2(INT diskNum, INT* phy, DWORD* TotalDiskSize, IDENTIFY_DEVICE* data, BOOL* isSSD, BOOL* isNVMe) {
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 #ifndef AMD_RC2
 	if (!g_AMD_RC2_init)  AMD_RC2_DLL_Load();
 	if (!AMD_RC2_GetIdentify) return FALSE;
@@ -11386,7 +11358,7 @@ BOOL CAtaSmart::DoIdentifyDeviceAMD_RC2(INT diskNum, INT* phy, DWORD* TotalDiskS
 
 BOOL CAtaSmart::GetSmartDataAMD_RC2(INT diskNum, ATA_SMART_INFO* asi)
 {
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 #ifndef AMD_RC2
 	if (!g_AMD_RC2_init)  AMD_RC2_DLL_Load();
 	if (!AMD_RC2_GetSmartData) return FALSE;
@@ -11404,7 +11376,7 @@ BOOL CAtaSmart::GetSmartDataAMD_RC2(INT diskNum, ATA_SMART_INFO* asi)
 
 BOOL CAtaSmart::GetSmartThresholdAMD_RC2(INT diskNum, ATA_SMART_INFO* asi)
 {
-#ifndef _M_ARM
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 	if (!AMD_RC2_GetSmartData(diskNum, asi->SmartReadThreshold, READ_THRESHOLD_BUFFER_SIZE, asi->SmartReadThreshold, READ_THRESHOLD_BUFFER_SIZE))
 	{
 		return FALSE;
