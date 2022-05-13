@@ -43,11 +43,11 @@ void CDHtmlMainDialog::SetWindowTitle(CString message, CString mode)
 
 	if(! message.IsEmpty())
 	{
-		title.Format(_T("%s - %s"), PRODUCT_SHORT_NAME, message);
+		title.Format(_T("%s - %s"), PRODUCT_SHORT_NAME, message.GetString());
 	}
 	else if(! mode.IsEmpty())
 	{
-		title.Format(_T("%s %s %s"), PRODUCT_NAME, PRODUCT_VERSION, mode);
+		title.Format(_T("%s %s %s"), PRODUCT_NAME, PRODUCT_VERSION, mode.GetString());
 	}
 	else
 	{
@@ -86,20 +86,20 @@ void CDHtmlMainDialog::InitThemeLang()
 // Set Language
 	GetPrivateProfileString(_T("Setting"), _T("Language"), _T(""), str, 256, m_Ini);
 
-	langPath.Format(_T("%s\\%s.lang"), m_LangDir, str);
-	m_DefaultLangPath.Format(_T("%s\\%s.lang"), m_LangDir, _T("English"));
+	langPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), str);
+	m_DefaultLangPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), _T("English"));
 
 	if(_tcscmp(str, _T("")) != 0 && IsFileExist((const TCHAR*)langPath))
 	{
 		m_CurrentLang = str;
-		m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, str);
+		m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), str);
 	}
 	else
 	{
 		m_CurrentLocalID.Format(_T("0x%04X"), GetUserDefaultLCID());
 		PrimaryLangID = PRIMARYLANGID(GetUserDefaultLCID());
 
-		langPath.Format(_T("%s\\*.lang"), m_LangDir);
+		langPath.Format(_T("%s\\*.lang"), m_LangDir.GetString());
 
 		hFind = ::FindFirstFile(langPath, &findData);
 		if(hFind != INVALID_HANDLE_VALUE)
@@ -109,14 +109,14 @@ void CDHtmlMainDialog::InitThemeLang()
 				{
 					i++;
 					CString cstr;
-					cstr.Format(_T("%s\\%s"), m_LangDir, findData.cFileName);
+					cstr.Format(_T("%s\\%s"), m_LangDir.GetString(), findData.cFileName);
 					GetPrivateProfileString(_T("Language"), _T("LOCALE_ID"), _T(""), str, 256, cstr);
 					if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){*ptrEnd = '\0';}
 
 					if(_tcsstr(str, m_CurrentLocalID) != NULL)
 					{
 						m_CurrentLang = findData.cFileName;
-						m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, findData.cFileName);
+						m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), findData.cFileName);
 					}
 					if(PrimaryLangID == PRIMARYLANGID(_tcstol(str, NULL, 16)))
 					{
@@ -132,12 +132,12 @@ void CDHtmlMainDialog::InitThemeLang()
 			if(PrimaryLang.IsEmpty())
 			{
 				m_CurrentLang = _T("English");
-				m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, m_CurrentLang);
+				m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), m_CurrentLang.GetString());
 			}
 			else
 			{
 				m_CurrentLang = PrimaryLang;
-				m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir, PrimaryLang);
+				m_CurrentLangPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), PrimaryLang.GetString());
 			}	
 		}
 	}
@@ -152,7 +152,7 @@ void CDHtmlMainDialog::InitMenu()
 	UINT newItemID = 0;
 	UINT currentItemID = 0;
 	UINT defaultStyleItemID = 0;
-	UINT defaultLanguageItemID = 0;
+	//UINT defaultLanguageItemID = 0;
 	WIN32_FIND_DATA findData;
 	WIN32_FIND_DATA findCssData;
 	HANDLE hFind;
@@ -168,7 +168,7 @@ void CDHtmlMainDialog::InitMenu()
 	subMenu.Attach(menu.GetSubMenu(m_ThemeIndex)->GetSafeHmenu());
 //	subMenu.RemoveMenu(0, MF_BYPOSITION);
 
-	themePath.Format(_T("%s\\*.*"), m_ThemeDir);
+	themePath.Format(_T("%s\\*.*"), m_ThemeDir.GetString());
 
 	hFind = ::FindFirstFile(themePath, &findData);
 	if(hFind != INVALID_HANDLE_VALUE)
@@ -224,7 +224,7 @@ void CDHtmlMainDialog::InitMenu()
 	subMenuOZ.Attach(subMenu.GetSubMenu(1)->GetSafeHmenu()); // 2nd is "O~Z"
 	subMenuOZ.RemoveMenu(0, MF_BYPOSITION);
 
-	langPath.Format(_T("%s\\*.lang"), m_LangDir);
+	langPath.Format(_T("%s\\*.lang"), m_LangDir.GetString());
 	i = 0;
 	hFind = ::FindFirstFile(langPath, &findData);
 	if(hFind != INVALID_HANDLE_VALUE)
@@ -237,7 +237,7 @@ void CDHtmlMainDialog::InitMenu()
 
 				// Add Language
 				CString cstr;
-				cstr.Format(_T("%s\\%s"), m_LangDir, findData.cFileName);
+				cstr.Format(_T("%s\\%s"), m_LangDir.GetString(), findData.cFileName);
 				GetPrivateProfileString(_T("Language"), _T("LANGUAGE"), _T(""), str, 256, cstr);
 				if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL)
 				{
@@ -367,7 +367,7 @@ void CDHtmlMainDialog::ChangeTheme(CString ThemeName)
 	hr = dispatch.pdispVal->QueryInterface(IID_IHTMLStyleSheet, (void **) &pHtmlStyleSheet);
 	if(FAILED(hr)) return ;
 
-	cstr.Format(_T("%s\\%s\\%s"), m_ThemeDir, ThemeName, MAIN_CSS_FILE_NAME);
+	cstr.Format(_T("%s\\%s\\%s"), m_ThemeDir.GetString(), ThemeName.GetString(), MAIN_CSS_FILE_NAME);
 	bstr = cstr;
 	hr = pHtmlStyleSheet->put_href(bstr);
 	if(FAILED(hr)) return ;
@@ -377,12 +377,12 @@ void CDHtmlMainDialog::ChangeTheme(CString ThemeName)
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef KUREI_KEI_SUPPORT
-		WritePrivateProfileString(_T("Setting"), _T("ThemeKureiKei"), ThemeName, m_Ini);
+		WritePrivateProfileString(_T("Setting"), _T("ThemeKureiKei"), ThemeName.GetString(), m_Ini);
 	#else
-		WritePrivateProfileString(_T("Setting"), _T("ThemeShizuku"), ThemeName, m_Ini);
+		WritePrivateProfileString(_T("Setting"), _T("ThemeShizuku"), ThemeName.GetString(), m_Ini);
 	#endif
 #else
-	WritePrivateProfileString(_T("Setting"), _T("Theme"), ThemeName, m_Ini);
+	WritePrivateProfileString(_T("Setting"), _T("Theme"), ThemeName.GetString(), m_Ini);
 #endif
 
 
@@ -392,7 +392,7 @@ void CDHtmlMainDialog::ChangeTheme(CString ThemeName)
 BOOL CDHtmlMainDialog::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
 	// Select Theme
-	if(WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize())
+	if(WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (WPARAM)m_MenuArrayTheme.GetSize())
 	{
 		CMenu menu;
 		CMenu subMenu;

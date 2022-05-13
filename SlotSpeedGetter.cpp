@@ -11,7 +11,7 @@
 #include <comutil.h>
 #include <Setupapi.h>
 #include <Cfgmgr32.h>
-#pragma comment(lib, "Cfgmgr32.lib")
+//#pragma comment(lib, "Cfgmgr32.lib")
 #pragma comment(lib, "Setupapi.lib")
 #pragma comment(lib, "wbemuuid.lib")
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
@@ -74,7 +74,7 @@ CString GetDeviceIDFromPhysicalDriveID(const INT physicalDriveId, const BOOL IsK
 	CString result;
 	IWbemLocator* pIWbemLocator = NULL;
 	IWbemServices* pIWbemServices = NULL;
-	BOOL flag = FALSE;
+	//BOOL flag = FALSE;
 
 	try
 	{
@@ -93,7 +93,7 @@ CString GetDeviceIDFromPhysicalDriveID(const INT physicalDriveId, const BOOL IsK
 					CString StorageID = GetStringValueFromQuery(pIWbemServices, query, L"DeviceID");
 					if(!StorageID.IsEmpty())
 					{
-						query.Format(query2findcontroller, StorageID);
+						query.Format(query2findcontroller.GetString(), StorageID.GetString());
 						CString ControllerID = GetStringValueFromQuery(pIWbemServices, query, L"DeviceID");
 						result = ControllerID;
 					}
@@ -116,7 +116,7 @@ CString GetDeviceIDFromPhysicalDriveID(const INT physicalDriveId, const BOOL IsK
 
 SlotMaxCurrSpeed ConvertOSResult(const OSSlotMaxCurrSpeed OSLevelResult)
 {
-	SlotMaxCurrSpeed result;
+	SlotMaxCurrSpeed result{};
 	result.Current.LinkWidth = PCIeDataWidth(OSLevelResult.Current.LinkWidth);
 	result.Current.SpecVersion = PCIeSpecification(OSLevelResult.Current.SpecVersion);
 	result.Maximum.LinkWidth = PCIeDataWidth(OSLevelResult.Maximum.LinkWidth);
@@ -127,11 +127,11 @@ SlotMaxCurrSpeed ConvertOSResult(const OSSlotMaxCurrSpeed OSLevelResult)
 SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 {
 	DWORD CurrentDevice = 0;
-	OSSlotMaxCurrSpeed OSLevelResult = {0};
+	OSSlotMaxCurrSpeed OSLevelResult{};
 	GUID SCSIAdapterGUID = GUID_DEVCLASS_SCSIADAPTER;
 	HDEVINFO ClassDeviceInformations = SetupDiGetClassDevs(&SCSIAdapterGUID, nullptr, 0, DIGCF_PRESENT);
 
-	BOOL LastResult;
+	BOOL LastResult{};
 	do
 	{
 		SP_DEVINFO_DATA DeviceInfoData = {sizeof(SP_DEVINFO_DATA)};
@@ -139,36 +139,39 @@ SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 
 		BOOL DeviceIDFound = FALSE;	
 		TCHAR DeviceIDBuffer[MAX_PATH] = {};
-		BOOL GetDeviceResult = CM_Get_Device_ID(DeviceInfoData.DevInst, DeviceIDBuffer, sizeof(DeviceIDBuffer), 0);
+		BOOL GetDeviceResult = CM_Get_Device_ID(DeviceInfoData.DevInst, DeviceIDBuffer, MAX_PATH, 0);
 		DeviceIDFound = (GetDeviceResult == ERROR_SUCCESS) && (DeviceID.Compare(DeviceIDBuffer) == 0);
 		if (LastResult && DeviceIDFound)
 		{
-			DEVPROPTYPE PropertyType;
-			BYTE ResultBuffer[1024] = {0};
-			DWORD RequiredSize;
+			DEVPROPTYPE PropertyType{};
+			BYTE ResultBuffer[1024]{};
+			DWORD RequiredSize{};
 
-			FN_SetupDiGetDeviceProperty SetupDiGetDeviceProperty = 
-				(FN_SetupDiGetDeviceProperty) GetProcAddress(GetModuleHandle(TEXT("Setupapi.dll")), "SetupDiGetDevicePropertyW");
-			//Compatible with pre-vista era windows.
+			const HMODULE hMod = LoadLibrary(TEXT("Setupapi.dll"));
+			if (hMod && hMod != INVALID_HANDLE_VALUE) {
+				FN_SetupDiGetDeviceProperty SetupDiGetDeviceProperty =
+					(FN_SetupDiGetDeviceProperty)GetProcAddress(hMod, "SetupDiGetDevicePropertyW");
+				//Compatible with pre-vista era windows.
+				if (SetupDiGetDeviceProperty) {
+					SetupDiGetDeviceProperty(ClassDeviceInformations, &DeviceInfoData,
+						&DEVPKEY_PciDevice_MaxLinkWidth, &PropertyType, ResultBuffer,
+						sizeof(ResultBuffer), &RequiredSize, 0);
+					OSLevelResult.Maximum.LinkWidth = ResultBuffer[0];
+					SetupDiGetDeviceProperty(ClassDeviceInformations, &DeviceInfoData,
+						&DEVPKEY_PciDevice_MaxLinkSpeed, &PropertyType, ResultBuffer,
+						sizeof(ResultBuffer), &RequiredSize, 0);
+					OSLevelResult.Maximum.SpecVersion = ResultBuffer[0];
 
-			SetupDiGetDeviceProperty(ClassDeviceInformations, &DeviceInfoData,
-				&DEVPKEY_PciDevice_MaxLinkWidth, &PropertyType, ResultBuffer,
-				sizeof(ResultBuffer), &RequiredSize, 0);
-			OSLevelResult.Maximum.LinkWidth = ResultBuffer[0];
-			SetupDiGetDeviceProperty(ClassDeviceInformations, &DeviceInfoData,
-				&DEVPKEY_PciDevice_MaxLinkSpeed, &PropertyType, ResultBuffer,
-				sizeof(ResultBuffer), &RequiredSize, 0);
-			OSLevelResult.Maximum.SpecVersion = ResultBuffer[0];
-
-			SetupDiGetDeviceProperty(ClassDeviceInformations, &DeviceInfoData,
-				&DEVPKEY_PciDevice_CurrentLinkWidth, &PropertyType, ResultBuffer,
-				sizeof(ResultBuffer), &RequiredSize, 0);
-			OSLevelResult.Current.LinkWidth = ResultBuffer[0];
-			SetupDiGetDeviceProperty(ClassDeviceInformations, &DeviceInfoData,
-				&DEVPKEY_PciDevice_CurrentLinkSpeed, &PropertyType, ResultBuffer,
-				sizeof(ResultBuffer), &RequiredSize, 0);
-			OSLevelResult.Current.SpecVersion = ResultBuffer[0];
-			
+					SetupDiGetDeviceProperty(ClassDeviceInformations, &DeviceInfoData,
+						&DEVPKEY_PciDevice_CurrentLinkWidth, &PropertyType, ResultBuffer,
+						sizeof(ResultBuffer), &RequiredSize, 0);
+					OSLevelResult.Current.LinkWidth = ResultBuffer[0];
+					SetupDiGetDeviceProperty(ClassDeviceInformations, &DeviceInfoData,
+						&DEVPKEY_PciDevice_CurrentLinkSpeed, &PropertyType, ResultBuffer,
+						sizeof(ResultBuffer), &RequiredSize, 0);
+					OSLevelResult.Current.SpecVersion = ResultBuffer[0];
+				}
+			}
 			break;
 		}
 

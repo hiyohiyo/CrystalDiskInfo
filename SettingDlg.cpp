@@ -277,7 +277,7 @@ void CSettingDlg::InitSelectDisk()
 			driveLetter.Format(_T("(%s)"), p->m_Ata.vars[i].DriveMap.GetString());
 		}
 
-		cstr.Format(_T("(%02d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model.GetString(), temp, driveLetter);
+		cstr.Format(_T("(%02d) %s %s %s"), i + 1, p->m_Ata.vars.GetAt(i).Model.GetString(), temp.GetString(), driveLetter.GetString());
 		m_CtrlSelectDisk.AddString(cstr);
 
 		if (i == p->GetSelectedDrive())
@@ -305,7 +305,7 @@ void CSettingDlg::OnEnableAam()
 	}
 
 	int targetValue = m_AamScrollbar.GetScrollPos();
-	p->m_Ata.EnableAam(m_DiskIndex, targetValue);
+	p->m_Ata.EnableAam(m_DiskIndex, (BYTE)targetValue);
 	p->m_Ata.UpdateIdInfo(m_DiskIndex);
 
 	if(p->m_Ata.vars.GetAt(m_DiskIndex).IsAamEnabled)
@@ -358,7 +358,7 @@ void  CSettingDlg::OnEnableApm()
 	}
 
 	int targetValue = m_ApmScrollbar.GetScrollPos();
-	p->m_Ata.EnableApm(m_DiskIndex, targetValue);
+	p->m_Ata.EnableApm(m_DiskIndex, (BYTE)targetValue);
 	p->m_Ata.UpdateIdInfo(m_DiskIndex);
 
 	if(p->m_Ata.vars.GetAt(m_DiskIndex).IsApmEnabled)

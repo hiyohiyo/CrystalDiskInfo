@@ -61,8 +61,8 @@ BOOL CDiskInfoApp::InitInstance()
 	int defaultDisk = -1;
 	HANDLE hMutex = NULL;
 
-	INITCOMMONCONTROLSEX InitCtrls;
-	InitCtrls.dwSize = sizeof(InitCtrls);
+	INITCOMMONCONTROLSEX InitCtrls = { sizeof(INITCOMMONCONTROLSEX) };
+	//InitCtrls.dwSize = sizeof(InitCtrls);
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 	CWinApp::InitInstance();
@@ -104,7 +104,7 @@ BOOL CDiskInfoApp::InitInstance()
 	WritePrivateProfileString(_T("Setting"), _T("DebugMode"), cstr, m_Ini);
 
 	int argc = 0;
-	int index = 0;
+	//int index = 0;
 	LPWSTR *argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 
 	if(argc > 1)
@@ -226,10 +226,10 @@ BOOL CDiskInfoApp::InitInstance()
 	m_ThemeIndex = MENU_THEME_INDEX;
 	m_LangIndex = MENU_LANG_INDEX;
 
-	DefaultTheme.Format(_T("%s\\%s"), m_ThemeDir, DEFAULT_THEME);
-	DefaultLanguage.Format(_T("%s\\%s.lang"), m_LangDir, DEFAULT_LANGUAGE);
+	DefaultTheme.Format(_T("%s\\%s"), m_ThemeDir.GetString(), DEFAULT_THEME);
+	DefaultLanguage.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), DEFAULT_LANGUAGE);
 
-	OSVERSIONINFOEX osvi;
+	/*OSVERSIONINFOEX osvi;
 	BOOL bosVersionInfoEx;
 
 	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -238,7 +238,7 @@ BOOL CDiskInfoApp::InitInstance()
 	{
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 		GetVersionEx((OSVERSIONINFO *)&osvi);
-	}
+	}*/
 
 	if((BOOL)GetPrivateProfileInt(_T("Workaround"), _T("IE8MODE"), 0, m_Ini))
 	{
@@ -261,7 +261,7 @@ BOOL CDiskInfoApp::InitInstance()
 #ifdef _UNICODE
 	if(! IsUserAnAdmin())
 	{
-		if(osvi.dwMajorVersion < 6)
+		if( ! UtilityFx__IsWindowsVersionOrGreater( 6, 0 )/*osvi.dwMajorVersion < 6*/)
 		{
 			AfxMessageBox(_T("CrystalDiskInfo is required Administrator Privileges."));
 		}
@@ -276,7 +276,7 @@ BOOL CDiskInfoApp::InitInstance()
 	{
 		CGraphDlg dlg(NULL, defaultDisk);
 		m_pMainWnd = &dlg;
-		INT_PTR nResponse = dlg.DoModal();
+		/*INT_PTR nResponse = */(void)dlg.DoModal();
 	}
 	else
 	{
@@ -296,7 +296,7 @@ BOOL CDiskInfoApp::InitInstance()
 		else
 		{
 			DebugPrint(_T("CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);"));
-			CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+			(void)CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 		}
 
 		CDiskInfoDlg dlg(NULL, flagStartupExit);

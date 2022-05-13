@@ -333,7 +333,7 @@ BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam);
 
 void CDiskInfoDlg::KillGraphDlg()
 {
-	static HWND hWnd;
+	//static HWND hWnd{};
 	EnumWindows(EnumWindowsProc, (LPARAM)&m_GraphProcessId);
 }
 
@@ -816,7 +816,7 @@ HCURSOR CDiskInfoDlg::OnQueryDragIcon()
 
 BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
-	if(WM_LANGUAGE_ID <= wParam && wParam < WM_LANGUAGE_ID + (UINT)m_MenuArrayLang.GetSize())
+	if(WM_LANGUAGE_ID <= wParam && wParam < (WPARAM)WM_LANGUAGE_ID + m_MenuArrayLang.GetSize())
 	{
 #ifdef _UNICODE
 		CMenu menu;
@@ -891,15 +891,15 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
 		ShowTemperatureIconOnly();
 	}
-	else if(wParam == SHOW_GRAPH_BASE + CAtaSmart::MAX_DISK)
+	else if(wParam == (WPARAM)SHOW_GRAPH_BASE + CAtaSmart::MAX_DISK)
 	{
 		ShowGraphDlg(-1); // Using "GraphHideDisk" option
 	}
-	else if(SHOW_GRAPH_BASE <= wParam && wParam < SHOW_GRAPH_BASE + CAtaSmart::MAX_DISK)
+	else if(SHOW_GRAPH_BASE <= wParam && wParam < (WPARAM)SHOW_GRAPH_BASE + CAtaSmart::MAX_DISK)
 	{
 		ShowGraphDlg((int)wParam - SHOW_GRAPH_BASE);
 	}
-	else if(ALARM_SETTING_HEALTH_STATUS_BASE <= wParam && wParam <= ALARM_SETTING_HEALTH_STATUS_BASE + CAtaSmart::MAX_DISK + 1)
+	else if(ALARM_SETTING_HEALTH_STATUS_BASE <= wParam && wParam <= (WPARAM)ALARM_SETTING_HEALTH_STATUS_BASE + CAtaSmart::MAX_DISK + 1)
 	{
 		int i = (int)(wParam - ALARM_SETTING_HEALTH_STATUS_BASE);
 
@@ -935,7 +935,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			WritePrivateProfileStringFx(_T("AlarmHealthStatus"), m_Ata.vars[i].ModelSerial, alarm, m_Ini);
 		}
 	}
-	else if(ALARM_SETTING_TEMPERATURE_BASE <= wParam && wParam <= ALARM_SETTING_TEMPERATURE_BASE + (CAtaSmart::MAX_DISK + 1) * 100)
+	else if(ALARM_SETTING_TEMPERATURE_BASE <= wParam && wParam <= (WPARAM)ALARM_SETTING_TEMPERATURE_BASE + ((WPARAM)CAtaSmart::MAX_DISK + 1) * 100)
 	{
 		int i = (int)(wParam - ALARM_SETTING_TEMPERATURE_BASE) / 100;
 		int j = (int)(wParam - ALARM_SETTING_TEMPERATURE_BASE) % 100;
@@ -958,7 +958,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			WritePrivateProfileStringFx(_T("AlarmTemperature"), m_Ata.vars[i].ModelSerial, temperature, m_Ini);
 		}
 	}
-	else if(TRAY_TEMPERATURE_ICON_BASE <= wParam && wParam <= TRAY_TEMPERATURE_ICON_BASE + CAtaSmart::MAX_DISK + 1)
+	else if(TRAY_TEMPERATURE_ICON_BASE <= wParam && wParam <= (WPARAM)TRAY_TEMPERATURE_ICON_BASE + CAtaSmart::MAX_DISK + 1)
 	{
 		int i = (int)(wParam - TRAY_TEMPERATURE_ICON_BASE);
 
@@ -1041,13 +1041,13 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-	else if(SELECT_DISK_BASE <= wParam && wParam < SELECT_DISK_BASE + CAtaSmart::MAX_DISK)
+	else if(SELECT_DISK_BASE <= wParam && wParam < (WPARAM)SELECT_DISK_BASE + CAtaSmart::MAX_DISK)
 	{
 		int i = (int)(wParam - SELECT_DISK_BASE);
 		m_DriveMenuPage = i / 8;
 		SelectDrive(i);
 	}
-	else if(AUTO_REFRESH_TARGET_BASE <= wParam && wParam <= AUTO_REFRESH_TARGET_BASE + CAtaSmart::MAX_DISK + 1)
+	else if(AUTO_REFRESH_TARGET_BASE <= wParam && wParam <= (WPARAM)AUTO_REFRESH_TARGET_BASE + CAtaSmart::MAX_DISK + 1)
 	{
 		int i = (int)(wParam - AUTO_REFRESH_TARGET_BASE);
 		// Target All Disk : AUTO_REFRESH_TARGET_BASE + CAtaSmart::MAX_DISK
@@ -1089,7 +1089,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		SetMenu(menu);
 		DrawMenuBar();
 	}
-	else if(WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize())
+	else if(WM_THEME_ID <= wParam && wParam < (WPARAM)WM_THEME_ID + m_MenuArrayTheme.GetSize())
 	{
 #ifndef SUISHO_SHIZUKU_SUPPORT
 		CMenu *menu = GetMenu();
@@ -1446,7 +1446,7 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 		// m_CtrlCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(m_OffsetX * m_ZoomRatio), (int)(24 * m_ZoomRatio));
 		m_CtrlCopyright.InitControl((int)(positionX * m_ZoomRatio), (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio), 1.0, &m_BkDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
 #else
-		m_List.MoveWindow((int)((8 + m_OffsetX) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672 - 16) * m_ZoomRatio), (int)(cy - ((SIZE_Y + 8) * m_ZoomRatio)));
+		m_List.MoveWindow((int)((8.0 + m_OffsetX) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672.0 - 16.0) * m_ZoomRatio), (int)(cy - ((SIZE_Y + 8.0) * m_ZoomRatio)));
 #endif
 	}
 	flag = TRUE;
@@ -1482,8 +1482,8 @@ void CDiskInfoDlg::SetClientSize(int sizeX, int sizeY, double zoomRatio)
 
 void CDiskInfoDlg::SavePos() const
 {
-	WINDOWPLACEMENT place;
-	place.length = sizeof(WINDOWPLACEMENT);
+	WINDOWPLACEMENT place = { sizeof(WINDOWPLACEMENT) };
+	//place.length = sizeof(WINDOWPLACEMENT);
 	GetWindowPlacement(&place);
 
 	CString x, y;
@@ -1511,8 +1511,8 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 	DWORD niifType = NIIF_INFO;
 	int pre = -1;
 	
-	name.Format(_T("(%d) %s / %s / %s\r\n"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].SerialNumber, m_Ata.vars[i].DriveMap);
-	title.Format(_T("(%d) %s / %s / %s"), i + 1, m_Ata.vars[i].Model, m_Ata.vars[i].SerialNumber, m_Ata.vars[i].DriveMap);
+	name.Format(_T("(%d) %s / %s / %s\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].SerialNumber.GetString(), m_Ata.vars[i].DriveMap.GetString());
+	title.Format(_T("(%d) %s / %s / %s"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].SerialNumber.GetString(), m_Ata.vars[i].DriveMap.GetString());
 
 	GetPrivateProfileString(disk, _T("HealthStatus"), _T("0"), str, 256, dir + _T("\\") + SMART_INI);
 	pre = _tstoi(str);
@@ -1523,8 +1523,8 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 	}
 	else if(m_Ata.vars[i].DiskStatus > (DWORD)pre && m_Ata.vars[i].DiskStatus != m_Ata.DISK_STATUS_GOOD)
 	{
-		cstr.Format(_T("%s: [%s] -> [%s]\r\n"), i18n(_T("Dialog"), _T("HEALTH_STATUS")),
-					GetDiskStatus(pre), GetDiskStatus(m_Ata.vars[i].DiskStatus));
+		cstr.Format(_T("%s: [%s] -> [%s]\r\n"), i18n(_T("Dialog"), _T("HEALTH_STATUS")).GetString(),
+					GetDiskStatus(pre).GetString(), GetDiskStatus(m_Ata.vars[i].DiskStatus).GetString());
 		alarm += cstr;
 		niifType = NIIF_WARNING;
 		AddEventLog(601, 2, name + cstr);
@@ -1534,8 +1534,8 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 	}
 	else if(m_Ata.vars[i].DiskStatus < (DWORD)pre)
 	{
-		cstr.Format(_T("%s: [%s] -> [%s]\r\n"), i18n(_T("Dialog"), _T("HEALTH_STATUS")),
-					GetDiskStatus(pre), GetDiskStatus(m_Ata.vars[i].DiskStatus));
+		cstr.Format(_T("%s: [%s] -> [%s]\r\n"), i18n(_T("Dialog"), _T("HEALTH_STATUS")).GetString(),
+					GetDiskStatus(pre).GetString(), GetDiskStatus(m_Ata.vars[i].DiskStatus).GetString());
 		alarm += cstr;
 		niifType = NIIF_INFO;
 		AddEventLog(701, 4, name + cstr);
@@ -1554,7 +1554,7 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 	}
 	else if(m_Ata.vars[i].Life < pre)
 	{
-		cstr.Format(_T("%s: [%d] -> [%d]\r\n"), i18n(_T("SmartSsd"), _T("FF")), pre, m_Ata.vars[i].Life);
+		cstr.Format(_T("%s: [%d] -> [%d]\r\n"), i18n(_T("SmartSsd"), _T("FF")).GetString(), pre, m_Ata.vars[i].Life);
 		alarm += cstr;
 		niifType = NIIF_WARNING;
 		AddEventLog(607, 2, name + cstr);
@@ -1564,7 +1564,7 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 	}
 	else if(m_Ata.vars[i].Life > pre)
 	{
-		cstr.Format(_T("%s: [%d] -> [%d]\r\n"), i18n(_T("SmartSsd"), _T("FF")), pre, m_Ata.vars[i].Life);
+		cstr.Format(_T("%s: [%d] -> [%d]\r\n"), i18n(_T("SmartSsd"), _T("FF")).GetString(), pre, m_Ata.vars[i].Life);
 		alarm += cstr;
 		niifType = NIIF_INFO;
 		AddEventLog(707, 4, name + cstr);
@@ -1610,8 +1610,8 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 			int rawValue = MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]);
 			if(rawValue > pre && pre != -1)
 			{
-				cstr.Format(_T("%s: (%02X) %s [%d->%d]\r\n"), i18n(_T("Alarm"), _T("DEGRADATION")),
-					m_Ata.vars[i].Attribute[j].Id, i18n(_T("Smart"), id), pre, rawValue);
+				cstr.Format(_T("%s: (%02X) %s [%d->%d]\r\n"), i18n(_T("Alarm"), _T("DEGRADATION")).GetString(),
+					m_Ata.vars[i].Attribute[j].Id, i18n(_T("Smart"), id).GetString(), pre, rawValue);
 				alarm += cstr;
 				niifType = NIIF_WARNING;
 				AddEventLog(eventId, 2, name + cstr);
@@ -1621,8 +1621,8 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 			}
 			else if(rawValue < pre && pre != -1)
 			{
-				cstr.Format(_T("%s: (%02X) %s [%d->%d]\r\n"), i18n(_T("Alarm"), _T("RECOVERY")),
-					m_Ata.vars[i].Attribute[j].Id, i18n(_T("Smart"), id), pre, rawValue);
+				cstr.Format(_T("%s: (%02X) %s [%d->%d]\r\n"), i18n(_T("Alarm"), _T("RECOVERY")).GetString(),
+					m_Ata.vars[i].Attribute[j].Id, i18n(_T("Smart"), id).GetString(), pre, rawValue);
 				alarm += cstr;
 				niifType = NIIF_INFO;
 				AddEventLog(eventId + 100, 4, name + cstr);
@@ -1639,11 +1639,11 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 			{
 				if(m_bFahrenheit)
 				{
-					cstr.Format(_T("%s: %d F\r\n"), i18n(_T("Alarm"), _T("ALARM_TEMPERATURE")), m_Ata.vars[i].Temperature * 9 / 5 + 32);
+					cstr.Format(_T("%s: %d F\r\n"), i18n(_T("Alarm"), _T("ALARM_TEMPERATURE")).GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32);
 				}
 				else
 				{
-					cstr.Format(_T("%s: %d C\r\n"), i18n(_T("Alarm"), _T("ALARM_TEMPERATURE")), m_Ata.vars[i].Temperature);
+					cstr.Format(_T("%s: %d C\r\n"), i18n(_T("Alarm"), _T("ALARM_TEMPERATURE")).GetString(), m_Ata.vars[i].Temperature);
 				}
 				AddEventLog(606, 2, name + cstr);
 				SendMail(606, title, cstr);
@@ -1658,7 +1658,7 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 
 	if(! alarm.IsEmpty())
 	{
-		cstr.Format(_T("(%d) %s\n"), i + 1, m_Ata.vars[i].Model);
+		cstr.Format(_T("(%d) %s\n"), i + 1, m_Ata.vars[i].Model.GetString());
 		if(niifType == NIIF_WARNING)
 		{
 			ShowBalloon(m_MainIconId, niifType, i18n(_T("Alarm"), _T("ALARM_HEALTH_STATUS")), cstr + alarm);
@@ -1693,10 +1693,10 @@ BOOL CDiskInfoDlg::SendMail(DWORD eventId, CString title, CString message)
 
 	CString subject, body, option;
 
-	subject.Format(_T("[CDI] %s %s [%d]"), computer, title, eventId);
-	body.Format(_T("%s %s\r\n[%d] %s"), computer, title, eventId, message);
+	subject.Format(_T("[CDI] %s %s [%d]"), computer, title.GetString(), eventId);
+	body.Format(_T("%s %s\r\n[%d] %s"), computer, title.GetString(), eventId, message.GetString());
 
-	option.Format(_T("Subject=\"%s\" Body=\"%s\""), subject, body);
+	option.Format(_T("Subject=\"%s\" Body=\"%s\""), subject.GetString(), body.GetString());
 	if((INT_PTR)(ShellExecute(NULL, NULL, m_AlertMailPath, option, NULL, SW_SHOW)) > 32)
 	{
 		return TRUE;
@@ -1710,7 +1710,7 @@ BOOL CDiskInfoDlg::SendMail(DWORD eventId, CString title, CString message)
 BOOL CDiskInfoDlg::AddAlarmHistory(DWORD eventId, CString disk, CString message)
 {
 	CString cstr;
-	cstr.Format(L"[Alarm] EventID=%d, Disk=%s, Message=%s", eventId, disk, message);
+	cstr.Format(L"[Alarm] EventID=%d, Disk=%s, Message=%s", eventId, disk.GetString(), message.GetString());
 	cstr.Replace(L"\n", L"");
 	DebugPrint(cstr);
 	return FALSE;
@@ -1850,7 +1850,15 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode) const
 			return FALSE;
 		}
 		const HGLOBAL hOpus = LoadResource(hModule, hrs);
+		if (!hOpus)
+		{
+			return FALSE;
+		}
 		const LPBYTE lpOpus = static_cast<LPBYTE>(LockResource(hOpus));
+		if (!lpOpus)
+		{
+			return FALSE;
+		}
 		DWORD dwWrite = 0;
 
 		const HANDLE hFile = CreateFile(m_TempFilePathOpus, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, nullptr);
@@ -1964,11 +1972,11 @@ void CDiskInfoDlg::AlarmOverheat()
 			
 			if(m_bFahrenheit)
 			{
-				cstr.Format(_T("(%d) %s [%s] %d F\r\n"), i + 1, m_Ata.vars[i].Model, diskStatus, m_Ata.vars[i].Temperature * 9 / 5 + 32);
+				cstr.Format(_T("(%d) %s [%s] %d F\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), diskStatus.GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32);
 			}
 			else
 			{
-				cstr.Format(_T("(%d) %s [%s] %d C\r\n"), i + 1, m_Ata.vars[i].Model, diskStatus, m_Ata.vars[i].Temperature);
+				cstr.Format(_T("(%d) %s [%s] %d C\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), diskStatus.GetString(), m_Ata.vars[i].Temperature);
 			}
 			
 			overheat += cstr;
@@ -2021,17 +2029,17 @@ void CDiskInfoDlg::OnTimer(UINT_PTR nIDEvent)
 				if (years > 0)
 				{
 					title.Format(_T("%d %s %d %s %d %s%s"),
-						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")),
-						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-						IsMinutesT);
+						years, i18n(_T("Dialog"), _T("POWER_ON_YEARS_UNIT")).GetString(),
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")).GetString(),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString(),
+						IsMinutesT.GetString());
 				}
 				else
 				{
 					title.Format(_T("%d %s %d %s%s"),
-						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")),
-						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")),
-						IsMinutesT);
+						days, i18n(_T("Dialog"), _T("POWER_ON_DAYS_UNIT")).GetString(),
+						hours, i18n(_T("Dialog"), _T("POWER_ON_HOURS_UNIT")).GetString(),
+						IsMinutesT.GetString());
 				}
 				m_CtrlPowerOnHours.SetToolTipText(title + L"  ");
 			}
@@ -2247,7 +2255,7 @@ void CDiskInfoDlg::AutoAamApmAdaption()
 		value =  GetPrivateProfileIntFx(_T("AamValue"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
 		if(status == 1 /* Enabled */ && value != -1)
 		{
-			m_Ata.EnableAam(i, value);
+			m_Ata.EnableAam(i, (BYTE)value);
 			m_Ata.UpdateIdInfo(i);
 			DebugPrint(_T("m_Ata.EnableAam"));
 		}
@@ -2271,7 +2279,7 @@ void CDiskInfoDlg::AutoAamApmAdaption()
 		value  = GetPrivateProfileIntFx(_T("ApmValue"), m_Ata.vars[i].ModelSerial, -1, m_Ini);
 		if(status == 1 /* Enabled */ && value != -1)
 		{
-			m_Ata.EnableApm(i, value);
+			m_Ata.EnableApm(i, (BYTE)value);
 			m_Ata.UpdateIdInfo(i);
 			DebugPrint(_T("m_Ata.EnableApm"));
 		}
@@ -2316,12 +2324,12 @@ void CDiskInfoDlg::OnBnClickedButtonDisk7(){SelectDrive(7 + m_DriveMenuPage * 8)
 void CDiskInfoDlg::SetControlFont()
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	BYTE textAlpha = TEXT_ALPHA;
+	//BYTE textAlpha = TEXT_ALPHA;
 //	COLORREF textColor = RGB(77, 77, 77);
-	COLORREF textColor = m_LabelText;
+	//COLORREF textColor = m_LabelText;
 #else
-	BYTE textAlpha = 255;
-	COLORREF textColor = m_LabelText;
+	///BYTE textAlpha = 255;
+	//COLORREF textColor = m_LabelText;
 #endif
 
 	m_List.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
