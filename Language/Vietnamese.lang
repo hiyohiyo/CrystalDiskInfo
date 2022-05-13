@@ -1,6 +1,6 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=Nguyễn Đức Dũng
+TRANSLATOR=Nguyễn Đức Dũng, Trần Nhật Sang
 VERSION=4.5.0
 
 [Language]
@@ -20,9 +20,9 @@ COPY=&Sao chép
 FUNCTION=Chức năng
 HIDE_SMART_INFO=&Ẩn thông tin S.M.A.R.T
 HIDE_SERIAL_NUMBER=Ẩn số serial
-SHOW_DRIVE_LEserial=Hiện thông tin ổ đĩa
+SHOW_DRIVE_LETTER=Hiện thông tin ổ đĩa
 ADVANCED_DISK_SEARCH=Tìm ổ đĩa nâng cao
-EVENT_LOG=&Lịch sủ làm việc
+EVENT_LOG=&Lịch sử làm việc
 AAM_APM_CONTROL=Điểu khiển AAM APM
 AUTO_AAM_APM_ADAPTION=Tự động điều chỉnh AAM APM
 RESIDENT=Resident
@@ -77,8 +77,8 @@ ATTRIBUTE=&Thuộc tính
 ;3.5.0
 ASCII_VIEW=Xem kiểu ASCII
 AUTO_DTECTION=Tự động phát hiện
-SECOND=giây.
-MINUTE=phút.
+SECOND=giây
+MINUTE=phút
 HOUR=giờ
 
 :3.9.4
@@ -88,26 +88,26 @@ WORKAROUND=Workaround
 ALERT_MAIL=Mail cảnh báo
 MAIL_SETTINGS=Cài đặt email
 SMART_IN_ENGLISH=S.M.A.R.T. in English
-FONT_SETTING=Cài đặt Font
+FONT_SETTING=Cài đặt phông chữ
 
 ;5.0.0
-ALERT_FEATURES=A&lert Features
-ALARM_HISTORY=Alarm History
-ALERT_SOUND=Alert Sound
-SOUND_SETTINGS=Sound Settings
-GADGET_SUPPORT=Gadget Support
-INSTALL_GADGET=Install Gadget
-ENABLE_AUTO=Enable (Auto Detection)
-ENABLE_ALL=Enable (All Disks)
-ENABLE_RAID=Enable (RAID Volume Only)
+ALERT_FEATURES=Tính năng cảnh báo
+ALARM_HISTORY=Lịch sử cảnh báo
+ALERT_SOUND=Âm thanh cảnh báo
+SOUND_SETTINGS=Cài đặt âm thanh
+GADGET_SUPPORT=Hỗ trợ Gadget
+INSTALL_GADGET=Cài đặt Gadget
+ENABLE_AUTO=Cho phép (Tự động phát hiện)
+ENABLE_ALL=Cho phép (Tất cả ổ đĩa)
+ENABLE_RAID=Cho phép (Chỉ RAID Volume)
 
 ;6.0.0
 HIDE_NO_SMART_DISK=&Hide No S.M.A.R.T. Disk
-GREEN_MODE=&Green Mode
+GREEN_MODE=&Chế độ xanh lá cây
 
 ;8.6.0
-SAVE_TEXT=Save (&text)
-SAVE_IMAGE=&Save (image)
+SAVE_TEXT=Lưu (&văn bản)
+SAVE_IMAGE=&Lưu (Hình ảnh)
 
 [TrayMenu]
 EXIT=Thoát
@@ -118,17 +118,17 @@ DISABLE=Không cho phép
 ENABLE_ALL=Cho phép tất cả
 DISABLE_ALL=Không cho phép tất cả
 AUTO_REFRESH=Auto-vernieuwen
-AUTO_REFRESH_01_MIN=1 phút.
-AUTO_REFRESH_03_MIN=3 phút.
-AUTO_REFRESH_05_MIN=5 phút.
-AUTO_REFRESH_10_MIN=10 phút.
-AUTO_REFRESH_30_MIN=30 phút.
-AUTO_REFRESH_60_MIN=60 phút.
+AUTO_REFRESH_01_MIN=1 phút
+AUTO_REFRESH_03_MIN=3 phút
+AUTO_REFRESH_05_MIN=5 phút
+AUTO_REFRESH_10_MIN=10 phút
+AUTO_REFRESH_30_MIN=30 phút
+AUTO_REFRESH_60_MIN=60 phút
 AUTO_REFRESH_TARGET=Mục tiêu tự động làm mới
 AUTO_REFRESH_TARGET_ALL_DISK=Làm mới tất cả ổ đĩa
 AUTO_REFRESH_UNTARGET_ALL_DISK=Làm mới tất cả ổ đĩa không được chọn
 ALARM_SETTING_TEMPERATURE=Nhiệt độ giới hạn cảnh báo
-ALARM_SETTING_HEALTH_STATUS=Trạng thái giới hạn cảnh bảo
+ALARM_SETTING_HEALTH_STATUS=Trạng thái giới hạn cảnh báo
 SHOW_MAIN_WINDOW=Hiển thị cửa sổ chính
 SHOW_TEMPERATURE_ICON=Hiển thị biểu tượng nhiệt độ
 SHOW_ALL_TEMPERATURE_ICON= Hiển thị tất cả biểu tượng nhiệt độ
@@ -146,15 +146,15 @@ DISK=Ổ đĩa
 
 [Dialog]
 LIST_ID=ID
-LIST_CURRENT=Danh sách hiệt tại
+LIST_CURRENT=Danh sách hiện tại
 LIST_WORST=Danh sách xấu
 LIST_THRESHOLD=Danh sách tới ngưỡng
-LIST_RAW_VALUES=Danh sách giá trị nguyên
+LIST_RAW_VALUES=Danh sách giá trị Raw
 LIST_DESCRIPTION=Danh sách miêu tả
 LIST_ATTRIBUTE_NAME=Danh sách tên thuộc tính
 
-FIRMWARE=Phần mềm điều khiển
-SERIAL_NUMBER=Số Xê-ri
+FIRMWARE=Firmware
+SERIAL_NUMBER=Số Sê-ri
 INTERFACE=Giao diện
 STANDARD=Tiêu chuẩn
 TRANSFER_MODE=Chuẩn giao tiếp
@@ -189,11 +189,11 @@ MAJOR_VERSION_MINOR_VERSION=Major Version | Minor Version
 ;8.5.0
 FONT_FACE=Font Face
 FONT_SCALE=Font Scale (%)
-DEFAULT=Default
+DEFAULT=Mặc định
 
 ;8.9.0
-ENABLED=Enabled
-DISABLED=Disabled
+ENABLED=Đã kích hoạt
+DISABLED=Đã vô hiệu hóa
 
 [Message]
 DETECT_UNIT_POWER_ON_HOURS=Xác định số giờ chạy
@@ -246,11 +246,11 @@ AAM_APM_CONTROL=Điều khiển AAM/APM
 HEALTH_STATUS_SETTING=Cài đặt trạng thái sức khỏe
 
 ;5.0.0
-ALARM_HISTORY=Alarm History
-SOUND_SETTINGS=Sound Settings
+ALARM_HISTORY=Lịch sử cảnh báo
+SOUND_SETTINGS=Cài đặt âm thanh
 
 ;5.1.0
-FONT_SETTING=Cài đặt Font
+FONT_SETTING=Cài đặt phông chữ
 
 [HealthStatus]
 THRESHOLD_OF_CAUTION=Ngưỡng cảnh báo
@@ -469,7 +469,7 @@ B6=Erase Fail Count
 B8=Reported I/O Error Detection Code Errors
 BB=Reported Uncorrectable Errors
 C2=Temperature
-C3=On‐the‐Fly ECC Uncorrectable Error Count
+C3=On-the-Fly ECC Uncorrectable Error Count
 C4=Reallocation Event Count
 C6=Uncorrectable Sector Count
 C7=SATA R-Errors (CRC) Error Count
