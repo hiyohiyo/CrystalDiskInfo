@@ -9,12 +9,10 @@
 #include "OsInfoFx.h"
 #include "UtilityFx.h"
 
-// warning: GetVersionExW
-#pragma warning(disable : 28159)
-
 typedef BOOL (WINAPI* FuncGetProductInfo)(DWORD, DWORD, DWORD, DWORD, PDWORD);
 typedef BOOL (WINAPI* FuncGetNativeSystemInfo)(LPSYSTEM_INFO);
 typedef BOOL (WINAPI* FuncIsWow64Process)(HANDLE hProcess,PBOOL Wow64Process);
+typedef LONG (WINAPI* FuncRtlGetVersion)(POSVERSIONINFOEXW osvi);
 
 BOOL IsWindowsVersionOrGreaterFx(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor)
 {
@@ -40,16 +38,38 @@ BOOL IsWindowBuildOrGreater(DWORD build)
 	return (VerifyVersionInfoW(&osvi, VER_BUILDNUMBER, VerSetConditionMask(0, VER_BUILDNUMBER, VER_GREATER_EQUAL)) == TRUE);
 }
 
+BOOL GetVersionFx(POSVERSIONINFOEXW osvi)
+{
+	static FuncRtlGetVersion pRtlGetVersion = NULL;
+	if (pRtlGetVersion == NULL)
+	{
+		HMODULE hModule = GetModuleHandle(L"ntdll.dll");
+		if (hModule)
+		{
+			pRtlGetVersion = (FuncRtlGetVersion)GetProcAddress(hModule, "RtlGetVersion");
+		}
+	}
+
+	if (pRtlGetVersion)
+	{
+		if (pRtlGetVersion(osvi) >= 0) // NT_SUCCESS(pRtlGetVersion(osvi) 
+		{
+			return TRUE;
+		}
+	}	
+	return FALSE;
+}
+
 BOOL IsX64()
 {
 	static BOOL b = -1;
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
-		if (kernel32)
+		HMODULE hModule = GetModuleHandle(L"kernel32.dll");
+		if (hModule)
 		{
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(kernel32, "GetNativeSystemInfo");
+			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(hModule, "GetNativeSystemInfo");
 			if (pGetNativeSystemInfo != NULL)
 			{
 				SYSTEM_INFO si{};
@@ -70,10 +90,10 @@ BOOL IsIa64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
-		if (kernel32)
+		HMODULE hModule = GetModuleHandle(L"kernel32.dll");
+		if (hModule)
 		{
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(kernel32, "GetNativeSystemInfo");
+			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(hModule, "GetNativeSystemInfo");
 			if (pGetNativeSystemInfo != NULL)
 			{
 				SYSTEM_INFO si{};
@@ -94,10 +114,10 @@ BOOL IsArm32()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
-		if (kernel32)
+		HMODULE hModule = GetModuleHandle(L"kernel32.dll");
+		if (hModule)
 		{
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(kernel32, "GetNativeSystemInfo");
+			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(hModule, "GetNativeSystemInfo");
 			if (pGetNativeSystemInfo != NULL)
 			{
 				SYSTEM_INFO si{};
@@ -118,10 +138,10 @@ BOOL IsArm64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
-		if (kernel32)
+		HMODULE hModule = GetModuleHandle(L"kernel32.dll");
+		if (hModule)
 		{
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(kernel32, "GetNativeSystemInfo");
+			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(hModule, "GetNativeSystemInfo");
 			if (pGetNativeSystemInfo != NULL)
 			{
 				SYSTEM_INFO si{};
@@ -142,10 +162,10 @@ BOOL IsWow64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
-		if (kernel32)
+		HMODULE hModule = GetModuleHandle(L"kernel32.dll");
+		if (hModule)
 		{
-			FuncIsWow64Process pIsWow64Process = (FuncIsWow64Process)GetProcAddress(kernel32, "IsWow64Process");
+			FuncIsWow64Process pIsWow64Process = (FuncIsWow64Process)GetProcAddress(hModule, "IsWow64Process");
 			if (pIsWow64Process != NULL)
 			{
 				pIsWow64Process(GetCurrentProcess(), &b);
@@ -373,8 +393,9 @@ BOOL HasSidebar()
 	if (b == -1)
 	{
 		b = FALSE;
-		OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
-		GetVersionEx((OSVERSIONINFO*)&osvi);
+		OSVERSIONINFOEX osvi;
+		GetVersionFx(&osvi);
+
 		if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion < 2 && osvi.wProductType == VER_NT_WORKSTATION)
 		{
 			b = TRUE;
@@ -431,36 +452,13 @@ DWORD GetIeVersion()
 	return ieVersion;
 }
 
-/* The latest version cannot be represented by an integer.
-* 20H2, 20H1, 21H2...
-* https://docs.microsoft.com/en-us/windows/release-health/release-information
-DWORD GetWin10Version()
-{
-	OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
-	GetVersionEx((OSVERSIONINFO*)&osvi);
-
-	if (osvi.dwBuildNumber >= 19041) { return 2004; }
-	else if (osvi.dwBuildNumber >= 18363) { return 1909; }
-	else if (osvi.dwBuildNumber >= 18362) { return 1903; }
-	else if (osvi.dwBuildNumber >= 17763) { return 1809; }
-	else if (osvi.dwBuildNumber >= 17134) { return 1803; }
-	else if (osvi.dwBuildNumber >= 16299) { return 1709; }
-	else if (osvi.dwBuildNumber >= 15063) { return 1703; }
-	else if (osvi.dwBuildNumber >= 14393) { return 1607; }
-	else if (osvi.dwBuildNumber >= 10586) { return 1511; }
-	else if (osvi.dwBuildNumber >= 10240) { return 1507; }
-	else { return 0; }
-}
-*/
-
 void GetOsName(CString& OsFullName)
 {
 	CString osName, osType, osCsd, osVersion, osBuild, osFullName, osArchitecture;
 	CString cstr;
-	TCHAR path[MAX_PATH];
 
 	OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
-	GetVersionEx((OSVERSIONINFO*)&osvi);
+	GetVersionFx((OSVERSIONINFOEX*)&osvi);
 
 	switch(osvi.dwPlatformId)
 	{
@@ -629,7 +627,12 @@ void GetOsName(CString& OsFullName)
 
 		if(osvi.dwMajorVersion >= 6)
 		{
-			FuncGetProductInfo pGetProductInfo = (FuncGetProductInfo)GetProcAddress(GetModuleHandle(L"kernel32.dll"), "GetProductInfo");
+			HMODULE hModule = GetModuleHandle(L"kernel32.dll");
+			FuncGetProductInfo pGetProductInfo = NULL;
+			if (hModule)
+			{
+				pGetProductInfo = (FuncGetProductInfo)GetProcAddress(hModule, "GetProductInfo");
+			}
 
 			if(pGetProductInfo)
 			{
@@ -813,9 +816,10 @@ void GetOsName(CString& OsFullName)
 			// Meida Center & Tablet
 			if(GetSystemMetrics(SM_MEDIACENTER))
 			{
+				TCHAR path[MAX_PATH] = {};
+				TCHAR str[256] = {};
 				UINT length = GetWindowsDirectoryW(path, MAX_PATH);
 				_tcscat_s(path, MAX_PATH, L"\\ehome\\ehshell.exe");
-				TCHAR str[256];
 				if(length != 0 && GetFileVersion(path, str))
 				{					
 					cstr = str;
@@ -881,6 +885,5 @@ void GetOsName(CString& OsFullName)
 			osFullName.Format(L"%s %s [%s Build %s] (%s)", (LPCTSTR)osName, (LPCTSTR)osType, (LPCTSTR)osVersion, (LPCTSTR)osBuild, (LPCTSTR)osArchitecture);
 		}
 		OsFullName = osFullName;
-		break;
 	}
 }

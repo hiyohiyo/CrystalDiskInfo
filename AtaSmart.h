@@ -1914,7 +1914,6 @@ public:
 	DWORD CheckDiskStatus(DWORD index);
 
 protected:
-	//OSVERSIONINFOEX m_Os;
 	CString m_SerialNumberA_Z[26];
 	BOOL m_bAtaPassThrough;
 	BOOL m_bAtaPassThroughSmart;

@@ -105,11 +105,11 @@ BOOL CDialogFx::OnInitDialog()
 	ReleaseDC(pDC);
 
 	HMODULE hModule = GetModuleHandle(L"Shcore.dll");
-	if (hModule != NULL)
+	if (hModule)
 	{
 		typedef HRESULT(WINAPI* FuncGetDpiForMonitor) (HMONITOR hmonitor, UINT dpiType, UINT* dpiX, UINT* dpiY);
 		FuncGetDpiForMonitor pGetDpiForMonitor = (FuncGetDpiForMonitor)GetProcAddress(hModule, "GetDpiForMonitor");
-		if (pGetDpiForMonitor != NULL)
+		if (pGetDpiForMonitor)
 		{
 			UINT dpiX, dpiY;
 			pGetDpiForMonitor(MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), 0, &dpiX, &dpiY);

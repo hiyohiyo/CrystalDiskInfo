@@ -63,7 +63,7 @@ void DebugPrint(CString cstr)
 		return;
 	}
 
-	FILE* fp;
+	FILE* fp{};
 	_tfopen_s(&fp, file, L"ac");
 	if (fp != NULL)
 	{
@@ -89,7 +89,6 @@ int GetFileVersion(const TCHAR* file, TCHAR* version)
 	TCHAR* buf = NULL;
 	int  Locale = 0;
 	TCHAR str[256]{};
-	//str[0] = '\0';
 
 	UINT size = GetFileVersionInfoSize((TCHAR*)file, &reserved);
 	TCHAR* vbuf = new TCHAR[size];
@@ -124,8 +123,8 @@ int GetFileVersion(const TCHAR* file, TCHAR* version)
 
 BOOL IsFileExist(const TCHAR* path)
 {
-	FILE* fp;
-	errno_t err;
+	FILE* fp{};
+	errno_t err{};
 
 	err = _tfopen_s(&fp, path, L"rb");
 	if (err != 0 || fp == NULL)
@@ -144,9 +143,14 @@ typedef ULONGLONG(WINAPI* FuncGetTickCount64)();
 
 ULONGLONG GetTickCountFx()
 {
-	static FuncGetTickCount64 pGetTickCount64 = (FuncGetTickCount64)GetProcAddress(GetModuleHandle(L"kernel32"), "GetTickCount64");
+	HMODULE hModule = GetModuleHandle(L"kernel32.dll");
+	FuncGetTickCount64 pGetTickCount64 = NULL;
+	if (hModule)
+	{
+		pGetTickCount64 = (FuncGetTickCount64)GetProcAddress(hModule, "GetTickCount64");
+	}
 
-	if (pGetTickCount64 != NULL)
+	if (pGetTickCount64)
 	{
 		return (ULONGLONG)pGetTickCount64();
 	}

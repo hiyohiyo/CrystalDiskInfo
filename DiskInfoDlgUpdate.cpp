@@ -180,18 +180,24 @@ void CDiskInfoDlg::DeleteShareInfo()
 	SHDeleteKey(HKEY_CURRENT_USER, REGISTRY_PATH);
 }
 
-typedef int(WINAPI* FuncGetSystemMetricsForDpi) (int nIndex, UINT dpi);
-typedef UINT(WINAPI* FuncGetDpiForWindow) (HWND hWnd);
 
 void CDiskInfoDlg::RebuildListHeader(DWORD i, BOOL forceUpdate)
 {
 	static DWORD preVendorId = (DWORD)-1;
 	int width = 0;
 
-	static FuncGetSystemMetricsForDpi pGetSystemMetricsForDpi = (FuncGetSystemMetricsForDpi)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetSystemMetricsForDpi");
-	static FuncGetDpiForWindow pGetDpiForWindow = (FuncGetDpiForWindow)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetDpiForWindow");
+	HMODULE hModule = GetModuleHandle(L"user32.dll");
+	typedef int(WINAPI* FuncGetSystemMetricsForDpi) (int nIndex, UINT dpi);
+	typedef UINT(WINAPI* FuncGetDpiForWindow) (HWND hWnd);
+	FuncGetSystemMetricsForDpi pGetSystemMetricsForDpi = NULL;
+	FuncGetDpiForWindow pGetDpiForWindow = NULL;
+	if (hModule)
+	{
+		pGetSystemMetricsForDpi = (FuncGetSystemMetricsForDpi)GetProcAddress(hModule, "GetSystemMetricsForDpi");
+		pGetDpiForWindow = (FuncGetDpiForWindow)GetProcAddress(hModule, "GetDpiForWindow");
+	}
 
-	if (pGetSystemMetricsForDpi != NULL)
+	if (pGetSystemMetricsForDpi && pGetDpiForWindow)
 	{
 		width = (int)((656 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))) - 4);
 	}

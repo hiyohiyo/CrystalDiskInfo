@@ -545,12 +545,18 @@ void CMainDialogFx::SaveImage()
 {
 	BOOL bDwmEnabled = FALSE;
 
-	static HMODULE hModule = LoadLibraryEx(L"dwmapi.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
+	HMODULE hModule = LoadLibraryEx(L"dwmapi.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
 	typedef HRESULT(WINAPI* FuncDwmGetWindowAttribute) (HWND hwnd, DWORD dwAttribute, PVOID pvAttribute, DWORD cbAttribute);
 	typedef HRESULT(WINAPI* FuncDwmIsCompositionEnabled)(BOOL* pfEnabled);
-	static FuncDwmGetWindowAttribute pDwmGetWindowAttribute = (FuncDwmGetWindowAttribute)GetProcAddress(hModule, "DwmGetWindowAttribute");
-	static FuncDwmIsCompositionEnabled pDwmIsCompositionEnabled = (FuncDwmIsCompositionEnabled)GetProcAddress(hModule, "DwmIsCompositionEnabled");
-	if (hModule && pDwmGetWindowAttribute && pDwmIsCompositionEnabled)
+	FuncDwmGetWindowAttribute pDwmGetWindowAttribute = NULL;
+	FuncDwmIsCompositionEnabled pDwmIsCompositionEnabled = NULL;
+	if (hModule)
+	{
+		pDwmGetWindowAttribute = (FuncDwmGetWindowAttribute)GetProcAddress(hModule, "DwmGetWindowAttribute");
+		pDwmIsCompositionEnabled = (FuncDwmIsCompositionEnabled)GetProcAddress(hModule, "DwmIsCompositionEnabled");
+	}
+
+	if (pDwmGetWindowAttribute && pDwmIsCompositionEnabled)
 	{
 		pDwmIsCompositionEnabled(&bDwmEnabled);
 	}
