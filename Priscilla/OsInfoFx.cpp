@@ -9,9 +9,36 @@
 #include "OsInfoFx.h"
 #include "UtilityFx.h"
 
+// warning: GetVersionExW
+#pragma warning(disable : 28159)
+
 typedef BOOL (WINAPI* FuncGetProductInfo)(DWORD, DWORD, DWORD, DWORD, PDWORD);
 typedef BOOL (WINAPI* FuncGetNativeSystemInfo)(LPSYSTEM_INFO);
 typedef BOOL (WINAPI* FuncIsWow64Process)(HANDLE hProcess,PBOOL Wow64Process);
+
+BOOL IsWindowsVersionOrGreaterFx(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor)
+{
+	OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
+	DWORDLONG        const dwlConditionMask = VerSetConditionMask(
+		VerSetConditionMask(
+			VerSetConditionMask(
+				0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+			VER_MINORVERSION, VER_GREATER_EQUAL),
+		VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
+
+	osvi.dwMajorVersion = wMajorVersion;
+	osvi.dwMinorVersion = wMinorVersion;
+	osvi.wServicePackMajor = wServicePackMajor;
+
+	return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR, dwlConditionMask) != FALSE;
+}
+
+BOOL IsWindowBuildOrGreater(DWORD build)
+{
+	OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
+	osvi.dwBuildNumber = build;
+	return (VerifyVersionInfoW(&osvi, VER_BUILDNUMBER, VerSetConditionMask(0, VER_BUILDNUMBER, VER_GREATER_EQUAL)) == TRUE);
+}
 
 BOOL IsX64()
 {
@@ -19,9 +46,10 @@ BOOL IsX64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(dll_kernel32, "GetNativeSystemInfo");
+		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
+		if (kernel32)
+		{
+			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(kernel32, "GetNativeSystemInfo");
 			if (pGetNativeSystemInfo != NULL)
 			{
 				SYSTEM_INFO si{};
@@ -42,9 +70,10 @@ BOOL IsIa64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(dll_kernel32, "GetNativeSystemInfo");
+		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
+		if (kernel32)
+		{
+			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(kernel32, "GetNativeSystemInfo");
 			if (pGetNativeSystemInfo != NULL)
 			{
 				SYSTEM_INFO si{};
@@ -65,9 +94,10 @@ BOOL IsArm32()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(dll_kernel32, "GetNativeSystemInfo");
+		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
+		if (kernel32)
+		{
+			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(kernel32, "GetNativeSystemInfo");
 			if (pGetNativeSystemInfo != NULL)
 			{
 				SYSTEM_INFO si{};
@@ -88,9 +118,10 @@ BOOL IsArm64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(dll_kernel32, "GetNativeSystemInfo");
+		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
+		if (kernel32)
+		{
+			FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(kernel32, "GetNativeSystemInfo");
 			if (pGetNativeSystemInfo != NULL)
 			{
 				SYSTEM_INFO si{};
@@ -111,9 +142,10 @@ BOOL IsWow64()
 	if (b == -1)
 	{
 		b = FALSE;
-		HMODULE dll_kernel32 = GetModuleHandleW(L"kernel32");
-		if (dll_kernel32) {
-			FuncIsWow64Process pIsWow64Process = (FuncIsWow64Process)GetProcAddress(dll_kernel32, "IsWow64Process");
+		HMODULE kernel32 = GetModuleHandleW(L"kernel32");
+		if (kernel32)
+		{
+			FuncIsWow64Process pIsWow64Process = (FuncIsWow64Process)GetProcAddress(kernel32, "IsWow64Process");
 			if (pIsWow64Process != NULL)
 			{
 				pIsWow64Process(GetCurrentProcess(), &b);
@@ -235,18 +267,7 @@ BOOL IsNT5()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwMajorVersion == 5)
-		{
-			b = TRUE;
-		}*/
-
-		b = !UtilityFx__IsWindowsVersionOrGreater(6, 0) && UtilityFx__IsWindowsVersionOrGreater(5, 0) ? TRUE : FALSE;
+		b = !IsWindowsVersionOrGreaterFx(6, 0) && IsWindowsVersionOrGreaterFx(5, 0) ? TRUE : FALSE;
 	}
 	return b;
 }
@@ -256,17 +277,7 @@ BOOL IsNT6orLater()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwMajorVersion >= 6)
-		{
-			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(6, 0) ? TRUE : FALSE;
+		b = IsWindowsVersionOrGreaterFx(6, 0) ? TRUE : FALSE;
 	}
 	return b;
 }
@@ -276,17 +287,7 @@ BOOL IsWin2k()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)
-		{
-			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(5, 0) && !UtilityFx__IsWindowsVersionOrGreater(5, 1) ? TRUE : FALSE;
+		b = IsWindowsVersionOrGreaterFx(5, 0) && !IsWindowsVersionOrGreaterFx(5, 1) ? TRUE : FALSE;
 	}
 	return b;
 }
@@ -296,21 +297,7 @@ BOOL IsWinXpOrLater()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion >= 1)
-		{
-			b = TRUE;
-		}
-		else if (osvi.dwMajorVersion >= 6)
-		{
-			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(5, 1) ? TRUE : FALSE;
+		b = IsWindowsVersionOrGreaterFx(5, 1) ? TRUE : FALSE;
 	}
 	return b;
 }
@@ -321,17 +308,7 @@ BOOL IsWinXpLuna()
 	BOOL b = FALSE;
 	if (xp == -1)
 	{
-		/*xp = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwMajorVersion == 5)
-		{
-			xp = TRUE;
-		}*/
-		xp = UtilityFx__IsWindowsVersionOrGreater(5, 0) && !UtilityFx__IsWindowsVersionOrGreater(6, 0) ? TRUE : FALSE;
+		xp = IsWindowsVersionOrGreaterFx(5, 1) && !IsWindowsVersionOrGreaterFx(6, 0) ? TRUE : FALSE;
 	}
 	if (xp == FALSE)
 	{ 
@@ -342,7 +319,7 @@ BOOL IsWinXpLuna()
 	DWORD type = REG_DWORD;
 	ULONG size = 256;
 	HKEY  hKey = NULL;
-	BYTE  buf[256];
+	BYTE  buf[256] = {};
 	CString cstr;
 
 	if (RegOpenKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager\\", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -365,25 +342,7 @@ BOOL IsWin8orLater()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwMajorVersion <= 5)
-		{
-			b = FALSE;
-		}
-		else if (/osvi.dwMajorVersion == 6 && osvi.dwMinorVersion <= 1)
-		{
-			b = FALSE;
-		}
-		else
-		{
-			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(6, 2) ? TRUE : FALSE;
+		b = IsWindowsVersionOrGreaterFx(6, 2) ? TRUE : FALSE;
 	}
 	return b;
 }
@@ -393,25 +352,7 @@ BOOL IsWin81orLater()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		/*b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwMajorVersion <= 5)
-		{
-			b = FALSE;
-		}
-		else if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion <= 2)
-		{
-			b = FALSE;
-		}
-		else
-		{
-			b = TRUE;
-		}*/
-		b = UtilityFx__IsWindowsVersionOrGreater(6, 3) ? TRUE : FALSE;
+		b = IsWindowsVersionOrGreaterFx(6, 3) ? TRUE : FALSE;
 	}
 	return b;
 }
@@ -421,21 +362,10 @@ BOOL IsDarkModeSupport()
 	static BOOL b = -1;
 	if (b == -1)
 	{
-		b = UtilityFx__IsWindowBuildOrNewer(17763) ? TRUE : FALSE;
-		/*b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwBuildNumber >= 17763) // Windows 10 Ver.1809 or later
-		{
-			b = TRUE;
-		}*/
+		b = IsWindowBuildOrGreater(17763) ? TRUE : FALSE;
 	}
 	return b;
 }
-
 
 BOOL HasSidebar()
 {
@@ -443,9 +373,7 @@ BOOL HasSidebar()
 	if (b == -1)
 	{
 		b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
 		GetVersionEx((OSVERSIONINFO*)&osvi);
 		if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion < 2 && osvi.wProductType == VER_NT_WORKSTATION)
 		{
@@ -467,7 +395,7 @@ DWORD GetIeVersion()
 	DWORD type = REG_SZ;
 	ULONG size = 256;
 	HKEY  hKey = NULL;
-	BYTE  buf[256];
+	BYTE  buf[256] = {};
 	CString cstr;
 
 	switch (GetFileVersion(L"Shdocvw.dll"))
@@ -503,11 +431,12 @@ DWORD GetIeVersion()
 	return ieVersion;
 }
 
+/* The latest version cannot be represented by an integer.
+* 20H2, 20H1, 21H2...
+* https://docs.microsoft.com/en-us/windows/release-health/release-information
 DWORD GetWin10Version()
 {
-	/*OSVERSIONINFOEX osvi;
-	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
 	GetVersionEx((OSVERSIONINFO*)&osvi);
 
 	if (osvi.dwBuildNumber >= 19041) { return 2004; }
@@ -520,20 +449,9 @@ DWORD GetWin10Version()
 	else if (osvi.dwBuildNumber >= 14393) { return 1607; }
 	else if (osvi.dwBuildNumber >= 10586) { return 1511; }
 	else if (osvi.dwBuildNumber >= 10240) { return 1507; }
-	else { return 0; }*/
-
-	if (UtilityFx__IsWindowBuildOrNewer(19041)) { return 2004; }
-	else if (UtilityFx__IsWindowBuildOrNewer(18363)) { return 1909; }
-	else if (UtilityFx__IsWindowBuildOrNewer(18362)) { return 1903; }
-	else if (UtilityFx__IsWindowBuildOrNewer(17763)) { return 1809; }
-	else if (UtilityFx__IsWindowBuildOrNewer(17134)) { return 1803; }
-	else if (UtilityFx__IsWindowBuildOrNewer(16299)) { return 1709; }
-	else if (UtilityFx__IsWindowBuildOrNewer(15063)) { return 1703; }
-	else if (UtilityFx__IsWindowBuildOrNewer(14393)) { return 1607; }
-	else if (UtilityFx__IsWindowBuildOrNewer(10586)) { return 1511; }
-	else if (UtilityFx__IsWindowBuildOrNewer(10240)) { return 1507; }
 	else { return 0; }
 }
+*/
 
 void GetOsName(CString& OsFullName)
 {
@@ -541,9 +459,7 @@ void GetOsName(CString& OsFullName)
 	CString cstr;
 	TCHAR path[MAX_PATH];
 
-	OSVERSIONINFOEX osvi;
-	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
 	GetVersionEx((OSVERSIONINFO*)&osvi);
 
 	switch(osvi.dwPlatformId)

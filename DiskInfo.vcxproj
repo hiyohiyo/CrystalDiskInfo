@@ -463,6 +463,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -847,6 +848,7 @@
       <ProgramDataBaseFileName>Build\$(Configuration)$(Platform)\$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

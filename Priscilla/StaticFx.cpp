@@ -157,17 +157,17 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 			a = 0;
 		}
 
-		const int max_length = length;
-
 		for (int y = 0; y < (int)(m_CtrlSize.cy * m_ImageCount); y++)
 		{
 			for (int x = 0; x < m_CtrlSize.cx; x++)
 			{
-				if ((y * m_CtrlSize.cx + x) * 4 + 4 > max_length) continue;//over run
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = b;
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
-				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = a;
+				DWORD p = (y * m_CtrlSize.cx + x) * 4;
+#pragma warning( disable : 6386 )
+				bitmapBits[p + 0] = b;
+				bitmapBits[p + 1] = g;
+				bitmapBits[p + 2] = r;
+				bitmapBits[p + 3] = a;
+#pragma warning( default : 6386 )
 			}
 		}
 
@@ -315,8 +315,8 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 					int cn = (baseY + py) * CtlLineBytes;
 					for (LONG px = 0; px < meter; px++)
 					{
-						int a = CtlBuffer[cn + 3];
-						int na = 255 - a;
+						BYTE a = CtlBuffer[cn + 3];
+						BYTE na = 255 - a;
 						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
 						DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
 						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
@@ -326,8 +326,8 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 					cn -= baseY * CtlLineBytes;
 					for (LONG px = meter; px < DstBmpInfo.bmWidth; px++)
 					{
-						int a = CtlBuffer[cn + 3];
-						int na = 255 - a;
+						BYTE a = CtlBuffer[cn + 3];
+						BYTE na = 255 - a;
 						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
 						DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
 						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
@@ -338,7 +338,6 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 			}
 			else
 			{
-				const int buffer_max = (int)(CtlMemSize > DstMemSize ? DstMemSize : CtlMemSize);
 				int baseY = m_CtrlSize.cy * no;
 				for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
 				{
@@ -346,7 +345,8 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 					int cn = (baseY + py) * CtlLineBytes;
 					for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 					{
-						if (cn + 4 > buffer_max || dn + 4 > buffer_max)  continue;//buffer over run
+#pragma warning( disable : 6385 )
+#pragma warning( disable : 6386 )
 						BYTE a = CtlBuffer[cn + 3];
 						BYTE na = 255 - a;
 						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
@@ -354,6 +354,8 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
 						dn += (DstBmpInfo.bmBitsPixel / 8);
 						cn += (CtlBmpInfo.bmBitsPixel / 8);
+#pragma warning( default : 6386 )
+#pragma warning( default : 6385 )
 					}
 				}
 			}
@@ -662,8 +664,7 @@ void CStaticFx::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (!m_bTrackingNow)
 	{
-		TRACKMOUSEEVENT tme;
-		tme.cbSize = sizeof(tme);
+		TRACKMOUSEEVENT tme = { sizeof(TRACKMOUSEEVENT) };
 		tme.hwndTrack = m_hWnd;
 		tme.dwFlags = TME_LEAVE | TME_HOVER;
 		tme.dwHoverTime = 1;

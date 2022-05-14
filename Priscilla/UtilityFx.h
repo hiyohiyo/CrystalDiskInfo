@@ -30,11 +30,6 @@ ULONGLONG GetTickCountFx();
 ULONG64 B8toB64(BYTE b0, BYTE b1 = 0, BYTE b2 = 0, BYTE b3 = 0, BYTE b4 = 0, BYTE b5 = 0, BYTE b6 = 0, BYTE b7 = 0);
 DWORD B8toB32(BYTE b0, BYTE b1 = 0, BYTE b2 = 0, BYTE b3 = 0);
 
-//+ 20220502
-bool UtilityFx__IsWindowsVersionOrGreater(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor = 0);
-//+ 20220508
-bool UtilityFx__IsWindowBuildOrNewer(DWORD v);
-
 ////------------------------------------------------
 //   .ini support function
 ////------------------------------------------------

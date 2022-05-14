@@ -13,6 +13,9 @@
 //   OS Info
 ////------------------------------------------------
 
+BOOL IsWindowsVersionOrGreaterFx(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor = 0);
+BOOL IsWindowBuildOrGreater(DWORD build);
+
 BOOL IsX64();
 BOOL IsIa64();
 BOOL IsArm32();
@@ -32,7 +35,7 @@ BOOL IsWin81orLater();
 BOOL IsDarkModeSupport();
 BOOL HasSidebar();
 DWORD GetIeVersion();
-DWORD GetWin10Version();
+// DWORD GetWin10Version();
 void GetOsName(CString& OsFullName);
 
 ////------------------------------------------------

@@ -242,7 +242,6 @@ void CMainDialogFx::InitMenu()
 	UINT newItemID = 0;
 	UINT currentItemID = 0;
 	UINT defaultStyleItemID = 0;
-	//UINT defaultLanguageItemID = 0;
 	WIN32_FIND_DATA findData;
 	 
 	HANDLE hFind;

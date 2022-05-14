@@ -221,17 +221,6 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 #endif
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	OSVERSIONINFOEX osvi;
-	BOOL bosVersionInfoEx;
-
-	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	if (!(bosVersionInfoEx = GetVersionEx((OSVERSIONINFO *)&osvi)))
-	{
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-		GetVersionEx((OSVERSIONINFO *)&osvi);
-	}
-
 	m_hVoice = LoadLibrary(m_VoicePath);
 	if (m_hVoice != NULL)
 	{
@@ -1441,8 +1430,8 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 		{
 			positionX = 1000 - OFFSET_X;
 		}
-		m_List.MoveWindow((int)((8 + m_OffsetX) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672 - 16) * m_ZoomRatio), (int)(cy - ((SIZE_Y + 8) * m_ZoomRatio)));
-		m_CtrlVoice.MoveWindow((int)(positionX * m_ZoomRatio), (int)(48 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(cy - ((24 + 48) * m_ZoomRatio)));
+		m_List.MoveWindow((int)((8 + m_OffsetX) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672 - 16) * m_ZoomRatio), (int)(cy - ((int)(SIZE_Y + 8) * m_ZoomRatio)));
+		m_CtrlVoice.MoveWindow((int)(positionX * m_ZoomRatio), (int)(48 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(cy - (int)((24 + 48) * m_ZoomRatio)));
 		// m_CtrlCopyright.MoveWindow(0, (int)(cy - (24 * m_ZoomRatio)), (int)(m_OffsetX * m_ZoomRatio), (int)(24 * m_ZoomRatio));
 		m_CtrlCopyright.InitControl((int)(positionX * m_ZoomRatio), (int)(cy - (24 * m_ZoomRatio)), (int)(OFFSET_X * m_ZoomRatio), (int)(24 * m_ZoomRatio), 1.0, &m_BkDC, IP(PROJECT_COPYRIGHT), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
 #else

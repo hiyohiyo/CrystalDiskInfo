@@ -106,15 +106,14 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.16.4"
-#define PRODUCT_RELEASE				L"2022/04/08"
+#define PRODUCT_VERSION				L"8.17.0 Beta1"
+#define PRODUCT_RELEASE				L"2022/05/14"
 #define PRODUCT_COPY_YEAR			L"2008-2022"
 #define PRODUCT_LICENSE				L"The MIT License"
 
 #ifdef KUREI_KEI_SUPPORT
 #define PRODUCT_COPYRIGHT_1         L"© 2008-2022 hiyohiyo"
 #define PRODUCT_COPYRIGHT_2         L"© 2017-2022 Pronama LLC"
-
 #elif SUISHO_SHIZUKU_SUPPORT
 #define PRODUCT_COPYRIGHT_1         L"© 2008-2022 hiyohiyo"
 #define PRODUCT_COPYRIGHT_2         L"© 2012-2022 kirino kasumu"

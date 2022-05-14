@@ -6,7 +6,6 @@
 /*---------------------------------------------------------------------------*/
 // Reference : http://www.usefullcode.net/2007/02/hddsmart.html (ja)
 
-
 #include "stdafx.h"
 #include <comutil.h>
 #include "AtaSmart.h"
@@ -14,7 +13,7 @@
 #include <wbemcli.h>
 
 #include "DnpService.h"
-//#include "OsInfoFx.h"
+#include "OsInfoFx.h"
 
 //warning : enum3, enum class
 #pragma warning(disable : 26812)
@@ -30,32 +29,26 @@
 #define safeVirtualFree(h,b,c) { if( h != NULL ) { ::VirtualFree(h, b, c); h = NULL; } }
 #endif
 
-
 CAtaSmart::CAtaSmart()
 {
 	m_bAtaPassThrough = FALSE;
 	m_bAtaPassThroughSmart = FALSE;
 	m_bNVMeStorageQuery = FALSE;
 
-	if (UtilityFx__IsWindowsVersionOrGreater(10, 0)/*m_Os.dwMajorVersion >= 10*/) {
+	if (IsWindowsVersionOrGreaterFx(10, 0))
+	{
 		m_bAtaPassThrough = TRUE;
 		m_bAtaPassThroughSmart = TRUE;
 		m_bNVMeStorageQuery = TRUE;
 	}
-	else if (
-		UtilityFx__IsWindowsVersionOrGreater(6, 0) || UtilityFx__IsWindowsVersionOrGreater(5, 2)
-		//m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2)
-		) {
+	else if (IsWindowsVersionOrGreaterFx(6, 0) || IsWindowsVersionOrGreaterFx(5, 2))
+	{
 		m_bAtaPassThrough = TRUE;
 		m_bAtaPassThroughSmart = TRUE;
 	}
-	else if (
-		UtilityFx__IsWindowsVersionOrGreater(5, 1)//m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 1
-		) {
-		//CString cstr;
-		//cstr = m_Os.szCSDVersion;
-		//cstr.Replace(_T("Service Pack "), _T(""));
-		if (UtilityFx__IsWindowsVersionOrGreater(5, 1, 2)/*_tstoi(cstr) >= 2*/)
+	else if (IsWindowsVersionOrGreaterFx(5, 1))
+	{
+		if (IsWindowsVersionOrGreaterFx(5, 1, 2))
 		{
 			m_bAtaPassThrough = TRUE;
 			m_bAtaPassThroughSmart = TRUE;
@@ -63,46 +56,6 @@ CAtaSmart::CAtaSmart()
 	}
 }
 
-#if 0
-CAtaSmart::CAtaSmart()
-{
-	BOOL bosVersionInfoEx;
-	ZeroMemory(&m_Os, sizeof(OSVERSIONINFOEX));
-	m_Os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	if (!(bosVersionInfoEx = GetVersionEx((OSVERSIONINFO*)&m_Os)))
-	{
-		m_Os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-		GetVersionEx((OSVERSIONINFO*)&m_Os);
-	}
-
-	m_bAtaPassThrough = FALSE;
-	m_bAtaPassThroughSmart = FALSE;
-	m_bNVMeStorageQuery = FALSE;
-
-	if (m_Os.dwMajorVersion >= 10)
-	{
-		m_bAtaPassThrough = TRUE;
-		m_bAtaPassThroughSmart = TRUE;
-		m_bNVMeStorageQuery = TRUE;
-	}
-	else if (m_Os.dwMajorVersion >= 6 || (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 2))
-	{
-		m_bAtaPassThrough = TRUE;
-		m_bAtaPassThroughSmart = TRUE;
-	}
-	else if (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 1)
-	{
-		CString cstr;
-		cstr = m_Os.szCSDVersion;
-		cstr.Replace(_T("Service Pack "), _T(""));
-		if (_tstoi(cstr) >= 2)
-		{
-			m_bAtaPassThrough = TRUE;
-			m_bAtaPassThroughSmart = TRUE;
-		}
-	}
-}
-#endif
 CAtaSmart::~CAtaSmart()
 {
 }
@@ -695,10 +648,10 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 		*flagChangeDisk = FALSE;
 		for(int i = 0; i < vars.GetCount(); i++)
 		{
-			DISK_POSITION dp = { vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId };
-			//dp.PhysicalDriveId = vars[i].PhysicalDriveId;
-			//dp.ScsiTargetId = vars[i].ScsiTargetId;
-			//dp.ScsiPort = vars[i].ScsiPort;
+			DISK_POSITION dp = { };
+			dp.PhysicalDriveId = vars[i].PhysicalDriveId;
+			dp.ScsiTargetId = vars[i].ScsiTargetId;
+			dp.ScsiPort = vars[i].ScsiPort;
 			memcpy(&(dp.sasPhyEntity), &(vars[i].sasPhyEntity), sizeof(CSMI_SAS_PHY_ENTITY));
 
 			previous.Add(dp);
@@ -764,9 +717,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				else 
 				{
 					long securityFlag = 0;
-					if(UtilityFx__IsWindowsVersionOrGreater(6, 0)//m_Os.dwMajorVersion >= 6 // Vista or later
-				//	|| (m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion >= 1) // XP or later
-					)
+					if(IsWindowsVersionOrGreaterFx(6, 0))
 					{
 						securityFlag = WBEM_FLAG_CONNECT_USE_MAX_WAIT;
 					}
@@ -6284,10 +6235,6 @@ BOOL CAtaSmart::ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, 
 			memcpy_s(data, dataSize, ab.Buf, dataSize);
 		}
 	}
-	else if (!UtilityFx__IsWindowsVersionOrGreater(5, 0)/*m_Os.dwMajorVersion <= 4*/)
-	{
-		return FALSE;
-	}
 
 	return	bRet;
 }
@@ -6344,10 +6291,6 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 		{
 			memcpy_s(data, dataSize, ab.Buf, dataSize);
 		}
-	}
-	else if (!UtilityFx__IsWindowsVersionOrGreater(5, 0)/*m_Os.dwMajorVersion <= 4*/)
-	{
-		return FALSE;
 	}
 	else
 	{
@@ -8953,7 +8896,7 @@ BOOL CAtaSmart::GetSmartAttributeWmi(ATA_SMART_INFO* asi)
 
 BOOL CAtaSmart::GetSmartThresholdWmi(ATA_SMART_INFO* asi)
 {
-	if(!UtilityFx__IsWindowsVersionOrGreater(5, 1)/*m_Os.dwMajorVersion == 5 && m_Os.dwMinorVersion == 0*/)
+	if(! IsWindowsVersionOrGreaterFx(5, 1))
 	{
 		return FALSE;
 	}
@@ -8992,7 +8935,7 @@ BOOL CAtaSmart::GetSmartInfoWmi(DWORD type, ATA_SMART_INFO* asi)
 				IID_IWbemLocator, (LPVOID *)&pIWbemLocator)))
 		{
 			long securityFlag = 0;
-			if(UtilityFx__IsWindowsVersionOrGreater(6, 0)/*m_Os.dwMajorVersion >= 6*/){securityFlag = WBEM_FLAG_CONNECT_USE_MAX_WAIT;}
+			if(IsWindowsVersionOrGreaterFx(6, 0)){securityFlag = WBEM_FLAG_CONNECT_USE_MAX_WAIT;}
 			if(SUCCEEDED(pIWbemLocator->ConnectServer(_bstr_t(L"\\\\.\\root\\WMI"), 
 				NULL, NULL, 0L, securityFlag, NULL, NULL, &pIWbemServices)))
 			{

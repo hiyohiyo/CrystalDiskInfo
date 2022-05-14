@@ -208,6 +208,8 @@ HBRUSH CSoundSettingDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 			pDC->SetBkMode(TRANSPARENT);
 			return m_CtrlSlider.m_BkBrush;
 		}
+		return hbr;
+		break;
 	default:
 		return hbr;
 	}

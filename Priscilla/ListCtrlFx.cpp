@@ -63,8 +63,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 
 	if (m_bHighContrast)
 	{
-		TCHAR lpchar[1]{};
-		SetBkImage(lpchar/*L""*/);
+		SetBkImage((LPTSTR)L"");
 	}
 	else if (renderMode & OwnerDrawGlass || renderMode & OwnerDrawTransparent)
 	{
@@ -111,12 +110,13 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		{
 			for (int x = 0; x < maxWidth; x++)
 			{
-				const DWORD p = (y * maxWidth + x) * 4;
-				if (p + 4 > length)  continue;//buffer over run
+				DWORD p = (y * maxWidth + x) * 4;
+#pragma warning( disable : 6386 )
 				bitmapBits[p + 0] = b;
 				bitmapBits[p + 1] = g;
 				bitmapBits[p + 2] = r;
 				bitmapBits[p + 3] = a;
+#pragma warning( default : 6386 )
 			}
 		}
 
@@ -139,8 +139,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 	{
 		if(m_bNT6orLater)
 		{
-			TCHAR lpchar[1]{};
-			SetBkImage(lpchar/*L""*/);
+			SetBkImage((LPTSTR)L"");
 			SetBkColor(m_BkColor1);
 			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
@@ -184,8 +183,6 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 	BYTE* CtlBuffer = new BYTE[CtlMemSize];
 	ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
-	const int buffer_max = (int)(CtlMemSize > DstMemSize ? DstMemSize : CtlMemSize);
-
 	int baseY = 0;
 	for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
 	{
@@ -193,7 +190,8 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 		int cn = (baseY + py) * CtlLineBytes;
 		for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 		{
-			if (cn + 4 > buffer_max || dn + 4 > buffer_max )  continue;//buffer over run
+#pragma warning( disable : 6385 )
+#pragma warning( disable : 6386 )
 			BYTE a = CtlBuffer[cn + 3];
 			BYTE na = 255 - a;
 			CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
@@ -201,6 +199,8 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 			CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
 			dn += (DstBmpInfo.bmBitsPixel / 8);
 			cn += (CtlBmpInfo.bmBitsPixel / 8);
+#pragma warning( default : 6386 )
+#pragma warning( default : 6385 )
 		}
 	}
 

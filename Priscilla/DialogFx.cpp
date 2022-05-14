@@ -191,7 +191,6 @@ void CDialogFx::SetClientSize(int sizeX, int sizeY, double zoomRatio)
 void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 {
 	HRESULT hr;
-	//BOOL    br = FALSE;
 	CImage srcBitmap;
 	double ratio = m_ZoomRatio;
 	m_bBkImage = FALSE;
@@ -381,8 +380,7 @@ DWORD CDialogFx::ChangeZoomType(DWORD zoomType)
 
 BOOL CDialogFx::IsHighContrast()
 {
-	HIGHCONTRAST hc;
-	hc.cbSize = sizeof(HIGHCONTRAST);
+	HIGHCONTRAST hc = { sizeof(HIGHCONTRAST) };
 	SystemParametersInfoW(SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0);
 
 	return hc.dwFlags & HCF_HIGHCONTRASTON;
@@ -542,7 +540,7 @@ afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 	m_Dpi = (INT)HIWORD(wParam);
 
-	if (GetWin10Version() >= 1709) // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+	if (IsWindowBuildOrGreater(16299)) // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
 	{
 		ChangeZoomType(m_ZoomType);
 		m_bDpiChanging = TRUE;

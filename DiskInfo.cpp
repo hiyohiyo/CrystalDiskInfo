@@ -62,22 +62,11 @@ BOOL CDiskInfoApp::InitInstance()
 	HANDLE hMutex = NULL;
 
 	INITCOMMONCONTROLSEX InitCtrls = { sizeof(INITCOMMONCONTROLSEX) };
-	//InitCtrls.dwSize = sizeof(InitCtrls);
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 	CWinApp::InitInstance();
 
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-	// IE Version Check.
-	/*
-	if(GetFileVersion(_T("Shdocvw.dll")) < 471)
-	{
-		AfxMessageBox(_T("CrystalDiskInfo is required IE 6.0 or later."));
-	}
-	*/
-
-	// CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
 	// for WMI error
 	SetErrorMode(SEM_FAILCRITICALERRORS);
@@ -128,7 +117,7 @@ BOOL CDiskInfoApp::InitInstance()
 			{
 				Sleep(time * 1000);
 			}
-			TCHAR str[MAX_PATH];
+			TCHAR str[MAX_PATH] = {};
 			::GetModuleFileName(NULL, str, MAX_PATH);
 			ShellExecute(NULL, NULL, str, NULL, NULL, SW_SHOWNORMAL);
 			return FALSE;
@@ -146,7 +135,6 @@ BOOL CDiskInfoApp::InitInstance()
 			m_SaveAsText = m_Txt;
 			m_bCopyExit = TRUE;
 		}
-
 	}
 
 	// DEBUG
@@ -169,7 +157,7 @@ BOOL CDiskInfoApp::InitInstance()
 
 	CString DefaultTheme;
 	CString DefaultLanguage;
-	TCHAR tmp[MAX_PATH];
+	TCHAR tmp[MAX_PATH] = {};
 
 	GetModuleFileName(NULL, tmp, MAX_PATH);
 	if((ptrEnd = _tcsrchr(tmp, '\\')) != NULL)
@@ -183,8 +171,8 @@ BOOL CDiskInfoApp::InitInstance()
 //	m_GadgetDir.Format(_T("%s\\%s"), tmp, GADGET_DIR);
 
 	// Smart folder
-	TCHAR smartDir[256];
-	GetPrivateProfileString(_T("Setting"), _T("SmartDir"), _T(""), smartDir, 256, m_Ini);
+	TCHAR smartDir[MAX_PATH] = {};
+	GetPrivateProfileString(_T("Setting"), _T("SmartDir"), _T(""), smartDir, MAX_PATH, m_Ini);
 	if (_tcscmp(smartDir, _T("")) != 0 || CreateDirectory(smartDir, nullptr) || GetLastError() == ERROR_ALREADY_EXISTS) {
 		m_SmartDir.Format(_T("%s"), smartDir);
 		if (m_SmartDir.Right(1).Compare(_T("\\")) != 0) // Add "\"
@@ -229,17 +217,6 @@ BOOL CDiskInfoApp::InitInstance()
 	DefaultTheme.Format(_T("%s\\%s"), m_ThemeDir.GetString(), DEFAULT_THEME);
 	DefaultLanguage.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), DEFAULT_LANGUAGE);
 
-	/*OSVERSIONINFOEX osvi;
-	BOOL bosVersionInfoEx;
-
-	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	if(!(bosVersionInfoEx = GetVersionEx((OSVERSIONINFO *)&osvi)))
-	{
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-		GetVersionEx((OSVERSIONINFO *)&osvi);
-	}*/
-
 	if((BOOL)GetPrivateProfileInt(_T("Workaround"), _T("IE8MODE"), 0, m_Ini))
 	{
 		m_GraphDlgPath.Format(_T("%s\\") DIALOG_DIR GRAPH_DIALOG_IE8, tmp);
@@ -257,18 +234,15 @@ BOOL CDiskInfoApp::InitInstance()
 //	if(! IsFileExistEx(DefaultTheme, DEFAULT_THEME))				{	return FALSE;	}
 	if(! IsFileExistEx(DefaultLanguage, DEFAULT_LANGUAGE))			{	return FALSE;	}
 
-// for Windows NT family
-#ifdef _UNICODE
 	if(! IsUserAnAdmin())
 	{
-		if( ! UtilityFx__IsWindowsVersionOrGreater( 6, 0 )/*osvi.dwMajorVersion < 6*/)
+		if( ! IsWindowsVersionOrGreaterFx(6, 0))
 		{
 			AfxMessageBox(_T("CrystalDiskInfo is required Administrator Privileges."));
 		}
 		RunAsRestart();
 		return FALSE;
 	}
-#endif
 
 	BOOL flagAfxOleInit = FALSE;
 
@@ -276,7 +250,7 @@ BOOL CDiskInfoApp::InitInstance()
 	{
 		CGraphDlg dlg(NULL, defaultDisk);
 		m_pMainWnd = &dlg;
-		/*INT_PTR nResponse = */(void)dlg.DoModal();
+		dlg.DoModal();
 	}
 	else
 	{

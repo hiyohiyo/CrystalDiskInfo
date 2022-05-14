@@ -152,7 +152,6 @@ void CDHtmlMainDialog::InitMenu()
 	UINT newItemID = 0;
 	UINT currentItemID = 0;
 	UINT defaultStyleItemID = 0;
-	//UINT defaultLanguageItemID = 0;
 	WIN32_FIND_DATA findData;
 	WIN32_FIND_DATA findCssData;
 	HANDLE hFind;
@@ -452,8 +451,7 @@ BOOL CDHtmlMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString t
 {
 	if(m_bResident)
 	{
-		NOTIFYICONDATA nidata;
-		nidata.cbSize = sizeof(NOTIFYICONDATA);
+		NOTIFYICONDATA nidata = { sizeof(NOTIFYICONDATA) };
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
 		nidata.uFlags = NIF_TIP | NIF_ICON | NIF_MESSAGE;
@@ -485,8 +483,7 @@ BOOL CDHtmlMainDialog::ModifyTaskTrayIcon(UINT id, HICON icon)
 {
 	if(m_bResident)
 	{
-		NOTIFYICONDATA nidata;
-		nidata.cbSize = sizeof(NOTIFYICONDATA);
+		NOTIFYICONDATA nidata = { sizeof(NOTIFYICONDATA) };
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
 		nidata.uFlags = NIF_ICON;
@@ -508,8 +505,7 @@ BOOL CDHtmlMainDialog::ModifyTaskTrayTip(UINT id, CString tip)
 {
 	if(m_bResident)
 	{
-		NOTIFYICONDATA nidata;
-		nidata.cbSize = sizeof(NOTIFYICONDATA);
+		NOTIFYICONDATA nidata = { sizeof(NOTIFYICONDATA) };
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
 		nidata.uFlags = NIF_TIP;
@@ -533,8 +529,7 @@ BOOL CDHtmlMainDialog::ModifyTaskTray(UINT id, HICON icon, CString tip)
 {
 	if(m_bResident)
 	{
-		NOTIFYICONDATA nidata;
-		nidata.cbSize = sizeof(NOTIFYICONDATA);
+		NOTIFYICONDATA nidata = { sizeof(NOTIFYICONDATA) };
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
 		nidata.uFlags = NIF_TIP|NIF_ICON;
@@ -558,8 +553,7 @@ BOOL CDHtmlMainDialog::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, C
 {
 	if(m_bResident)
 	{
-		NOTIFYICONDATA nidata;
-		nidata.cbSize = sizeof(NOTIFYICONDATA);
+		NOTIFYICONDATA nidata = { sizeof(NOTIFYICONDATA) };
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
 		nidata.uFlags = NIF_INFO;
@@ -585,8 +579,7 @@ BOOL CDHtmlMainDialog::RemoveTaskTray(UINT id)
 {
 	if(m_bResident)
 	{
-		NOTIFYICONDATA nidata;
-		nidata.cbSize = sizeof(NOTIFYICONDATA);
+		NOTIFYICONDATA nidata = { sizeof(NOTIFYICONDATA) };
 		nidata.hWnd = m_hWnd;
 		nidata.uID = id;
 
