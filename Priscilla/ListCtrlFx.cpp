@@ -87,9 +87,9 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		m_CtrlBitmap.Detach();
 		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
 
-		DWORD length = maxWidth * maxHeight * 4;
-		BYTE* bitmapBits = new BYTE[length];
-		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
+		//DWORD length = maxWidth * maxHeight * 4;
+		BYTE* bitmapBits = new BYTE[(size_t)maxWidth * maxHeight * 4];
+		m_CtrlBitmap.GetBitmapBits(maxWidth * maxHeight * 4, bitmapBits);
 
 		BYTE r, g, b, a;
 		if (renderMode & OwnerDrawGlass)
@@ -111,17 +111,50 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		{
 			for (int x = 0; x < maxWidth; x++)
 			{
-				const DWORD p = (y * maxWidth + x) * 4;
-				if (p + 4 > length)  continue;//buffer over run
-				bitmapBits[p + 0] = b;
-				bitmapBits[p + 1] = g;
-				bitmapBits[p + 2] = r;
-				bitmapBits[p + 3] = a;
+				//const DWORD p = (y1 * maxWidth + x1) * 4;
+				//if (p + 4 > length)  continue;//buffer over run
+				bitmapBits[(y * maxWidth + x) * 4 + 0] = b;
+				bitmapBits[(y * maxWidth + x) * 4 + 1] = g;
+				bitmapBits[(y * maxWidth + x) * 4 + 2] = r;
+				bitmapBits[(y * maxWidth + x) * 4 + 3] = a;
 			}
 		}
 
-		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
+		m_CtrlBitmap.SetBitmapBits(maxWidth * maxHeight * 4, bitmapBits);
 		delete[] bitmapBits;
+
+		/*
+		// no test altanate (faster? 32bit)
+		DWORD* bitmapBitsDWORD = new DWORD[(size_t)maxWidth * maxHeight];
+		m_CtrlBitmap.GetBitmapBits(maxWidth * maxHeight * 4, bitmapBitsDWORD);
+
+		BYTE r, g, b, a;
+		if (renderMode & OwnerDrawGlass)
+		{
+			r = (BYTE)GetRValue(m_GlassColor);
+			g = (BYTE)GetGValue(m_GlassColor);
+			b = (BYTE)GetBValue(m_GlassColor);
+			a = m_GlassAlpha;
+		}
+		else // OwnerDrawTransparent
+		{
+			r = 0;
+			g = 0;
+			b = 0;
+			a = 0;
+		}
+
+		const DWORD rgba = (a << 24) | (r << 16) | (g << 8) | b;
+		const UINT_PTR maxWH = (UINT_PTR)maxWidth * maxHeight;
+		for (UINT_PTR i = 0; i < maxWH; ++i)
+		{
+			bitmapBitsDWORD[i] = rgba;
+		}
+
+		m_CtrlBitmap.SetBitmapBits(maxWidth * maxHeight * 4, bitmapBitsDWORD);
+		delete[] bitmapBitsDWORD;
+		*/
+
 
 		SetupControlImage(m_BkBitmap, m_CtrlBitmap);
 		if(m_bNT6orLater)
@@ -179,9 +212,9 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 	ctrlBitmap.GetBitmap(&CtlBmpInfo);
 	DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
 	DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
-	BYTE* DstBuffer = new BYTE[DstMemSize];
+	BYTE* DstBuffer = new BYTE[(size_t)DstBmpInfo.bmWidth * DstBmpInfo.bmHeight * 4/*/*DstMemSize*/];
 	bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
-	BYTE* CtlBuffer = new BYTE[CtlMemSize];
+	BYTE* CtlBuffer = new BYTE[(size_t)CtlBmpInfo.bmWidth * CtlBmpInfo.bmHeight * 4/*CtlMemSize*/];
 	ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
 	const int buffer_max = (int)(CtlMemSize > DstMemSize ? DstMemSize : CtlMemSize);
@@ -193,7 +226,7 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 		int cn = (baseY + py) * CtlLineBytes;
 		for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 		{
-			if (cn + 4 > buffer_max || dn + 4 > buffer_max )  continue;//buffer over run
+			//if (cn + 4 > buffer_max || dn + 4 > buffer_max )  continue;//buffer over run
 			BYTE a = CtlBuffer[cn + 3];
 			BYTE na = 255 - a;
 			CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);

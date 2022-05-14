@@ -399,9 +399,9 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 			ctrlBitmap.GetBitmap(&CtlBmpInfo);
 			DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
 			DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
-			BYTE* DstBuffer = new BYTE[DstMemSize];
+			BYTE* DstBuffer = new BYTE[(size_t)DstBmpInfo.bmWidth * DstBmpInfo.bmHeight * 4/*/*DstMemSize*/];
 			bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
-			BYTE* CtlBuffer = new BYTE[CtlMemSize];
+			BYTE* CtlBuffer = new BYTE[(size_t)CtlBmpInfo.bmWidth * CtlBmpInfo.bmHeight * 4/*CtlMemSize*/];
 			ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
 			const int buffer_max = (int)(CtlMemSize > DstMemSize ? DstMemSize : CtlMemSize);
@@ -412,7 +412,7 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 				int cn = (baseY + py) * CtlLineBytes;
 				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 				{
-					if (cn + 4 > buffer_max || dn + 4 > buffer_max)  continue;//buffer over run
+					//if (cn + 4 > buffer_max || dn + 4 > buffer_max)  continue;//buffer over run
 					BYTE a = CtlBuffer[cn + 3];
 					BYTE na = 255 - a;
 					DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
