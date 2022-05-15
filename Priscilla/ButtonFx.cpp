@@ -7,6 +7,8 @@
 
 #include "../stdafx.h"
 #include "ButtonFx.h"
+#include <algorithm>
+#include <vector>
 
 ////------------------------------------------------
 //   CButtonFx
@@ -133,42 +135,25 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy * m_ImageCount, 32);
 		m_CtrlBitmap.Detach();
 		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
-		DWORD length = m_CtrlSize.cx * m_CtrlSize.cy * m_ImageCount * 4;
-		BYTE* bitmapBits = new BYTE[length];
-		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
+		DWORD nrPixles = m_CtrlSize.cx * m_CtrlSize.cy * m_ImageCount;
+		std::vector<RGBQUAD> bitmapBits(nrPixles);
 
-		BYTE r, g, b, a;
+		RGBQUAD pixel{};
 		if (renderMode & OwnerDrawGlass)
 		{
-			r = (BYTE)GetRValue(m_GlassColor);
-			g = (BYTE)GetGValue(m_GlassColor);
-			b = (BYTE)GetBValue(m_GlassColor);
-			a = m_GlassAlpha;
+			pixel.rgbRed = GetRValue(m_GlassColor);
+			pixel.rgbGreen = GetGValue(m_GlassColor);
+			pixel.rgbGreen = GetBValue(m_GlassColor);
+			pixel.rgbReserved = m_GlassAlpha;
 		}
 		else // OwnerDrawTransparent
 		{
-			r = 0;
-			g = 0;
-			b = 0;
-			a = 0;
+			constexpr BYTE ALPHA_TRANSPARENT{0};
+			pixel.rgbReserved = ALPHA_TRANSPARENT;
 		}
+		std::fill(begin(bitmapBits), end(bitmapBits), pixel);
 
-		for (int y = 0; y < (int)(m_CtrlSize.cy * m_ImageCount); y++)
-		{
-			for (int x = 0; x < m_CtrlSize.cx; x++)
-			{
-				DWORD p = (y * m_CtrlSize.cx + x) * 4;
-#pragma warning( disable : 6386 )
-				bitmapBits[p + 0] = b;
-				bitmapBits[p + 1] = g;
-				bitmapBits[p + 2] = r;
-				bitmapBits[p + 3] = a;
-#pragma warning( default : 6386 )
-			}
-		}
-
-		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
-		delete[] bitmapBits;
+		m_CtrlBitmap.SetBitmapBits(static_cast<DWORD>(size(bitmapBits) * sizeof(RGBQUAD)), data(bitmapBits));
 	}
 
 	Invalidate();
