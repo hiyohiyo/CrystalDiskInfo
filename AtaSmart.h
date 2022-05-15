@@ -1070,6 +1070,8 @@ protected:
 #define CSMI_SAS_LINK_RATE_NEGOTIATED  0x00
 #define CSMI_SAS_LINK_RATE_1_5_GBPS    0x08
 #define CSMI_SAS_LINK_RATE_3_0_GBPS    0x09
+#define CSMI_SAS_LINK_RATE_6_0_GBPS    0x0A
+#define CSMI_SAS_LINK_RATE_12_0_GBPS   0x0B
 
 // Connection status
 // (bConnectionStatus)

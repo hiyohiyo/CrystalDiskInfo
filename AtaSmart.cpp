@@ -1250,6 +1250,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				AfxMessageBox(cstr);
 			}
 			*/
+			cstr.Format(_T("MAX_SEARCH_PHYSICAL_DRIVE"));
 
 			for (int i = 0; i < MAX_SEARCH_PHYSICAL_DRIVE; i++)
 			{
@@ -1280,32 +1281,58 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				safeCloseHandle(hIoCtrl);
 			}
 
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 			///////////////////////////////
 			// Intel/AMD RAID support
 			///////////////////////////////
-#if ! defined(_M_ARM) && ! defined(_M_ARM64)
+
+			DebugPrint(L"CSMI");
 			//AMD RAIDXpert2 9.3.x// +AMD_RC2
 			if (FlagAMD_RC2 && AmdRaidDriverVersion >= 93)
 			{
+				DebugPrint(L"AddDiskAMD_RC2");
 				AddDiskAMD_RC2();// +AMD_RC2
 			}
 			else // +AMD_RC2
-#endif
 			// AMD RAIDXpert2 9.2.0.x may cause BSoD
 			if (AmdRaidDriverVersion != 92)// -2021/11/06
 			{
+				DebugPrint(L"AMD/Intel RAID (CSMI)");
 				for (int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
 				{
 					AddDiskCsmi(i);
 				}
 			}
 
-
+			// Intel RST on Windows 11 22H2
+			// https://crystalmark.info/board/c-board.cgi?cmd=one;no=2354;id=#2354
+			/*
+			if (CsmiType != CSMI_TYPE_DISABLE)
+			{
+				IDENTIFY_DEVICE identify = {};
+				DWORD diskSize = 0;
+				for (int port = 0; port < 8; port++)
+				{
+					for (int pathId = 0; pathId < 16; pathId++)
+					{
+						cstr.Format(L"DoIdentifyDeviceNVMeIntelRst(-1, %d, %d)", port, pathId);
+						DebugPrint(cstr);
+						if (DoIdentifyDeviceNVMeIntelRst(-1, port, pathId, &identify, &diskSize))
+						{
+							DebugPrint(L"AddDiskNVMe");
+							AddDiskNVMe(-1, port, pathId, 0, 0, CMD_TYPE_NVME_INTEL_RST, &identify, &diskSize);
+						}
+					}
+				}
+			}
+			*/
+#endif
 			///////////////////////////////
 			// MegaRAID SAS support
 			///////////////////////////////
 			if(FlagMegaRAID)
 			{
+				DebugPrint(L"MegaRAID");
 				for(int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
 				{
 					AddDiskMegaRAID(i);
@@ -1514,7 +1541,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 								flagNVMe = TRUE;
 							}
 						}
-						else if (model.Find(_T("NVMe")) >= 0 || pnpDeviceId.Find(_T("NVME")) >= 0)
+						else if (model.Find(_T("NVMe")) >= 0 || pnpDeviceId.Find(_T("NVME")) >= 0 || model.Find(_T("Optane")) >= 0 || pnpDeviceId.Find(_T("OPTANE")) >= 0)
 						{
 							DebugPrint(_T("INTERFACE_TYPE_NVME"));
 							interfaceType = INTERFACE_TYPE_NVME;
@@ -1524,6 +1551,9 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 						{
 							flagTarget = TRUE;
 						}
+
+						cstr.Format(L"InterfaceTypeId=%d", interfaceType);
+						DebugPrint(cstr);
 						
 						for(int i = 0; i < externals.GetCount(); i++)
 						{
@@ -3522,6 +3552,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.DiskVendorId = HDD_GENERAL;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
+	else if (IsSsdSanDisk(asi))
+	{
+		asi.DiskVendorId = SSD_VENDOR_SANDISK;
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+	}
 	else if (IsSsdWdc(asi))
 	{
 		asi.SmartKeyName = _T("SmartWdc");
@@ -3623,11 +3658,6 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 	{
 		asi.SmartKeyName = _T("SmartPlextor");
 		asi.DiskVendorId = SSD_VENDOR_PLEXTOR;
-		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
-	}
-	else if(IsSsdSanDisk(asi))
-	{
-		asi.DiskVendorId = SSD_VENDOR_SANDISK;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
 	else if (IsSsdKingston(asi))
@@ -4461,6 +4491,8 @@ BOOL CAtaSmart::IsSsdIntelDc(ATA_SMART_INFO& asi)
 BOOL CAtaSmart::IsSsdIntel(ATA_SMART_INFO &asi)
 {
 	BOOL flagSmartType = FALSE;
+	CString modelUpper = asi.Model;
+	modelUpper.MakeUpper();
 
 	if(asi.Attribute[ 0].Id == 0x03
 	&& asi.Attribute[ 1].Id == 0x04
@@ -4483,7 +4515,7 @@ BOOL CAtaSmart::IsSsdIntel(ATA_SMART_INFO &asi)
 		}
 	}
 
-	return (asi.Model.Find(_T("INTEL")) >= 0 || flagSmartType == TRUE);
+	return (modelUpper.Find(_T("INTEL")) >= 0 || modelUpper.Find(_T("SOLIDIGM")) >= 0 || flagSmartType == TRUE);
 }
 
 
@@ -4835,6 +4867,13 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 		{
 			asi.FlagLifeSanDisk1 = TRUE;
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
+			asi.SmartKeyName = _T("SmartSanDiskGb");
+		}
+		// 2022/04/24
+		// https://osdn.net/projects/crystaldiskinfo/ticket/44354
+		else if (asi.Model.Find(_T("1006")) > 0)
+		{
+			asi.HostReadsWritesUnit = HOST_READS_WRITES_16MB;
 			asi.SmartKeyName = _T("SmartSanDiskGb");
 		}
 		else if (asi.Model.Find(_T("iSSD P4")) >= 0)
@@ -9022,6 +9061,9 @@ HANDLE CAtaSmart::GetIoCtrlHandleCsmi(INT scsiPort)
 
 BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 {
+	CString cstr;
+	cstr.Format(L"AddDiskCsmi(%d)", scsiPort);
+	DebugPrint(cstr);
 	if(CsmiType == CSMI_TYPE_DISABLE)
 	{
 		return FALSE;
@@ -9036,18 +9078,17 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 	CSMI_SAS_DRIVER_INFO_BUFFER driverInfoBuf = {};
 	if(! CsmiIoctl(hHandle, CC_CSMI_SAS_GET_DRIVER_INFO, &driverInfoBuf.IoctlHeader, sizeof(driverInfoBuf)))
 	{
-		safeCloseHandle(hHandle);
+	//	safeCloseHandle(hHandle);
 		DebugPrint(_T("FAILED: CC_CSMI_SAS_GET_DRIVER_INFO"));
-		return FALSE;
+	//	return FALSE;
 	}
-
 
 	CSMI_SAS_RAID_INFO_BUFFER raidInfoBuf = {};
 	if(! CsmiIoctl(hHandle, CC_CSMI_SAS_GET_RAID_INFO, &raidInfoBuf.IoctlHeader, sizeof(raidInfoBuf)))
 	{
-		safeCloseHandle(hHandle);
+	//	safeCloseHandle(hHandle);
 		DebugPrint(_T("FAILED: CC_CSMI_SAS_GET_RAID_INFO"));
-		return FALSE;
+	//	return FALSE;
 	}
 
 //	CArray<CSMI_SAS_RAID_DRIVES, CSMI_SAS_RAID_DRIVES> raidDrives;
@@ -9116,8 +9157,11 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 		// Intel RST NVMe RAID support
 		for (int j = 0; j < raidDrives.GetCount(); j++)
 		{
+			cstr.Format(L"DoIdentifyDeviceNVMeIntelRst(-1, %d, %d)", scsiPort, raidDrives.GetAt(j));
+			DebugPrint(cstr);
 			if (DoIdentifyDeviceNVMeIntelRst(-1, scsiPort, raidDrives.GetAt(j), &identify, &diskSize))
 			{
+				DebugPrint(L"AddDiskNVMe");
 				AddDiskNVMe(-1, scsiPort, raidDrives.GetAt(j), 0, 0, CMD_TYPE_NVME_INTEL_RST, &identify, &diskSize);
 			}
 		}
