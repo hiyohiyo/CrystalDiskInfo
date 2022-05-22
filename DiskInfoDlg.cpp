@@ -1252,7 +1252,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 //	m_CtrlDiskStatus.SetAlpha(IMAGE_ALPHA);
 
 	className.Replace(L"Green", L"");
-	if (m_Ata.vars.GetCount() && m_Ata.vars[m_SelectDisk].Life == 100)
+	if (m_Ata.vars.GetCount() && className.Find(L"Good") != -1 && m_Ata.vars[m_SelectDisk].Life == 100)
 	{
 		className += L"100";
 	}

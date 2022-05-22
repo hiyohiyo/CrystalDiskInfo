@@ -10556,7 +10556,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		}
 		else 
 		if(
-		   (vars[i].Attribute[j].Id == 0xA9 && (vars[i].DiskVendorId == SSD_VENDOR_REALTEK || (vars[i].DiskVendorId == SSD_VENDOR_KINGSTON && vars[i].HostReadsWritesUnit == HOST_READS_WRITES_32MB /*KingstonKC600*/)))
+		   (vars[i].Attribute[j].Id == 0xA9 && (vars[i].DiskVendorId == SSD_VENDOR_REALTEK || (vars[i].DiskVendorId == SSD_VENDOR_KINGSTON && vars[i].HostReadsWritesUnit == HOST_READS_WRITES_32MB /*KingstonKC600*/) || vars[i].DiskVendorId == SSD_VENDOR_SILICONMOTION))
 		|| (vars[i].Attribute[j].Id == 0xAD && vars[i].DiskVendorId == SSD_VENDOR_KIOXIA)
 		|| (vars[i].Attribute[j].Id == 0xB1 && vars[i].DiskVendorId == SSD_VENDOR_SAMSUNG)
 		|| (vars[i].Attribute[j].Id == 0xBB && vars[i].DiskVendorId == SSD_VENDOR_MTRON)
