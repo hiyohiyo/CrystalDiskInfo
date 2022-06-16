@@ -4923,7 +4923,7 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 				asi.SmartKeyName = _T("SmartSanDiskLenovo");
 			}			
 		}
-		else if (asi.Model.Find(_T("G1012")) >= 0 || asi.Model.Find(_T("Z400s 2.5"))) // DELL OEM
+		else if (asi.Model.Find(_T("G1012")) >= 0 || asi.Model.Find(_T("Z400s 2.5")) >= 0) // DELL OEM
 		{
 			asi.DiskVendorId = SSD_VENDOR_SANDISK_DELL;
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
