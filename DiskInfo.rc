@@ -1289,7 +1289,7 @@ BEGIN
             MENUITEM "SSD - Marvell",               ID_SSD_MARVELL
             MENUITEM "SSD - Maxiotek",              ID_SSD_MAXIOTEK
             MENUITEM "SSD - Micron",                ID_SSD_MICRON
-            MENUITEM "SSD - Micron MU02",           ID_SSD_MICRON_MU02
+            MENUITEM "SSD - Micron MU03",           ID_SSD_MICRON_MU03
             MENUITEM "SSD - MTRON",                 ID_SSD_MTRON
             MENUITEM "SSD - OCZ",                   ID_SSD_OCZ
             MENUITEM "SSD - OCZ VECTOR",            ID_SSD_OCZ_VECTOR
@@ -1301,6 +1301,13 @@ BEGIN
             MENUITEM "SSD - SandForce",             ID_SSD_SANDFORCE
             MENUITEM "SSD - SanDisk",               ID_SSD_SANDISK
             MENUITEM "SSD - SanDisk GB",            ID_SSD_SANDISK_GB
+
+            MENUITEM "SSD - SanDisk DELL",          ID_SSD_SANDISK_DELL,
+            MENUITEM "SSD - SanDisk HP",            ID_SSD_SANDISK_HP,
+            MENUITEM "SSD - SanDisk HP (Venus)",    ID_SSD_SANDISK_HP_VENUS,
+            MENUITEM "SSD - SanDisk Lenovo",        ID_SSD_SANDISK_LENOVO,
+            MENUITEM "SSD - SanDisk Lenovo (Helen/Venus)", ID_SSD_SANDISK_LENOVO_HELEN_VENUS,
+
             MENUITEM "SSD - Seagate",               ID_SSD_SEAGATE
             MENUITEM "SSD - Seagate Barra Cuda",    ID_SSD_SEAGATE_BARRA_CUDA
             MENUITEM "SSD - Seagate IronWolf",      ID_SSD_SEAGATE_IRON_WOLF

@@ -64,7 +64,7 @@ static const TCHAR* ssdVendorString[] =
 	_T("to"), // TOSHIABA
 	_T("co"), // Corsair
 	_T("ki"), // Kingston
-	_T("m2"), // Micron MU02
+	_T("m3"), // Micron MU03
 	_T("nv"), // NVMe
 	_T("re"), // Realtek
 	_T("sk"), // SKhynix
@@ -89,6 +89,11 @@ static const TCHAR* ssdVendorString[] =
 	_T(""),	  // _T("SmartKingstonDC500"),
 	_T(""),	  // _T("SmartKingstonSA400"),
 	_T("re"), // RECADATA
+	_T(""),	  // _T("SmartSanDiskDell"),
+	_T(""),	  // _T("SmartSanDiskHp"),
+	_T(""),	  // _T("SmartSanDiskHpVenus"),
+	_T(""),	  // _T("SmartSanDiskLenovo"),
+	_T(""),	  // _T("SmartSanDiskLenovoHelenVenus"),
 };
 
 static const TCHAR* attributeString[] =
@@ -111,7 +116,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartToshiba"),
 	_T("SmartCorsair"),
 	_T("SmartKingston"),
-	_T("SmartMicronMU02"),
+	_T("SmartMicronMU03"),
 	_T("SmartNVMe"),
 	_T("SmartRealtek"),
 	_T("SmartSKhynix"),
@@ -136,6 +141,11 @@ static const TCHAR* attributeString[] =
 	_T("SmartKingstonDC500"),
 	_T("SmartKingstonSA400"),
 	_T("SmartRecadata"),
+	_T("SmartSanDiskDell"),
+	_T("SmartSanDiskHp"),
+	_T("SmartSanDiskHpVenus"),
+	_T("SmartSanDiskLenovo"),
+	_T("SmartSanDiskLenovoHelenVenus"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -190,7 +200,7 @@ public:
 		SSD_VENDOR_TOSHIBA = 15,
 		SSD_VENDOR_CORSAIR = 16,
 		SSD_VENDOR_KINGSTON = 17,
-		SSD_VENDOR_MICRON_MU02 = 18,
+		SSD_VENDOR_MICRON_MU03 = 18,
 		SSD_VENDOR_NVME = 19,
 		SSD_VENDOR_REALTEK = 20,
 		SSD_VENDOR_SKHYNIX = 21,
@@ -217,6 +227,12 @@ public:
 		SSD_VENDOR_KINGSTON_SA400 = 41,
 
 		SSD_VENDOR_RECADATA = 42,
+
+		SSD_VENDOR_SANDISK_DELL = 43,
+		SSD_VENDOR_SANDISK_HP = 44,
+		SSD_VENDOR_SANDISK_HP_VENUS = 45,
+		SSD_VENDOR_SANDISK_LENOVO = 46,
+		SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS = 47,
 
 		SSD_VENDOR_MAX = 99,
 
@@ -2034,7 +2050,7 @@ protected:
 	BOOL IsSsdIntelDc(ATA_SMART_INFO& asi);
 	BOOL IsSsdSamsung(ATA_SMART_INFO &asi);
 	BOOL IsSsdSandForce(ATA_SMART_INFO &asi);
-	BOOL IsSsdMicronMU02(ATA_SMART_INFO &asi);
+	BOOL IsSsdMicronMU03(ATA_SMART_INFO &asi);
 	BOOL IsSsdMicron(ATA_SMART_INFO &asi);
 	BOOL IsSsdOcz(ATA_SMART_INFO &asi);
 	BOOL IsSsdSsstc(ATA_SMART_INFO &asi);

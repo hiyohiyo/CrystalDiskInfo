@@ -924,7 +924,7 @@
 #define ID_SSD_TOSHIBA					33016
 #define ID_SSD_CORSAIR					33017
 #define ID_SSD_KINGSTON					33018
-#define ID_SSD_MICRON_MU02				33019
+#define ID_SSD_MICRON_MU03				33019
 #define ID_SSD_REALTEK					33020
 #define ID_SSD_NVME                     33021
 #define ID_SSD_SKHYNIX					33022
@@ -950,6 +950,12 @@
 #define ID_SSD_KINGSTON_DC500			33041
 #define ID_SSD_KINGSTON_SA400			33042
 #define ID_SSD_RECADATA			        33043
+
+#define ID_SSD_SANDISK_DELL             33044
+#define ID_SSD_SANDISK_HP               33045
+#define ID_SSD_SANDISK_HP_VENUS         33046
+#define ID_SSD_SANDISK_LENOVO           33047
+#define ID_SSD_SANDISK_LENOVO_HELEN_VENUS 33048
 
 #define ID_SSD_MAX                      33049
 #define ID_ATA_PASS_THROUGH_SMART       33050

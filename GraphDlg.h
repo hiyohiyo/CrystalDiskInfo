@@ -228,7 +228,7 @@ public:
 	afx_msg void OnSsdToshiba();
 	afx_msg void OnSsdCorsair();
 	afx_msg void OnSsdKingston();
-	afx_msg void OnSsdMicronMU02();
+	afx_msg void OnSsdMicronMU03();
 	afx_msg void OnSsdRealtek();
 	afx_msg void OnSsdNVMe();
 	afx_msg void OnSsdSkHynix();
@@ -243,6 +243,11 @@ public:
 	afx_msg void OnSsdYmtc();
 	afx_msg void OnSsdScy();
 	afx_msg void OnSsdRecadata();
+	afx_msg void OnSsdSanDiskDell();
+	afx_msg void OnSsdSanDiskHp();
+	afx_msg void OnSsdSanDiskHpVenus();
+	afx_msg void OnSsdSanDiskLenovo();
+	afx_msg void OnSsdSanDiskLenovoHelenVenus();
 
 	afx_msg void OnSsdJmicron60x();
 	afx_msg void OnSsdJmicron61x();

@@ -548,16 +548,17 @@ CString CDiskInfoDlg::GetDiskStatusReason(DWORD index)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xAD && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_TOSHIBA || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KIOXIA))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xB1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xBB && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
-			|| (m_Ata.vars[index].Attribute[j].Id == 0xCA && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU02 || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC))
+			|| (m_Ata.vars[index].Attribute[j].Id == 0xCA && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU03 || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xD1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
-			|| (m_Ata.vars[index].Attribute[j].Id == 0xE6 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_WDC || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK))
+			|| (m_Ata.vars[index].Attribute[j].Id == 0xE6 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_WDC || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK_LENOVO || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK_DELL))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE8 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE7 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX
 				                                          || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SSSTC || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_APACER
 				                                          || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_JMICRON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SEAGATE || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MAXIOTEK || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_YMTC
 				                                          || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SCY || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_RECADATA))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE9 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INTEL || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_OCZ || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_OCZ_VECTOR || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX))
-			|| (m_Ata.vars[index].Attribute[j].Id == 0xE9 && m_Ata.vars[index].FlagLifeSanDiskLenovo)
+			|| (m_Ata.vars[index].Attribute[j].Id == 0xE9 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS)
+			|| (m_Ata.vars[index].Attribute[j].Id == 0xC9 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK_HP || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK_HP_VENUS))
 				)
 			{
 				cstr.Format(_T("%02X"), m_Ata.vars[index].Attribute[j].Id);

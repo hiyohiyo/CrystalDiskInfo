@@ -229,7 +229,7 @@ BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_COMMAND(ID_SSD_KINGSTON_DC500, &CGraphDlg::OnSsdKingstonDC500)
 	ON_COMMAND(ID_SSD_KINGSTON_SA400, &CGraphDlg::OnSsdKingstonSA400)
 
-	ON_COMMAND(ID_SSD_MICRON_MU02, &CGraphDlg::OnSsdMicronMU02)
+	ON_COMMAND(ID_SSD_MICRON_MU03, &CGraphDlg::OnSsdMicronMU03)
 	ON_COMMAND(ID_SSD_REALTEK, &CGraphDlg::OnSsdRealtek)
 	ON_COMMAND(ID_SSD_NVME, &CGraphDlg::OnSsdNVMe)
 	ON_COMMAND(ID_SSD_SKHYNIX, &CGraphDlg::OnSsdSkHynix)
@@ -244,6 +244,12 @@ BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_COMMAND(ID_SSD_YMTC, &CGraphDlg::OnSsdYmtc)
 	ON_COMMAND(ID_SSD_SCY, &CGraphDlg::OnSsdScy)
 	ON_COMMAND(ID_SSD_RECADATA, &CGraphDlg::OnSsdRecadata)
+
+	ON_COMMAND(ID_SSD_SANDISK_DELL, &CGraphDlg::OnSsdSanDiskDell)
+	ON_COMMAND(ID_SSD_SANDISK_HP, &CGraphDlg::OnSsdSanDiskHp)
+	ON_COMMAND(ID_SSD_SANDISK_HP_VENUS, &CGraphDlg::OnSsdSanDiskHpVenus)
+	ON_COMMAND(ID_SSD_SANDISK_LENOVO, &CGraphDlg::OnSsdSanDiskLenovo)
+	ON_COMMAND(ID_SSD_SANDISK_LENOVO_HELEN_VENUS, &CGraphDlg::OnSsdSanDiskLenovoHelenVenus)
 
 END_MESSAGE_MAP()
 
@@ -1416,7 +1422,7 @@ void CGraphDlg::InitMenu()
 	case CAtaSmart::SSD_VENDOR_TOSHIBA: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_TOSHIBA, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_CORSAIR: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_CORSAIR, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_KINGSTON: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_KINGSTON, MF_BYCOMMAND); break;
-	case CAtaSmart::SSD_VENDOR_MICRON_MU02: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_MICRON_MU02, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_MICRON_MU03: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_MICRON_MU03, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_REALTEK: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_REALTEK, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_NVME: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_NVME, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_SKHYNIX: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SKHYNIX, MF_BYCOMMAND); break;
@@ -1443,6 +1449,12 @@ void CGraphDlg::InitMenu()
 	case CAtaSmart::SSD_VENDOR_KINGSTON_SA400: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_KINGSTON_SA400, MF_BYCOMMAND); break;
 
 	case CAtaSmart::SSD_VENDOR_RECADATA: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_RECADATA, MF_BYCOMMAND); break;
+
+	case CAtaSmart::SSD_VENDOR_SANDISK_DELL: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SANDISK_DELL, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_SANDISK_HP: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SANDISK_HP, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_SANDISK_HP_VENUS: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SANDISK_HP_VENUS, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_SANDISK_LENOVO: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SANDISK_LENOVO, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SANDISK_LENOVO_HELEN_VENUS, MF_BYCOMMAND); break;
 
 	default:
 		m_Attribute = CAtaSmart::HDD_GENERAL;
@@ -1707,7 +1719,7 @@ void CGraphDlg::OnSsdOczVector(){SetAttribute(ID_SSD_OCZ_VECTOR, CAtaSmart::SSD_
 void CGraphDlg::OnSsdToshiba() { SetAttribute(ID_SSD_TOSHIBA, CAtaSmart::SSD_VENDOR_TOSHIBA); }
 void CGraphDlg::OnSsdCorsair() { SetAttribute(ID_SSD_CORSAIR, CAtaSmart::SSD_VENDOR_CORSAIR); }
 void CGraphDlg::OnSsdKingston() { SetAttribute(ID_SSD_KINGSTON, CAtaSmart::SSD_VENDOR_KINGSTON); }
-void CGraphDlg::OnSsdMicronMU02() { SetAttribute(ID_SSD_MICRON_MU02, CAtaSmart::SSD_VENDOR_MICRON_MU02); }
+void CGraphDlg::OnSsdMicronMU03() { SetAttribute(ID_SSD_MICRON_MU03, CAtaSmart::SSD_VENDOR_MICRON_MU03); }
 
 void CGraphDlg::OnSsdRealtek(){SetAttribute(ID_SSD_REALTEK, CAtaSmart::SSD_VENDOR_REALTEK);}
 void CGraphDlg::OnSsdNVMe(){SetAttribute(ID_SSD_NVME, CAtaSmart::SSD_VENDOR_NVME);}
@@ -1724,6 +1736,12 @@ void CGraphDlg::OnSsdMaxiotek() { SetAttribute(ID_SSD_MAXIOTEK, CAtaSmart::SSD_V
 void CGraphDlg::OnSsdYmtc() { SetAttribute(ID_SSD_YMTC, CAtaSmart::SSD_VENDOR_YMTC); }
 void CGraphDlg::OnSsdScy() { SetAttribute(ID_SSD_SCY, CAtaSmart::SSD_VENDOR_SCY); }
 void CGraphDlg::OnSsdRecadata() { SetAttribute(ID_SSD_RECADATA, CAtaSmart::SSD_VENDOR_RECADATA); }
+
+void CGraphDlg::OnSsdSanDiskDell() { SetAttribute(ID_SSD_SANDISK_DELL, CAtaSmart::SSD_VENDOR_SANDISK_DELL); }
+void CGraphDlg::OnSsdSanDiskHp() { SetAttribute(ID_SSD_SANDISK_HP, CAtaSmart::SSD_VENDOR_SANDISK_HP); }
+void CGraphDlg::OnSsdSanDiskHpVenus() { SetAttribute(ID_SSD_SANDISK_HP_VENUS, CAtaSmart::SSD_VENDOR_SANDISK_HP_VENUS); }
+void CGraphDlg::OnSsdSanDiskLenovo() { SetAttribute(ID_SSD_SANDISK_LENOVO, CAtaSmart::SSD_VENDOR_SANDISK_LENOVO); }
+void CGraphDlg::OnSsdSanDiskLenovoHelenVenus() { SetAttribute(ID_SSD_SANDISK_LENOVO_HELEN_VENUS, CAtaSmart::SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS); }
 
 void CGraphDlg::OnSsdJmicron60x() { SetAttribute(ID_SSD_JMICRON_60X, CAtaSmart::SSD_VENDOR_JMICRON_60X); }
 void CGraphDlg::OnSsdJmicron61x() { SetAttribute(ID_SSD_JMICRON_61X, CAtaSmart::SSD_VENDOR_JMICRON_61X); }
