@@ -2337,6 +2337,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.NominalMediaRotationRate = 0;
 //	asi.Speed = 0.0;
 	asi.Life = -1;
+	asi.FlagLifeNoReport = FALSE;
 	asi.FlagLifeRawValue = FALSE;
 	asi.FlagLifeRawValueIncrement = FALSE;
 	asi.FlagLifeSanDiskUsbMemory = FALSE;
@@ -4226,7 +4227,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			||  asi.DiskVendorId == SSD_VENDOR_SANDISK || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_APACER || asi.DiskVendorId == SSD_VENDOR_JMICRON || asi.DiskVendorId == SSD_VENDOR_PHISON 
 			||  asi.DiskVendorId == SSD_VENDOR_SEAGATE || asi.DiskVendorId == SSD_VENDOR_MAXIOTEK || asi.DiskVendorId == SSD_VENDOR_YMTC || asi.DiskVendorId == SSD_VENDOR_SCY || asi.DiskVendorId == SSD_VENDOR_RECADATA)
 			{
-				if (asi.FlagLifeRawValueIncrement)
+				if (asi.FlagLifeNoReport)
+				{
+					asi.Life = -1;
+				}
+				else if (asi.FlagLifeRawValueIncrement)
 				{
 					asi.Life = 100 - asi.Attribute[j].RawValue[0];
 				}
@@ -4985,6 +4990,10 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 			if (asi.FirmwareRev.Find(L"03070009") == 0)
 			{
 				asi.FlagLifeRawValue = FALSE;
+			}
+			else if (asi.FirmwareRev.Find(L"SBFK62C3") == 0)
+			{
+				asi.FlagLifeNoReport = TRUE;
 			}
 			else
 			{
@@ -10292,8 +10301,11 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				||  asi->DiskVendorId == SSD_VENDOR_SANDISK || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_APACER || asi->DiskVendorId == SSD_VENDOR_JMICRON || asi->DiskVendorId == SSD_VENDOR_PHISON || asi->DiskVendorId == SSD_VENDOR_SEAGATE
 				||  asi->DiskVendorId == SSD_VENDOR_MAXIOTEK || asi->DiskVendorId == SSD_VENDOR_YMTC || asi->DiskVendorId == SSD_VENDOR_SCY || asi->DiskVendorId == SSD_VENDOR_RECADATA)
 				{
-
-					if (asi->FlagLifeRawValueIncrement)
+					if (asi->FlagLifeNoReport)
+					{
+						asi->Life = -1;
+					}
+					else if (asi->FlagLifeRawValueIncrement)
 					{
 						asi->Life = 100 - asi->Attribute[j].RawValue[0];
 					}
@@ -10641,7 +10653,11 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			flagUnknown = FALSE;
 			int life = 0;
 
-			if (vars[i].FlagLifeRawValueIncrement)
+			if (vars[i].FlagLifeNoReport)
+			{
+				life = -1;
+			}
+			else if (vars[i].FlagLifeRawValueIncrement)
 			{
 				life = 100 - vars[i].Attribute[j].RawValue[0];
 			}

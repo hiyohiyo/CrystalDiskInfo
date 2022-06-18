@@ -1824,6 +1824,7 @@ public:
 //		INT					PlextorNandWritesUnit;
 
 		INT					Life{};
+		BOOL				FlagLifeNoReport{};
 		BOOL				FlagLifeRawValue{};
 		BOOL				FlagLifeRawValueIncrement{};
 		BOOL				FlagLifeSanDiskUsbMemory{};
