@@ -4731,9 +4731,10 @@ BOOL CAtaSmart::IsSsdMicron(ATA_SMART_INFO &asi)
 
 	return modelUpper.Find(_T("P600")) == 0 || modelUpper.Find(_T("C600")) == 0
 		|| modelUpper.Find(_T("M6-")) == 0 || modelUpper.Find(_T("M600")) == 0
-		|| modelUpper.Find(_T("P500")) == 0 || modelUpper.Find(_T("C500")) == 0
+		|| modelUpper.Find(_T("P500")) == 0
+		|| (modelUpper.Find(_T("C500")) == 0 && asi.FirmwareRev.Find(_T("H")) != 0) // workaround for Maxiotek C500
 		|| modelUpper.Find(_T("M5-")) == 0 || modelUpper.Find(_T("M500")) == 0
-		|| modelUpper.Find(_T("P400")) == 0 || modelUpper.Find(_T("C400")) == 0
+		|| modelUpper.Find(_T("P400")) == 0 || modelUpper.Find(_T("C400")) == 0 
 		|| modelUpper.Find(_T("M4-")) == 0 || modelUpper.Find(_T("M400")) == 0
 		|| modelUpper.Find(_T("P300")) == 0 || modelUpper.Find(_T("C300")) == 0
 		|| modelUpper.Find(_T("M3-")) == 0 || modelUpper.Find(_T("M300")) == 0
@@ -5296,7 +5297,8 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 		// Disabled for harmful to other products (v8.12.8)
 		//	asi.FlagLifeRawValueIncrement = TRUE;
 		}
-		else if (asi.Model.Find(_T("WT200")) == 0)
+		// WINTEC
+		else if (asi.Model.Find(_T("WT200")) == 0 || asi.Model.Find(_T("WT100")) == 0 || asi.Model.Find(_T("WT ")) == 0)
 		{
 
 		}
