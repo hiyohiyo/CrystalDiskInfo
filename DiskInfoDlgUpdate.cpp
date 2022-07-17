@@ -1550,7 +1550,9 @@ APM: Advanced Power Management\n\
 AAM: Automatic Acoustic Management\n\
 NCQ: Native Command Queuing\n\
 TRIM: Trim function of DATA SET MANAGEMENT command\n\
-DevSleep: Device Sleep\
+DevSleep: Device Sleep\n\
+Streaming: Streaming Feature Set\n\
+GPL: General Purpose Log\n\
 ";
 	}
 
@@ -1584,6 +1586,16 @@ DevSleep: Device Sleep\
 	if (m_Ata.vars[i].IsDeviceSleepSupported)
 	{
 		m_Feature += _T("DevSleep, ");
+	}
+
+	if (m_Ata.vars[i].IsStreamingSupported)
+	{
+		m_Feature += _T("Streaming, ");
+	}
+
+	if (m_Ata.vars[i].IsGplSupported)
+	{
+		m_Feature += _T("GPL, ");
 	}
 
 	if (m_Ata.vars[i].IsVolatileWriteCachePresent)

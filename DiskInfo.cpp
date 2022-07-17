@@ -142,7 +142,7 @@ BOOL CDiskInfoApp::InitInstance()
 	DebugPrint(PRODUCT_VERSION);
 	DebugPrint(PRODUCT_RELEASE);
 
-	if(! flagEarthlight)
+	if(! flagEarthlight && ! m_bCopyExit)
 	{
 		DebugPrint(_T("CreateMutex"));
 		hMutex = ::CreateMutex(NULL, FALSE, PROJECT_NAME);
@@ -284,8 +284,11 @@ BOOL CDiskInfoApp::InitInstance()
 			flagReExec = TRUE;
 		}
 
-		::ReleaseMutex(hMutex);
-		::CloseHandle(hMutex);
+		if (hMutex)
+		{
+			::ReleaseMutex(hMutex);
+			::CloseHandle(hMutex);
+		}
 
 		if(flagReExec)
 		{

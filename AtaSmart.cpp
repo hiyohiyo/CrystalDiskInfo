@@ -2300,6 +2300,9 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.IsApmEnabled = FALSE;
 	asi.IsNvCacheSupported = FALSE;
 	asi.IsDeviceSleepSupported = FALSE;
+	asi.IsStreamingSupported = FALSE;
+	asi.IsGplSupported = FALSE;
+
 	asi.IsMaxtorMinute = FALSE;
 	asi.IsSsd = FALSE;
 	asi.IsTrimSupported = FALSE;
@@ -2575,6 +2578,17 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	if(asi.Major >= 7 && asi.IdentifyDevice.A.DataSetManagement & (1 << 0))
 	{
 		asi.IsTrimSupported = TRUE;
+	}
+
+	// 8.17.4 ATA Streaming feature set
+	if (asi.Major >= 7 && asi.IdentifyDevice.A.CommandSetSupported3 & (1 << 4))
+	{
+		asi.IsStreamingSupported = TRUE;
+	}
+	// 8.17.4 GPL feature set
+	if (asi.Major >= 7 && asi.IdentifyDevice.A.CommandSetSupported3 & (1 << 5))
+	{
+		asi.IsGplSupported = TRUE;
 	}
 
 	// http://ascii.jp/elem/000/000/203/203345/img.html
@@ -3273,6 +3287,9 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.IsApmEnabled = FALSE;
 	asi.IsNvCacheSupported = FALSE;
 	asi.IsDeviceSleepSupported = FALSE;
+	asi.IsStreamingSupported = FALSE;
+	asi.IsGplSupported = FALSE;
+
 	asi.IsMaxtorMinute = FALSE;
 	asi.IsSsd = TRUE;
 	asi.IsTrimSupported = FALSE;
@@ -3573,6 +3590,12 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.DiskVendorId = SSD_VENDOR_MTRON;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
+	else if (IsSsdToshiba(asi))
+	{
+		asi.SmartKeyName = _T("SmartToshiba");
+		asi.DiskVendorId = SSD_VENDOR_TOSHIBA;
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+	}
 	else if (IsSsdJMicron66x(asi))
 	{
 		asi.SmartKeyName = _T("SmartJMicron66x");
@@ -3663,12 +3686,6 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 	else if (IsSsdKingston(asi))
 	{
 		asi.DiskVendorId = SSD_VENDOR_KINGSTON;
-		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
-	}
-	else if(asi.Model.Find(_T("TOSHIBA")) == 0)
-	{
-		asi.SmartKeyName = _T("SmartToshiba");
-		asi.DiskVendorId = SSD_VENDOR_TOSHIBA;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
 	else if (asi.Model.Find(_T("Corsair")) == 0)
@@ -5029,8 +5046,10 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 BOOL CAtaSmart::IsSsdToshiba(ATA_SMART_INFO &asi)
 {
 	BOOL flagSmartType = FALSE;
+	CString modelUpper = asi.Model;
+	modelUpper.MakeUpper();
 
-	if (asi.Model.Find(_T("Toshiba")) >= 0 && asi.IsSsd)
+	if (modelUpper.Find(_T("TOSHIBA")) >= 0 && asi.IsSsd)
 	{
 		flagSmartType = TRUE;
 		if (asi.Model.Find(_T("THNSNC")) >= 0)

@@ -557,6 +557,14 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		{
 			feature += _T("DevSleep, ");
 		}
+		if (m_Ata.vars[i].IsStreamingSupported)
+		{
+			feature += _T("Streaming, ");
+		}
+		if (m_Ata.vars[i].IsGplSupported)
+		{
+			feature += _T("GPL, ");
+		}
 		if (m_Ata.vars[i].IsVolatileWriteCachePresent)
 		{
 			feature += _T("VolatileWriteCache, ");

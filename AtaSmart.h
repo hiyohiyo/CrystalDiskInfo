@@ -1772,6 +1772,8 @@ public:
 		BOOL				IsNcqSupported{};
 		BOOL				IsNvCacheSupported{};
 		BOOL				IsDeviceSleepSupported{};
+		BOOL				IsStreamingSupported{};
+		BOOL				IsGplSupported{};
 		BOOL				IsMaxtorMinute{};
 		BOOL				IsSsd{};
 		BOOL				IsTrimSupported{};
