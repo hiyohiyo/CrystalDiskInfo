@@ -1291,13 +1291,20 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			if (FlagAMD_RC2 && AmdRaidDriverVersion >= 93)
 			{
 				DebugPrint(L"AddDiskAMD_RC2");
-				AddDiskAMD_RC2();// +AMD_RC2
+				if (! AddDiskAMD_RC2())
+				{
+					DebugPrint(L"AMD RAID (CSMI)");
+					for (int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
+					{
+						AddDiskCsmi(i);
+					}
+				}
 			}
 			else // +AMD_RC2
 			// AMD RAIDXpert2 9.2.0.x may cause BSoD
 			if (AmdRaidDriverVersion != 92)// -2021/11/06
 			{
-				DebugPrint(L"AMD/Intel RAID (CSMI)");
+				DebugPrint(L"Intel/AMD RAID (CSMI)");
 				for (int i = 0; i < MAX_SEARCH_SCSI_PORT; i++)
 				{
 					AddDiskCsmi(i);
@@ -3881,7 +3888,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				asi.Life = asi.Attribute[j].CurrentValue;
 				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
 			}
-			else if ((asi.DiskVendorId == SSD_VENDOR_SANDISK || SSD_VENDOR_SANDISK_LENOVO) && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
+			else if ((asi.DiskVendorId == SSD_VENDOR_SANDISK || asi.DiskVendorId == SSD_VENDOR_SANDISK_LENOVO) && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
 			{
 				asi.NandWrites = *((INT*)&asi.Attribute[j].RawValue[0]);//(INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
@@ -5385,7 +5392,7 @@ BOOL CAtaSmart::IsSsdWdc(ATA_SMART_INFO& asi)
 {
 	BOOL flagSmartType = FALSE;
 
-	if (asi.Model.Find(_T("WDC ")) == 0)
+	if (asi.Model.Find(_T("WDC ")) == 0 || asi.Model.Find(_T("WD ")) == 0)
 	{
 		flagSmartType = TRUE;
 
@@ -9149,6 +9156,7 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 	HANDLE hHandle = GetIoCtrlHandleCsmi(scsiPort);
 	if(hHandle == INVALID_HANDLE_VALUE)
 	{
+		DebugPrint(_T("FAILED: INVALID_HANDLE_VALUE"));
 		return FALSE;
 	}
 
@@ -9216,9 +9224,20 @@ BOOL CAtaSmart::AddDiskCsmi(INT scsiPort)
 	IDENTIFY_DEVICE identify = {};	
 	DWORD diskSize = 0;
 
+	// CSMI Driver Information
+	CString cs;
+	cs = driverInfoBuf.Information.szName;
+	cstr.Format(L"DriverName: %s", cs.GetBuffer());
+	DebugPrint(cstr);
+	cstr.Format(L"Revision: %d.%d.%d.%d", driverInfoBuf.Information.usMajorRevision, driverInfoBuf.Information.usMinorRevision, driverInfoBuf.Information.usBuildRevision, driverInfoBuf.Information.usReleaseRevision);
+	DebugPrint(cstr);
+	cstr.Format(L"CSMI Revision: %d.%d", driverInfoBuf.Information.usCSMIMajorRevision, driverInfoBuf.Information.usCSMIMinorRevision);
+	DebugPrint(cstr);
+
 	// AMD-RAIDXpert2 support
 	if(memcmp(driverInfoBuf.Information.szName, "rcraid", 7) == 0)
 	{
+		DebugPrint(_T("rcraid"));
 		for(UINT i = 0; i < raidInfoBuf.Information.uMaxPhysicalDrives; i++)
 		{
 			if(i >= phyInfo.bNumberOfPhys)
@@ -11390,6 +11409,7 @@ BOOL AMD_RC2_DLL_Load() {
 
 BOOL CAtaSmart::AddDiskAMD_RC2()
 {
+	int count = 0;
 #ifndef AMD_RC2
 	if (!g_AMD_RC2_init)  AMD_RC2_DLL_Load();
 	else if (g_AMD_RC2_load) {
@@ -11407,11 +11427,11 @@ BOOL CAtaSmart::AddDiskAMD_RC2()
 		BOOL isNVMe = FALSE;
 		if (DoIdentifyDeviceAMD_RC2(i, &phy, &TotalDiskSize, &identify, &isSSD, &isNVMe)) {
 			if (isNVMe) {//NVMe
-#ifdef DEBUG_PRINT
+
 				CString cs;
-				cs.Format(_T("DoIdentifyDeviceAMD_RC2: %d > Maybe NVMe. not support."), i);
-				DebugPrint(cs.GetBuffer());
-#endif
+				cs.Format(_T("DoIdentifyDeviceAMD_RC2:%d > NVMe / diskSize:%u / PhysicalID:%d / Model:%hs"), i, TotalDiskSize, phy, identify.A.Model);
+				DebugPrint(cs);
+
 				IDENTIFY_DEVICE identify2 = {};
 				//identify2.N.MajorVersion = identify.A.MinorVersion & 0xF;
 				//identify2.N.MinorVersion = (identify.A.MinorVersion & 0xF0) >> 4;
@@ -11419,29 +11439,46 @@ BOOL CAtaSmart::AddDiskAMD_RC2()
 				memcpy_s(identify2.N.SerialNumber, 20, identify.A.SerialNumber, 20);
 				memcpy_s(identify2.N.FirmwareRev, 8, identify.A.FirmwareRev, 8);
 				strcpy_s(identify2.N.Reserved3, 60, identify.A.CurrentMediaSerialNo);
-				AddDiskNVMe(phy, 0, 0, i, 0, COMMAND_TYPE::CMD_TYPE_AMD_RC2, &identify2, &TotalDiskSize);
+				if (AddDiskNVMe(phy, 0, 0, i, 0, COMMAND_TYPE::CMD_TYPE_AMD_RC2, &identify2, &TotalDiskSize))
+				{
+					count++;
+				}
 				//AddDisk(phy, 0, 0, -1, 0, COMMAND_TYPE::CMD_TYPE_AMD_RC2, &identify, -1, NULL, L"", TotalDiskSize);
 			}
-			else {
-#ifdef DEBUG_PRINT
+			else
+			{
 				CString cs;
-				cs.Format(_T("DoIdentifyDeviceAMD_RC2:ok %d > AddDisk / disksize:%u / PhysicalID:%d / Model:%hs"), i, TotalDiskSize, phy, identify.A.Model);
-				DebugPrint(cs.GetBuffer());
-#endif
+				cs.Format(_T("DoIdentifyDeviceAMD_RC2:%d > ATA / diskSize:%u / PhysicalID:%d / Model:%hs"), i, TotalDiskSize, phy, identify.A.Model);
+				DebugPrint(cs);
+
 				if (isSSD) identify.A.SerialAtaCapabilities = 1;
 				ChangeByteOrder(identify.A.SerialNumber, sizeof(identify.A.SerialNumber));
 				ChangeByteOrder(identify.A.FirmwareRev, sizeof(identify.A.FirmwareRev));
 				ChangeByteOrder(identify.A.Model, sizeof(identify.A.Model));
-				AddDisk(phy, 0, 0, i, 0, COMMAND_TYPE::CMD_TYPE_AMD_RC2, &identify, -1, NULL, L"", TotalDiskSize);
+				if (AddDisk(phy, 0, 0, i, 0, COMMAND_TYPE::CMD_TYPE_AMD_RC2, &identify, -1, NULL, L"", TotalDiskSize))
+				{
+					count++;
+				}
 			}
-#ifdef DEBUG_PRINT
+
 			CString cs;
 			cs.Format(_T("DoIdentifyDeviceAMD_RC2:%d > AddDisk:end"), i);
-			DebugPrint(cs.GetBuffer());
-#endif
+			DebugPrint(cs);
 		}
 	}
-	return TRUE;
+
+	CString cs;
+	cs.Format(_T("DoIdentifyDeviceAMD_RC2:count=%d, Drives=%d"), count, Drives);
+	DebugPrint(cs);
+
+	if (count > 0)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
 }
 
 BOOL CAtaSmart::DoIdentifyDeviceAMD_RC2(INT diskNum, INT* phy, DWORD* TotalDiskSize, IDENTIFY_DEVICE* data, BOOL* isSSD, BOOL* isNVMe) {
