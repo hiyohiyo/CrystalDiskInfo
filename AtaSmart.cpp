@@ -5059,10 +5059,14 @@ BOOL CAtaSmart::IsSsdToshiba(ATA_SMART_INFO &asi)
 	if (modelUpper.Find(_T("TOSHIBA")) >= 0 && asi.IsSsd)
 	{
 		flagSmartType = TRUE;
-		if (asi.Model.Find(_T("THNSNC")) >= 0)
+		if (asi.Model.Find(_T("THNSNC")) >= 0 || asi.Model.Find(_T("THNSNK")) >= 0 || asi.Model.Find(_T("KSG60")) >= 0
+		||  asi.Model.Find(_T("TL100")) >= 0 || asi.Model.Find(_T("TR150")) >= 0 || asi.Model.Find(_T("TR200")) >= 0
+		)
 		{
 			// TOSHIBA HG3
 			// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1106;id=diskinfo#1106
+			// TOSHIBA KSG60ZMV
+			// https://crystalmark.info/board/c-board.cgi?cmd=one;no=2425;id=#2425
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_32MB;
 		}
 		else
@@ -6523,7 +6527,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.TargetId = 0;
 	sptwb.Spt.Lun = 0;
 	sptwb.Spt.SenseInfoLength = 24;
-	sptwb.Spt.DataTransferLength = 4096;
+	sptwb.Spt.DataTransferLength = 512;
 	sptwb.Spt.TimeOutValue = 2;
 	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf);
 	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, SenseBuf);
