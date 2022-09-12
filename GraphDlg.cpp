@@ -58,7 +58,7 @@ CGraphDlg::~CGraphDlg()
 	{
 		index.Format(_T("Disk%d"), i);
 		value.Format(_T("%d"), ( ! m_bGraph[i] ? 1 : 0 ) );
-		WritePrivateProfileString(_T("GraphHideDisk"), index, value, m_Ini);
+		WritePrivateProfileStringFx(_T("GraphHideDisk"), index, value, m_Ini);
 	}
 }
 
@@ -398,7 +398,7 @@ void CGraphDlg::InitVars(int defaultDisk)
 	CString cstr;
 	int temp;
 
-	GetPrivateProfileString(_T("EXCHANGE"), _T("DetectedDisk"), _T("-1"), str, 256, m_SmartDir + EXCHANGE_INI);
+	GetPrivateProfileStringFx(_T("EXCHANGE"), _T("DetectedDisk"), _T("-1"), str, 256, m_SmartDir + EXCHANGE_INI);
 	temp = _tstoi(str);
 	if(0 < temp && temp <= CAtaSmart::MAX_DISK)
 	{
@@ -434,18 +434,18 @@ void CGraphDlg::InitVars(int defaultDisk)
 	for(int i = 0; i < m_DetectedDisk; i++)
 	{
 		cstr.Format(_T("%d"), i);
-		GetPrivateProfileString(_T("MODEL"), cstr, _T(""), str, 256, m_SmartDir + EXCHANGE_INI);
+		GetPrivateProfileStringFx(_T("MODEL"), cstr, _T(""), str, 256, m_SmartDir + EXCHANGE_INI);
 		m_Model[i] = str;
 		m_ModelEscape[i] = str;
 		m_ModelEscape[i].Replace(_T("\""), _T("\\\""));
-		GetPrivateProfileString(_T("SERIAL"), cstr, _T(""), str, 256, m_SmartDir + EXCHANGE_INI);
+		GetPrivateProfileStringFx(_T("SERIAL"), cstr, _T(""), str, 256, m_SmartDir + EXCHANGE_INI);
 		m_Serial[i] = str;
-		GetPrivateProfileString(_T("DRIVE"), cstr, _T(""), str, 256, m_SmartDir + EXCHANGE_INI);
+		GetPrivateProfileStringFx(_T("DRIVE"), cstr, _T(""), str, 256, m_SmartDir + EXCHANGE_INI);
 		m_Drive[i] = str;
 	}
 
 	// LegendPosition
-	GetPrivateProfileString(_T("Setting"), _T("LegendPosition"), _T("sw"), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("LegendPosition"), _T("sw"), str, 256, m_Ini);
 	cstr = str;
 	if(cstr.Compare(_T("nw")) == 0 || cstr.Compare(_T("ne")) == 0 || cstr.Compare(_T("sw")) == 0 || cstr.Compare(_T("se")) == 0)
 	{
@@ -457,7 +457,7 @@ void CGraphDlg::InitVars(int defaultDisk)
 	}
 
 	// Date Style
-	GetPrivateProfileString(_T("Setting"), _T("TimeFormat"), _T("mdhm"), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("TimeFormat"), _T("mdhm"), str, 256, m_Ini);
 	cstr = str;
 	if(cstr.Compare(_T("%m/%d %H:%M")) == 0
 	|| cstr.Compare(_T("%m/%d")) == 0
@@ -476,7 +476,7 @@ void CGraphDlg::InitVars(int defaultDisk)
 	}
 
 	// Paint Weekend
-	GetPrivateProfileString(_T("Setting"), _T("PaintWeekend"), _T("0"), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("PaintWeekend"), _T("0"), str, 256, m_Ini);
 	if(_tstoi(str) > 0)
 	{
 		m_bPaintWeekend = TRUE;
@@ -486,7 +486,7 @@ void CGraphDlg::InitVars(int defaultDisk)
 		m_bPaintWeekend = FALSE;
 	}
 
-	GetPrivateProfileString(_T("Setting"), _T("MaxPlotPoint"), _T("100"), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("MaxPlotPoint"), _T("100"), str, 256, m_Ini);
 	if(_tstoi(str) > 0)
 	{
 		m_MaxPlotPoint = _tstoi(str);
@@ -496,7 +496,7 @@ void CGraphDlg::InitVars(int defaultDisk)
 		m_MaxPlotPoint = 0;
 	}
 
-	GetPrivateProfileString(_T("Setting"), _T("Attribute"), _T("0"), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("Attribute"), _T("0"), str, 256, m_Ini);
 	if(_tstoi(str) > 0)
 	{
 		m_Attribute = _tstoi(str);
@@ -573,7 +573,7 @@ COLORREF CGraphDlg::GetLineColor(DWORD index)
 	TCHAR str[256];
 	CString cstr;
 	cstr.Format(_T("%d"), index);
-	GetPrivateProfileString(_T("LineColor"), cstr, _T("-1"), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("LineColor"), cstr, _T("-1"), str, 256, m_Ini);
 
 	if(str[0] == '#')
 	{
@@ -604,7 +604,7 @@ HRESULT CGraphDlg::OnSelectAttributeId(IHTMLElement* /*pElement*/)
 		UpdateGraph();
 		CString cstr;
 		cstr.Format(_T("%d"), m_AttributeId);
-		WritePrivateProfileString(_T("Setting"), _T("SelectedAttributeId"), cstr, m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("SelectedAttributeId"), cstr, m_Ini);
 	}
 
 	return S_FALSE;
@@ -803,7 +803,7 @@ void CGraphDlg::InitMenuBar()
 		for(int j = 1; j < 255; j++)
 		{
 			cstr.Format(_T("%02X"), j);
-			GetPrivateProfileString(disk, cstr, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
+			GetPrivateProfileStringFx(disk, cstr, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
 			if(_tstoi(str) >= 0)
 			{
 				flagAttribute[j] = TRUE;
@@ -1156,7 +1156,7 @@ BOOL CGraphDlg::UpdateGraph()
 		dir += disk;
 		TCHAR str[256];
 		cstr.Format(_T("%02X"), m_AttributeId);
-		GetPrivateProfileString(disk + _T("THRESHOLD"), cstr, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
+		GetPrivateProfileStringFx(disk + _T("THRESHOLD"), cstr, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
 		threshold = _tstoi(str);
 		if(threshold >= 0)
 		{
@@ -1561,9 +1561,9 @@ void CGraphDlg::OnSize(UINT nType, int cx, int cy)
 		CString cstr;
 		GetClientRect(&rect);
 		cstr.Format(_T("%d"), (DWORD)(((double)rect.bottom - rect.top) / m_ZoomRatio));
-		WritePrivateProfileString(_T("Setting"), _T("GraphHeight"), cstr, m_Ini);	
+		WritePrivateProfileStringFx(_T("Setting"), _T("GraphHeight"), cstr, m_Ini);	
 		cstr.Format(_T("%d"), (DWORD)(((double)rect.right - rect.left) / m_ZoomRatio));
-		WritePrivateProfileString(_T("Setting"), _T("GraphWidth"), cstr, m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("GraphWidth"), cstr, m_Ini);
 	}
 }
 
@@ -1580,7 +1580,7 @@ void CGraphDlg::OnSouthEast(){SetLegendPosition(ID_SOUTH_EAST, _T("se"));}
 
 void CGraphDlg::SetLegendPosition(DWORD id, CString position)
 {
-	WritePrivateProfileString(_T("Setting"), _T("LegendPosition"), position, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("LegendPosition"), position, m_Ini);
 	m_LegendPositon = position;
 	UpdateGraph();
 
@@ -1601,7 +1601,7 @@ void CGraphDlg::OnDmy2()  {SetTimeFormat(ID_DMY2,   _T("%d.%m.%y"));}
 
 void CGraphDlg::SetTimeFormat(DWORD id, CString format)
 {
-	WritePrivateProfileString(_T("Setting"), _T("TimeFormat"), format, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("TimeFormat"), format, m_Ini);
 	m_TimeFormat = format;
 	UpdateGraph();
 
@@ -1616,7 +1616,7 @@ void CGraphDlg::OnPaintWeekend()
 	if(m_bPaintWeekend)
 	{
 		m_bPaintWeekend = FALSE;
-		WritePrivateProfileString(_T("Setting"), _T("PaintWeekend"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("PaintWeekend"), _T("0"), m_Ini);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_PAINT_WEEKEND, MF_UNCHECKED);
@@ -1626,7 +1626,7 @@ void CGraphDlg::OnPaintWeekend()
 	else
 	{
 		m_bPaintWeekend = TRUE;
-		WritePrivateProfileString(_T("Setting"), _T("PaintWeekend"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("PaintWeekend"), _T("1"), m_Ini);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_PAINT_WEEKEND, MF_CHECKED);
@@ -1656,7 +1656,7 @@ void CGraphDlg::SetPlotPoint(DWORD id, DWORD point)
 {
 	CString cstr;
 	cstr.Format(_T("%d"), point);
-	WritePrivateProfileString(_T("Setting"), _T("MaxPlotPoint"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("MaxPlotPoint"), cstr, m_Ini);
 	m_MaxPlotPoint = point;
 	UpdateGraph();
 
@@ -1676,7 +1676,7 @@ void CGraphDlg::UpdateBkImage()
 {
 	TCHAR str[256];
 	CString cstr;
-	GetPrivateProfileString(_T("Customize"), _T("GraphBkImage"), _T(""), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Customize"), _T("GraphBkImage"), _T(""), str, 256, m_Ini);
 	cstr = str;
 	cstr.Replace(_T("\\"), _T("/"));
 	if(cstr.IsEmpty())
@@ -1758,7 +1758,7 @@ void CGraphDlg::SetAttribute(DWORD id, DWORD type)
 {
 	CString cstr;
 	cstr.Format(_T("%d"), type);
-	WritePrivateProfileString(_T("Setting"), _T("Attribute"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("Attribute"), cstr, m_Ini);
 	if(type <= CAtaSmart::SSD_VENDOR_MAX)
 	{
 		m_Attribute = type;

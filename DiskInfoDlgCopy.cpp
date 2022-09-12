@@ -673,19 +673,19 @@ void CDiskInfoDlg::SaveText(CString fileName)
 
 				if (m_bSmartEnglish)
 				{
-					GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_DefaultLangPath);
+					GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_DefaultLangPath);
 				}
 				else
 				{
-					GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, L"", str, 256, m_DefaultLangPath);
+					GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, cstr, L"", str, 256, m_DefaultLangPath);
 					CString en = str;
 					if (en.IsEmpty())
 					{
-						GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_CurrentLangPath);
+						GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_CurrentLangPath);
 					}
 					else
 					{
-						GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, en, str, 256, m_CurrentLangPath);
+						GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, cstr, en, str, 256, m_CurrentLangPath);
 					}
 				}
 

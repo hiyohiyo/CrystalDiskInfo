@@ -159,14 +159,14 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	if((BOOL)GetPrivateProfileInt(_T("Workaround"), _T("ExecFailed"), 0, m_Ini))
 	{
 		m_bAtaPassThroughSmart = FALSE;
-		WritePrivateProfileString(_T("Setting"), _T("AtaPassThroughSmart"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AtaPassThroughSmart"), _T("0"), m_Ini);
 	}
 
 	// Added 2013/04/12 - Workaround for Exec Failed
-	WritePrivateProfileString(_T("Workaround"), _T("ExecFailed"), _T("1"), m_Ini);
+	WritePrivateProfileStringFx(_T("Workaround"), _T("ExecFailed"), _T("1"), m_Ini);
 	
 	TCHAR str[256];
-	GetPrivateProfileString(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
 	m_AlertSoundPath = str;
 
 	m_bGadget = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("Gadget"), 0, m_Ini);
@@ -752,7 +752,7 @@ LRESULT CDiskInfoDlg::OnPlayAlertSound(WPARAM wParam, LPARAM lParam)
 	}
 
 	TCHAR str[256];
-	GetPrivateProfileString(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
 	m_AlertSoundPath = str;
 	if (m_AlertSoundPath.Compare(_T("")) != 0)
 	{
@@ -936,7 +936,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 				m_Ata.vars[k].AlarmTemperature = j;
 				CString temperature;
 				temperature.Format(_T("%d"), j);
-				WritePrivateProfileString(_T("AlarmTemperature"), m_Ata.vars[k].Model + m_Ata.vars[k].SerialNumber, temperature, m_Ini);
+				WritePrivateProfileStringFx(_T("AlarmTemperature"), m_Ata.vars[k].Model + m_Ata.vars[k].SerialNumber, temperature, m_Ini);
 			}
 		}
 		else
@@ -1445,7 +1445,7 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 		CString cstr;
 		m_SizeY = (int)(cy / m_ZoomRatio);
 		cstr.Format(_T("%d"), m_SizeY);
-		WritePrivateProfileString(_T("Setting"), _T("Height"), cstr, m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("Height"), cstr, m_Ini);
 	}
 }
 
@@ -1478,8 +1478,8 @@ void CDiskInfoDlg::SavePos() const
 	CString x, y;
 	x.Format(_T("%d"), place.rcNormalPosition.left);
 	y.Format(_T("%d"), place.rcNormalPosition.top);
-	WritePrivateProfileString(_T("Setting"), _T("X"), x, m_Ini);
-	WritePrivateProfileString(_T("Setting"), _T("Y"), y, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("X"), x, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("Y"), y, m_Ini);
 }
 
 void CDiskInfoDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
@@ -1503,7 +1503,7 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 	name.Format(_T("(%d) %s / %s / %s\r\n"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].SerialNumber.GetString(), m_Ata.vars[i].DriveMap.GetString());
 	title.Format(_T("(%d) %s / %s / %s"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].SerialNumber.GetString(), m_Ata.vars[i].DriveMap.GetString());
 
-	GetPrivateProfileString(disk, _T("HealthStatus"), _T("0"), str, 256, dir + _T("\\") + SMART_INI);
+	GetPrivateProfileStringFx(disk, _T("HealthStatus"), _T("0"), str, 256, dir + _T("\\") + SMART_INI);
 	pre = _tstoi(str);
 
 	if(m_Ata.vars[i].DiskStatus == m_Ata.DISK_STATUS_UNKNOWN)
@@ -1534,7 +1534,7 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 	}
 
 
-	GetPrivateProfileString(disk, _T("Life"), _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
+	GetPrivateProfileStringFx(disk, _T("Life"), _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
 	pre = _tstoi(str);
 
 	if(m_Ata.vars[i].Life == -1 || pre == -1)
@@ -1593,7 +1593,7 @@ void CDiskInfoDlg::AlarmHealthStatus(DWORD i, CString dir, CString disk)
 				eventId = 605;
 			}
 
-			GetPrivateProfileString(disk, target, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
+			GetPrivateProfileStringFx(disk, target, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
 			pre = _tstoi(str);
 			id.Format(_T("%02X"), m_Ata.vars[i].Attribute[j].Id);
 			int rawValue = MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]);
@@ -2284,7 +2284,7 @@ void CDiskInfoDlg::AutoAamApmAdaption()
 void CDiskInfoDlg::ReExecute()
 {
 	// Added 2013/04/12 - Workaround for Exec Failed
-	WritePrivateProfileString(_T("Workaround"), _T("ExecFailed"), _T("0"), m_Ini);
+	WritePrivateProfileStringFx(_T("Workaround"), _T("ExecFailed"), _T("0"), m_Ini);
 
 	ShowWindow(SW_HIDE);
 	RemoveTrayMainIcon();

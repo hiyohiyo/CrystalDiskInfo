@@ -401,16 +401,16 @@ CString CDHtmlDialogEx::i18n(CString section, CString key, BOOL inEnglish)
 
 	if(inEnglish)
 	{
-		GetPrivateProfileString(section, key, _T(""), str, 256, m_DefaultLangPath);
+		GetPrivateProfileStringFx(section, key, _T(""), str, 256, m_DefaultLangPath);
 		cstr = str;
 	}
 	else
 	{
-		GetPrivateProfileString(section, key, _T(""), str, 256, m_CurrentLangPath);
+		GetPrivateProfileStringFx(section, key, _T(""), str, 256, m_CurrentLangPath);
 		cstr = str;
 		if(cstr.IsEmpty())
 		{
-			GetPrivateProfileString(section, key, _T(""), str, 256, m_DefaultLangPath);
+			GetPrivateProfileStringFx(section, key, _T(""), str, 256, m_DefaultLangPath);
 			cstr = str;
 		}
 	}

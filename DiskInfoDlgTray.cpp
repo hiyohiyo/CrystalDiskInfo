@@ -929,7 +929,7 @@ void CDiskInfoDlg::OnResident()
 			}
 		}
 		m_bResident = FALSE;
-		WritePrivateProfileString(_T("Setting"), _T("Resident"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("Resident"), _T("0"), m_Ini);
 	}
 	else
 	{
@@ -939,7 +939,7 @@ void CDiskInfoDlg::OnResident()
 		menu->CheckMenuItem(ID_RESIDENT, MF_CHECKED);
 		SetMenu(menu);
 		DrawMenuBar();
-		WritePrivateProfileString(_T("Setting"), _T("Resident"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("Resident"), _T("1"), m_Ini);
 		CheckTrayTemperatureIcon();
 
 		if(! m_bShowTemperatureIconOnly || ! IsTemperatureIconExist())
@@ -954,14 +954,14 @@ void CDiskInfoDlg::ShowTemperatureIconOnly()
 	if(m_bShowTemperatureIconOnly)
 	{
 		m_bShowTemperatureIconOnly = FALSE;
-		WritePrivateProfileString(_T("Setting"), _T("ShowTemperatureIconOnly"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("ShowTemperatureIconOnly"), _T("0"), m_Ini);
 
 		AddTrayMainIcon();
 	}
 	else
 	{
 		m_bShowTemperatureIconOnly = TRUE;
-		WritePrivateProfileString(_T("Setting"), _T("ShowTemperatureIconOnly"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("ShowTemperatureIconOnly"), _T("1"), m_Ini);
 
 		if(IsTemperatureIconExist())
 		{

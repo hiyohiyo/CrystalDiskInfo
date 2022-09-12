@@ -73,18 +73,18 @@ void CDHtmlMainDialog::InitThemeLang()
 	{
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef KUREI_KEI_SUPPORT
-		GetPrivateProfileString(_T("Setting"), _T("ThemeKureiKei"), _T("default"), str, 256, m_Ini);
+		GetPrivateProfileStringFx(_T("Setting"), _T("ThemeKureiKei"), _T("default"), str, 256, m_Ini);
 	#else
-		GetPrivateProfileString(_T("Setting"), _T("ThemeShizuku"), _T("default"), str, 256, m_Ini);
+		GetPrivateProfileStringFx(_T("Setting"), _T("ThemeShizuku"), _T("default"), str, 256, m_Ini);
 	#endif
 #else
-		GetPrivateProfileString(_T("Setting"), _T("Theme"), _T("default"), str, 256, m_Ini);
+		GetPrivateProfileStringFx(_T("Setting"), _T("Theme"), _T("default"), str, 256, m_Ini);
 #endif
 		m_CurrentTheme = str;
 	}
 
 // Set Language
-	GetPrivateProfileString(_T("Setting"), _T("Language"), _T(""), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("Language"), _T(""), str, 256, m_Ini);
 
 	langPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), str);
 	m_DefaultLangPath.Format(_T("%s\\%s.lang"), m_LangDir.GetString(), _T("English"));
@@ -110,7 +110,7 @@ void CDHtmlMainDialog::InitThemeLang()
 					i++;
 					CString cstr;
 					cstr.Format(_T("%s\\%s"), m_LangDir.GetString(), findData.cFileName);
-					GetPrivateProfileString(_T("Language"), _T("LOCALE_ID"), _T(""), str, 256, cstr);
+					GetPrivateProfileStringFx(_T("Language"), _T("LOCALE_ID"), _T(""), str, 256, cstr);
 					if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){*ptrEnd = '\0';}
 
 					if(_tcsstr(str, m_CurrentLocalID) != NULL)
@@ -237,7 +237,7 @@ void CDHtmlMainDialog::InitMenu()
 				// Add Language
 				CString cstr;
 				cstr.Format(_T("%s\\%s"), m_LangDir.GetString(), findData.cFileName);
-				GetPrivateProfileString(_T("Language"), _T("LANGUAGE"), _T(""), str, 256, cstr);
+				GetPrivateProfileStringFx(_T("Language"), _T("LANGUAGE"), _T(""), str, 256, cstr);
 				if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL)
 				{
 					*ptrEnd = '\0';
@@ -291,7 +291,7 @@ void CDHtmlMainDialog::InitMenu()
 				// Add Language
 				CString cstr;
 				cstr.Format(_T("%s\\%s"), m_LangDir, findData.cFileName);
-				GetPrivateProfileString(_T("Language"), _T("LANGUAGE"), _T(""), str, 256, cstr);
+				GetPrivateProfileStringFx(_T("Language"), _T("LANGUAGE"), _T(""), str, 256, cstr);
 				if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){
 					*ptrEnd = '\0';
 				}
@@ -376,12 +376,12 @@ void CDHtmlMainDialog::ChangeTheme(CString ThemeName)
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef KUREI_KEI_SUPPORT
-		WritePrivateProfileString(_T("Setting"), _T("ThemeKureiKei"), ThemeName.GetString(), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("ThemeKureiKei"), ThemeName.GetString(), m_Ini);
 	#else
-		WritePrivateProfileString(_T("Setting"), _T("ThemeShizuku"), ThemeName.GetString(), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("ThemeShizuku"), ThemeName.GetString(), m_Ini);
 	#endif
 #else
-	WritePrivateProfileString(_T("Setting"), _T("Theme"), ThemeName.GetString(), m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("Theme"), ThemeName.GetString(), m_Ini);
 #endif
 
 
@@ -437,7 +437,7 @@ void CDHtmlMainDialog::SetZoomType(DWORD zoomType)
 {
 	CString cstr;
 	cstr.Format(_T("%d"), m_ZoomType);
-	WritePrivateProfileString(_T("Setting"), _T("ZoomType"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("ZoomType"), cstr, m_Ini);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

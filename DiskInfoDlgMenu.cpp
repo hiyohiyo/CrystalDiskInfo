@@ -130,14 +130,14 @@ void CDiskInfoDlg::CreateExchangeInfo()
 {
 	CString cstr;
 	cstr.Format(_T("%d"), (DWORD)m_Ata.vars.GetCount());
-	WritePrivateProfileString(_T("EXCHANGE"), _T("DetectedDisk"), cstr, m_SmartDir + EXCHANGE_INI);
+	WritePrivateProfileStringFx(_T("EXCHANGE"), _T("DetectedDisk"), cstr, m_SmartDir + EXCHANGE_INI);
 
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 	{
 		cstr.Format(_T("%d"), i);
-		WritePrivateProfileString(_T("MODEL"), cstr, m_Ata.vars[i].Model, m_SmartDir + EXCHANGE_INI);
-		WritePrivateProfileString(_T("SERIAL"), cstr, m_Ata.vars[i].SerialNumber, m_SmartDir + EXCHANGE_INI);
-		WritePrivateProfileString(_T("DRIVE"), cstr, m_Ata.vars[i].DriveMap, m_SmartDir + EXCHANGE_INI);
+		WritePrivateProfileStringFx(_T("MODEL"), cstr, m_Ata.vars[i].Model, m_SmartDir + EXCHANGE_INI);
+		WritePrivateProfileStringFx(_T("SERIAL"), cstr, m_Ata.vars[i].SerialNumber, m_SmartDir + EXCHANGE_INI);
+		WritePrivateProfileStringFx(_T("DRIVE"), cstr, m_Ata.vars[i].DriveMap, m_SmartDir + EXCHANGE_INI);
 	}
 }
 
@@ -165,7 +165,7 @@ void CDiskInfoDlg::OnHideSmartInfo()
 
 	CString cstr;
 	cstr.Format(_T("%d"), m_SizeY);
-	WritePrivateProfileString(_T("Setting"), _T("Height"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("Height"), cstr, m_Ini);
 
 	SetMenu(menu);
 	DrawMenuBar();
@@ -327,7 +327,7 @@ void CDiskInfoDlg::OnRescan()
 void CDiskInfoDlg::OnHelpAboutSmart()
 {
 	TCHAR url[256];
-	GetPrivateProfileString(_T("Url"), _T("WIKIPEDIA_SMART"), _T("http://en.wikipedia.org/wiki/Self-Monitoring%2C_Analysis%2C_and_Reporting_Technology"), url, 256, m_CurrentLangPath);
+	GetPrivateProfileStringFx(_T("Url"), _T("WIKIPEDIA_SMART"), _T("http://en.wikipedia.org/wiki/Self-Monitoring%2C_Analysis%2C_and_Reporting_Technology"), url, 256, m_CurrentLangPath);
 
 	OpenUrl(url);
 }
@@ -356,7 +356,7 @@ void CDiskInfoDlg::CheckRadioAutoRefresh(int id, int value)
 
 	CString cstr;
 	cstr.Format(_T("%d"), value);
-	WritePrivateProfileString(_T("Setting"), _T("AutoRefresh"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("AutoRefresh"), cstr, m_Ini);
 
 	if(value == 0)
 	{
@@ -428,7 +428,7 @@ void CDiskInfoDlg::CheckRadioWaitTime(int id, int value)
 
 	CString cstr;
 	cstr.Format(_T("%d"), value);
-	WritePrivateProfileString(_T("Setting"), _T("StartupWaitTime"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("StartupWaitTime"), cstr, m_Ini);
 }
 
 void CDiskInfoDlg::CheckRadioWaitTime()
@@ -492,7 +492,7 @@ void CDiskInfoDlg::CheckRadioRawValues(int id, int value)
 
 	CString cstr;
 	cstr.Format(_T("%d"), value);
-	WritePrivateProfileString(_T("Setting"), _T("RawValues"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("RawValues"), cstr, m_Ini);
 
 	Refresh(TRUE);
 }
@@ -541,7 +541,7 @@ void CDiskInfoDlg::OnAdvancedDiskSearch()
 			// Update Menu and Dialog
 			ChangeLang(m_CurrentLang);
 		}
-		WritePrivateProfileString(_T("Setting"), _T("AdvancedDiskSearch"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AdvancedDiskSearch"), _T("0"), m_Ini);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_ADVANCED_DISK_SEARCH, MF_UNCHECKED);
@@ -558,7 +558,7 @@ void CDiskInfoDlg::OnAdvancedDiskSearch()
 			// Update Menu and Dialog
 			ChangeLang(m_CurrentLang);
 		}
-		WritePrivateProfileString(_T("Setting"), _T("AdvancedDiskSearch"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AdvancedDiskSearch"), _T("1"), m_Ini);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_ADVANCED_DISK_SEARCH, MF_CHECKED);
@@ -591,7 +591,7 @@ void CDiskInfoDlg::OnWorkaroundHD204UI()
 			// Update Menu and Dialog
 			ChangeLang(m_CurrentLang);
 		}
-		WritePrivateProfileString(_T("Workaround"), _T("HD204UI"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("HD204UI"), _T("0"), m_Ini);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_HD204UI, MF_UNCHECKED);
@@ -608,7 +608,7 @@ void CDiskInfoDlg::OnWorkaroundHD204UI()
 			// Update Menu and Dialog
 			ChangeLang(m_CurrentLang);
 		}
-		WritePrivateProfileString(_T("Workaround"), _T("HD204UI"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("HD204UI"), _T("1"), m_Ini);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_HD204UI, MF_CHECKED);
@@ -634,7 +634,7 @@ void CDiskInfoDlg::OnWorkaroundIE8MODE()
 	if(m_bWorkaroundIE8MODE)
 	{
 		m_bWorkaroundIE8MODE = FALSE;
-		WritePrivateProfileString(_T("Workaround"), _T("IE8MODE"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("IE8MODE"), _T("0"), m_Ini);
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_IE8MODE, MF_UNCHECKED);
 		SetMenu(menu);
@@ -643,7 +643,7 @@ void CDiskInfoDlg::OnWorkaroundIE8MODE()
 	else
 	{
 		m_bWorkaroundIE8MODE = TRUE;
-		WritePrivateProfileString(_T("Workaround"), _T("IE8MODE"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("IE8MODE"), _T("1"), m_Ini);
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_IE8MODE, MF_CHECKED);
 		SetMenu(menu);
@@ -666,7 +666,7 @@ void CDiskInfoDlg::OnWorkaroundAdataSsd()
 			// Update Menu and Dialog
 			ChangeLang(m_CurrentLang);
 		}
-		WritePrivateProfileString(_T("Workaround"), _T("AdataSsd"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("AdataSsd"), _T("0"), m_Ini);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_ADATA_SSD, MF_UNCHECKED);
@@ -683,7 +683,7 @@ void CDiskInfoDlg::OnWorkaroundAdataSsd()
 			// Update Menu and Dialog
 			ChangeLang(m_CurrentLang);
 		}
-		WritePrivateProfileString(_T("Workaround"), _T("AdataSsd"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("AdataSsd"), _T("1"), m_Ini);
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_ADATA_SSD, MF_CHECKED);
@@ -709,7 +709,7 @@ void CDiskInfoDlg::OnWorkaroundIgnoreC4()
 	if (m_bWorkaroundIgnoreC4)
 	{
 		m_bWorkaroundIgnoreC4 = FALSE;
-		WritePrivateProfileString(_T("Workaround"), _T("IgnoreC4"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("IgnoreC4"), _T("0"), m_Ini);
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_IGNORE_C4, MF_UNCHECKED);
 		SetMenu(menu);
@@ -718,7 +718,7 @@ void CDiskInfoDlg::OnWorkaroundIgnoreC4()
 	else
 	{
 		m_bWorkaroundIgnoreC4 = TRUE;
-		WritePrivateProfileString(_T("Workaround"), _T("IgnoreC4"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("IgnoreC4"), _T("1"), m_Ini);
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_WORKAROUND_IGNORE_C4, MF_CHECKED);
 		SetMenu(menu);
@@ -734,14 +734,14 @@ void CDiskInfoDlg::OnAtaPassThroughSmart()
 		m_bAtaPassThroughSmart = FALSE;
 		m_Ata.SetAtaPassThroughSmart(FALSE);
 		menu->CheckMenuItem(ID_ATA_PASS_THROUGH_SMART, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AtaPassThroughSmart"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AtaPassThroughSmart"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bAtaPassThroughSmart = TRUE;
 		m_Ata.SetAtaPassThroughSmart(TRUE);
 		menu->CheckMenuItem(ID_ATA_PASS_THROUGH_SMART, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AtaPassThroughSmart"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AtaPassThroughSmart"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -754,7 +754,7 @@ void CDiskInfoDlg::OnEventLog()
 	{
 		m_bEventLog = FALSE;
 		menu->CheckMenuItem(ID_EVENT_LOG, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("EventLog"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("EventLog"), _T("0"), m_Ini);
 
 	//	if(! m_bUseEventCreate)
 	//	{
@@ -765,7 +765,7 @@ void CDiskInfoDlg::OnEventLog()
 	{
 		m_bEventLog = TRUE;
 		menu->CheckMenuItem(ID_EVENT_LOG, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("EventLog"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("EventLog"), _T("1"), m_Ini);
 
 	//	if(m_bUseEventCreate)
 	//	{
@@ -783,13 +783,13 @@ void CDiskInfoDlg::OnAlertMail()
 	{
 		m_bAlertMail = FALSE;
 		menu->CheckMenuItem(ID_ALERT_MAIL, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AlertMail"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertMail"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bAlertMail = TRUE;
 		menu->CheckMenuItem(ID_ALERT_MAIL, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AlertMail"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertMail"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -802,14 +802,14 @@ void CDiskInfoDlg::OnAlertSound()
 	{
 		m_bAlertSound = FALSE;
 		menu->CheckMenuItem(ID_ALERT_SOUND, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AlertSound"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSound"), _T("0"), m_Ini);
 		AlertSound(0, AS_SET_SOUND_ID);
 	}
 	else
 	{
 		m_bAlertSound = TRUE;
 		menu->CheckMenuItem(ID_ALERT_SOUND, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AlertSound"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSound"), _T("1"), m_Ini);
 		AlertSound(0, AS_SET_SOUND_ID);
 	}
 	SetMenu(menu);
@@ -823,13 +823,13 @@ void CDiskInfoDlg::OnHideNoSmartDisk()
 	{
 		m_bHideNoSmartDisk = FALSE;
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("HideNoSmartDisk"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("HideNoSmartDisk"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bHideNoSmartDisk = TRUE;
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("HideNoSmartDisk"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("HideNoSmartDisk"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -844,14 +844,14 @@ void CDiskInfoDlg::OnGadgetSupport()
 	{
 		m_bGadget = FALSE;
 		menu->CheckMenuItem(ID_GADGET_SUPPORT, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("Gadget"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("Gadget"), _T("0"), m_Ini);
 		DeleteShareInfo();
 	}
 	else
 	{
 		m_bGadget = TRUE;
 		menu->CheckMenuItem(ID_GADGET_SUPPORT, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("Gadget"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("Gadget"), _T("1"), m_Ini);
 		UpdateShareInfo();
 	}
 	SetMenu(menu);
@@ -880,13 +880,13 @@ void CDiskInfoDlg::CheckStartup()
 		{
 			RegisterStartup();
 			// Fixed in 5.2.2  
-			WritePrivateProfileString(_T("Setting"), _T("StartupFixed"), _T("1"), m_Ini);
+			WritePrivateProfileStringFx(_T("Setting"), _T("StartupFixed"), _T("1"), m_Ini);
 		}
 	}
 	else
 	{
 		m_bStartup = FALSE;
-		WritePrivateProfileString(_T("Setting"), _T("StartupFixed"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("StartupFixed"), _T("1"), m_Ini);
 	}
 }
 
@@ -898,14 +898,14 @@ void CDiskInfoDlg::OnStartup()
 		UnregisterStartup();
 		m_bStartup = FALSE;
 		menu->CheckMenuItem(ID_STARTUP, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("Startup"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("Startup"), _T("0"), m_Ini);
 	}
 	else
 	{
 		RegisterStartup();
 		m_bStartup = TRUE;
 		menu->CheckMenuItem(ID_STARTUP, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("Startup"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("Startup"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1042,7 +1042,7 @@ void CDiskInfoDlg::OnCelsius()
 	SetMenu(menu);
 	DrawMenuBar();
 	m_bFahrenheit = FALSE;
-	WritePrivateProfileString(_T("Setting"), _T("Temperature"), _T("0"), m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("Temperature"), _T("0"), m_Ini);
 
 	SelectDrive(m_SelectDisk);
 }
@@ -1054,7 +1054,7 @@ void CDiskInfoDlg::OnFahrenheit()
 	SetMenu(menu);
 	DrawMenuBar();
 	m_bFahrenheit = TRUE;
-	WritePrivateProfileString(_T("Setting"), _T("Temperature"), _T("1"), m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("Temperature"), _T("1"), m_Ini);
 
 	SelectDrive(m_SelectDisk);
 }
@@ -1066,13 +1066,13 @@ void CDiskInfoDlg::OnAutoAamApm()
 	{
 		m_bAutoAamApm = FALSE;
 		menu->CheckMenuItem(ID_AUTO_AAM_APM, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AutoAamApm"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AutoAamApm"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bAutoAamApm = TRUE;
 		menu->CheckMenuItem(ID_AUTO_AAM_APM, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AutoAamApm"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AutoAamApm"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1085,13 +1085,13 @@ void CDiskInfoDlg::OnUsbSat()
 	{
 		m_Ata.FlagUsbSat = FALSE;
 		menu->CheckMenuItem(ID_USB_SAT, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("SAT"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("SAT"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbSat = TRUE;
 		menu->CheckMenuItem(ID_USB_SAT, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("SAT"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("SAT"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1104,13 +1104,13 @@ void CDiskInfoDlg::OnUsbIodata()
 	{
 		m_Ata.FlagUsbIodata = FALSE;
 		menu->CheckMenuItem(ID_USB_IODATA, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("IODATA"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("IODATA"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbIodata = TRUE;
 		menu->CheckMenuItem(ID_USB_IODATA, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("IODATA"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("IODATA"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1123,13 +1123,13 @@ void CDiskInfoDlg::OnUsbSunplus()
 	{
 		m_Ata.FlagUsbSunplus = FALSE;
 		menu->CheckMenuItem(ID_USB_SUNPLUS, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Sunplus"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Sunplus"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbSunplus = TRUE;
 		menu->CheckMenuItem(ID_USB_SUNPLUS, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Sunplus"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Sunplus"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1142,13 +1142,13 @@ void CDiskInfoDlg::OnUsbLogitec()
 	{
 		m_Ata.FlagUsbLogitec = FALSE;
 		menu->CheckMenuItem(ID_USB_LOGITEC, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Logitec"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Logitec"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbLogitec = TRUE;
 		menu->CheckMenuItem(ID_USB_LOGITEC, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Logitec"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Logitec"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1161,13 +1161,13 @@ void CDiskInfoDlg::OnUsbProlific()
 	{
 		m_Ata.FlagUsbProlific = FALSE;
 		menu->CheckMenuItem(ID_USB_PROLIFIC, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Prolific"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Prolific"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbProlific = TRUE;
 		menu->CheckMenuItem(ID_USB_PROLIFIC, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Prolific"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Prolific"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1180,13 +1180,13 @@ void CDiskInfoDlg::OnUsbJmicron()
 	{
 		m_Ata.FlagUsbJmicron = FALSE;
 		menu->CheckMenuItem(ID_USB_JMICRON, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("JMicron"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("JMicron"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbJmicron = TRUE;
 		menu->CheckMenuItem(ID_USB_JMICRON, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("JMicron"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("JMicron"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1199,13 +1199,13 @@ void CDiskInfoDlg::OnUsbCypress()
 	{
 		m_Ata.FlagUsbCypress = FALSE;
 		menu->CheckMenuItem(ID_USB_CYPRESS, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Cypress"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Cypress"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbCypress = TRUE;
 		menu->CheckMenuItem(ID_USB_CYPRESS, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("Cypress"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Cypress"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1218,13 +1218,13 @@ void CDiskInfoDlg::OnUsbMemory()
 	{
 		m_Ata.FlagUsbMemory = FALSE;
 		menu->CheckMenuItem(ID_USB_MEMORY, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("UsbMemory"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("UsbMemory"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbMemory = TRUE;
 		menu->CheckMenuItem(ID_USB_MEMORY, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("UsbMemory"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("UsbMemory"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1238,13 +1238,13 @@ void CDiskInfoDlg::OnUsbSat16()
 	{
 		m_Ata.FlagUsbSat16 = FALSE;
 		menu->CheckMenuItem(ID_USB_SAT16, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("UsbSAT16"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("UsbSAT16"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbSat16 = TRUE;
 		menu->CheckMenuItem(ID_USB_SAT16, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("UsbSAT16"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("UsbSAT16"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1258,13 +1258,13 @@ void CDiskInfoDlg::OnUsbNVMeJMicron()
 	{
 		m_Ata.FlagUsbNVMeJMicron = FALSE;
 		menu->CheckMenuItem(ID_USB_NVME_JMICRON, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("NVMeJMicron"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("NVMeJMicron"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbNVMeJMicron = TRUE;
 		menu->CheckMenuItem(ID_USB_NVME_JMICRON, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("NVMeJMicron"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("NVMeJMicron"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1277,13 +1277,13 @@ void CDiskInfoDlg::OnUsbNVMeASMedia()
 	{
 		m_Ata.FlagUsbNVMeASMedia = FALSE;
 		menu->CheckMenuItem(ID_USB_NVME_ASMEDIA, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("NVMeASMedia"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("NVMeASMedia"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbNVMeASMedia = TRUE;
 		menu->CheckMenuItem(ID_USB_NVME_ASMEDIA, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("NVMeASMedia"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("NVMeASMedia"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1296,13 +1296,13 @@ void CDiskInfoDlg::OnUsbNVMeRealtek()
 	{
 		m_Ata.FlagUsbNVMeRealtek = FALSE;
 		menu->CheckMenuItem(ID_USB_NVME_REALTEK, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("NVMeRealtek"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("NVMeRealtek"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbNVMeRealtek = TRUE;
 		menu->CheckMenuItem(ID_USB_NVME_REALTEK, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("NVMeRealtek"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("NVMeRealtek"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1315,13 +1315,13 @@ void CDiskInfoDlg::OnMegaRAID()
 	{
 		m_Ata.FlagMegaRAID = FALSE;
 		menu->CheckMenuItem(ID_MEGA_RAID, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("MegaRAID"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("MegaRAID"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagMegaRAID = TRUE;
 		menu->CheckMenuItem(ID_MEGA_RAID, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("MegaRAID"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("MegaRAID"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1334,13 +1334,13 @@ void CDiskInfoDlg::OnUsbASM1352R()
 	{
 		m_Ata.FlagUsbASM1352R = FALSE;
 		menu->CheckMenuItem(ID_USB_ASM1352R, MF_UNCHECKED);
-		WritePrivateProfileString(_T("USB"), _T("ASM1352R"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("ASM1352R"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_Ata.FlagUsbASM1352R = TRUE;
 		menu->CheckMenuItem(ID_USB_ASM1352R, MF_CHECKED);
-		WritePrivateProfileString(_T("USB"), _T("ASM1352R"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("ASM1352R"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1415,13 +1415,13 @@ void CDiskInfoDlg::OnDumpIdentifyDevice()
 	{
 		m_bDumpIdentifyDevice = FALSE;
 		menu->CheckMenuItem(ID_DUMP_IDENTIFY_DEVICE, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("DumpIdentifyDevice"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("DumpIdentifyDevice"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bDumpIdentifyDevice = TRUE;
 		menu->CheckMenuItem(ID_DUMP_IDENTIFY_DEVICE, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("DumpIdentifyDevice"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("DumpIdentifyDevice"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1434,13 +1434,13 @@ void CDiskInfoDlg::OnDumpSmartReadData()
 	{
 		m_bDumpSmartReadData = FALSE;
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_DATA, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("DumpSmartReadData"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("DumpSmartReadData"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bDumpSmartReadData = TRUE;
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_DATA, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("DumpSmartReadData"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("DumpSmartReadData"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1453,13 +1453,13 @@ void CDiskInfoDlg::OnDumpSmartReadThreshold()
 	{
 		m_bDumpSmartReadThreshold = FALSE;
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_THRESHOLD, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("DumpSmartReadThreshold"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("DumpSmartReadThreshold"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bDumpSmartReadThreshold = TRUE;
 		menu->CheckMenuItem(ID_DUMP_SMART_READ_THRESHOLD, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("DumpSmartReadThreshold"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("DumpSmartReadThreshold"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1473,13 +1473,13 @@ void CDiskInfoDlg::OnAsciiView()
 	{
 		m_bAsciiView = FALSE;
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AsciiView"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AsciiView"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bAsciiView = TRUE;
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("AsciiView"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AsciiView"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1492,13 +1492,13 @@ void CDiskInfoDlg::OnSmartEnglish()
 	{
 		m_bSmartEnglish = FALSE;
 		menu->CheckMenuItem(ID_SMART_ENGLISH, MF_UNCHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("SmartEnglish"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("SmartEnglish"), _T("0"), m_Ini);
 	}
 	else
 	{
 		m_bSmartEnglish = TRUE;
 		menu->CheckMenuItem(ID_SMART_ENGLISH, MF_CHECKED);
-		WritePrivateProfileString(_T("Setting"), _T("SmartEnglish"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("SmartEnglish"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -1517,11 +1517,11 @@ void CDiskInfoDlg::OnFontSetting()
 		m_FontRender = fontSelection.GetFontRender();
 
 		CString cstr;
-		WritePrivateProfileString(L"Setting", L"FontFace", L"\"" + m_FontFace + L"\"", m_Ini);
+		WritePrivateProfileStringFx(L"Setting", L"FontFace", L"\"" + m_FontFace + L"\"", m_Ini);
 		cstr.Format(L"%d", m_FontScale);
-		WritePrivateProfileString(L"Setting", L"FontScale", cstr, m_Ini);
+		WritePrivateProfileStringFx(L"Setting", L"FontScale", cstr, m_Ini);
 		cstr.Format(L"%d", m_FontRender);
-		WritePrivateProfileString(L"Setting", L"FontRender", cstr, m_Ini);
+		WritePrivateProfileStringFx(L"Setting", L"FontRender", cstr, m_Ini);
 
 		UpdateDialogSize();
 	}
@@ -1535,7 +1535,7 @@ void CDiskInfoDlg::OnResidentHide()
 	SetMenu(menu);
 	DrawMenuBar();
 	m_bResidentMinimize = FALSE;
-	WritePrivateProfileString(_T("Setting"), _T("ResidentMinimize"), _T("0"), m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("ResidentMinimize"), _T("0"), m_Ini);
 }
 
 void CDiskInfoDlg::OnResidentMinimize()
@@ -1545,7 +1545,7 @@ void CDiskInfoDlg::OnResidentMinimize()
 	SetMenu(menu);
 	DrawMenuBar();
 	m_bResidentMinimize = TRUE;
-	WritePrivateProfileString(_T("Setting"), _T("ResidentMinimize"), _T("1"), m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("ResidentMinimize"), _T("1"), m_Ini);
 }
 
 void CDiskInfoDlg::OnZoom100()
@@ -1628,7 +1628,7 @@ BOOL CDiskInfoDlg::CheckRadioZoomType(int id, int value)
 
 	CString cstr;
 	cstr.Format(_T("%d"), value);
-	WritePrivateProfileString(_T("Setting"), _T("ZoomType"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("ZoomType"), cstr, m_Ini);
 
 	ChangeZoomType(m_ZoomType);
 
@@ -1696,7 +1696,7 @@ void CDiskInfoDlg::CheckRadioAutoDetection(int id, int value)
 
 	CString cstr;
 	cstr.Format(_T("%d"), value);
-	WritePrivateProfileString(_T("Setting"), _T("AutoDetection"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("AutoDetection"), cstr, m_Ini);
 }
 
 void CDiskInfoDlg::OnCsmiDisable()
@@ -1730,7 +1730,7 @@ void CDiskInfoDlg::CheckRadioCsmiType(int id, int value)
 
 	CString cstr;
 	cstr.Format(_T("%d"), value);
-	WritePrivateProfileString(_T("Setting"), _T("CsmiType"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("CsmiType"), cstr, m_Ini);
 
 	OnRescan();
 }

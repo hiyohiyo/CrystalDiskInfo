@@ -61,7 +61,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 		defaultFontFace = DEFAULT_FONT_FACE_2;
 	}
 
-	GetPrivateProfileString(_T("Setting"), _T("FontFace"), defaultFontFace, str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("FontFace"), defaultFontFace, str, 256, m_Ini);
 	m_FontFace = str;
 	m_FontScale = GetPrivateProfileInt(L"Setting", L"FontScale", 100, m_Ini);
 	if (m_FontScale > 150 || m_FontScale < 50)
@@ -176,7 +176,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	if(m_bStartupExit)
 	{
 		// Added 2013/04/12 - Workaround for Exec Failed
-		WritePrivateProfileString(_T("Workaround"), _T("ExecFailed"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("ExecFailed"), _T("0"), m_Ini);
 		DebugPrint(_T("EndDialog(0)"));
 		EndDialog(0);
 		return FALSE;
@@ -278,7 +278,7 @@ void CDiskInfoDlg::InitDialogComplete()
 
 
 		// Added 2013/04/12 - Workaround for Exec Failed
-		WritePrivateProfileString(_T("Workaround"), _T("ExecFailed"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("Workaround"), _T("ExecFailed"), _T("0"), m_Ini);
 
 		if(! ((CDiskInfoApp*)AfxGetApp())->m_SaveAsText.IsEmpty())
 		{
@@ -601,11 +601,21 @@ CString CDiskInfoDlg::GetLogicalDriveInfo(DWORD index, INT maxLength)
 				&totalNumberOfBytes, &totalNumberOfFreeBytes);
 			GetVolumeInformation(letter,  volumeNameBuffer, 256, NULL, NULL, NULL, NULL, 0);
 
-			cstr.Format(_T("%C: %s [%.1f/%.1f GB (%.1f %%)]\r\n"), 
-				j + 'A', volumeNameBuffer,
-				totalNumberOfFreeBytes.QuadPart / 1024 / 1024 / 1024.0,
-				totalNumberOfBytes.QuadPart  / 1024 / 1024 / 1024.0,
-				(double)totalNumberOfFreeBytes.QuadPart / (double)totalNumberOfBytes.QuadPart * 100);
+			if (totalNumberOfFreeBytes.QuadPart < totalNumberOfBytes.QuadPart)
+			{
+				cstr.Format(_T("%C: %s [%.1f/%.1f GB (%.1f %%)]\r\n"), 
+					j + 'A', volumeNameBuffer,
+					totalNumberOfFreeBytes.QuadPart / 1024 / 1024 / 1024.0,
+					totalNumberOfBytes.QuadPart  / 1024 / 1024 / 1024.0,
+					(double)totalNumberOfFreeBytes.QuadPart / (double)totalNumberOfBytes.QuadPart * 100);
+			}
+			else
+			{
+				cstr.Format(_T("%C: %s [%.1f/%.1f GB]\r\n"),
+					j + 'A', volumeNameBuffer,
+					totalNumberOfFreeBytes.QuadPart / 1024 / 1024 / 1024.0,
+					totalNumberOfBytes.QuadPart / 1024 / 1024 / 1024.0);
+			}
 		
 			resultL += cstr;
 

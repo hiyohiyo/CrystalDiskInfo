@@ -210,7 +210,7 @@ void COptionDlg::InitDialogComplete()
 	m_Reset          = i18n(_T("Graph"), _T("RESET"));
 
 	TCHAR str[256];
-	GetPrivateProfileString(_T("Customize"), _T("GraphBkImage"), _T(""), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Customize"), _T("GraphBkImage"), _T(""), str, 256, m_Ini);
 	m_BkImage = str;
 	SetElementPropertyEx(_T("GraphBkImage"), DISPID_IHTMLELEMENT_TITLE, m_BkImage);
 
@@ -306,7 +306,7 @@ void COptionDlg::SelectColor(DWORD i)
 		CString cstr1, cstr2;
 		cstr1.Format(_T("%d"), i);
 		cstr2.Format(_T("#%02x%02x%02x"), GetRValue(color), GetGValue(color), GetBValue(color));
-		WritePrivateProfileString(_T("LineColor"), cstr1, cstr2, m_Ini);
+		WritePrivateProfileStringFx(_T("LineColor"), cstr1, cstr2, m_Ini);
 		m_ColorCode[i] = cstr2;
 
 		CallScript(_T("changeBackgroundColor"), cstr1 + _T(", ") + cstr2);
@@ -326,7 +326,7 @@ HRESULT COptionDlg::OnSelectBkImage(IHTMLElement* /*pElement*/)
 	if(dlg.DoModal() == IDOK)
 	{
 		m_BkImage = dlg.GetPathName();
-		WritePrivateProfileString(_T("Customize"), _T("GraphBkImage"), m_BkImage, m_Ini);
+		WritePrivateProfileStringFx(_T("Customize"), _T("GraphBkImage"), m_BkImage, m_Ini);
 		SetElementPropertyEx(_T("GraphBkImage"), DISPID_IHTMLELEMENT_TITLE, m_BkImage);
 		UpdateData(FALSE);
 		::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_UPDATE_BG_IMAGE, NULL, NULL);
@@ -337,7 +337,7 @@ HRESULT COptionDlg::OnSelectBkImage(IHTMLElement* /*pElement*/)
 HRESULT COptionDlg::OnNoBkImage(IHTMLElement* /*pElement*/)
 {
 	m_BkImage = _T("");
-	WritePrivateProfileString(_T("Customize"), _T("GraphBkImage"), m_BkImage, m_Ini);
+	WritePrivateProfileStringFx(_T("Customize"), _T("GraphBkImage"), m_BkImage, m_Ini);
 	SetElementPropertyEx(_T("GraphBkImage"), DISPID_IHTMLELEMENT_TITLE, m_BkImage);
 	UpdateData(FALSE);
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_UPDATE_BG_IMAGE, NULL, NULL);
@@ -352,7 +352,7 @@ HRESULT COptionDlg::OnReset(IHTMLElement* /*pElement*/)
 		CString cstr1, cstr2;
 		cstr1.Format(_T("%d"), i);
 		cstr2.Format(_T("#%02x%02x%02x"), GetRValue(color), GetGValue(color), GetBValue(color));
-		WritePrivateProfileString(_T("LineColor"), cstr1, cstr2, m_Ini);
+		WritePrivateProfileStringFx(_T("LineColor"), cstr1, cstr2, m_Ini);
 		m_ColorCode[i] = cstr2;
 
 		CallScript(_T("changeBackgroundColor"), cstr1 + _T(", ") + cstr2);

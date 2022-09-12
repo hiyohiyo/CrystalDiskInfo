@@ -191,9 +191,6 @@
     <ClInclude Include="TemperatureDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CommonFx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FontSelectionDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>

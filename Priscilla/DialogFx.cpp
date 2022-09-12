@@ -429,16 +429,16 @@ CString CDialogFx::i18n(CString section, CString key, BOOL inEnglish)
 
 	if(inEnglish)
 	{
-		GetPrivateProfileString(section, key, L"", str, 256, m_DefaultLangPath);
+		GetPrivateProfileStringFx(section, key, L"", str, 256, m_DefaultLangPath);
 		cstr = str;
 	}
 	else
 	{
-		GetPrivateProfileString(section, key, L"", str, 256, m_CurrentLangPath);
+		GetPrivateProfileStringFx(section, key, L"", str, 256, m_CurrentLangPath);
 		cstr = str;
 		if(cstr.IsEmpty())
 		{
-			GetPrivateProfileString(section, key, L"", str, 256, m_DefaultLangPath);
+			GetPrivateProfileStringFx(section, key, L"", str, 256, m_DefaultLangPath);
 			cstr = str;
 		}
 	}

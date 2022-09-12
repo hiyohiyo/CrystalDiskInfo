@@ -726,19 +726,19 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 
 		if (m_bSmartEnglish)
 		{
-			GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_DefaultLangPath);
+			GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_DefaultLangPath);
 		}
 		else
 		{
-			GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, L"", str, 256, m_DefaultLangPath);
+			GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, cstr, L"", str, 256, m_DefaultLangPath);
 			CString en = str;
 			if (en.IsEmpty())
 			{
-				GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_CurrentLangPath);
+				GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, cstr, vendorSpecific, str, 256, m_CurrentLangPath);
 			}
 			else
 			{
-				GetPrivateProfileString(m_Ata.vars[i].SmartKeyName, cstr, en, str, 256, m_CurrentLangPath);
+				GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, cstr, en, str, 256, m_CurrentLangPath);
 			}
 		}
 
@@ -2339,7 +2339,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 	SetClientSize(m_SizeX, m_SizeY, m_ZoomRatio);
 
-	WritePrivateProfileString(_T("Setting"), _T("Language"), LangName, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("Language"), LangName, m_Ini);
 }
 
 void CDiskInfoDlg::OnDiskStatus() { OnHealthStatus(); }
@@ -2485,22 +2485,22 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 	// 
 	DWORD length = 256;
 	GetComputerNameW(str, &length);
-	WritePrivateProfileString(L"PC", L"ComputerName", str, dir + _T("\\") + SMART_INI);
+	WritePrivateProfileStringFx(L"PC", L"ComputerName", str, dir + _T("\\") + SMART_INI);
 
-	GetPrivateProfileString(disk, _T("Date"), _T(""), str, 256, dir + _T("\\") + SMART_INI);
+	GetPrivateProfileStringFx(disk, _T("Date"), _T(""), str, 256, dir + _T("\\") + SMART_INI);
 	cstr = str;
 	if (cstr.IsEmpty())
 	{
 		flagFirst = TRUE;
 		_stprintf_s(str, 256, _T("%s"), time.Format(_T("%Y/%m/%d %H:%M:%S")).GetBuffer());
-		WritePrivateProfileString(disk + _T("FIRST"), _T("Date"), str, dir + _T("\\") + SMART_INI);
+		WritePrivateProfileStringFx(disk + _T("FIRST"), _T("Date"), str, dir + _T("\\") + SMART_INI);
 
 		_stprintf_s(str, 256, _T("%d"), m_Ata.vars[i].DiskStatus);
-		WritePrivateProfileString(disk + _T("FIRST"), _T("HealthStatus"), str, dir + _T("\\") + SMART_INI);
+		WritePrivateProfileStringFx(disk + _T("FIRST"), _T("HealthStatus"), str, dir + _T("\\") + SMART_INI);
 	}
 
 	// Check Threshold of Reallocated Sectors Count
-	GetPrivateProfileString(disk + _T("THRESHOLD"), _T("05"), _T(""), str, 256, dir + _T("\\") + SMART_INI);
+	GetPrivateProfileStringFx(disk + _T("THRESHOLD"), _T("05"), _T(""), str, 256, dir + _T("\\") + SMART_INI);
 	cstr = str;
 	if (cstr.IsEmpty())
 	{
@@ -2508,10 +2508,10 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 	}
 
 	_stprintf_s(str, 256, _T("%s"), time.Format(_T("%Y/%m/%d %H:%M:%S")).GetBuffer());
-	WritePrivateProfileString(disk, _T("Date"), str, dir + _T("\\") + SMART_INI);
+	WritePrivateProfileStringFx(disk, _T("Date"), str, dir + _T("\\") + SMART_INI);
 
 	_stprintf_s(str, 256, _T("%d"), m_Ata.vars[i].DiskStatus);
-	WritePrivateProfileString(disk, _T("HealthStatus"), str, dir + _T("\\") + SMART_INI);
+	WritePrivateProfileStringFx(disk, _T("HealthStatus"), str, dir + _T("\\") + SMART_INI);
 
 	if (m_Ata.vars[i].Temperature > -300)
 	{
@@ -2596,23 +2596,23 @@ BOOL CDiskInfoDlg::AppendLog(CString dir, CString disk, CString file, CTime time
 	if (flagFirst)
 	{
 		wsprintf(str, _T("%d"), value);
-		WritePrivateProfileString(disk + _T("FIRST"), file, str, dir + _T("\\") + SMART_INI);
+		WritePrivateProfileStringFx(disk + _T("FIRST"), file, str, dir + _T("\\") + SMART_INI);
 
 		if (file.GetLength() == 2)
 		{
 			wsprintf(str, _T("%d"), threshold);
-			WritePrivateProfileString(disk + _T("THRESHOLD"), file, str, dir + _T("\\") + SMART_INI);
+			WritePrivateProfileStringFx(disk + _T("THRESHOLD"), file, str, dir + _T("\\") + SMART_INI);
 		}
 	}
 
-	GetPrivateProfileString(disk, file, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
+	GetPrivateProfileStringFx(disk, file, _T("-1"), str, 256, dir + _T("\\") + SMART_INI);
 	int pre = _tstoi(str);
 
 	if (pre != value)
 	{
 		// Update
 		wsprintf(str, _T("%d"), value);
-		WritePrivateProfileString(disk, file, str, dir + _T("\\") + SMART_INI);
+		WritePrivateProfileStringFx(disk, file, str, dir + _T("\\") + SMART_INI);
 
 		CString line;
 		line.Format(_T("%s,%d\n"), time.Format(_T("%Y/%m/%d %H:%M:%S")).GetString(), value);

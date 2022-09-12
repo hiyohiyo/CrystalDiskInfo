@@ -166,12 +166,12 @@ void CMainDialogFx::InitThemeLang()
 			defaultTheme = m_RecommendTheme;
 		}
 
-		GetPrivateProfileString(L"Setting", m_ThemeKeyName, defaultTheme, str, 256, m_Ini);
+		GetPrivateProfileStringFx(L"Setting", m_ThemeKeyName, defaultTheme, str, 256, m_Ini);
 		m_CurrentTheme = str;
 	}
 
 // Set Language
-	GetPrivateProfileString(L"Setting", L"Language", L"", str, 256, m_Ini);
+	GetPrivateProfileStringFx(L"Setting", L"Language", L"", str, 256, m_Ini);
 
 	langPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), str);
 	m_DefaultLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), DEFAULT_LANGUAGE);
@@ -198,7 +198,7 @@ void CMainDialogFx::InitThemeLang()
 					i++;
 					CString cstr;
 					cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
-					GetPrivateProfileString(L"Language", L"LOCALE_ID", L"", str, 256, cstr);
+					GetPrivateProfileStringFx(L"Language", L"LOCALE_ID", L"", str, 256, cstr);
 					if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){*ptrEnd = '\0';}
 
 					if(_tcsstr(str, currentLocalID) != NULL)
@@ -334,7 +334,7 @@ void CMainDialogFx::InitMenu()
 				// Add Language
 				CString cstr;
 				cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
-				GetPrivateProfileString(L"Language", L"LANGUAGE", L"", str, 256, cstr);
+				GetPrivateProfileStringFx(L"Language", L"LANGUAGE", L"", str, 256, cstr);
 				if((ptrEnd = _tcsrchr(findData.cFileName, L'.')) != NULL)
 				{
 					*ptrEnd = '\0';
@@ -391,7 +391,7 @@ BOOL CMainDialogFx::OnInitDialog()
 
 void CMainDialogFx::ChangeTheme(CString themeName)
 {
-	WritePrivateProfileString(L"Setting", m_ThemeKeyName, themeName, m_Ini);
+	WritePrivateProfileStringFx(L"Setting", m_ThemeKeyName, themeName, m_Ini);
 }
 
 BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam) 
@@ -462,7 +462,7 @@ void CMainDialogFx::SetZoomType(DWORD zoomType)
 {
 	CString cstr;
 	cstr.Format(L"%d", m_ZoomType);
-	WritePrivateProfileString(L"Setting", L"ZoomType", cstr, m_Ini);
+	WritePrivateProfileStringFx(L"Setting", L"ZoomType", cstr, m_Ini);
 }
 
 void CMainDialogFx::UpdateThemeInfo()
@@ -529,7 +529,7 @@ CString CMainDialogFx::GetParentTheme(int i, CString theme)
 	CString cstr;
 	cstr.Format(L"ParentTheme%d", i);
 	TCHAR str[256];
-	GetPrivateProfileString(L"Info", cstr, L"", str, 256, theme);
+	GetPrivateProfileStringFx(L"Info", cstr, L"", str, 256, theme);
 	cstr = str;
 
 	return cstr;

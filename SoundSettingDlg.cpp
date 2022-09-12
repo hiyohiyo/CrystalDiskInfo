@@ -61,7 +61,7 @@ BOOL CSoundSettingDlg::OnInitDialog()
 	m_bShowWindow = TRUE;
 
 	TCHAR str[256];
-	GetPrivateProfileString(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("AlertSoundPath"), _T(""), str, 256, m_Ini);
 	m_FilePath = str;
 	UpdateData(FALSE);
 
@@ -144,7 +144,7 @@ void CSoundSettingDlg::OnSelectFile()
 	if(dlg.DoModal() == IDOK)
 	{
 		m_FilePath = dlg.GetPathName();
-		WritePrivateProfileString(_T("Setting"), _T("AlertSoundPath"), _T("\"") + m_FilePath + _T("\""), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundPath"), _T("\"") + m_FilePath + _T("\""), m_Ini);
 		m_CtrlFilePath.SetToolTipText(m_FilePath);
 		UpdateData(FALSE);
 	}
@@ -158,7 +158,7 @@ void CSoundSettingDlg::OnPlay()
 		m_CurrentVolume = pos;
 		CString volume;
 		volume.Format(_T("%d"), m_CurrentVolume);
-		WritePrivateProfileString(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
 	}
 
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_PLAY_ALERT_SOUND, NULL, NULL);
@@ -169,7 +169,7 @@ void CSoundSettingDlg::OnDefault()
 	m_CtrlSlider.SetPos(80);
 
 	m_FilePath = _T("");
-	WritePrivateProfileString(_T("Setting"), _T("AlertSoundPath"), m_FilePath, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundPath"), m_FilePath, m_Ini);
 	m_CtrlFilePath.SetToolTipText(m_FilePath);
 	UpdateData(FALSE);
 }
@@ -178,7 +178,7 @@ void CSoundSettingDlg::OnOk()
 {
 	CString volume;
 	volume.Format(_T("%d"), m_CtrlSlider.GetPos());
-	WritePrivateProfileString(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
 
 	CDialogFx::OnCancel();
 }
@@ -190,7 +190,7 @@ void CSoundSettingDlg::OnCancel()
 	{
 		CString volume;
 		volume.Format(_T("%d"), m_InitialVolume);
-		WritePrivateProfileString(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
 	}
 
 	CDialogFx::OnCancel();

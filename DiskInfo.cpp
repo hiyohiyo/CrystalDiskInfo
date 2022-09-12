@@ -90,7 +90,7 @@ BOOL CDiskInfoApp::InitInstance()
 	DWORD debugMode = GetPrivateProfileInt(_T("Setting"), _T("DebugMode"), 0, m_Ini);
 	SetDebugMode(debugMode);
 	cstr.Format(_T("%d"), debugMode);
-	WritePrivateProfileString(_T("Setting"), _T("DebugMode"), cstr, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("DebugMode"), cstr, m_Ini);
 
 	int argc = 0;
 	//int index = 0;
@@ -172,7 +172,7 @@ BOOL CDiskInfoApp::InitInstance()
 
 	// Smart folder
 	TCHAR smartDir[MAX_PATH] = {};
-	GetPrivateProfileString(_T("Setting"), _T("SmartDir"), _T(""), smartDir, MAX_PATH, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("SmartDir"), _T(""), smartDir, MAX_PATH, m_Ini);
 	if (_tcscmp(smartDir, _T("")) != 0 || CreateDirectory(smartDir, nullptr) || GetLastError() == ERROR_ALREADY_EXISTS) {
 		m_SmartDir.Format(_T("%s"), smartDir);
 		if (m_SmartDir.Right(1).Compare(_T("\\")) != 0) // Add "\"

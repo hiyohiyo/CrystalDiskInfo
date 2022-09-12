@@ -192,21 +192,40 @@ DWORD B8toB32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 
 DWORD GetPrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpDefault, LPTSTR  lpReturnedString, DWORD nSize, LPCTSTR lpFileName)
 {
-	CString cstr = lpKeyName;
-	cstr.Replace(L"=", L"%#3D");
-	return GetPrivateProfileString(lpAppName, cstr, lpDefault, lpReturnedString, nSize, lpFileName);
+	DWORD result = 0;
+	CString key = lpKeyName;
+	key.Replace(L"=", L"%#3D");
+	key.Replace(L"\"", L"%#22");
+	result = GetPrivateProfileString(lpAppName, key, lpDefault, lpReturnedString, nSize, lpFileName);
+
+	CString value = lpReturnedString;
+	value.Replace(L"%#3D", L"=");
+	value.Replace(L"%#22", L"\"");
+	wsprintf(lpReturnedString, value.GetString());
+
+	return result;
 }
 
 UINT GetPrivateProfileIntFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, INT nDefault, LPCTSTR lpFileName)
 {
-	CString cstr = lpKeyName;
-	cstr.Replace(L"=", L"%#3D");
-	return GetPrivateProfileInt(lpAppName, cstr, nDefault, lpFileName);
+	CString key = lpKeyName;
+	key.Replace(L"=", L"%#3D");
+	key.Replace(L"\"", L"%#22");
+
+	return GetPrivateProfileInt(lpAppName, key, nDefault, lpFileName);
 }
 
 BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpString, LPCTSTR lpFileName)
 {
-	CString cstr = lpKeyName;
-	cstr.Replace(L"=", L"%#3D");
-	return WritePrivateProfileString(lpAppName, cstr, lpString, lpFileName);
+	CString key = lpKeyName;
+	key.Replace(L"=", L"%#3D");
+	key.Replace(L"\"", L"%#22");
+
+	CString value = lpString;
+	value.Replace(L"=", L"%#3D");
+	value.Replace(L"\"", L"%#22");
+
+	value = L"\"" + value + L"\"";
+
+	return WritePrivateProfileString(lpAppName, key, value, lpFileName);
 }
