@@ -10541,7 +10541,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			return DISK_STATUS_BAD;
 		}
 
-		if (vars[i].Attribute[3].RawValue[0] == 0)
+		if (vars[i].Attribute[3].RawValue[0] == 0 || vars[i].Attribute[3].RawValue[0] > 100) // Available Spare Threshold does not available.
 		{
 		}
 		else if (vars[i].Attribute[2].RawValue[0] < vars[i].Attribute[3].RawValue[0])

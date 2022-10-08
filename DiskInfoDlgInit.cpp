@@ -219,7 +219,49 @@ void CDiskInfoDlg::RestorePos()
 	}
 	else
 	{
-		SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+		// Get Taskbar Size
+		APPBARDATA	taskbarInfo = { 0 };
+		taskbarInfo.cbSize = sizeof(APPBARDATA);
+		taskbarInfo.hWnd = m_hWnd;
+		SHAppBarMessage(ABM_GETTASKBARPOS, &taskbarInfo);
+		CRect taskbarRect = taskbarInfo.rc;
+
+		/// <summary>
+		/// Debug Code
+		/// </summary>
+		/// CString cstr;
+		/// cstr.Format(L"top=%d, bottom=%d, left=%d, right=%d", taskbarInfo.rc.top, taskbarInfo.rc.bottom, taskbarInfo.rc.left, taskbarInfo.rc.right);
+		/// AfxMessageBox(cstr);
+
+		if (taskbarInfo.rc.top <= 0 && taskbarInfo.rc.left <= 0) // Top Side or Left Side
+		{
+			if (taskbarRect.Height() > taskbarRect.Width()) // Left Side
+			{
+				if (x < taskbarRect.Width()) // Overlap
+				{
+					SetWindowPos(nullptr, taskbarRect.Width(), y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				}
+				else
+				{
+					SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				}				
+			}
+			else // Top Side
+			{
+				if (y < taskbarRect.Height()) // Overlap
+				{
+					SetWindowPos(nullptr, x, taskbarRect.Height(), 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				}
+				else
+				{
+					SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				}				
+			}
+		}
+		else
+		{
+			SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+		}		
 	}
 }
 

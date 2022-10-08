@@ -348,6 +348,12 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 					icon = ICON_CAUTION;
 				}
 			}
+			// 2022/10/02 Workaround for no support Available Spare Threshold devices
+			// https://github.com/hiyohiyo/CrystalDiskInfo/issues/186
+			else if (m_Ata.vars[i].Attribute[j].Id == 0x03 && m_Ata.vars[i].Attribute[3].RawValue[0] > 100)
+			{
+				icon = ICON_GOOD;
+			}
 			// 2022/03/26 Workaround for WD_BLACK AN1500 (No support Available Spare/Available Spare Threshold)
 			else if (m_Ata.vars[i].Attribute[j].Id == 0x03 && (m_Ata.vars[i].Attribute[2].RawValue[0] == 0 && m_Ata.vars[i].Attribute[3].RawValue[0] == 0))
 			{
