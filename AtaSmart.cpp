@@ -5059,7 +5059,8 @@ BOOL CAtaSmart::IsSsdToshiba(ATA_SMART_INFO &asi)
 	if (modelUpper.Find(_T("TOSHIBA")) >= 0 && asi.IsSsd)
 	{
 		flagSmartType = TRUE;
-		if (asi.Model.Find(_T("THNSNC")) >= 0 || asi.Model.Find(_T("THNSNK")) >= 0 || asi.Model.Find(_T("KSG60")) >= 0
+		if (asi.Model.Find(_T("THNSNC")) >= 0 || asi.Model.Find(_T("THNSNJ")) >= 0 || asi.Model.Find(_T("THNSNK")) >= 0
+		||  asi.Model.Find(_T("KSG60")) >= 0
 		||  asi.Model.Find(_T("TL100")) >= 0 || asi.Model.Find(_T("TR150")) >= 0 || asi.Model.Find(_T("TR200")) >= 0
 		)
 		{
