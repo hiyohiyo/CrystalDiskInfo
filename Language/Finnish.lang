@@ -9,7 +9,7 @@ CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x040B,
 
 [Url]
-WIKIPEDIA_SMART=https://fi.wikipedia.org/wiki/Kiintolevy 
+WIKIPEDIA_SMART=https://fi.wikipedia.org/wiki/Kiintolevy
 WIKIPEDIA_SMART2=http://ftfm.apz.fi/art/3/
 
 [Menu]

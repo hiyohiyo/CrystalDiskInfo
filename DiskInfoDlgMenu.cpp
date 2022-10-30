@@ -327,7 +327,7 @@ void CDiskInfoDlg::OnRescan()
 void CDiskInfoDlg::OnHelpAboutSmart()
 {
 	TCHAR url[256];
-	GetPrivateProfileStringFx(_T("Url"), _T("WIKIPEDIA_SMART"), _T("http://en.wikipedia.org/wiki/Self-Monitoring%2C_Analysis%2C_and_Reporting_Technology"), url, 256, m_CurrentLangPath);
+	GetPrivateProfileStringFx(_T("Url"), _T("WIKIPEDIA_SMART"), _T("https://en.wikipedia.org/wiki/S.M.A.R.T."), url, 256, m_CurrentLangPath);
 
 	OpenUrl(url);
 }

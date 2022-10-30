@@ -201,7 +201,7 @@ DWORD GetPrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lp
 	CString value = lpReturnedString;
 	value.Replace(L"%#3D", L"=");
 	value.Replace(L"%#22", L"\"");
-	wsprintf(lpReturnedString, value.GetString());
+	_tcscpy_s(lpReturnedString, nSize, value.GetString());
 
 	return result;
 }
