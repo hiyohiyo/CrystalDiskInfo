@@ -1517,7 +1517,7 @@ void CDiskInfoDlg::OnFontSetting()
 		m_FontRender = fontSelection.GetFontRender();
 
 		CString cstr;
-		WritePrivateProfileStringFx(L"Setting", L"FontFace", L"\"" + m_FontFace + L"\"", m_Ini);
+		WritePrivateProfileStringFx(L"Setting", L"FontFace", m_FontFace, m_Ini);
 		cstr.Format(L"%d", m_FontScale);
 		WritePrivateProfileStringFx(L"Setting", L"FontScale", cstr, m_Ini);
 		cstr.Format(L"%d", m_FontRender);

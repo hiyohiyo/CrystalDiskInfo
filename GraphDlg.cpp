@@ -1067,7 +1067,7 @@ BOOL CGraphDlg::UpdateGraph()
 			inFile.Close();
 
 			count = 0;
-			if(m_AttributeId == 0x1C3) // Fahrenheit
+			if(m_AttributeId == SMART_TEMPERATURE && m_bFahrenheit) // Fahrenheit
 			{
 				for(int i = 0; i < end; i++)
 				{
@@ -1117,7 +1117,7 @@ BOOL CGraphDlg::UpdateGraph()
 
 		// Latest
 		_tzset();
-		if(m_AttributeId == 0x1C3) // Fahrenheit
+		if(m_AttributeId == SMART_TEMPERATURE && m_bFahrenheit) // Fahrenheit
 		{
 			cstr.Format(_T("[%I64d, %d]"), (ULONGLONG)(time(&dateTime) - (time_t)m_TimeZoneInformation.Bias * 60) * 1000, value * 9 / 5 + 32);
 		}
