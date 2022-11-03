@@ -144,7 +144,7 @@ void CSoundSettingDlg::OnSelectFile()
 	if(dlg.DoModal() == IDOK)
 	{
 		m_FilePath = dlg.GetPathName();
-		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundPath"), _T("\"") + m_FilePath + _T("\""), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundPath"), m_FilePath, m_Ini);
 		m_CtrlFilePath.SetToolTipText(m_FilePath);
 		UpdateData(FALSE);
 	}
@@ -158,7 +158,7 @@ void CSoundSettingDlg::OnPlay()
 		m_CurrentVolume = pos;
 		CString volume;
 		volume.Format(_T("%d"), m_CurrentVolume);
-		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), volume, m_Ini);
 	}
 
 	::PostMessage(m_ParentWnd->GetSafeHwnd(), MY_PLAY_ALERT_SOUND, NULL, NULL);
@@ -167,6 +167,7 @@ void CSoundSettingDlg::OnPlay()
 void CSoundSettingDlg::OnDefault()
 {
 	m_CtrlSlider.SetPos(80);
+	m_CtrlValueVolume.SetWindowTextW(L"80");
 
 	m_FilePath = _T("");
 	WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundPath"), m_FilePath, m_Ini);
@@ -178,7 +179,7 @@ void CSoundSettingDlg::OnOk()
 {
 	CString volume;
 	volume.Format(_T("%d"), m_CtrlSlider.GetPos());
-	WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), volume, m_Ini);
 
 	CDialogFx::OnCancel();
 }
@@ -190,7 +191,7 @@ void CSoundSettingDlg::OnCancel()
 	{
 		CString volume;
 		volume.Format(_T("%d"), m_InitialVolume);
-		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), _T("\"") + volume + _T("\""), m_Ini);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AlertSoundVolume"), volume, m_Ini);
 	}
 
 	CDialogFx::OnCancel();
