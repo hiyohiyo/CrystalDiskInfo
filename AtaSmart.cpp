@@ -5344,6 +5344,10 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 		{
 
 		}
+		else if (asi.Model.Find(_T("tecmiyo")) == 0) // https://github.com/hiyohiyo/CrystalDiskInfo/issues/191
+		{
+
+		}
 		else
 		{
 			asi.FlagLifeRawValue = TRUE;
