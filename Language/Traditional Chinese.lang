@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=謝慶憲, chriszxl (小良奇), haobinnan
-VERSION=8.16.3
+VERSION=8.17.12
 
 [Language]
 LANGUAGE=正體中文
@@ -543,7 +543,7 @@ FD=總區塊重新對應成功計數
 FE=總背景掃描超過限制計數
 DF=總背景掃描
 
-[SmartMicronMU02] ;Updated 6.6.0
+[SmartMicronMU02] ;Updated 8.17.0
 ; RAIN = Redundant Array of Independent NAND
 01=原始讀取錯誤率
 05=重定位磁區計數
@@ -581,7 +581,7 @@ F4=ECC 累計臨界值事件
 F5=累計程式 NAND 頁
 F6=總計主機磁區寫入
 F7=主機程式頁面計數
-F8=FTL 程式頁面計數
+F8=背景程式頁面計數
 ; Updated 6.6.0
 A0=無法糾正的磁區計數
 A1=有效的備用區塊
@@ -1276,7 +1276,7 @@ F2=讀取壽命
 FA=NAND 讀取重試壽命
 
 [SmartSeagateIronWolf]
-; https://www.seagate.com/jp/ja/internal-hard-drives/ssd/ironwolf-nas-ssd/#specs
+; https://www.seagate.com/www-content/manuals/ironwolf-110-ssd/pdf/IronWolf_110_SSD_PM-100841919_B.pdf
 01=Raw 底層資料讀取錯誤率
 05=重定位磁區計數
 09=總通電時間

@@ -2664,11 +2664,22 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 			asi.LogicalSectorSize = 512;
 			asi.PhysicalSectorSize = 4096;
 		}
-		else if ((identify->A.SectorSize & 0x1000) == 0x1000) // bit 12
+		else if ((identify->A.SectorSize & 0x1000) == 0x1000) // bit 12=1
 		{
-			asi.LogicalSectorSize = 4096;
-			asi.PhysicalSectorSize = 4096;
+			if (identify->A.WordsPerLogicalSector == 256 || identify->A.WordsPerLogicalSector == 0)
+			{
+				asi.LogicalSectorSize = 512;
+			}
+			else
+			{
+				asi.LogicalSectorSize = identify->A.WordsPerLogicalSector * 2;
+			}			
 		}
+	}
+
+	if (asi.PhysicalSectorSize < asi.LogicalSectorSize)
+	{
+		asi.PhysicalSectorSize = asi.LogicalSectorSize;
 	}
 
 	if(identify->A.TotalAddressableSectors == 0x01100003) // 9126807040 bytes
@@ -5499,6 +5510,15 @@ BOOL CAtaSmart::IsSsdMarvell(ATA_SMART_INFO& asi)
 	if (flagSmartType)
 	{
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+	}
+
+	// https://crystalmark.info/board/c-board.cgi?cmd=one;no=2476;id=#2476
+	CString modelUpper = asi.Model;
+	modelUpper.MakeUpper();
+
+	if (modelUpper.Find(L"LEXAR") == 0 && asi.FirmwareRev.Find(L"SN") == 0)
+	{
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_32MB;
 	}
 
 	return flagSmartType;
