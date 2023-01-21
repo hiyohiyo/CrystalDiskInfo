@@ -4917,7 +4917,7 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1425;id=diskinfo#1425
 	// 2020/07/25
 	// 
-	if (asi.Model.Find(_T("SanDisk")) >= 0)
+	if (asi.Model.Find(_T("SanDisk")) >= 0 || asi.Model.Find(_T("SD Ultra")) == 0)
 	{
 		asi.DiskVendorId = SSD_VENDOR_SANDISK; // Default Vendor ID for SanDisk
 		flagSmartType = TRUE;

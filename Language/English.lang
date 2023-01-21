@@ -10,7 +10,7 @@ CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x0009, 0x0409, 0x0809, 0x0C09, 0x1009, 0x1409, 0x1809, 0x1C09, 0x2009, 0x2409, 0x2809, 0x2C09, 0x3009, 0x3409,  0x3809, 0x3C09, 0x4409, 0x4809, 0x4C09
 
 [Url]
-WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/S.M.A.R.T.
+WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/Self-Monitoring,_Analysis_and_Reporting_Technology
 
 [Menu]
 FILE=&File
