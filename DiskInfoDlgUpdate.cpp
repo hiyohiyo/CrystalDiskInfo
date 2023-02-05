@@ -1613,7 +1613,7 @@ GPL: General Purpose Log\n\
 		m_Feature.Delete(m_Feature.GetLength() - 2, 2);
 	}
 
-	if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2)
+	if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMICRON_USB_RAID)
 	{
 		m_Feature = L"";
 	}

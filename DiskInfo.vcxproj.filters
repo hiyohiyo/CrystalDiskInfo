@@ -242,6 +242,12 @@
     <ClInclude Include="Priscilla\SliderCtrlFx.h">
       <Filter>Prscilla</Filter>
     </ClInclude>
+    <ClInclude Include="JMicronUsbRaidInit.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JMicronUsbRaidDef.h">
+      <Filter>Library Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\bad.ico">

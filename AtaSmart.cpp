@@ -15,6 +15,9 @@
 #include "DnpService.h"
 #include "OsInfoFx.h"
 
+#include "JMicronUsbRaidDef.h"
+#include "JMicronUsbRaidInit.h"
+
 //warning : enum3, enum class
 #pragma warning(disable : 26812)
 
@@ -248,6 +251,13 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
 #endif
+		case CMD_TYPE_JMICRON_USB_RAID:
+			if (!GetSmartInfoJMicronUsbRaid(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i])))
+			{
+				return SMART_STATUS_NO_CHANGE;
+			}
+			vars[i].DiskStatus = CheckDiskStatus(i);
+			break;
 		default:
 			return SMART_STATUS_NO_CHANGE;
 		}
@@ -295,6 +305,9 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 		flag = DoIdentifyDeviceAMD_RC2(vars[i].ScsiBus, NULL, NULL, &(vars[i].IdentifyDevice), NULL, NULL);
 		break;
 #endif
+	case CMD_TYPE_JMICRON_USB_RAID:
+		flag = DoIdentifyDeviceJMicronUsbRaid(vars[i].ScsiBus, vars[i].ScsiPort, & (vars[i].IdentifyDevice));
+		break;
 	default:
 		return FALSE;
 		break;
@@ -416,6 +429,7 @@ BOOL CAtaSmart::SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param)
 		return SendAtaCommandMegaRAID(vars[i].ScsiPort, vars[i].ScsiTargetId, main, sub, param);
 		break;
 	case CMD_TYPE_AMD_RC2:// +AMD_RC2
+	case CMD_TYPE_JMICRON_USB_RAID:
 	default:
 		return FALSE;
 		break;
@@ -1344,6 +1358,25 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				{
 					AddDiskMegaRAID(i);
 				}
+			}
+
+			///////////////////////////////
+			// JMicron USB RAID
+			///////////////////////////////
+			if (FlagJMicronUsbRaid)
+			{
+				DebugPrint(L"JMicronUsbRaid");
+
+				HMODULE hModule = NULL;
+				InitializeDll(&hModule);
+
+				int count = 0;
+				count = GetControllerCount();
+
+				for (int i = 0; i < count; i++)
+				{
+					AddDiskJMicronUsbRaid(i);
+				}				
 			}
 
 			try
@@ -2521,6 +2554,18 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		identify->A.CurrentMediaSerialNo[0] = '\0';
 		identify->A.SerialAtaCapabilities = 0;
 	}
+	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMICRON_USB_RAID)
+	{
+		asi.Major = 0;
+		asi.IsSmartSupported = TRUE;
+		asi.Interface = L"JMicron USB RAID";
+		asi.CurrentTransferMode = L"---";
+		asi.MaxTransferMode = L"----";
+
+		     if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0002) { asi.MaxTransferMode = L"SATA/150"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
+	}
 	else {
 		// +AMD_RC2 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2689,12 +2734,18 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 
 	if (commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2) // +AMD_RC2
 	{
-		asi.DiskSizeChs = TotalDiskSize;
+		asi.IsLba48Supported = TRUE;
+		asi.DiskSizeChs = 0;
+	}
+	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMICRON_USB_RAID)
+	{
+		asi.IsLba48Supported = TRUE;
+		asi.DiskSizeChs = 0;
 	}
 	else if(identify->A.LogicalCylinders == 0 || identify->A.LogicalHeads == 0 || identify->A.LogicalSectors == 0)
 	{
-		return FALSE;
-	//	asi.DiskSizeChs   = 0;
+	//	return FALSE;
+		asi.DiskSizeChs   = 0;
 	}
 	else if(((ULONGLONG)((ULONGLONG)identify->A.LogicalCylinders * identify->A.LogicalHeads * identify->A.LogicalSectors * 512) / 1000 / 1000) > 1000)
 	{
@@ -2736,10 +2787,6 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	{
 		asi.TotalDiskSize = 0;
 	}
-	else if(asi.DiskSizeChs == 0)
-	{
-		asi.TotalDiskSize = 0;
-	}
 	else if(asi.DiskSizeLba48 > asi.DiskSizeLba28)
 	{
 		asi.TotalDiskSize = asi.DiskSizeLba48;
@@ -2750,7 +2797,6 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	}
 	else
 	{
-	//	asi.TotalDiskSize = 0;
 		asi.TotalDiskSize = asi.DiskSizeChs;
 	}
 
@@ -3137,6 +3183,19 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 			}
 			break;
 #endif
+		case CMD_TYPE_JMICRON_USB_RAID:
+			if (GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asi))
+			{
+				CheckSsdSupport(asi);
+				GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asiCheck);
+				if (CheckSmartAttributeCorrect(&asi, &asiCheck))
+				{
+					asi.IsSmartCorrect = TRUE;
+					asi.IsThresholdCorrect = TRUE;
+				}
+				asi.IsSmartEnabled = TRUE;
+			}
+			break;
 		default:
 			return FALSE;
 			break;
@@ -9822,6 +9881,39 @@ BOOL CAtaSmart::SendAtaCommandMegaRAID(INT scsiPort, INT scsiTargetId, BYTE main
 /** Does not work...
 */
 	return FALSE;
+}
+
+
+BOOL CAtaSmart::AddDiskJMicronUsbRaid(INT index)
+{
+	IDENTIFY_DEVICE identify = { 0 };
+	UNION_SMART_ATTRIBUTE attribute = { 0 };
+	UNION_SMART_THRESHOLD threshold = { 0 };
+
+	for (int i = 0; i < 5 /*MAX_DISK_IN_CONTROLLER*/; i++)
+	{
+		if (DoIdentifyDeviceJMicronUsbRaid(index, i, &identify))
+		{
+			AddDisk(-1, i, NULL, index, 0xA0, CMD_TYPE_JMICRON_USB_RAID, &identify);
+		}
+	}
+
+	return TRUE;
+}
+
+BOOL CAtaSmart::DoIdentifyDeviceJMicronUsbRaid(INT index, BYTE port, IDENTIFY_DEVICE* identify)
+{
+	GetIdentifyInfoFx(index, port, (UNION_IDENTIFY_DEVICE*)identify);
+	return TRUE;
+}
+
+BOOL CAtaSmart::GetSmartInfoJMicronUsbRaid(INT index, BYTE port, ATA_SMART_INFO* asi)
+{
+	GetSmartInfoFx(index, port, (UNION_SMART_ATTRIBUTE*) & (asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+	FillSmartData(asi);
+	FillSmartThreshold(asi);
+
+	return TRUE;
 }
 
 /*---------------------------------------------------------------------------*/

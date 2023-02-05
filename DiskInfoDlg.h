@@ -612,6 +612,7 @@ public:
 	afx_msg void OnUsbEnableAll();
 	afx_msg void OnUsbDisableAll();
 	afx_msg void OnMegaRAID();
+	afx_msg void OnJMicronUsbRaid();
 	afx_msg void OnHealthStatus();
 	afx_msg void OnSoundSetting();
 	afx_msg void OnDumpIdentifyDevice();

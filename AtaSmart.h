@@ -40,6 +40,7 @@ static const TCHAR* commandTypeString[] =
 	_T("nt"), // NVMe Intel RST
 	_T("mr"), // MegaRAID SAS
 	_T("rc"), // +AMD RC2
+	_T("jr"), // JMicron USB RAID
 
 	_T("dg"), // Debug
 };
@@ -329,6 +330,7 @@ public:
 		CMD_TYPE_NVME_INTEL_RST,
 		CMD_TYPE_MEGARAID,
 		CMD_TYPE_AMD_RC2,// +AMD_RC2
+		CMD_TYPE_JMICRON_USB_RAID,
 		CMD_TYPE_DEBUG
 	};
 
@@ -1928,6 +1930,7 @@ public:
 	BOOL FlagMegaRAID = FALSE;
 	BOOL FlagUsbASM1352R = FALSE;
 	BOOL FlagAMD_RC2 = TRUE;// +AMD_RC2
+	BOOL FlagJMicronUsbRaid = FALSE;
 	BOOL FlagNoWakeUp = FALSE;// +M 20211216
 
 	DWORD CsmiType = 0;
@@ -2031,6 +2034,10 @@ protected:
 	BOOL SendAtaCommandMegaRAID(INT scsiPort, INT scsiTargetId, BYTE main, BYTE sub, BYTE param);
 	BOOL SendDCommandMegaRAID(HANDLE hHandle, ULONG opcode, void* buf, size_t bufsize, BYTE* mbox, size_t mboxlen);
 	BOOL SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, void* buf, size_t bufsize, const UCHAR Cdb[], UCHAR CdbLength);
+
+	BOOL AddDiskJMicronUsbRaid(INT index);
+	BOOL DoIdentifyDeviceJMicronUsbRaid(INT index, BYTE port, IDENTIFY_DEVICE* identify);
+	BOOL GetSmartInfoJMicronUsbRaid(INT index, BYTE port, ATA_SMART_INFO* asi);
 
 	DWORD GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &currentTransferMode, CString &maxTransferMode, CString &Interface, INTERFACE_TYPE *interfaceType);
 	VOID GetTransferModePCIe(CString & current, CString & max, SlotMaxCurrSpeed slotspeed);

@@ -682,7 +682,8 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_USB_NVME_ASMEDIA, &CDiskInfoDlg::OnUsbNVMeASMedia)
 	ON_COMMAND(ID_USB_NVME_REALTEK, &CDiskInfoDlg::OnUsbNVMeRealtek)
 	ON_COMMAND(ID_MEGA_RAID, &CDiskInfoDlg::OnMegaRAID)
-		
+	ON_COMMAND(ID_JMICRON_USB_RAID, &CDiskInfoDlg::OnJMicronUsbRaid)
+
 	ON_COMMAND(ID_USB_ENABLE_ALL, &CDiskInfoDlg::OnUsbEnableAll)
 	ON_COMMAND(ID_USB_DISABLE_ALL, &CDiskInfoDlg::OnUsbDisableAll)
 	ON_COMMAND(ID_HEALTH_STATUS, &CDiskInfoDlg::OnHealthStatus)

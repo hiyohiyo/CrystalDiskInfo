@@ -1346,6 +1346,25 @@ void CDiskInfoDlg::OnUsbASM1352R()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::OnJMicronUsbRaid()
+{
+	CMenu* menu = GetMenu();
+	if (m_Ata.FlagJMicronUsbRaid)
+	{
+		m_Ata.FlagJMicronUsbRaid = FALSE;
+		menu->CheckMenuItem(ID_JMICRON_USB_RAID, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMicronUsbRaid"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagJMicronUsbRaid = TRUE;
+		menu->CheckMenuItem(ID_JMICRON_USB_RAID, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMicronUsbRaid"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
 void CDiskInfoDlg::OnUsbEnableAll()
 {
 	m_Ata.FlagUsbSat     = FALSE;
