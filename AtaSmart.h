@@ -2035,9 +2035,11 @@ protected:
 	BOOL SendDCommandMegaRAID(HANDLE hHandle, ULONG opcode, void* buf, size_t bufsize, BYTE* mbox, size_t mboxlen);
 	BOOL SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, void* buf, size_t bufsize, const UCHAR Cdb[], UCHAR CdbLength);
 
+#if ! defined(_M_ARM) && ! defined(_M_ARM64)
 	BOOL AddDiskJMicronUsbRaid(INT index);
 	BOOL DoIdentifyDeviceJMicronUsbRaid(INT index, BYTE port, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartInfoJMicronUsbRaid(INT index, BYTE port, ATA_SMART_INFO* asi);
+#endif
 
 	DWORD GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &currentTransferMode, CString &maxTransferMode, CString &Interface, INTERFACE_TYPE *interfaceType);
 	VOID GetTransferModePCIe(CString & current, CString & max, SlotMaxCurrSpeed slotspeed);

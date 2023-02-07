@@ -192,3 +192,10 @@ typedef int(WINAPI* _GetControllerCount) ();
 
 typedef BOOL(WINAPI* _GetSmartInfoFx) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
 typedef BOOL(WINAPI* _GetIdentifyInfoFx) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
+
+/*
+extern _GetDllVersion GetDllVersion;
+extern _GetControllerCount GetControllerCount;
+extern _GetSmartInfoFx GetSmartInfoFx;
+extern _GetIdentifyInfoFx GetIdentifyInfoFx;
+*/
