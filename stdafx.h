@@ -106,9 +106,9 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.18.0 Beta2"
-#define PRODUCT_RELEASE				L"2023/02/07"
-#define PRODUCT_COPY_YEAR			L"2008-2022"
+#define PRODUCT_VERSION				L"8.18.0 Beta4"
+#define PRODUCT_RELEASE				L"2023/02/12"
+#define PRODUCT_COPY_YEAR			L"2008-2023"
 #define PRODUCT_LICENSE				L"The MIT License"
 
 #ifdef KUREI_KEI_SUPPORT

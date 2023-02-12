@@ -2509,9 +2509,17 @@ void CDiskInfoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 void CDiskInfoDlg::ShowWindowEx(int nCmdShow)
 {
-	m_bShowWindow = TRUE;
-	ShowWindow(nCmdShow);
-//	SetForegroundWindow();
+	if (nCmdShow != SW_HIDE)
+	{
+		m_bShowWindow = TRUE;
+		ShowWindow(nCmdShow);
+		SetForegroundWindow();
+	}
+	else
+	{
+		ShowWindow(nCmdShow);
+		m_bShowWindow = FALSE;
+	}
 }
 
 BOOL CDiskInfoDlg::CheckThemeEdition(CString name)

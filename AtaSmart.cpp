@@ -19,7 +19,6 @@
 
 #include "JMicronUsbRaidDef.h"
 #include "JMicronUsbRaidApi.h"
-
 	#ifdef _M_X64
 		#pragma comment(lib, "JMicronUsbRaid64.lib")
 		#pragma comment(lib, "libgcc64.a")
@@ -30,8 +29,6 @@
 		#pragma comment(lib, "libraidapi32.a")
 	#endif
 #endif
-
-// #include "JMicronUsbRaidInit.h"
 
 //warning : enum3, enum class
 #pragma warning(disable : 26812)
@@ -1383,17 +1380,6 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			{
 				DebugPrint(L"JMicronUsbRaid");
 
-				// HMODULE hModule = NULL;
-
-				// if (InitializeDll(&hModule))
-				/*
-				BYTE major = 0;
-				BYTE minor = 0;
-				BYTE revision = 0;
-				BYTE release = 0;
-
-				DWORD version = GetDllVersion(&major, &minor, &revision, &release);
-				*/
 				int count = 0;
 				count = GetControllerCount();
 
@@ -1407,7 +1393,6 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 
 			}
 #endif
-
 			try
 			{
 				DebugPrint(_T("DO:SELECT * FROM Win32_DiskDrive"));
@@ -2088,10 +2073,9 @@ safeRelease:
 
 	DebugPrint(_T("OK:GetDiskInfo - PhysicalDrive"));
 	// Sort
-	ATA_SMART_INFO* p = vars.GetData();
-	qsort(p, vars.GetCount(), sizeof(ATA_SMART_INFO), Compare);
-
-	DebugPrint(_T("OK:qsort"));
+	// ATA_SMART_INFO* p = vars.GetData();
+	// qsort(p, vars.GetCount(), sizeof(ATA_SMART_INFO), Compare);
+	// DebugPrint(_T("OK:qsort"));
 
 	// Advanced Disk Search
 	if(IsAdvancedDiskSearch)
@@ -2218,7 +2202,6 @@ safeRelease:
 		vars[i].DriveMap.Append(driveLetter);
 		vars[i].DriveMap.TrimRight();
 	}
-	// Drive Letter Mapping2
 
 	MeasuredGetTickCount = GetTickCountFx();
 	DebugPrint(_T("CAtaSmart::Init - Complete"));
@@ -2263,40 +2246,87 @@ safeRelease:
 	}
 
 	// [2023/02/05] Workaround for JMicron USB RAID
-	int count = (int)vars.GetCount();
-	if (count > 0)
+	if (FlagJMicronUsbRaid)
 	{
-		for (int i = count - 1; i >= 0; i--)
+		int count = (int)vars.GetCount();
+		if (count > 0)
 		{
-			if (vars[i].Model.Find(L"H/W RAID") == 0)
+			for (int i = count - 1; i >= 0; i--)
 			{
-				vars.RemoveAt(i);
+				if (vars[i].Model.Find(L"H/W RAID") == 0)
+				{
+					vars.RemoveAt(i);
+				}
 			}
 		}
 	}
+
+	DebugPrint(_T("Sort by DriveLetter"));
+	ATA_SMART_INFO* p = vars.GetData();
+	qsort(p, vars.GetCount(), sizeof(ATA_SMART_INFO), Compare);
 }
 
 int CAtaSmart::Compare(const void *p1, const void *p2)
+{
+	int dlm1 = 0; 
+	int dlm2 = 0;
+
+	for (int i = 0; i < 26; i++)
+	{
+		if(((ATA_SMART_INFO*)p1)->DriveLetterMap & 1 << i)
+		{
+			dlm1 = i;
+			break;
+		}
+	}
+
+	for (int i = 0; i < 26; i++)
+	{
+		if (((ATA_SMART_INFO*)p2)->DriveLetterMap & 1 << i)
+		{
+			dlm2 = i;
+			break;
+		}
+	}
+
+	int pdi1 = ((ATA_SMART_INFO*)p1)->PhysicalDriveId;
+	int pdi2 = ((ATA_SMART_INFO*)p2)->PhysicalDriveId;
+
+	int pepi1 = ((ATA_SMART_INFO*)p1)->sasPhyEntity.bPortIdentifier;
+	int pepi2 = ((ATA_SMART_INFO*)p2)->sasPhyEntity.bPortIdentifier;
+
+	if (pdi1 == -1) { pdi1 = 255; }
+	if (pdi2 == -1) { pdi2 = 255; }
+
+	if (dlm1 == 0) { dlm1 = 26 + 1; } /* Z + 1 */
+	if (dlm2 == 0) { dlm2 = 26 + 1; } 
+
+	int sort1 = (dlm1 << 8) + pdi1;
+	int sort2 = (dlm2 << 8) + pdi2;
+
+	if(sort1 == sort2)
+	{
+		return pepi1 - pepi2;
+	}
+	else
+	{
+		return sort1 - sort2;
+	}
+}
+
+/*
+* int CAtaSmart::Compare(const void *p1, const void *p2)
 {
 	if(((ATA_SMART_INFO*)p1)->PhysicalDriveId == -1 && ((ATA_SMART_INFO*)p2)->PhysicalDriveId == -1)
 	{
 		return ((ATA_SMART_INFO*)p1)->sasPhyEntity.bPortIdentifier - ((ATA_SMART_INFO*)p2)->sasPhyEntity.bPortIdentifier;
 	}
-	/*
-	else if(((ATA_SMART_INFO*)p1)->PhysicalDriveId == -1)
-	{
-		return 0;
-	}
-	else if(((ATA_SMART_INFO*)p2)->PhysicalDriveId == -1)
-	{
-		return -1;
-	}
-	*/	
 	else
 	{
 		return ((ATA_SMART_INFO*)p1)->PhysicalDriveId - ((ATA_SMART_INFO*)p2)->PhysicalDriveId;
 	}
 }
+*/
 
 BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, INT siliconImageType, PCSMI_SAS_PHY_ENTITY sasPhyEntity, CString pnpDeviceId,
 	DWORD TotalDiskSize// +AMD_RC2
@@ -3227,12 +3257,11 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 			if (GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asi))
 			{
 				CheckSsdSupport(asi);
-				GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asiCheck);
-				if (CheckSmartAttributeCorrect(&asi, &asiCheck))
-				{
-					asi.IsSmartCorrect = TRUE;
-					asi.IsThresholdCorrect = TRUE;
-				}
+				// GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asiCheck);
+				// if (CheckSmartAttributeCorrect(&asi, &asiCheck)){}
+				asi.IsSmartSupported = TRUE;
+				asi.IsSmartCorrect = TRUE;
+				asi.IsThresholdCorrect = TRUE;
 				asi.IsSmartEnabled = TRUE;
 			}
 			break;
@@ -9946,8 +9975,7 @@ BOOL CAtaSmart::DoIdentifyDeviceJMicronUsbRaid(INT index, BYTE port, IDENTIFY_DE
 	cstr.Format(L"GetIdentifyInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
 
-	GetIdentifyInfoFx(index, port, (UNION_IDENTIFY_DEVICE*)identify);
-	return TRUE;
+	return GetIdentifyInfoFx(index, port, (UNION_IDENTIFY_DEVICE*)identify);
 }
 
 BOOL CAtaSmart::GetSmartInfoJMicronUsbRaid(INT index, BYTE port, ATA_SMART_INFO* asi)
@@ -9956,11 +9984,23 @@ BOOL CAtaSmart::GetSmartInfoJMicronUsbRaid(INT index, BYTE port, ATA_SMART_INFO*
 	cstr.Format(L"GetSmartInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
 
-	GetSmartInfoFx(index, port, (UNION_SMART_ATTRIBUTE*) & (asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+	GetSmartInfoFx(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
 	FillSmartData(asi);
 	FillSmartThreshold(asi);
 
-	return TRUE;
+	if (asi->AttributeCount == 0)
+	{
+		Sleep(1000);
+		GetSmartInfoFx(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+		FillSmartData(asi);
+		FillSmartThreshold(asi);
+	}
+
+	if (asi->AttributeCount > 0)
+	{
+		return TRUE;
+	}
+	return FALSE;
 }
 #endif
 

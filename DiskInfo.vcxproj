@@ -878,7 +878,8 @@
       <ProgramDatabaseFile>Build\$(Configuration)$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
       <ManifestFile>Build\$(Configuration)$(Platform)\$(TargetExt).intermediate.manifest</ManifestFile>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>libgcc32.a; libraidapi32.a;</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <Manifest>

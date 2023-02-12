@@ -197,7 +197,14 @@ BOOL CDiskInfoDlg::OnInitDialog()
 
 	InitDialogComplete();
 
-	return TRUE; 
+	if (m_bResident)
+	{
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
 }
 
 void CDiskInfoDlg::RestorePos()

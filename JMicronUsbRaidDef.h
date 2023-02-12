@@ -182,20 +182,7 @@ typedef union _UNION_SMART_THRESHOLD
 //
 //-----------------------------------------------------------------------------
 
-// DLL
-// typedef DWORD(WINAPI* _GetDllStatus) ();
-typedef DWORD(WINAPI* _GetDllVersion) (PBYTE major, PBYTE minor, PBYTE revision, PBYTE release);
-
 // JMicron USB RAID API
 typedef int(WINAPI* _GetControllerCount) ();
-// typedef DWORD(WINAPI* _GetControllerInfoFx) (int index, CONTROLLER* controller);
-
 typedef BOOL(WINAPI* _GetSmartInfoFx) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
 typedef BOOL(WINAPI* _GetIdentifyInfoFx) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
-
-/*
-extern _GetDllVersion GetDllVersion;
-extern _GetControllerCount GetControllerCount;
-extern _GetSmartInfoFx GetSmartInfoFx;
-extern _GetIdentifyInfoFx GetIdentifyInfoFx;
-*/
