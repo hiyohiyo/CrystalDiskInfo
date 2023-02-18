@@ -5156,9 +5156,11 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 			{
 				asi.FlagLifeRawValue = FALSE;
 			}
+			// https://github.com/hiyohiyo/CrystalDiskInfo/issues/201
 			else if (asi.FirmwareRev.Find(L"SBFK62C3") == 0)
 			{
-				asi.FlagLifeNoReport = TRUE;
+			//	asi.FlagLifeNoReport = TRUE;
+				asi.FlagLifeRawValue = TRUE;
 			}
 			else
 			{
@@ -10919,10 +10921,14 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 				life = vars[i].Attribute[j].CurrentValue;
 			}
 
-			if (life <= 0) { life = 0; }
+			// if (life <= 0) { life = 0; }
 			if (life > 100) { life = 100; }
 		
-			if(life == 0 || (! (vars[i].FlagLifeRawValue || vars[i].FlagLifeRawValueIncrement) && life < vars[i].Threshold[j].ThresholdValue))
+			if (life == -1)
+			{
+
+			}
+			else if(life == 0 || (! (vars[i].FlagLifeRawValue || vars[i].FlagLifeRawValueIncrement) && life < vars[i].Threshold[j].ThresholdValue))
 			{
 				error = 1;
 			}
