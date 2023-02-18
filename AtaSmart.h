@@ -234,6 +234,7 @@ public:
 		SSD_VENDOR_SANDISK_HP_VENUS = 45,
 		SSD_VENDOR_SANDISK_LENOVO = 46,
 		SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS = 47,
+		SSD_VENDOR_SANDISK_CLOUD = 48,
 
 		SSD_VENDOR_MAX = 99,
 
@@ -1835,6 +1836,7 @@ public:
 		BOOL				FlagLifeSanDisk0_1{};
 		BOOL				FlagLifeSanDisk1{};
 		BOOL				FlagLifeSanDiskLenovo{};
+		BOOL				FlagLifeSanDiskCloud{};
 
 		DWORD				Major{};
 		DWORD				Minor{};
