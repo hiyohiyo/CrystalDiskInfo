@@ -2457,6 +2457,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	asi.FlagLifeSanDiskUsbMemory = FALSE;
 	asi.FlagLifeSanDisk0_1 = FALSE;
 	asi.FlagLifeSanDisk1 = FALSE;
+	asi.FlagLifeSanDiskCloud = FALSE;
 	asi.FlagLifeSanDiskLenovo = FALSE;
 	asi.HostWrites = -1;
 	asi.HostReads = -1;
@@ -4441,6 +4442,16 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			}
 			break;
 		case 0xF5:
+			// Percent Drive Life Remaining (SanDisk/WD CloudSpeed)
+			if (asi.DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
+			{
+				int life = -1;
+				life = asi.Attribute[j].CurrentValue;
+				if (life < 0) { life = -1; }
+
+				asi.Life = life;
+			}
+
 			// NAND Page Size = 8KBytes
 			// http://www.overclock.net/t/1145150/official-crucial-ssd-owners-club/1290
 			if (asi.DiskVendorId == SSD_VENDOR_MICRON)
@@ -5046,7 +5057,7 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1425;id=diskinfo#1425
 	// 2020/07/25
 	// 
-	if (asi.Model.Find(_T("SanDisk")) >= 0 || asi.Model.Find(_T("SD Ultra")) == 0)
+	if (asi.Model.Find(_T("SanDisk")) >= 0 || asi.Model.Find(_T("SD Ultra")) >=0 || asi.Model.Find(_T("SDLF1")) >= 0)
 	{
 		asi.DiskVendorId = SSD_VENDOR_SANDISK; // Default Vendor ID for SanDisk
 		flagSmartType = TRUE;
@@ -5124,6 +5135,20 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 			asi.FlagLifeSanDiskUsbMemory = TRUE;
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
 			asi.SmartKeyName = _T("SmartSanDisk");
+		}
+		else if (
+			// CloudSpeed ECO Gen II Eco SSD
+			asi.Model.Find(_T("SDLF1CRR-")) >= 0
+			|| asi.Model.Find(_T("SDLF1DAR-")) >= 0
+			// CloudSpeed ECO Gen II Ultra SSD
+			|| asi.Model.Find(_T("SDLF1CRM-")) >= 0
+			|| asi.Model.Find(_T("SDLF1DAM-")) >= 0
+			)
+		{
+			asi.DiskVendorId = SSD_VENDOR_SANDISK_CLOUD;
+			asi.FlagLifeSanDiskCloud = TRUE;
+			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+			asi.SmartKeyName = _T("SmartCloudSpeedGenII");
 		}
 		else
 		{
@@ -10073,6 +10098,22 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					asi->Temperature = asi->Attribute[j].RawValue[0];
 				}
 				break;
+			case 0xBF: // Clean PowerOff Count for Sandisk/WD CloudSpeed SSD
+				if (asi->DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
+				{
+					// Use Clean Shutdowns to calculate Power On Count
+					rawValue = *(DWORD*)&asi->Attribute[j].RawValue[0];
+					asi->PowerOnCount = rawValue + 1;
+				}
+				break;
+			case 0xC0: // UnClean PowerOff Count for Sandisk/WD CloudSpeed SSD
+				if (asi->DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
+				{
+					// Use UnClean Shutdowns to calculate Power On Count
+					rawValue = *(DWORD*)&asi->Attribute[j].RawValue[0];
+					asi->PowerOnCount += rawValue;
+				}
+				break;
 			case 0xC2: // Temperature
 				if(asi->Model.Find(_T("SAMSUNG SV")) == 0 && (asi->Attribute[j].RawValue[1] != 0 || asi->Attribute[j].RawValue[0] > 70))
 				{
@@ -10212,7 +10253,10 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					asi->Life = asi->Attribute[j].CurrentValue;
 					if (asi->Life < 0 || asi->Life > 100) { asi->Life = -1; }
 				}
-				else if ((asi->DiskVendorId == SSD_VENDOR_SANDISK || asi->DiskVendorId == SSD_VENDOR_SANDISK_LENOVO) && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
+				else if ((asi->DiskVendorId == SSD_VENDOR_SANDISK ||
+						asi->DiskVendorId == SSD_VENDOR_SANDISK_LENOVO ||
+						asi->DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
+					&& asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
 				{
 					asi->NandWrites = *(INT*)&asi->Attribute[j].RawValue[0];// (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
@@ -10383,7 +10427,9 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
 						 / 32);
 				}
-				else if(asi->DiskVendorId == SSD_VENDOR_SANDISK && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
+				else if((asi->DiskVendorId == SSD_VENDOR_SANDISK ||
+						asi->DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
+					&& asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
 				{
 					asi->HostWrites = *(INT*)&asi->Attribute[j].RawValue[0];//(INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
@@ -10488,7 +10534,9 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						        asi->Attribute[j].RawValue[3], asi->Attribute[j].RawValue[4], asi->Attribute[j].RawValue[5])
 						/ 32);
 				}
-				else if(asi->DiskVendorId == SSD_VENDOR_SANDISK && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
+				else if ((asi->DiskVendorId == SSD_VENDOR_SANDISK ||
+					asi->DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
+					&& asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
 				{
 					asi->HostReads = *(INT*)&asi->Attribute[j].RawValue[0];//(INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
