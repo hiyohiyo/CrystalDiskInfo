@@ -641,9 +641,9 @@ CString CDiskInfoDlg::GetLogicalDriveInfo(DWORD index, INT maxLength)
 {
 	DWORD map = m_Ata.vars[index].DriveLetterMap;
 	CString resultS, resultM, resultL;
-	ULARGE_INTEGER freeBytesAvailableToCaller;
-	ULARGE_INTEGER totalNumberOfBytes;
-	ULARGE_INTEGER totalNumberOfFreeBytes;
+	ULARGE_INTEGER freeBytesAvailableToCaller = {};
+	ULARGE_INTEGER totalNumberOfBytes = {};
+	ULARGE_INTEGER totalNumberOfFreeBytes = {};
 
 	for(int j = 0; j < 26; j++)
 	{
@@ -651,14 +651,18 @@ CString CDiskInfoDlg::GetLogicalDriveInfo(DWORD index, INT maxLength)
 		{
 			CString cstr;
 			CString letter;
-			TCHAR volumeNameBuffer[256];
+			TCHAR volumeNameBuffer[256] = {};
 
 			letter.Format(_T("%C:\\"), j + 'A');
 			GetDiskFreeSpaceEx(letter, &freeBytesAvailableToCaller,
 				&totalNumberOfBytes, &totalNumberOfFreeBytes);
 			GetVolumeInformation(letter,  volumeNameBuffer, 256, NULL, NULL, NULL, NULL, 0);
 
-			if (totalNumberOfFreeBytes.QuadPart < totalNumberOfBytes.QuadPart)
+			if (totalNumberOfBytes.QuadPart == 0)
+			{
+				cstr.Format(_T("%C: %s\r\n"), j + 'A', volumeNameBuffer);
+			}
+			else if (totalNumberOfFreeBytes.QuadPart < totalNumberOfBytes.QuadPart)
 			{
 				cstr.Format(_T("%C: %s [%.1f/%.1f GB (%.1f %%)]\r\n"), 
 					j + 'A', volumeNameBuffer,
