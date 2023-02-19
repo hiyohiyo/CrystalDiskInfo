@@ -222,6 +222,7 @@ protected:
 	BOOL m_bAlertSound;
 	BOOL m_bHideNoSmartDisk;
 	BOOL m_bForceDisableDarkMode;
+	BOOL m_bSortDriveLetter;
 
 	BOOL AddTemperatureIcon(DWORD index);
 	BOOL RemoveTemperatureIcon(DWORD index);
@@ -620,6 +621,9 @@ public:
 	afx_msg void OnDumpSmartReadThreshold();
 	afx_msg void OnResidentMinimize();
 	afx_msg void OnResidentHide();
+	afx_msg void OnSortPhysicalDriveId();
+	afx_msg void OnSortDriveLetter();
+
 	afx_msg void OnZoom100();
 	afx_msg void OnZoom125();
 	afx_msg void OnZoom150();

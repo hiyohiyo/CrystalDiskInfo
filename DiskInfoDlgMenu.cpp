@@ -1567,6 +1567,26 @@ void CDiskInfoDlg::OnResidentMinimize()
 	WritePrivateProfileStringFx(_T("Setting"), _T("ResidentMinimize"), _T("1"), m_Ini);
 }
 
+void CDiskInfoDlg::OnSortPhysicalDriveId()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_SORT_PHYSICAL_DRIVE_ID, ID_SORT_DRIVE_LETTER, ID_SORT_PHYSICAL_DRIVE_ID, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+	m_bSortDriveLetter = FALSE;
+	WritePrivateProfileStringFx(_T("Setting"), _T("SortDriveLetter"), _T("0"), m_Ini);
+}
+
+void CDiskInfoDlg::OnSortDriveLetter()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_SORT_PHYSICAL_DRIVE_ID, ID_SORT_DRIVE_LETTER, ID_SORT_DRIVE_LETTER, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+	m_bSortDriveLetter = TRUE;
+	WritePrivateProfileStringFx(_T("Setting"), _T("SortDriveLetter"), _T("1"), m_Ini);
+}
+
 void CDiskInfoDlg::OnZoom100()
 {
 	if(CheckRadioZoomType(ID_ZOOM_100, 100))

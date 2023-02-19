@@ -635,7 +635,7 @@ BOOL CAtaSmart::MeasuredTimeUnit()
 }
 
 /* PUBLIC FUNCTION */
-VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk)
+VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk, BOOL flagSortDriveLetter)
 {
 	/*
 	if (1)
@@ -2261,12 +2261,21 @@ safeRelease:
 		}
 	}
 
-	DebugPrint(_T("Sort by DriveLetter"));
 	ATA_SMART_INFO* p = vars.GetData();
-	qsort(p, vars.GetCount(), sizeof(ATA_SMART_INFO), Compare);
+
+	if (flagSortDriveLetter)
+	{
+		DebugPrint(_T("Sort by DriveLetter"));
+		qsort(p, vars.GetCount(), sizeof(ATA_SMART_INFO), CompareDriveLetter);
+	}
+	else
+	{
+		DebugPrint(_T("Sort by PhysicalDriveId"));
+		qsort(p, vars.GetCount(), sizeof(ATA_SMART_INFO), ComparePhysicalDriveId);
+	}
 }
 
-int CAtaSmart::Compare(const void *p1, const void *p2)
+int CAtaSmart::CompareDriveLetter(const void *p1, const void *p2)
 {
 	int dlm1 = 0; 
 	int dlm2 = 0;
@@ -2314,8 +2323,32 @@ int CAtaSmart::Compare(const void *p1, const void *p2)
 	}
 }
 
+int CAtaSmart::ComparePhysicalDriveId(const void* p1, const void* p2)
+{
+	int pdi1 = ((ATA_SMART_INFO*)p1)->PhysicalDriveId;
+	int pdi2 = ((ATA_SMART_INFO*)p2)->PhysicalDriveId;
+
+	int pepi1 = ((ATA_SMART_INFO*)p1)->sasPhyEntity.bPortIdentifier;
+	int pepi2 = ((ATA_SMART_INFO*)p2)->sasPhyEntity.bPortIdentifier;
+
+	if (pdi1 == -1) { pdi1 = 255; }
+	if (pdi2 == -1) { pdi2 = 255; }
+
+	int sort1 = (pdi1 << 8) + pdi1;
+	int sort2 = (pdi2 << 8) + pdi2;
+
+	if (sort1 == sort2)
+	{
+		return pepi1 - pepi2;
+	}
+	else
+	{
+		return sort1 - sort2;
+	}
+}
+
 /*
-* int CAtaSmart::Compare(const void *p1, const void *p2)
+int CAtaSmart::ComparePhysicalDriveId(const void *p1, const void *p2)
 {
 	if(((ATA_SMART_INFO*)p1)->PhysicalDriveId == -1 && ((ATA_SMART_INFO*)p2)->PhysicalDriveId == -1)
 	{
@@ -2630,7 +2663,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	{
 		asi.Major = 0;
 		asi.IsSmartSupported = TRUE;
-		asi.Interface = L"JMicron USB RAID";
+		asi.Interface = L"USB (JMicron RAID)";
 		asi.CurrentTransferMode = L"---";
 		asi.MaxTransferMode = L"----";
 
@@ -4445,16 +4478,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			// Percent Drive Life Remaining (SanDisk/WD CloudSpeed)
 			if (asi.DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
 			{
-				int life = -1;
-				life = asi.Attribute[j].CurrentValue;
-				if (life < 0) { life = -1; }
-
-				asi.Life = life;
+				asi.Life = asi.Attribute[j].CurrentValue;
 			}
-
 			// NAND Page Size = 8KBytes
 			// http://www.overclock.net/t/1145150/official-crucial-ssd-owners-club/1290
-			if (asi.DiskVendorId == SSD_VENDOR_MICRON)
+			else if (asi.DiskVendorId == SSD_VENDOR_MICRON)
 			{
 				asi.NandWrites = (INT) (
 					B8toB64(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2],
@@ -5148,7 +5176,7 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 			asi.DiskVendorId = SSD_VENDOR_SANDISK_CLOUD;
 			asi.FlagLifeSanDiskCloud = TRUE;
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
-			asi.SmartKeyName = _T("SmartCloudSpeedGenII");
+			asi.SmartKeyName = _T("SmartSanDiskCloud");
 		}
 		else
 		{
@@ -10650,9 +10678,15 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				}
 				break;
 			case 0xF5:
+				// Percent Drive Life Remaining (SanDisk/WD CloudSpeed)
+				if (asi->DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
+				{
+					asi->Life = asi->Attribute[j].CurrentValue;
+				}
+
 				// NAND Page Size = 8KBytes
 				// http://www.overclock.net/t/1145150/official-crucial-ssd-owners-club/1290
-				if (asi->DiskVendorId == SSD_VENDOR_MICRON)
+				else if (asi->DiskVendorId == SSD_VENDOR_MICRON)
 				{
 					asi->NandWrites = (INT) (
 						B8toB64(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2],
@@ -10758,6 +10792,11 @@ BOOL CAtaSmart::FillSmartThreshold(ATA_SMART_INFO* asi)
 		}
 	}
 
+
+	return TRUE;
+
+	// 2023/02/19 Disabled Threshold Check
+	/*
 	if(count > 0)
 	{
 		return TRUE;
@@ -10766,6 +10805,7 @@ BOOL CAtaSmart::FillSmartThreshold(ATA_SMART_INFO* asi)
 	{
 		return FALSE;
 	}
+	*/
 }
 
 /*---------------------------------------------------------------------------*/

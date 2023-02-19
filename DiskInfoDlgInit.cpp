@@ -139,6 +139,12 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	default:	OnResidentHide();	  break;
 	}
 
+	switch (GetPrivateProfileInt(_T("Setting"), _T("SortDriveLetter"), 1, m_Ini))
+	{
+	case   1:	OnSortDriveLetter();	 break;
+	default:	OnSortPhysicalDriveId(); break;
+	}
+
 	// USB/IEEE1394 Support
 	m_Ata.FlagUsbSat     = ! GetPrivateProfileInt(_T("USB"), _T("SAT"), 1, m_Ini);
 	m_Ata.FlagUsbIodata  = ! GetPrivateProfileInt(_T("USB"), _T("IODATA"), 1, m_Ini);
@@ -352,7 +358,7 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 	SetWindowTitle(i18n(_T("Message"), _T("DETECT_DISK")));
 	m_NowDetectingUnitPowerOnHours = FALSE;
 
-	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_bHideNoSmartDisk);
+	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_bHideNoSmartDisk, m_bSortDriveLetter);
 	
 	DWORD errorCount = 0;
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)

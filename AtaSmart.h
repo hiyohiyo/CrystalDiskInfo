@@ -40,7 +40,7 @@ static const TCHAR* commandTypeString[] =
 	_T("nt"), // NVMe Intel RST
 	_T("mr"), // MegaRAID SAS
 	_T("rc"), // +AMD RC2
-	_T("jr"), // JMicron USB RAID
+	_T("jr"), // JMicron RAID
 
 	_T("dg"), // Debug
 };
@@ -95,6 +95,7 @@ static const TCHAR* ssdVendorString[] =
 	_T(""),	  // _T("SmartSanDiskHpVenus"),
 	_T(""),	  // _T("SmartSanDiskLenovo"),
 	_T(""),	  // _T("SmartSanDiskLenovoHelenVenus"),
+	_T(""),	  // _T("SmartSanDiskCloud"),
 };
 
 static const TCHAR* attributeString[] =
@@ -147,6 +148,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartSanDiskHpVenus"),
 	_T("SmartSanDiskLenovo"),
 	_T("SmartSanDiskLenovoHelenVenus"),
+	_T("SmartSanDiskCloud"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -1724,7 +1726,7 @@ public:
 	BYTE GetRecommendAamValue(DWORD index);
 	BYTE GetRecommendApmValue(DWORD index);
 
-	VOID Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk);
+	VOID Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk, BOOL flagSortDriveLetter);
 	BOOL MeasuredTimeUnit();
 	DWORD GetPowerOnHours(DWORD rawValue, DWORD timeUnitType);
 	DWORD GetPowerOnHoursEx(DWORD index, DWORD timeUnitType);
@@ -2090,7 +2092,8 @@ protected:
 
 //	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
-	static int __cdecl Compare(const void *p1, const void *p2);
+	static int __cdecl CompareDriveLetter(const void *p1, const void *p2);
+	static int __cdecl ComparePhysicalDriveId(const void* p1, const void* p2);
 
 	CString GetModelSerial(CString &model, CString &serialNumber);
 //	BOOL GetLifeByGpl(ATA_SMART_INFO& asi);

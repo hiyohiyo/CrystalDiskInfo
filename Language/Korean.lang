@@ -1,4 +1,3 @@
-KR
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Lyttiya, Gihun Ham, 로웰
@@ -110,6 +109,11 @@ GREEN_MODE=그린 모드(&G)
 ;8.6.0
 SAVE_TEXT=텍스트로 저장(&T)
 SAVE_IMAGE=이미지로 저장(&S)
+
+;8.18.0
+DRIVE_SORT_METHOD=Drive Sort Method
+PHYSICAL_DRIVE_ID=Physical Drive ID
+DRIVE_LETTER=Drive Letter
 
 [TrayMenu]
 EXIT=종료
@@ -1636,3 +1640,29 @@ F3=총 쓰기 페이지량
 F6=총 쓰기 섹터량 (호스트)
 F7=총 NAND 쓰기 페이지량 (호스트)
 F8=총 FTL의 NAND 페이지 쓰기량
+
+[SmartSanDiskCloud] ;Added 8.18.0
+05=Retired Block Count
+09=Power On Hours
+0D=Count of Uncorrectable ECC Errors
+20=Write Amplification multiplied by 100
+21=Write Amplification Factor
+AA=Reserve Block Count
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Average Write/Erase Count
+AE=Unexpected Power Loss Count
+B2=SSD Life Left (upto 0.01%)
+BF=Clean Shutdown Count
+C0=Unclean Shutdown Count
+C2=Temperature
+C4=Number of Blocks Reallocated
+E6=Percent of Total Write/Erase Count
+E8=Spare Blocks Remaining
+E9=Total Nand Writes 64GB
+EB=Capacitor Health
+F1=Total Host Writes 64GB
+F2=Total Host Reads 64GB
+F4=Lifetime Thermal Throttle Activations
+F5=Percent Drive Life Remaining
+FD=SPI Tests Remaining

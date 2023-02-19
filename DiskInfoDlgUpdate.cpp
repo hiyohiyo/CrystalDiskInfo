@@ -1882,7 +1882,8 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	subMenu.ModifyMenu(8, MF_BYPOSITION, 8, cstr);
 	cstr = i18n(_T("Menu"), _T("RESIDENT_STYLE"));
 	subMenu.ModifyMenu(9, MF_BYPOSITION, 9, cstr);
-
+	cstr = i18n(_T("Menu"), _T("DRIVE_SORT_METHOD"));
+	subMenu.ModifyMenu(10, MF_BYPOSITION, 10, cstr);
 #ifdef UWP
 	subMenu.EnableMenuItem(7, MF_GRAYED);
 #endif
@@ -1926,6 +1927,20 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	else
 	{
 		OnResidentHide();
+	}
+
+	cstr = i18n(_T("Menu"), _T("PHYSICAL_DRIVE_ID"));
+	menu->ModifyMenu(ID_SORT_PHYSICAL_DRIVE_ID, MF_STRING, ID_SORT_PHYSICAL_DRIVE_ID, cstr);
+	cstr = i18n(_T("Menu"), _T("DRIVE_LETTER"));
+	menu->ModifyMenu(ID_SORT_DRIVE_LETTER, MF_STRING, ID_SORT_DRIVE_LETTER, cstr);
+
+	if (m_bSortDriveLetter)
+	{
+		OnSortDriveLetter();
+	}
+	else
+	{
+		OnSortPhysicalDriveId();
 	}
 
 	cstr = i18n(_T("Menu"), _T("HELP_WEB")) + _T("\tF1");

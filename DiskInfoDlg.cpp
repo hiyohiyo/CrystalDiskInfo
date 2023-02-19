@@ -148,6 +148,8 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_bDumpSmartReadData = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("DumpSmartReadData"), 1, m_Ini);
 	m_bDumpSmartReadThreshold = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("DumpSmartReadThreshold"), 1, m_Ini);
 	m_bResidentMinimize = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("ResidentMinimize"), 0, m_Ini);
+	m_bSortDriveLetter = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("SortDriveLetter"), 1, m_Ini);
+
 	m_bShowTemperatureIconOnly = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("ShowTemperatureIconOnly"), 0, m_Ini);
 	m_bAsciiView = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("AsciiView"), 0, m_Ini);
 	m_bSmartEnglish = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("SmartEnglish"), 0, m_Ini);
@@ -693,6 +695,8 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_DUMP_SMART_READ_THRESHOLD, &CDiskInfoDlg::OnDumpSmartReadThreshold)
 	ON_COMMAND(ID_RESIDENT_HIDE, &CDiskInfoDlg::OnResidentHide)
 	ON_COMMAND(ID_RESIDENT_MINIMIZE, &CDiskInfoDlg::OnResidentMinimize)
+	ON_COMMAND(ID_SORT_PHYSICAL_DRIVE_ID, &CDiskInfoDlg::OnSortPhysicalDriveId)
+	ON_COMMAND(ID_SORT_DRIVE_LETTER, &CDiskInfoDlg::OnSortDriveLetter)
 	ON_COMMAND(ID_ZOOM_100, &CDiskInfoDlg::OnZoom100)
 	ON_COMMAND(ID_ZOOM_125, &CDiskInfoDlg::OnZoom125)
 	ON_COMMAND(ID_ZOOM_150, &CDiskInfoDlg::OnZoom150)

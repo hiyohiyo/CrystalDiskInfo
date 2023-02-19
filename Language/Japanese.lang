@@ -109,6 +109,11 @@ GREEN_MODE=グリーンモード(&G)
 SAVE_TEXT=保存(テキスト)(&T)
 SAVE_IMAGE=保存(画像)(&S)
 
+;8.18.0
+DRIVE_SORT_METHOD=ドライブソート方法
+PHYSICAL_DRIVE_ID=物理ドライブID
+DRIVE_LETTER=ドライブレター
+
 [TrayMenu]
 EXIT=終了
 REFRESH=更新
@@ -1627,3 +1632,29 @@ F3=総書き込みページ数
 F6=総書き込みセクタ数 (ホスト)
 F7=総書き込みセクタ数 (ホスト)
 F8=総書き込みページ数 (FTL)
+
+[SmartSanDiskCloud] ;Added 8.18.0
+05=代替処理済のブロック数
+09=使用時間
+0D=訂正不可能 ECC エラー数
+20=Write Amplification multiplied by 100
+21=Write Amplification Factor
+AA=予備ブロック数
+AB=書き込み失敗回数
+AC=消去失敗回数
+AD=平均書き込み/消去回数
+AE=予期せぬ電源断回数
+B2=残り寿命 (upto 0.01%)
+BF=電源オフ回数 (クリーン)
+C0=電源オフ回数 (アンクリーン)
+C2=温度
+C4=Number of Blocks Reallocated
+E6=Percent of Total Write/Erase Count
+E8=残り予備ブロック
+E9=総書き込み量 (NAND)
+EB=キャパシタ健康状態
+F1=総書き込み量 (ホスト)
+F2=総読み込み量 (ホスト)
+F4=Lifetime Thermal Throttle Activations
+F5=残り寿命
+FD=SPI Tests Remaining

@@ -111,6 +111,11 @@ GREEN_MODE=绿色样式(&G)
 SAVE_TEXT=保存为文本(&T)
 SAVE_IMAGE=保存为图片(&S)
 
+;8.18.0
+DRIVE_SORT_METHOD=Drive Sort Method
+PHYSICAL_DRIVE_ID=Physical Drive ID
+DRIVE_LETTER=Drive Letter
+
 [TrayMenu]
 EXIT=退出
 REFRESH=刷新
@@ -1636,3 +1641,29 @@ F3=总计编程页次数
 F6=主机累计写入扇区
 F7=主机编程 NAND 页计数
 F8=FTL 编程 NAND 页计数
+
+[SmartSanDiskCloud] ;Added 8.18.0
+05=Retired Block Count
+09=Power On Hours
+0D=Count of Uncorrectable ECC Errors
+20=Write Amplification multiplied by 100
+21=Write Amplification Factor
+AA=Reserve Block Count
+AB=Program Fail Count
+AC=Erase Fail Count
+AD=Average Write/Erase Count
+AE=Unexpected Power Loss Count
+B2=SSD Life Left (upto 0.01%)
+BF=Clean Shutdown Count
+C0=Unclean Shutdown Count
+C2=Temperature
+C4=Number of Blocks Reallocated
+E6=Percent of Total Write/Erase Count
+E8=Spare Blocks Remaining
+E9=Total Nand Writes 64GB
+EB=Capacitor Health
+F1=Total Host Writes 64GB
+F2=Total Host Reads 64GB
+F4=Lifetime Thermal Throttle Activations
+F5=Percent Drive Life Remaining
+FD=SPI Tests Remaining

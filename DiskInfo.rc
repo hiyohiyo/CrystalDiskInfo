@@ -1127,9 +1127,14 @@ BEGIN
                 MENUITEM "Hide",                        ID_RESIDENT_HIDE
                 MENUITEM "Minimize",                    ID_RESIDENT_MINIMIZE
             END
+            POPUP "Drive Sort Method"
+            BEGIN
+                MENUITEM "Physical Drive ID",           ID_SORT_PHYSICAL_DRIVE_ID
+                MENUITEM "Drive Letter",                ID_SORT_DRIVE_LETTER
+            END
             MENUITEM SEPARATOR
-            MENUITEM "&Advanced Disk Search",       ID_ADVANCED_DISK_SEARCH
-            MENUITEM "ATA_PASS_THROUGH",            ID_ATA_PASS_THROUGH_SMART
+            MENUITEM "&Advanced Disk Search",           ID_ADVANCED_DISK_SEARCH
+            MENUITEM "ATA_PASS_THROUGH",                ID_ATA_PASS_THROUGH_SMART
             POPUP "USB/IEEE 1394"
             BEGIN
                 MENUITEM "SCSI_ATA_TRANSLATION (SAT)",  ID_USB_SAT

@@ -893,11 +893,14 @@
 #define ID_HEALTH_STATUS                32982
 #define ID_EDIT_OPTIONS                 32983
 // #define ID_USB_SAT16                    32984
-#define ID_DUMP_IDENTIFY_DEVICE         32987
-#define ID_DUMP_SMART_READ_DATA         32988
-#define ID_DUMP_SMART_READ_THRESHOLD    32989
-#define ID_RESIDENT_HIDE                32990
-#define ID_RESIDENT_MINIMIZE            32991
+#define ID_DUMP_IDENTIFY_DEVICE         32985
+#define ID_DUMP_SMART_READ_DATA         32986
+#define ID_DUMP_SMART_READ_THRESHOLD    32987
+#define ID_RESIDENT_HIDE                32988
+#define ID_RESIDENT_MINIMIZE            32989
+#define ID_SORT_PHYSICAL_DRIVE_ID       32990
+#define ID_SORT_DRIVE_LETTER            32991
+
 #define ID_FUNCTION_ZOOM                32992
 #define ID_ZOOM_100                     32993
 #define ID_ZOOM_125                     32994
