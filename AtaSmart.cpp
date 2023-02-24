@@ -6685,6 +6685,67 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 //  NVMe JMicron
 /*---------------------------------------------------------------------------*/
 
+#include <stdio.h>
+
+// 2023/02/24 Compatible with SIV
+HANDLE CreateWorldMutex(CONST TCHAR* nam)										// Create/Open a Mutex with
+{                                                                               // appropriate protection
+	HANDLE                    mhl;                                              // Mutex Handle
+	SID                       *sid;;											// Security ID
+	SECURITY_ATTRIBUTES       sab[1];											// Security Attributes Block
+	SECURITY_DESCRIPTOR       sdb[1];											// Security Descriptor Block
+	ACL                       acl[32];											// ACL Area
+	SID_IDENTIFIER_AUTHORITY  swa[1] = SECURITY_WORLD_SID_AUTHORITY;			// World access
+	TCHAR                     gtb[256];                                         // Global\\ text buffer
+
+	InitializeSecurityDescriptor(sdb, SECURITY_DESCRIPTOR_REVISION);            // setup Security Descriptor
+
+	sid = NULL;								// in case AllocateAndInitializeSid fails
+	if (AllocateAndInitializeSid(swa,       // SID Identifier Authority
+			1,								// Sub Authority count
+			SECURITY_WORLD_RID,             // Sub Authority 0
+			0,                              // Sub Authority 1
+			0,                              // Sub Authority 2
+			0,                              // Sub Authority 3
+			0,                              // Sub Authority 4
+			0,                              // Sub Authority 5
+			0,                              // Sub Authority 6
+			0,                              // Sub Authority 7
+			(PSID*) & sid) &&               // returned SID
+		(InitializeAcl(acl,                 // ACL setup OK and
+			sizeof(acl),                    //
+			ACL_REVISION)) &&               //
+		(AddAccessAllowedAce(acl,           // ACE setup OK and
+			ACL_REVISION,                   //
+			MUTANT_ALL_ACCESS,              // Access Rights Mask
+			sid)))                          //
+		SetSecurityDescriptorDacl(sdb, TRUE, acl, FALSE);  // yes, setup world access
+	else                                                   //
+		SetSecurityDescriptorDacl(sdb, TRUE, NULL, FALSE); // no, setup with default
+
+	sab->nLength = sizeof(sdb);                            // setup Security Attributes Block 
+	sab->bInheritHandle = FALSE;                           //
+	sab->lpSecurityDescriptor = sdb;                       //
+
+	swprintf_s(gtb, 256, TEXT("Global\\%s"), nam);         // name with Global\ prefix
+
+	if (((mhl = CreateMutex(sab,                           // Create/Open with Global\ Unprotected or
+		FALSE,                                             //
+		gtb)) != NULL) ||                                  //
+		((mhl = OpenMutex(READ_CONTROL | MUTANT_QUERY_STATE | SYNCHRONIZE,   // Open with Global\ Protected or (probably Aquasuite)
+			FALSE,                                        
+			gtb)) != NULL) ||                              
+		((mhl = CreateMutex(sab,                           // Create/Open with no prefix Unprotected ?
+			FALSE,                                         //
+			nam)) != NULL)) {
+	}
+
+	if (sid)                                               // need to free the SID ?
+		FreeSid(sid);                                      // yes, free it
+
+	return mhl;                                            // return the handle
+}
+
 BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, BOOL flagUsb2mode)
 {
 	BOOL	bRet = FALSE;
@@ -6715,8 +6776,6 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	{
 		return	FALSE;
 	}
-
-	//::ZeroMemory(&sptwb, sizeof(SCSI_PASS_THROUGH_WITH_BUFFERS24));
 
 	sptwb.Spt.Length = sizeof(SCSI_PASS_THROUGH);
 	sptwb.Spt.PathId = 0;
@@ -6752,17 +6811,20 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 
 	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf) + sptwb.Spt.DataTransferLength;
 
+	// 2023/02/24 Compatible with SIV
+	HANDLE lockHandle = CreateWorldMutex(L"Access_JMicron_SMART");
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
 
 	if (bRet == FALSE)
 	{
+		safeCloseHandle(lockHandle);	// 2023/02/24 Compatible with SIV
 		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
 
-//	::ZeroMemory(&sptwb, sizeof(SCSI_PASS_THROUGH_WITH_BUFFERS24));
+	::ZeroMemory(&sptwb, sizeof(SCSI_PASS_THROUGH_WITH_BUFFERS24));
 	sptwb.Spt.Length = sizeof(SCSI_PASS_THROUGH);
 	sptwb.Spt.PathId = 0;
 	sptwb.Spt.TargetId = 0;
@@ -6794,6 +6856,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
+	safeCloseHandle(lockHandle);	// 2023/02/24 Lock Handle: Compatible with SIV
 
 	if (bRet == FALSE)
 	{
@@ -6834,8 +6897,6 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 	{
 		return	FALSE;
 	}
-
-	//::ZeroMemory(&sptwb, sizeof(SCSI_PASS_THROUGH_WITH_BUFFERS24));
 
 	sptwb.Spt.Length = sizeof(SCSI_PASS_THROUGH);
 	sptwb.Spt.PathId = 0;
@@ -6878,12 +6939,15 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 
 	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf) + sptwb.Spt.DataTransferLength;
 
+	// 2023/02/24 Lock Handle: Compatible with SIV
+	HANDLE lockHandle = CreateWorldMutex(L"Access_JMicron_SMART");
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
 
 	if (bRet == FALSE)
 	{
+		safeCloseHandle(lockHandle);	// 2023/02/24 Lock Handle: Compatible with SIV
 		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
@@ -6917,6 +6981,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
+	safeCloseHandle(lockHandle);	// 2023/02/24 Lock Handle: Compatible with SIV
 
 	if (bRet == FALSE)
 	{
@@ -10824,12 +10889,9 @@ BOOL CAtaSmart::FillSmartThreshold(ATA_SMART_INFO* asi)
 		}
 	}
 
-
-	return TRUE;
-
 	// 2023/02/19 Disabled Threshold Check
-	/*
-	if(count > 0)
+	// if(count > 0)
+	if(asi->AttributeCount > 0)
 	{
 		return TRUE;
 	}
@@ -10837,7 +10899,7 @@ BOOL CAtaSmart::FillSmartThreshold(ATA_SMART_INFO* asi)
 	{
 		return FALSE;
 	}
-	*/
+
 }
 
 /*---------------------------------------------------------------------------*/
