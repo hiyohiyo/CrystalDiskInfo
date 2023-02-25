@@ -49,6 +49,8 @@ public:
 	CDiskInfoApp();
 	~CDiskInfoApp();
 
+	ULONG_PTR gdiplusToken{};
+
 	CString m_GraphDlgPath;
 	CString m_OptionDlgPath;
 	CString m_SmartDir;

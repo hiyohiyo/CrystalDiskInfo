@@ -14,10 +14,17 @@
 #include "OsInfoFx.h"
 
 #include <afxole.h>
+#include <stdio.h>
+
+#ifndef safeCloseHandle
+#define safeCloseHandle(h) { if( h != NULL ) { ::CloseHandle(h); h = NULL; } }
+#endif
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+GdiplusStartupInput gdiplusStartupInput;
 
 // CDiskInfoApp
 
@@ -25,15 +32,13 @@ BEGIN_MESSAGE_MAP(CDiskInfoApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-GdiplusStartupInput gdiplusStartupInput;
-ULONG_PTR gdiplusToken;
-
 // CDiskInfoApp construction
 
 CDiskInfoApp::CDiskInfoApp()
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
+
 }
 
 CDiskInfoApp::~CDiskInfoApp()
@@ -50,8 +55,8 @@ CDiskInfoApp theApp;
 //-----------------------------------------------------------------------------
 static BOOL IsFileExistEx(const TCHAR* path, const TCHAR* fileName);
 static BOOL RunAsRestart();
-// CDiskInfoApp initialization
 
+// CDiskInfoApp initialization
 BOOL CDiskInfoApp::InitInstance()
 {
 	BOOL flagEarthlight = FALSE;
@@ -255,8 +260,7 @@ BOOL CDiskInfoApp::InitInstance()
 	else
 	{
 		// No Server Busy Dialog!!
-
-		DebugPrint(_T("AfxOleInit()"));
+  		DebugPrint(_T("AfxOleInit()"));
 		if(AfxOleInit())
 		{
 			flagAfxOleInit = TRUE;
@@ -284,11 +288,7 @@ BOOL CDiskInfoApp::InitInstance()
 			flagReExec = TRUE;
 		}
 
-		if (hMutex)
-		{
-			::ReleaseMutex(hMutex);
-			::CloseHandle(hMutex);
-		}
+		safeCloseHandle(hMutex);
 
 		if(flagReExec)
 		{
@@ -303,7 +303,7 @@ BOOL CDiskInfoApp::InitInstance()
 		DebugPrint(_T("CoUninitialize();"));
 		CoUninitialize();
 	}
-
+	/**/
 	return FALSE;
 }
 

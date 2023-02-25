@@ -69,10 +69,14 @@ CAtaSmart::CAtaSmart()
 			m_bAtaPassThroughSmart = TRUE;
 		}
 	}
+
+	// 2023/02/24 Lock Handle: Compatible with SIV
+	hMutexJMicron = CreateWorldMutex(L"Access_JMicron_SMART");
 }
 
 CAtaSmart::~CAtaSmart()
 {
+	safeCloseHandle(hMutexJMicron);
 }
 
 /* PUBLIC FUNCTION */
@@ -1389,8 +1393,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				for (int i = 0; i < count; i++)
 				{
 					AddDiskJMicronUsbRaid(i);
-				}	
-
+				}
 			}
 #endif
 			try
@@ -2245,18 +2248,18 @@ safeRelease:
 		}
 	}
 
-	// [2023/02/05] Workaround for JMicron USB RAID
-	if (FlagJMicronUsbRaid)
+	// [2023/02/25] Hide RAID Volume
+	int count = (int)vars.GetCount();
+	if (count > 0)
 	{
-		int count = (int)vars.GetCount();
-		if (count > 0)
+		for (int i = count - 1; i >= 0; i--)
 		{
-			for (int i = count - 1; i >= 0; i--)
+			CString model;
+			model = vars[i].Model;
+			model.MakeUpper();
+			if (vars[i].Model.Find(L"RAID") >= 0)
 			{
-				if (vars[i].Model.Find(L"H/W RAID") == 0)
-				{
-					vars.RemoveAt(i);
-				}
+				vars.RemoveAt(i);
 			}
 		}
 	}
@@ -5937,7 +5940,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL_RST"));
 			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_INTEL_RST, &identify)) { return TRUE; }
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_INTEL_RST, &identify, &diskSize)) { return TRUE; }
 		}
 
 		debug.Format(_T("DoIdentifyDeviceNVMeSamsung"));
@@ -5952,14 +5955,12 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		debug.Format(_T("DoIdentifyDeviceNVMeIntel"));
 		DebugPrint(debug);
 
-		if (DoIdentifyDeviceNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &identify))
+		if (DoIdentifyDeviceNVMeIntel(physicalDriveId, scsiPort, scsiTargetId, &identify, &diskSize))
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_INTEL"));
 			DebugPrint(debug);
 			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_INTEL, &identify)){return TRUE; }
 		}
-
-
 	}
 	
 	if(physicalDriveId >= 0)
@@ -6685,13 +6686,11 @@ BOOL CAtaSmart::SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BY
 //  NVMe JMicron
 /*---------------------------------------------------------------------------*/
 
-#include <stdio.h>
-
 // 2023/02/24 Compatible with SIV
-HANDLE CreateWorldMutex(CONST TCHAR* nam)										// Create/Open a Mutex with
+HANDLE CAtaSmart::CreateWorldMutex(CONST TCHAR* name)							// Create/Open a Mutex with
 {                                                                               // appropriate protection
 	HANDLE                    mhl;                                              // Mutex Handle
-	SID                       *sid;;											// Security ID
+	SID*					  sid;												// Security ID
 	SECURITY_ATTRIBUTES       sab[1];											// Security Attributes Block
 	SECURITY_DESCRIPTOR       sdb[1];											// Security Descriptor Block
 	ACL                       acl[32];											// ACL Area
@@ -6702,16 +6701,16 @@ HANDLE CreateWorldMutex(CONST TCHAR* nam)										// Create/Open a Mutex with
 
 	sid = NULL;								// in case AllocateAndInitializeSid fails
 	if (AllocateAndInitializeSid(swa,       // SID Identifier Authority
-			1,								// Sub Authority count
-			SECURITY_WORLD_RID,             // Sub Authority 0
-			0,                              // Sub Authority 1
-			0,                              // Sub Authority 2
-			0,                              // Sub Authority 3
-			0,                              // Sub Authority 4
-			0,                              // Sub Authority 5
-			0,                              // Sub Authority 6
-			0,                              // Sub Authority 7
-			(PSID*) & sid) &&               // returned SID
+		1,									// Sub Authority count
+		SECURITY_WORLD_RID,					// Sub Authority 0
+		0,									// Sub Authority 1
+		0,									// Sub Authority 2
+		0,									// Sub Authority 3
+		0,									// Sub Authority 4
+		0,									// Sub Authority 5
+		0,									// Sub Authority 6
+		0,									// Sub Authority 7
+		(PSID*)&sid) &&						// returned SID
 		(InitializeAcl(acl,                 // ACL setup OK and
 			sizeof(acl),                    //
 			ACL_REVISION)) &&               //
@@ -6719,31 +6718,58 @@ HANDLE CreateWorldMutex(CONST TCHAR* nam)										// Create/Open a Mutex with
 			ACL_REVISION,                   //
 			MUTANT_ALL_ACCESS,              // Access Rights Mask
 			sid)))                          //
+	{
 		SetSecurityDescriptorDacl(sdb, TRUE, acl, FALSE);  // yes, setup world access
-	else                                                   //
+	}
+	else
+	{
 		SetSecurityDescriptorDacl(sdb, TRUE, NULL, FALSE); // no, setup with default
+	}
 
 	sab->nLength = sizeof(sdb);                            // setup Security Attributes Block 
 	sab->bInheritHandle = FALSE;                           //
 	sab->lpSecurityDescriptor = sdb;                       //
 
-	swprintf_s(gtb, 256, TEXT("Global\\%s"), nam);         // name with Global\ prefix
+	swprintf_s(gtb, 256, TEXT("Global\\%s"), name);        // name with Global\ prefix
 
 	if (((mhl = CreateMutex(sab,                           // Create/Open with Global\ Unprotected or
 		FALSE,                                             //
 		gtb)) != NULL) ||                                  //
 		((mhl = OpenMutex(READ_CONTROL | MUTANT_QUERY_STATE | SYNCHRONIZE,   // Open with Global\ Protected or (probably Aquasuite)
-			FALSE,                                        
-			gtb)) != NULL) ||                              
+			FALSE,
+			gtb)) != NULL) ||
 		((mhl = CreateMutex(sab,                           // Create/Open with no prefix Unprotected ?
 			FALSE,                                         //
-			nam)) != NULL)) {
+			name)) != NULL)) {
 	}
 
-	if (sid)                                               // need to free the SID ?
+	if (sid)											   // need to free the SID ?
+	{
 		FreeSid(sid);                                      // yes, free it
+	}
 
 	return mhl;                                            // return the handle
+}
+
+void CAtaSmart::AcquireMutexJMicron()
+{
+	DWORD status = 0;
+
+	if ((status = WaitForSingleObject(hMutexJMicron, INFINITE)) != WAIT_OBJECT_0)
+	{
+		if (status != WAIT_ABANDONED)
+		{
+			DebugPrint(_T("AcquireMutexJMicron() failed"));
+		}
+	}
+}
+
+void CAtaSmart::ReleaseMutexJMicron()
+{
+	if (!ReleaseMutex(hMutexJMicron))
+	{
+		DebugPrint(_T("ReleaseMutexJMicron() failed"));
+	}
 }
 
 BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, BOOL flagUsb2mode)
@@ -6811,15 +6837,14 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 
 	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf) + sptwb.Spt.DataTransferLength;
 
-	// 2023/02/24 Compatible with SIV
-	HANDLE lockHandle = CreateWorldMutex(L"Access_JMicron_SMART");
+	AcquireMutexJMicron(); // 2023/02/24 Compatible with SIV
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
 
 	if (bRet == FALSE)
 	{
-		safeCloseHandle(lockHandle);	// 2023/02/24 Compatible with SIV
+		ReleaseMutexJMicron();
 		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
@@ -6856,7 +6881,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
-	safeCloseHandle(lockHandle);	// 2023/02/24 Lock Handle: Compatible with SIV
+	ReleaseMutexJMicron();
 
 	if (bRet == FALSE)
 	{
@@ -6939,15 +6964,14 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 
 	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf) + sptwb.Spt.DataTransferLength;
 
-	// 2023/02/24 Lock Handle: Compatible with SIV
-	HANDLE lockHandle = CreateWorldMutex(L"Access_JMicron_SMART");
+	AcquireMutexJMicron(); // 2023/02/24 Compatible with SIV
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
 
 	if (bRet == FALSE)
 	{
-		safeCloseHandle(lockHandle);	// 2023/02/24 Lock Handle: Compatible with SIV
+		ReleaseMutexJMicron();
 		safeCloseHandle(hIoCtrl);
 		return	FALSE;
 	}
@@ -6981,7 +7005,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
 		&sptwb, length,
 		&sptwb, length, &dwReturned, NULL);
-	safeCloseHandle(lockHandle);	// 2023/02/24 Lock Handle: Compatible with SIV
+	ReleaseMutexJMicron();
 
 	if (bRet == FALSE)
 	{
@@ -7577,7 +7601,7 @@ CString CAtaSmart::GetScsiPath(const TCHAR* Path)
 	return result;
 }
 
-BOOL CAtaSmart::DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
+BOOL CAtaSmart::DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize)
 {
 	CString path;
 	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
@@ -7601,7 +7625,21 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT
 	nptwb.Direction = NVME_FROM_DEV_TO_HOST;
 
 	nptwb.NVMeCmd[0] = 6;  // Identify
-	nptwb.NVMeCmd[10] = 1; // Return to Host
+	nptwb.NVMeCmd[1] = 1;  // Namespace Identifier (CDW1.NSID)
+	nptwb.NVMeCmd[10] = 0; // Controller or Namespace Structure (CNS)
+
+	bRet = DeviceIoControl(hIoCtrl, IOCTL_SCSI_MINIPORT,
+		&nptwb, length, &nptwb, length, &dwReturned, NULL);
+
+	if (bRet)
+	{
+		ULONG64 totalLBA = *(ULONG64*)&nptwb.DataBuffer[0];
+		int sectorSize = 1 << nptwb.DataBuffer[130];
+		*diskSize = (DWORD)(totalLBA * sectorSize / 1000 / 1000);
+	}
+
+	nptwb.NVMeCmd[1] = 0;  // Namespace Identifier (CDW1.NSID)
+	nptwb.NVMeCmd[10] = 1; // Controller or Namespace Structure (CNS)
 
 	bRet = DeviceIoControl(hIoCtrl, IOCTL_SCSI_MINIPORT,
 		&nptwb, length, &nptwb, length, &dwReturned, NULL);
@@ -7763,14 +7801,6 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, 
 			&dummy, nullptr))
 		{
 			ULONG64 totalLBA = *(ULONG64*)&NVMeData.DataBuffer[0];
-			/*	 (((ULONG64)NVMeData.DataBuffer[7] << 56)
-				+ ((ULONG64)NVMeData.DataBuffer[6] << 48)
-				+ ((ULONG64)NVMeData.DataBuffer[5] << 40)
-				+ ((ULONG64)NVMeData.DataBuffer[4] << 32)
-				+ ((ULONG64)NVMeData.DataBuffer[3] << 24)
-				+ ((ULONG64)NVMeData.DataBuffer[2] << 16)
-				+ ((ULONG64)NVMeData.DataBuffer[1] << 8)
-				+ ((ULONG64)NVMeData.DataBuffer[0]));*/
 			int sectorSize = 1 << NVMeData.DataBuffer[130];
 
 			*diskSize = (DWORD)(totalLBA * sectorSize / 1000 / 1000);
@@ -11309,16 +11339,22 @@ DWORD CAtaSmart::GetPowerOnHoursEx(DWORD i, DWORD timeUnitType)
 
 DWORD CAtaSmart::GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &current, CString &max, CString &type, INTERFACE_TYPE* interfaceType)
 {
-	DWORD tm = TRANSFER_MODE_PIO;
+	DWORD tm = TRANSFER_MODE_UNKNOWN;
 	current = max = _T("");
-	type = _T("Parallel ATA");
-	*interfaceType = INTERFACE_TYPE_PATA;
+	type = _T("");
+	*interfaceType = INTERFACE_TYPE_UNKNOWN;
 
 	// Multiword DMA or PIO
 	if(w63 & 0x0700)
 	{
 		tm = TRANSFER_MODE_PIO_DMA;
 		current = max = _T("PIO/DMA");
+	}
+
+	if (w88 & 0x7F)
+	{
+		type = _T("Parallel ATA");
+		*interfaceType = INTERFACE_TYPE_PATA;
 	}
 
 	// Ultara DMA Max Transfer Mode

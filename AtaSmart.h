@@ -1942,6 +1942,13 @@ public:
 	DWORD CheckDiskStatus(DWORD index);
 
 protected:
+
+	// 2023/02/24 Compatible with SIV
+	HANDLE hMutexJMicron{};
+	HANDLE CreateWorldMutex(CONST TCHAR* name);
+	void AcquireMutexJMicron();
+	void ReleaseMutexJMicron();
+
 	CString m_SerialNumberA_Z[26];
 	BOOL m_bAtaPassThrough;
 	BOOL m_bAtaPassThroughSmart;
@@ -1990,7 +1997,7 @@ protected:
 	BOOL GetSmartAttributeNVMeSamsung951(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	CString GetScsiPath(const TCHAR* Path);
-	BOOL DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
+	BOOL DoIdentifyDeviceNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize);
 	BOOL GetSmartAttributeNVMeIntel(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	BOOL GetScsiAddress(const TCHAR* Path, BYTE* PortNumber, BYTE* PathId, BYTE* TargetId, BYTE* Lun);
