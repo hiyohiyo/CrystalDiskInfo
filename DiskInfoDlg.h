@@ -613,6 +613,7 @@ public:
 	afx_msg void OnUsbEnableAll();
 	afx_msg void OnUsbDisableAll();
 	afx_msg void OnMegaRAID();
+	afx_msg void OnIntelVROC();
 #ifdef JMICRON_USB_RAID_SUPPORT
 	afx_msg void OnJMicronUsbRaid();
 #endif

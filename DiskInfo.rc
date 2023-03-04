@@ -1170,6 +1170,7 @@ BEGIN
                 MENUITEM "Plug-in: AMD_RC2t7 [Web]", ID_AMD_RC2T7
             END
 			MENUITEM "MegaRAID", ID_MEGA_RAID
+            MENUITEM "Intel VROC", ID_INTEL_VROC
 
             MENUITEM SEPARATOR
             MENUITEM "Gadget Support",              ID_GADGET_SUPPORT

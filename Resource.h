@@ -1016,13 +1016,14 @@
 #define ID_DISABLE_DARK_MODE            33137
 #define ID_AMD_RC2T7                    33138
 #define ID_JMICRON_USB_RAID             33139
+#define ID_INTEL_VROC                   33140
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        171
-#define _APS_NEXT_COMMAND_VALUE         33140
+#define _APS_NEXT_COMMAND_VALUE         33141
 #define _APS_NEXT_CONTROL_VALUE         1101
 #define _APS_NEXT_SYMED_VALUE           111
 #endif

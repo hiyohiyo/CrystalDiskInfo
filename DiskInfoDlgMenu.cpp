@@ -1327,6 +1327,25 @@ void CDiskInfoDlg::OnMegaRAID()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::OnIntelVROC()
+{
+	CMenu* menu = GetMenu();
+	if (m_Ata.FlagIntelVROC)
+	{
+		m_Ata.FlagIntelVROC = FALSE;
+		menu->CheckMenuItem(ID_INTEL_VROC, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("IntelVROC"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagIntelVROC = TRUE;
+		menu->CheckMenuItem(ID_INTEL_VROC, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("IntelVROC"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
 void CDiskInfoDlg::OnUsbASM1352R()
 {
 	CMenu* menu = GetMenu();

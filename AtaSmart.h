@@ -38,6 +38,7 @@ static const TCHAR* commandTypeString[] =
 	_T("na"), // NVMe ASMedia
 	_T("nr"), // NVMe Realtek
 	_T("nt"), // NVMe Intel RST
+	_T("iv"), // NVMe Intel VROC
 	_T("mr"), // MegaRAID SAS
 	_T("rc"), // +AMD RC2
 	_T("jr"), // JMicron RAID
@@ -331,6 +332,7 @@ public:
 		CMD_TYPE_NVME_ASMEDIA,
 		CMD_TYPE_NVME_REALTEK,
 		CMD_TYPE_NVME_INTEL_RST,
+		CMD_TYPE_NVME_INTEL_VROC,
 		CMD_TYPE_MEGARAID,
 		CMD_TYPE_AMD_RC2,// +AMD_RC2
 		CMD_TYPE_JMICRON_USB_RAID,
@@ -1932,6 +1934,7 @@ public:
 	BOOL FlagUsbNVMeASMedia = FALSE;
 	BOOL FlagUsbNVMeRealtek = FALSE;
 	BOOL FlagMegaRAID = FALSE;
+	BOOL FlagIntelVROC = FALSE;
 	BOOL FlagUsbASM1352R = FALSE;
 	BOOL FlagAMD_RC2 = TRUE;// +AMD_RC2
 #ifdef JMICRON_USB_RAID_SUPPORT
@@ -2005,6 +2008,9 @@ protected:
 	BOOL GetScsiAddress(const TCHAR* Path, BYTE* PortNumber, BYTE* PathId, BYTE* TargetId, BYTE* Lun);
 	BOOL DoIdentifyDeviceNVMeIntelRst(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize);
 	BOOL GetSmartAttributeNVMeIntelRst(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+
+	BOOL DoIdentifyDeviceNVMeIntelVroc(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize);
+	BOOL GetSmartAttributeNVMeIntelVroc(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	BOOL DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
 	BOOL GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
