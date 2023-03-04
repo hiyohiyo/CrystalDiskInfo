@@ -2,7 +2,7 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : The MIT License
+//      License : MIT License
 /*---------------------------------------------------------------------------*/
 // Reference : http://www.usefullcode.net/2007/02/hddsmart.html (ja)
 
@@ -1934,7 +1934,9 @@ public:
 	BOOL FlagMegaRAID = FALSE;
 	BOOL FlagUsbASM1352R = FALSE;
 	BOOL FlagAMD_RC2 = TRUE;// +AMD_RC2
+#ifdef JMICRON_USB_RAID_SUPPORT
 	BOOL FlagJMicronUsbRaid = FALSE;
+#endif
 	BOOL FlagNoWakeUp = FALSE;// +M 20211216
 
 	DWORD CsmiType = 0;

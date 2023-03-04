@@ -2,7 +2,7 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : The MIT License
+//      License : MIT License
 /*---------------------------------------------------------------------------*/
 #pragma once
 
@@ -613,7 +613,9 @@ public:
 	afx_msg void OnUsbEnableAll();
 	afx_msg void OnUsbDisableAll();
 	afx_msg void OnMegaRAID();
+#ifdef JMICRON_USB_RAID_SUPPORT
 	afx_msg void OnJMicronUsbRaid();
+#endif
 	afx_msg void OnHealthStatus();
 	afx_msg void OnSoundSetting();
 	afx_msg void OnDumpIdentifyDevice();

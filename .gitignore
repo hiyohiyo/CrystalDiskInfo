@@ -25,3 +25,5 @@ libraidapi32.a
 libraidapi64.a
 libgcc32.a
 libgcc64.a
+JMicronUsbRaid32d.lib
+JMicronUsbRaid64d.lib

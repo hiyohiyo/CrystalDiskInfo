@@ -2,7 +2,7 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : The MIT License
+//      License : MIT License
 /*---------------------------------------------------------------------------*/
 
 #include "stdafx.h"
@@ -160,7 +160,9 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagUsbNVMeASMedia = !GetPrivateProfileInt(_T("USB"), _T("NVMeASMedia"), 1, m_Ini);
 	m_Ata.FlagUsbNVMeRealtek = !GetPrivateProfileInt(_T("USB"), _T("NVMeRealtek"), 1, m_Ini);
 	m_Ata.FlagMegaRAID = !GetPrivateProfileInt(_T("Setting"), _T("MegaRAID"), 1, m_Ini);
+#ifdef JMICRON_USB_RAID_SUPPORT
 	m_Ata.FlagJMicronUsbRaid = !GetPrivateProfileInt(_T("Setting"), _T("JMicronUsbRaid"), 0, m_Ini); // Default Off
+#endif
 
 	OnUsbSat();
 	OnUsbIodata();
@@ -176,7 +178,9 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnUsbNVMeASMedia();
 	OnUsbNVMeRealtek();
 	OnMegaRAID();
+#ifdef JMICRON_USB_RAID_SUPPORT
 	OnJMicronUsbRaid();
+#endif
 
 	DebugPrint(_T("InitAta"));
 	InitAta((BOOL)GetPrivateProfileInt(_T("Setting"), _T("UseWMI"), 1, m_Ini), m_bAdvancedDiskSearch, NULL, m_bWorkaroundHD204UI, m_bWorkaroundAdataSsd);

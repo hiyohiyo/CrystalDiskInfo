@@ -2,7 +2,7 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : The MIT License
+//      License : MIT License
 /*---------------------------------------------------------------------------*/
 
 #include "stdafx.h"
@@ -1346,6 +1346,7 @@ void CDiskInfoDlg::OnUsbASM1352R()
 	DrawMenuBar();
 }
 
+#ifdef JMICRON_USB_RAID_SUPPORT
 void CDiskInfoDlg::OnJMicronUsbRaid()
 {
 	CMenu* menu = GetMenu();
@@ -1364,6 +1365,7 @@ void CDiskInfoDlg::OnJMicronUsbRaid()
 	SetMenu(menu);
 	DrawMenuBar();
 }
+#endif
 
 void CDiskInfoDlg::OnUsbEnableAll()
 {

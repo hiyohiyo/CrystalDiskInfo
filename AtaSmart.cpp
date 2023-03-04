@@ -2,7 +2,7 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : The MIT License
+//      License : MIT License
 /*---------------------------------------------------------------------------*/
 // Reference : http://www.usefullcode.net/2007/02/hddsmart.html (ja)
 
@@ -19,11 +19,19 @@
 #include "JMicronUsbRaidDef.h"
 #include "JMicronUsbRaidApi.h"
 	#ifdef _M_X64
-		#pragma comment(lib, "JMicronUsbRaid64.lib")
+		#ifdef DEBUG
+			#pragma comment(lib, "JMicronUsbRaid64d.lib")
+		#else
+			#pragma comment(lib, "JMicronUsbRaid64.lib")
+		#endif
 		#pragma comment(lib, "libgcc64.a")
 		#pragma comment(lib, "libraidapi64.a")
 	#else
-		#pragma comment(lib, "JMicronUsbRaid32.lib")
+		#ifdef DEBUG
+			#pragma comment(lib, "JMicronUsbRaid32d.lib")
+		#else
+			#pragma comment(lib, "JMicronUsbRaid32.lib")
+		#endif
 		#pragma comment(lib, "libgcc32.a")
 		#pragma comment(lib, "libraidapi32.a")
 	#endif
@@ -5720,6 +5728,12 @@ BOOL CAtaSmart::IsSsdMarvell(ATA_SMART_INFO& asi)
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_32MB;
 	}
 
+	// https://crystalmark.info/board/c-board.cgi?cmd=one;no=2523;id=#2523
+	if ((modelUpper.Find(L"HANYE-Q55") == 0))
+	{
+		return FALSE;
+	}
+
 	return flagSmartType;
 }
 
@@ -5739,6 +5753,19 @@ BOOL CAtaSmart::IsSsdMaxiotek(ATA_SMART_INFO& asi)
 	{
 		flagSmartType = TRUE;
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
+	}
+	// https://crystalmark.info/board/c-board.cgi?cmd=one;no=2523;id=#2523
+	else if (modelUpper.Find(L"HANYE-Q55") == 0
+		&& asi.Attribute[0].Id == 0x05
+		&& asi.Attribute[1].Id == 0x09
+		&& asi.Attribute[2].Id == 0x0C
+		&& asi.Attribute[3].Id == 0xA4
+		&& asi.Attribute[4].Id == 0xA5
+		&& asi.Attribute[5].Id == 0xA6
+		&& asi.Attribute[6].Id == 0xA7
+		)
+	{
+		flagSmartType = TRUE;
 	}
 	else if (
 		   asi.Attribute[0].Id == 0x05
@@ -6731,7 +6758,9 @@ HANDLE CAtaSmart::CreateWorldMutex(CONST TCHAR* name)							// Create/Open a Mut
 	}
 	else
 	{
+#pragma warning(disable:6248)
 		SetSecurityDescriptorDacl(sdb, TRUE, NULL, FALSE); // no, setup with default
+#pragma warning(default:6248)
 	}
 
 	sab->nLength = sizeof(sdb);                            // setup Security Attributes Block 

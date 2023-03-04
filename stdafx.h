@@ -2,7 +2,7 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : The MIT License
+//      License : MIT License
 /*---------------------------------------------------------------------------*/
 
 #pragma once
@@ -68,7 +68,7 @@
 #define PRODUCT_NAME			_T("CrystalDiskInfo")
 
 #if KUREI_KEI_SUPPORT
-#define PRODUCT_SHORT_NAME		_T("CDI 8 KKE")
+#define PRODUCT_SHORT_NAME		_T("CDI 9 KKE")
 
 #ifdef _M_ARM
 #define PRODUCT_EDITION			_T("Kurei Kei Edition ARM32")
@@ -80,7 +80,7 @@
 #define PRODUCT_EDITION			_T("Kurei Kei Edition x86")
 #endif
 #elif SUISHO_SHIZUKU_SUPPORT
-#define PRODUCT_SHORT_NAME		_T("CDI 8 SE")
+#define PRODUCT_SHORT_NAME		_T("CDI 9 SE")
 #ifdef _M_ARM32
 #define PRODUCT_EDITION			_T("Shizuku Edition ARM32")
 #elif _M_ARM64
@@ -104,9 +104,9 @@
 #endif
 
 #define PRODUCT_VERSION				L"9.0.0 Beta1"
-#define PRODUCT_RELEASE				L"2023/03/03"
+#define PRODUCT_RELEASE				L"2023/03/04"
 #define PRODUCT_COPY_YEAR			L"2008-2023"
-#define PRODUCT_LICENSE				L"The MIT License"
+#define PRODUCT_LICENSE				L"MIT License"
 
 #ifdef KUREI_KEI_SUPPORT
 #define PRODUCT_COPYRIGHT_1         L"© 2008-2023 hiyohiyo"

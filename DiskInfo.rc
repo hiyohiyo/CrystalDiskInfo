@@ -8,6 +8,7 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "afxres.h"
+#include "CompileOptions.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -897,7 +898,7 @@ BEGIN
     BEGIN
         BLOCK "080003a4"
         BEGIN
-            VALUE "Comments", "https://crystalmark.info/, The MIT License."
+            VALUE "Comments", "https://crystalmark.info/, MIT License."
             VALUE "CompanyName", "Crystal Dew World"
             VALUE "FileVersion", "9.0.0.0"
             VALUE "ProductVersion", "9.0.0.0"
@@ -1150,7 +1151,9 @@ BEGIN
 		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron)",            ID_USB_NVME_JMICRON
 		        MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA
 				MENUITEM "SCSI_NVME_TRANSLATION (Realtek)",            ID_USB_NVME_REALTEK
+#ifdef JMICRON_USB_RAID_SUPPORT
                 MENUITEM "JMicron USB RAID",            ID_JMICRON_USB_RAID
+#endif
                 MENUITEM SEPARATOR
                 MENUITEM "Enable All",                  ID_USB_ENABLE_ALL
                 MENUITEM "Disable All",                 ID_USB_DISABLE_ALL
