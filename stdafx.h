@@ -1,6 +1,9 @@
-﻿// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently,
-// but are changed infrequently
+﻿/*---------------------------------------------------------------------------*/
+//       Author : hiyohiyo
+//         Mail : hiyohiyo@crystalmark.info
+//          Web : https://crystalmark.info/
+//      License : The MIT License
+/*---------------------------------------------------------------------------*/
 
 #pragma once
 
@@ -51,16 +54,10 @@
 
 #include "CommonFx.h"
 #include "UtilityFx.h"
+#include "CompileOptions.h"
 
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #pragma warning(disable : 4996)
-
-//------------------------------------------------
-// Option Flags
-//------------------------------------------------
-
-// For Task Tray Icon Feature
-#define OPTION_TASK_TRAY
 
 //------------------------------------------------
 // Global Sttings
@@ -94,7 +91,7 @@
 #define PRODUCT_EDITION			_T("Shizuku Edition x86")
 #endif
 #else
-#define PRODUCT_SHORT_NAME		_T("CDI 8")
+#define PRODUCT_SHORT_NAME		_T("CDI 9")
 #ifdef _M_ARM
 #define PRODUCT_EDITION			_T("ARM32")
 #elif _M_ARM64
@@ -106,8 +103,8 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"8.18.0 Beta7"
-#define PRODUCT_RELEASE				L"2023/02/25"
+#define PRODUCT_VERSION				L"9.0.0 Beta1"
+#define PRODUCT_RELEASE				L"2023/03/03"
 #define PRODUCT_COPY_YEAR			L"2008-2023"
 #define PRODUCT_LICENSE				L"The MIT License"
 

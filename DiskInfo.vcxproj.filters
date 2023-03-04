@@ -248,6 +248,9 @@
     <ClInclude Include="JMicronUsbRaidApi.h">
       <Filter>Library Files</Filter>
     </ClInclude>
+    <ClInclude Include="CompileOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\bad.ico">

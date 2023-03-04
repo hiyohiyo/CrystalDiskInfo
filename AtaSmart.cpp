@@ -15,8 +15,7 @@
 #include "DnpService.h"
 #include "OsInfoFx.h"
 
-#if ! defined(_M_ARM) && ! defined(_M_ARM64)
-
+#ifdef JMICRON_USB_RAID_SUPPORT
 #include "JMicronUsbRaidDef.h"
 #include "JMicronUsbRaidApi.h"
 	#ifdef _M_X64
@@ -266,6 +265,8 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			}
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
+#endif
+#ifdef JMICRON_USB_RAID_SUPPORT
 		case CMD_TYPE_JMICRON_USB_RAID:
 			if (!GetSmartInfoJMicronUsbRaid(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i])))
 			{
@@ -320,6 +321,8 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 	case CMD_TYPE_AMD_RC2:// +AMD_RC2
 		flag = DoIdentifyDeviceAMD_RC2(vars[i].ScsiBus, NULL, NULL, &(vars[i].IdentifyDevice), NULL, NULL);
 		break;
+#endif
+#ifdef JMICRON_USB_RAID_SUPPORT
 	case CMD_TYPE_JMICRON_USB_RAID:
 		flag = DoIdentifyDeviceJMicronUsbRaid(vars[i].ScsiBus, vars[i].ScsiPort, & (vars[i].IdentifyDevice));
 		break;
@@ -839,6 +842,8 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 						}
 						VariantClear(&pVal);
 					}
+
+					SAFE_RELEASE(pCOMDev);
 				}
 			}
 			catch (...)
@@ -942,7 +947,6 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 						{
 							FlagMarvellController = TRUE;
 						}
-
 
 						if (cstr.Find(_T("   - ") + name1) >= 0 || cstr.Find(_T("   + ") + name1) >= 0)
 						{
@@ -1379,7 +1383,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			///////////////////////////////
 			// JMicron USB RAID
 			///////////////////////////////
-#if ! defined(_M_ARM) && ! defined(_M_ARM64)
+#ifdef JMICRON_USB_RAID_SUPPORT
 			if (FlagJMicronUsbRaid)
 			{
 				DebugPrint(L"JMicronUsbRaid");
@@ -2252,12 +2256,12 @@ safeRelease:
 	int count = (int)vars.GetCount();
 	if (count > 0)
 	{
-		for (int i = count - 1; i >= 0; i--)
+		for (int i = 0; i < count; i++)
 		{
 			CString model;
 			model = vars[i].Model;
 			model.MakeUpper();
-			if (vars[i].Model.Find(L"RAID") >= 0)
+			if (model.Find(L"RAID") >= 0)
 			{
 				vars.RemoveAt(i);
 			}
@@ -2662,6 +2666,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		identify->A.CurrentMediaSerialNo[0] = '\0';
 		identify->A.SerialAtaCapabilities = 0;
 	}
+#ifdef JMICRON_USB_RAID_SUPPORT
 	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMICRON_USB_RAID)
 	{
 		asi.Major = 0;
@@ -2674,6 +2679,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
 		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
 	}
+#endif
 	else {
 		// +AMD_RC2 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3290,6 +3296,8 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				asi.IsSmartEnabled = TRUE;
 			}
 			break;
+#endif
+#ifdef JMICRON_USB_RAID_SUPPORT
 		case CMD_TYPE_JMICRON_USB_RAID:
 			if (GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asi))
 			{
@@ -10135,7 +10143,7 @@ BOOL CAtaSmart::SendAtaCommandMegaRAID(INT scsiPort, INT scsiTargetId, BYTE main
 	return FALSE;
 }
 
-#if ! defined(_M_ARM) && ! defined(_M_ARM64)
+#ifdef JMICRON_USB_RAID_SUPPORT
 BOOL CAtaSmart::AddDiskJMicronUsbRaid(INT index)
 {
 	IDENTIFY_DEVICE identify = { 0 };

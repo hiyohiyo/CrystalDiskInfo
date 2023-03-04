@@ -2046,7 +2046,7 @@ protected:
 	BOOL SendDCommandMegaRAID(HANDLE hHandle, ULONG opcode, void* buf, size_t bufsize, BYTE* mbox, size_t mboxlen);
 	BOOL SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, void* buf, size_t bufsize, const UCHAR Cdb[], UCHAR CdbLength);
 
-#if ! defined(_M_ARM) && ! defined(_M_ARM64)
+#ifdef JMICRON_USB_RAID_SUPPORT
 	BOOL AddDiskJMicronUsbRaid(INT index);
 	BOOL DoIdentifyDeviceJMicronUsbRaid(INT index, BYTE port, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartInfoJMicronUsbRaid(INT index, BYTE port, ATA_SMART_INFO* asi);
