@@ -21,3 +21,7 @@ DiskInfo.VC.VC.opendb
 .vs/
 enc_temp_folder/47375794a7a15ae9bc5c605bd6169eb2/stdafx.h
 UpgradeLog.htm
+libraidapi32.a
+libraidapi64.a
+libgcc32.a
+libgcc64.a
