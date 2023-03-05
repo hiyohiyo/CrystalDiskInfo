@@ -2284,7 +2284,7 @@ safeRelease:
 	int count = (int)vars.GetCount();
 	if (count > 0)
 	{
-		for (int i = 0; i < count; i++)
+		for (int i = count - 1; i >= 0; i--)
 		{
 			CString model;
 			model = vars[i].Model;
@@ -2661,6 +2661,14 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 			{
 				return FALSE;
 			}
+		}
+
+		if (asi.ModelReverse.Compare(vars[i].Model) == 0 && asi.SerialNumberReverse.Compare(vars[i].SerialNumber) == 0)
+		{
+			CString cstr;
+			cstr.Format(L"Duplicate Check: %s:%s", asi.Model.GetString(), asi.SerialNumber.GetString());
+			DebugPrint(cstr);
+			return FALSE;
 		}
 	}
 

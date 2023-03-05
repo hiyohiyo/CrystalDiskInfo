@@ -75,6 +75,9 @@ public:
 	public:
 	virtual BOOL InitInstance();
 
+	private:
+	HANDLE hMutex{};
+
 // Implementation
 
 	DECLARE_MESSAGE_MAP()

@@ -38,12 +38,12 @@ CDiskInfoApp::CDiskInfoApp()
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
-
 }
 
 CDiskInfoApp::~CDiskInfoApp()
 {
 	GdiplusShutdown(gdiplusToken);
+	safeCloseHandle(hMutex);
 }
 
 // The one and only CDiskInfoApp object
@@ -64,7 +64,6 @@ BOOL CDiskInfoApp::InitInstance()
 	m_bCopyExit = FALSE;
 
 	int defaultDisk = -1;
-	HANDLE hMutex = NULL;
 
 	INITCOMMONCONTROLSEX InitCtrls = { sizeof(INITCOMMONCONTROLSEX) };
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;

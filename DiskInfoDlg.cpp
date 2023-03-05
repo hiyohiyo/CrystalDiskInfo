@@ -154,7 +154,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_bAsciiView = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("AsciiView"), 0, m_Ini);
 	m_bSmartEnglish = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("SmartEnglish"), 0, m_Ini);
 	m_bAlertSound = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("AlertSound"), 1, m_Ini);
-	m_bHideNoSmartDisk = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("HideNoSmartDisk"), 0, m_Ini);
+	m_bHideNoSmartDisk = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("HideNoSmartDisk"), 1, m_Ini);
 	m_bGreenMode = (BOOL) GetPrivateProfileInt(_T("Setting"), _T("GreenMode"), 0, m_Ini);
 	m_bForceDisableDarkMode = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("ForceDisableDarkMode"), 0, m_Ini);
 
