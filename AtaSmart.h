@@ -1930,6 +1930,7 @@ public:
 	BOOL FlagUsbCypress = FALSE;
 	BOOL FlagUsbMemory = FALSE;
 //	BOOL FlagUsbSat16 = FALSE;
+	BOOL FlagUsbNVMeJMicron3 = FALSE;
 	BOOL FlagUsbNVMeJMicron = FALSE;
 	BOOL FlagUsbNVMeASMedia = FALSE;
 	BOOL FlagUsbNVMeRealtek = FALSE;

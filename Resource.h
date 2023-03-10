@@ -892,6 +892,7 @@
 #define ID_USB_DISABLE_ALL              32981
 #define ID_HEALTH_STATUS                32982
 #define ID_EDIT_OPTIONS                 32983
+#define ID_USB_NVME_JMICRON3            32984
 // #define ID_USB_SAT16                    32984
 #define ID_DUMP_IDENTIFY_DEVICE         32985
 #define ID_DUMP_SMART_READ_DATA         32986
