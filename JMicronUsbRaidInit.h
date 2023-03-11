@@ -71,6 +71,8 @@ BOOL InitializeJMS56X(HMODULE* hModule)
 		&& pGetIdentifyInfoJMS56X
 		))
 	{
+		FreeLibrary(*hModule);
+		*hModule = NULL;
 		return FALSE;
 	}
 
@@ -107,6 +109,8 @@ BOOL InitializeJMB39X(HMODULE* hModule)
 		&& pGetIdentifyInfoJMB39X
 		))
 	{
+		FreeLibrary(*hModule);
+		*hModule = NULL;
 		return FALSE;
 	}
 

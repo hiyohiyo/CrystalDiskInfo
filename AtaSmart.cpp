@@ -1436,17 +1436,18 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			{
 				DebugPrint(L"JMS56X");
 
-				InitializeJMS56X(&hJMS56X);
-
-				int count = 0;
-				count = pGetControllerCountJMS56X();
-
-				cstr.Format(L"ControllerCount: %d", count);
-				DebugPrint(cstr);
-
-				for (int i = 0; i < count; i++)
+				if(InitializeJMS56X(&hJMS56X))
 				{
-					AddDiskJMS56X(i);
+					int count = 0;
+					count = pGetControllerCountJMS56X();
+
+					cstr.Format(L"ControllerCount: %d", count);
+					DebugPrint(cstr);
+
+					for (int i = 0; i < count; i++)
+					{
+						AddDiskJMS56X(i);
+					}
 				}
 			}
 
@@ -1454,17 +1455,18 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			{
 				DebugPrint(L"JMB39X");
 
-				InitializeJMB39X(&hJMB39X);
-
-				int count = 0;
-				count = pGetControllerCountJMB39X();
-
-				cstr.Format(L"ControllerCount: %d", count);
-				DebugPrint(cstr);
-
-				for (int i = 0; i < count; i++)
+				if (InitializeJMB39X(&hJMB39X))
 				{
-					AddDiskJMB39X(i);
+					int count = 0;
+					count = pGetControllerCountJMB39X();
+
+					cstr.Format(L"ControllerCount: %d", count);
+					DebugPrint(cstr);
+
+					for (int i = 0; i < count; i++)
+					{
+						AddDiskJMB39X(i);
+					}
 				}
 			}
 #endif
@@ -10456,6 +10458,7 @@ BOOL CAtaSmart::SendAtaCommandMegaRAID(INT scsiPort, INT scsiTargetId, BYTE main
 #ifdef JMICRON_USB_RAID_SUPPORT
 BOOL CAtaSmart::AddDiskJMS56X(INT index)
 {
+	if (! hJMS56X) {	return FALSE; }
 	IDENTIFY_DEVICE identify = { 0 };
 
 	for (int i = 0; i < 5 /*MAX_DISK_IN_CONTROLLER*/; i++)
@@ -10471,6 +10474,7 @@ BOOL CAtaSmart::AddDiskJMS56X(INT index)
 
 BOOL CAtaSmart::DoIdentifyDeviceJMS56X(INT index, BYTE port, IDENTIFY_DEVICE* identify)
 {
+	if (!hJMS56X) { return FALSE; }
 	CString cstr;
 	cstr.Format(L"GetIdentifyInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
@@ -10480,6 +10484,7 @@ BOOL CAtaSmart::DoIdentifyDeviceJMS56X(INT index, BYTE port, IDENTIFY_DEVICE* id
 
 BOOL CAtaSmart::GetSmartInfoJMS56X(INT index, BYTE port, ATA_SMART_INFO* asi)
 {
+	if (!hJMS56X) { return FALSE; }
 	CString cstr;
 	cstr.Format(L"GetSmartInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
@@ -10506,6 +10511,7 @@ BOOL CAtaSmart::GetSmartInfoJMS56X(INT index, BYTE port, ATA_SMART_INFO* asi)
 
 BOOL CAtaSmart::AddDiskJMB39X(INT index)
 {
+	if (!hJMB39X) { return FALSE; }
 	IDENTIFY_DEVICE identify = { 0 };
 
 	for (int i = 0; i < 5 /*MAX_DISK_IN_CONTROLLER*/; i++)
@@ -10521,6 +10527,7 @@ BOOL CAtaSmart::AddDiskJMB39X(INT index)
 
 BOOL CAtaSmart::DoIdentifyDeviceJMB39X(INT index, BYTE port, IDENTIFY_DEVICE* identify)
 {
+	if (!hJMB39X) { return FALSE; }
 	CString cstr;
 	cstr.Format(L"GetIdentifyInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
@@ -10530,6 +10537,7 @@ BOOL CAtaSmart::DoIdentifyDeviceJMB39X(INT index, BYTE port, IDENTIFY_DEVICE* id
 
 BOOL CAtaSmart::GetSmartInfoJMB39X(INT index, BYTE port, ATA_SMART_INFO* asi)
 {
+	if (!hJMB39X) { return FALSE; }
 	CString cstr;
 	cstr.Format(L"GetSmartInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
