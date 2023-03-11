@@ -1818,8 +1818,8 @@
     <ClInclude Include="FontSelectionDlg.h" />
     <ClInclude Include="GraphDlg.h" />
     <ClInclude Include="HealthDlg.h" />
-    <ClInclude Include="JMicronUsbRaidApi.h" />
     <ClInclude Include="JMicronUsbRaidDef.h" />
+    <ClInclude Include="JMicronUsbRaidInit.h" />
     <ClInclude Include="NVMeInterpreter.h" />
     <ClInclude Include="OptionDlg.h" />
     <ClInclude Include="Priscilla\ButtonFx.h" />

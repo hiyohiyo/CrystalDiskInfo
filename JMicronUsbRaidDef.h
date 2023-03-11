@@ -182,7 +182,15 @@ typedef union _UNION_SMART_THRESHOLD
 //
 //-----------------------------------------------------------------------------
 
-// JMicron USB RAID API
-typedef int(WINAPI* _GetControllerCount) ();
-typedef BOOL(WINAPI* _GetSmartInfoFx) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
-typedef BOOL(WINAPI* _GetIdentifyInfoFx) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
+// JMicron JMS56X API
+typedef DWORD(WINAPI* _GetDllVersionJMS56X) (PBYTE major, PBYTE minor, PBYTE revision, PBYTE release);
+typedef int(WINAPI* _GetControllerCountJMS56X) ();
+typedef BOOL(WINAPI* _GetSmartInfoJMS56X) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
+typedef BOOL(WINAPI* _GetIdentifyInfoJMS56X) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
+
+// JMicron JMB39X API
+typedef DWORD(WINAPI* _GetDllVersionJMB39X) (PBYTE major, PBYTE minor, PBYTE revision, PBYTE release);
+typedef int(WINAPI* _GetControllerCountJMB39X) ();
+typedef BOOL(WINAPI* _GetSmartInfoJMB39X) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
+typedef BOOL(WINAPI* _GetIdentifyInfoJMB39X) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
+

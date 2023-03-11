@@ -245,11 +245,11 @@
     <ClInclude Include="JMicronUsbRaidDef.h">
       <Filter>Library Files</Filter>
     </ClInclude>
-    <ClInclude Include="JMicronUsbRaidApi.h">
-      <Filter>Library Files</Filter>
-    </ClInclude>
     <ClInclude Include="CompileOptions.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JMicronUsbRaidInit.h">
+      <Filter>Library Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

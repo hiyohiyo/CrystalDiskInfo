@@ -164,7 +164,9 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagIntelVROC = !GetPrivateProfileInt(_T("Setting"), _T("IntelVROC"), 1, m_Ini);
 
 #ifdef JMICRON_USB_RAID_SUPPORT
-	m_Ata.FlagJMicronUsbRaid = !GetPrivateProfileInt(_T("Setting"), _T("JMicronUsbRaid"), 0, m_Ini); // Default Off
+	m_Ata.FlagJMS56X = !GetPrivateProfileInt(_T("Setting"), _T("JMS56X"), 0, m_Ini); // Default Off
+	m_Ata.FlagJMB39X = !GetPrivateProfileInt(_T("Setting"), _T("JMB39X"), 0, m_Ini); // Default Off
+
 #endif
 
 	OnUsbSat();
@@ -184,7 +186,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnMegaRAID();
 	OnIntelVROC();
 #ifdef JMICRON_USB_RAID_SUPPORT
-	OnJMicronUsbRaid();
+	OnUsbJMS56X();
+	OnUsbJMB39X();
 #endif
 
 	DebugPrint(_T("InitAta"));

@@ -14,6 +14,8 @@
 #include "NVMeInterpreter.h"
 #include "StorageQuery.h"
 
+#define DLL_DIR					    _T("CdiResource\\dll\\")
+
 static const TCHAR* commandTypeString[] =
 {
 	_T("un"),
@@ -41,7 +43,8 @@ static const TCHAR* commandTypeString[] =
 	_T("iv"), // NVMe Intel VROC
 	_T("mr"), // MegaRAID SAS
 	_T("rc"), // +AMD RC2
-	_T("jr"), // JMicron RAID
+	_T("j5"), // JMS56X
+	_T("j3"), // JMB39X
 
 	_T("dg"), // Debug
 };
@@ -335,7 +338,8 @@ public:
 		CMD_TYPE_NVME_INTEL_VROC,
 		CMD_TYPE_MEGARAID,
 		CMD_TYPE_AMD_RC2,// +AMD_RC2
-		CMD_TYPE_JMICRON_USB_RAID,
+		CMD_TYPE_JMS56X,
+		CMD_TYPE_JMB39X,
 		CMD_TYPE_DEBUG
 	};
 
@@ -1939,7 +1943,9 @@ public:
 	BOOL FlagUsbASM1352R = FALSE;
 	BOOL FlagAMD_RC2 = TRUE;// +AMD_RC2
 #ifdef JMICRON_USB_RAID_SUPPORT
-	BOOL FlagJMicronUsbRaid = FALSE;
+	BOOL FlagJMS56X = FALSE;
+	BOOL FlagJMB39X = FALSE;
+
 #endif
 	BOOL FlagNoWakeUp = FALSE;// +M 20211216
 
@@ -1949,6 +1955,8 @@ public:
 
 protected:
 
+	HMODULE hJMS56X{};
+	HMODULE hJMB39X{};
 	// 2023/02/24 Compatible with SIV
 	HANDLE hMutexJMicron{};
 	HANDLE CreateWorldMutex(CONST TCHAR* name);
@@ -2056,9 +2064,13 @@ protected:
 	BOOL SendPassThroughCommandMegaRAID(INT scsiPort, INT scsiTargetId, void* buf, size_t bufsize, const UCHAR Cdb[], UCHAR CdbLength);
 
 #ifdef JMICRON_USB_RAID_SUPPORT
-	BOOL AddDiskJMicronUsbRaid(INT index);
-	BOOL DoIdentifyDeviceJMicronUsbRaid(INT index, BYTE port, IDENTIFY_DEVICE* identify);
-	BOOL GetSmartInfoJMicronUsbRaid(INT index, BYTE port, ATA_SMART_INFO* asi);
+	BOOL AddDiskJMS56X(INT index);
+	BOOL DoIdentifyDeviceJMS56X(INT index, BYTE port, IDENTIFY_DEVICE* identify);
+	BOOL GetSmartInfoJMS56X(INT index, BYTE port, ATA_SMART_INFO* asi);
+
+	BOOL AddDiskJMB39X(INT index);
+	BOOL DoIdentifyDeviceJMB39X(INT index, BYTE port, IDENTIFY_DEVICE* identify);
+	BOOL GetSmartInfoJMB39X(INT index, BYTE port, ATA_SMART_INFO* asi);
 #endif
 
 	DWORD GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &currentTransferMode, CString &maxTransferMode, CString &Interface, INTERFACE_TYPE *interfaceType);

@@ -1385,20 +1385,39 @@ void CDiskInfoDlg::OnUsbASM1352R()
 }
 
 #ifdef JMICRON_USB_RAID_SUPPORT
-void CDiskInfoDlg::OnJMicronUsbRaid()
+void CDiskInfoDlg::OnUsbJMS56X()
 {
 	CMenu* menu = GetMenu();
-	if (m_Ata.FlagJMicronUsbRaid)
+	if (m_Ata.FlagJMS56X)
 	{
-		m_Ata.FlagJMicronUsbRaid = FALSE;
-		menu->CheckMenuItem(ID_JMICRON_USB_RAID, MF_UNCHECKED);
-		WritePrivateProfileStringFx(_T("Setting"), _T("JMicronUsbRaid"), _T("0"), m_Ini);
+		m_Ata.FlagJMS56X = FALSE;
+		menu->CheckMenuItem(ID_USB_JMS56X, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMS56X"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_Ata.FlagJMicronUsbRaid = TRUE;
-		menu->CheckMenuItem(ID_JMICRON_USB_RAID, MF_CHECKED);
-		WritePrivateProfileStringFx(_T("Setting"), _T("JMicronUsbRaid"), _T("1"), m_Ini);
+		m_Ata.FlagJMS56X = TRUE;
+		menu->CheckMenuItem(ID_USB_JMS56X, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMS56X"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
+void CDiskInfoDlg::OnUsbJMB39X()
+{
+	CMenu* menu = GetMenu();
+	if (m_Ata.FlagJMB39X)
+	{
+		m_Ata.FlagJMB39X = FALSE;
+		menu->CheckMenuItem(ID_USB_JMB39X, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMB39X"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagJMB39X = TRUE;
+		menu->CheckMenuItem(ID_USB_JMB39X, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMB39X"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
