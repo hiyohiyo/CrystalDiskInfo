@@ -1618,7 +1618,7 @@ GPL: General Purpose Log\n\
 		m_Feature = L"";
 	}
 
-	m_ModelCapacity = m_Model + _T(" ") + m_Capacity;
+	m_ModelCapacity = m_Model + L" : " + m_Capacity;
 
 	m_CtrlModel.SetToolTipText(m_ModelCapacity + L"\r\n" + m_Ata.vars[i].Enclosure);
 
@@ -1884,6 +1884,8 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	subMenu.ModifyMenu(9, MF_BYPOSITION, 9, cstr);
 	cstr = i18n(_T("Menu"), _T("DRIVE_SORT_METHOD"));
 	subMenu.ModifyMenu(10, MF_BYPOSITION, 10, cstr);
+	cstr = i18n(_T("Menu"), _T("DRIVE_MENU_NUMBER"));
+	subMenu.ModifyMenu(11, MF_BYPOSITION, 11, cstr);
 #ifdef UWP
 	subMenu.EnableMenuItem(7, MF_GRAYED);
 #endif
@@ -1941,6 +1943,14 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	else
 	{
 		OnSortPhysicalDriveId();
+	}
+
+	switch (m_DriveMenuNumber)
+	{
+	case 10: OnDriveMenu10(); break;
+	case 16: OnDriveMenu16(); break;
+	case 20: OnDriveMenu20(); break;
+	default: OnDriveMenu8();  break;
 	}
 
 	cstr = i18n(_T("Menu"), _T("HELP_WEB")) + _T("\tF1");
@@ -2223,11 +2233,33 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		CString cstr;
 		if (m_Ata.vars[i].TotalDiskSize >= 1000)
 		{
-			cstr.Format(_T("(%d) %s %.1f GB"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0);
+			if (! m_Ata.vars[i].DriveMap.IsEmpty())
+			{
+				cstr.Format(_T("(%d) %s : %.1f GB [%s]"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, m_Ata.vars[i].DriveMap.GetString());
+			}
+			else if(m_Ata.vars[i].PhysicalDriveId >= 0)
+			{
+				cstr.Format(_T("(%d) %s : %.1f GB [Disk %d]"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, m_Ata.vars[i].PhysicalDriveId);
+			}
+			else
+			{
+				cstr.Format(_T("(%d) %s : %.1f GB"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0);
+			}
 		}
 		else
 		{
-			cstr.Format(_T("(%d) %s %d MB"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize);
+			if (!m_Ata.vars[i].DriveMap.IsEmpty())
+			{
+				cstr.Format(_T("(%d) %s : %d MB [%s]"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize, m_Ata.vars[i].DriveMap.GetString());
+			}
+			else if (m_Ata.vars[i].PhysicalDriveId >= 0)
+			{
+				cstr.Format(_T("(%d) %s : %d MB [Disk %d]"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize, m_Ata.vars[i].PhysicalDriveId);
+			}
+			else
+			{
+				cstr.Format(_T("(%d) %s : %d MB"), i + 1, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize);
+			}
 		}
 		subMenuInfo.wID = SELECT_DISK_BASE + i;
 		subMenuInfo.dwTypeData = (LPWSTR)cstr.GetString();

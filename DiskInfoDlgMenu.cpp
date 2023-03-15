@@ -1388,15 +1388,15 @@ void CDiskInfoDlg::OnUsbASM1352R()
 void CDiskInfoDlg::OnUsbJMS56X()
 {
 	CMenu* menu = GetMenu();
-	if (m_Ata.FlagJMS56X)
+	if (m_Ata.FlagUsbJMS56X)
 	{
-		m_Ata.FlagJMS56X = FALSE;
+		m_Ata.FlagUsbJMS56X = FALSE;
 		menu->CheckMenuItem(ID_USB_JMS56X, MF_UNCHECKED);
 		WritePrivateProfileStringFx(_T("Setting"), _T("JMS56X"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_Ata.FlagJMS56X = TRUE;
+		m_Ata.FlagUsbJMS56X = TRUE;
 		menu->CheckMenuItem(ID_USB_JMS56X, MF_CHECKED);
 		WritePrivateProfileStringFx(_T("Setting"), _T("JMS56X"), _T("1"), m_Ini);
 	}
@@ -1407,15 +1407,15 @@ void CDiskInfoDlg::OnUsbJMS56X()
 void CDiskInfoDlg::OnUsbJMB39X()
 {
 	CMenu* menu = GetMenu();
-	if (m_Ata.FlagJMB39X)
+	if (m_Ata.FlagUsbJMB39X)
 	{
-		m_Ata.FlagJMB39X = FALSE;
+		m_Ata.FlagUsbJMB39X = FALSE;
 		menu->CheckMenuItem(ID_USB_JMB39X, MF_UNCHECKED);
 		WritePrivateProfileStringFx(_T("Setting"), _T("JMB39X"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_Ata.FlagJMB39X = TRUE;
+		m_Ata.FlagUsbJMB39X = TRUE;
 		menu->CheckMenuItem(ID_USB_JMB39X, MF_CHECKED);
 		WritePrivateProfileStringFx(_T("Setting"), _T("JMB39X"), _T("1"), m_Ini);
 	}
@@ -1434,8 +1434,10 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbJmicron = FALSE;
 	m_Ata.FlagUsbCypress = FALSE;
 	m_Ata.FlagUsbASM1352R = FALSE;
+	m_Ata.FlagUsbJMS56X = FALSE;
+	m_Ata.FlagUsbJMB39X = FALSE;
 	m_Ata.FlagUsbMemory  = FALSE;
-//	m_Ata.FlagUsbSat16 = FALSE;
+	//	m_Ata.FlagUsbSat16 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron3 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron = FALSE;
 	m_Ata.FlagUsbNVMeASMedia = FALSE;
@@ -1448,9 +1450,11 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbProlific();
 	OnUsbJmicron();
 	OnUsbCypress();
+	OnUsbASM1352R();
+	OnUsbJMS56X();
+	OnUsbJMB39X();
 	OnUsbMemory();
 //	OnUsbSat16();
-	OnUsbASM1352R();
 	OnUsbNVMeJMicron3();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
@@ -1467,6 +1471,8 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbJmicron = TRUE;
 	m_Ata.FlagUsbCypress = TRUE;
 	m_Ata.FlagUsbASM1352R = TRUE;
+	m_Ata.FlagUsbJMB39X = TRUE;
+	m_Ata.FlagUsbJMS56X = TRUE;
 	m_Ata.FlagUsbMemory  = TRUE;
 //	m_Ata.FlagUsbSat16 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron3 = TRUE;
@@ -1481,9 +1487,11 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbProlific();
 	OnUsbJmicron();
 	OnUsbCypress();
+	OnUsbASM1352R();
+	OnUsbJMS56X();
+	OnUsbJMB39X();
 	OnUsbMemory();
 //	OnUsbSat16();
-	OnUsbASM1352R();
 	OnUsbNVMeJMicron3();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
@@ -1648,6 +1656,58 @@ void CDiskInfoDlg::OnSortDriveLetter()
 	DrawMenuBar();
 	m_bSortDriveLetter = TRUE;
 	WritePrivateProfileStringFx(_T("Setting"), _T("SortDriveLetter"), _T("1"), m_Ini);
+}
+
+void CDiskInfoDlg::OnDriveMenu8()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_DRIVE_MENU_8, ID_DRIVE_MENU_20, ID_DRIVE_MENU_8, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+
+	m_DriveMenuNumber = 8;
+	m_bHalfDriveMenu = FALSE;
+	
+	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("8"), m_Ini);
+}
+
+void CDiskInfoDlg::OnDriveMenu10()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_DRIVE_MENU_8, ID_DRIVE_MENU_20, ID_DRIVE_MENU_10, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+
+	m_DriveMenuNumber = 10;
+	m_bHalfDriveMenu = FALSE;
+
+	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("10"), m_Ini);
+}
+
+void CDiskInfoDlg::OnDriveMenu16()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_DRIVE_MENU_8, ID_DRIVE_MENU_20, ID_DRIVE_MENU_16, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+
+	m_DriveMenuNumber = 16;
+	m_bHalfDriveMenu = TRUE;
+
+	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("16"), m_Ini);
+}
+
+void CDiskInfoDlg::OnDriveMenu20()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_DRIVE_MENU_8, ID_DRIVE_MENU_20, ID_DRIVE_MENU_20, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+
+	m_DriveMenuNumber = 20;
+	m_bHalfDriveMenu = TRUE;
+
+	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("20"), m_Ini);
 }
 
 void CDiskInfoDlg::OnZoom100()

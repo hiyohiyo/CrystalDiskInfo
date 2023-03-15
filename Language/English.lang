@@ -115,6 +115,7 @@ SAVE_IMAGE=&Save (image)
 DRIVE_SORT_METHOD=Drive Sort Method
 PHYSICAL_DRIVE_ID=Physical Drive ID
 DRIVE_LETTER=Drive Letter
+DRIVE_MENU_NUMBER=Display Number of Drives
 
 [TrayMenu]
 EXIT=Exit

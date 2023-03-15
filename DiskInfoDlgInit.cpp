@@ -145,6 +145,14 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	default:	OnSortPhysicalDriveId(); break;
 	}
 
+	switch (GetPrivateProfileInt(_T("Setting"), _T("DriveMenu"), 8, m_Ini))
+	{
+	case   10:	OnDriveMenu10();	break;
+	case   16:	OnDriveMenu16();	break;
+	case   20:	OnDriveMenu20();	break;
+	default:	OnDriveMenu8(); 	break;
+	}
+
 	// USB/IEEE1394 Support
 	m_Ata.FlagUsbSat     = ! GetPrivateProfileInt(_T("USB"), _T("SAT"), 1, m_Ini);
 	m_Ata.FlagUsbIodata  = ! GetPrivateProfileInt(_T("USB"), _T("IODATA"), 1, m_Ini);
@@ -731,7 +739,14 @@ void CDiskInfoDlg::InitDriveList()
 		for(int i = m_Ata.vars.GetCount() % 8; i < 8; i++)
 		{
 			m_LiDisk[i] = _T("");
-			m_ButtonDisk[i].ReloadImage(IP(L"noDisk"), 1);
+			if (m_bHalfDriveMenu)
+			{
+				m_ButtonDisk[i].ReloadImage(IP(L"noDisk"), 1);
+			}
+			else
+			{
+				m_ButtonDisk[i].ReloadImage(IP(L"noDiskMini"), 1);
+			}
 			m_ButtonDisk[i].SetToolTipText(L"");
 		//	m_ButtonDisk[i].EnableWindow(FALSE);
 			m_ButtonDisk[i].SetHandCursor(FALSE);
@@ -770,6 +785,14 @@ void CDiskInfoDlg::InitDriveList()
 
 		diskStatus = GetDiskStatus(m_Ata.vars[i].DiskStatus);
 		className = GetDiskStatusClass(m_Ata.vars[i].DiskStatus);
+
+		if (m_bHalfDriveMenu)
+		{
+			className += L"Mini";
+			diskStatus = L" ";
+			driveLetter.Replace(L":", L"");
+			driveLetter.Replace(L" ", L"");	
+		}
 
 		if(m_SelectDisk == i)
 		{

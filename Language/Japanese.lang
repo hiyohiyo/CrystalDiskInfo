@@ -113,6 +113,7 @@ SAVE_IMAGE=保存(画像)(&S)
 DRIVE_SORT_METHOD=ドライブソート方法
 PHYSICAL_DRIVE_ID=物理ドライブID
 DRIVE_LETTER=ドライブレター
+DRIVE_MENU_NUMBER=ドライブ表示台数
 
 [TrayMenu]
 EXIT=終了

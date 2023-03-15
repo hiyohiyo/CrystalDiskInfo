@@ -372,6 +372,18 @@ void CDiskInfoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_DISK5, m_ButtonDisk[5]);
 	DDX_Control(pDX, IDC_BUTTON_DISK6, m_ButtonDisk[6]);
 	DDX_Control(pDX, IDC_BUTTON_DISK7, m_ButtonDisk[7]);
+	DDX_Control(pDX, IDC_BUTTON_DISK8, m_ButtonDisk[8]);
+	DDX_Control(pDX, IDC_BUTTON_DISK9, m_ButtonDisk[9]);
+	DDX_Control(pDX, IDC_BUTTON_DISK10, m_ButtonDisk[10]);
+	DDX_Control(pDX, IDC_BUTTON_DISK11, m_ButtonDisk[11]);
+	DDX_Control(pDX, IDC_BUTTON_DISK12, m_ButtonDisk[12]);
+	DDX_Control(pDX, IDC_BUTTON_DISK13, m_ButtonDisk[13]);
+	DDX_Control(pDX, IDC_BUTTON_DISK14, m_ButtonDisk[14]);
+	DDX_Control(pDX, IDC_BUTTON_DISK15, m_ButtonDisk[15]);
+	DDX_Control(pDX, IDC_BUTTON_DISK16, m_ButtonDisk[16]);
+	DDX_Control(pDX, IDC_BUTTON_DISK17, m_ButtonDisk[17]);
+	DDX_Control(pDX, IDC_BUTTON_DISK18, m_ButtonDisk[18]);
+	DDX_Control(pDX, IDC_BUTTON_DISK19, m_ButtonDisk[19]);
 
 	DDX_Control(pDX, IDC_BUTTON_PRE_DISK, m_CtrlButtonPreDisk);
 	DDX_Control(pDX, IDC_BUTTON_NEXT_DISK, m_CtrlButtonNextDisk);
@@ -416,6 +428,18 @@ void CDiskInfoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_BUTTON_DISK5, m_LiDisk[5]);
 	DDX_Text(pDX, IDC_BUTTON_DISK6, m_LiDisk[6]);
 	DDX_Text(pDX, IDC_BUTTON_DISK7, m_LiDisk[7]);
+	DDX_Text(pDX, IDC_BUTTON_DISK8, m_LiDisk[8]);
+	DDX_Text(pDX, IDC_BUTTON_DISK9, m_LiDisk[9]);
+	DDX_Text(pDX, IDC_BUTTON_DISK10, m_LiDisk[10]);
+	DDX_Text(pDX, IDC_BUTTON_DISK11, m_LiDisk[11]);
+	DDX_Text(pDX, IDC_BUTTON_DISK12, m_LiDisk[12]);
+	DDX_Text(pDX, IDC_BUTTON_DISK13, m_LiDisk[13]);
+	DDX_Text(pDX, IDC_BUTTON_DISK14, m_LiDisk[14]);
+	DDX_Text(pDX, IDC_BUTTON_DISK15, m_LiDisk[15]);
+	DDX_Text(pDX, IDC_BUTTON_DISK16, m_LiDisk[16]);
+	DDX_Text(pDX, IDC_BUTTON_DISK17, m_LiDisk[17]);
+	DDX_Text(pDX, IDC_BUTTON_DISK18, m_LiDisk[18]);
+	DDX_Text(pDX, IDC_BUTTON_DISK19, m_LiDisk[19]);
 
 	DDX_Text(pDX, IDC_LABEL_FIRMWARE, m_LabelFirmware);
 	DDX_Text(pDX, IDC_LABEL_SERIAL_NUMBER, m_LabelSerialNumber);
@@ -640,7 +664,6 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_HELP, &CDiskInfoDlg::OnHelp)
 	ON_COMMAND(ID_CUSTOMIZE, &CDiskInfoDlg::OnCustomize)
 	ON_COMMAND(ID_STARTUP, &CDiskInfoDlg::OnStartup)
-	ON_COMMAND(ID_NARROW_DRIVE_MENU, &CDiskInfoDlg::OnNarrowDriveMenu)
 	ON_COMMAND(ID_WAIT_0_SEC, &CDiskInfoDlg::OnWait0Sec)
 	ON_COMMAND(ID_WAIT_5_SEC, &CDiskInfoDlg::OnWait5Sec)
 	ON_COMMAND(ID_WAIT_10_SEC, &CDiskInfoDlg::OnWait10Sec)
@@ -703,6 +726,10 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_RESIDENT_MINIMIZE, &CDiskInfoDlg::OnResidentMinimize)
 	ON_COMMAND(ID_SORT_PHYSICAL_DRIVE_ID, &CDiskInfoDlg::OnSortPhysicalDriveId)
 	ON_COMMAND(ID_SORT_DRIVE_LETTER, &CDiskInfoDlg::OnSortDriveLetter)
+	ON_COMMAND(ID_DRIVE_MENU_8, &CDiskInfoDlg::OnDriveMenu8)
+	ON_COMMAND(ID_DRIVE_MENU_10, &CDiskInfoDlg::OnDriveMenu10)
+	ON_COMMAND(ID_DRIVE_MENU_16, &CDiskInfoDlg::OnDriveMenu16)
+	ON_COMMAND(ID_DRIVE_MENU_20, &CDiskInfoDlg::OnDriveMenu20)
 	ON_COMMAND(ID_ZOOM_100, &CDiskInfoDlg::OnZoom100)
 	ON_COMMAND(ID_ZOOM_125, &CDiskInfoDlg::OnZoom125)
 	ON_COMMAND(ID_ZOOM_150, &CDiskInfoDlg::OnZoom150)
@@ -737,6 +764,19 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_BN_CLICKED(IDC_BUTTON_DISK5, &CDiskInfoDlg::OnBnClickedButtonDisk5)
 	ON_BN_CLICKED(IDC_BUTTON_DISK6, &CDiskInfoDlg::OnBnClickedButtonDisk6)
 	ON_BN_CLICKED(IDC_BUTTON_DISK7, &CDiskInfoDlg::OnBnClickedButtonDisk7)
+	ON_BN_CLICKED(IDC_BUTTON_DISK8, &CDiskInfoDlg::OnBnClickedButtonDisk8)
+	ON_BN_CLICKED(IDC_BUTTON_DISK9, &CDiskInfoDlg::OnBnClickedButtonDisk9)
+	ON_BN_CLICKED(IDC_BUTTON_DISK10, &CDiskInfoDlg::OnBnClickedButtonDisk10)
+	ON_BN_CLICKED(IDC_BUTTON_DISK11, &CDiskInfoDlg::OnBnClickedButtonDisk11)
+	ON_BN_CLICKED(IDC_BUTTON_DISK12, &CDiskInfoDlg::OnBnClickedButtonDisk12)
+	ON_BN_CLICKED(IDC_BUTTON_DISK13, &CDiskInfoDlg::OnBnClickedButtonDisk13)
+	ON_BN_CLICKED(IDC_BUTTON_DISK14, &CDiskInfoDlg::OnBnClickedButtonDisk14)
+	ON_BN_CLICKED(IDC_BUTTON_DISK15, &CDiskInfoDlg::OnBnClickedButtonDisk15)
+	ON_BN_CLICKED(IDC_BUTTON_DISK16, &CDiskInfoDlg::OnBnClickedButtonDisk16)
+	ON_BN_CLICKED(IDC_BUTTON_DISK17, &CDiskInfoDlg::OnBnClickedButtonDisk17)
+	ON_BN_CLICKED(IDC_BUTTON_DISK18, &CDiskInfoDlg::OnBnClickedButtonDisk18)
+	ON_BN_CLICKED(IDC_BUTTON_DISK19, &CDiskInfoDlg::OnBnClickedButtonDisk19)
+
 	ON_BN_CLICKED(IDC_BUTTON_PRE_DISK, &CDiskInfoDlg::OnBnClickedButtonPreDisk)
 	ON_BN_CLICKED(IDC_BUTTON_NEXT_DISK, &CDiskInfoDlg::OnBnClickedButtonNextDisk)
 	ON_BN_CLICKED(IDC_BUTTON_HEALTH_STATUS, &CDiskInfoDlg::OnBnClickedButtonHealthStatus)
@@ -1044,7 +1084,7 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	else if(SELECT_DISK_BASE <= wParam && wParam < (WPARAM)SELECT_DISK_BASE + CAtaSmart::MAX_DISK)
 	{
 		int i = (int)(wParam - SELECT_DISK_BASE);
-		m_DriveMenuPage = i / 8;
+		m_DriveMenuPage = i / m_DriveMenuNumber;
 		SelectDrive(i);
 	}
 	else if(AUTO_REFRESH_TARGET_BASE <= wParam && wParam <= (WPARAM)AUTO_REFRESH_TARGET_BASE + CAtaSmart::MAX_DISK + 1)
@@ -1207,12 +1247,36 @@ void CDiskInfoDlg::UpdateDialogSize()
 #endif
 
 	int buttonDiskHeight = 48;
+	/*
 	if(m_bHighContrast){ buttonDiskHeight = 56;}
 	for(int i = 0; i < 8; i++)
 	{
 		m_ButtonDisk[i].InitControl(84 * i + m_OffsetX, 0, 84, buttonDiskHeight, m_ZoomRatio, &m_BkDC, IP(L"noDisk"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
 		m_ButtonDisk[i].SetMargin(0, 0, 3, 0, m_ZoomRatio);
 		m_ButtonDisk[i].SetHandCursor(TRUE);
+	}
+	*/
+
+// TEMP
+#define DRIVE_MENU_SIZE 80
+
+	if (m_bHalfDriveMenu)
+	{
+		for (DWORD i = 0; i < m_DriveMenuNumber; i++)
+		{
+			m_ButtonDisk[i].InitControl(DRIVE_MENU_SIZE / 2 * i + m_OffsetX, 0, DRIVE_MENU_SIZE / 2, buttonDiskHeight, m_ZoomRatio, &m_BkDC, IP(L"noDiskMini"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
+			m_ButtonDisk[i].SetMargin(3, 0, 3, 0, m_ZoomRatio);
+			m_ButtonDisk[i].SetHandCursor(TRUE);
+		}
+	}
+	else
+	{
+		for (DWORD i = 0; i < m_DriveMenuNumber; i++)
+		{
+			m_ButtonDisk[i].InitControl(DRIVE_MENU_SIZE * i + m_OffsetX, 0, DRIVE_MENU_SIZE, buttonDiskHeight, m_ZoomRatio, &m_BkDC, IP(L"noDisk"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
+			m_ButtonDisk[i].SetMargin(3, 0, 3, 0, m_ZoomRatio);
+			m_ButtonDisk[i].SetHandCursor(TRUE);
+		}
 	}
 
 	InitDriveList();
@@ -2320,6 +2384,18 @@ void CDiskInfoDlg::OnBnClickedButtonDisk4(){SelectDrive(4 + m_DriveMenuPage * 8)
 void CDiskInfoDlg::OnBnClickedButtonDisk5(){SelectDrive(5 + m_DriveMenuPage * 8);}
 void CDiskInfoDlg::OnBnClickedButtonDisk6(){SelectDrive(6 + m_DriveMenuPage * 8);}
 void CDiskInfoDlg::OnBnClickedButtonDisk7(){SelectDrive(7 + m_DriveMenuPage * 8);}
+void CDiskInfoDlg::OnBnClickedButtonDisk8() { SelectDrive(8 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk9() { SelectDrive(9 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk10() { SelectDrive(10 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk11() { SelectDrive(11 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk12() { SelectDrive(12 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk13() { SelectDrive(13 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk14() { SelectDrive(14 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk15() { SelectDrive(15 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk16() { SelectDrive(16 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk17() { SelectDrive(17 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk18() { SelectDrive(18 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnBnClickedButtonDisk19() { SelectDrive(19 + m_DriveMenuPage * m_DriveMenuNumber); }
 
 void CDiskInfoDlg::SetControlFont()
 {

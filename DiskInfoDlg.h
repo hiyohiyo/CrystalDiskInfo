@@ -124,7 +124,7 @@ protected:
 	CListCtrlFx			m_List;
 	CImageList			m_ImageList;
 
-	CButtonFx			m_ButtonDisk[8];
+	CButtonFx			m_ButtonDisk[20];
 
 	CButtonFx			m_CtrlButtonPreDisk;
 	CButtonFx			m_CtrlButtonNextDisk;
@@ -224,12 +224,15 @@ protected:
 	BOOL m_bHideNoSmartDisk;
 	BOOL m_bForceDisableDarkMode;
 	BOOL m_bSortDriveLetter;
+	BOOL m_bHalfDriveMenu;
+
+	DWORD m_DriveMenuNumber;
 
 	BOOL AddTemperatureIcon(DWORD index);
 	BOOL RemoveTemperatureIcon(DWORD index);
 	BOOL ModifyTemperatureIcon(DWORD index);
 
-	CString m_LiDisk[8];
+	CString m_LiDisk[20];
 
 	CString m_Model;
 	CString m_ModelCapacity;
@@ -630,7 +633,10 @@ public:
 	afx_msg void OnResidentHide();
 	afx_msg void OnSortPhysicalDriveId();
 	afx_msg void OnSortDriveLetter();
-
+	afx_msg void OnDriveMenu8();
+	afx_msg void OnDriveMenu10();
+	afx_msg void OnDriveMenu16();
+	afx_msg void OnDriveMenu20();
 	afx_msg void OnZoom100();
 	afx_msg void OnZoom125();
 	afx_msg void OnZoom150();
@@ -664,6 +670,19 @@ public:
 	afx_msg void OnBnClickedButtonDisk5();
 	afx_msg void OnBnClickedButtonDisk6();
 	afx_msg void OnBnClickedButtonDisk7();
+	afx_msg void OnBnClickedButtonDisk8();
+	afx_msg void OnBnClickedButtonDisk9();
+	afx_msg void OnBnClickedButtonDisk10();
+	afx_msg void OnBnClickedButtonDisk11();
+	afx_msg void OnBnClickedButtonDisk12();
+	afx_msg void OnBnClickedButtonDisk13();
+	afx_msg void OnBnClickedButtonDisk14();
+	afx_msg void OnBnClickedButtonDisk15();
+	afx_msg void OnBnClickedButtonDisk16();
+	afx_msg void OnBnClickedButtonDisk17();
+	afx_msg void OnBnClickedButtonDisk18();
+	afx_msg void OnBnClickedButtonDisk19();
+
 	afx_msg void OnBnClickedButtonPreDisk();
 	afx_msg void OnBnClickedButtonNextDisk();
 	afx_msg void OnBnClickedButtonHealthStatus();

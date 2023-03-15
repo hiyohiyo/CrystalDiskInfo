@@ -650,14 +650,6 @@
 #define IDC_LABEL_SERIAL_NUMBER         1016
 #define IDC_VALUE_INTERFACE             1017
 #define IDC_LABEL_INTERFACE             1018
-#define IDC_BUTTON_DISK0                1020
-#define IDC_BUTTON_DISK1                1021
-#define IDC_BUTTON_DISK2                1022
-#define IDC_BUTTON_DISK3                1023
-#define IDC_BUTTON_DISK4                1024
-#define IDC_BUTTON_DISK5                1025
-#define IDC_BUTTON_DISK6                1026
-#define IDC_BUTTON_DISK7                1027
 #define IDC_VALUE_TRANSFER_MODE         1028
 #define IDC_LABEL_TRANSFER_MODE         1029
 #define IDC_LABEL_DRIVE_MAP             1030
@@ -761,6 +753,27 @@
 #define IDC_SET_DEFAULT					1208
 
 
+#define IDC_BUTTON_DISK0                1220
+#define IDC_BUTTON_DISK1                1221
+#define IDC_BUTTON_DISK2                1222
+#define IDC_BUTTON_DISK3                1223
+#define IDC_BUTTON_DISK4                1224
+#define IDC_BUTTON_DISK5                1225
+#define IDC_BUTTON_DISK6                1226
+#define IDC_BUTTON_DISK7                1227
+#define IDC_BUTTON_DISK8                1228
+#define IDC_BUTTON_DISK9                1229
+#define IDC_BUTTON_DISK10               1230
+#define IDC_BUTTON_DISK11               1231
+#define IDC_BUTTON_DISK12               1232
+#define IDC_BUTTON_DISK13               1233
+#define IDC_BUTTON_DISK14               1234
+#define IDC_BUTTON_DISK15               1235
+#define IDC_BUTTON_DISK16               1236
+#define IDC_BUTTON_DISK17               1237
+#define IDC_BUTTON_DISK18               1238
+#define IDC_BUTTON_DISK19               1239
+
 #define ID_EXIT                         32771
 #define ID_ABOUT                        32772
 #define ID_CRYSTALDEWWORLD              32773
@@ -837,6 +850,7 @@
 #define ID_CUSTOMIZE                    32909
 #define ID_BETA_STARTUP                 32911
 #define ID_STARTUP                      32912
+
 #define ID_WAIT_TIME_AT_STARTUP         32914
 #define ID_WAIT_0_SEC                   32915
 #define ID_WAIT_5_SEC                   32916
@@ -1020,12 +1034,17 @@
 #define ID_USB_JMB39X                   33140
 #define ID_INTEL_VROC                   33141
 
+#define ID_DRIVE_MENU_8                 33142
+#define ID_DRIVE_MENU_10                33143
+#define ID_DRIVE_MENU_16                33144
+#define ID_DRIVE_MENU_20                33145
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        171
-#define _APS_NEXT_COMMAND_VALUE         33142
+#define _APS_NEXT_COMMAND_VALUE         33146
 #define _APS_NEXT_CONTROL_VALUE         1101
 #define _APS_NEXT_SYMED_VALUE           111
 #endif
