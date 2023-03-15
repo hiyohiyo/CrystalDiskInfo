@@ -1432,7 +1432,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 			// JMicron USB RAID
 			///////////////////////////////
 #ifdef JMICRON_USB_RAID_SUPPORT
-			if (FlagJMS56X)
+			if (FlagUsbJMS56X)
 			{
 				DebugPrint(L"JMS56X");
 
@@ -1451,7 +1451,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				}
 			}
 
-			if (FlagJMB39X)
+			if (FlagUsbJMB39X)
 			{
 				DebugPrint(L"JMB39X");
 
@@ -6056,7 +6056,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 
 		debug.Format(_T("DoIdentifyDeviceNVMeStorageQuery"));
 		DebugPrint(debug);
-		if (m_bNVMeStorageQuery && DoIdentifyDeviceNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &identify))
+		if (m_bNVMeStorageQuery && DoIdentifyDeviceNVMeStorageQuery(physicalDriveId, scsiPort, scsiTargetId, &identify, &diskSize))
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_STORAGE_QUERY"));
 			DebugPrint(debug);
@@ -8201,7 +8201,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeIntelVroc(INT physicalDriveId, INT scsiPort
 // Reference: http://naraeon.net/en/archives/1338
 /*---------------------------------------------------------------------------*/
 
-BOOL CAtaSmart::DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
+BOOL CAtaSmart::DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize)
 {
 	CString path;
 	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
@@ -8217,11 +8217,32 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPo
 	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeIdentify;
 	nptwb.ProtocolSpecific.ProtocolDataOffset = sizeof(StorageQuery::TStorageProtocolSpecificData);
 	nptwb.ProtocolSpecific.ProtocolDataLength = 4096;
-	nptwb.ProtocolSpecific.ProtocolDataRequestValue = 1; /*NVME_IDENTIFY_CNS_CONTROLLER*/
-	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0;
+	nptwb.ProtocolSpecific.ProtocolDataRequestValue = 0;
+	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 1;
 	nptwb.Query.PropertyId = StorageQuery::StorageAdapterProtocolSpecificProperty;
 	nptwb.Query.QueryType = StorageQuery::PropertyStandardQuery;
 	DWORD dwReturned = 0;
+	
+	bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
+		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
+
+	if (bRet)
+	{
+		ULONG64 totalLBA = *(ULONG64*)&nptwb.Buffer[0];
+		int sectorSize = 1 << nptwb.Buffer[130];
+		*diskSize = (DWORD)(totalLBA * sectorSize / 1000 / 1000);
+	}
+
+	ZeroMemory(&nptwb, sizeof(nptwb));
+	nptwb.ProtocolSpecific.ProtocolType = StorageQuery::ProtocolTypeNvme;
+	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeIdentify;
+	nptwb.ProtocolSpecific.ProtocolDataOffset = sizeof(StorageQuery::TStorageProtocolSpecificData);
+	nptwb.ProtocolSpecific.ProtocolDataLength = 4096;
+	nptwb.Query.PropertyId = StorageQuery::StorageAdapterProtocolSpecificProperty;
+	nptwb.Query.QueryType = StorageQuery::PropertyStandardQuery;
+	nptwb.ProtocolSpecific.ProtocolDataRequestValue = 1; /*NVME_IDENTIFY_CNS_CONTROLLER*/
+	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0;
+	dwReturned = 0;
 
 	bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
 		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);

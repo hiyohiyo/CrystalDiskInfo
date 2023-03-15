@@ -164,8 +164,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagIntelVROC = !GetPrivateProfileInt(_T("Setting"), _T("IntelVROC"), 1, m_Ini);
 
 #ifdef JMICRON_USB_RAID_SUPPORT
-	m_Ata.FlagJMS56X = !GetPrivateProfileInt(_T("Setting"), _T("JMS56X"), 0, m_Ini); // Default Off
-	m_Ata.FlagJMB39X = !GetPrivateProfileInt(_T("Setting"), _T("JMB39X"), 0, m_Ini); // Default Off
+	m_Ata.FlagUsbJMS56X = !GetPrivateProfileInt(_T("Setting"), _T("JMS56X"), 0, m_Ini); // Default Off
+	m_Ata.FlagUsbJMB39X = !GetPrivateProfileInt(_T("Setting"), _T("JMB39X"), 0, m_Ini); // Default Off
 
 #endif
 
@@ -832,11 +832,11 @@ void CDiskInfoDlg::InitDriveList()
 
 			if(m_Ata.vars[i].PhysicalDriveId >= 0)
 			{
-				cstr.Format(_T("Disk %d : %s %.1f GB\n%s"), m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i).GetString());
+				cstr.Format(_T("Disk %d : %s : %.1f GB\n%s"), m_Ata.vars[i].PhysicalDriveId, m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i).GetString());
 			}
 			else
 			{
-				cstr.Format(_T("Disk -- : %s %.1f GB\n%s"), m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i).GetString());
+				cstr.Format(_T("Disk -- : %s : %.1f GB\n%s"), m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i).GetString());
 			}
 			
 			m_ButtonDisk[i % 8].SetToolTipText(cstr);

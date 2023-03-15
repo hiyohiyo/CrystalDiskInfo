@@ -1069,6 +1069,8 @@ BEGIN
         MENUITEM "Hide Serial Number",              ID_HIDE_SERIAL_NUMBER
         MENUITEM "Resident",                        ID_RESIDENT
         MENUITEM "Startup",                         ID_STARTUP
+        MENUITEM "Narrow Drive Menu",               ID_NARROW_DRIVE_MENU
+
         MENUITEM SEPARATOR
         POPUP "Alert Features"
         BEGIN
@@ -1141,21 +1143,22 @@ BEGIN
                 MENUITEM "SCSI_ATA_TRANSLATION (SAT)",  ID_USB_SAT
                 MENUITEM "I-O DATA",                    ID_USB_IODATA
                 MENUITEM "Sunplus",                     ID_USB_SUNPLUS
-                MENUITEM "Logitec",                    ID_USB_LOGITEC
+                MENUITEM "Logitec",                     ID_USB_LOGITEC
 				MENUITEM "Prolific",                    ID_USB_PROLIFIC
                 MENUITEM "JMicron",                     ID_USB_JMICRON
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
-                MENUITEM "ASM1352R",                    ID_USB_ASM1352R
-                MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
-//                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16
-                MENUITEM "SCSI_NVME_TRANSLATION (JMicron)",            ID_USB_NVME_JMICRON3
-		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron/Compatible)", ID_USB_NVME_JMICRON
-                MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA
-				MENUITEM "SCSI_NVME_TRANSLATION (Realtek)",            ID_USB_NVME_REALTEK
+                MENUITEM "ASMedia ASM1352R",            ID_USB_ASM1352R
 #ifdef JMICRON_USB_RAID_SUPPORT
                 MENUITEM "JMicron JMS56X",              ID_USB_JMS56X
                 MENUITEM "JMicron JMB39X",              ID_USB_JMB39X
-#endif
+#endif 
+                MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
+//                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16
+                MENUITEM "SCSI_NVME_TRANSLATION (JMicron for USB3/4)",   ID_USB_NVME_JMICRON3
+		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron for USB2/3/4)", ID_USB_NVME_JMICRON
+                MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA
+				MENUITEM "SCSI_NVME_TRANSLATION (Realtek)",            ID_USB_NVME_REALTEK
+
                 MENUITEM SEPARATOR
                 MENUITEM "Enable All",                  ID_USB_ENABLE_ALL
                 MENUITEM "Disable All",                 ID_USB_DISABLE_ALL

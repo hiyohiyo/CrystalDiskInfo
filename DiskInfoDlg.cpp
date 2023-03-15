@@ -157,6 +157,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_bHideNoSmartDisk = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("HideNoSmartDisk"), 1, m_Ini);
 	m_bGreenMode = (BOOL) GetPrivateProfileInt(_T("Setting"), _T("GreenMode"), 0, m_Ini);
 	m_bForceDisableDarkMode = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("ForceDisableDarkMode"), 0, m_Ini);
+	m_bNarrowDriveMenu = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("NarrowDriveMenu"), 0, m_Ini);
 
 	if((BOOL)GetPrivateProfileInt(_T("Workaround"), _T("ExecFailed"), 0, m_Ini))
 	{
@@ -639,6 +640,7 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_HELP, &CDiskInfoDlg::OnHelp)
 	ON_COMMAND(ID_CUSTOMIZE, &CDiskInfoDlg::OnCustomize)
 	ON_COMMAND(ID_STARTUP, &CDiskInfoDlg::OnStartup)
+	ON_COMMAND(ID_NARROW_DRIVE_MENU, &CDiskInfoDlg::OnNarrowDriveMenu)
 	ON_COMMAND(ID_WAIT_0_SEC, &CDiskInfoDlg::OnWait0Sec)
 	ON_COMMAND(ID_WAIT_5_SEC, &CDiskInfoDlg::OnWait5Sec)
 	ON_COMMAND(ID_WAIT_10_SEC, &CDiskInfoDlg::OnWait10Sec)

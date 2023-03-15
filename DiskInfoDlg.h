@@ -196,6 +196,7 @@ protected:
 	BOOL m_bTrayMainIcon;
 
 	// Options
+	BOOL m_bNarrowDriveMenu;
 	BOOL m_bStartupExit;
 	BOOL m_bHideSmartInfo;
 	BOOL m_bHideSerialNumber;
@@ -568,6 +569,7 @@ public:
 	afx_msg void OnHelp();
 	afx_msg void OnCustomize();
 	afx_msg void OnStartup();
+	afx_msg void OnNarrowDriveMenu();
 	afx_msg void OnWait0Sec();
 	afx_msg void OnWait5Sec();
 	afx_msg void OnWait10Sec();

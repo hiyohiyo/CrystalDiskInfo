@@ -1943,9 +1943,8 @@ public:
 	BOOL FlagUsbASM1352R = FALSE;
 	BOOL FlagAMD_RC2 = TRUE;// +AMD_RC2
 #ifdef JMICRON_USB_RAID_SUPPORT
-	BOOL FlagJMS56X = FALSE;
-	BOOL FlagJMB39X = FALSE;
-
+	BOOL FlagUsbJMS56X = FALSE;
+	BOOL FlagUsbJMB39X = FALSE;
 #endif
 	BOOL FlagNoWakeUp = FALSE;// +M 20211216
 
@@ -2021,7 +2020,7 @@ protected:
 	BOOL DoIdentifyDeviceNVMeIntelVroc(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize);
 	BOOL GetSmartAttributeNVMeIntelVroc(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
-	BOOL DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
+	BOOL DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize);
 	BOOL GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	BOOL DoIdentifyDeviceScsi(INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
