@@ -734,28 +734,33 @@ void CDiskInfoDlg::InitDriveList()
 {
 	CString cstr;
 	CString delimiter;
-	if (m_Ata.vars.GetCount() / 8 == m_DriveMenuPage)
+	CString mini = L"";
+
+	if (m_bHalfDriveMenu)
 	{
-		for(int i = m_Ata.vars.GetCount() % 8; i < 8; i++)
+		mini = L"Mini";
+	}
+
+	if (m_Ata.vars.GetCount() / m_DriveMenuNumber == m_DriveMenuPage)
+	{
+		for(int i = m_Ata.vars.GetCount() % m_DriveMenuNumber; i < m_DriveMenuNumber; i++)
 		{
 			m_LiDisk[i] = _T("");
-			if (m_bHalfDriveMenu)
-			{
-				m_ButtonDisk[i].ReloadImage(IP(L"noDisk"), 1);
-			}
-			else
-			{
-				m_ButtonDisk[i].ReloadImage(IP(L"noDiskMini"), 1);
-			}
+			m_ButtonDisk[i].ReloadImage(IP(L"noDisk" + mini), 1);
 			m_ButtonDisk[i].SetToolTipText(L"");
 		//	m_ButtonDisk[i].EnableWindow(FALSE);
 			m_ButtonDisk[i].SetHandCursor(FALSE);
 		}
 	}
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < m_DriveMenuNumber; i++)
 	{
+		m_ButtonDisk[i].ShowWindow(SW_SHOW);
 		m_ButtonDisk[i].SetSelected(FALSE);
+	}
+	for (int i = m_DriveMenuNumber; i < 20; i++)
+	{
+		m_ButtonDisk[i].ShowWindow(SW_HIDE);
 	}
 
 	delimiter = _T("\r\n");
@@ -796,24 +801,24 @@ void CDiskInfoDlg::InitDriveList()
 
 		if(m_SelectDisk == i)
 		{
-			m_ButtonDisk[i % 8].SetSelected(TRUE);
+			m_ButtonDisk[i % m_DriveMenuNumber].SetSelected(TRUE);
 		}
 
 		// DriveMenu
-		if(i / 8 == m_DriveMenuPage)
+		if(i / m_DriveMenuNumber == m_DriveMenuPage)
 		{
 			CString targetDisk;
-			targetDisk.Format(_T("Disk%d"), i % 8);
+			targetDisk.Format(_T("Disk%d"), i % m_DriveMenuNumber);
 			if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME && m_Ata.vars[i].Temperature > -300)
 			{
 				if (m_bFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s%d °F%s%s"),
+					m_LiDisk[i % m_DriveMenuNumber].Format(_T("%s%s%d °F%s%s"),
 						diskStatus.GetString(), delimiter.GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter.GetString(), driveLetter.GetString());
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s%d °C%s%s"),
+					m_LiDisk[i % m_DriveMenuNumber].Format(_T("%s%s%d °C%s%s"),
 						diskStatus.GetString(), delimiter.GetString(), m_Ata.vars[i].Temperature, delimiter.GetString(), driveLetter.GetString());
 				}
 			}
@@ -821,12 +826,12 @@ void CDiskInfoDlg::InitDriveList()
 			{
 				if(m_bFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s%d °F%s%s"), 
+					m_LiDisk[i % m_DriveMenuNumber].Format(_T("%s%s%d °F%s%s"),
 								diskStatus.GetString(), delimiter.GetString(), m_Ata.vars[i].Temperature * 9 / 5 + 32, delimiter.GetString(), driveLetter.GetString());
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s%d °C%s%s"), 
+					m_LiDisk[i % m_DriveMenuNumber].Format(_T("%s%s%d °C%s%s"),
 								diskStatus.GetString(), delimiter.GetString(), m_Ata.vars[i].Temperature, delimiter.GetString(), driveLetter.GetString());
 				}
 			}
@@ -834,22 +839,22 @@ void CDiskInfoDlg::InitDriveList()
 			{
 				if(m_bFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s-- °F%s%s"), diskStatus.GetString(), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
+					m_LiDisk[i % m_DriveMenuNumber].Format(_T("%s%s-- °F%s%s"), diskStatus.GetString(), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("%s%s-- °C%s%s"), diskStatus.GetString(), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
+					m_LiDisk[i % m_DriveMenuNumber].Format(_T("%s%s-- °C%s%s"), diskStatus.GetString(), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
 				}
 			}
 			else
 			{
 				if(m_bFahrenheit)
 				{
-					m_LiDisk[i % 8].Format(_T("----%s-- °F%s%s"), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
+					m_LiDisk[i % m_DriveMenuNumber].Format(_T("----%s-- °F%s%s"), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
 				}
 				else
 				{
-					m_LiDisk[i % 8].Format(_T("----%s-- °C%s%s"), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
+					m_LiDisk[i % m_DriveMenuNumber].Format(_T("----%s-- °C%s%s"), delimiter.GetString(), delimiter.GetString(), driveLetter.GetString());
 				}
 			}
 
@@ -862,11 +867,11 @@ void CDiskInfoDlg::InitDriveList()
 				cstr.Format(_T("Disk -- : %s : %.1f GB\n%s"), m_Ata.vars[i].Model.GetString(), m_Ata.vars[i].TotalDiskSize / 1000.0, GetLogicalDriveInfo(i).GetString());
 			}
 			
-			m_ButtonDisk[i % 8].SetToolTipText(cstr);
+			m_ButtonDisk[i % m_DriveMenuNumber].SetToolTipText(cstr);
 			className.Replace(L"Status", L"");
-			m_ButtonDisk[i % 8].ReloadImage(IP(className), 4);
-			m_ButtonDisk[i % 8].SetHandCursor(TRUE);
-		//	m_ButtonDisk[i % 8].EnableWindow(TRUE);
+			m_ButtonDisk[i % m_DriveMenuNumber].ReloadImage(IP(className), 4);
+			m_ButtonDisk[i % m_DriveMenuNumber].SetHandCursor(TRUE);
+		//	m_ButtonDisk[i % m_DriveMenuNumber].EnableWindow(TRUE);
 		}
 	}
 

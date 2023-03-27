@@ -1669,6 +1669,8 @@ void CDiskInfoDlg::OnDriveMenu8()
 	m_bHalfDriveMenu = FALSE;
 	
 	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("8"), m_Ini);
+
+	UpdateDialogSize();
 }
 
 void CDiskInfoDlg::OnDriveMenu10()
@@ -1682,6 +1684,8 @@ void CDiskInfoDlg::OnDriveMenu10()
 	m_bHalfDriveMenu = FALSE;
 
 	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("10"), m_Ini);
+
+	UpdateDialogSize();
 }
 
 void CDiskInfoDlg::OnDriveMenu16()
@@ -1695,6 +1699,8 @@ void CDiskInfoDlg::OnDriveMenu16()
 	m_bHalfDriveMenu = TRUE;
 
 	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("16"), m_Ini);
+
+	UpdateDialogSize();
 }
 
 void CDiskInfoDlg::OnDriveMenu20()
@@ -1708,6 +1714,8 @@ void CDiskInfoDlg::OnDriveMenu20()
 	m_bHalfDriveMenu = TRUE;
 
 	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("20"), m_Ini);
+
+	UpdateDialogSize();
 }
 
 void CDiskInfoDlg::OnZoom100()

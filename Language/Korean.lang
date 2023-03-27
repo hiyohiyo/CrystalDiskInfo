@@ -110,7 +110,7 @@ GREEN_MODE=그린 모드(&G)
 SAVE_TEXT=텍스트로 저장(&T)
 SAVE_IMAGE=이미지로 저장(&S)
 
-;8.18.0
+;9.0.0
 DRIVE_SORT_METHOD=Drive Sort Method
 PHYSICAL_DRIVE_ID=Physical Drive ID
 DRIVE_LETTER=Drive Letter
@@ -1641,7 +1641,7 @@ F6=총 쓰기 섹터량 (호스트)
 F7=총 NAND 쓰기 페이지량 (호스트)
 F8=총 FTL의 NAND 페이지 쓰기량
 
-[SmartSanDiskCloud] ;Added 8.18.0
+[SmartSanDiskCloud] ;Added 9.0.0
 05=Retired Block Count
 09=Power On Hours
 0D=Count of Uncorrectable ECC Errors

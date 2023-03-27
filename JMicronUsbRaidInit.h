@@ -43,12 +43,13 @@ _GetIdentifyInfoJMB39X pGetIdentifyInfoJMB39X = NULL;
 
 BOOL InitializeJMS56X(HMODULE* hModule)
 {
-#ifdef _M_X64
-	*hModule = LoadLibraryW(DLL_DIR L"JMS56x64.dll");
+#ifdef _M_ARM64
+	* hModule = LoadLibraryW(DLL_DIR L"JMS56xA64.dll");
+#elif _M_X64
+	* hModule = LoadLibraryW(DLL_DIR L"JMS56x64.dll");
 #else
-	*hModule = LoadLibraryW(DLL_DIR L"JMS56x32.dll");
+	* hModule = LoadLibraryW(DLL_DIR L"JMS56x86.dll");
 #endif
-
 	if (*hModule == NULL)
 	{
 		return FALSE;
@@ -81,10 +82,12 @@ BOOL InitializeJMS56X(HMODULE* hModule)
 
 BOOL InitializeJMB39X(HMODULE* hModule)
 {
-#ifdef _M_X64
-	* hModule = LoadLibraryW(DLL_DIR L"JMB39X64.dll");
+#ifdef _M_ARM64
+	* hModule = LoadLibraryW(DLL_DIR L"JMB39xA64.dll");
+#elif _M_X64
+	* hModule = LoadLibraryW(DLL_DIR L"JMB39x64.dll");
 #else
-	* hModule = LoadLibraryW(DLL_DIR L"JMB39X32.dll");
+	* hModule = LoadLibraryW(DLL_DIR L"JMB39x86.dll");
 #endif
 
 	if (*hModule == NULL)

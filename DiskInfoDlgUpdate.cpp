@@ -2265,7 +2265,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		subMenuInfo.dwTypeData = (LPWSTR)cstr.GetString();
 		subMenu.InsertMenuItem(-1, &subMenuInfo);
 
-		if (i % 8 == 7 && i + (INT_PTR)1 != m_Ata.vars.GetCount())
+		if (i % m_DriveMenuNumber == (m_DriveMenuNumber - 1) && i + (INT_PTR)1 != m_Ata.vars.GetCount())
 		{
 			subMenu.AppendMenu(MF_SEPARATOR);
 		}
@@ -2319,7 +2319,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 
 		subSubMenu.InsertMenuItem(-1, &subSubMenuInfo);
 
-		if (i % 8 == 7 && i + (INT_PTR)1 != m_Ata.vars.GetCount())
+		if (i % m_DriveMenuNumber == (m_DriveMenuNumber - 1) && i + (INT_PTR)1 != m_Ata.vars.GetCount())
 		{
 			subSubMenu.AppendMenu(MF_SEPARATOR);
 		}
@@ -2399,14 +2399,28 @@ void CDiskInfoDlg::OnDiskStatus() { OnHealthStatus(); }
 void CDiskInfoDlg::OnPreDisk() { SelectDrive(m_SelectDisk - 1); }
 void CDiskInfoDlg::OnNextDisk() { SelectDrive(m_SelectDisk + 1); }
 
-void CDiskInfoDlg::OnDisk0() { SelectDrive(0 + m_DriveMenuPage * 8); }
-void CDiskInfoDlg::OnDisk1() { SelectDrive(1 + m_DriveMenuPage * 8); }
-void CDiskInfoDlg::OnDisk2() { SelectDrive(2 + m_DriveMenuPage * 8); }
-void CDiskInfoDlg::OnDisk3() { SelectDrive(3 + m_DriveMenuPage * 8); }
-void CDiskInfoDlg::OnDisk4() { SelectDrive(4 + m_DriveMenuPage * 8); }
-void CDiskInfoDlg::OnDisk5() { SelectDrive(5 + m_DriveMenuPage * 8); }
-void CDiskInfoDlg::OnDisk6() { SelectDrive(6 + m_DriveMenuPage * 8); }
-void CDiskInfoDlg::OnDisk7() { SelectDrive(7 + m_DriveMenuPage * 8); }
+/*
+void CDiskInfoDlg::OnDisk0() { SelectDrive(0 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk1() { SelectDrive(1 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk2() { SelectDrive(2 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk3() { SelectDrive(3 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk4() { SelectDrive(4 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk5() { SelectDrive(5 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk6() { SelectDrive(6 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk7() { SelectDrive(7 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk8() { SelectDrive(8 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk9() { SelectDrive(9 + m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk10(){ SelectDrive(10+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk11(){ SelectDrive(11+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk12(){ SelectDrive(12+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk13(){ SelectDrive(13+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk14(){ SelectDrive(14+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk15(){ SelectDrive(15+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk16(){ SelectDrive(16+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk17(){ SelectDrive(17+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk18(){ SelectDrive(18+ m_DriveMenuPage * m_DriveMenuNumber); }
+void CDiskInfoDlg::OnDisk19(){ SelectDrive(19+ m_DriveMenuPage * m_DriveMenuNumber); }
+*/
 
 int CDiskInfoDlg::GetSelectedDrive()
 {
@@ -2447,7 +2461,7 @@ void CDiskInfoDlg::SelectDrive(DWORD i)
 	}
 
 	m_SelectDisk = i;
-	m_DriveMenuPage = i / 8;
+	m_DriveMenuPage = i / m_DriveMenuNumber;
 	ChangeDisk(i);
 	UpdateListCtrl(i);
 	InitDriveList();

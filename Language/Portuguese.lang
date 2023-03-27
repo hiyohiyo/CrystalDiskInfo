@@ -110,7 +110,7 @@ GREEN_MODE=&Green Mode
 SAVE_TEXT=Save (&text)
 SAVE_IMAGE=&Save (image)
 
-;8.18.0
+;9.0.0
 DRIVE_SORT_METHOD=Drive Sort Method
 PHYSICAL_DRIVE_ID=Physical Drive ID
 DRIVE_LETTER=Drive Letter
@@ -1595,7 +1595,7 @@ F6=Cumulative Host Sectors Written
 F7=Host Program NAND Pages Count
 F8=FTL Program NAND Pages Count
 
-[SmartSanDiskCloud] ;Added 8.18.0
+[SmartSanDiskCloud] ;Added 9.0.0
 05=Retired Block Count
 09=Power On Hours
 0D=Count of Uncorrectable ECC Errors

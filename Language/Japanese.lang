@@ -1,6 +1,6 @@
 [Information]
 TRANSLATOR=hiyohiyo
-VERSION=8.14.0
+VERSION=9.0.0
 
 [Language]
 LANGUAGE=日本語
@@ -109,7 +109,7 @@ GREEN_MODE=グリーンモード(&G)
 SAVE_TEXT=保存(テキスト)(&T)
 SAVE_IMAGE=保存(画像)(&S)
 
-;8.18.0
+;9.0.0
 DRIVE_SORT_METHOD=ドライブソート方法
 PHYSICAL_DRIVE_ID=物理ドライブID
 DRIVE_LETTER=ドライブレター
@@ -1634,7 +1634,7 @@ F6=総書き込みセクタ数 (ホスト)
 F7=総書き込みセクタ数 (ホスト)
 F8=総書き込みページ数 (FTL)
 
-[SmartSanDiskCloud] ;Added 8.18.0
+[SmartSanDiskCloud] ;Added 9.0.0
 05=代替処理済のブロック数
 09=使用時間
 0D=訂正不可能 ECC エラー数

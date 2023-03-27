@@ -12,6 +12,5 @@
 // For Task Tray Icon Feature
 #define OPTION_TASK_TRAY
 
-#if ! defined(_M_ARM) && ! defined(_M_ARM64)
+// JMicron JMB39x/JMS56x support
 #define JMICRON_USB_RAID_SUPPORT
-#endif

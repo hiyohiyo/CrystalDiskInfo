@@ -50,16 +50,24 @@ public:
 	enum { IDD = IDD_DISKINFO_DIALOG };
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	static const int SIZE_X = 1000;
-	static const int SIZE_SMART_X = 1000;
 	static const int SIZE_SMART_Y = 640;
 	static const int SIZE_MIN_Y = 500;
-	static const int SIZE_Y = 288;
 	static const int SIZE_MAX_Y = 1000;
-	static const int OFFSET_X = 328;
+	static const int SIZE_Y = 288;
 	static const int IMAGE_ALPHA = 192;
 	static const int TEXT_ALPHA = 255;
 	static const int LIST_CTL_ALPHA = 192;
+	static const int DRIVE_MENU_SIZE = 84;
+#ifdef BRILLIANT_AZURE_SUPPORT
+	static const int SIZE_X = 1200;
+	static const int SIZE_SMART_X = 1200;
+	static const int OFFSET_X = 360;
+#else
+	static const int SIZE_X = 1000;
+	static const int SIZE_SMART_X = 1000;
+	static const int OFFSET_X = 328;
+#endif
+
 #else
 	static const int SIZE_X = 672;
 	static const int SIZE_SMART_X = 672;
@@ -68,6 +76,7 @@ public:
 	static const int SIZE_Y = 260;
 	static const int SIZE_MAX_Y = 1000;
 	static const int OFFSET_X = 0;
+	static const int DRIVE_MENU_SIZE = 84;
 #endif
 
 public:
@@ -226,7 +235,7 @@ protected:
 	BOOL m_bSortDriveLetter;
 	BOOL m_bHalfDriveMenu;
 
-	DWORD m_DriveMenuNumber;
+	INT m_DriveMenuNumber;
 
 	BOOL AddTemperatureIcon(DWORD index);
 	BOOL RemoveTemperatureIcon(DWORD index);
@@ -354,6 +363,7 @@ protected:
 //	virtual void OnDocumentComplete(LPDISPATCH pDisp, LPCTSTR szUrl);
 	virtual void InitDialogComplete();
 
+/*
 	void OnDisk0();
 	void OnDisk1();
 	void OnDisk2();
@@ -362,6 +372,20 @@ protected:
 	void OnDisk5();
 	void OnDisk6();
 	void OnDisk7();
+	void OnDisk8();
+	void OnDisk9();
+	void OnDisk10();
+	void OnDisk11();
+	void OnDisk12();
+	void OnDisk13();
+	void OnDisk14();
+	void OnDisk15();
+	void OnDisk16();
+	void OnDisk17();
+	void OnDisk18();
+	void OnDisk19();
+*/
+
 	void OnPreDisk();
 	void OnNextDisk();
 	void OnDiskStatus();
@@ -572,7 +596,6 @@ public:
 	afx_msg void OnHelp();
 	afx_msg void OnCustomize();
 	afx_msg void OnStartup();
-	afx_msg void OnNarrowDriveMenu();
 	afx_msg void OnWait0Sec();
 	afx_msg void OnWait5Sec();
 	afx_msg void OnWait10Sec();

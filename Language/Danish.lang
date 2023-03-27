@@ -1,10 +1,10 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=Valdemar Lemche, Duck Buzzard
-VERSION=4.1.4
+TRANSLATOR=P. Allan, Duck Buzzard, Valdemar Lemche
+VERSION=8.17.0
 
 [Language]
-LANGUAGE=Danish
+LANGUAGE=Dansk
 CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x0406
 
@@ -21,7 +21,7 @@ FUNCTION=F&unktioner
 HIDE_SMART_INFO=Skjul &S.M.A.R.T. information
 HIDE_SERIAL_NUMBER=Skjul serie&nummer
 SHOW_DRIVE_LETTER=Vis drev&bogstav
-ADVANCED_DISK_SEARCH=&Advanceret disk søgning
+ADVANCED_DISK_SEARCH=&Avanceret disksøgning
 EVENT_LOG=Hændelses&log
 AAM_APM_CONTROL=AA&M/APM kontrol
 AUTO_AAM_APM_ADAPTION=Auto AAM/A&PM tilpasning
@@ -29,46 +29,46 @@ RESIDENT=Kør &i baggrunden
 STARTUP=Kør ved &opstart af Windows
 OPEN_DISK_MANAGEMENT=Åbn "&Diskhåndtering"
 OPEN_DEVICE_MANAGER=Åbn "Enhedshåndtering"
-ADVANCED_FEATURE=Advanceret &funktioner
-REFRESH=&Opdatér
+ADVANCED_FEATURE=Indstil avanceret
+REFRESH=&Opdater
 RESCAN=S&can igen
 DISABLE=Deaktiver
-AUTO_REFRESH=&Auto opdatér
-AUTO_REFRESH_TARGET=Auto opdatér valgte
-AUTO_REFRESH_TARGET_ALL_DISK=Auto opdatér - Vælg alle harddiske
-AUTO_REFRESH_UNTARGET_ALL_DISK=Auto opdatér - &Fravælg alle harddiske
+AUTO_REFRESH=&Auto opdater
+AUTO_REFRESH_TARGET=Auto opdater valgte
+AUTO_REFRESH_TARGET_ALL_DISK=Auto opdater - vælg alle harddiske
+AUTO_REFRESH_UNTARGET_ALL_DISK=Auto opdater - &fravælg alle harddiske
 WAIT_TIME_AT_STARTUP=&Ventetid ved opstart
 GRAPH=&Graf
 THEME=&Tema
 DISK=&Disk
 HELP=&Hjælp
-HELP_WEB=&Hjælp [Web]
+HELP_WEB=&Hjælp (hjemmeside)
 HELP_ABOUT=&Om CrystalDiskInfo
-HELP_ABOUT_SMART=Om &S.M.A.R.T. (Wikipedia) [Web]
-LANGUAGE=&Sprog
-ITEM=&Punkt
-TEMPERATURE_TYPE=T&emperatur type
-CELSIUS=Celsius (°C)
-FAHRENHEIT=Fahrenheit (°F)
-HEALTH_STATUS_SETTING=&Helbredsstatus indstilninger
+HELP_ABOUT_SMART=Om &S.M.A.R.T. (Wikipedia)
+LANGUAGE=&Sprog 
+ITEM=Emne
+TEMPERATURE_TYPE=T&emperaturskala
+CELSIUS=Celsius (°C)
+FAHRENHEIT=Fahrenheit (°F)
+HEALTH_STATUS_SETTING=Indstil &helbredsstatus
 
 ;Graph
-OPTION=&Indstilninger
-LEGEND_POSITION=&Henvisningsposition
+OPTION=&Indstillinger
+LEGEND_POSITION=P&lacering af forklaring
 NORTH_WEST=Øverst venstre
 NORTH_EAST=Øverst højre
 SOUTH_WEST=Nederst venstre
 SOUTH_EAST=Nederst højre
 MAX_PLOT_POINT=Største plot point
 TIME_FORMAT=&Tidsformat
-PAINT_WEEKEND=&Tegn i weekenden
+PAINT_WEEKEND=Vis weekend
 ALL=&Alle
 
 ;2.7.0
-COPY_OPTION=Kopi &indstilninger
-RESIDENT_STYLE=Baggrunds indstilninger
-MINIMIZE=Minimér
-HIDE=Skjul
+COPY_OPTION=Indstil k&opiering
+RESIDENT_STYLE=Ved kørsel i baggrunden
+MINIMIZE=Minimer
+HIDE=I systembakke
 
 ;3.0.0
 ZOOM=&Zoom
@@ -77,7 +77,7 @@ ATTRIBUTE=&Attribut
 
 ;3.5.0
 ASCII_VIEW=ASCII visning
-AUTO_DTECTION=Auto detektion
+AUTO_DTECTION=Find automatisk
 SECOND=sek.
 MINUTE=min.
 HOUR=time
@@ -86,57 +86,64 @@ HOUR=time
 WORKAROUND=W&orkaround
 
 ;4.0.0
-ALERT_MAIL=Mail advisering
-MAIL_SETTINGS=Mail indstilinger
+ALERT_MAIL=Mailbesked
+MAIL_SETTINGS=Indstil mail
 SMART_IN_ENGLISH=S.M.A.R.T. på engelsk
 FONT_SETTING=Skrifttype
 
 ;5.0.0
-ALERT_FEATURES=A&lert Features
-ALARM_HISTORY=Alarm History
-ALERT_SOUND=Alert Sound
-SOUND_SETTINGS=Sound Settings
-GADGET_SUPPORT=Gadget Support
-INSTALL_GADGET=Install Gadget
-ENABLE_AUTO=Enable (Auto Detection)
-ENABLE_ALL=Enable (All Disks)
-ENABLE_RAID=Enable (RAID Volume Only)
+ALERT_FEATURES=A&larmfunktion
+ALARM_HISTORY=Alarmhistorik
+ALERT_SOUND=Alarmlyd
+SOUND_SETTINGS=Indstil lyd
+GADGET_SUPPORT=Understøt gadget
+INSTALL_GADGET=Installer gadget
+ENABLE_AUTO=Aktiver (find automatisk)
+ENABLE_ALL=Aktiver (alle diske)
+ENABLE_RAID=Aktiver (kun RAID-enheder)
 
 ;6.0.0
-HIDE_NO_SMART_DISK=&Hide No S.M.A.R.T. Disk
-GREEN_MODE=&Green Mode
+HIDE_NO_SMART_DISK=Skjul ikke-S.M.A.R.T. diske
+GREEN_MODE=&Grøn tilstand
 
 ;8.6.0
-SAVE_TEXT=Save (&text)
-SAVE_IMAGE=&Save (image)
+SAVE_TEXT=Gem (&tekst)
+SAVE_IMAGE=Gem (billede)
 
-;8.18.0
-DRIVE_SORT_METHOD=Drive Sort Method
-PHYSICAL_DRIVE_ID=Physical Drive ID
-DRIVE_LETTER=Drive Letter
+;9.0.0
+DRIVE_SORT_METHOD=Sorter drev efter
+PHYSICAL_DRIVE_ID=ID for fysisk drev
+DRIVE_LETTER=Drevbogstav
+DRIVE_MENU_NUMBER=Vis antal drev
 
 [TrayMenu]
 EXIT=Afslut
-REFRESH=Opdatér
+REFRESH=Opdater
 RESCAN=Scan igen
 ENABLE=Aktiver
 DISABLE=Deaktiver
 ENABLE_ALL=Aktiver alle
 DISABLE_ALL=Deaktiver alle
-AUTO_REFRESH=AAuto opdatér
-AUTO_REFRESH_TARGET=Auto opdatér valgte
-AUTO_REFRESH_TARGET_ALL_DISK=Auto opdatér - Vælg alle harddiske
-AUTO_REFRESH_UNTARGET_ALL_DISK=Auto opdatér - Fravælg alle harddiske
-ALARM_SETTING_TEMPERATURE=Alarm indstillinger - Temperatur
-ALARM_SETTING_HEALTH_STATUS=Alarm indstillinger - Helbredsstatus
+AUTO_REFRESH=Auto-opdater
+AUTO_REFRESH_01_MIN=1 min.
+AUTO_REFRESH_03_MIN=3 min.
+AUTO_REFRESH_05_MIN=5 min.
+AUTO_REFRESH_10_MIN=10 min.
+AUTO_REFRESH_30_MIN=30 min.
+AUTO_REFRESH_60_MIN=60 min.
+AUTO_REFRESH_TARGET=Auto opdater valgte
+AUTO_REFRESH_TARGET_ALL_DISK=Auto-opdater - vælg alle harddiske
+AUTO_REFRESH_UNTARGET_ALL_DISK=Auto-opdater - fravælg alle harddiske
+ALARM_SETTING_TEMPERATURE=Indstil alarm - temperatur
+ALARM_SETTING_HEALTH_STATUS=Indstil alarm - helbredsstatus
 SHOW_MAIN_WINDOW=Vis hovedvinduet
-SHOW_TEMPERATURE_ICON=Vis temperatur ikon
-SHOW_ALL_TEMPERATURE_ICON=Vis Alle temperatur ikoner
-HIDE_ALL_TEMPERATURE_ICON=Skjul Alle temperatur ikoner
+SHOW_TEMPERATURE_ICON=Vis temperaturikon
+SHOW_ALL_TEMPERATURE_ICON=Vis alle temperaturikoner
+HIDE_ALL_TEMPERATURE_ICON=Skjul alle temperaturikoner
 COLLECTIVE_SETTING=Fælles indstilling
 GRAPH=Graf
 ;Added 3.0
-SHOW_TEMPERATURE_ICON_ONLY=Vis kun temperatur ikon
+SHOW_TEMPERATURE_ICON_ONLY=Vis kun temperaturikon
 
 [DiskStatus]
 GOOD=God
@@ -152,19 +159,19 @@ LIST_WORST=Værste
 LIST_THRESHOLD=Grænseværdier
 LIST_RAW_VALUES=Rå værdier
 ;LIST_DESCRIPTION=Beskrivelse (engelsk)
-LIST_ATTRIBUTE_NAME=Attributnavn
+LIST_ATTRIBUTE_NAME=Attribut navn
 
 FIRMWARE=Firmware
 SERIAL_NUMBER=Serienummer
 INTERFACE=Grænseflade
 STANDARD=Standard
 TRANSFER_MODE=Overførselsmetode
-BUFFER_SIZE=Buffer størrelse
-NV_CACHE_SIZE=NV cache størrelse
+BUFFER_SIZE=Bufferstørrelse
+NV_CACHE_SIZE=NV cache, størrelse
 ROTATION_RATE=Rotationshastighed
 TEMPERATURE=Temperatur
 POWER_ON_HOURS=Tændte timer
-POWER_ON_COUNT=Opstart tæller
+POWER_ON_COUNT=Opstartstæller
 DRIVE_LETTER=Drevbogstav
 FEATURE=Understøttet
 HEALTH_STATUS=Helbredsstatus
@@ -176,63 +183,64 @@ POWER_ON_DAYS_UNIT=dage
 POWER_ON_YEARS_UNIT=år
 
 ;4.3
-TOTAL_HOST_WRITES=Total Host Writes
-TOTAL_HOST_READS=Total Host Reads
-TOTAL_NAND_WRITES=Total NAND Writes
+TOTAL_HOST_WRITES=I alt host writes
+TOTAL_HOST_READS=I alt host reads
+TOTAL_NAND_WRITES=I alt NAND writes
 
 ;4.5
-WEAR_LEVELING_COUNT=Wear Leveling Count
+WEAR_LEVELING_COUNT=Antal slidudjævninger
 
 ;6.1
-CURRENT_MODE_SUPPORTED_MODE=Current Mode | Supported Mode
-MAJOR_VERSION_MINOR_VERSION=Major Version | Minor Version
+CURRENT_MODE_SUPPORTED_MODE=Denne metode | Understøttet
+MAJOR_VERSION_MINOR_VERSION=Større version | Mindre
 
 ;8.5.0
-FONT_FACE=Font Face
-FONT_SCALE=Font Scale (%)
-DEFAULT=Default
+FONT_FACE=Skrift
+FONT_SCALE=Skrift (%)
+DEFAULT=Standard
+OK=OK
 
 ;8.9.0
-ENABLED=Enabled
-DISABLED=Disabled
+ENABLED=Aktiveret
+DISABLED=Deaktiveret
 
 [Message]
-DETECT_UNIT_POWER_ON_HOURS=Finder enheden "Tændte timer" (tager cirka 130 sek.)
-DETECT_DISK=Detekter disk
-PLEASE_ENABLE_WMI=Aktiver venligst WMI(Windows Management Instrumentation)
-PLEASE_RESTART_THIS_APPLICATION=Genstart venligst programmet for at skifte tema
+DETECT_UNIT_POWER_ON_HOURS=Finder enheden for "Tændte timer" (tager cirka 130 sek.)
+DETECT_DISK=Finder disk
+PLEASE_ENABLE_WMI=Aktiver WMI(Windows Management Instrumentation)
+PLEASE_RESTART_THIS_APPLICATION=Genstart programmet for at skifte tema
 DISK_NOT_FOUND=Disk ikke fundet
 
 [Alarm]
-ALARM_TEMPERATURE=Alarm - Temperatur
-ALARM_HEALTH_STATUS=Alarm - Helbredsstatus
+ALARM_TEMPERATURE=Alarm - temperatur
+ALARM_HEALTH_STATUS=Alarm - helbredsstatus
 DEGRADATION=Forværring
-RECOVERY=Helbredelse
+RECOVERY=Genoprettelse
 ;3.5.0
-INFO_HEALTH_STATUS=Information - Helbredsstatus
+INFO_HEALTH_STATUS=Info - helbredsstatus
 
 [Graph]
-PLEASE_SELECT_ITEM=Vælg venligst emne
+PLEASE_SELECT_ITEM=Vælg emne
 ACTUAL_VALUE=Faktisk værdi (rå værdi)
-NORMALIZED_VALUE=Normaliseret værdi (nuværende værdi)
+NORMALIZED_VALUE=Normaliseret værdi (aktuel værdi)
 ALL_ON=Vis alle
 ALL_OFF=Skjul alle
 RESET=Nulstil
 
 [Customize]
-LINE_COLOR=Linie farve
+LINE_COLOR=Linjefarve
 BACKGROUND_IMAGE=Baggrundsbillede
 SUPPORTED_IMAGE_FORMAT=Understøttet billedformat
 ALL_FILES=Alle filer
 
 ;5.0.0
-SUPPORTED_SOUND_FORMAT=Supported Sound Format
+SUPPORTED_SOUND_FORMAT=Understøttet lydformat
 
 [AamApm]
-AAM_LOW=<- Tavshed (80h)
+AAM_LOW=<- Tavs (80h)
 AAM_HIGH=Ydelse (FEh) ->
 AAM_RECOMMEND=Anbefalet værdi
-APM_LOW=<- Min strømføring (01h)
+APM_LOW=<- Min. tændt (01h)
 APM_HIGH=Ydelse (FEh) ->
 ;3.5.0
 AUTOMATIC_ACOUSTIC_MANAGEMENT=Automatic Acoustic Management (AAM)
@@ -241,20 +249,20 @@ ADVANCED_POWER_MANAGEMENT=Advanced Power Management (APM)
 [WindowTitle]
 ABOUT=Om CrystalDiskInfo
 GRAPH=Graph
-CUSTOMIZE=Tilpasning
+CUSTOMIZE=Tilpas
 VERSION_INFORMATION=Versionsinformation
 AAM_APM_CONTROL=AAM/APM kontrol
-HEALTH_STATUS_SETTING=Helbredsstatus indstillinger
+HEALTH_STATUS_SETTING=Indstil helbredsstatus
 
 ;5.0.0
-ALARM_HISTORY=Alarm History
-SOUND_SETTINGS=Sound Settings
+ALARM_HISTORY=Alarmhistorik
+SOUND_SETTINGS=Indstil lyd
 
 ;5.1.0
 FONT_SETTING=Skrifttype
 
 [HealthStatus]
-THRESHOLD_OF_CAUTION=Grænseværdi for forsigtig
+THRESHOLD_OF_CAUTION=Forsigtig grænseværdi
 APPLY=Anvend
 DEFAULT=Standard
 
@@ -272,8 +280,13 @@ VENDOR_SPECIFIC=Vendor Specific
 09=Power-On Hours
 0A=Spin Retry Count
 0B=Recalibration Retries
-0C=Device Power Cycle Count
+0C=Power Cycle Count
 0D=Soft Read Error Rate stab
+16=Current Helium Level
+B8=End-to-End Error
+BB=Reported Uncorrectable Errors
+BC=Command Timeout
+BD=High Fly Writes
 BE=Airflow Temperature
 BF=G-Sense Error Rate
 C0=Power-off Retract Count
@@ -309,11 +322,6 @@ E6=GMR Head Amplitude
 E7=Temperature
 F0=Head Flying Hours
 FA=Read Error Retry Rate
-;Added 3.0
-B8=End-to-End Error
-BB=Reported Uncorrectable Errors
-BC=Command Timeout
-BD=High Fly Writes
 FE=Free Fall Protection
 
 ;Updated 5.4.0
@@ -332,7 +340,7 @@ F2=Total Host Reads
 09=Power-On Hours
 0A=Spin Retry Count
 0B=Recalibration Retries
-0C=Device Power Cycle Count
+0C=Power Cycle Count
 0D=Soft Read Error Rate stab
 C0=Unsafe Shutdown Count
 C2=Temperature
@@ -354,6 +362,7 @@ BB=Total Erase Count
 09=Power-On Hours
 0C=Power Cycle Count
 B8=Initial Bad Block Count
+C2=Temperature
 C3=Program Failure Block Count
 C4=Erase Failure Block Count
 C5=Read Failure Block Count
@@ -386,41 +395,32 @@ EB=Good Block Count, System Block Count
 05=Re-Allocated Sector Count
 09=Power-On Hours Count
 0C=Power Cycle Count
-C0=Unsafe Shutdown Count
-E1=Host Writes
-E8=Available Reserved Space
-E9=Media Wearout Indicator
-B8=End to End Error Detection Count
-
-;Updated 4.1
 AA=Available Reserved Space
 AB=Program Fail Count
 AC=Erase Fail Count
-BB=Uncorrectable Error Count
-
-;Updated 4.3
 AE=Unexpected Power Loss
+AF=Power Loss Protection Failure
+B7=SATA Downshift Count
+B8=End to End Error Detection Count
+BB=Uncorrectable Error Count
+BE=Temperature
+C0=Unsafe Shutdown Count
+C2=Temperature
+C5=Pending Sector Count
+C7=CRC Error Count
+E1=Host Writes
 E2=Timed Workload Media Wear
 E3=Timed Workload Host Read/Write Ratio
 E4=Timed Workload Timer
+E8=Available Reserved Space
+E9=Media Wearout Indicator
+EA=Thermal Throttle Status
 F1=Total LBAs Written
 F2=Total LBAs Read
+F3=Total NAND Writes
 F9=Total NAND Writes
 
-;Updated 5.5.0
-B7=SATA Downshift Count
-BE=Temperature
-C7=CRC Error Count
-
-;Updated 5.6.1
-AF=Power Loss Protection Failure
-C2=Temperature
-C5=Pending Sector Count
-
-;Added 6.6.0
-EA=Thermal Throttle Status
-
-[SmartSamsung]
+[SmartSamsung] ;Updated 6.6
 05=Reallocated Sector Count
 09=Power-on Hours
 0C=Power-on Count
@@ -442,8 +442,8 @@ C7=CRC Error Count
 C9=Super cap Status
 CA=SSD Mode Status
 EB=POR Recovery Count
-F1=Total LBA Written
-F2=Total LBA Read
+F1=Total LBAs Written
+F2=Total LBAs Read
 
 ;Added 6.6
 AA=Unused Reserved Block Count (Chip) 
@@ -454,7 +454,7 @@ AE=Unexpected Power Loss Count
 B8=Error Detection
 E9=Normalized Media Wear-out
 
-[SmartSandForce] ;Updated (3.7.0)
+[SmartSandForce] ;Updated 3.7.0
 01=Raw Read Error Rate
 05=Retired Block Count
 09=Power-on Hours
@@ -474,17 +474,17 @@ C2=Temperature
 C3=On-the-Fly ECC Uncorrectable Error Count
 C4=Reallocation Event Count
 C6=Uncorrectable Sector Count
-C7=SATA R-Errors (CRC) Error Count
+C7=SATA R-Errors Error Count
 C9=Uncorrectable Soft Read Error Rate
 CC=Soft ECC Correction Rate
-E6=Life Curve Status
+E6=Drive Life Protection Status
 E7=SSD Life Left
 E8=Available Reserved Space
-EB=SuperCap health
+EB=Power Fail Backup Health
 F1=Lifetime Writes from Host
 F2=Lifetime Reads from Host
 
-[SmartJMicron61x] ;Added (3.9)
+[SmartJMicron61x] ;Added 3.9.0
 01=Read Error Rate
 02=Throughput Performance
 03=Spin-Up Time
@@ -544,7 +544,16 @@ F6=Total Host Sector Writes
 F7=Host Program Page Count
 F8=Background Program Page Count
 
-[SmartMicronMU02] ;Updated 6.6.0
+; Updated 8.11.0
+F9=Total Refresh ISP Count
+FA=Total Do RefCal Count
+FB=Total NAND Read Plane Count (Low 4Bytes)
+FC=Total NAND Read Plane Count (High 4Bytes)
+FD=Total Block ReMap Pass Count
+FE=Total Background Scan Over Limit Count
+DF=Total Background Scan
+
+[SmartMicronMU02] ;Updated 8.17.0
 ; RAIN = Redundant Array of Independent NAND
 01=Raw Read Error Rate
 05=Reallocated Sectors Count
@@ -592,10 +601,10 @@ A3=Initial Invalid Blocks
 95=Maximum SLC Erase Count
 96=Minimum SLC Erase Count
 97=Average SLC Erase Count
-A4=Total TLC Erase Count
-A5=Maximum TLC Erase Count
-A6=Minimum TLC Erase Count
-A7=Average TLC Erase Count
+A4=Total NAND Erase Count
+A5=Maximum NAND Erase Count
+A6=Minimum NAND Erase Count
+A7=Average NAND Erase Count
 A9=Percentage Lifetime Remaining
 B5=Program Fail Count
 B6=Erase Fail Count
@@ -603,17 +612,27 @@ C0=Power-off Retract Count
 E8=Available Reserved Space
 F1=Total LBA Write
 F2=Total LBA Read
-F5=Total TLC Write Count
+F5=Total NAND Write Count
 F6=Total SLC Write Count
 F7=RAID Recovery Count
 
-[SmartOcz] ;Added (4.5)
+; Updated 8.10.0
+F9=Total Refresh ISP Count
+FA=Total Do RefCal Count
+FB=Total NAND Read Plane Count (Low 4Bytes)
+FC=Total NAND Read Plane Count (High 4Bytes)
+FD=Total Block ReMap Pass Count
+FE=Total Background Scan Over Limit Count
+DF=Total Background Scan
+
+[SmartOcz] ;Added 4.5.0
 01=Raw Read Error Rate
 03=Spin Up Time
 04=Start Stop Count
 05=Reallocated Sectors Count
 09=Power-On Hours
 0C=Power Cycle Count
+C2=Temperature
 E8=Total Count of Write Sectors
 E9=Remaining Life
 
@@ -674,26 +693,31 @@ E9=NAND GB written
 F1=Total Host Writes
 F2=Total Host Reads
 
-[SmartSanDisk] ;Added (5.2.0)
-05=Retired Block Count
-09=Power-On Hours
+[SmartSanDisk] ;Added 5.2.0
+05=Reassigned Block Count
+09=Power On Hours
 0C=Power Cycle Count
 AA=Reserve Block Count
 AB=Program Fail Count
 AC=Erase Fail Count
+AD=Average Write/Erase Count
 AE=Unexpected Power Loss Count
 BB=Reported Uncorrectable Errors
-E8=Remaining Life
+C2=Temperature
+E6=Percent of Total Write/Erase Count
+E8=Spare Blocks Remaining
+EA=Percent of Total Write/Erase Count (BC blocks)
 F1=Total Host Writes
 F2=Total Host Reads
 
-[SmartOczVector] ;Added (5.3.0)
+[SmartOczVector] ;Added 5.3.0
 05=Accumulated Runtime Bad Blocks
 09=Power-On Hours Count
 0C=Power Cycle Count
 AB=Available Over-Provisioned Block Count
 AE=Power Cycle Count (Unplanned)
 BB=Total Uncorrectable NAND Reads
+C2=Temperature
 C3=Total Programming Failures
 C4=Total Erase Failures
 C5=Total Read Failures (Uncorrectable)
@@ -768,27 +792,39 @@ F1=Total Host Writes
 F2=Total Host Reads
 
 [SmartSanDiskGb] ;Added 6.2.0
-05=Reallocated Block Count
+01=Read Error Rate
+05=Reassigned Block Count
 09=Power On Hours
 0C=Power Cycle Count
-A6=Min W/E Cycle
-A7=Max Bad Block/Die
-A8=Maximum Erase Cycle
+A5=Block Erase Count (SLC)
+A6=Minimum P/E Cycles
+A7=Maximum Bad Blocks per die
+A8=Maximum P/E Cycles
 A9=Total Bad Block
+AA=Grown Bad Blocks
 AB=Program Fail Count
 AC=Erase Fail Count
-AD=Average Erase Cycle
+AD=Average P/E Cycles
 AE=Unexpected Power Loss Count
+B8=End-to-End Error Detection/Correction Count
 BB=Reported Uncorrectable Errors
+BC=Command Timeout Count
 C2=Temperature
+C7=CRC Error Count
 D4=SATA PHY Error
-E6=Percentage Total P/E Count
-E8=Spare Block Remaining
-E9=Total GB Written To NAND
+E6=Media Wearout Indicator
+E7=SSD Life Left
+E8=Available Reserve Space
+E9=NAND GB Written
+EA=NAND GB Written (SLC)
+EE=Media Wearout Indicator (Cycles Remaining)
 F1=Total GB Written
 F2=Total GB Read
+F4=Temperature Throttle Status
+F9=NAND GB Written
 
 [SmartKingston] ;Added 6.6.0
+;https://media.kingston.com/support/downloads/MKP_521_Phison_SMART_attribute.pdf
 01=Read Error Rate
 02=Throughput Performance
 03=Spin Up Time
@@ -865,7 +901,7 @@ E7=Lifetime left
 E8=Available reserved space
 F1=Write life time
 F2=Read life time
-F9=Total GB written to NAND (TLC)
+F9=Total GB written to NAND
 FA=Total GB written to NAND (SLC)
 
 [SmartSKhynix] ; Updated 8.8.0
@@ -908,9 +944,9 @@ F1=Total LBA Written
 F2=Total LBA Read
 FA=Total Number of NAND Read Retries
 
-[SmartKioxia]
+[SmartKioxia] ; Added 8.8.0
 09=Power-On Hours Count
-0C=Device Power Cycle Count
+0C=Power Cycle Count
 A7=SSD Protect Mode
 A8=SATA PHY Error Count
 A9=Bad Block Count
@@ -919,7 +955,7 @@ C0=Unexpected Power Loss Count
 C2=Temperature
 F1=Host Writes
 
-[SmartWdc]
+[SmartWdc] ; Added 8.8.0
 01=Read Error Rate
 05=Reassigned Block Count
 09=Power On Hours
@@ -947,10 +983,13 @@ EA=NAND GB Written (SLC)
 EE=Media Wearout Indicator (Cycles Remaining)
 F1=Total GB Written
 F2=Total GB Read
+F3=Total NAND Writes
 F4=Temperature Throttle Status
 F9=NAND GB Written
 
 [SmartKingstonSuv]
+; https://media.kingston.com/support/downloads/UV400-SMART-attribute.pdf
+; https://media.kingston.com/support/downloads/UV500_SMART_attribute.pdf
 01=Read Error Rate
 05=Reallocated Sector Count
 09=Power On Hours
@@ -979,6 +1018,7 @@ F2=Lifetime Host Reads
 FA=Total Number of NAND Read Retries
 
 [SmartKingstonKC600]
+;https://media.kingston.com/support/downloads/KC600-SMART-attribute.pdf
 01=Read Error Rate
 05=Re-Allocated NAND Block Count
 09=Power-On Hours
@@ -1011,6 +1051,7 @@ F2=Total LBAs Read
 F5=Total Media Writes
 
 [SmartKingstonDC500]
+;https://media.kingston.com/support/pdf/MKP_521-7_SMART-DC500_attribute_hr.pdf
 01=Host UNC Error Count
 09=Power on Hours
 0C=Power On / Off Cycle
@@ -1039,6 +1080,7 @@ F5=Max Erase Count
 F6=Total Erase Count
 
 [SmartKingstonSA400]
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/20
 01=Uncorrectable Errors
 09=Power On Hours
 0C=Power Cycles
@@ -1071,8 +1113,8 @@ F6=Total Erase Count
 09=Power On Hours
 0C=Power Cycle Count
 AA=Available Reserved Space
-AB=Program Fail Count(Total)
-AC=Erase Fail Count(Total)
+AB=Program Fail Count (Total)
+AC=Erase Fail Count (Total)
 AD=Average Program/Erase Count
 AE=Unexpected Power Loss Count
 AF=Program Fail count (Worst case)
@@ -1098,6 +1140,7 @@ F2=Total Host Read
 F3=NAND GB Written
 
 [SmartIntelDc]
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/18
 01=Raw Read Error Count
 05=Reallocated Flash Block Count
 09=Power-On Hours Count
@@ -1122,7 +1165,7 @@ CA=Percentage of Drive Life Used
 E2=Timed Workload - Media Wear
 E3=Timed Workload - Host Read/Write Ratio
 E4=Timed Workload Timer
-EA=Total Host Bytes Read
+EA=Thermal Throttle Status
 EB=Total Host Bytes/Sectors Written
 F1=Total Nand Bytes/Sectors Written
 
@@ -1191,6 +1234,7 @@ F5=Flash Write Sector Count
 09=Power-On Hours
 0A=Spin Retry Count
 0C=Power Cycle Count
+A7=SSD Protect Mode
 A8=SATA PHY Error Count
 AA=Bad Block Count
 AD=Erase Count
@@ -1219,6 +1263,7 @@ E7=SSD Life Left
 F1=Host Writes
 
 [SmartSeagate]
+; https://crystalmark.info/board/c-board.cgi?cmd=one;no=1818;id=#1818
 01=Read Error Rate
 05=Retired Sectors Count
 09=Power On Hours
@@ -1249,6 +1294,7 @@ F2=Lifetime Reads From Host
 FA=Lifetime NAND Read Retries
 
 [SmartSeagateIronWolf]
+; https://www.seagate.com/www-content/manuals/ironwolf-110-ssd/pdf/IronWolf_110_SSD_PM-100841919_B.pdf
 01=Raw Read Error Rate
 05=Reallocated Sector Count
 09=Power On Hours
@@ -1293,7 +1339,7 @@ F2=Total Read
 [SmartMaxiotek] ; Added 8.8.6
 05=Reallocated Sector Count
 09=Power-On Hours
-0C=Drive Power Cycle Count
+0C=Power Cycle Count
 A7=SSD Protect Mode
 A8=PHY Error Count
 A9=Bad Block Count
@@ -1596,7 +1642,7 @@ F6=Cumulative Host Sectors Written
 F7=Host Program NAND Pages Count
 F8=FTL Program NAND Pages Count
 
-[SmartSanDiskCloud] ;Added 8.18.0
+[SmartSanDiskCloud] ;Added 9.0.0
 05=Retired Block Count
 09=Power On Hours
 0D=Count of Uncorrectable ECC Errors

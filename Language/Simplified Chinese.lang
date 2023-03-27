@@ -111,7 +111,7 @@ GREEN_MODE=绿色样式(&G)
 SAVE_TEXT=保存为文本(&T)
 SAVE_IMAGE=保存为图片(&S)
 
-;8.18.0
+;9.0.0
 DRIVE_SORT_METHOD=Drive Sort Method
 PHYSICAL_DRIVE_ID=Physical Drive ID
 DRIVE_LETTER=Drive Letter
@@ -1642,7 +1642,7 @@ F6=主机累计写入扇区
 F7=主机编程 NAND 页计数
 F8=FTL 编程 NAND 页计数
 
-[SmartSanDiskCloud] ;Added 8.18.0
+[SmartSanDiskCloud] ;Added 9.0.0
 05=Retired Block Count
 09=Power On Hours
 0D=Count of Uncorrectable ECC Errors

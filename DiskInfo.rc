@@ -1150,9 +1150,9 @@ BEGIN
             POPUP "Drive Menu"
                 BEGIN
                 MENUITEM "8",                           ID_DRIVE_MENU_8
-                MENUITEM "10",                          ID_DRIVE_MENU_10
+           //     MENUITEM "10",                          ID_DRIVE_MENU_10
                 MENUITEM "16",                          ID_DRIVE_MENU_16
-                MENUITEM "20",                          ID_DRIVE_MENU_20
+           //     MENUITEM "20",                          ID_DRIVE_MENU_20
             END
             MENUITEM SEPARATOR
             MENUITEM "&Advanced Disk Search",           ID_ADVANCED_DISK_SEARCH

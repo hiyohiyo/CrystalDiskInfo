@@ -1212,7 +1212,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	else
 	{
 		m_OffsetX = 0;
-		positionX = 1000 - OFFSET_X;
+		positionX = SIZE_X - OFFSET_X;
 	}
 	m_CtrlVoice.InitControl(positionX, 48, OFFSET_X, m_SizeY - 24 - 48, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlVoiceHide.InitControl(positionX, 0, OFFSET_X, 48, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
@@ -1247,22 +1247,18 @@ void CDiskInfoDlg::UpdateDialogSize()
 #endif
 
 	int buttonDiskHeight = 48;
-	/*
+
 	if(m_bHighContrast){ buttonDiskHeight = 56;}
-	for(int i = 0; i < 8; i++)
+	for(int i = 0; i < 20; i++)
 	{
-		m_ButtonDisk[i].InitControl(84 * i + m_OffsetX, 0, 84, buttonDiskHeight, m_ZoomRatio, &m_BkDC, IP(L"noDisk"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
+		m_ButtonDisk[i].InitControl(DRIVE_MENU_SIZE / 2 * i + m_OffsetX, 0, DRIVE_MENU_SIZE / 2, buttonDiskHeight, m_ZoomRatio, &m_BkDC, IP(L"noDisk"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
 		m_ButtonDisk[i].SetMargin(0, 0, 3, 0, m_ZoomRatio);
 		m_ButtonDisk[i].SetHandCursor(TRUE);
 	}
-	*/
-
-// TEMP
-#define DRIVE_MENU_SIZE 80
 
 	if (m_bHalfDriveMenu)
 	{
-		for (DWORD i = 0; i < m_DriveMenuNumber; i++)
+		for (int i = 0; i < m_DriveMenuNumber; i++)
 		{
 			m_ButtonDisk[i].InitControl(DRIVE_MENU_SIZE / 2 * i + m_OffsetX, 0, DRIVE_MENU_SIZE / 2, buttonDiskHeight, m_ZoomRatio, &m_BkDC, IP(L"noDiskMini"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
 			m_ButtonDisk[i].SetMargin(3, 0, 3, 0, m_ZoomRatio);
@@ -1271,7 +1267,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	}
 	else
 	{
-		for (DWORD i = 0; i < m_DriveMenuNumber; i++)
+		for (int i = 0; i < m_DriveMenuNumber; i++)
 		{
 			m_ButtonDisk[i].InitControl(DRIVE_MENU_SIZE * i + m_OffsetX, 0, DRIVE_MENU_SIZE, buttonDiskHeight, m_ZoomRatio, &m_BkDC, IP(L"noDisk"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
 			m_ButtonDisk[i].SetMargin(3, 0, 3, 0, m_ZoomRatio);
@@ -1503,7 +1499,7 @@ void CDiskInfoDlg::OnSize(UINT nType, int cx, int cy)
 		}
 		else
 		{
-			positionX = 1000 - OFFSET_X;
+			positionX = SIZE_X - OFFSET_X;
 		}
 		m_List.MoveWindow((int)((8 + m_OffsetX) * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), (int)((672 - 16) * m_ZoomRatio), (int)(cy - ((int)(SIZE_Y + 8) * m_ZoomRatio)));
 		m_CtrlVoice.MoveWindow((int)(positionX * m_ZoomRatio), (int)(48 * m_ZoomRatio), (int)(OFFSET_X * m_ZoomRatio), (int)(cy - (int)((24 + 48) * m_ZoomRatio)));
@@ -2376,14 +2372,14 @@ DWORD CDiskInfoDlg::GetSelectDisk()
 	return m_SelectDisk;
 }
 
-void CDiskInfoDlg::OnBnClickedButtonDisk0(){SelectDrive(0 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnBnClickedButtonDisk1(){SelectDrive(1 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnBnClickedButtonDisk2(){SelectDrive(2 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnBnClickedButtonDisk3(){SelectDrive(3 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnBnClickedButtonDisk4(){SelectDrive(4 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnBnClickedButtonDisk5(){SelectDrive(5 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnBnClickedButtonDisk6(){SelectDrive(6 + m_DriveMenuPage * 8);}
-void CDiskInfoDlg::OnBnClickedButtonDisk7(){SelectDrive(7 + m_DriveMenuPage * 8);}
+void CDiskInfoDlg::OnBnClickedButtonDisk0(){SelectDrive(0 + m_DriveMenuPage * m_DriveMenuNumber);}
+void CDiskInfoDlg::OnBnClickedButtonDisk1(){SelectDrive(1 + m_DriveMenuPage * m_DriveMenuNumber);}
+void CDiskInfoDlg::OnBnClickedButtonDisk2(){SelectDrive(2 + m_DriveMenuPage * m_DriveMenuNumber);}
+void CDiskInfoDlg::OnBnClickedButtonDisk3(){SelectDrive(3 + m_DriveMenuPage * m_DriveMenuNumber);}
+void CDiskInfoDlg::OnBnClickedButtonDisk4(){SelectDrive(4 + m_DriveMenuPage * m_DriveMenuNumber);}
+void CDiskInfoDlg::OnBnClickedButtonDisk5(){SelectDrive(5 + m_DriveMenuPage * m_DriveMenuNumber);}
+void CDiskInfoDlg::OnBnClickedButtonDisk6(){SelectDrive(6 + m_DriveMenuPage * m_DriveMenuNumber);}
+void CDiskInfoDlg::OnBnClickedButtonDisk7(){SelectDrive(7 + m_DriveMenuPage * m_DriveMenuNumber);}
 void CDiskInfoDlg::OnBnClickedButtonDisk8() { SelectDrive(8 + m_DriveMenuPage * m_DriveMenuNumber); }
 void CDiskInfoDlg::OnBnClickedButtonDisk9() { SelectDrive(9 + m_DriveMenuPage * m_DriveMenuNumber); }
 void CDiskInfoDlg::OnBnClickedButtonDisk10() { SelectDrive(10 + m_DriveMenuPage * m_DriveMenuNumber); }
@@ -2410,7 +2406,7 @@ void CDiskInfoDlg::SetControlFont()
 
 	m_List.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
-	for(int i = 0; i < 8; i++)
+	for(int i = 0; i < 20; i++)
 	{
 		m_ButtonDisk[i].SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	}
