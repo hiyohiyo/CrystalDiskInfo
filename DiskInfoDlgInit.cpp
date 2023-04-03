@@ -147,9 +147,11 @@ BOOL CDiskInfoDlg::OnInitDialog()
 
 	switch (GetPrivateProfileInt(_T("Setting"), _T("DriveMenu"), 8, m_Ini))
 	{
-	case   10:	OnDriveMenu10();	break;
 	case   16:	OnDriveMenu16();	break;
+#ifdef MAX_DRIVE_20
+	case   10:	OnDriveMenu10();	break;
 	case   20:	OnDriveMenu20();	break;
+#endif
 	default:	OnDriveMenu8(); 	break;
 	}
 
@@ -758,7 +760,7 @@ void CDiskInfoDlg::InitDriveList()
 		m_ButtonDisk[i].ShowWindow(SW_SHOW);
 		m_ButtonDisk[i].SetSelected(FALSE);
 	}
-	for (int i = m_DriveMenuNumber; i < 20; i++)
+	for (int i = m_DriveMenuNumber; i < MAX_DRIVE_MENU; i++)
 	{
 		m_ButtonDisk[i].ShowWindow(SW_HIDE);
 	}

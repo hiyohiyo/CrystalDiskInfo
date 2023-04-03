@@ -103,8 +103,8 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"9.0.0 Beta4"
-#define PRODUCT_RELEASE				L"2023/03/27"
+#define PRODUCT_VERSION				L"9.0.0 Beta5"
+#define PRODUCT_RELEASE				L"2023/04/03"
 #define PRODUCT_COPY_YEAR			L"2008-2023"
 #define PRODUCT_LICENSE				L"MIT License"
 
@@ -140,6 +140,12 @@
 #define	URL_PROJECT_SHIZUKU_EN		L"https://suishoshizuku.com/en/"
 
 #define URL_PRONAMA	                L"https://pronama.jp/2017/08/04/crystaldiskinfo-kurei-kei-edition-release/"
+
+#ifdef MAX_DRIVE_20
+#define MAX_DRIVE_MENU              20
+#else
+#define MAX_DRIVE_MENU              16
+#endif
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 

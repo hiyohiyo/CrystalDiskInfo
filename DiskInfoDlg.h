@@ -133,8 +133,7 @@ protected:
 	CListCtrlFx			m_List;
 	CImageList			m_ImageList;
 
-	CButtonFx			m_ButtonDisk[20];
-
+	CButtonFx			m_ButtonDisk[MAX_DRIVE_MENU];
 	CButtonFx			m_CtrlButtonPreDisk;
 	CButtonFx			m_CtrlButtonNextDisk;
 
@@ -362,30 +361,6 @@ protected:
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 //	virtual void OnDocumentComplete(LPDISPATCH pDisp, LPCTSTR szUrl);
 	virtual void InitDialogComplete();
-
-/*
-	void OnDisk0();
-	void OnDisk1();
-	void OnDisk2();
-	void OnDisk3();
-	void OnDisk4();
-	void OnDisk5();
-	void OnDisk6();
-	void OnDisk7();
-	void OnDisk8();
-	void OnDisk9();
-	void OnDisk10();
-	void OnDisk11();
-	void OnDisk12();
-	void OnDisk13();
-	void OnDisk14();
-	void OnDisk15();
-	void OnDisk16();
-	void OnDisk17();
-	void OnDisk18();
-	void OnDisk19();
-*/
-
 	void OnPreDisk();
 	void OnNextDisk();
 	void OnDiskStatus();
@@ -657,9 +632,11 @@ public:
 	afx_msg void OnSortPhysicalDriveId();
 	afx_msg void OnSortDriveLetter();
 	afx_msg void OnDriveMenu8();
-	afx_msg void OnDriveMenu10();
 	afx_msg void OnDriveMenu16();
+#ifdef MAX_DRIVE_20
+	afx_msg void OnDriveMenu10();
 	afx_msg void OnDriveMenu20();
+#endif
 	afx_msg void OnZoom100();
 	afx_msg void OnZoom125();
 	afx_msg void OnZoom150();
@@ -701,11 +678,12 @@ public:
 	afx_msg void OnBnClickedButtonDisk13();
 	afx_msg void OnBnClickedButtonDisk14();
 	afx_msg void OnBnClickedButtonDisk15();
+#ifdef MAX_DRIVE_20
 	afx_msg void OnBnClickedButtonDisk16();
 	afx_msg void OnBnClickedButtonDisk17();
 	afx_msg void OnBnClickedButtonDisk18();
 	afx_msg void OnBnClickedButtonDisk19();
-
+#endif
 	afx_msg void OnBnClickedButtonPreDisk();
 	afx_msg void OnBnClickedButtonNextDisk();
 	afx_msg void OnBnClickedButtonHealthStatus();

@@ -1667,23 +1667,9 @@ void CDiskInfoDlg::OnDriveMenu8()
 
 	m_DriveMenuNumber = 8;
 	m_bHalfDriveMenu = FALSE;
+	SelectDrive(0);
 	
 	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("8"), m_Ini);
-
-	UpdateDialogSize();
-}
-
-void CDiskInfoDlg::OnDriveMenu10()
-{
-	CMenu* menu = GetMenu();
-	menu->CheckMenuRadioItem(ID_DRIVE_MENU_8, ID_DRIVE_MENU_20, ID_DRIVE_MENU_10, MF_BYCOMMAND);
-	SetMenu(menu);
-	DrawMenuBar();
-
-	m_DriveMenuNumber = 10;
-	m_bHalfDriveMenu = FALSE;
-
-	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("10"), m_Ini);
 
 	UpdateDialogSize();
 }
@@ -1697,8 +1683,26 @@ void CDiskInfoDlg::OnDriveMenu16()
 
 	m_DriveMenuNumber = 16;
 	m_bHalfDriveMenu = TRUE;
+	SelectDrive(0);
 
 	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("16"), m_Ini);
+
+	UpdateDialogSize();
+}
+
+#ifdef MAX_DRIVE_20
+void CDiskInfoDlg::OnDriveMenu10()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_DRIVE_MENU_8, ID_DRIVE_MENU_20, ID_DRIVE_MENU_10, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+
+	m_DriveMenuNumber = 10;
+	m_bHalfDriveMenu = FALSE;
+	SelectDrive(0);
+
+	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("10"), m_Ini);
 
 	UpdateDialogSize();
 }
@@ -1712,11 +1716,13 @@ void CDiskInfoDlg::OnDriveMenu20()
 
 	m_DriveMenuNumber = 20;
 	m_bHalfDriveMenu = TRUE;
+	SelectDrive(0);
 
 	WritePrivateProfileStringFx(_T("Setting"), _T("DriveMenu"), _T("20"), m_Ini);
 
 	UpdateDialogSize();
 }
+#endif
 
 void CDiskInfoDlg::OnZoom100()
 {

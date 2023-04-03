@@ -705,11 +705,12 @@ BEGIN
     PUSHBUTTON      "Disk13", IDC_BUTTON_DISK13, 120, 0, 40, 40, BS_CENTER | BS_MULTILINE | BS_NOTIFY
     PUSHBUTTON      "Disk14", IDC_BUTTON_DISK14, 160, 0, 40, 40, BS_CENTER | BS_MULTILINE | BS_NOTIFY
     PUSHBUTTON      "Disk15", IDC_BUTTON_DISK15, 200, 0, 40, 40, BS_CENTER | BS_MULTILINE | BS_NOTIFY
+#ifdef MAX_DRIVE_20
     PUSHBUTTON      "Disk16", IDC_BUTTON_DISK16, 240, 0, 40, 40, BS_CENTER | BS_MULTILINE | BS_NOTIFY
     PUSHBUTTON      "Disk17", IDC_BUTTON_DISK17, 280, 0, 40, 40, BS_CENTER | BS_MULTILINE | BS_NOTIFY
     PUSHBUTTON      "Disk18", IDC_BUTTON_DISK18, 280, 0, 40, 40, BS_CENTER | BS_MULTILINE | BS_NOTIFY
     PUSHBUTTON      "Disk19", IDC_BUTTON_DISK19, 280, 0, 40, 40, BS_CENTER | BS_MULTILINE | BS_NOTIFY
-
+#endif
     PUSHBUTTON      "",IDC_BUTTON_PRE_DISK,9,50,26,15,BS_MULTILINE
     PUSHBUTTON      "",IDC_BUTTON_NEXT_DISK,465,45,26,15,BS_MULTILINE
     CONTROL         "Life",IDC_BUTTON_LIFE,"Button",BS_OWNERDRAW | BS_CENTER | BS_MULTILINE | BS_NOTIFY | WS_TABSTOP,8,199,88,23
@@ -1150,9 +1151,13 @@ BEGIN
             POPUP "Drive Menu"
                 BEGIN
                 MENUITEM "8",                           ID_DRIVE_MENU_8
-           //     MENUITEM "10",                          ID_DRIVE_MENU_10
+#ifdef MAX_DRIVE_20
+                MENUITEM "10",                          ID_DRIVE_MENU_10
+#endif
                 MENUITEM "16",                          ID_DRIVE_MENU_16
-           //     MENUITEM "20",                          ID_DRIVE_MENU_20
+#ifdef MAX_DRIVE_20
+                MENUITEM "20",                          ID_DRIVE_MENU_20
+#endif
             END
             MENUITEM SEPARATOR
             MENUITEM "&Advanced Disk Search",           ID_ADVANCED_DISK_SEARCH

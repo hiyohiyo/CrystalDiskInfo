@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Lyttiya, Gihun Ham, 로웰
-VERSION=8.17.0
+VERSION=9.0.0
 
 [Language]
 LANGUAGE=한국어
@@ -9,7 +9,7 @@ CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x0412
 
 [Url]
-WIKIPEDIA_SMART=https://ko.wikipedia.org/wiki/S.M.A.R.T.
+WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/Self-Monitoring%2C_Analysis_and_Reporting_Technology
 
 [Menu]
 FILE=파일(&F)
@@ -111,9 +111,10 @@ SAVE_TEXT=텍스트로 저장(&T)
 SAVE_IMAGE=이미지로 저장(&S)
 
 ;9.0.0
-DRIVE_SORT_METHOD=Drive Sort Method
-PHYSICAL_DRIVE_ID=Physical Drive ID
-DRIVE_LETTER=Drive Letter
+DRIVE_SORT_METHOD=드라이브 정렬 방식
+PHYSICAL_DRIVE_ID=물리 드라이브 ID
+DRIVE_LETTER=드라이브 문자
+DRIVE_MENU_NUMBER=드라이브 표시 대수
 
 [TrayMenu]
 EXIT=종료
@@ -667,7 +668,7 @@ F2=총 읽기량 (호스트)
 0C=사용 횟수
 AA=증가한 배드 블록 수
 AB=총 쓰기 실패 횟수
-AC=총 삭제 실패 횟수
+AC=삭제 실패 횟수
 AD=평균 쓰기/삭제 횟수
 AE=예기치 않은 전원 손실 횟수
 AF=쓰기 실패 횟수 (최악의 경우)
@@ -1164,7 +1165,7 @@ CA=남은 수명(%)
 E2=일정 시간 부하 미디어 소모
 E3=일정 시간 부하 읽기/쓰기 비율
 E4=일정 시간 부하 타이머
-EA=총 읽기량 (호스트)
+EA=발열 제어 상태
 EB=총 쓰기량 (호스트)
 F1=총 쓰기량 (NAND)
 
@@ -1642,27 +1643,27 @@ F7=총 NAND 쓰기 페이지량 (호스트)
 F8=총 FTL의 NAND 페이지 쓰기량
 
 [SmartSanDiskCloud] ;Added 9.0.0
-05=Retired Block Count
-09=Power On Hours
-0D=Count of Uncorrectable ECC Errors
-20=Write Amplification multiplied by 100
-21=Write Amplification Factor
-AA=Reserve Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Average Write/Erase Count
-AE=Unexpected Power Loss Count
-B2=SSD Life Left (upto 0.01%)
-BF=Clean Shutdown Count
-C0=Unclean Shutdown Count
-C2=Temperature
-C4=Number of Blocks Reallocated
-E6=Percent of Total Write/Erase Count
-E8=Spare Blocks Remaining
-E9=Total Nand Writes 64GB
-EB=Capacitor Health
-F1=Total Host Writes 64GB
-F2=Total Host Reads 64GB
-F4=Lifetime Thermal Throttle Activations
-F5=Percent Drive Life Remaining
-FD=SPI Tests Remaining
+05=재할당된 블록 수
+09=사용 시간
+0D=회복 불가능한 ECC 오류 횟수
+20=쓰기 증폭값 (곱하기 100)
+21=쓰기 증폭률
+AA=예약 블록 수
+AB=총 쓰기 실패 횟수
+AC=삭제 실패 횟수
+AD=평균 쓰기/삭제 횟수
+AE=예기치 않은 전원 손실 횟수
+B2=남은 SSD 수명 (0.001%까지)
+BF=깔끔한 종료 횟수
+C0=예기치 않은 전원 손실 횟수
+C2=온도
+C4=재할당된 이벤트 수
+E6=총 쓰기/삭제 횟수(%)
+E8=남은 예비 블록 수
+E9=총 쓰기량 (NAND 64GB)
+EB=축전기 건강 상태
+F1=총 쓰기량 (호스트 64GB)
+F2=총 읽기량 (호스트 64GB)
+F4=발열 제어 활성화 횟수
+F5=남은 수명(%)
+FD=남은 SPI 테스트 횟수

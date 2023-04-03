@@ -380,10 +380,13 @@ void CDiskInfoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_DISK13, m_ButtonDisk[13]);
 	DDX_Control(pDX, IDC_BUTTON_DISK14, m_ButtonDisk[14]);
 	DDX_Control(pDX, IDC_BUTTON_DISK15, m_ButtonDisk[15]);
+
+#ifdef MAX_DRIVE_20
 	DDX_Control(pDX, IDC_BUTTON_DISK16, m_ButtonDisk[16]);
 	DDX_Control(pDX, IDC_BUTTON_DISK17, m_ButtonDisk[17]);
 	DDX_Control(pDX, IDC_BUTTON_DISK18, m_ButtonDisk[18]);
 	DDX_Control(pDX, IDC_BUTTON_DISK19, m_ButtonDisk[19]);
+#endif
 
 	DDX_Control(pDX, IDC_BUTTON_PRE_DISK, m_CtrlButtonPreDisk);
 	DDX_Control(pDX, IDC_BUTTON_NEXT_DISK, m_CtrlButtonNextDisk);
@@ -436,10 +439,13 @@ void CDiskInfoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_BUTTON_DISK13, m_LiDisk[13]);
 	DDX_Text(pDX, IDC_BUTTON_DISK14, m_LiDisk[14]);
 	DDX_Text(pDX, IDC_BUTTON_DISK15, m_LiDisk[15]);
+
+#ifdef MAX_DRIVE_20
 	DDX_Text(pDX, IDC_BUTTON_DISK16, m_LiDisk[16]);
 	DDX_Text(pDX, IDC_BUTTON_DISK17, m_LiDisk[17]);
 	DDX_Text(pDX, IDC_BUTTON_DISK18, m_LiDisk[18]);
 	DDX_Text(pDX, IDC_BUTTON_DISK19, m_LiDisk[19]);
+#endif
 
 	DDX_Text(pDX, IDC_LABEL_FIRMWARE, m_LabelFirmware);
 	DDX_Text(pDX, IDC_LABEL_SERIAL_NUMBER, m_LabelSerialNumber);
@@ -727,9 +733,11 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_SORT_PHYSICAL_DRIVE_ID, &CDiskInfoDlg::OnSortPhysicalDriveId)
 	ON_COMMAND(ID_SORT_DRIVE_LETTER, &CDiskInfoDlg::OnSortDriveLetter)
 	ON_COMMAND(ID_DRIVE_MENU_8, &CDiskInfoDlg::OnDriveMenu8)
-	ON_COMMAND(ID_DRIVE_MENU_10, &CDiskInfoDlg::OnDriveMenu10)
 	ON_COMMAND(ID_DRIVE_MENU_16, &CDiskInfoDlg::OnDriveMenu16)
+#ifdef MAX_DRIVE_20
+	ON_COMMAND(ID_DRIVE_MENU_10, &CDiskInfoDlg::OnDriveMenu10)
 	ON_COMMAND(ID_DRIVE_MENU_20, &CDiskInfoDlg::OnDriveMenu20)
+#endif
 	ON_COMMAND(ID_ZOOM_100, &CDiskInfoDlg::OnZoom100)
 	ON_COMMAND(ID_ZOOM_125, &CDiskInfoDlg::OnZoom125)
 	ON_COMMAND(ID_ZOOM_150, &CDiskInfoDlg::OnZoom150)
@@ -772,10 +780,12 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_BN_CLICKED(IDC_BUTTON_DISK13, &CDiskInfoDlg::OnBnClickedButtonDisk13)
 	ON_BN_CLICKED(IDC_BUTTON_DISK14, &CDiskInfoDlg::OnBnClickedButtonDisk14)
 	ON_BN_CLICKED(IDC_BUTTON_DISK15, &CDiskInfoDlg::OnBnClickedButtonDisk15)
+#ifdef MAX_DRIVE_20
 	ON_BN_CLICKED(IDC_BUTTON_DISK16, &CDiskInfoDlg::OnBnClickedButtonDisk16)
 	ON_BN_CLICKED(IDC_BUTTON_DISK17, &CDiskInfoDlg::OnBnClickedButtonDisk17)
 	ON_BN_CLICKED(IDC_BUTTON_DISK18, &CDiskInfoDlg::OnBnClickedButtonDisk18)
 	ON_BN_CLICKED(IDC_BUTTON_DISK19, &CDiskInfoDlg::OnBnClickedButtonDisk19)
+#endif
 
 	ON_BN_CLICKED(IDC_BUTTON_PRE_DISK, &CDiskInfoDlg::OnBnClickedButtonPreDisk)
 	ON_BN_CLICKED(IDC_BUTTON_NEXT_DISK, &CDiskInfoDlg::OnBnClickedButtonNextDisk)
@@ -1249,7 +1259,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 	int buttonDiskHeight = 48;
 
 	if(m_bHighContrast){ buttonDiskHeight = 56;}
-	for(int i = 0; i < 20; i++)
+	for(int i = 0; i < MAX_DRIVE_MENU; i++)
 	{
 		m_ButtonDisk[i].InitControl(DRIVE_MENU_SIZE / 2 * i + m_OffsetX, 0, DRIVE_MENU_SIZE / 2, buttonDiskHeight, m_ZoomRatio, &m_BkDC, IP(L"noDisk"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
 		m_ButtonDisk[i].SetMargin(0, 0, 3, 0, m_ZoomRatio);
@@ -2388,10 +2398,13 @@ void CDiskInfoDlg::OnBnClickedButtonDisk12() { SelectDrive(12 + m_DriveMenuPage 
 void CDiskInfoDlg::OnBnClickedButtonDisk13() { SelectDrive(13 + m_DriveMenuPage * m_DriveMenuNumber); }
 void CDiskInfoDlg::OnBnClickedButtonDisk14() { SelectDrive(14 + m_DriveMenuPage * m_DriveMenuNumber); }
 void CDiskInfoDlg::OnBnClickedButtonDisk15() { SelectDrive(15 + m_DriveMenuPage * m_DriveMenuNumber); }
+
+#ifdef MAX_DRIVE_20
 void CDiskInfoDlg::OnBnClickedButtonDisk16() { SelectDrive(16 + m_DriveMenuPage * m_DriveMenuNumber); }
 void CDiskInfoDlg::OnBnClickedButtonDisk17() { SelectDrive(17 + m_DriveMenuPage * m_DriveMenuNumber); }
 void CDiskInfoDlg::OnBnClickedButtonDisk18() { SelectDrive(18 + m_DriveMenuPage * m_DriveMenuNumber); }
 void CDiskInfoDlg::OnBnClickedButtonDisk19() { SelectDrive(19 + m_DriveMenuPage * m_DriveMenuNumber); }
+#endif
 
 void CDiskInfoDlg::SetControlFont()
 {
@@ -2406,7 +2419,7 @@ void CDiskInfoDlg::SetControlFont()
 
 	m_List.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
-	for(int i = 0; i < 20; i++)
+	for(int i = 0; i < MAX_DRIVE_MENU; i++)
 	{
 		m_ButtonDisk[i].SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
 	}
