@@ -1393,13 +1393,13 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_CtrlAtaAtapi.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_CtrlFeature.SetGlassColor(m_Glass, m_GlassAlpha);
 
-	m_CtrlFirmware.SetMargin(0, 2, 0, 0, m_ZoomRatio);
-	m_CtrlSerialNumber.SetMargin(0, 2, 0, 0, m_ZoomRatio);
-	m_CtrlInterface.SetMargin(0, 2, 0, 0, m_ZoomRatio);
-	m_CtrlTransferMode.SetMargin(0, 2, 0, 0, m_ZoomRatio);
-	m_CtrlDriveMap.SetMargin(0, 2, 0, 0, m_ZoomRatio);
-	m_CtrlAtaAtapi.SetMargin(0, 2, 0, 0, m_ZoomRatio);
-	m_CtrlFeature.SetMargin(0, 2, 0, 0, m_ZoomRatio);
+	m_CtrlFirmware.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+	m_CtrlSerialNumber.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+	m_CtrlInterface.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+	m_CtrlTransferMode.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+	m_CtrlDriveMap.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+	m_CtrlAtaAtapi.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+	m_CtrlFeature.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
 	m_CtrlFirmware.InitControl    (256 + m_OffsetX,  88, 180, 20, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, TRUE);
 	m_CtrlSerialNumber.InitControl(256 + m_OffsetX, 112, 180, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, TRUE);

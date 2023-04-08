@@ -103,8 +103,8 @@
 #endif
 #endif
 
-#define PRODUCT_VERSION				L"9.0.0 Beta5"
-#define PRODUCT_RELEASE				L"2023/04/03"
+#define PRODUCT_VERSION				L"9.0.0 RC1"
+#define PRODUCT_RELEASE				L"2023/04/08"
 #define PRODUCT_COPY_YEAR			L"2008-2023"
 #define PRODUCT_LICENSE				L"MIT License"
 
@@ -146,6 +146,10 @@
 #else
 #define MAX_DRIVE_MENU              16
 #endif
+
+#define CERTNAME_JMS56X				L"Open Source Developer, Noriyuki Miyazaki"
+#define CERTNAME_JMB39X				L"Open Source Developer, Noriyuki Miyazaki"
+
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 

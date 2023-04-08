@@ -229,3 +229,57 @@ BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR l
 
 	return WritePrivateProfileString(lpAppName, key, value, lpFileName);
 }
+
+////------------------------------------------------
+//   Check CodeSign
+////------------------------------------------------
+
+#include <Softpub.h>
+#pragma comment(lib, "Wintrust.lib")
+#pragma comment(lib, "Crypt32.lib")
+
+BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath)
+{
+	// check sign
+
+	WINTRUST_FILE_INFO FileData = { sizeof(WINTRUST_FILE_INFO) };
+	FileData.pcwszFilePath = filePath;
+
+	GUID WVTPolicyGUID = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+	WINTRUST_DATA WinTrustData = { sizeof(WinTrustData) };
+	WinTrustData.dwUIChoice = WTD_UI_NONE;
+	WinTrustData.fdwRevocationChecks = WTD_REVOKE_NONE;
+	WinTrustData.dwUnionChoice = WTD_CHOICE_FILE;
+	WinTrustData.dwStateAction = WTD_STATEACTION_VERIFY;
+	WinTrustData.pFile = &FileData;
+
+	const LONG ret = WinVerifyTrust(NULL, &WVTPolicyGUID, &WinTrustData);
+
+	bool cert_chk = false;
+
+	if (ret == ERROR_SUCCESS) {
+		// retreive the signer certificate and display its information
+		CRYPT_PROVIDER_DATA const* psProvData = NULL;
+		CRYPT_PROVIDER_SGNR* psProvSigner = NULL;
+		CRYPT_PROVIDER_CERT* psProvCert = NULL;
+
+		psProvData = WTHelperProvDataFromStateData(WinTrustData.hWVTStateData);
+		if (psProvData) {
+			psProvSigner = WTHelperGetProvSignerFromChain((PCRYPT_PROVIDER_DATA)psProvData, 0, FALSE, 0);
+			if (psProvSigner) {
+				psProvCert = WTHelperGetProvCertFromChain(psProvSigner, 0);
+				if (psProvCert) {
+					wchar_t szCertName[200] = {};
+					DWORD dwStrType = CERT_X500_NAME_STR;
+					CertGetNameStringW(psProvCert->pCert, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, &dwStrType, szCertName, 200);
+					cert_chk = !(szCertName[0] == '\0' || wcscmp(szCertName, certName) != 0);
+				}
+			}
+		}
+	}
+	WinTrustData.dwStateAction = WTD_STATEACTION_CLOSE;
+	(void)WinVerifyTrust(NULL, &WVTPolicyGUID, &WinTrustData);
+	if (!cert_chk)  return FALSE;
+
+	return TRUE;
+}

@@ -37,3 +37,9 @@ DWORD B8toB32(BYTE b0, BYTE b1 = 0, BYTE b2 = 0, BYTE b3 = 0);
 DWORD GetPrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpDefault, LPTSTR  lpReturnedString,DWORD nSize,LPCTSTR lpFileName);
 UINT GetPrivateProfileIntFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, INT nDefault, LPCTSTR lpFileName);
 BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpString, LPCTSTR lpFileName);
+
+////------------------------------------------------
+//   Check CodeSign
+////------------------------------------------------
+
+BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath);

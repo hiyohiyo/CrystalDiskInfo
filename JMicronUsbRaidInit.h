@@ -43,13 +43,28 @@ _GetIdentifyInfoJMB39X pGetIdentifyInfoJMB39X = NULL;
 
 BOOL InitializeJMS56X(HMODULE* hModule)
 {
+	TCHAR fullPath[MAX_PATH] = {};
+	TCHAR drive[MAX_PATH] = {};
+	TCHAR path[MAX_PATH] = {};
+	TCHAR dllPath[MAX_PATH] = {};
+
+	GetModuleFileNameW(NULL, fullPath, MAX_PATH);
+	_wsplitpath_s(fullPath, drive, MAX_PATH, path, MAX_PATH, NULL, 0, NULL, 0);
+	wcscat_s(dllPath, MAX_PATH, drive);
+	wcscat_s(dllPath, MAX_PATH, path);
+	wcscat_s(dllPath, MAX_PATH, DLL_DIR);
+
 #ifdef _M_ARM64
-	* hModule = LoadLibraryW(DLL_DIR L"JMS56xA64.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMS56xA64.dll");
 #elif _M_X64
-	* hModule = LoadLibraryW(DLL_DIR L"JMS56x64.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMS56x64.dll");
 #else
-	* hModule = LoadLibraryW(DLL_DIR L"JMS56x86.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMS56x86.dll");
 #endif
+
+	if (!CheckCodeSign(CERTNAME_JMS56X, dllPath)) { return FALSE; }
+	* hModule = LoadLibraryW(dllPath);
+
 	if (*hModule == NULL)
 	{
 		return FALSE;
@@ -82,13 +97,27 @@ BOOL InitializeJMS56X(HMODULE* hModule)
 
 BOOL InitializeJMB39X(HMODULE* hModule)
 {
+	TCHAR fullPath[MAX_PATH] = {};
+	TCHAR drive[MAX_PATH] = {};
+	TCHAR path[MAX_PATH] = {};
+	TCHAR dllPath[MAX_PATH] = {};
+
+	GetModuleFileNameW(NULL, fullPath, MAX_PATH);
+	_wsplitpath_s(fullPath, drive, MAX_PATH, path, MAX_PATH, NULL, 0, NULL, 0);
+	wcscat_s(dllPath, MAX_PATH, drive);
+	wcscat_s(dllPath, MAX_PATH, path);
+	wcscat_s(dllPath, MAX_PATH, DLL_DIR);
+
 #ifdef _M_ARM64
-	* hModule = LoadLibraryW(DLL_DIR L"JMB39xA64.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMB39xA64.dll");
 #elif _M_X64
-	* hModule = LoadLibraryW(DLL_DIR L"JMB39x64.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMB39x64.dll");
 #else
-	* hModule = LoadLibraryW(DLL_DIR L"JMB39x86.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMB39x86.dll");
 #endif
+
+	if (!CheckCodeSign(CERTNAME_JMB39X, dllPath)) { return FALSE; }
+	*hModule = LoadLibraryW(dllPath);
 
 	if (*hModule == NULL)
 	{

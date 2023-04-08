@@ -48,6 +48,14 @@ Language = English
 %1!s!
 .
 
+MessageId = 607
+Severity = Warning
+Facility = Application
+SymbolicName = MSG_607
+Language = English
+%1!s!
+.
+
 MessageId = 701
 Severity = Informational
 Facility = Application
@@ -88,4 +96,11 @@ Language = English
 %1!s!
 .
 
+MessageId = 707
+Severity = Informational
+Facility = Application
+SymbolicName = MSG_707
+Language = English
+%1!s!
+.
 

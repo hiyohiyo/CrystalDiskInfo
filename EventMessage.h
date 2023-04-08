@@ -1,5 +1,5 @@
-﻿//
-//  Values are 32 bit values layed out as follows:
+//
+//  Values are 32 bit values laid out as follows:
 //
 //   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
 //   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
@@ -39,7 +39,7 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_601                          0x80000259L
 
@@ -48,7 +48,7 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_602                          0x8000025AL
 
@@ -57,7 +57,7 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_603                          0x8000025BL
 
@@ -66,7 +66,7 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_604                          0x8000025CL
 
@@ -75,7 +75,7 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_605                          0x8000025DL
 
@@ -84,16 +84,25 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_606                          0x8000025EL
+
+//
+// MessageId: MSG_607
+//
+// MessageText:
+//
+// %1!s!
+//
+#define MSG_607                          0x8000025FL
 
 //
 // MessageId: MSG_701
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_701                          0x400002BDL
 
@@ -102,7 +111,7 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_702                          0x400002BEL
 
@@ -111,7 +120,7 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_703                          0x400002BFL
 
@@ -120,7 +129,7 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_704                          0x400002C0L
 
@@ -129,7 +138,16 @@
 //
 // MessageText:
 //
-//  %1!s!
+// %1!s!
 //
 #define MSG_705                          0x400002C1L
+
+//
+// MessageId: MSG_707
+//
+// MessageText:
+//
+// %1!s!
+//
+#define MSG_707                          0x400002C3L
 

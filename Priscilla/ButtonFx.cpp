@@ -72,8 +72,8 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
-	m_CtrlSize.cx = (int)(width * zoomRatio);
-	m_CtrlSize.cy = (int)(height * zoomRatio);
+	m_CtrlSize.cx = (int)(width * zoomRatio + 0.5);
+	m_CtrlSize.cy = (int)(height * zoomRatio + 0.5);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
 
 	m_BkDC = bkDC;
