@@ -5203,6 +5203,7 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 	{
 		asi.DiskVendorId = SSD_VENDOR_SANDISK; // Default Vendor ID for SanDisk
 		flagSmartType = TRUE;
+
 		if (
 			  (asi.Model.Find(_T("X600")) >= 0 && asi.Model.Find(_T("2280")) >= 0) // https://crystalmark.info/board/c-board.cgi?cmd=one;no=2123;id=#2123
 			|| asi.Model.Find(_T("X400")) >= 0
@@ -5211,9 +5212,22 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 			|| asi.Model.Find(_T("SD5")) >= 0
 			)
 		{
+			if (asi.Attribute[2].Id == 0xAF || asi.Attribute[3].Id == 0xAF)
+			{
+				asi.SmartKeyName = _T("SmartSanDiskDell");
+			}
+			else
+			{
+				asi.SmartKeyName = _T("SmartSanDiskGb");
+			}
 			asi.FlagLifeSanDisk1 = TRUE;
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
-			asi.SmartKeyName = _T("SmartSanDiskGb");
+
+		}
+		else if (asi.Model.Find(_T("Z400")) >= 0)
+		{
+			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+			asi.SmartKeyName = _T("SmartSanDiskDell");
 		}
 		// 2022/04/24
 		// https://osdn.net/projects/crystaldiskinfo/ticket/44354
