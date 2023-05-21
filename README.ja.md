@@ -1,4 +1,4 @@
-[英語](./README.md) | 日本語
+[英語](./README.md) | 日本語 | [中国語（簡体字）](./README.md)
 
 # CrystalDiskInfo
 
