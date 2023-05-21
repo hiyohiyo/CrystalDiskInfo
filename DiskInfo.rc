@@ -929,8 +929,8 @@ BEGIN
         VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2012-2023 kirino kasumu"
 #endif
 #else
-        VALUE "FileDescription", "CrystalDiskInfo 9"
-        VALUE "ProductName", "CrystalDiskInfo 9"
+        VALUE "FileDescription", "CrystalDiskInfo"
+        VALUE "ProductName", "CrystalDiskInfo"
         VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo"
 #endif
         END
