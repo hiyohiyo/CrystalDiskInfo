@@ -1,0 +1,1675 @@
+[Information]
+; (Latest Translator, First Translator, Second Translator ...)
+TRANSLATOR=J.A.Bosch
+VERSION=9.0.0
+
+[Language]
+LANGUAGE=Català
+CHARACTER_CODE=Unicode (UTF-16, LE, w/BOM)
+;Locale ID: https://docs.microsoft.com/previous-versions/windows/embedded/ms912047(v=winembedded.10)
+LOCALE_ID=0x0003, 0x0403
+
+[Url]
+WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/Self-Monitoring,_Analysis_and_Reporting_Technology
+
+[Menu]
+FILE=&Fitxer
+CUSTOMIZE=&Personalitzar
+EXIT=&Sortir
+EDIT=&Editar
+COPY=&Copiar
+FUNCTION=F&unció
+HIDE_SMART_INFO=&Amagar informació S.M.A.R.T.
+HIDE_SERIAL_NUMBER=Amagar &número de sèrie
+SHOW_DRIVE_LETTER=M&ostrar lletra de la unitat
+ADVANCED_DISK_SEARCH=Cerca avan&çada al disc
+EVENT_LOG=&Registre d'esdeveniments
+AAM_APM_CONTROL=Control de AA&M/APM
+AUTO_AAM_APM_ADAPTION=Aplicar automàticament canvis a AAM/A&PM
+RESIDENT=Mantenir a la &barra de tasques
+STARTUP=&Iniciar amb Windows
+OPEN_DISK_MANAGEMENT=Obrir Ad&ministració de discs
+OPEN_DEVICE_MANAGER=Obrir Admini&strador de dispositius
+ADVANCED_FEATURE=Opcions a&vançades
+REFRESH=Act&ualitzar
+RESCAN=Tornar a &detectar
+DISABLE=&Desactivar
+AUTO_REFRESH=A&ctualització automàtica
+AUTO_REFRESH_TARGET=&Unitats a actualitzar automàticament
+AUTO_REFRESH_TARGET_ALL_DISK=&Tots els discs
+AUTO_REFRESH_UNTARGET_ALL_DISK=C&ap disc
+WAIT_TIME_AT_STARTUP=Tem&ps d'espera per arrencar
+GRAPH=&Gràfica
+THEME=T&ema
+DISK=D&isc
+HELP=A&juda
+HELP_WEB=Ajuda [&Web]
+HELP_ABOUT=Sobre Cr&ystalDiskInfo
+HELP_ABOUT_SMART=Sob&re S.M.A.R.T. [Wikipedia]
+LANGUAGE=&Idioma
+ITEM=E&lement
+TEMPERATURE_TYPE=Escala de &temperatura
+CELSIUS=Celsius (°C)
+FAHRENHEIT=Fahrenheit (°F)
+HEALTH_STATUS_SETTING=Con&figuració de l'estat de salut
+
+;Graph
+OPTION=&Opcions
+LEGEND_POSITION=&Posició de llegenda
+NORTH_WEST=Nord-&oest
+NORTH_EAST=Nord-&est
+SOUTH_WEST=&Sud-oest
+SOUTH_EAST=S&ud-est
+MAX_PLOT_POINT=&Nombre màxim de traçats
+TIME_FORMAT=&Format de data
+PAINT_WEEKEND=&Mostrar caps de setmana
+ALL=&Tot
+
+;2.7.0
+COPY_OPTION=Opcions a &copiar
+RESIDENT_STYLE=Estil a la barra de tasques
+MINIMIZE=&Minimitzar
+HIDE=&Amagar
+
+;3.0.0
+ZOOM=&Zoom
+AUTO=&Automàtic
+ATTRIBUTE=A&tribut
+
+;3.5.0
+ASCII_VIEW=Mostrar &ASCII
+AUTO_DTECTION=&Detecció automàtica
+SECOND=seg.
+MINUTE=min.
+HOUR=h.
+
+:3.9.4
+WORKAROUND=&Solucions alternatives
+
+;4.0.0
+ALERT_MAIL=Enviar correu electrònic en cas d'alerta
+MAIL_SETTINGS=Configuració de correu electrònic
+SMART_IN_ENGLISH=Mostrar descripcions S.M.A.R.T. en anglès
+FONT_SETTING=Configuració de la font
+
+;5.0.0
+ALERT_FEATURES=Característiques d’alertes
+ALARM_HISTORY=Historial d'alertes
+ALERT_SOUND=So d'alerta
+SOUND_SETTINGS=Configuració del so
+GADGET_SUPPORT=Suport per a gadgets
+INSTALL_GADGET=Instal·lar gadget
+ENABLE_AUTO=Activar (detecció automàtica)
+ENABLE_ALL=Activar (per a tots els discs)
+ENABLE_RAID=Activar (sols per a volums RAID)
+
+;6.0.0
+HIDE_NO_SMART_DISK=Amagar discs no compatibles amb S.M.A.R.T.
+GREEN_MODE=Mode d’estalvi
+
+;8.6.0
+SAVE_TEXT=Guardar (com a &text)
+SAVE_IMAGE=Guardar (&imatge)
+
+;9.0.0
+DRIVE_SORT_METHOD=Mètode ordenació de unitats
+PHYSICAL_DRIVE_ID=ID de la unitat física
+DRIVE_LETTER=Lletra de la unitat
+DRIVE_MENU_NUMBER=Mostra el nombre de unitats
+
+[TrayMenu]
+EXIT=Sortir
+REFRESH=Actualitzar
+RESCAN=Tornar a detectar
+ENABLE=Activar
+DISABLE=Desactivar
+ENABLE_ALL=Activar tot
+DISABLE_ALL=Desactivar tot
+AUTO_REFRESH=Actualització automàtica
+AUTO_REFRESH_01_MIN=1 min.
+AUTO_REFRESH_03_MIN=3 min.
+AUTO_REFRESH_05_MIN=5 min.
+AUTO_REFRESH_10_MIN=10 min.
+AUTO_REFRESH_30_MIN=30 min.
+AUTO_REFRESH_60_MIN=60 min.
+AUTO_REFRESH_TARGET=Unitats a actualitzar automàticament
+AUTO_REFRESH_TARGET_ALL_DISK=Tots els discs
+AUTO_REFRESH_UNTARGET_ALL_DISK=Cap disc
+ALARM_SETTING_TEMPERATURE=Configuració d'alerta per temperatura
+ALARM_SETTING_HEALTH_STATUS=Configuració d'alerta per estat de salut
+SHOW_MAIN_WINDOW=Mostrar la finestra principal
+SHOW_TEMPERATURE_ICON=Mostrar icona de temperatura
+SHOW_ALL_TEMPERATURE_ICON=Mostrar totes les icones de temperatura
+HIDE_ALL_TEMPERATURE_ICON=Amagar totes les icones de temperatura
+COLLECTIVE_SETTING=Opcions globals
+GRAPH=Gràfica
+;Added 3,0
+SHOW_TEMPERATURE_ICON_ONLY=Mostrar sols icona de temperatura
+
+[DiskStatus]
+GOOD=Correcte
+CAUTION=Precaució
+BAD=Dolent
+UNKNOWN=Desconegut
+DISK=Disc
+
+[Dialog]
+LIST_ID=ID
+LIST_CURRENT=Actual
+LIST_WORST=Pitjor
+LIST_THRESHOLD=Llindar
+LIST_RAW_VALUES=Valors en brut
+;LIST_DESCRIPTION=Descripció
+LIST_ATTRIBUTE_NAME=Nom d'atribut
+
+FIRMWARE=Firmware
+SERIAL_NUMBER=Número de sèrie
+INTERFACE=Interfície
+STANDARD=Estàndard
+TRANSFER_MODE=Mode de transferència
+BUFFER_SIZE=Mida del buffer
+NV_CACHE_SIZE=Mida memòria cau NV
+ROTATION_RATE=Velocitat de rotació
+TEMPERATURE=Temperatura
+POWER_ON_HOURS=Total hores funcionament
+POWER_ON_COUNT=Nombre total d'engegades
+DRIVE_LETTER=Lletra de la unitat
+FEATURE=Característiques
+HEALTH_STATUS=Estat de salut
+
+UNKNOWN=Desconegut
+POWER_ON_COUNT_UNIT=cops
+POWER_ON_HOURS_UNIT=hores
+POWER_ON_DAYS_UNIT=dies
+POWER_ON_YEARS_UNIT=anys
+
+;4.3
+TOTAL_HOST_READS=Total de lectures a l'amfitrió
+TOTAL_HOST_WRITES=Total escriptures a l’amfitrió
+TOTAL_NAND_WRITES=Total d’escriptures a NAND
+
+;4.5
+WEAR_LEVELING_COUNT=Equilibrat de desgast
+
+;6.1
+CURRENT_MODE_SUPPORTED_MODE=Mode actual | Mode compatible
+MAJOR_VERSION_MINOR_VERSION=Versió major | Versió menor
+
+;8.5.0
+FONT_FACE=Tipografia
+FONT_SCALE=Escala de font (%)
+DEFAULT=Per defecte
+OK=Acceptar
+
+;8.9.0
+ENABLED=Activat
+DISABLED=Desactivat
+
+[Message]
+DETECT_UNIT_POWER_ON_HOURS=Detectant hores funcionament unitat (requereix d’uns 130 seg.)
+DETECT_DISK=Detectant disc
+PLEASE_ENABLE_WMI=Es necessari activar WMI (Instrumental d'Administració de Windows)
+PLEASE_RESTART_THIS_APPLICATION=Reinicia l'aplicació per canviar el tema, si us plau
+DISK_NOT_FOUND=Disc no trobat
+
+[Alarm]
+ALARM_TEMPERATURE=Alerta per temperatura
+ALARM_HEALTH_STATUS=Alerta per estat de salut
+DEGRADATION=Degradació
+RECOVERY=Recuperació
+;3.5.0
+INFO_HEALTH_STATUS=Informació de l'estat de salut
+
+[Graph]
+PLEASE_SELECT_ITEM=Seleccioni un element
+ACTUAL_VALUE=Valor real (sense format)
+NORMALIZED_VALUE=Valor normalitzat (valor actual)
+ALL_ON=Activar tot
+ALL_OFF=Desactivar tot
+RESET=Reiniciar
+
+[Customize]
+LINE_COLOR=Color de línies
+BACKGROUND_IMAGE=Imatge de fons
+SUPPORTED_IMAGE_FORMAT=Formats compatibles d'imatge
+ALL_FILES=Tots els fitxers
+
+;5.0.0
+SUPPORTED_SOUND_FORMAT=Formats compatibles de so
+
+[AamApm]
+AAM_LOW=<- Silenciós (80h)
+AAM_HIGH=Rendiment (FEh) ->
+AAM_RECOMMEND=Valor recomanat
+APM_LOW=<- Potencia mínima (01h)
+APM_HIGH=Rendiment (FEh) ->
+;3.5.0
+AUTOMATIC_ACOUSTIC_MANAGEMENT=Control automàtic de soroll (AAM)
+ADVANCED_POWER_MANAGEMENT=Control d'alimentació avançat (APM)
+
+[WindowTitle]
+ABOUT=Sobre CrystalDiskInfo
+GRAPH=Gràfica
+CUSTOMIZE=Personalitzar
+VERSION_INFORMATION=Informació de la versió
+AAM_APM_CONTROL=Control d'AAM/APM
+HEALTH_STATUS_SETTING=Configuració de l'estat de salut
+
+;5.0.0
+ALARM_HISTORY=Historial d'alertes
+SOUND_SETTINGS=Configuració del so
+
+;5.1.0
+FONT_SETTING=Configuració de la font
+
+[HealthStatus]
+THRESHOLD_OF_CAUTION=Llindar de risc
+APPLY=Aplicar
+DEFAULT=Configuració per defecte
+
+[Smart]
+UNKNOWN=Desconegut
+VENDOR_SPECIFIC=Específic del fabricant
+01=Taxa d'errors de lectura
+02=Rendiment
+03=Temps d'arrancada
+04=Nº de cicles d'arrancada/parada
+05=Nº de sectors reassignats
+06=Marge de lectura per canal
+07=Taxa d'errors de cerca
+08=Rendiment del temps de cerca
+09=Hores d'encesa
+0A=Nº de reintents de gir
+0B=Reintents de calibració
+0C=Nº de cicles d'encès
+0D=Taxa d'errors de lectura programari
+16=Nivell actual de heli
+B8=Errors entre extrems
+BB=Errors no corregibles notificats
+BC=Comandaments sense executar per falta de temps
+BD=Escriptures a alçada excessiva
+BE=Temperatura del flux d'aire
+BF=Taxa d'errors G-Sense
+C0=Nº apagats per replegat
+C1=Nº cicles de càrrega/descàrrega
+C2=Temperatura
+C3=Recuperació d'errors hardware ECC
+C4=Nº d'esdeveniments de reassignació
+C5=Nº de sectors pendents
+C6=Nº de sectors no corregibles
+C7=Nº d'errors de CRC UltraDMA
+C8=Taxa d'errors d'escriptura
+C9=Taxa d'errors de lectura programari
+CA=Errors de marca d'encaminament de dades
+CB=Cancel·lació de verificació de memòria
+CC=Correcció programari d'errors ECC
+CD=Taxa d'aspror tèrmica
+CE=Altura de vol
+CF=Corrent de gir
+D0=Reintents de gir
+D1=Rendiment de cerca sense connexió
+D3=Vibracions durant escriptures
+D4=Sacsejades durant escriptures
+DC=Desplaçament del disc
+DD=Taxa d'errors G-Sense
+DE=Hores de càrrega
+DF=Nº reintents de càrrega/descàrrega
+E0=Fricció de càrrega
+E1=Nº cicles de càrrega/descàrrega
+E2=Temps de càrrega al disc
+E3=Nº amplificació de parell motor
+E4=Nº apagats per replegat
+E6=Amplitud del capçal GMR
+E7=Temperatura
+F0=Hores de vol del capçal
+FA=Taxa de reintents de lectura
+FE=Protecció contra caigudes lliures
+
+;Updated 5.4.0
+F1=Nº escriptures a l'amfitrió
+F2=Nº lectures de l'amfitrió
+
+[SmartSsd]
+01=Taxa d'errors de lectura
+02=Rendiment
+03=Temps d'arrancada
+04=Nº cicles d'arrancada/parada
+05=Nº de sectors reassignats
+06=Marge de lectura per canal
+07=Taxa d'errors de recerca
+08=Rendiment del temps de recerca
+09=Hores d'encesa
+0A=Nº de reintents de gir
+0B=Reintents de calibració
+0C=Nº de cicles d'encès
+0D=Taxa d'errors de lectura del programari
+C0=Nº d'apagats no segurs
+C2=Temperatura
+C4=Nº d'esdeveniments de recol·locació
+C5=Nº de sectors pendents
+C6=Nº de sectors no corregibles
+; CrystalDiskInfo assign
+FF=Esperança de vida
+
+;Updated 5.4.0
+F1=Nº escriptures a l'amfitrió
+F2=Nº lectures de l'amfitrió
+
+[SmartMtron]
+BB=Nº d'esborrats
+
+[SmartIndilinx]
+01=Taxa d'errors de lectura
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+B8=Nº inicial de blocs defectuosos
+C2=Temperatura
+C3=Nº d'errors al programar blocs
+C4=Nº d'errors en esborrar blocs
+C5=Nº d'errors al llegir blocs
+C6=Nº total de sectors llegits
+C7=Nº total de sectors escrits
+C8=Nº total de comandaments de lectura
+C9=Nº total de comandaments d'escriptura
+CA=Nº total de bits amb errors en memòria flaix
+CB=Nº total de sectors llegits amb errors en bits corregibles
+CC=Indicador de blocs defectuosos plens
+CD=Nº màxim especificat de P/E
+CE=Nº d'esborrats mínims
+CF=Nº d'esborrats màxims
+D0=Mitjana d'esborrats
+D1=Esperança de vida de la unitat
+
+[SmartJMicron60x]
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+C2=Temperatura
+E5=ID sistema aturat, Flash ID
+E8=Informació de la versió del firmware
+E9=Registre d'errors ECC
+EA=Mitjana d'esborrats, Màxim d'esborrats
+EB=Nº de blocs bons, Nº de blocs del sistema
+
+[SmartIntel]
+03=Temps d'arrancada
+04=Nº de cicles de arrancada/parada
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AA=Espai reservat disponible
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AE=Caigudes d'alimentació inesperades
+AF=Errors en la protecció contra caigudes d'alimentació
+B7=Nº de pèrdues de SATA
+B8=Nº d'errors d'extrem a extrem detectats
+BB=Nº d'errors no corregibles
+BE=Temperatura
+C0=Nº d'apagats no segurs
+C2=Temperatura
+C5=Nº de sectors pendents
+C7=Nº d'errors de comprovació CRC
+E1=Escriptures a l'amfitrió
+E2=Desgast de mitjans de càrrega de treball cronometrat
+E3=Relació de lectura/escriptura de l'amfitrió de càrrega de treball cronometrat
+E4=Temps de càrrega de treball cronometrat
+E8=Espai reservat disponible
+E9=Indicador de desgast del suport
+EA=Estat del des-accelerador tèrmic
+F1=Nº total d'escriptures LBAs
+F2=Nº total de lectures LBAs
+F3=Nº total d'escriptures NAND
+F9=Nº total d'escriptures NAND
+
+[SmartSamsung] ;Updated 6.6
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº d'enceses
+AF=Nº d'errors de programació (xip)
+B0=Nº d'errors d'esborrat (xip)
+B1=Nº de nivell de desgast
+B2=Nº de blocs reservats usats (xip)
+B3=Nº de blocs reservats usats (totals)
+B4=Nº de blocs reservats sense utilitzar (totals)
+B5=Nº d'errors de programació (totals)
+B6=Nº d'errors d'esborrat (totals)
+B7=Recompte de blocs defectuosos (totals)
+BB=Nº d'errors no corregibles
+BE=Temperatura del flux d'aire
+C2=Temperatura
+C3=Taxa d'errors de correcció ECC
+C6=Nº d'errors no corregibles sense connexió
+C7=Nº d'errors de comprovació CRC
+C9=Estat del super cap
+CA=Estat del mode SSD
+EB=Nº de recuperacions després d'apagat
+F1=Nº total d'escriptures de LBAs
+F2=Nº total de lectures de LBAs
+
+;Afegit 6.6
+AA=Nº de blocs reservats sense utilitzar (xip)
+AB=Nº d'errors de programació (xip)
+AC=Nº d'errors d'esborrat (xip)
+AD=Nº de nivell de desgast
+AE=Nº de caigudes d'alimentació inesperades
+B8=Detecció d'errors
+E9=Desgast normalitzat del suport
+
+[SmartSandForce] ;Actualitzat 3.7.0
+01=Taxa d'errors de lectura sense processar
+05=Nº de blocs retirats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+0D=Taxa d'errors de lectura del programari
+64=Gigabytes esborrats
+AA=Nº de blocs reservats
+AB=Nº d’errors de programació
+AC=Nº d’errors d’esborrat
+AE=Nº de caigudes d'alimentació inesperades
+B1=Delta del rang de desgast
+B5=Nº d’errors de programació
+B6=Nº d’errors d’esborrat
+B8=Errors de codi de detecció d'errors E/S notificats
+BB=Errors no corregibles notificats
+C2=Temperatura
+C3=Nº d'errors no corregibles de ECC sobre la marxa
+C4=Nº d'esdeveniments de reassignació
+C6=Nº de sectors no corregibles
+C7=Nº d'errors tipus R-Error de SATA
+C9=Taxa d'errors no corregibles de lectura per programari
+CC=Taxa de correcció del programari d'errors ECC
+E6=Protecció esperança de vida de la unitat
+E7=Esperança de vida restant del SSD
+E8=Espai reservat disponible
+EB=Salut còpia de seguretat en fallada d’alimentació
+F1=Escriptures de l'amfitrió en tota la vida útil
+F2=Lectures de l'amfitrió en tota la vida útil
+
+[SmartJMicron61x] ;Afegit 3.9.0
+01=Taxa d'errors de lectura
+02=Rendiment
+03=Temps d’arrancada
+05=Nº de sectors reassignats
+07=Taxa d'errors de recerca
+08=Rendiment del temps de recerca
+09=Hores d’encesa
+0A=Nº de reintents de gir
+0C=Nº de cicles d'encès
+A8=Nº d'errors PHY de SATA
+AF=Nº de taules de clústers defectuosos (errors d’ECC)
+C0=Nº de caigudes d’alimentació inesperades
+C2=Temperatura
+C5=Nº de sectors pendents
+AA=Nº de blocs defectuosos
+AD=Nº d'esborrats
+
+[SmartMicron] ;Added 4.0.0/ Updated 6.6.0
+; RAIN = Redundant Array of Independent NAND
+01=Taxa d’errors de lectura
+ sense processar
+05=Blocs NAND reassignats
+09=Hores d’encesa
+0C=Nº de cicles d’encès
+0D=Taxa d’errors de programari
+0E=Capacitat del dispositiu (NAND)
+0F=Capacitat per al usuari
+10=Blocs de reserva disponibles
+11=Blocs de reserva restants
+64=Nº d'esborrats
+AA=Nº de blocs reservats
+AB=Nº d'errors de programació
+AC=Nº d'errors d’esborrat
+AD=Mitjana de blocs esborrats
+AE=Nº de caigudes d'alimentació inesperades
+B4=Blocs reserva de la NAND sense utilitzar
+B5=Nº de accessos sense alinear
+B7=Nº de pèrdues d'interfície SATA
+B8=Nº d'errors corregits
+BB=Errors no corregibles notificats
+BC=Nº comandos sense executar per falta de temps
+BD=Nº de blocs defectuosos de fàbrica
+C2=Temperatura
+C3=Nº acumulatiu de bits corregits per ECC
+C4=Nº de esdeveniments de reassignació
+C5=Nº de sectors pendents
+C6=Recerca sense connexió de n.§ d'errors no corregibles
+C7=Taxa d'errors CRC de Ultra DMA
+CA=Esperança de vida (%) gastada
+CE=Taxa d'errors de escriptura
+D2=Taxa de recuperació per RAIN exitosa
+EA=Nº total de bytes llegits
+F2=Progrés de protecció de escriptura
+F3=Bits de ECC corregits
+F4=Esdeveniments de llindar de ECC acumulats
+F5=Programacions NAND acumulades
+F6=Nº total de escriptures de sectors de l'amfitrió
+F7=Nº de pàgines de programació de l'amfitrió
+F8=Nº de pàgines de programació en 2n. pla
+
+; Updated 8.11.0
+F9=Nº total de ISP actualitzats
+FA=Nº total de Do RefCal
+FB=Nº total de lectures del pla NAND (4 bytes inferiors)
+FC=Nº total de lectures del pla NAND (4 bytes superiors)
+FD=Nº total de passades de reassignació de blocs
+FE=Nº total de límit de recerques en 2n. pla
+DF=Nº total de recerques en 2n. pla
+
+[SmartMicronMU02] ;Updated 8.17.0
+; RAIN = Redundant Array of Independent NAND
+01=Taxa d'errors de lectura sense processar
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+0D=Taxa d'errors de programari
+0E=Capacitat del dispositiu (NAND)
+0F=Capacitat para el usuari
+10=Blocs de reserva disponibles
+11=Blocs de reserva restants
+64=Nº d'esborrats
+AA=Nº de blocs reservats
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana de blocs esborrats
+AE=Nº de caigudes d'alimentació inesperades
+B4=Blocs de reserva de la NAND sense utilitzar
+B7=Nº de pèrdues d'interfície SATA
+B8=Nº d'errors corregits
+BB=Errors no corregibles notificats
+BC=Nº comandos sense executar per falta de temps
+BD=Nº de blocs defectuosos de fàbrica
+C2=Temperatura
+C3=Nº acumulatiu de bits corregits per ECC
+C4=Nº de esdeveniments de reassignació
+C5=Nº de sectors pendents
+C6=Recerca sense connexió de n.§ d'errors no corregibles
+C7=Taxa d'errors CRC de Ultra DMA
+CA=Esperança de vida (%) gastada
+CE=Taxa d'errors de escriptura
+D2=Taxa de recuperació per RAIN exitosa
+EA=Nº total de bytes llegits
+F3=Bits de ECC corregits
+F4=Esdeveniments de llindar de ECC acumulats
+F5=Programacions de pàgines NAND acumulades
+F6=Nº total de escriptures de sectors de l'amfitrió
+F7=Nº de pàgines de programació de l'amfitrió
+F8=Nº de pàgines de programació en 2n. pla
+
+; Updated 6.6.0
+A0=Nº de sectors no corregibles
+A1=Blocs de reserva vàlids
+A3=Blocs no vàlids inicials
+94=Nº total d'esborrats SLC
+95=Nº màxim d'esborrats SLC
+96=Nº mínim d'esborrats SLC
+97=Mitjana d'esborrats SLC
+A4=Nº total d'esborrats NAND
+A5=Nº màxim d'esborrats NAND
+A6=Nº mínim d'esborrats NAND
+A7=Mitjana d'esborrats NAND
+A9=Esperança de vida (%) restant
+B5=Nº d'errors de programació
+B6=Nº d'errors d'esborrat
+C0=Nº apagats per replegat
+E8=Espai reservat disponible
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F5=Nº total de escriptures a NAND
+F6=Nº total de escriptures a SLC
+F7=Recuperacions de RAID
+
+; Updated 8.10.0
+F9=Nº total de ISP actualitzats
+FA=Nº total de Do RefCal
+FB=Nº total de lectures del pla NAND (4 bytes inferiors)
+FC=Nº total de lectures del pla NAND (4 bytes superiors)
+FD=Nº total de passades de reassignació de blocs
+FE=Nº total de límit de recerques en 2n. pla
+DF=Nº total de recerques en 2n. pla
+
+[SmartOcz] ;Added 4.5.0
+01=Taxa d'errors de lectura sense processar
+03=Temps de arranque
+04=Nº de cicles de arranque/parada
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+C2=Temperatura
+E8=Nº total de sectors escrits
+E9=Esperança de vida
+
+; Added 6.6.0
+64=Nº total de blocs esborrats
+A7=Mode de protecció del SSD
+A8=Nº d'errors PHY de SATA
+A9=Nº de blocs defectuosos
+AD=Nº d'esborrats
+B8=Nº de blocs defectuosos de fàbrica
+C0=Nº de caigudes d'alimentació inesperades
+CA=Nº total de bits corregits
+CD=Nº màxim de coeficients de P/E
+CE=Nº d'esborrats mínims
+CF=Nº d'esborrats màxims
+D3=Nº d'errors no corregibles de SATA
+D4=Pàgines llegides NAND durant reintents
+D5=Reintents simples de lectura
+D6=Reintents adaptatius de lectura
+DD=Errors no corregibles en ruta de dades interna
+DE=Recuperacions de RAID
+E6=Protecció contra caigudes d'alimentació
+FB=Nº de lectures NAND
+
+;Updated 6.7.0
+F1=Nº de escriptures al amfitrió
+F2=Nº de lectures de l'amfitrió
+
+[SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
+01=Taxa d'errors de lectura
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AA=Blocs defectuosos produïts
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana d'esborrats/programacions
+AE=Nº de caigudes d'alimentació inesperades
+AF=Nº d'errors de programació (pessimista)
+B0=Nº d'errors d'esborrat (pessimista)
+B1=Nº de nivell de desgast
+B2=Nº de blocs reservats utilitzats (pessimista)
+B3=Nº de blocs reservats utilitzats
+B4=Nº de blocs alliberats utilitzats (totals)
+B5=Nº d'errors de programació
+B6=Nº d'errors d'esborrat
+B7=Pèrdues d'interfície SATA
+B8=Errors de dades entre extrems corregits
+BB=Nº d'errors no corregibles
+BC=Comandos sense executar per falta de temps
+C0=Nº d'apagats no segurs
+C3=Taxa de correccions ECC
+C4=Nº de esdeveniments de reassignació
+C6=Nº de sectors no corregibles
+C7=Nº d'errors de comprovació Ultra CRC
+E8=Espai reservat disponible
+E9=GB escrits a NAND
+F1=Nº de escriptures al amfitrió
+F2=Nº de lectures de l'amfitrió
+
+[SmartSanDisk] ;Added 5.2.0
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AA=Nº de blocs reservats
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana de escriptures/esborrats
+AE=Nº de caigudes d'alimentació inesperades
+BB=Errors no corregibles notificats
+C2=Temperatura
+E6=Total (%) de escriptures/esborrats
+E8=Blocs de reserva restants
+EA=Total (%) de escriptures/esborrats (blocs BC)
+F1=Nº de escriptures al amfitrió
+F2=Nº de lectures de l'amfitrió
+
+[SmartOczVector] ;Added 5.3.0
+05=Acumulació de blocs defectuosos produïts
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AB=Nº de blocs infrautilitzats disponibles
+AE=Nº de cicles d'encès (sense planificar)
+BB=Nº total de lectures NAND no corregibles
+C2=Temperatura
+C3=Nº total d'errors de programació
+C4=Nº total d'errors d'esborrat
+C5=Nº total d'errors de lectura (no corregibles)
+C6=Lectures de l'amfitrió
+C7=Escriptures al amfitrió
+D0=Mitjana d'esborrats
+D2=Nº d'errors de comprovació CRC SATA
+E9=Esperança de vida
+F9=Nº total de programacions NAND
+
+;Updated 5.5.0
+F1=Nº de escriptures al amfitrió
+F2=Nº de lectures de l'amfitrió
+
+;Updated 6.6.0
+64=Nº total de blocs esborrats
+B8=Nº total de blocs defectuosos de fàbrica
+CA=Nº total de bits de lectura corregits
+CD=Nº màxim de coeficients de P/E
+CE=Nº mínim d'esborrats
+CF=Nº màxim d'esborrats
+D4=Nº total de lectures de pàgines NAND que han necessitat reintent
+D5=Nº total de reintents simples de lectura
+D6=Nº total de reintents adaptatius de lectura
+DD=Errors no corregibles de la protecció de la ruta de dades interna
+DE=Recuperacions de RAID
+E0=Vigència de garantia
+E1=Polaritat de DAS
+E2=Pfail parcial
+E6=Indicador d’activació de desacceleració d’escriptura
+F9=Nº total de programacions NAND (pàgines)
+FB=Nº total de lectures NAND
+
+[SmartCorsair] ;Added 6.2.0
+01=Taxa d'errors de lectura sense processar
+05=Nº de blocs retirats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AA=Nº de blocs reservats
+AC=Nº d'errors d'esborrat
+AE=Nº de caigudes d'alimentació inesperades
+B5=Nº d'errors de programació
+BB=Errors no corregibles notificats
+C2=Temperatura
+C4=Nº de esdeveniments de reassignació
+E7=Esperança de vida restant del SSD
+F1=GB escrits durant la vida útil
+F2=GB llegits durant la vida útil
+
+[SmartToshiba] ;Added 6.2.0
+01=Taxa d'errors de lectura
+02=Rendiment
+03=Temps de arranque
+04=Nº de cicles de arranque/parada
+05=Nº de sectors reassignats
+07=Taxa d'errors de recerca
+08=Rendiment del temps de recerca
+09=Hores d'encesa
+0A=Nº de reintents de giro
+0B=Reintents de calibració
+0C=Nº de cicles d'encès
+A7=Mode de protecció del SSD
+A8=Nº d'errors PHY de SATA
+A9=Nº total de blocs defectuosos
+AD=Nº d'esborrats
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+C4=Nº de esdeveniments de reassignació
+C5=Nº de sectors pendents
+C6=Nº de sectors no corregibles
+F1=Nº de escriptures al amfitrió
+F2=Nº de lectures de l'amfitrió
+
+[SmartSanDiskGb] ;Added 6.2.0
+01=Taxa d'errors de lectura
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+A5=Nº de blocs esborrats (SLC)
+A6=Nº mínim de cicles P/E
+A7=Nº màxim de blocs defectuosos per xip
+A8=Nº màxim de cicles P/E
+A9=Nº total de blocs defectuosos
+AA=Blocs defectuosos produïts
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana de cicles P/E
+AE=Nº de caigudes d'alimentació inesperades
+B8=Nº de detecció/correcció d'errors entre extrems
+BB=Errors no corregibles notificats
+BC=Nº comandos sense executar per falta de temps
+C2=Temperatura
+C7=Nº d'errors de comprovació CRC
+D4=Errors PHY en SATA
+E6=Indicador de desgast del suport
+E7=Esperança de vida restant del SSD
+E8=Espai reservat disponible
+E9=GB escrits a NAND
+EA=GB escrits a NAND (SLC)
+EE=Indicador de desgast del suport (cicles restants)
+F1=Nº total de GB escrits
+F2=Nº total de GBs llegits
+F4=Estat de desacceleració de temperatura
+F9=GB escrits a NAND
+
+[SmartKingston] ;Added 6.6.0
+;https://media.kingston.com/support/downloads/MKP_521_Phison_SMART_attribute.pdf
+01=Taxa
+ d'errors de lectura
+02=Rendiment
+03=Temps de arranque
+05=Nº de sectors reassignats
+07=Taxa d'errors de recerca
+08=Rendiment del temps de recerca
+09=Hores d'encesa
+0A=Nº de reintents de giro
+0C=Nº de cicles d'encès
+A8=Nº d'errors PHY de SATA
+AA=Nº de blocs defectuosos
+AD=Nº d'esborrats
+AF=Nº de taules de clústers defectuosos
+BB=Errors no corregibles
+C0=Nº d'apagats no segurs
+C2=Temperatura
+C4=Nº de blocs defectuosos posteriors
+C5=Nº de sectors pendents
+C7=Nº d'errors de comprovació CRC
+DA=Nº d'errors de comprovació CRC
+E7=Esperança de vida restant del SSD
+E9=Escriptures a flaix durant la vida útil
+F0=Inicio de escriptura
+F1=Escriptures al amfitrió
+F2=Lectures de l'amfitrió
+F4=Mitjana d'esborrats
+F5=Nº màxim d'esborrats
+F6=Nº d'esborrats
+
+[SmartNVMe] ;Added 6.7.0
+01=Avisos crítics
+02=Temperatura composta
+03=Reserves disponibles
+04=Llindar de reserves disponibles
+05=Percentatge de uso
+06=Unitats de dades llegides
+07=Unitats de dades escrites
+08=Comandos de lectura de l'amfitrió
+09=Comandos de escriptura de l'amfitrió
+0A=Temps de espera del controlador
+0B=Nº de cicles d'encès
+0C=Hores d'encesa
+0D=Apagats no segurs
+0E=Errors de integritat de dades y del suport
+0F=Nº de entrades en el registro de informació d'errors
+
+[SmartRealtek] ;Added by Realtek
+01=Taxa d'errors de dades sense processar
+05=Nº de sectors reassignats
+09=Nº de hores en funcionament
+0C=Nº de cicles d'encès
+A1=GDN
+A2=Nº total d'esborrats
+A3=Nº màxim de cicles P/E
+A4=Mitjana d'esborrats
+A5=Nº inicial de blocs defectuosos
+A6=Nº total de blocs defectuosos
+A7=Mode de protecció del SSD
+A8=Nº d'errors PHY de SATA
+A9=Estat de salut
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AE=Nº de caigudes d'alimentació inesperades
+AF=Nº d'errors de correcció ECC
+B5=Nº de accessos sense alinear
+BB=Errors no corregibles notificats
+C2=Temperatura de carcassa
+C3=Acumulació de ECC corregits
+C4=Nº de esdeveniments de reassignació
+C7=Nº d'errors de CRC en Ultra DMA
+CE=Nº mínim d'esborrats
+CF=Nº màxim d'esborrats
+E7=Esperança de vida restant
+E8=Espai reservat disponible
+F1=Esperança de vida de escriptures
+F2=Esperança de vida de lectures
+F9=Nº total de GB escrits a NAND
+FA=Nº total de GB escrits a NAND (SLC)
+
+[SmartSKhynix] ; Updated 8.8.0
+01=Taxa d'errors de lectura
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+64=Nº d'esborrats
+A8=Nº mínim d'esborrats
+A9=Nº màxim d'esborrats
+AA=Nº de blocs reservats
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AE=Nº de caigudes d'alimentació inesperades
+AF=Nº d'errors de programació (pessimista)
+B0=Nº d'errors d'esborrat (pessimista)
+B1=Nº de nivell de desgast
+B2=Nº de blocs reservats utilitzats (pessimista)
+B3=Nº de blocs reservats utilitzats (total del SSD)
+B4=Nº de blocs reservats sense utilitzar (total del SSD)
+B5=Nº d'errors de programació (total del SSD)
+B6=Nº d'errors d'esborrat (total del SSD)
+B7=Nº de pèrdues de SATA
+B8=Nº d'errors entre extrems detectats
+BB=Nº d'errors no corregibles
+BC=Nº comandos sense executar per falta de temps
+BF=Nº de esdeveniments de sacsejades durant operacions
+C2=Temperatura
+C3=Taxa de correccions ECC
+C4=Nº de esdeveniments de reassignació
+C6=Nº de sectors no corregibles
+C7=Nº d'errors de comprovació CRC
+C9=Taxa d'errors no corregibles de lectura per programari
+CC=Taxa de correcció per programari d'errors ECC
+D4=Nº d'errors PHY
+E7=Esperança de vida restant del SSD
+E9=Esperança de vida restant del SSD
+EA=NAND escrita
+F1=Nº total de LBA escrits
+F2=Nº total de lectures de LBAs
+FA=Nº total de reintents de lectura NAND
+
+[SmartKioxia] ; Added 8.8.0
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+A7=Mode de protecció del SSD
+A8=Nº d'errors PHY de SATA
+A9=Nº de blocs defectuosos
+AD=Nº d'esborrats (dades de usuari)
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+F1=Escriptures al amfitrió
+
+[SmartWdc] ; Added 8.8.0
+01=Taxa d'errors de lectura
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+A5=Nº de blocs esborrats (SLC)
+A6=Nº mínim de cicles P/E
+A7=Nº màxim de blocs defectuosos per xip
+A8=Nº màxim de cicles P/E
+A9=Nº total de blocs defectuosos
+AA=Blocs defectuosos produïts
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana de cicles P/E
+AE=Nº de caigudes d'alimentació inesperades
+B8=Nº de detecció/correcció d'errors entre extrems
+BB=Errors no corregibles notificats
+BC=Nº comandos sense executar per falta de temps
+C2=Temperatura
+C7=Nº d'errors de comprovació CRC
+D4=Errors PHY en SATA
+E6=Indicador de desgast del suport
+E8=Espai reservat disponible
+E9=GB escrits a NAND
+EA=GB escrits a NAND (SLC)
+EE=Indicador de desgast del suport (cicles restants)
+F1=Nº total de GB escrits
+F2=Nº total de GBs llegits
+F3=Nº total de escriptures a NAND
+F4=Estat de desacceleració de temperatura
+F9=GB escrits a NAND
+
+[SmartKingstonSuv]
+; https://media.kingston.com/support/downloads/UV400-SMART-attribute.pdf
+; https://media.kingston.com/support/downloads/UV500_SMART_attribute.pdf
+01=Taxa d'errors de lectura
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AA=Nº de blocs reservats utilitzats
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AE=Nº d'apagats inesperats
+AF=Nº d'errors de programació del pitjor xip
+B0=Nº d'errors d'esborrat del pitjor xip
+B1=Nº de nivell de desgast
+B2=Nº de blocs reservats utilitzats del pitjor xip
+B4=Nº de blocs reservats sense utilitzar (total del SSD)
+BB=Errors no corregibles notificats
+C2=Temperatura
+C3=Nº d'errors ECC detectats al vol
+C4=Nº de esdeveniments de reassignació
+C5=Nº de sectors pendents
+C7=Nº d'errors de comprovació CRC UDMA
+C9=Taxa d'errors no corregibles de lectura
+CC=Taxa de correcció per programari d'errors ECC
+E7=Esperança de vida restant del SSD
+EA=Escriptures a NAND durant la vida útil
+F1=Escriptures al amfitrió durant la vida útil
+F2=Lectures al amfitrió durant la vida útil
+FA=Nº total de reintents de lectura a NAND
+
+[SmartKingstonKC600]
+;https://media.kingston.com/support/downloads/KC600-SMART-attribute.pdf
+01=Taxa d'errors de lectura
+05=Nº de blocs NAND reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+94=Reservat
+95=Reservat
+96=Reservat
+97=Mitjana d'esborrats SLC
+9F=Nº d'errors de 1 bit de DRAM
+A0=Errors UECC (no corregibles) notificats
+A1=Espai reservat disponible
+A4=Reservat
+A5=Reservat
+A6=Reservat
+A7=Mitjana d'esborrats
+A8=Reservat
+A9=Esperança de vida (%) restant
+B1=Reservat
+B5=Nº d'errors de programació
+B6=Nº d'errors d'esborrat
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura del dispositiu
+C3=Errors ECC de hardware recuperats
+C4=Nº de esdeveniments de reassignació
+C7=Nº d'errors de comprovació CRC UDMA
+E7=Taxa de vida útil (%) restant
+E8=Nº de blocs reservats sense utilitzar
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F5=Nº total de escriptures al suport
+
+[SmartKingstonDC500]
+;https://media.kingston.com/support/pdf/MKP_521-7_SMART-DC500_attribute_hr.pdf
+01=Nº d'errors no corregibles de l'amfitrió
+09=Hores en funcionament
+0C=Nº de cicles d'ences/apagat
+A7=Mode de protecció
+A8=Nº d'errors PHY de SATA
+A9=Taxa de blocs defectuosos
+AA=Informació sobre blocs defectuosos
+AC=Nº d'errors d'esborrat
+AD=Nº d'esborrats
+B5=Nº d'errors de programació
+B6=Nº d'errors d'esborrat
+BB=Nº d'errors no corregibles de l'amfitrió
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+C4=Nº total de blocs defectuosos posteriors
+C7=Nº d'errors de comprovació CRC
+CF=Nº de desacceleracions tèrmiques
+DA=Nº d'errors de comprovació CRC
+E7=Esperança de vida del SSD
+E8=Nº d'errors de lectura
+E9=Escriptures a NAND
+F1=Escriptures al amfitrió
+F2=Lectures de l'amfitrió
+F4=Mitjana d'esborrats
+F5=Nº màxim d'esborrats
+F6=Nº d'esborrats
+
+[SmartKingstonSA400]
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/20
+01=Errors no corregibles
+09=Hores d'encesa
+0C=Nº de cicles d'encès/apagat
+94=Exclusiu del fabricant
+95=Exclusiu del fabricant
+A7=Exclusiu del fabricant
+A8=Nº d'errors PHY de SATA
+A9=Exclusiu del fabricant
+AA=Nº de blocs defectuosos
+AC=Exclusiu del fabricant
+AD=Nº d'esborrats
+B5=Exclusiu del fabricant
+B6=Exclusiu del fabricant
+BB=Errors de ECC no corregibles
+C2=Temperatura
+C4=Esdeveniments de reassignació
+C7=Errors de comprovació CRC de SATA
+DA=Nº d'errors de comprovació CRC
+E7=Indicador de desgast del SSD
+E9=Escriptures a NAND durant la vida útil
+F1=Escriptures de l'amfitrió en tota la vida útil
+F2=Lectures de l'amfitrió en tota la vida útil
+F4=Mitjana d'esborrats
+F5=Nº màxim d'esborrats
+F6=Nº d'esborrats
+
+[SmartSsstc]
+01=Taxa d'errors de lectura sense processar
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AA=Espai reservat disponible
+AB=Nº d'errors de programació (totals)
+AC=Nº d'errors d'esborrat (totals)
+AD=Mitjana d'esborrats/programacions
+AE=Nº de caigudes d'alimentació inesperades
+AF=Nº d'errors de programació (pessimista)
+B0=Nº d'errors d'esborrat (pessimista)
+B1=Nº de nivell de desgast
+B2=Nº de blocs reservats utilitzats (pessimista)
+B3=Nº de blocs reservats utilitzats (totals)
+B4=Nº de blocs reservats sense utilitzar (totals)
+B7=Pèrdues d'interfície SATA
+B8=Nº d'errors de dades entre extrems
+BB=Nº d'errors no corregibles
+BC=Comandos sense executar per falta de temps
+C2=Temperatura de la unitat
+C3=Taxa de correccions ECC
+C6=Nº d'errors no corregibles sense connexió
+C7=Nº d'errors de comprovació CRC SATA
+E5=Errors en la protecció contra caigudes d'alimentació
+E7=Esperança de vida (%) restant
+E8=Espai reservat disponible 
+E9=GB escrits a NAND
+F1=Nº total de escriptures al amfitrió
+F2=Nº total de lectures de l'amfitrió
+F3=GB escrits a NAND
+
+[SmartIntelDc]
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/18
+01=Nº d'errors de lectura sense processar
+05=Nº de blocs reassignats en flaix
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+0E=Capacitat del dispositiu
+0F=Capacitat para el usuari
+10=Blocs de reserva disponibles
+11=Espai de reserva restant
+AC=Nº total d'errors d'esborrat de blocs
+AD=Nº màxim d'esborrats per bloc
+AE=Nº de caigudes
+ d'alimentació inesperades
+AF=Mitjana
+ d'esborrats
+B0=Errors de protecció contra caigudes d'alimentació
+B5=Nº total d'errors de programació de blocs
+B8=Nº d'errors entre extrems detectats
+BB=Nº d'errors no corregibles
+C2=Temperatura
+C5=Nº de sectors pendents
+C6=Nº d'errors no corregibles sense connexió
+C7=Nº d'errors de comprovació CRC
+CA=Vida útil consumida de la unitat (%)
+E2=Càrrega de treball cronometrada - Desgast de mitjans 
+E3=Càrrega de treball cronometrada - Relació de lectura/escriptura de l'amfitrió
+E4=Temporitzador de càrrega de treball cronometrat
+EA=Estat del des-accelerador tèrmic
+EB=Nº total de bytes/sectors de l'amfitrió escrits
+F1=Nº total de bytes/sectors de NAND escrits
+
+[SmartApacer]
+09=Hores en funcionament
+0C=Nº de cicles d'encès
+A3=Nº d'esborrats màxims
+A4=Mitjana d'esborrats
+A6=Nº total de blocs defectuosos posteriors
+A7=Mode de protecció del SSD
+A8=Nº d'errors PHY de SATA
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AF=Nº de taules de clústers defectuosos
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+E7=Esperança de vida
+F1=Nº total de sectors escrits
+
+[SmartSiliconMotion]
+01=Taxa d'errors de lectura
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+94=Nº d'esborrats del SLC
+95=Nº màxim d'esborrats del SLC
+96=Nº mínim d'esborrats del SLC
+97=Mitjana d'esborrats SLC
+9F=Nº d'errors de 1 bit de DRAM
+A0=Nº de sectors no corregibles al llegir/escriure
+A1=Nº de blocs de reserva vàlids
+A2=Nº de blocs de dades de memòria cau
+A3=Nº de blocs no vàlids inicials
+A4=Nº d'esborrats
+A5=Nº d'esborrats màxims
+A6=Nº d'esborrats mínims
+A7=Mitjana d'esborrats
+A8=Nº màxim d'esborrats d'especificacions 
+A9=Esperança de vida
+AF=Nº d'errors de programació (pitjor xip)
+B0=Nº d'errors d'esborrat (pitjor xip)
+B1=Nº total del nivell de desgast
+B2=Nº de blocs no vàlids produïts
+B5=Nº total d'errors de programació
+B6=Nº total d'errors d'esborrat
+BB=Nº d'errors no corregibles
+C0=Nº d'apagats per replegat
+C2=Temperatura
+C3=Errors ECC de hardware recuperats
+C4=Nº de esdeveniments de reassignació
+C5=Nº de sectors pendents
+C6=Nº d'errors no corregibles sense connexió
+C7=Nº d'errors de comprovació CRC del Ultra DMA
+E8=Espai reservat disponible
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F5=Nº de escriptures de sectors de flaix
+
+[SmartJMicron66x]
+01=Taxa d'errors de lectura
+02=Rendiment
+03=Temps de arranque
+05=Nº de sectors reassignats
+07=Taxa d'errors de recerca
+08=Rendiment del temps de recerca
+09=Hores d'encesa
+0A=Nº de reintents de giro
+0C=Nº de cicles d'encès
+A7=Mode de protecció del SSD
+A8=Nº d'errors PHY de SATA
+AA=Nº de blocs defectuosos
+AD=Nº d'esborrats
+AF=Nº de taules de clústers defectuosos
+B4=Nº de blocs de reserva
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+C5=Nº de sectors pendents
+E7=Esperança de vida de la unitat
+E9=Nº de sectors escrits (NAND)
+F0=Inicio de escriptura
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+
+[SmartPhison]
+01=Taxa d'errors de lectura
+09=Hores en funcionament
+0C=Nº de cicles d'encès
+A8=Nº d'errors PHY de SATA
+AA=Nº de blocs defectuosos
+AD=Nº d'esborrats
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+DA=Nº d'errors de comprovació CRC
+E7=Esperança de vida restant del SSD
+F1=Escriptures al amfitrió
+
+[SmartSeagate]
+; https://crystalmark.info/board/c-board.cgi?cmd=one;no=1818;id=#1818
+01=Taxa d'errors de lectura
+05=Nº de sectors retirats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+10=Blocs de reserva disponibles
+11=Blocs de reserva restants
+A8=Nº d'errors PHY de SATA
+AA=Nº de blocs defectuosos
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Nº d'esborrats
+AE=Nº de caigudes d'alimentació inesperades
+B1=Delta del rang de desgast
+B5=Nº d'errors de programació
+B6=Nº d'errors d'esborrat
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+C9=Taxa d'errors de programari
+CC=Taxa de correcció per programari d'errors ECC
+DA=Nº d'errors de comprovació CRC
+E7=Esperança de vida restant del SSD
+E8=Nº d'errors al llegir blocs
+E9=GB de NAND escrits
+EA=Escriptures a flaix en la vida útil
+EB=Sectors NAND escrits
+F1=Escriptures al amfitrió en la vida útil
+F2=Lectures de l'amfitrió en la vida útil
+FA=Reintents de lectura NAND en la vida útil
+
+[SmartSeagateIronWolf]
+; https://www.seagate.com/www-content/manuals/ironwolf-110-ssd/pdf/IronWolf_110_SSD_PM-100841919_B.pdf
+01=Taxa d'errors de lectura sense processar
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+64=Gigabits de flaix esborrats
+66=Nº de entrades PS4 en la vida útil
+67=Nº de entrades PS3 en la vida útil
+AA=Nº de blocs defectuosos produïts
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana d'esborrats/programacions
+AE=Nº de caigudes d'alimentació inesperades
+B1=Delta del rang de desgast
+B7=Nº de pèrdues d'interfície SATA/PCIe
+BB=Nº de ECC no corregibles
+C2=Temperatura
+C3=Nº de ECC de RAISE corregibles
+C6=Nº d'errors de lectura no corregibles
+C7=Nº d'errors R-Error (CRC) de SATA
+E6=Protecció esperança de vida de la unitat
+E7=Esperança de vida restant del SSD
+E8=Espai reservat disponible
+E9=Escriptures a flaix durant la vida útil
+F1=Escriptures al amfitrió en la vida útil
+F2=Lectures de l'amfitrió en la vida útil
+F3=Espai disponible
+
+[SmartMarvell] ; Added 8.8.3
+05=Nº de blocs defectuosos nous
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+A4=Nº d'esborrats
+A5=Nº d'esborrats màxims
+A6=Nº d'esborrats mínims
+A7=Mitjana d'esborrats
+C0=Nº d'apagats per replegat
+C2=Temperatura
+C7=Nº d'errors de comprovació CRC SATA
+F1=Nº total de dades escrites
+F2=Nº total de dades llegides
+
+[SmartMaxiotek] ; Added 8.8.6
+05=Nº de sectors reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+A7=Mode de protecció del SSD
+A8=Nº d'errors PHY
+A9=Nº de blocs defectuosos
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Nº d'esborrats
+AF=Nº de taules de clústers defectuosos
+B1=Nº de reintents de lectura
+B4=Nº de blocs de reserva restants
+BB=Errors no recuperables notificats
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+C4=Nº de esdeveniments de reassignació
+C7=Nº d'errors de comprovació CRC UDMA
+CE=Nº d'esborrats mínims
+CF=Nº d'esborrats màxims
+D0=Mitjana d'esborrats
+D1=Nº d'esborrats mínims del bloc SLC
+D2=Nº d'esborrats màxims del bloc SLC
+D3=Mitjana d'esborrats del bloc SLC
+E7=Esperança de vida restant del SSD
+E9=Nº de sectors escrits a NAND
+EA=Nº de sectors llegits a NAND
+F1=Nº de sectors escrits
+F2=Nº de sectors llegits
+F5=Nº d'errors en bits
+
+[SmartSeagateBarraCuda] ; Added 8.9.0
+01=Nº d'errors UECC
+05=Nº de sectors retirats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+10=Blocs de reserva disponibles
+11=Blocs de reserva restants
+A8=Nº d'errors PHY de SATA
+AA=Nº de blocs defectuosos
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Nº d'esborrats
+AE=Nº de caigudes d'alimentació inesperades
+B1=Delta del rang de desgast
+B5=Nº d'errors de programació
+B6=Nº d'errors d'esborrat
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura
+C9=Taxa d'errors de programari
+CC=Taxa de correcció per programari d'errors ECC
+DA=Nº d'errors de comprovació CRC
+E7=Esperança de vida restant del SSD
+E8=Nº d'errors al llegir blocs
+E9=GB de NAND escrits
+EA=Escriptures a flaix en la vida útil
+EB=Sectors NAND escrits
+F1=Escriptures al amfitrió en la vida útil
+F2=Lectures de l'amfitrió en la vida útil
+FA=Reintents de lectura NAND en la vida útil
+
+[SmartYmtc] ; Added 8.10.0
+05=Nº de blocs defectuosos nous
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AA=Nº màxim de blocs defectuosos
+A8=Nº d'errors PHY de SATA
+A9=Nº de blocs defectuosos
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Nº d'esborrats
+AF=Nº de clústers defectuosos
+B7=Nº de pèrdues d'interfície SATA
+B8=Nº d'errors detectats/corregits entre extrems
+BB=Nº d'errors no corregibles
+BE=Temperatura
+C0=Nº de caigudes d'alimentació inesperades
+C4=Nº de esdeveniments de reassignació
+C7=Nº d'errors de comprovació CRC
+CE=Nº d'esborrats mínims
+CF=Nº d'esborrats màxims
+D0=Mitjana d'esborrats
+D1=Nº mínim d'esborrats del SLC
+D2=Nº màxim d'esborrats del SLC
+D3=Mitjana d'esborrats SLC
+E7=Esperança de vida restant del SSD
+E9=Nº de sectors escrits a NAND
+EA=Nº de sectors llegits de NAND
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F3=Temperatura de NAND
+F5=Nº d'errors de bits
+
+[SmartScy] ;Added 8.12.8
+01=Taxa d'errors de lectura sense processar
+05=Nº de sectors reassignats
+07=Taxa d'errors de recerca
+09=Hores d'encesa
+0C=Nº de cicles d'encès de la unitat
+A7=Mitjana d'esborrats
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Nº d'esborrats
+B1=Nº de reintents de lectura
+B4=Nº de blocs de reserva restants
+B7=Blocs defectuosos produïts
+BB=Errors no recuperables notificats
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura controlada
+C3=Nº acumulatiu de bits corregits per ECC
+C4=Nº de esdeveniments de reassignació
+C5=Sector actualment pendent
+C7=Nº d'errors de comprovació CRC UDMA
+E7=Esperança de vida restant del SSD
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F5=Nº total de escriptures a NAND flaix
+
+[SmartRecadata] ;Added 8.14.0
+07=Taxa d'errors de recerca
+09=Hores d'encesa
+0C=Nº de cicles d'encès de la unitat
+A7=Mitjana d'esborrats
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Nº d'esborrats
+B1=Nº de reintents de lectura
+B4=Nº de blocs de reserva restants
+B7=Blocs defectuosos produïts
+BB=Errors no recuperables notificats
+C0=Nº de caigudes d'alimentació inesperades
+C2=Temperatura controlada
+C3=Nº acumulatiu de bits corregits per ECC
+C4=Nº de esdeveniments de reassignació
+C5=Sector actualment pendent
+C7=Nº d'errors de comprovació CRC UDMA
+E7=Esperança de vida restant del SSD
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F5=Nº total de escriptures a NAND flaix
+
+[SmartSanDiskHp] ;Added 8.17.0
+01=Taxa d'errors de lectura sense processar
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès de la unitat
+AA=Nº
+ de blocs reservats
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Nº de nivell de desgast
+AE=Nº de caigudes d'alimentació inesperades
+B0=Nº de blocs reservats sense utilitzar
+B7=Nº de pèrdues d'interfície SATA
+B8=Nº d'errors detectats/corregits entre extrems
+BB=Nº d'errors no corregibles
+BC=Comandos sense executar per falta de temps
+BE=Temperatura del flux de aire
+C2=Temperatura
+C4=Nº de esdeveniments de reassignació
+C7=Nº d'errors de comprovació CRC
+C9=Esperança de vida restant del SSD
+E6=Indicador de desgast del suport
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F3=Estadístiques de desacceleració
+F4=Estat de desacceleració de temperatura
+F9=GB escrits a la NAND TLC
+
+[SmartSanDiskHpVenus] ;Added 8.17.0
+01=Taxa d'errors de lectura sense processar
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès de la unitat
+AA=Nº de blocs reservats
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Nº de nivell de desgast
+AE=Nº de caigudes d'alimentació inesperades
+B0=Nº de blocs reservats sense utilitzar
+B7=Nº de pèrdues d'interfície SATA
+B8=Nº d'errors detectats/corregits entre extrems
+BB=Nº d'errors no corregibles
+BC=Comandos sense executar per falta de temps
+BE=Temperatura del flux de aire
+C2=Temperatura
+C4=Nº de esdeveniments de reassignació
+C7=Nº d'errors de comprovació CRC
+C9=Esperança de vida restant del SSD
+E6=Indicador de desgast del suport
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F3=Nº total de escriptures a NAND
+F4=Estat de desacceleració de temperatura
+F9=GB escrits a la NAND TLC
+
+[SmartSanDiskDell] ;Added 8.17.0
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès de la unitat
+AF=Nº d'errors de programació (pitjor component)
+B0=Nº d'errors d'esborrat (pitjor component)
+B1=Nº de nivell de desgast
+B2=Nº de blocs reservats utilitzats (pitjor component)
+B3=Nº de blocs reservats utilitzats (total del SSD)
+B4=Nº de blocs reservats restants (total del SSD)
+B5=Nº d'errors de programació (total del SSD)
+B6=Nº d'errors d'esborrat (total del SSD)
+BB=Nº d'errors no corregibles
+C2=Temperatura
+C3=Taxa de correccions ECC
+C7=Nº d'errors de comprovació CRC
+E6=Indicador de desgast del suport
+EE=Indicador de desgast del suport (cicles restants)
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+
+[SmartSanDiskLenovo] ;Added 8.17.0
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès de la unitat
+A6=Nº mínim de cicles P/E
+A7=Nº màxim de blocs defectuosos per xip
+A8=Nº màxim de cicles P/E
+A9=Nº total de blocs defectuosos
+AA=Blocs defectuosos produïts
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana de atributs de cicles P/E
+AE=Nº de caigudes d'alimentació inesperades
+B2=Nº de blocs reservats utilitzats
+B4=Nº de blocs reservats restants
+B8=Nº d'errors detectats/corregits entre extrems
+BB=Nº de UECC
+BC=Comandos sense executar per falta de temps
+C2=Temperatura
+C7=Errors CRC de SATA
+D4=Errors PHY en SATA
+E6=Indicador de desgast del suport
+E8=Espai reservat disponible
+E9=GB escrits a NAND
+EA=GB escrits a NAND (SLC)
+F1=Nº total de GBs escrits en l'amfitrió
+F2=Nº total de GBs llegits
+F3=Estadístiques de desacceleració
+F4=Estat del des-accelerador tèrmic
+
+[SmartSanDiskLenovoHelenVenus] ;Added 8.17.0
+05=Nº de blocs reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès de la unitat
+A6=Nº mínim de cicles P/E
+A7=Nº màxim de blocs defectuosos per xip
+A8=Nº màxim de cicles P/E
+A9=Nº total de blocs defectuosos
+AA=Blocs defectuosos produïts
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana de atributs de cicles P/E
+AE=Nº de caigudes d'alimentació inesperades
+B2=Nº de blocs reservats utilitzats
+B4=Nº de blocs reservats restants
+B8=Nº d'errors detectats/corregits entre extrems
+BB=Nº de UECC
+BC=Comandos sense executar per falta de temps
+C2=Temperatura
+C7=Errors CRC de SATA
+D4=Errors PHY en SATA
+E8=Espai reservat disponible
+E9=Indicador de desgast del suport
+EA=GB escrits a NAND (SLC)
+F1=Nº total de GB escrits en l'amfitrió
+F2=Nº total de GB llegits
+F3=Estadístiques de desacceleració
+F4=Estat del desaccelerador tèrmic
+F9=GB escrits a NAND (TLC)
+
+[SmartMicronMU03] ;Added 8.17.0
+01=Taxa d'errors de lectura sense processar
+05=Nº de blocs NAND reassignats
+09=Hores d'encesa
+0C=Nº de cicles d'encès
+AB=Nº d'errors de programació
+AC=Nº d'errors d'esborrat
+AD=Mitjana de blocs esborrats
+AE=Nº de caigudes d'alimentació inesperades
+B4=Blocs NAND de reserva sense utilitzar
+B5=Accés alineat alie a 4K
+B7=Pèrdua d'interfície SATA
+B8=Nº d'errors corregits
+BB=Errors no corregibles notificats
+C2=Temperatura
+C4=Nº de esdeveniments de reassignació
+C5=Nº de correccions ECC pendents
+C6=Recerca sense connexió d'errors no corregibles de SMART
+C7=Nº d'errors de comprovació CRC UDMA
+CA=Esperança de vida
+CE=Taxa d'errors de escriptura
+D2=Taxa de recuperació per RAIN exitosa
+F0=Nº de pàgines de programació de l'amfitrió
+F1=Nº total de escriptures de LBAs
+F2=Nº total de lectures de LBAs
+F3=Nº total de pàgines programades
+F6=Nº acumulat de sectors escrits en l'amfitrió
+F7=Nº de pàgines NAND programades per l'amfitrió
+F8=Nº de pàgines NAND programades per FTL
+
+[SmartSanDiskCloud] ;Added 9.0.0
+05=Recompte de blocs retirats
+09=Hores d'encesa
+0D=Recompte d'errors ECC no corregibles
+20=Amplificació escriptura multiplicada per 100
+21=Factor d'amplificació d’escriptura
+AA=Recompte de blocs reservats
+AB=Recompte d'errors del programa
+AC=Esborrar el recompte d'errors
+AD=Recompte mitjà d'escrits/esborrats
+AE=Nº de pèrdues d'energia inesperades
+B2=Vida útil SSD restant (fins a 0,01%)
+BF=Nº d'apagats nets
+C0=Nº d'apagats no nets
+C2=Temperatura
+C4=Nº de blocs reassignats
+E6=Percentatge total d’escrits/esborrats
+E8=Blocs de recanvi restants
+E9=Total escriptura a Nand de 64GB
+EB=Salut del condensador
+F1=Total ecriptura de l'amfitrió de 64GB
+F2=Total lectura de l'amfitrió de 64GB
+F4=Activacions accelerador tèrmic de per vida
+F5=Percentatge de vida útil restant
+FD=Proves SPI restants
