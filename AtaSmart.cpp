@@ -2354,8 +2354,8 @@ safeRelease:
 
 int CAtaSmart::CompareDriveLetter(const void *p1, const void *p2)
 {
-	int dlm1 = 0; 
-	int dlm2 = 0;
+	int dlm1 = -1; 
+	int dlm2 = -1;
 
 	for (int i = 0; i < 26; i++)
 	{
@@ -2384,8 +2384,11 @@ int CAtaSmart::CompareDriveLetter(const void *p1, const void *p2)
 	if (pdi1 == -1) { pdi1 = 255; }
 	if (pdi2 == -1) { pdi2 = 255; }
 
-	if (dlm1 == 0) { dlm1 = 26 + 1; } /* Z + 1 */
-	if (dlm2 == 0) { dlm2 = 26 + 1; } 
+	if (dlm1 == -1) { dlm1 = 26 + 1; } /* Z + 1 */
+	if (dlm2 == -1) { dlm2 = 26 + 1; } 
+
+	dlm1++;
+	dlm2++;
 
 	int sort1 = (dlm1 << 8) + pdi1;
 	int sort2 = (dlm2 << 8) + pdi2;
