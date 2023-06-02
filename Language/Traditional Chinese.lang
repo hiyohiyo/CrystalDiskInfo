@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=謝慶憲, chriszxl (小良奇), haobinnan
-VERSION=8.17.12
+VERSION=9.0.1
 
 [Language]
 LANGUAGE=正體中文
@@ -111,9 +111,10 @@ SAVE_TEXT=儲存 (文字)
 SAVE_IMAGE=儲存 (圖片)
 
 ;9.0.0
-DRIVE_SORT_METHOD=Drive Sort Method
-PHYSICAL_DRIVE_ID=Physical Drive ID
-DRIVE_LETTER=Drive Letter
+DRIVE_SORT_METHOD=磁碟機排序方法
+PHYSICAL_DRIVE_ID=實體磁碟機 ID
+DRIVE_LETTER=磁碟機代號
+DRIVE_MENU_NUMBER=顯示磁碟機數量
 
 [TrayMenu]
 EXIT=結束
@@ -412,7 +413,7 @@ E3=讀寫比例
 E4=單次測試時間
 E8=可用的保留空間
 E9=介質耗損指標
-EA=熱節流狀態
+EA=動態熱能管理機制狀態
 F1=LBA(邏輯區塊定址)寫入總數
 F2=LBA(邏輯區塊定址)讀取總數
 F3=NAND 累計寫入
@@ -1152,7 +1153,7 @@ CA=使用的磁碟壽命百分比
 E2=一定時間內的磨損比例
 E3=讀寫比例
 E4=單次測試時間
-EA=主機位元組讀取總數
+EA=動態熱能管理機制狀態
 EB=主機位元組/磁區寫入總數
 F1=Nand 位元組/磁區寫入總數
 
@@ -1630,27 +1631,27 @@ F7=主機程式 NAND 資料頁數
 F8=FTL 程式 NAND 資料頁數
 
 [SmartSanDiskCloud] ;Added 9.0.0
-05=Retired Block Count
-09=Power On Hours
-0D=Count of Uncorrectable ECC Errors
-20=Write Amplification multiplied by 100
-21=Write Amplification Factor
-AA=Reserve Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Average Write/Erase Count
-AE=Unexpected Power Loss Count
-B2=SSD Life Left (upto 0.01%)
-BF=Clean Shutdown Count
-C0=Unclean Shutdown Count
-C2=Temperature
-C4=Number of Blocks Reallocated
-E6=Percent of Total Write/Erase Count
-E8=Spare Blocks Remaining
-E9=Total Nand Writes 64GB
-EB=Capacitor Health
-F1=Total Host Writes 64GB
-F2=Total Host Reads 64GB
-F4=Lifetime Thermal Throttle Activations
-F5=Percent Drive Life Remaining
-FD=SPI Tests Remaining
+05=已淘汰區塊數
+09=總通電時間
+0D=不可糾正 ECC 錯誤計數
+20=寫入放大乘以100
+21=寫入放大
+AA=保留區塊數量
+AB=程式失敗次數
+AC=抹除失敗次數
+AD=平均寫入/抹除次數
+AE=未預期的電源中斷次數
+B2=SSD 壽命剩下 (最多 0.01%)
+BF=正常關機次數
+C0=未正常關機次數
+C2=溫度
+C4=區塊重定位數
+E6=寫入/抹除次數總計百分比
+E8=剩餘壽命
+E9=總計 Nand 寫入 64GB
+EB=電容器健康情況
+F1=對 SSD 累計寫入 64GB
+F2=對 SSD 累計讀取 64GB
+F4=存留期動態熱能管理機制啟用
+F5=磁碟機剩餘壽命百分比
+FD=剩餘 SPI 測試
