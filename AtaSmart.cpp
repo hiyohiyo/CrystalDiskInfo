@@ -2990,6 +2990,12 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.NvCacheSize = (ULONGLONG)identify->A.NvCacheSizeLogicalBlocks * 512;
 	}
 
+	// +AMD_RC2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	if (commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2) {
+		asi.TotalDiskSize = TotalDiskSize;
+	}
+	else
+	// +AMD_RC2 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	if(identify->A.TotalAddressableSectors > 0x0FFFFFFF)
 	{
 		asi.TotalDiskSize = 0;
@@ -3386,6 +3392,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				if (GetSmartThresholdAMD_RC2(scsiBus, &asiCheck)) {
 					asi.IsThresholdCorrect = TRUE;
 				}
+				asi.IsSmartSupported = TRUE;
 				asi.IsSmartEnabled = TRUE;
 			}
 			break;
@@ -6837,8 +6844,8 @@ HANDLE CAtaSmart::CreateWorldMutex(CONST TCHAR* name)							// Create/Open a Mut
 {                                                                               // appropriate protection
 	HANDLE                    mhl;                                              // Mutex Handle
 	SID*					  sid;												// Security ID
-	SECURITY_ATTRIBUTES       sab[1];											// Security Attributes Block
-	SECURITY_DESCRIPTOR       sdb[1];											// Security Descriptor Block
+	SECURITY_ATTRIBUTES       sab[1]{};											// Security Attributes Block
+	SECURITY_DESCRIPTOR       sdb[1]{};											// Security Descriptor Block
 	ACL                       acl[32];											// ACL Area
 	SID_IDENTIFIER_AUTHORITY  swa[1] = SECURITY_WORLD_SID_AUTHORITY;			// World access
 	TCHAR                     gtb[256];                                         // Global\\ text buffer
@@ -11657,6 +11664,430 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 	{
 		return DISK_STATUS_GOOD;
 	}
+}
+
+// [2023/06/26] Correct attribute data. compatible CDiskInfoDlg::UpdateListCtrl
+// Please maintain according to the specification of CAtaSmart::CheckDiskStatus
+DWORD CAtaSmart::CorrectDiskAttributeStatus(DWORD index, BYTE(&status)[MAX_ATTRIBUTE], UINT RawValueFormat, TCHAR(&text)[MAX_ATTRIBUTE][5][32]) const {
+	if( index >= vars.GetCount() ) return DISK_STATUS_UNKNOWN;
+
+	BYTE tmp[MAX_ATTRIBUTE]{};
+	BYTE highest_stat = DISK_STATUS_UNKNOWN;
+	const ATA_SMART_INFO* var = &vars[index];
+	const DWORD ven_id = var->DiskVendorId;
+
+	for (UINT_PTR j = 0; j < var->AttributeCount && j < MAX_ATTRIBUTE; ++j)
+	{
+		const BYTE attr_id = var->Attribute[j].Id;
+		if (attr_id == 0x00 || attr_id == 0xFF)  continue;
+
+		if (var->IsNVMe)
+		{
+			BYTE stat = DISK_STATUS_GOOD;
+			if (var->Model.Find(_T("Parallels")) == 0
+				|| var->Model.Find(_T("VMware")) == 0
+				|| var->Model.Find(_T("QEMU")) == 0 )  stat = DISK_STATUS_UNKNOWN;
+			else {
+				switch (attr_id)
+				{
+				case 0x01:
+					if (var->Attribute[j].RawValue[0])  stat = DISK_STATUS_BAD;
+					break;
+				case 0x02:
+				{
+					const int temperature = (int)(MAKEWORD(var->Attribute[1].RawValue[0], var->Attribute[1].RawValue[1])) - 273;
+					if (temperature >= var->AlarmTemperature)  stat = DISK_STATUS_BAD;
+					else if (temperature == var->AlarmTemperature)  stat = DISK_STATUS_CAUTION;
+				}
+					break;
+				case 0x03:
+					// 2022/10/02 Workaround for no support Available Spare Threshold devices
+					// https://github.com/hiyohiyo/CrystalDiskInfo/issues/186
+					if (var->Attribute[3].RawValue[0] > 100)  stat = DISK_STATUS_GOOD;
+					// 2022/03/26 Workaround for WD_BLACK AN1500 (No support Available Spare/Available Spare Threshold)
+					else if (var->Attribute[2].RawValue[0] == 0
+						&& var->Attribute[3].RawValue[0] == 0)  stat = DISK_STATUS_GOOD;
+					else if (var->Attribute[2].RawValue[0] < var->Attribute[3].RawValue[0])  stat = DISK_STATUS_BAD;
+					else if (var->Attribute[2].RawValue[0] == var->Attribute[3].RawValue[0]
+						&& var->Attribute[3].RawValue[0] != 100)  stat = DISK_STATUS_CAUTION;
+
+					break;
+				case 0x05:
+					if ((100 - var->Attribute[j].RawValue[0]) <= var->ThresholdFF)  stat = DISK_STATUS_CAUTION;
+					break;
+				}
+			}
+			tmp[j] = stat;
+		}
+		else if (var->IsSmartCorrect && var->IsThresholdCorrect && !var->IsThresholdBug)
+		{
+			if (!var->IsSsd &&
+				(attr_id == 0x05 // Reallocated Sectors Count
+					|| attr_id == 0xC5 // Current Pending Sector Count
+					|| attr_id == 0xC6 // Off-Line Scan Uncorrectable Sector Count
+					))
+			{
+				if (var->Threshold[j].ThresholdValue
+					&& var->Attribute[j].CurrentValue < var->Threshold[j].ThresholdValue)  tmp[j] = DISK_STATUS_BAD;
+				else
+				{
+					WORD threshold = 0;
+					switch (attr_id)
+					{
+					case 0x05:
+						threshold = var->Threshold05;
+						break;
+					case 0xC5:
+						threshold = var->ThresholdC5;
+						break;
+					case 0xC6:
+						threshold = var->ThresholdC6;
+						break;
+					}
+					if (threshold && (MAKEWORD(var->Attribute[j].RawValue[0], var->Attribute[j].RawValue[1])) >= threshold)  tmp[j] = DISK_STATUS_CAUTION;
+					else  tmp[j] = DISK_STATUS_GOOD;
+				}
+			}
+			// [2021/12/15] Workaround for SanDisk USB Memory
+			else if (attr_id == 0xE8 && var->FlagLifeSanDiskUsbMemory)  tmp[j] = DISK_STATUS_GOOD;
+			// Temperature
+			else if (attr_id == 0xC2)  tmp[j] = DISK_STATUS_GOOD;
+			// End-to-End Error
+			// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1090;id=diskinfo#1090
+			// http://h20000.www2.hp.com/bc/docs/support/SupportManual/c01159621/c01159621.pdf
+			else if (attr_id == 0xB8)  tmp[j] = DISK_STATUS_GOOD;
+			// Life for WDC/SanDisk
+			else if (attr_id == 0xE6 && (var->DiskVendorId == SSD_VENDOR_WDC || var->DiskVendorId == SSD_VENDOR_SANDISK))
+			{
+				int life = -1;
+
+				if (var->FlagLifeSanDiskUsbMemory) {}
+				else if (var->FlagLifeSanDisk0_1)  life = 100 - (var->Attribute[j].RawValue[1] * 256 + var->Attribute[j].RawValue[0]) / 100;
+				else if (var->FlagLifeSanDisk1)  life = 100 - var->Attribute[j].RawValue[1];
+				else if (var->FlagLifeSanDiskLenovo)  life = var->Attribute[j].CurrentValue;
+				else  life = 100 - var->Attribute[j].RawValue[1];
+
+				if (life < 0)  life = 0;
+
+				if (var->FlagLifeSanDiskUsbMemory)  tmp[j] = DISK_STATUS_GOOD;
+				else if (life == 0)  tmp[j] = DISK_STATUS_BAD;
+				else if (life <= var->ThresholdFF)  tmp[j] = DISK_STATUS_CAUTION;
+				else  tmp[j] = DISK_STATUS_GOOD;
+			}
+			// Life
+			else if (
+				(attr_id == 0xA9 && (ven_id == SSD_VENDOR_REALTEK || (ven_id == SSD_VENDOR_KINGSTON && var->HostReadsWritesUnit == HOST_READS_WRITES_32MB) || ven_id == SSD_VENDOR_SILICONMOTION))
+				|| (attr_id == 0xAD && (ven_id == SSD_VENDOR_TOSHIBA || ven_id == SSD_VENDOR_KIOXIA))
+				|| (attr_id == 0xB1 && ven_id == SSD_VENDOR_SAMSUNG)
+				|| (attr_id == 0xBB && ven_id == SSD_VENDOR_MTRON)
+				|| (attr_id == 0xCA && (ven_id == SSD_VENDOR_MICRON || ven_id == SSD_VENDOR_MICRON_MU03 || ven_id == SSD_VENDOR_INTEL_DC))
+				|| (attr_id == 0xD1 && ven_id == SSD_VENDOR_INDILINX)
+				|| (attr_id == 0xE7 && (ven_id == SSD_VENDOR_SANDFORCE || ven_id == SSD_VENDOR_CORSAIR || ven_id == SSD_VENDOR_KINGSTON || ven_id == SSD_VENDOR_SKHYNIX
+					|| ven_id == SSD_VENDOR_REALTEK || ven_id == SSD_VENDOR_SANDISK || ven_id == SSD_VENDOR_SSSTC || ven_id == SSD_VENDOR_APACER
+					|| ven_id == SSD_VENDOR_JMICRON || ven_id == SSD_VENDOR_SEAGATE || ven_id == SSD_VENDOR_MAXIOTEK
+					|| ven_id == SSD_VENDOR_YMTC || ven_id == SSD_VENDOR_SCY || ven_id == SSD_VENDOR_RECADATA))
+				|| (attr_id == 0xE8 && ven_id == SSD_VENDOR_PLEXTOR)
+				|| (attr_id == 0xE9 && (ven_id == SSD_VENDOR_INTEL || ven_id == SSD_VENDOR_OCZ || ven_id == SSD_VENDOR_OCZ_VECTOR || ven_id == SSD_VENDOR_SKHYNIX))
+				|| (attr_id == 0xE9 && ven_id == SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS)
+				|| (attr_id == 0xE6 && (ven_id == SSD_VENDOR_SANDISK_LENOVO || ven_id == SSD_VENDOR_SANDISK_DELL))
+				|| (attr_id == 0xC9 && (ven_id == SSD_VENDOR_SANDISK_HP || ven_id == SSD_VENDOR_SANDISK_HP_VENUS))
+				)
+			{
+				if (var->FlagLifeRawValue || var->FlagLifeRawValueIncrement)  tmp[j] = DISK_STATUS_GOOD;
+				else if (var->Attribute[j].CurrentValue == 0
+					|| var->Attribute[j].CurrentValue < var->Threshold[j].ThresholdValue)  tmp[j] = DISK_STATUS_BAD;
+				else if (var->Attribute[j].CurrentValue <= var->ThresholdFF)  tmp[j] = DISK_STATUS_CAUTION;
+				else  tmp[j] = DISK_STATUS_GOOD;
+			}
+			else if (attr_id == 0x01 // Read Error Rate for SandForce Bug
+				&& ven_id == SSD_VENDOR_SANDFORCE)
+			{
+				if (var->Attribute[j].CurrentValue == 0
+					&& var->Attribute[j].RawValue[0] == 0
+					&& var->Attribute[j].RawValue[1] == 0)  tmp[j] = DISK_STATUS_GOOD;
+				else if (var->Threshold[j].ThresholdValue
+					&& var->Attribute[j].CurrentValue < var->Threshold[j].ThresholdValue)  tmp[j] = DISK_STATUS_BAD;
+				else  tmp[j] = DISK_STATUS_GOOD;
+			}
+			else if ((var->IsSsd && !var->IsRawValues8)
+				|| ((0x01 <= attr_id && attr_id <= 0x0D)
+					|| attr_id == 0x16
+					|| (0xBB <= attr_id && attr_id <= 0xC1)
+					|| (0xC3 <= attr_id && attr_id <= 0xD1)
+					|| (0xD3 <= attr_id && attr_id <= 0xD4)
+					|| (0xDC <= attr_id && attr_id <= 0xE4)
+					|| (0xE6 <= attr_id && attr_id <= 0xE7)
+					|| attr_id == 0xF0
+					|| attr_id == 0xFA
+					|| attr_id == 0xFE
+					))
+			{
+				if (var->Threshold[j].ThresholdValue
+					&& var->Attribute[j].CurrentValue < var->Threshold[j].ThresholdValue)  tmp[j] = DISK_STATUS_BAD;
+				else  tmp[j] = DISK_STATUS_GOOD;
+			}
+			else  tmp[j] = DISK_STATUS_GOOD;
+		}
+		if (highest_stat < tmp[j])  highest_stat = tmp[j];
+
+
+		_sntprintf_s(text[j][0], 32, _TRUNCATE, _T("%02X"), attr_id);
+
+		//...
+		//CDiskInfoDlg::UpdateListCtrl > if(m_bSmartEnglish) {}
+		//...
+
+		if ( ven_id == SSD_VENDOR_SANDFORCE)
+		{
+			_sntprintf_s(text[j][0], 32, _TRUNCATE, _T("%d"), var->Attribute[j].CurrentValue);
+			_sntprintf_s(text[j][0], 32, _TRUNCATE, _T("%d"), var->Attribute[j].WorstValue);
+			if (var->IsThresholdCorrect)
+			{
+				_sntprintf_s(text[j][3], 32, _TRUNCATE, _T("%d"), var->Threshold[j].ThresholdValue);
+			}
+			else
+			{
+				_tcscpy_s( text[j][3], 32, _T("---") );
+			}
+
+			switch (RawValueFormat)
+			{
+			case 3:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d %d %d %d"),
+					var->Attribute[j].Reserved,
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0]);
+				break;
+			case 2:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d"),
+					var->Attribute[j].Reserved,
+					MAKEWORD(var->Attribute[j].RawValue[4], var->Attribute[j].RawValue[5]),
+					MAKEWORD(var->Attribute[j].RawValue[2], var->Attribute[j].RawValue[3]),
+					MAKEWORD(var->Attribute[j].RawValue[0], var->Attribute[j].RawValue[1]));
+				break;
+			case 1:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%I64u"),
+					((UINT64)var->Attribute[j].Reserved << 48) +
+					((UINT64)var->Attribute[j].RawValue[5] << 40) +
+					((UINT64)var->Attribute[j].RawValue[4] << 32) +
+					((UINT64)var->Attribute[j].RawValue[3] << 24) +
+					((UINT64)var->Attribute[j].RawValue[2] << 16) +
+					((UINT64)var->Attribute[j].RawValue[1] << 8) +
+					(UINT64)var->Attribute[j].RawValue[0]);
+				break;
+			default:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%02X%02X%02X%02X%02X%02X%02X"),
+					var->Attribute[j].Reserved,
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0]);
+				break;
+			}
+		}
+		else if ( ven_id == SSD_VENDOR_JMICRON && var->IsRawValues8)
+		{
+			_sntprintf_s(text[j][1], 32, _TRUNCATE, _T("%d"), var->Attribute[j].CurrentValue);
+			_tcscpy_s(text[j][2], 32, _T("---"));
+			_tcscpy_s(text[j][3], 32, _T("---"));
+			switch (RawValueFormat)
+			{
+			case 3:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d %d %d %d %d"),
+					var->Attribute[j].Reserved,
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0],
+					var->Attribute[j].WorstValue);
+				break;
+			case 2:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d"),
+					MAKEWORD(var->Attribute[j].RawValue[5], var->Attribute[j].Reserved),
+					MAKEWORD(var->Attribute[j].RawValue[3], var->Attribute[j].RawValue[4]),
+					MAKEWORD(var->Attribute[j].RawValue[1], var->Attribute[j].RawValue[2]),
+					MAKEWORD(var->Attribute[j].WorstValue, var->Attribute[j].RawValue[0]));
+				break;
+			case 1:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%I64u"),
+					((UINT64)var->Attribute[j].Reserved << 56) +
+					((UINT64)var->Attribute[j].RawValue[5] << 48) +
+					((UINT64)var->Attribute[j].RawValue[4] << 40) +
+					((UINT64)var->Attribute[j].RawValue[3] << 32) +
+					((UINT64)var->Attribute[j].RawValue[2] << 24) +
+					((UINT64)var->Attribute[j].RawValue[1] << 16) +
+					((UINT64)var->Attribute[j].RawValue[0] << 8) +
+					(UINT64)var->Attribute[j].WorstValue);
+				break;
+			default:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%02X%02X%02X%02X%02X%02X%02X%02X"),
+					var->Attribute[j].Reserved,
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0],
+					var->Attribute[j].WorstValue);
+				break;
+			}
+		}
+		else if (ven_id == SSD_VENDOR_INDILINX)
+		{
+			_tcscpy_s(text[j][1], 32, _T("---"));
+			_tcscpy_s(text[j][2], 32, _T("---"));
+			_tcscpy_s(text[j][3], 32, _T("---"));
+			switch (RawValueFormat)
+			{
+			case 3:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d %d %d %d %d"),
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0],
+					var->Attribute[j].WorstValue,
+					var->Attribute[j].CurrentValue);
+				break;
+			case 2:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d"),
+					MAKEWORD(var->Attribute[j].RawValue[4], var->Attribute[j].RawValue[5]),
+					MAKEWORD(var->Attribute[j].RawValue[2], var->Attribute[j].RawValue[3]),
+					MAKEWORD(var->Attribute[j].RawValue[0], var->Attribute[j].RawValue[1]),
+					MAKEWORD(var->Attribute[j].CurrentValue, var->Attribute[j].WorstValue));
+				break;
+			case 1:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%I64u"),
+					((UINT64)var->Attribute[j].RawValue[5] << 56) +
+					((UINT64)var->Attribute[j].RawValue[4] << 48) +
+					((UINT64)var->Attribute[j].RawValue[3] << 40) +
+					((UINT64)var->Attribute[j].RawValue[2] << 32) +
+					((UINT64)var->Attribute[j].RawValue[1] << 24) +
+					((UINT64)var->Attribute[j].RawValue[0] << 16) +
+					((UINT64)var->Attribute[j].WorstValue << 8) +
+					(UINT64)var->Attribute[j].CurrentValue);
+				break;
+			default:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%02X%02X%02X%02X%02X%02X%02X%02X"),
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0],
+					var->Attribute[j].WorstValue,
+					var->Attribute[j].CurrentValue);
+				break;
+			}
+		}
+		else if (ven_id == SSD_VENDOR_NVME)
+		{
+			_tcscpy_s(text[j][1], 32, _T("---"));
+			_tcscpy_s(text[j][2], 32, _T("---"));
+			_tcscpy_s(text[j][3], 32, _T("---"));
+			switch (RawValueFormat)
+			{
+			case 3:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d %d %d %d"),
+					var->Attribute[j].Reserved,
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0]);
+				break;
+			case 2:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d"),
+					var->Attribute[j].Reserved,
+					MAKEWORD(var->Attribute[j].RawValue[4], var->Attribute[j].RawValue[5]),
+					MAKEWORD(var->Attribute[j].RawValue[2], var->Attribute[j].RawValue[3]),
+					MAKEWORD(var->Attribute[j].RawValue[0], var->Attribute[j].RawValue[1]));
+				break;
+			case 1:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%I64u"),
+					((UINT64)var->Attribute[j].Reserved << 48) +
+					((UINT64)var->Attribute[j].RawValue[5] << 40) +
+					((UINT64)var->Attribute[j].RawValue[4] << 32) +
+					((UINT64)var->Attribute[j].RawValue[3] << 24) +
+					((UINT64)var->Attribute[j].RawValue[2] << 16) +
+					((UINT64)var->Attribute[j].RawValue[1] << 8) +
+					(UINT64)var->Attribute[j].RawValue[0]);
+				break;
+			default:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%02X%02X%02X%02X%02X%02X%02X"),
+					var->Attribute[j].Reserved,
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0]);
+				break;
+			}
+		}
+		else
+		{
+			_sntprintf_s(text[j][1], 32, _TRUNCATE, _T("%d"), var->Attribute[j].CurrentValue);
+			_sntprintf_s(text[j][2], 32, _TRUNCATE, _T("%d"), var->Attribute[j].WorstValue);
+			if (var->IsThresholdCorrect)
+			{
+				_sntprintf_s(text[j][3], 32, _TRUNCATE, _T("%d"), var->Threshold[j].ThresholdValue);
+			}
+			else
+			{
+				_tcscpy_s(text[j][3], 32, L"---");
+			}
+
+			switch (RawValueFormat)
+			{
+			case 3:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d %d %d %d"),
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0]);
+				break;
+			case 2:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%d %d %d"),
+					MAKEWORD(var->Attribute[j].RawValue[4], var->Attribute[j].RawValue[5]),
+					MAKEWORD(var->Attribute[j].RawValue[2], var->Attribute[j].RawValue[3]),
+					MAKEWORD(var->Attribute[j].RawValue[0], var->Attribute[j].RawValue[1]));
+				break;
+			case 1:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%I64u"),
+					((UINT64)var->Attribute[j].RawValue[5] << 40) +
+					((UINT64)var->Attribute[j].RawValue[4] << 32) +
+					((UINT64)var->Attribute[j].RawValue[3] << 24) +
+					((UINT64)var->Attribute[j].RawValue[2] << 16) +
+					((UINT64)var->Attribute[j].RawValue[1] << 8) +
+					(UINT64)var->Attribute[j].RawValue[0]);
+				break;
+			default:
+				_sntprintf_s(text[j][4], 32, _TRUNCATE, _T("%02X%02X%02X%02X%02X%02X"),
+					var->Attribute[j].RawValue[5],
+					var->Attribute[j].RawValue[4],
+					var->Attribute[j].RawValue[3],
+					var->Attribute[j].RawValue[2],
+					var->Attribute[j].RawValue[1],
+					var->Attribute[j].RawValue[0]);
+				break;
+			}
+		}
+	}
+	memcpy_s(status, MAX_ATTRIBUTE, tmp, MAX_ATTRIBUTE);
+	return highest_stat;
 }
 
 VOID CAtaSmart::ChangeByteOrder(PCHAR str, DWORD length)
