@@ -1855,9 +1855,9 @@ public:
 		INT 				AlarmTemperature{};
 		BOOL				AlarmHealthStatus{};
 
-		INTERFACE_TYPE		InterfaceType;
-		COMMAND_TYPE		CommandType;
-		HOST_READS_WRITES_UNIT HostReadsWritesUnit;
+		INTERFACE_TYPE		InterfaceType{};
+		COMMAND_TYPE		CommandType{};
+		HOST_READS_WRITES_UNIT HostReadsWritesUnit{};
 
 		DWORD				DiskVendorId{};
 		DWORD				UsbVendorId{};
@@ -1869,7 +1869,7 @@ public:
 		WORD				ThresholdC6{};
 		WORD				ThresholdFF{};
 
-		CSMI_SAS_PHY_ENTITY sasPhyEntity;
+		CSMI_SAS_PHY_ENTITY sasPhyEntity{};
 
 		CString				SerialNumber;
 		CString				SerialNumberReverse;
@@ -1951,6 +1951,7 @@ public:
 	DWORD CsmiType = 0;
 
 	DWORD CheckDiskStatus(DWORD index);
+	DWORD CorrectDiskAttributeStatus(DWORD index, BYTE(&status)[MAX_ATTRIBUTE], UINT RawValueFormat, TCHAR(&text)[MAX_ATTRIBUTE][5][32]) const;
 
 protected:
 
