@@ -402,7 +402,6 @@ public:
 	afx_msg void OnHideSmartInfo();
 	afx_msg void OnHideSerialNumber();
 	afx_msg void OnCrystalDewWorld();
-	afx_msg void OnAmdRc2t7();
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnRefresh();
@@ -616,6 +615,7 @@ public:
 	afx_msg void OnUsbNVMeRealtek();
 	afx_msg void OnUsbEnableAll();
 	afx_msg void OnUsbDisableAll();
+	afx_msg void OnAMD_RC2();
 	afx_msg void OnMegaRAID();
 	afx_msg void OnIntelVROC();
 #ifdef JMICRON_USB_RAID_SUPPORT

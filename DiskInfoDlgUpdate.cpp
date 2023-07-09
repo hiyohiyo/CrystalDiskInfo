@@ -1668,10 +1668,12 @@ GPL: General Purpose Log\n\
 		m_Feature.Delete(m_Feature.GetLength() - 2, 2);
 	}
 
-	if (/*m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || */m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X)
+	/*
+	if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X)
 	{
-		m_Feature = L"";
+	//	m_Feature = L"";
 	}
+	*/
 
 	m_ModelCapacity = m_Model + L" : " + m_Capacity;
 

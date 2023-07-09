@@ -265,17 +265,6 @@ void CDiskInfoDlg::OnCrystalDewWorld()
 	}	
 }
 
-void CDiskInfoDlg::OnAmdRc2t7()
-{
-	if (GetUserDefaultLCID() == 0x0411) // Japanese
-	{
-		OpenUrl(URL_AMD_RC2T7_JA);
-	}
-	else // Other Language
-	{
-		OpenUrl(URL_AMD_RC2T7_EN);
-	}
-}
 
 void CDiskInfoDlg::OnHelp()
 {
@@ -1322,6 +1311,25 @@ void CDiskInfoDlg::OnUsbNVMeRealtek()
 		m_Ata.FlagUsbNVMeRealtek = TRUE;
 		menu->CheckMenuItem(ID_USB_NVME_REALTEK, MF_CHECKED);
 		WritePrivateProfileStringFx(_T("USB"), _T("NVMeRealtek"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
+void CDiskInfoDlg::OnAMD_RC2()
+{
+	CMenu* menu = GetMenu();
+	if (m_Ata.FlagAMD_RC2)
+	{
+		m_Ata.FlagAMD_RC2 = FALSE;
+		menu->CheckMenuItem(ID_AMD_RC2T7, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AMD_RC2"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagAMD_RC2 = TRUE;
+		menu->CheckMenuItem(ID_AMD_RC2T7, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("AMD_RC2"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();

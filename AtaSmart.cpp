@@ -11669,7 +11669,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 // [2023/06/26] Correct attribute data. compatible CDiskInfoDlg::UpdateListCtrl
 // Please maintain according to the specification of CAtaSmart::CheckDiskStatus
 DWORD CAtaSmart::CorrectDiskAttributeStatus(DWORD index, BYTE(&status)[MAX_ATTRIBUTE], UINT RawValueFormat, TCHAR(&text)[MAX_ATTRIBUTE][5][32]) const {
-	if( index >= vars.GetCount() ) return DISK_STATUS_UNKNOWN;
+	if( index >= (DWORD)vars.GetCount() ) return DISK_STATUS_UNKNOWN;
 
 	BYTE tmp[MAX_ATTRIBUTE]{};
 	BYTE highest_stat = DISK_STATUS_UNKNOWN;
@@ -12583,23 +12583,29 @@ A_AMD_RC2_GetSmartData AMD_RC2_GetSmartData = NULL;
 
 BOOL AMD_RC2_DLL_Load() {
 
-	wchar_t	buffer1[261] = {}, dir1[261] = {}, buffer3[261] = {};
+	DebugPrint(L"AMD_RC2_DLL_Load");
 
-	GetModuleFileNameW(NULL, buffer1, 261);
-	_wsplitpath_s(buffer1, dir1, 261, buffer3, 261, NULL, 0, NULL, 0);
-	wcscat_s(dir1, 261, buffer3);
+	TCHAR fullPath[MAX_PATH] = {};
+	TCHAR drive[MAX_PATH] = {};
+	TCHAR path[MAX_PATH] = {};
+	TCHAR dllPath[MAX_PATH] = {};
 
-	wcscpy_s(buffer1, 261, dir1);
+	GetModuleFileNameW(NULL, fullPath, MAX_PATH);
+	_wsplitpath_s(fullPath, drive, MAX_PATH, path, MAX_PATH, NULL, 0, NULL, 0);
+	wcscat_s(dllPath, MAX_PATH, drive);
+	wcscat_s(dllPath, MAX_PATH, path);
+	wcscat_s(dllPath, MAX_PATH, DLL_DIR);
+
 #ifdef _M_AMD64
-	wcscat_s(buffer1, 261, L"AMD_RC2t7x64.dll");
+	wcscat_s(dllPath, MAX_PATH, L"AMD_RC2t7x64.dll");
 #else
-	wcscat_s(buffer1, 261, L"AMD_RC2t7x86.dll");
+	wcscat_s(dllPath, MAX_PATH, L"AMD_RC2t7x86.dll");
 #endif
 
 	// check sign
 
 	WINTRUST_FILE_INFO FileData = { sizeof(WINTRUST_FILE_INFO) };
-	FileData.pcwszFilePath = buffer1;
+	FileData.pcwszFilePath = dllPath;
 
 	GUID WVTPolicyGUID = WINTRUST_ACTION_GENERIC_VERIFY_V2;
 	WINTRUST_DATA WinTrustData = { sizeof(WinTrustData) };
@@ -12639,7 +12645,7 @@ BOOL AMD_RC2_DLL_Load() {
 
 	// DLL load
 
-	g_AMD_RC2_hmodule = LoadLibraryW(buffer1);
+	g_AMD_RC2_hmodule = LoadLibraryW(dllPath);
 	if (!g_AMD_RC2_hmodule)  return FALSE;
 
 	// get functions
@@ -12660,7 +12666,7 @@ BOOL AMD_RC2_DLL_Load() {
 
 	// check status
 
-	g_AMD_RC2_load = ( status == AMD_RC2_ERROR_CODE::AMD_RC2_loaded );
+	g_AMD_RC2_load = (status == AMD_RC2_ERROR_CODE::AMD_RC2_loaded);
 	if (!g_AMD_RC2_load) {
 		if (status > AMD_RC2_ERROR_CODE::AMD_RC2_MAX)  status = AMD_RC2_ERROR_CODE::AMD_RC2_MAX;
 
@@ -12679,12 +12685,12 @@ BOOL AMD_RC2_DLL_Load() {
 			_T("AMD_RC2_unknown")
 		};
 		DebugPrint(error_msg[status]);
-
 	}
 	g_AMD_RC2_init = TRUE;
 	return g_AMD_RC2_load;
 }
 #endif
+
 
 BOOL CAtaSmart::AddDiskAMD_RC2()
 {
