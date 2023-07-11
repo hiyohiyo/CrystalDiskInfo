@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Jadran Rudec, Boris Urbančič
-VERSION=CrystalDiskInfo 8.17.3
+VERSION=CrystalDiskInfo 9.0.0
 
 [Language]
 LANGUAGE=Slovenščina
@@ -1643,27 +1643,27 @@ F7=Štev. strani gostiteljskega programa NAND
 F8=Štev. strani FTL programa NAND
 
 [SmartSanDiskCloud] ;Added 9.0.0
-05=Retired Block Count
-09=Power On Hours
-0D=Count of Uncorrectable ECC Errors
-20=Write Amplification multiplied by 100
-21=Write Amplification Factor
-AA=Reserve Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Average Write/Erase Count
-AE=Unexpected Power Loss Count
-B2=SSD Life Left (upto 0.01%)
-BF=Clean Shutdown Count
-C0=Unclean Shutdown Count
-C2=Temperature
-C4=Number of Blocks Reallocated
-E6=Percent of Total Write/Erase Count
-E8=Spare Blocks Remaining
-E9=Total Nand Writes 64GB
-EB=Capacitor Health
-F1=Total Host Writes 64GB
-F2=Total Host Reads 64GB
-F4=Lifetime Thermal Throttle Activations
-F5=Percent Drive Life Remaining
-FD=SPI Tests Remaining
+05=Število umaknjenih blokov
+09=Urdelovanja
+0D=Število nepopravljivih napak ECC
+20=Ojačitev zapisa pomnožena s 100
+21=Faktor ojačanja zapisa
+AA=Štev. rezervnih blokov
+AB=Število napak programa
+AC=Število napak pri brisanju
+AD=povprečno število pisanja/brisanja
+AE=Štev. nepričakovanih izgub napajanja
+B2=Preostala življenjska doba SSD (do 0,01 %)
+BF=Čisto število zaustavitev
+C0=Nečisto število zaustavitev
+C2=Temperatura
+C4=Število prerazporejenih blokov
+E6=Odstotek skupnega števila pisanja/brisanja
+E8=Preostali rezervni bloki
+E9=Skupaj Nand zapiše 64 GB
+EB=zdravje kondenzatorja
+F1=Skup. pisanj gostitelja 64 GB
+F2=Skup. branj gostitelja 64 GB
+F4=Življenjske aktivacije toplotnega plina
+F5=Odstotek preostale življenjske dobe pogona
+FD=Preostali preizkusii SPI

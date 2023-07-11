@@ -1951,7 +1951,6 @@ public:
 	DWORD CsmiType = 0;
 
 	DWORD CheckDiskStatus(DWORD index);
-	DWORD CorrectDiskAttributeStatus(DWORD index, BYTE(&status)[MAX_ATTRIBUTE], UINT RawValueFormat, TCHAR(&text)[MAX_ATTRIBUTE][5][32]) const;
 
 protected:
 

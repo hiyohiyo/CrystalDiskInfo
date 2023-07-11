@@ -303,79 +303,25 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 	}
 
 	CString cstr;
-	//DWORD caution = 0;
+	DWORD caution = 0;
 	UINT mask = LVIF_IMAGE;
 
 	DWORD k = 0;
 
-	TCHAR str[256]{};
-	//CString unknown;
+	TCHAR str[256];
+	CString unknown;
 	CString vendorSpecific;
 
 	//	unknown = i18n(_T("Smart"), _T("UNKNOWN"), m_bSmartEnglish);
 	vendorSpecific = i18n(_T("Smart"), _T("VENDOR_SPECIFIC"), m_bSmartEnglish);
 
-	BYTE attr_status[CAtaSmart::MAX_ATTRIBUTE]{};
-	TCHAR attr_text[CAtaSmart::MAX_ATTRIBUTE][5][32]{};
-	const DWORD attr_status_highest = m_Ata.CorrectDiskAttributeStatus(i, attr_status, m_RawValues, attr_text);
-	const UINT ICON_GOOD1 = ICON_GOOD + m_bGreenMode;
-
-	for (UINT_PTR j = 0; j < m_Ata.vars[i].AttributeCount && j < CAtaSmart::MAX_ATTRIBUTE; ++j)
+	for (DWORD j = 0; j < m_Ata.vars[i].AttributeCount; j++)
 	{
 		if (m_Ata.vars[i].Attribute[j].Id == 0x00 || m_Ata.vars[i].Attribute[j].Id == 0xFF)
 		{
 			continue;
 		}
 
-		UINT icon = ICON_UNKNOWN;
-		if (attr_status_highest) {
-			switch (attr_status[j]) {
-			case CAtaSmart::DISK_STATUS_GOOD:
-				icon = ICON_GOOD1;
-				break;
-			case CAtaSmart::DISK_STATUS_CAUTION:
-				icon = ICON_CAUTION;
-				break;
-			case CAtaSmart::DISK_STATUS_BAD:
-				icon = ICON_BAD;
-				break;
-			}
-		}
-
-		if (flag)
-		{
-			m_List.SetItem(k, 0, mask, _T(""), icon, 0, 0, 0, 0);
-		}
-		else
-		{
-			m_List.InsertItem(k, _T(""), icon);
-		}
-
-
-		m_List.SetItemText(k, 1, attr_text[j][0]);
-		if (m_bSmartEnglish)
-		{
-			GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, attr_text[j][0], vendorSpecific, str, 256, m_DefaultLangPath);
-		}
-		else
-		{
-			GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, attr_text[j][0], L"", str, 256, m_DefaultLangPath);
-			CString en = str;
-			if (en.IsEmpty())
-			{
-				GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, attr_text[j][0], vendorSpecific, str, 256, m_CurrentLangPath);
-			}
-			else
-			{
-				GetPrivateProfileStringFx(m_Ata.vars[i].SmartKeyName, attr_text[j][0], en, str, 256, m_CurrentLangPath);
-			}
-		}
-		m_List.SetItemText(k, 2, str);
-		for (int j2 = 3; j2 < 7; ++j2) {
-			m_List.SetItemText(k, j2, attr_text[j][j2 - 2]);
-		}
-
-#if 0
 		if (m_Ata.vars[i].IsNVMe)
 		{
 			UINT icon = ICON_GOOD + m_bGreenMode;
@@ -1075,8 +1021,6 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			//	m_List.SetItemText(k, 6, _T("DDDDDDDDDDDD"));
 			m_List.SetItemText(k, 6, cstr);
 		}
-#endif
-
 		k++;
 	}
 
