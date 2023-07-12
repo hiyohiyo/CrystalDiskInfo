@@ -15,27 +15,27 @@ WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/Self-Monitoring,_Analysis_and_Repo
 [Menu]
 FILE=&Файл
 CUSTOMIZE=&Настроить
-EXIT=В&ыход
+EXIT=&Выход
 EDIT=&Правка
-COPY=С&копировать в буфер обмена
-FUNCTION=С&ервис
-HIDE_SMART_INFO=Скрыть &информацию S.M.A.R.T.
+COPY=&Скопировать в буфер обмена
+FUNCTION=&Сервис
+HIDE_SMART_INFO=Скрыть информацию &S.M.A.R.T.
 HIDE_SERIAL_NUMBER=Скрыть серийный &номер
 SHOW_DRIVE_LETTER=Показывать &букву тома
 ADVANCED_DISK_SEARCH=&Расширенный поиск дисков
 EVENT_LOG=&Журнал событий
 AAM_APM_CONTROL=&Управление AAM/APM
-AUTO_AAM_APM_ADAPTION=Автонастро&йка AAM/APM
-RESIDENT=Запуск аг&ента (в области уведомлений)
-STARTUP=Ав&тозапуск
+AUTO_AAM_APM_ADAPTION=&Автонастройка AAM/APM
+RESIDENT=Запуск агента &(в области уведомлений)
+STARTUP=&Автозапуск
 OPEN_DISK_MANAGEMENT=&Управление дисками
-OPEN_DEVICE_MANAGER=Диспетчер устро&йств
+OPEN_DEVICE_MANAGER=&Диспетчер устройств
 ADVANCED_FEATURE=&Дополнительно
-REFRESH=О&бновить
-RESCAN=Пере&сканировать
+REFRESH=&Обновить
+RESCAN=&Пересканировать
 DISABLE=&Откл.
 AUTO_REFRESH=Частота &автообновления
-AUTO_REFRESH_TARGET=Диски для а&втообновления
+AUTO_REFRESH_TARGET=Диски для &автообновления
 AUTO_REFRESH_TARGET_ALL_DISK=&Выбрать все
 AUTO_REFRESH_UNTARGET_ALL_DISK=&Отменить все
 WAIT_TIME_AT_STARTUP=&Задержка запуска
@@ -45,21 +45,21 @@ DISK=&Диск
 HELP=&Справка
 HELP_WEB=Онлайн-&справка
 HELP_ABOUT=&О программе...
-HELP_ABOUT_SMART=О &технологии S.M.A.R.T. (в Википедии)
+HELP_ABOUT_SMART=&О технологии S.M.A.R.T. (в Википедии)
 LANGUAGE=Язык
 ITEM=&Пункт
-TEMPERATURE_TYPE=Т&емпература
+TEMPERATURE_TYPE=&Температура
 CELSIUS=По &Цельсию (°C)
 FAHRENHEIT=По &Фаренгейту (°F)
-HEALTH_STATUS_SETTING=У&становить пороговые значения
+HEALTH_STATUS_SETTING=&Установить пороговые значения
 
 ;Graph
 OPTION=&Настройки
 LEGEND_POSITION=&Условные обозначения
-NORTH_WEST=С&лева вверху
-NORTH_EAST=С&права вверху
-SOUTH_WEST=Сл&ева внизу
-SOUTH_EAST=Спр&ава внизу
+NORTH_WEST=&Слева вверху
+NORTH_EAST=&Справа вверху
+SOUTH_WEST=&Слева внизу
+SOUTH_EAST=&Справа внизу
 MAX_PLOT_POINT=&Макс. точка
 TIME_FORMAT=&Формат времени
 PAINT_WEEKEND=&Отображать простои
@@ -84,19 +84,19 @@ MINUTE=мин
 HOUR=ч
 
 :3.9.4
-WORKAROUND=Об&ход ошибок
+WORKAROUND=&Обход ошибок
 
 ;4.0.0
-ALERT_MAIL=Уведомлять по электронной &почте
+ALERT_MAIL=Уведомлять по &электронной почте
 MAIL_SETTINGS=&Настроить почту
-SMART_IN_ENGLISH=S.M.A.R.T. по-&английски
+SMART_IN_ENGLISH=S.M.A.R.T. &по-английски
 FONT_SETTING=&Шрифт
 
 ;5.0.0
-ALERT_FEATURES=Уведом&ления
+ALERT_FEATURES=&Уведомления
 ALARM_HISTORY=История уведомлений
-ALERT_SOUND=Уведомлять &звуком
-SOUND_SETTINGS=Н&астроить звук
+ALERT_SOUND=Уведомлять звуком
+SOUND_SETTINGS=Настроить звук
 GADGET_SUPPORT=Поддержка гаджета
 INSTALL_GADGET=Установить гаджет
 ENABLE_AUTO=Включить (автоопределение)
@@ -104,7 +104,7 @@ ENABLE_ALL=Включить (все диски)
 ENABLE_RAID=Включить (только для RAID-томов)
 
 ;6.0.0
-HIDE_NO_SMART_DISK=С&крыть диск без S.M.A.R.T.
+HIDE_NO_SMART_DISK=&Скрыть диск без S.M.A.R.T.
 GREEN_MODE=&Зелёный режим
 
 ;8.6.0
@@ -112,9 +112,10 @@ SAVE_TEXT=Сохранить &текст
 SAVE_IMAGE=Сохранить &изображение
 
 ;9.0.0
-DRIVE_SORT_METHOD=Drive Sort Method
-PHYSICAL_DRIVE_ID=Physical Drive ID
-DRIVE_LETTER=Drive Letter
+DRIVE_SORT_METHOD=Метод сортировки дисков
+PHYSICAL_DRIVE_ID=Идентификатор физического диска
+DRIVE_LETTER=Буква диска
+DRIVE_MENU_NUMBER=Отображение количества дисков
 
 [TrayMenu]
 EXIT=Выход
@@ -134,7 +135,7 @@ AUTO_REFRESH_60_MIN=60 мин
 AUTO_REFRESH_TARGET=Автообновление выбранного
 AUTO_REFRESH_TARGET_ALL_DISK=Автообновление: выбрать все диски
 AUTO_REFRESH_UNTARGET_ALL_DISK=Автообновление: снять выбор со всех дисков
-ALARM_SETTING_TEMPERATURE=&Тревога: температура
+ALARM_SETTING_TEMPERATURE=Тревога: температура
 ALARM_SETTING_HEALTH_STATUS=Тревога: техническое состояние
 SHOW_MAIN_WINDOW=Показать главное окно
 SHOW_TEMPERATURE_ICON=Показать температуру
@@ -188,7 +189,7 @@ TOTAL_HOST_READS=Всего хост-чтений
 TOTAL_NAND_WRITES=Всего NAND-записей
 
 ;4.5
-WEAR_LEVELING_COUNT=Операции Wear Leveling
+WEAR_LEVELING_COUNT=Счетчик выравнивания износа диска
 
 ;6.1
 CURRENT_MODE_SUPPORTED_MODE=Текущий режим | Поддерживаемый режим
@@ -198,6 +199,7 @@ MAJOR_VERSION_MINOR_VERSION=Основная версия | Подверсия
 FONT_FACE=Шрифт
 FONT_SCALE=Масштаб шрифта (%)
 DEFAULT=По умолчанию
+OK=OK
 
 ;8.9.0
 ENABLED=Включено
@@ -479,7 +481,7 @@ CC=Частота программных ECC-исправлений
 E6=Кривая надёжности
 E7=Оставшийся ресурс SSD
 E8=Резервное место
-EB=Состояние SuperCap
+EB=Состояние резервного копирования при сбое питания
 F1=Ресурс хост-записей
 F2=Ресурс хост-чтений
 
@@ -922,7 +924,7 @@ AC=Ошибки стирания
 AE=Неожиданные сбои питания
 AF=Ошибки программирования (худшее)
 B0=Ошибки стирания (худшее)
-B1=Операции Wear Leveling
+B1=Износ
 B2=Занятые резервные блоки (худшее)
 B3=Занятые резервные блоки (SSD всего)
 B4=Незанятые резервные блоки (SSD всего)
@@ -1004,7 +1006,7 @@ AC=Ошибки стирания
 AE=Неожиданные потери питания
 AF=Ошибки программирования, худший штамп
 B0=Ошибки стирания, худший штамп
-B1=Операции Wear Leveling
+B1=Износ
 B2=Занятые резервные блоки, худший штамп
 B4=Незанятые резервные блоки (всего на SSD)
 BB=Известные невосстановимые ошибки
@@ -1123,7 +1125,7 @@ AD=Программирования/стирания (среднее)
 AE=Неожиданные потери питания
 AF=Ошибки программирования (худшее)
 B0=Ошибки стирания (худшее)
-B1=Операции Wear Leveling
+B1=Износ
 B2=Занятые резервные блоки (худшее)
 B3=Занятые резервные блоки (всего)
 B4=Свободные резервные блоки (всего)
@@ -1266,7 +1268,7 @@ DA=Ошибки CRC
 E7=Оставшийся ресурс SSD
 F1=Хост-записи
 
-[SmartSeagete]
+[SmartSeagate]
 ; https://crystalmark.info/board/c-board.cgi?cmd=one;no=1818;id=#1818
 01=Ошибки UECC
 05=Неработающие сектора
@@ -1297,7 +1299,7 @@ F1=Записей с хоста за всё время
 F2=Чтений с хоста за всё время
 FA=Повторов чтения NAND за всё время
 
-[SmartSeageteIronWolf]
+[SmartSeagateIronWolf]
 ; https://www.seagate.com/jp/ja/internal-hard-drives/ssd/ironwolf-nas-ssd/#specs
 01=Частота ошибок raw-чтения
 05=Перераспределённые сектора
