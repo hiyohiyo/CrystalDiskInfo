@@ -1,4 +1,4 @@
-English | [Japanese](./README.ja.md)
+English | [Japanese](./README.ja.md) | [Chinese (Simplified)](./README.sc.md)
 
 # CrystalDiskInfo
 
