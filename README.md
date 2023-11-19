@@ -28,7 +28,7 @@ Open *DiskInfo.sln* and build.
 ### Note
 Copy *CdiResource* folder in the [Download CdiResource](https://crystalmark.info/redirect.php?product=CrystalDiskInfo) to *../Rugenia* folder created in the build. If the *CdiResource* folder does not exist at runtime, the app displays "*Not Found 'Graph.html'*".
 
-[AMD_RC2t7](https://thilmera.com/project/AMD_RC2t7/) is a library that provides a function to acquire SMART information (SATA/NVMe) of AMD RAID, it developed by [Gakuto Matsumura](https://twitter.com/thilmera7).
+[AMD_RC2t7](https://thilmera.com/project/AMD_RC2t7/) is a library that provides functionality to acquire SMART information (SATA/NVMe) of AMD RAID. It is developed by [Gakuto Matsumura](https://twitter.com/thilmera7).
 
 ## Project Page
 - [Crystal Dew World](https://crystalmark.info/)
