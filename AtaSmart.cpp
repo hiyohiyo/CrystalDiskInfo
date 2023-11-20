@@ -5670,6 +5670,10 @@ BOOL CAtaSmart::IsSsdSiliconMotion(ATA_SMART_INFO& asi)
 		{
 
 		}
+		else if (asi.Model.Find(_T("ADATA SU650")) == 0 && asi.FirmwareRev.Find(_T("XD0R3C0A")) == 0) // Twitter DM
+		{
+
+		}
 		else
 		{
 			asi.FlagLifeRawValue = TRUE;
@@ -6363,7 +6367,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				if (FlagUsbASM1352R && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT_ASM1352R))
 				{
 					DebugPrint(_T("AddDisk - ASM1352R"));
-					flag |= AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT_ASM1352R, &identify, siliconImageType, NULL, pnpDeviceId);
+					flag = AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT_ASM1352R, &identify, siliconImageType, NULL, pnpDeviceId);
 				}
 				if (flag == TRUE) { return TRUE; }
 			}

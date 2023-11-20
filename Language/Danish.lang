@@ -116,6 +116,9 @@ PHYSICAL_DRIVE_ID=ID for fysisk drev
 DRIVE_LETTER=Drevbogstav
 DRIVE_MENU_NUMBER=Vis antal drev
 
+;9.2.0
+VOICE=Voice
+
 [TrayMenu]
 EXIT=Afslut
 REFRESH=Opdater

@@ -1,6 +1,6 @@
 [Information]
 TRANSLATOR=hiyohiyo
-VERSION=9.0.0
+VERSION=9.2.0
 
 [Language]
 LANGUAGE=日本語
@@ -114,6 +114,9 @@ DRIVE_SORT_METHOD=ドライブソート方法
 PHYSICAL_DRIVE_ID=物理ドライブID
 DRIVE_LETTER=ドライブレター
 DRIVE_MENU_NUMBER=ドライブ表示台数
+
+;9.2.0
+VOICE=ボイス
 
 [TrayMenu]
 EXIT=終了

@@ -29,7 +29,7 @@ static const TCHAR* commandTypeString[] =
 	_T("pr"),
 	_T("jm"),
 	_T("cy"),
-	_T("pr"),
+	_T("ar"), // ASM1352R
 	_T("cs"),
 	_T("cp"),
 	_T("wm"),

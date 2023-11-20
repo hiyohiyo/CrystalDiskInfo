@@ -116,6 +116,9 @@ PHYSICAL_DRIVE_ID=물리 드라이브 ID
 DRIVE_LETTER=드라이브 문자
 DRIVE_MENU_NUMBER=드라이브 표시 대수
 
+;9.2.0
+VOICE=Voice
+
 [TrayMenu]
 EXIT=종료
 REFRESH=새로 고침

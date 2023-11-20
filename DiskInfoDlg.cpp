@@ -44,7 +44,11 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_OffsetX = 0;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
+	#ifdef AOI_SUPPORT
+		m_DefaultTheme = L"Aoi";
+		m_RecommendTheme = L"Aoi";
+		m_ThemeKeyName = L"ThemeAoi";
+	#elif KUREI_KEI_SUPPORT
 	m_DefaultTheme = L"KureiKei";
 	m_RecommendTheme = L"KureiKeiRecoding";
 	m_ThemeKeyName = L"ThemeKureiKei";
@@ -75,6 +79,9 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	m_VoicePath = ((CDiskInfoApp*) AfxGetApp())->m_VoicePath;
+	#ifdef AOI_SUPPORT
+	m_VoiceLanguage = ((CDiskInfoApp*)AfxGetApp())->m_VoiceLanguage;
+	#endif
 #endif
 
 	TCHAR tempPath[MAX_PATH];
@@ -214,7 +221,9 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 //	m_BrushDlg.CreateHatchBrush(HS_BDIAGONAL, RGB(0xF0, 0xF0, 0xF0));
 //	m_BrushDlg.CreatePatternBrush(&m_BitmapBk);
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
+	#ifdef AOI_SUPPORT
+		m_BackgroundName = L"AoiBackground";
+	#elif KUREI_KEI_SUPPORT
 		m_BackgroundName = L"KureiKeiBackground";
 	#else
 		m_BackgroundName = L"ShizukuBackground";
@@ -753,6 +762,10 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_ALERT_MAIL, &CDiskInfoDlg::OnAlertMail)
 	ON_COMMAND(ID_MAIL_SETTINGS, &CDiskInfoDlg::OnMailSettings)
 	ON_COMMAND(ID_SMART_ENGLISH, &CDiskInfoDlg::OnSmartEnglish)
+#ifdef AOI_SUPPORT
+		ON_COMMAND(ID_VOICE_ENGLISH, &CDiskInfoDlg::OnVoiceEnglish)
+		ON_COMMAND(ID_VOICE_JAPANESE, &CDiskInfoDlg::OnVoiceJapanese)
+#endif
 	ON_COMMAND(ID_FONT_SETTING, &CDiskInfoDlg::OnFontSetting)
 	ON_COMMAND(ID_CSMI_DISABLE, &CDiskInfoDlg::OnCsmiDisable)
 	ON_COMMAND(ID_CSMI_ENABLE_AUTO, &CDiskInfoDlg::OnCsmiEnableAuto)
@@ -2537,16 +2550,8 @@ void CDiskInfoDlg::OnBnClickedButtonCopyright()
 		}
 	}
 	*/
-#ifdef KUREI_KEI_SUPPORT
-
-	CString url;
-	url.Format(L"http://pronama.jp/crystaldiskinfo_themes/?%s", m_CurrentTheme);
-	OpenUrl(url);
-#else
 	UINT themeIndex = rand() % (UINT)m_MenuArrayTheme.GetSize();
 	SendMessage(WM_COMMAND, WM_THEME_ID + themeIndex);
-#endif
-
 #endif
 }
 
@@ -2620,13 +2625,15 @@ void CDiskInfoDlg::ShowWindowEx(int nCmdShow)
 BOOL CDiskInfoDlg::CheckThemeEdition(CString name)
 {
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
+	#ifdef AOI_SUPPORT
+		if (name.Find(L"Aoi") == 0) { return TRUE; }
+	#elif KUREI_KEI_SUPPORT
 	if (name.Find(L"KureiKei") == 0) { return TRUE; }
 	#else
 	if (name.Find(L"Shizuku") == 0) { return TRUE; }
 	#endif
 #else
-	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L".") != 0) { return TRUE; }
+	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L"Aoi") != 0 && name.Find(L".") != 0) { return TRUE; }
 #endif
 
 	return FALSE;

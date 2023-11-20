@@ -115,6 +115,10 @@ DRIVE_SORT_METHOD=Drive Sort Method
 PHYSICAL_DRIVE_ID=Physical Drive ID
 DRIVE_LETTER=Drive Letter
 
+;9.2.0
+VOICE=Voice
+
+
 [TrayMenu]
 EXIT=Çıxış
 REFRESH=Yeniləmək

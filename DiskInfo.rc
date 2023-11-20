@@ -64,12 +64,17 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
-	IDR_MAINFRAME           ICON                    "resK\\DiskInfo.ico"
-	IDI_MINI_ICON           ICON                    "resK\\DiskInfo16.ico"
+	#ifdef AOI_SUPPORT
+	    IDR_MAINFRAME           ICON                    "resA\\DiskInfo.ico"
+	    IDI_MINI_ICON           ICON                    "resA\\DiskInfo16.ico"
 	#else
-	IDR_MAINFRAME           ICON                    "resS\\DiskInfo.ico"
-	IDI_MINI_ICON           ICON                    "resS\\DiskInfo16.ico"
+        #ifdef KUREI_KEI_SUPPORT
+        IDR_MAINFRAME           ICON                    "resK\\DiskInfo.ico"
+        IDI_MINI_ICON           ICON                    "resK\\DiskInfo16.ico"
+        #else    
+	    IDR_MAINFRAME           ICON                    "resS\\DiskInfo.ico"
+	    IDI_MINI_ICON           ICON                    "resS\\DiskInfo16.ico"
+        #endif
 	#endif
 #else
 IDR_MAINFRAME           ICON                    "resN\\DiskInfo.ico"
@@ -896,8 +901,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 1, 1, 0
- PRODUCTVERSION 9, 1, 1, 0
+ FILEVERSION 9, 2, 0, 0
+ PRODUCTVERSION 9, 2, 0, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -914,19 +919,25 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, MIT License."
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.1.1.0"
-            VALUE "ProductVersion", "9.1.1.0"
+            VALUE "FileVersion", "9.2.0.0"
+            VALUE "ProductVersion", "9.2.0.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 #ifdef SUISHO_SHIZUKU_SUPPORT
-#ifdef KUREI_KEI_SUPPORT
-        VALUE "FileDescription", "CrystalDiskInfo 9 Kurei Kei Edition"
-        VALUE "ProductName", "CrystalDiskInfo 9 Kurei Kei Edition"
-        VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2017-2023 Pronama LLC"
-#else
-        VALUE "FileDescription", "CrystalDiskInfo 9 Shizuku Edition"
-        VALUE "ProductName", "CrystalDiskInfo 9 Shizuku Edition"
-        VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2012-2023 kirino kasumu"
+    #ifdef AOI_SUPPORT
+            VALUE "FileDescription", "CrystalDiskInfo Aoi Edition"
+            VALUE "ProductName", "CrystalDiskInfo Aoi Edition"
+            VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2023 nijihashi sola"
+    #else
+        #ifdef KUREI_KEI_SUPPORT
+            VALUE "FileDescription", "CrystalDiskInfo Kurei Kei Edition"
+            VALUE "ProductName", "CrystalDiskInfo Kurei Kei Edition"
+            VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2017-2023 Pronama LLC"
+        #else
+            VALUE "FileDescription", "CrystalDiskInfo Shizuku Edition"
+            VALUE "ProductName", "CrystalDiskInfo Shizuku Edition"
+            VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2012-2023 kirino kasumu"
+    #endif
 #endif
 #else
         VALUE "FileDescription", "CrystalDiskInfo"
@@ -1254,6 +1265,13 @@ BEGIN
         BEGIN
             MENUITEM "DUMMY",                       ID_DUMMY
         END
+#ifdef AOI_SUPPORT
+        POPUP "&Voice"
+        BEGIN
+            MENUITEM "English, [English]", ID_VOICE_ENGLISH
+            MENUITEM "“ú–{Œê, [Japanese]", ID_VOICE_JAPANESE
+        END
+#endif 
         MENUITEM "S.M.A.R.T. in English",       ID_SMART_ENGLISH
     END
 END

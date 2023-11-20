@@ -987,6 +987,8 @@
 #define ID_SMART_ENGLISH                33058
 #define ID_THEME_FONTSETTINGS           33059
 #define ID_FONT_SETTING                 33060
+#define ID_VOICE_ENGLISH                33061
+#define ID_VOICE_JAPANESE               33062
 #define ID_WORKAROUND_IGNORE_C4         33063
 #define ID_WORKAROUND_ADATA_SSD         33064
 #define ID_ADVANCEDFEATURE_INTELRAID    33065

@@ -116,6 +116,9 @@ PHYSICAL_DRIVE_ID=實體磁碟機 ID
 DRIVE_LETTER=磁碟機代號
 DRIVE_MENU_NUMBER=顯示磁碟機數量
 
+;9.2.0
+VOICE=Voice
+
 [TrayMenu]
 EXIT=結束
 REFRESH=重新整理

@@ -117,6 +117,9 @@ PHYSICAL_DRIVE_ID=ID de la unitat física
 DRIVE_LETTER=Lletra de la unitat
 DRIVE_MENU_NUMBER=Mostra el nombre de unitats
 
+;9.2.0
+VOICE=Voice
+
 [TrayMenu]
 EXIT=Sortir
 REFRESH=Actualitzar

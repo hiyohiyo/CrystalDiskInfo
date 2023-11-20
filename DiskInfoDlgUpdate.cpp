@@ -1667,6 +1667,11 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	menu->ModifyMenu(5, MF_BYPOSITION | MF_STRING, 5, cstr);
 	cstr = i18n(_T("Menu"), _T("LANGUAGE"));
 
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// Language
+	//////////////////////////////////////////////////////////////////////////////////
+
 	if (cstr.Find(_T("Language")) >= 0)
 	{
 		cstr = _T("&Language");
@@ -1676,6 +1681,22 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	{
 		menu->ModifyMenu(6, MF_BYPOSITION | MF_STRING, 6, cstr + _T("(&Language)"));
 	}
+
+#ifdef AOI_SUPPORT
+	subMenu.Attach(menu->GetSubMenu(6)->GetSafeHmenu());
+	cstr = i18n(_T("Menu"), _T("VOICE"));
+	subMenu.ModifyMenuW(2, MF_BYPOSITION, 2, cstr);
+	subMenu.Detach();
+
+	if (m_VoiceLanguage.Find(L"Japanese") == 0)
+	{
+		menu->CheckMenuRadioItem(ID_VOICE_ENGLISH, ID_VOICE_JAPANESE, ID_VOICE_JAPANESE, MF_BYCOMMAND);
+	}
+	else
+	{
+		menu->CheckMenuRadioItem(ID_VOICE_ENGLISH, ID_VOICE_JAPANESE, ID_VOICE_ENGLISH, MF_BYCOMMAND);
+	}	
+#endif
 
 	cstr = i18n(_T("Menu"), _T("CUSTOMIZE"));
 	menuState = menu->GetMenuState(ID_CUSTOMIZE, MF_BYCOMMAND);

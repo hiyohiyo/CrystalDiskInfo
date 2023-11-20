@@ -26,6 +26,8 @@
 #define OPUS_DEC_PATH				_T("CdiResource\\opus\\opusdec.exe")
 #define SHIZUKU_VOICE_PATH			_T("CdiResource\\voice\\ShizukuVoice.dll")
 #define KUREI_KEI_VOICE_PATH		_T("CdiResource\\voice\\KureiKeiVoice.dll")
+#define AOI_VOICE_JA_PATH			_T("CdiResource\\voice\\AoiVoice-ja.dll")
+#define AOI_VOICE_EN_PATH			_T("CdiResource\\voice\\AoiVoice-en.dll")
 
 #define MENU_THEME_INDEX			3
 #define MENU_LANG_INDEX				6
@@ -36,7 +38,9 @@
 #define OPTION_DIALOG				_T("Option.html")
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
+	#ifdef AOI_SUPPORT
+	#define PROJECT_COPYRIGHT   L"AoiCopyright"
+	#elif KUREI_KEI_SUPPORT
 		#define PROJECT_COPYRIGHT   L"KureiKeiCopyright"
 	#else
 		#define PROJECT_COPYRIGHT   L"ShizukuCopyright"
@@ -60,6 +64,9 @@ public:
 	CString m_OpusDecPath;
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	CString m_VoicePath;
+	#ifdef AOI_SUPPORT
+	CString m_VoiceLanguage;
+	#endif
 #endif
 	CString m_Ini;
 	CString m_Txt;

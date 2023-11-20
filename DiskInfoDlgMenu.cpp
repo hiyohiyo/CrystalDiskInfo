@@ -1604,6 +1604,60 @@ void CDiskInfoDlg::OnSmartEnglish()
 	UpdateListCtrl(m_SelectDisk);
 }
 
+#ifdef AOI_SUPPORT
+void CDiskInfoDlg::OnVoiceEnglish()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_VOICE_ENGLISH, ID_VOICE_JAPANESE, ID_VOICE_ENGLISH, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+
+	WritePrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), L"English", m_Ini);
+	m_VoiceLanguage = L"English";
+
+	TCHAR* ptrEnd;
+	TCHAR tmp[MAX_PATH] = {};
+	GetModuleFileName(NULL, tmp, MAX_PATH);
+	if ((ptrEnd = _tcsrchr(tmp, '\\')) != NULL)
+	{
+		*ptrEnd = '\0';
+	}
+	m_VoicePath.Format(_T("%s\\%s"), tmp, AOI_VOICE_EN_PATH);
+
+	if (m_hVoice != NULL)
+	{
+		FreeLibrary(m_hVoice);
+		m_hVoice = LoadLibrary(m_VoicePath);
+	}
+}
+
+void CDiskInfoDlg::OnVoiceJapanese()
+{
+	CMenu* menu = GetMenu();
+	menu->CheckMenuRadioItem(ID_VOICE_ENGLISH, ID_VOICE_JAPANESE, ID_VOICE_JAPANESE, MF_BYCOMMAND);
+	SetMenu(menu);
+	DrawMenuBar();
+
+	WritePrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), L"Japanese", m_Ini);
+	m_VoiceLanguage = L"Japanese";
+
+	TCHAR* ptrEnd;
+	TCHAR tmp[MAX_PATH] = {};
+	GetModuleFileName(NULL, tmp, MAX_PATH);
+	if ((ptrEnd = _tcsrchr(tmp, '\\')) != NULL)
+	{
+		*ptrEnd = '\0';
+	}
+	m_VoicePath.Format(_T("%s\\%s"), tmp, AOI_VOICE_JA_PATH);
+
+	if (m_hVoice != NULL)
+	{
+		FreeLibrary(m_hVoice);
+		m_hVoice = LoadLibrary(m_VoicePath);
+	}
+}
+#endif
+
 void CDiskInfoDlg::OnFontSetting()
 {
 	CFontSelectionDlg fontSelection(this);

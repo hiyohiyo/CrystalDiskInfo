@@ -8,6 +8,7 @@
 #include "../stdafx.h"
 #include "MainDialogFx.h"
 #include <ctime>
+using namespace std;
 
 CMainDialogFx::CMainDialogFx(UINT dlgResouce, CWnd* pParent)
 		:CDialogFx(dlgResouce, pParent)
@@ -252,7 +253,7 @@ void CMainDialogFx::InitMenu()
 	TCHAR *ptrEnd = NULL;
 	TCHAR str[256];
 
-	std::srand((unsigned int)std::time(nullptr));
+	srand((unsigned int)std::time(nullptr));
 
 	menu.Attach(GetMenu()->GetSafeHmenu());
 	subMenu.Attach(menu.GetSubMenu(MENU_THEME_INDEX)->GetSafeHmenu());
@@ -537,7 +538,7 @@ CString CMainDialogFx::GetParentTheme(int i, CString theme)
 
 CString CMainDialogFx::GetRandomTheme() {
 	// We need to add/subtract one to exclude first item ("Random").
-	UINT i = 1 + std::rand() % ((UINT)m_MenuArrayTheme.GetSize() - 1);
+	UINT i = 1 + rand() % ((UINT)m_MenuArrayTheme.GetSize() - 1);
 	return m_MenuArrayTheme.GetAt(i);
 }
 

@@ -72,7 +72,9 @@ void CDHtmlMainDialog::InitThemeLang()
 	if(m_CurrentTheme.IsEmpty())
 	{
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
+	#ifdef AOI_SUPPORT
+		GetPrivateProfileStringFx(_T("Setting"), _T("ThemeAoi"), _T("default"), str, 256, m_Ini);
+	#elif KUREI_KEI_SUPPORT
 		GetPrivateProfileStringFx(_T("Setting"), _T("ThemeKureiKei"), _T("default"), str, 256, m_Ini);
 	#else
 		GetPrivateProfileStringFx(_T("Setting"), _T("ThemeShizuku"), _T("default"), str, 256, m_Ini);
@@ -375,7 +377,9 @@ void CDHtmlMainDialog::ChangeTheme(CString ThemeName)
 	VariantClear(&dispatch);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef KUREI_KEI_SUPPORT
+	#ifdef AOI_SUPPORT
+		WritePrivateProfileStringFx(_T("Setting"), _T("ThemeAoi"), ThemeName.GetString(), m_Ini);
+	#elif KUREI_KEI_SUPPORT
 		WritePrivateProfileStringFx(_T("Setting"), _T("ThemeKureiKei"), ThemeName.GetString(), m_Ini);
 	#else
 		WritePrivateProfileStringFx(_T("Setting"), _T("ThemeShizuku"), ThemeName.GetString(), m_Ini);

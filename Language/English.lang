@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=hiyohiyo
-VERSION=9.0.0
+VERSION=9.2.0
 
 [Language]
 LANGUAGE=English
@@ -116,6 +116,9 @@ DRIVE_SORT_METHOD=Drive Sort Method
 PHYSICAL_DRIVE_ID=Physical Drive ID
 DRIVE_LETTER=Drive Letter
 DRIVE_MENU_NUMBER=Display Number of Drives
+
+;9.2.0
+VOICE=Voice
 
 [TrayMenu]
 EXIT=Exit

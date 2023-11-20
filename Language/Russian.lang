@@ -117,6 +117,9 @@ PHYSICAL_DRIVE_ID=Идентификатор физического диска
 DRIVE_LETTER=Буква диска
 DRIVE_MENU_NUMBER=Отображение количества дисков
 
+;9.2.0
+VOICE=Voice
+
 [TrayMenu]
 EXIT=Выход
 REFRESH=Обновить

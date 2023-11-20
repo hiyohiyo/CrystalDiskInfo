@@ -30,7 +30,9 @@ CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
 	m_Ini = p->GetIniPath();
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-#ifdef KUREI_KEI_SUPPORT
+#ifdef AOI_SUPPORT
+	m_BackgroundName = L"AoiAbout";
+#elif KUREI_KEI_SUPPORT
 	m_BackgroundName = L"KureiKeiAbout";
 #else
 	m_BackgroundName = L"ShizukuAbout";
@@ -124,7 +126,16 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlProjectSite4.SetHandCursor();
 	m_CtrlProjectSite5.SetHandCursor();
 	m_CtrlSecretVoice.SetHandCursor();
-#ifdef KUREI_KEI_SUPPORT
+
+#ifdef AOI_SUPPORT
+	m_CtrlProjectSite1.InitControl(64, 436, 192, 16, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite2.InitControl(100, 480, 148, 16, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite3.InitControl(100, 496, 208, 16, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite4.InitControl(108, 520, 148, 16, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite5.InitControl(0, 0, 0, 0, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlCrystalDewWorld.InitControl(80, 12, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
+	m_CtrlSecretVoice.InitControl(400, 200, 44, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+#elif KUREI_KEI_SUPPORT
 	m_CtrlProjectSite1.InitControl(340, 232, 268, 100, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlProjectSite2.InitControl(386, 376, 48, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlProjectSite3.InitControl(492, 376, 108, 40, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
@@ -158,7 +169,14 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlVersion.SetHandCursor();
 	m_CtrlLicense.SetHandCursor();
 
-#ifdef KUREI_KEI_SUPPORT
+#ifdef AOI_SUPPORT
+	m_CtrlVersion.InitControl(0, 152, 288, 28, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlEdition.InitControl(0, 180, 288, 28, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlRelease.InitControl(0, 216, 288, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlCopyright1.InitControl(0, 236, 288, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlCopyright2.InitControl(0, 256, 288, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlLicense.InitControl(0, 276, 288, 20, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+#elif KUREI_KEI_SUPPORT
 	m_CtrlVersion.InitControl(152, 12, 476, 28, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlEdition.InitControl(152, 40, 476, 28, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlRelease.InitControl(152, 72, 476, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
@@ -194,7 +212,9 @@ BOOL CAboutDlg::OnEraseBkgnd(CDC* pDC)
 
 void CAboutDlg::OnCrystalDewWorld()
 {
-#ifdef KUREI_KEI_SUPPORT
+#ifdef AOI_SUPPORT
+	OpenUrl(URL_AOI);
+#elif KUREI_KEI_SUPPORT
 	OpenUrl(URL_PRONAMA);
 #else if
 	if (GetUserDefaultLCID() == 0x0411)// Japanese

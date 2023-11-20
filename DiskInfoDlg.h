@@ -183,6 +183,9 @@ protected:
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	CString		m_VoicePath;
+	#ifdef AOI_SUPPORT
+		CString m_VoiceLanguage;
+	#endif
 #endif
 
 	DWORD m_SelectDisk;
@@ -653,6 +656,11 @@ public:
 	afx_msg void OnAlertMail();
 	afx_msg void OnMailSettings();
 	afx_msg void OnSmartEnglish();
+#ifdef AOI_SUPPORT
+	afx_msg void OnVoiceEnglish();
+	afx_msg void OnVoiceJapanese();
+#endif
+
 	afx_msg void OnFontSetting();
 	afx_msg void OnCsmiDisable();
 	afx_msg void OnCsmiEnableAuto();
