@@ -1906,6 +1906,17 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode) const
 		HMODULE hModule = nullptr;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
+#ifdef AOI_SUPPORT
+		if (m_hVoice != nullptr)
+		{
+			hModule = m_hVoice;
+			resource.Format(_T("CDI_VOICE_%03d"), soundId);
+		}
+		else
+		{
+			resource = _T("CDI_SOUND_001");
+		}		
+#else
 		// For Japanese
 		if (m_CurrentLang.Find(_T("Japanese")) == 0 || GetUserDefaultLCID() == 0x0411)
 		{
@@ -1923,6 +1934,7 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode) const
 		{
 			resource = _T("CDI_SOUND_001");
 		}
+#endif
 #else
 		resource = _T("CDI_SOUND_001");
 #endif

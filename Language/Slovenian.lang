@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Jadran Rudec, Boris Urbančič
-VERSION=CrystalDiskInfo 9.0.0
+VERSION=CrystalDiskInfo 9.2.0
 
 [Language]
 LANGUAGE=Slovenščina
@@ -21,7 +21,7 @@ COPY=&Kopiraj
 FUNCTION=&Funkcije
 HIDE_SMART_INFO=Skrij podatke &S.M.A.R.T.
 HIDE_SERIAL_NUMBER=Skrij serijsko &številko
-SHOW_DRIVE_LETTER=Prikaži &črko pogonov
+SHOW_DRIVE_LETTER=Prikaži &črke pogonov
 ADVANCED_DISK_SEARCH=&Napredno iskanje diskov
 EVENT_LOG=&Dnevnik dogodkov
 AAM_APM_CONTROL=Spremljanje AA&M/APM
@@ -112,15 +112,16 @@ SAVE_TEXT=Shrani (&besedilo)
 SAVE_IMAGE=&Shrani (slika)
 
 ;9.0.0
-DRIVE_SORT_METHOD=Drive Sort Method
-PHYSICAL_DRIVE_ID=Physical Drive ID
-DRIVE_LETTER=Drive Letter
+DRIVE_SORT_METHOD=Metoda razvrščanja pogona
+PHYSICAL_DRIVE_ID=ID fizičnega pogona
+DRIVE_LETTER=Črka pogona
+DRIVE_MENU_NUMBER=Prikaz števila pogonov
 
 ;9.2.0
-VOICE=Voice
+VOICE=Glas
 
 [TrayMenu]
-EXIT=Izhod
+EXIT=Zapri program
 REFRESH=Osveži
 RESCAN=Znova preglej
 ENABLE=Omogoči
