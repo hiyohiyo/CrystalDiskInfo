@@ -177,6 +177,7 @@ SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 
 		++CurrentDevice;
 	} while (LastResult);
+	SetupDiDestroyDeviceInfoList(ClassDeviceInformations);
 
 	return ConvertOSResult(OSLevelResult);
 }
