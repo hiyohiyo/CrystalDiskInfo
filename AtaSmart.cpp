@@ -874,6 +874,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 
 					SAFE_RELEASE(pCOMDev);
 				}
+				SAFE_RELEASE(pEnumCOMDevs);
 			}
 			catch (...)
 			{
