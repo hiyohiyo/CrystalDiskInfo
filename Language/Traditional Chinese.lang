@@ -119,6 +119,9 @@ DRIVE_MENU_NUMBER=顯示磁碟機數量
 ;9.2.0
 VOICE=Voice
 
+;9.3.0
+STARTUP_VOICE=Startup Voice
+
 [TrayMenu]
 EXIT=結束
 REFRESH=重新整理

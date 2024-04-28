@@ -119,6 +119,9 @@ DRIVE_MENU_NUMBER=드라이브 표시 대수
 ;9.2.0
 VOICE=Voice
 
+;9.3.0
+STARTUP_VOICE=Startup Voice
+
 [TrayMenu]
 EXIT=종료
 REFRESH=새로 고침

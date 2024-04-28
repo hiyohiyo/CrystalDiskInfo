@@ -427,7 +427,10 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		}
 		drive.Replace(_T("%TEMPERATURE%"), cstr);
 
-		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X)
+		if (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_NVME || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 
+		|| m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X
+		|| m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS586
+		)
 		{
 			cstr.Format(_T("%.1f GB"), m_Ata.vars[i].TotalDiskSize / 1000.0);
 		}
@@ -500,7 +503,8 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		drive.Replace(_T("%BUFFER_SIZE%"), cstr);
 
 
-		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X)
+		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X 
+		|| m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS586)
 		{
 			cstr.Format(_T("     Queue Depth : %s\r\n"), i18n(_T("Dialog"), _T("UNKNOWN")).GetString());
 		}
@@ -514,7 +518,8 @@ void CDiskInfoDlg::SaveText(CString fileName)
 		}
 		drive.Replace(_T("%QUEUE_DEPTH%"), cstr);
 
-		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X)
+		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X
+		|| m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS586)
 		{
 			cstr = i18n(_T("Dialog"), _T("UNKNOWN"));
 		}
@@ -587,7 +592,8 @@ void CDiskInfoDlg::SaveText(CString fileName)
 			feature.Delete(feature.GetLength() - 2, 2);
 		}
 
-		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X)
+		if (m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_AMD_RC2 || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS56X
+		|| m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMB39X || m_Ata.vars[i].CommandType == m_Ata.CMD_TYPE_JMS586)
 		{
 			feature = i18n(_T("Dialog"), _T("UNKNOWN"));
 		}

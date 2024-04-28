@@ -650,28 +650,28 @@
 #define IDC_LABEL_SERIAL_NUMBER         1016
 #define IDC_VALUE_INTERFACE             1017
 #define IDC_LABEL_INTERFACE             1018
-#define IDC_VALUE_TRANSFER_MODE         1028
-#define IDC_LABEL_TRANSFER_MODE         1029
-#define IDC_LABEL_DRIVE_MAP             1030
-#define IDC_VALUE_DRIVE_MAP             1031
-#define IDC_LABEL_ATA_ATAPI             1032
-#define IDC_VALUE_ATA_ATAPI             1033
-#define IDC_LABEL_FEATURE               1034
-#define IDC_VALUE_FEATURE               1035
-#define IDC_LABEL_BUFFER_SIZE           1036
-#define IDC_VALUE_BUFFER_SIZE           1037
-#define IDC_LABEL_NV_CACHE_SIZE         1038
-#define IDC_VALUE_NV_CACHE_SIZE         1039
-#define IDC_LABEL_ROTATION_RATE         1040
-#define IDC_VALUE_ROTATION_RATE         1041
-#define IDC_LABEL_POWER_ON_COUNT        1042
-#define IDC_VALUE_POWER_ON_COUNT        1043
-#define IDC_LABEL_POWER_ON_HOURS        1044
-#define IDC_VALUE_POWER_ON_HOURS        1045
-#define IDC_LABEL_HEALTH_STATUS         1046
-#define IDC_BUTTON_HEALTH_STATUS        1047
-#define IDC_LABEL_TEMPERATURE           1048
-#define IDC_BUTTON_TEMPERATURE          1049
+#define IDC_VALUE_TRANSFER_MODE         1019
+#define IDC_LABEL_TRANSFER_MODE         1020
+#define IDC_LABEL_DRIVE_MAP             1021
+#define IDC_VALUE_DRIVE_MAP             1022
+#define IDC_LABEL_ATA_ATAPI             1023
+#define IDC_VALUE_ATA_ATAPI             1024
+#define IDC_LABEL_FEATURE               1025
+#define IDC_VALUE_FEATURE               1026
+#define IDC_LABEL_BUFFER_SIZE           1027
+#define IDC_VALUE_BUFFER_SIZE           1028
+#define IDC_LABEL_NV_CACHE_SIZE         1029
+#define IDC_VALUE_NV_CACHE_SIZE         1030
+#define IDC_LABEL_ROTATION_RATE         1031
+#define IDC_VALUE_ROTATION_RATE         1032
+#define IDC_LABEL_POWER_ON_COUNT        1033
+#define IDC_VALUE_POWER_ON_COUNT        1034
+#define IDC_LABEL_POWER_ON_HOURS        1035
+#define IDC_VALUE_POWER_ON_HOURS        1036
+#define IDC_LABEL_HEALTH_STATUS         1037
+#define IDC_BUTTON_HEALTH_STATUS        1038
+#define IDC_LABEL_TEMPERATURE           1039
+#define IDC_BUTTON_TEMPERATURE          1040
 #define IDC_VALUE_CURRENT_AAM           1050
 #define IDC_BUTTON_PRE_DISK             1051
 #define IDC_BUTTON_NEXT_DISK            1052
@@ -691,8 +691,6 @@
 #define IDC_LABEL_APM                   1066
 #define IDC_LABEL_APM_LOW               1067
 #define IDC_LABEL_APM_HIGH              1068
-#define IDC_CRYSTAL_DEW_WORLD           1068
-#define IDC_LOGO                        1068
 #define IDC_VALUE_RECOMMEND_APM         1069
 #define IDC_SECRET_VOICE                1070
 #define IDC_VERSION                     1071
@@ -714,32 +712,28 @@
 #define IDC_LABEL_FF                    1087
 #define IDC_APPLY                       1088
 #define IDC_DEFAULT                     1089
-#define ID_OK                           1089
-#define IDC_VALUE_FF                    1090
-#define IDC_BUTTON_SELECT_FILE          1090
-#define IDC_VALUE_FFX                   1091
-#define IDC_BUTTON_DEFALT               1091
-#define IDC_BUTTON_DEFAULT              1091
-#define IDC_BUTTON_OK                   1092
-#define IDC_BUTTON_PLAY                 1093
-#define IDC_FILE_PATH                   1094
-#define IDC_BUTTON_VOICE                1095
-#define IDC_BUTTON_COPYRIGHT            1096
-#define IDC_BUTTON_LIFE                 1097
-#define IDC_LABEL_05                    1098
-#define IDC_LABEL_C6                    1099
-#define IDC_LABEL_C5                    1100
-#define IDC_COPYRIGHT2                  1101
-
-#define IDC_VALUE_TEMPERATURE           1102
-#define IDC_SLIDER_VOLUME               1103
-#define IDC_VALUE_TEMPERATURE_F         1104
-#define IDC_SCROLLBAR_TEMPERATURE       1105
-
-#define IDC_STATIC_VOLUME               1106
-#define IDC_VALUE_VOLUME                1107
-
-#define IDC_BUTTON_VOICE_HIDE           1108
+#define ID_OK                           1090
+#define IDC_VALUE_FF                    1091
+#define IDC_BUTTON_SELECT_FILE          1092
+#define IDC_VALUE_FFX                   1093
+#define IDC_BUTTON_DEFAULT              1094
+#define IDC_BUTTON_OK                   1095
+#define IDC_BUTTON_PLAY                 1096
+#define IDC_FILE_PATH                   1097
+#define IDC_BUTTON_VOICE                1098
+#define IDC_BUTTON_COPYRIGHT            1099
+#define IDC_BUTTON_LIFE                 1100
+#define IDC_LABEL_05                    1101
+#define IDC_LABEL_C6                    1102
+#define IDC_LABEL_C5                    1103
+#define IDC_COPYRIGHT2                  1104
+#define IDC_VALUE_TEMPERATURE           1105
+#define IDC_SLIDER_VOLUME               1106
+#define IDC_VALUE_TEMPERATURE_F         1107
+#define IDC_SCROLLBAR_TEMPERATURE       1108
+#define IDC_STATIC_VOLUME               1109
+#define IDC_VALUE_VOLUME                1110
+#define IDC_BUTTON_VOICE_HIDE           1111
 
 #define IDC_FONT_FACE_COMBO             1201
 #define IDC_FONT_SCALE_COMBO			1202
@@ -748,10 +742,9 @@
 #define IDC_FONT_FACE					1204
 #define IDC_FONT_SCALE					1205
 #define IDC_FONT_RENDER				    1206
-
 #define IDC_OK       					1207
 #define IDC_SET_DEFAULT					1208
-
+#define IDC_LOGO                        1209
 
 #define IDC_BUTTON_DISK0                1220
 #define IDC_BUTTON_DISK1                1221
@@ -975,10 +968,10 @@
 #define ID_SSD_SANDISK_LENOVO           33047
 #define ID_SSD_SANDISK_LENOVO_HELEN_VENUS 33048
 
-#define ID_SSD_MAX                      33049
-#define ID_ATA_PASS_THROUGH_SMART       33050
-#define ID_ADVANCEDFEATURE_ALERTMAIL    33051
-#define ID_ADVANCEDFEATURE_MAILSETTINGS 33052
+#define ID_SSD_SILICONMOTION_CVC		33049
+#define ID_SSD_MAX                      33050
+
+#define ID_ATA_PASS_THROUGH_SMART       33052
 #define ID_ALERT_MAIL                   33053
 #define ID_MAIL_SETTINGS                33054
 #define ID_WORKAROUND_HD204UI           33055
@@ -1035,11 +1028,13 @@
 #define ID_USB_JMS56X                   33139
 #define ID_USB_JMB39X                   33140
 #define ID_INTEL_VROC                   33141
+#define ID_USB_JMS586                   33142
+#define ID_STARTUP_VOICE                33143
 
-#define ID_DRIVE_MENU_8                 33142
-#define ID_DRIVE_MENU_10                33143
-#define ID_DRIVE_MENU_16                33144
-#define ID_DRIVE_MENU_20                33145
+#define ID_DRIVE_MENU_8                 33150
+#define ID_DRIVE_MENU_10                33151
+#define ID_DRIVE_MENU_16                33152
+#define ID_DRIVE_MENU_20                33153
 
 // Next default values for new objects
 // 

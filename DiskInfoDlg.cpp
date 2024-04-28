@@ -43,27 +43,29 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_Ini = ((CDiskInfoApp*)AfxGetApp())->m_Ini;
 	m_OffsetX = 0;
 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef AOI_SUPPORT
-		m_DefaultTheme = L"Aoi";
-		m_RecommendTheme = L"Aoi";
-		m_ThemeKeyName = L"ThemeAoi";
-	#elif KUREI_KEI_SUPPORT
+#ifdef SUISHO_AOI_SUPPORT
+	m_DefaultTheme = L"Aoi";
+	m_RecommendTheme = L"Aoi";
+	m_ThemeKeyName = L"ThemeAoi";
+#elif MSI_MEI_SUPPORT
+	m_DefaultTheme = L"MSIMei";
+	m_RecommendTheme = L"MSIMei";
+	m_ThemeKeyName = L"ThemeMSIMei";
+#elif KUREI_KEI_SUPPORT
 	m_DefaultTheme = L"KureiKei";
 	m_RecommendTheme = L"KureiKeiRecoding";
 	m_ThemeKeyName = L"ThemeKureiKei";
-	#else 
+#elif SUISHO_SHIZUKU_SUPPORT
 	m_DefaultTheme = L"Shizuku";
 	m_RecommendTheme = L"ShizukuIdol";
 	m_ThemeKeyName = L"ThemeShizuku";
-#endif
 #else
 	m_DefaultTheme = L"Default";
 	m_RecommendTheme = L"Default";
 	m_ThemeKeyName = L"Theme";
 #endif
-	m_RandomThemeLabel = L"Random";
 
+	m_RandomThemeLabel = L"Random";
 	m_BackgroundName = L"Background";
 
 	m_hMenu = NULL;
@@ -79,9 +81,9 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	m_VoicePath = ((CDiskInfoApp*) AfxGetApp())->m_VoicePath;
-	#ifdef AOI_SUPPORT
+#endif
+#ifdef SUISHO_AOI_SUPPORT
 	m_VoiceLanguage = ((CDiskInfoApp*)AfxGetApp())->m_VoiceLanguage;
-	#endif
 #endif
 
 	TCHAR tempPath[MAX_PATH];
@@ -166,6 +168,14 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_bForceDisableDarkMode = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("ForceDisableDarkMode"), 0, m_Ini);
 	m_bNarrowDriveMenu = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("NarrowDriveMenu"), 0, m_Ini);
 
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	#ifdef MSI_MEI_SUPPORT
+	m_bStartupVoice = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("StartupVoice"), 1, m_Ini);
+	#else
+	m_bStartupVoice = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("StartupVoice"), 0, m_Ini);
+	#endif
+#endif
+
 	if((BOOL)GetPrivateProfileInt(_T("Workaround"), _T("ExecFailed"), 0, m_Ini))
 	{
 		m_bAtaPassThroughSmart = FALSE;
@@ -220,14 +230,15 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 
 //	m_BrushDlg.CreateHatchBrush(HS_BDIAGONAL, RGB(0xF0, 0xF0, 0xF0));
 //	m_BrushDlg.CreatePatternBrush(&m_BitmapBk);
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef AOI_SUPPORT
-		m_BackgroundName = L"AoiBackground";
-	#elif KUREI_KEI_SUPPORT
-		m_BackgroundName = L"KureiKeiBackground";
-	#else
-		m_BackgroundName = L"ShizukuBackground";
-	#endif
+
+#ifdef SUISHO_AOI_SUPPORT
+	m_BackgroundName = L"AoiBackground";
+#elif MSI_MEI_SUPPORT
+	m_BackgroundName = L"Background";
+#elif KUREI_KEI_SUPPORT
+	m_BackgroundName = L"KureiKeiBackground";
+#elif SUISHO_SHIZUKU_SUPPORT
+	m_BackgroundName = L"ShizukuBackground";
 #else
 	m_BackgroundName = L"Background";
 #endif
@@ -729,6 +740,7 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 #ifdef JMICRON_USB_RAID_SUPPORT
 	ON_COMMAND(ID_USB_JMS56X, &CDiskInfoDlg::OnUsbJMS56X)
 	ON_COMMAND(ID_USB_JMB39X, &CDiskInfoDlg::OnUsbJMB39X)
+	ON_COMMAND(ID_USB_JMS586, &CDiskInfoDlg::OnUsbJMS586)
 #endif
 	ON_COMMAND(ID_USB_ENABLE_ALL, &CDiskInfoDlg::OnUsbEnableAll)
 	ON_COMMAND(ID_USB_DISABLE_ALL, &CDiskInfoDlg::OnUsbDisableAll)
@@ -762,7 +774,10 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 	ON_COMMAND(ID_ALERT_MAIL, &CDiskInfoDlg::OnAlertMail)
 	ON_COMMAND(ID_MAIL_SETTINGS, &CDiskInfoDlg::OnMailSettings)
 	ON_COMMAND(ID_SMART_ENGLISH, &CDiskInfoDlg::OnSmartEnglish)
-#ifdef AOI_SUPPORT
+#ifdef SUISHO_SHIZUKU_SUPPORT
+		ON_COMMAND(ID_STARTUP_VOICE, &CDiskInfoDlg::OnStartupVoice)
+#endif
+#ifdef SUISHO_AOI_SUPPORT
 		ON_COMMAND(ID_VOICE_ENGLISH, &CDiskInfoDlg::OnVoiceEnglish)
 		ON_COMMAND(ID_VOICE_JAPANESE, &CDiskInfoDlg::OnVoiceJapanese)
 #endif
@@ -1860,7 +1875,7 @@ int ExecAndWait(TCHAR *pszCmd, BOOL bNoWindow)
 }
 
 
-BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode) const
+BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 {
 	if(mode != AS_SET_SOUND_ID && eventId != 1000 && ! m_bAlertSound)
 	{
@@ -1881,6 +1896,13 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode) const
 	{
 		return TRUE;
 	}
+
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	if (600 <= soundId && soundId < 800)
+	{
+		m_bStartupVoiceDisabled = TRUE;
+	}
+#endif
 
 	if (600 <= soundId && soundId < 800 && IsFileExist(m_AlertSoundPath))
 	{
@@ -1906,35 +1928,35 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode) const
 		HMODULE hModule = nullptr;
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-#ifdef AOI_SUPPORT
-		if (m_hVoice != nullptr)
-		{
-			hModule = m_hVoice;
-			resource.Format(_T("CDI_VOICE_%03d"), soundId);
-		}
-		else
-		{
-			resource = _T("CDI_SOUND_001");
-		}		
-#else
-		// For Japanese
-		if (m_CurrentLang.Find(_T("Japanese")) == 0 || GetUserDefaultLCID() == 0x0411)
-		{
+	#ifdef SUISHO_AOI_SUPPORT
 			if (m_hVoice != nullptr)
 			{
 				hModule = m_hVoice;
+				resource.Format(_T("CDI_VOICE_%03d"), soundId);
 			}
 			else
 			{
-				return FALSE;
+				resource = _T("CDI_SOUND_001");
+			}		
+	#else
+			// For Japanese
+			if (m_CurrentLang.Find(_T("Japanese")) == 0 || GetUserDefaultLCID() == 0x0411)
+			{
+				if (m_hVoice != nullptr)
+				{
+					hModule = m_hVoice;
+				}
+				else
+				{
+					return FALSE;
+				}
+				resource.Format(_T("CDI_VOICE_%03d"), soundId);
 			}
-			resource.Format(_T("CDI_VOICE_%03d"), soundId);
-		}
-		else
-		{
-			resource = _T("CDI_SOUND_001");
-		}
-#endif
+			else
+			{
+				resource = _T("CDI_SOUND_001");
+			}
+	#endif
 #else
 		resource = _T("CDI_SOUND_001");
 #endif
@@ -1991,7 +2013,7 @@ BOOL CDiskInfoDlg::AlertSound(const CString& alertSoundPath) const
 		error = mciSendCommandW(mop.wDeviceID, MCI_STOP, MCI_WAIT, (DWORD_PTR)&mop);
 		error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, MCI_WAIT, (DWORD_PTR)&mop);
 		mop.wDeviceID = 0;
-		ZeroMemory(&mop, sizeof(MCI_PLAY_PARMS));
+		ZeroMemory(&mop, sizeof(MCI_OPEN_PARMS));
 		if (error)
 		{
 			return FALSE;
@@ -2636,16 +2658,16 @@ void CDiskInfoDlg::ShowWindowEx(int nCmdShow)
 
 BOOL CDiskInfoDlg::CheckThemeEdition(CString name)
 {
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef AOI_SUPPORT
-		if (name.Find(L"Aoi") == 0) { return TRUE; }
-	#elif KUREI_KEI_SUPPORT
+#ifdef SUISHO_AOI_SUPPORT
+	if (name.Find(L"Aoi") == 0) { return TRUE; }
+#elif MSI_MEI_SUPPORT
+	if (name.Find(L"MSIMei") == 0) { return TRUE; }
+#elif KUREI_KEI_SUPPORT
 	if (name.Find(L"KureiKei") == 0) { return TRUE; }
-	#else
+#elif SUISHO_SHIZUKU_SUPPORT
 	if (name.Find(L"Shizuku") == 0) { return TRUE; }
-	#endif
 #else
-	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L"Aoi") != 0 && name.Find(L".") != 0) { return TRUE; }
+	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L"Aoi") != 0 && name.Find(L"MSIMei") != 0 && name.Find(L".") != 0) { return TRUE; }
 #endif
 
 	return FALSE;

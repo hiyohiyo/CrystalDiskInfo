@@ -31,7 +31,7 @@ public:
 
 	// Control
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
-		LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame);
+		LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);
@@ -39,6 +39,8 @@ public:
 	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);
 	void SetMeter(BOOL bMeter, double meterRatio);
 	void SetLabelUnit(CString label, CString unit);
+	void SetLabelUnitFormat(UINT labelFormat, UINT unitFormat);
+	void SetTextFormat(UINT format);
 
 	// Font
 	void SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio = 1.0,
@@ -95,6 +97,10 @@ protected:
 
 	CString m_Label;
 	CString m_Unit;
+
+	UINT m_TextFormat;
+	UINT m_LabelFormat;
+	UINT m_UnitFormat;
 
 	// Glass
 	COLORREF m_GlassColor;

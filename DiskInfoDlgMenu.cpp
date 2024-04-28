@@ -270,11 +270,11 @@ void CDiskInfoDlg::OnHelp()
 {
 	if(GetUserDefaultLCID() == 0x0411) // Japanese
 	{
-		OpenUrl(URL_HTML_HELP_JA);
+		OpenUrl(URL_HELP_JA);
 	}
 	else // Other Language
 	{
-		OpenUrl(URL_HTML_HELP_EN);
+		OpenUrl(URL_HELP_EN);
 	}	
 }
 
@@ -1430,6 +1430,25 @@ void CDiskInfoDlg::OnUsbJMB39X()
 	SetMenu(menu);
 	DrawMenuBar();
 }
+
+void CDiskInfoDlg::OnUsbJMS586()
+{
+	CMenu* menu = GetMenu();
+	if (m_Ata.FlagUsbJMS586)
+	{
+		m_Ata.FlagUsbJMS586 = FALSE;
+		menu->CheckMenuItem(ID_USB_JMS586, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMS586"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagUsbJMS586 = TRUE;
+		menu->CheckMenuItem(ID_USB_JMS586, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMS586"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
 #endif
 
 void CDiskInfoDlg::OnUsbEnableAll()
@@ -1444,6 +1463,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbASM1352R = FALSE;
 	m_Ata.FlagUsbJMS56X = FALSE;
 	m_Ata.FlagUsbJMB39X = FALSE;
+	m_Ata.FlagUsbJMS586 = FALSE;
 	m_Ata.FlagUsbMemory  = FALSE;
 	//	m_Ata.FlagUsbSat16 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron3 = FALSE;
@@ -1461,6 +1481,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbASM1352R();
 	OnUsbJMS56X();
 	OnUsbJMB39X();
+	OnUsbJMS586();
 	OnUsbMemory();
 //	OnUsbSat16();
 	OnUsbNVMeJMicron3();
@@ -1479,8 +1500,9 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbJmicron = TRUE;
 	m_Ata.FlagUsbCypress = TRUE;
 	m_Ata.FlagUsbASM1352R = TRUE;
-	m_Ata.FlagUsbJMB39X = TRUE;
 	m_Ata.FlagUsbJMS56X = TRUE;
+	m_Ata.FlagUsbJMB39X = TRUE;
+	m_Ata.FlagUsbJMS586 = TRUE;
 	m_Ata.FlagUsbMemory  = TRUE;
 //	m_Ata.FlagUsbSat16 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron3 = TRUE;
@@ -1498,6 +1520,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbASM1352R();
 	OnUsbJMS56X();
 	OnUsbJMB39X();
+	OnUsbJMS586();
 	OnUsbMemory();
 //	OnUsbSat16();
 	OnUsbNVMeJMicron3();
@@ -1604,7 +1627,28 @@ void CDiskInfoDlg::OnSmartEnglish()
 	UpdateListCtrl(m_SelectDisk);
 }
 
-#ifdef AOI_SUPPORT
+#ifdef SUISHO_SHIZUKU_SUPPORT
+void CDiskInfoDlg::OnStartupVoice()
+{
+	CMenu* menu = GetMenu();
+	if (m_bStartupVoice)
+	{
+		m_bStartupVoice = FALSE;
+		menu->CheckMenuItem(ID_STARTUP_VOICE, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("StartupVoice"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_bStartupVoice = TRUE;
+		menu->CheckMenuItem(ID_STARTUP_VOICE, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("StartupVoice"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+#endif
+
+#ifdef SUISHO_AOI_SUPPORT
 void CDiskInfoDlg::OnVoiceEnglish()
 {
 	CMenu* menu = GetMenu();

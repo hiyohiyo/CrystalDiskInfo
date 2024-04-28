@@ -19,6 +19,7 @@ void DebugPrint(CString cstr);
 ////------------------------------------------------
 
 int GetFileVersion(const TCHAR* fileName, TCHAR* version = NULL);
+void GetFileVersionEx(const TCHAR* file, CString& version);
 BOOL IsFileExist(const TCHAR* fileName);
 
 ////------------------------------------------------
@@ -41,5 +42,11 @@ BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR l
 ////------------------------------------------------
 //   Check CodeSign
 ////------------------------------------------------
+#if _MSC_VER > 1310
+BOOL CheckCodeSign(LPCWSTR certName, LPCWSTR filePath);
+#endif
+////------------------------------------------------
+//   Play Sound
+////------------------------------------------------
 
-BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath);
+BOOL AlertSound(const CString& alertSoundPath, int volume);

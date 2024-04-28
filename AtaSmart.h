@@ -16,6 +16,10 @@
 
 #define DLL_DIR					    _T("CdiResource\\dll\\")
 
+#ifdef JMICRON_USB_RAID_SUPPORT
+#include "JMicronUsbRaidDef.h"
+#endif
+
 static const TCHAR* commandTypeString[] =
 {
 	_T("un"),
@@ -45,7 +49,7 @@ static const TCHAR* commandTypeString[] =
 	_T("rc"), // +AMD RC2
 	_T("j5"), // JMS56X
 	_T("j3"), // JMB39X
-
+	_T("j6"), // JMS586
 	_T("dg"), // Debug
 };
 
@@ -100,6 +104,7 @@ static const TCHAR* ssdVendorString[] =
 	_T(""),	  // _T("SmartSanDiskLenovo"),
 	_T(""),	  // _T("SmartSanDiskLenovoHelenVenus"),
 	_T(""),	  // _T("SmartSanDiskCloud"),
+	_T("mc"),	  // _T("SmartSiliconMotionCVC"),
 };
 
 static const TCHAR* attributeString[] =
@@ -153,6 +158,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartSanDiskLenovo"),
 	_T("SmartSanDiskLenovoHelenVenus"),
 	_T("SmartSanDiskCloud"),
+	_T("SmartSiliconMotionCVC"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -241,6 +247,8 @@ public:
 		SSD_VENDOR_SANDISK_LENOVO = 46,
 		SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS = 47,
 		SSD_VENDOR_SANDISK_CLOUD = 48,
+
+		SSD_VENDOR_SILICONMOTION_CVC = 49,
 
 		SSD_VENDOR_MAX = 99,
 
@@ -340,6 +348,7 @@ public:
 		CMD_TYPE_AMD_RC2,// +AMD_RC2
 		CMD_TYPE_JMS56X,
 		CMD_TYPE_JMB39X,
+		CMD_TYPE_JMS586,
 		CMD_TYPE_DEBUG
 	};
 
@@ -1945,6 +1954,7 @@ public:
 #ifdef JMICRON_USB_RAID_SUPPORT
 	BOOL FlagUsbJMS56X = FALSE;
 	BOOL FlagUsbJMB39X = FALSE;
+	BOOL FlagUsbJMS586 = FALSE;
 #endif
 	BOOL FlagNoWakeUp = FALSE;// +M 20211216
 
@@ -1956,6 +1966,7 @@ protected:
 
 	HMODULE hJMS56X{};
 	HMODULE hJMB39X{};
+	HMODULE hJMS586{};
 	// 2023/02/24 Compatible with SIV
 	HANDLE hMutexJMicron{};
 	HANDLE CreateWorldMutex(CONST TCHAR* name);
@@ -1994,7 +2005,12 @@ protected:
 	BOOL SendAtaCommandPd(INT physicalDriveId, BYTE target, BYTE main, BYTE sub, BYTE param, PBYTE data, DWORD dataSize);
 	BOOL ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, BYTE logPage, PBYTE data, DWORD dataSize);
 
-	BOOL AddDiskNVMe(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, DWORD* diskSize = NULL, CString pnpDeviceId = _T(""));
+	BOOL AddDiskNVMe(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, 
+		IDENTIFY_DEVICE* identify, DWORD* diskSize = NULL, CString pnpDeviceId = _T("")
+#ifdef JMICRON_USB_RAID_SUPPORT
+		, NVME_PORT* nvmePort = NULL
+#endif
+	);
 
 	BOOL DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify, BOOL flagUSB2mode);
 	BOOL GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
@@ -2070,6 +2086,14 @@ protected:
 	BOOL AddDiskJMB39X(INT index);
 	BOOL DoIdentifyDeviceJMB39X(INT index, BYTE port, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartInfoJMB39X(INT index, BYTE port, ATA_SMART_INFO* asi);
+
+	BOOL AddDiskJMS586(INT index);
+	BOOL DoIdentifyDeviceJMS586(INT index, BYTE port, IDENTIFY_DEVICE* identify);
+	BOOL GetSmartInfoJMS586(INT index, BYTE port, ATA_SMART_INFO* asi);
+
+	BOOL GetNVMePortInfoJMS586(INT index, BYTE port, NVME_PORT* nvmePort);
+	BOOL GetNVMeSmartInfoJMS586(INT index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo);
+	BOOL CAtaSmart::GetSmartAttributeNVMeJMS586(INT index, INT port, ATA_SMART_INFO* asi);
 #endif
 
 	DWORD GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &currentTransferMode, CString &maxTransferMode, CString &Interface, INTERFACE_TYPE *interfaceType);
@@ -2100,6 +2124,7 @@ protected:
 	BOOL IsSsdPlextor(ATA_SMART_INFO& asi);
 	BOOL IsSsdSanDisk(ATA_SMART_INFO &asi);
 	BOOL IsSsdKingston(ATA_SMART_INFO &asi);
+	BOOL IsSsdCorsair(ATA_SMART_INFO& asi);
 	BOOL IsSsdOczVector(ATA_SMART_INFO &asi);
 	BOOL IsSsdToshiba(ATA_SMART_INFO &asi);
 	BOOL IsSsdRealtek(ATA_SMART_INFO &asi);
@@ -2107,6 +2132,7 @@ protected:
 	BOOL IsSsdKioxia(ATA_SMART_INFO& asi);
 	BOOL IsSsdApacer(ATA_SMART_INFO& asi);
 	BOOL IsSsdSiliconMotion(ATA_SMART_INFO& asi);
+	BOOL IsSsdSiliconMotionCVC(ATA_SMART_INFO& asi);
 	BOOL IsSsdPhison(ATA_SMART_INFO& asi);
 	BOOL IsSsdWdc(ATA_SMART_INFO& asi);
 	BOOL IsSsdSeagate(ATA_SMART_INFO& asi);

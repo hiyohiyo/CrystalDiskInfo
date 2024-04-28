@@ -7,7 +7,7 @@ VERSION=4.5.0
 LANGUAGE= عربي 
 CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 ; Local ID : http://msdn.microsoft.com/en-us/library/ms912047(WinEmbedded.10).aspx
-LOCALE_ID=0x3801, 0x3C01, 0x1401, 0x0C01, 0x0801, 0x2C01, 0x3401, 0x3001, 0x1001, 0x1801, 0x2001, 0x4001, 0x0401, 0x2801, 0x1C01, 0x2401
+LOCALE_ID=0x1401,0x3C01,0x0C01,0x0801,0x2C01,0x3401,0x3001,0x1001,0x1801,0x2001,0x4001,0x0401,0x2801,0x1C01,0x3801,0x2401
 
 [Url]
 WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/Self-Monitoring,_Analysis_and_Reporting_Technology
@@ -118,6 +118,9 @@ DRIVE_LETTER=Drive Letter
 
 ;9.2.0
 VOICE=Voice
+
+;9.3.0
+STARTUP_VOICE=Startup Voice
 
 [TrayMenu]
 EXIT=خروج

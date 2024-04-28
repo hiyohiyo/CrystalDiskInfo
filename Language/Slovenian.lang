@@ -120,6 +120,9 @@ DRIVE_MENU_NUMBER=Prikaz števila pogonov
 ;9.2.0
 VOICE=Glas
 
+;9.3.0
+STARTUP_VOICE=Startup Voice
+
 [TrayMenu]
 EXIT=Zapri program
 REFRESH=Osveži

@@ -120,6 +120,9 @@ DRIVE_MENU_NUMBER=Отображение количества дисков
 ;9.2.0
 VOICE=Voice
 
+;9.3.0
+STARTUP_VOICE=Startup Voice
+
 [TrayMenu]
 EXIT=Выход
 REFRESH=Обновить

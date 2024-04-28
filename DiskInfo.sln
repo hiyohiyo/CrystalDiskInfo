@@ -27,6 +27,10 @@ Global
 		ReleaseKureiKei|ARM64 = ReleaseKureiKei|ARM64
 		ReleaseKureiKei|Win32 = ReleaseKureiKei|Win32
 		ReleaseKureiKei|x64 = ReleaseKureiKei|x64
+		ReleaseMSIMei|ARM = ReleaseMSIMei|ARM
+		ReleaseMSIMei|ARM64 = ReleaseMSIMei|ARM64
+		ReleaseMSIMei|Win32 = ReleaseMSIMei|Win32
+		ReleaseMSIMei|x64 = ReleaseMSIMei|x64
 		ReleaseShizuku|ARM = ReleaseShizuku|ARM
 		ReleaseShizuku|ARM64 = ReleaseShizuku|ARM64
 		ReleaseShizuku|Win32 = ReleaseShizuku|Win32
@@ -73,6 +77,14 @@ Global
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseKureiKei|Win32.Build.0 = ReleaseKureiKei|Win32
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseKureiKei|x64.ActiveCfg = ReleaseKureiKei|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseKureiKei|x64.Build.0 = ReleaseKureiKei|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseMSIMei|ARM.ActiveCfg = ReleaseMSIMei|ARM
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseMSIMei|ARM.Build.0 = ReleaseMSIMei|ARM
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseMSIMei|ARM64.ActiveCfg = ReleaseMSIMei|ARM64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseMSIMei|ARM64.Build.0 = ReleaseMSIMei|ARM64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseMSIMei|Win32.ActiveCfg = ReleaseMSIMei|Win32
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseMSIMei|Win32.Build.0 = ReleaseMSIMei|Win32
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseMSIMei|x64.ActiveCfg = ReleaseMSIMei|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseMSIMei|x64.Build.0 = ReleaseMSIMei|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseShizuku|ARM.ActiveCfg = ReleaseShizuku|ARM
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseShizuku|ARM.Build.0 = ReleaseShizuku|ARM
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseShizuku|ARM64.ActiveCfg = ReleaseShizuku|ARM64

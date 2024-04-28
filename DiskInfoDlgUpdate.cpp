@@ -564,7 +564,7 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xAD && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_TOSHIBA || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KIOXIA))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xB1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xBB && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
-				|| (m_Ata.vars[i].Attribute[j].Id == 0xCA && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU03 || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC))
+				|| (m_Ata.vars[i].Attribute[j].Id == 0xCA && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU03 || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SILICONMOTION_CVC))
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xD1 && m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
 				|| (m_Ata.vars[i].Attribute[j].Id == 0xE7 && (m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDFORCE || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_CORSAIR || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_KINGSTON || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SKHYNIX
 				                                          || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_REALTEK || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_SSSTC || m_Ata.vars[i].DiskVendorId == m_Ata.SSD_VENDOR_APACER
@@ -1682,7 +1682,7 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 		menu->ModifyMenu(6, MF_BYPOSITION | MF_STRING, 6, cstr + _T("(&Language)"));
 	}
 
-#ifdef AOI_SUPPORT
+#ifdef SUISHO_AOI_SUPPORT
 	subMenu.Attach(menu->GetSubMenu(6)->GetSafeHmenu());
 	cstr = i18n(_T("Menu"), _T("VOICE"));
 	subMenu.ModifyMenuW(2, MF_BYPOSITION, 2, cstr);
@@ -1995,6 +1995,10 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	cstr = i18n(_T("Menu"), _T("FONT_SETTING"));
 	menu->ModifyMenu(ID_FONT_SETTING, MF_STRING, ID_FONT_SETTING, cstr);
 
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	cstr = i18n(_T("Menu"), _T("STARTUP_VOICE"));
+	menu->ModifyMenu(ID_STARTUP_VOICE, MF_STRING, ID_STARTUP_VOICE, cstr);
+#endif
 
 	// Check Status
 
@@ -2033,6 +2037,17 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	{
 		menu->CheckMenuItem(ID_ASCII_VIEW, MF_UNCHECKED);
 	}
+
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	if (m_bStartupVoice)
+	{
+		menu->CheckMenuItem(ID_STARTUP_VOICE, MF_CHECKED);
+	}
+	else
+	{
+		menu->CheckMenuItem(ID_STARTUP_VOICE, MF_UNCHECKED);
+	}
+#endif
 
 	if (m_bSmartEnglish)
 	{

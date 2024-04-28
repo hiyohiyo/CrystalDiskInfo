@@ -155,6 +155,14 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	default:	OnDriveMenu8(); 	break;
 	}
 
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	if (m_bStartupVoice)
+	{
+		m_bStartupVoice = FALSE;
+		OnStartupVoice();
+	}
+#endif
+
 	// USB/IEEE1394 Support
 	m_Ata.FlagUsbSat     = ! GetPrivateProfileInt(_T("USB"), _T("SAT"), 1, m_Ini);
 	m_Ata.FlagUsbIodata  = ! GetPrivateProfileInt(_T("USB"), _T("IODATA"), 1, m_Ini);
@@ -177,6 +185,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 #ifdef JMICRON_USB_RAID_SUPPORT
 	m_Ata.FlagUsbJMS56X = !GetPrivateProfileInt(_T("Setting"), _T("JMS56X"), 0, m_Ini); // Default Off
 	m_Ata.FlagUsbJMB39X = !GetPrivateProfileInt(_T("Setting"), _T("JMB39X"), 0, m_Ini); // Default Off
+	m_Ata.FlagUsbJMS586 = !GetPrivateProfileInt(_T("Setting"), _T("JMS586"), 0, m_Ini); // Default Off
 #endif
 
 	OnUsbSat();
@@ -199,6 +208,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 #ifdef JMICRON_USB_RAID_SUPPORT
 	OnUsbJMS56X();
 	OnUsbJMB39X();
+	OnUsbJMS586();
 #endif
 
 	DebugPrint(_T("InitAta"));
@@ -225,6 +235,14 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_hDevNotify = RegisterDeviceNotification(m_hWnd, &filter, DEVICE_NOTIFY_WINDOW_HANDLE);
 
 	InitDialogComplete();
+
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	if (m_bStartupVoice && ! m_bStartupVoiceDisabled)
+	{
+		AlertSound(1, AS_SET_SOUND_ID);
+		AlertSound(1000, AS_PLAY_SOUND);
+	}
+#endif
 
 	if (m_bResident)
 	{
@@ -628,7 +646,7 @@ CString CDiskInfoDlg::GetDiskStatusReason(DWORD index)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xAD && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_TOSHIBA || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_KIOXIA))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xB1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SAMSUNG)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xBB && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MTRON)
-			|| (m_Ata.vars[index].Attribute[j].Id == 0xCA && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU03 || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC))
+			|| (m_Ata.vars[index].Attribute[j].Id == 0xCA && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_MICRON_MU03 || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INTEL_DC || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SILICONMOTION_CVC))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xD1 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_INDILINX)
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE6 && (m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_WDC || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK_LENOVO || m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_SANDISK_DELL))
 			|| (m_Ata.vars[index].Attribute[j].Id == 0xE8 && m_Ata.vars[index].DiskVendorId == m_Ata.SSD_VENDOR_PLEXTOR)

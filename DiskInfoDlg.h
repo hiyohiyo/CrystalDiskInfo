@@ -183,9 +183,9 @@ protected:
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	CString		m_VoicePath;
-	#ifdef AOI_SUPPORT
-		CString m_VoiceLanguage;
-	#endif
+#endif
+#ifdef SUISHO_AOI_SUPPORT
+	CString m_VoiceLanguage;
 #endif
 
 	DWORD m_SelectDisk;
@@ -198,46 +198,51 @@ protected:
 
 	CArray<DWORD, DWORD> m_GraphProcessId;
 
-	int m_SizeX;
-	int m_SizeY;
+	int m_SizeX{};
+	int m_SizeY{};
 
-	int m_PreTemp[CAtaSmart::MAX_DISK];
-	BOOL m_bTrayTemperatureIcon[CAtaSmart::MAX_DISK];
-	BOOL m_bAutoRefreshTarget[CAtaSmart::MAX_DISK];
+	int m_PreTemp[CAtaSmart::MAX_DISK]{};
+	BOOL m_bTrayTemperatureIcon[CAtaSmart::MAX_DISK]{};
+	BOOL m_bAutoRefreshTarget[CAtaSmart::MAX_DISK]{};
 	BOOL m_bTrayMainIcon;
 
 	// Options
-	BOOL m_bNarrowDriveMenu;
-	BOOL m_bStartupExit;
-	BOOL m_bHideSmartInfo;
-	BOOL m_bHideSerialNumber;
-	BOOL m_bAdvancedDiskSearch;
-	BOOL m_bWorkaroundHD204UI;
-	BOOL m_bWorkaroundIE8MODE;
-	BOOL m_bWorkaroundAdataSsd;
-	BOOL m_bWorkaroundIgnoreC4;
-	BOOL m_bEventLog;
-	BOOL m_bAlertMail;
-	BOOL m_bAtaPassThroughSmart;
+	BOOL m_bNarrowDriveMenu{};
+	BOOL m_bStartupExit{};
+	BOOL m_bHideSmartInfo{};
+	BOOL m_bHideSerialNumber{};
+	BOOL m_bAdvancedDiskSearch{};
+	BOOL m_bWorkaroundHD204UI{};
+	BOOL m_bWorkaroundIE8MODE{};
+	BOOL m_bWorkaroundAdataSsd{};
+	BOOL m_bWorkaroundIgnoreC4{};
+	BOOL m_bEventLog{};
+	BOOL m_bAlertMail{};
+	BOOL m_bAtaPassThroughSmart{};
 //	BOOL m_bUseEventCreate;		// Use eventcreate.exe (XP Pro or later)
-	BOOL m_bFahrenheit;
-	BOOL m_bAutoAamApm;
-	BOOL m_bDumpIdentifyDevice;
-	BOOL m_bDumpSmartReadData;
-	BOOL m_bDumpSmartReadThreshold;
-	BOOL m_bShowTemperatureIconOnly;
-	BOOL m_bAsciiView;
-	BOOL m_bSmartEnglish;
-	BOOL m_bGadget;
-	BOOL m_bGreenMode;
-	BOOL m_bWinDarkMode;
-	BOOL m_bAlertSound;
-	BOOL m_bHideNoSmartDisk;
-	BOOL m_bForceDisableDarkMode;
-	BOOL m_bSortDriveLetter;
-	BOOL m_bHalfDriveMenu;
+	BOOL m_bFahrenheit{};
+	BOOL m_bAutoAamApm{};
+	BOOL m_bDumpIdentifyDevice{};
+	BOOL m_bDumpSmartReadData{};
+	BOOL m_bDumpSmartReadThreshold{};
+	BOOL m_bShowTemperatureIconOnly{};
+	BOOL m_bAsciiView{};
+	BOOL m_bSmartEnglish{};
+	BOOL m_bGadget{};
+	BOOL m_bGreenMode{};
+	BOOL m_bWinDarkMode{};
+	BOOL m_bAlertSound{};
+	BOOL m_bHideNoSmartDisk{};
+	BOOL m_bForceDisableDarkMode{};
+	BOOL m_bSortDriveLetter{};
+	BOOL m_bHalfDriveMenu{};
 
-	INT m_DriveMenuNumber;
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	BOOL m_bStartupVoice{};
+	BOOL m_bStartupVoiceDisabled{};
+#endif
+
+	INT m_DriveMenuNumber{};
 
 	BOOL AddTemperatureIcon(DWORD index);
 	BOOL RemoveTemperatureIcon(DWORD index);
@@ -381,7 +386,7 @@ protected:
 #define AS_SET_SOUND_ID 1
 #define AS_PLAY_SOUND   2
 #define AS_DEINIT       3
-	BOOL AlertSound(DWORD eventId, DWORD mode) const;
+	BOOL AlertSound(DWORD eventId, DWORD mode);
 	BOOL AlertSound(const CString& alertSoundPath) const;
 	CString m_TempFilePathWave;
 	CString m_TempFilePathOpus;
@@ -624,6 +629,7 @@ public:
 #ifdef JMICRON_USB_RAID_SUPPORT
 	afx_msg void OnUsbJMS56X();
 	afx_msg void OnUsbJMB39X();
+	afx_msg void OnUsbJMS586();
 #endif
 	afx_msg void OnHealthStatus();
 	afx_msg void OnSoundSetting();
@@ -656,7 +662,10 @@ public:
 	afx_msg void OnAlertMail();
 	afx_msg void OnMailSettings();
 	afx_msg void OnSmartEnglish();
-#ifdef AOI_SUPPORT
+#ifdef SUISHO_SHIZUKU_SUPPORT
+	afx_msg void OnStartupVoice();
+#endif
+#ifdef SUISHO_AOI_SUPPORT
 	afx_msg void OnVoiceEnglish();
 	afx_msg void OnVoiceJapanese();
 #endif

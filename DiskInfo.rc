@@ -63,22 +63,21 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef AOI_SUPPORT
-	    IDR_MAINFRAME           ICON                    "resA\\DiskInfo.ico"
-	    IDI_MINI_ICON           ICON                    "resA\\DiskInfo16.ico"
-	#else
-        #ifdef KUREI_KEI_SUPPORT
-        IDR_MAINFRAME           ICON                    "resK\\DiskInfo.ico"
-        IDI_MINI_ICON           ICON                    "resK\\DiskInfo16.ico"
-        #else    
-	    IDR_MAINFRAME           ICON                    "resS\\DiskInfo.ico"
-	    IDI_MINI_ICON           ICON                    "resS\\DiskInfo16.ico"
-        #endif
-	#endif
+#ifdef SUISHO_AOI_SUPPORT
+	IDR_MAINFRAME           ICON                "resA\\DiskInfo.ico"
+	IDI_MINI_ICON           ICON                "resA\\DiskInfo16.ico"
+#elif MSI_MEI_SUPPORT
+    IDR_MAINFRAME           ICON                "resM\\DiskInfo.ico"
+    IDI_MINI_ICON           ICON                "resM\\DiskInfo16.ico"
+#elif KUREI_KEI_SUPPORT
+    IDR_MAINFRAME           ICON                "resK\\DiskInfo.ico"
+    IDI_MINI_ICON           ICON                "resK\\DiskInfo16.ico"
+#elif SUISHO_SHIZUKU_SUPPORT  
+	IDR_MAINFRAME           ICON                "resS\\DiskInfo.ico"
+	IDI_MINI_ICON           ICON                "resS\\DiskInfo16.ico"
 #else
-IDR_MAINFRAME           ICON                    "resN\\DiskInfo.ico"
-IDI_MINI_ICON           ICON                    "resN\\DiskInfo16.ico"
+    IDR_MAINFRAME           ICON                "resN\\DiskInfo.ico"
+    IDI_MINI_ICON           ICON                "resN\\DiskInfo16.ico"
 #endif
 
 IDI_GOOD                 ICON                    "res\\good.ico"
@@ -759,7 +758,7 @@ STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSM
 CAPTION "CrystalDiskInfo"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    PUSHBUTTON      "", IDC_CRYSTAL_DEW_WORLD, 26, 17, 156, 107
+    PUSHBUTTON      "", IDC_LOGO, 26, 17, 156, 107
     PUSHBUTTON      "", IDC_VERSION, 240, 18, 193, 8
     LTEXT           "", IDC_EDITION, 241, 38, 33, 8
     LTEXT           "", IDC_RELEASE, 239, 62, 33, 8
@@ -901,8 +900,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 2, 1, 0
- PRODUCTVERSION 9, 2, 1, 0
+ FILEVERSION 9, 3, 0, 0
+ PRODUCTVERSION 9, 3, 0, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -917,33 +916,42 @@ BEGIN
     BEGIN
         BLOCK "080003a4"
         BEGIN
-            VALUE "Comments", "https://crystalmark.info/, MIT License."
+#ifdef MSI_MEI_SUPPORT
+            VALUE "Comments", "https://crystalmark.info/"
+#else
+            VALUE "Comments", "https://crystalmark.info/ MIT License"
+#endif
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.2.1.0"
-            VALUE "ProductVersion", "9.2.1.0"
+            VALUE "FileVersion", "9.3.0.0"
+            VALUE "ProductVersion", "9.3.0.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
-#ifdef SUISHO_SHIZUKU_SUPPORT
-    #ifdef AOI_SUPPORT
+
+    #ifdef SUISHO_AOI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Aoi Edition"
             VALUE "ProductName", "CrystalDiskInfo Aoi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2023 nijihashi sola"
-    #else
-        #ifdef KUREI_KEI_SUPPORT
+            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2023-2024 nijihashi sola"
+
+    #elif MSI_MEI_SUPPORT
+            VALUE "FileDescription", "CrystalDiskInfo MSI Mei Mihoshi Edition"
+            VALUE "ProductName", "CrystalDiskInfo MSI Mei Mihoshi Edition"
+            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2024 Micro-Star INT'L CO., LTD."
+
+    #elif KUREI_KEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Kurei Kei Edition"
             VALUE "ProductName", "CrystalDiskInfo Kurei Kei Edition"
-            VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2017-2023 Pronama LLC"
-        #else
+            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2017-2024 Pronama LLC"
+
+    #elif SUISHO_SHIZUKU_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Shizuku Edition"
             VALUE "ProductName", "CrystalDiskInfo Shizuku Edition"
-            VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo, (C) 2012-2023 kirino kasumu"
+            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2012-2024 kirino kasumu"
+
+    #else
+            VALUE "FileDescription", "CrystalDiskInfo"
+            VALUE "ProductName", "CrystalDiskInfo"
+            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo"
     #endif
-#endif
-#else
-        VALUE "FileDescription", "CrystalDiskInfo"
-        VALUE "ProductName", "CrystalDiskInfo"
-        VALUE "LegalCopyright", "(C) 2008-2023 hiyohiyo"
-#endif
         END
     END
     BLOCK "VarFileInfo"
@@ -1186,6 +1194,7 @@ BEGIN
 #ifdef JMICRON_USB_RAID_SUPPORT
                 MENUITEM "JMicron JMS56X",              ID_USB_JMS56X
                 MENUITEM "JMicron JMB39X",              ID_USB_JMB39X
+                MENUITEM "JMicron JMS586 (Alpha)",      ID_USB_JMS586
 #endif 
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
 //                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16
@@ -1265,13 +1274,17 @@ BEGIN
         BEGIN
             MENUITEM "DUMMY",                       ID_DUMMY
         END
-#ifdef AOI_SUPPORT
+#ifdef SUISHO_AOI_SUPPORT
         POPUP "&Voice"
         BEGIN
             MENUITEM "English, [English]", ID_VOICE_ENGLISH
             MENUITEM "“ú–{Œê, [Japanese]", ID_VOICE_JAPANESE
         END
 #endif 
+#ifdef SUISHO_SHIZUKU_SUPPORT
+        MENUITEM "Startup Voice",               ID_STARTUP_VOICE
+#endif 
+
         MENUITEM "S.M.A.R.T. in English",       ID_SMART_ENGLISH
     END
 END
@@ -1372,6 +1385,7 @@ BEGIN
             MENUITEM "SSD - TOSHIBA",               ID_SSD_TOSHIBA
             MENUITEM "SSD - WDC",                   ID_SSD_WDC
             MENUITEM "SSD - YMTC",                  ID_SSD_YMTC
+            MENUITEM "SSD - Silicon Motion CVC",    ID_SSD_SILICONMOTION_CVC
         END
         MENUITEM "Paint Weekend",               ID_PAINT_WEEKEND
     END

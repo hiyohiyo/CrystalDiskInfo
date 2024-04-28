@@ -26,6 +26,7 @@
 #define OPUS_DEC_PATH				_T("CdiResource\\opus\\opusdec.exe")
 #define SHIZUKU_VOICE_PATH			_T("CdiResource\\voice\\ShizukuVoice.dll")
 #define KUREI_KEI_VOICE_PATH		_T("CdiResource\\voice\\KureiKeiVoice.dll")
+#define MSI_MEI_VOICE_PATH			_T("CdiResource\\voice\\MSIMeiVoice.dll")
 #define AOI_VOICE_JA_PATH			_T("CdiResource\\voice\\AoiVoice-ja.dll")
 #define AOI_VOICE_EN_PATH			_T("CdiResource\\voice\\AoiVoice-en.dll")
 
@@ -37,14 +38,14 @@
 #define GRAPH_DIALOG_IE8			_T("Graph8.html")
 #define OPTION_DIALOG				_T("Option.html")
 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	#ifdef AOI_SUPPORT
+#ifdef SUISHO_AOI_SUPPORT
 	#define PROJECT_COPYRIGHT   L"AoiCopyright"
-	#elif KUREI_KEI_SUPPORT
-		#define PROJECT_COPYRIGHT   L"KureiKeiCopyright"
-	#else
-		#define PROJECT_COPYRIGHT   L"ShizukuCopyright"
-	#endif
+#elif MSI_MEI_SUPPORT
+	#define PROJECT_COPYRIGHT   L"Copyright"
+#elif KUREI_KEI_SUPPORT
+	#define PROJECT_COPYRIGHT   L"KureiKeiCopyright"
+#else SUISHO_SHIZUKU_SUPPORT
+	#define PROJECT_COPYRIGHT   L"ShizukuCopyright"
 #endif
 
 class CDiskInfoApp : public CWinApp
@@ -64,9 +65,9 @@ public:
 	CString m_OpusDecPath;
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	CString m_VoicePath;
-	#ifdef AOI_SUPPORT
+#endif
+#ifdef SUISHO_AOI_SUPPORT
 	CString m_VoiceLanguage;
-	#endif
 #endif
 	CString m_Ini;
 	CString m_Txt;

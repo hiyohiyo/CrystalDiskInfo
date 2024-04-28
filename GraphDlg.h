@@ -260,4 +260,5 @@ public:
 	afx_msg void OnSsdKingstonDC500();
 	afx_msg void OnSsdKingstonSA400();
 
+	afx_msg void OnSsdSiliconMotionCVC();
 };

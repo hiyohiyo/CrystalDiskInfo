@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include <comutil.h>
+
 #include "AtaSmart.h"
 #include "Priscilla/UtilityFx.h"
 #include <wbemcli.h>
@@ -16,29 +17,8 @@
 #include "OsInfoFx.h"
 
 #ifdef JMICRON_USB_RAID_SUPPORT
-
 #include "JMicronUsbRaidDef.h"
 #include "JMicronUsbRaidInit.h"
-
-/*
-	#ifdef _M_X64
-		#ifdef DEBUG
-			#pragma comment(lib, "JMicronUsbRaid64d.lib")
-		#else
-			#pragma comment(lib, "JMicronUsbRaid64.lib")
-		#endif
-		#pragma comment(lib, "libgcc64.a")
-		#pragma comment(lib, "libraidapi64.a")
-	#else
-		#ifdef DEBUG
-			#pragma comment(lib, "JMicronUsbRaid32d.lib")
-		#else
-			#pragma comment(lib, "JMicronUsbRaid32.lib")
-		#endif
-		#pragma comment(lib, "libgcc32.a")
-		#pragma comment(lib, "libraidapi32.a")
-	#endif
-*/
 #endif
 
 //warning : enum3, enum class
@@ -90,6 +70,7 @@ CAtaSmart::~CAtaSmart()
 #ifdef JMICRON_USB_RAID_SUPPORT
 	DeinitializeJMS56X(&hJMS56X);
 	DeinitializeJMB39X(&hJMB39X);
+	DeinitializeJMS586(&hJMS586);
 #endif
 
 	safeCloseHandle(hMutexJMicron);
@@ -128,6 +109,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 		||  (vars[i].CommandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_REALTEK && GetSmartAttributeNVMeRealtek(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_JMS586 && GetSmartAttributeNVMeJMS586(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 			)
 		{
 			vars[i].Temperature = vars[i].SmartReadData[0x2] * 256 + vars[i].SmartReadData[0x1] - 273;
@@ -299,6 +281,13 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			}
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
+		case CMD_TYPE_JMS586:
+			if (!GetSmartInfoJMS586(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i])))
+			{
+				return SMART_STATUS_NO_CHANGE;
+			}
+			vars[i].DiskStatus = CheckDiskStatus(i);
+			break;
 #endif
 		default:
 			return SMART_STATUS_NO_CHANGE;
@@ -353,6 +342,9 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 		break;
 	case CMD_TYPE_JMB39X:
 		flag = DoIdentifyDeviceJMB39X(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i].IdentifyDevice));
+		break;
+	case CMD_TYPE_JMS586:
+		flag = DoIdentifyDeviceJMS586(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i].IdentifyDevice));
 		break;
 #endif
 	default:
@@ -478,6 +470,7 @@ BOOL CAtaSmart::SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param)
 	case CMD_TYPE_AMD_RC2:// +AMD_RC2
 	case CMD_TYPE_JMS56X:
 	case CMD_TYPE_JMB39X:
+	case CMD_TYPE_JMS586:
 	default:
 		return FALSE;
 		break;
@@ -2154,6 +2147,34 @@ safeRelease:
 	// qsort(p, vars.GetCount(), sizeof(ATA_SMART_INFO), Compare);
 	// DebugPrint(_T("OK:qsort"));
 
+
+			///////////////////////////////
+			// JMicron USB RAID
+			///////////////////////////////
+	#ifdef JMICRON_USB_RAID_SUPPORT
+		if (FlagUsbJMS586)
+		{
+			DebugPrint(L"JMS586");
+
+			if (InitializeJMS586(&hJMS586))
+			{
+				int count = 0;
+				count = pGetControllerCountJMS586();
+
+				CString cstr;
+				cstr.Format(L"ControllerCount: %d", count);
+				DebugPrint(cstr);
+
+				for (int i = 0; i < count; i++)
+				{
+					AddDiskJMS586(i);
+				}
+			}
+		}
+	#endif
+
+
+
 	// Advanced Disk Search
 	if(IsAdvancedDiskSearch)
 	{
@@ -2772,6 +2793,18 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
 		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
 	}
+	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586)
+	{
+		asi.Major = 0;
+		asi.IsSmartSupported = TRUE;
+		asi.Interface = L"USB (JMicron JMS586)";
+		asi.CurrentTransferMode = L"---";
+		asi.MaxTransferMode = L"----";
+
+		if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0002) { asi.MaxTransferMode = L"SATA/150"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
+	}
 #endif
 	else {
 		// +AMD_RC2 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2944,7 +2977,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.IsLba48Supported = TRUE;
 		asi.DiskSizeChs = 0;
 	}
-	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS56X || commandType == COMMAND_TYPE::CMD_TYPE_JMB39X)
+	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS56X || commandType == COMMAND_TYPE::CMD_TYPE_JMB39X || commandType == COMMAND_TYPE::CMD_TYPE_JMS586)
 	{
 		asi.IsLba48Supported = TRUE;
 		asi.DiskSizeChs = 0;
@@ -2952,7 +2985,16 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	else if(identify->A.LogicalCylinders == 0 || identify->A.LogicalHeads == 0 || identify->A.LogicalSectors == 0)
 	{
 	//	return FALSE;
-		asi.DiskSizeChs   = 0;
+	//	asi.DiskSizeChs   = 0;
+		// Realteck RTL9210 support (2024/01/19)
+		if (identify->A.Capabilities1 == 0 && identify->A.Capabilities2 == 0 && commandType == COMMAND_TYPE::CMD_TYPE_SAT)
+		{
+			return FALSE;
+		}
+		else
+		{
+			asi.DiskSizeChs = 0;
+		}
 	}
 	else if(((ULONGLONG)((ULONGLONG)identify->A.LogicalCylinders * identify->A.LogicalHeads * identify->A.LogicalSectors * 512) / 1000 / 1000) > 1000)
 	{
@@ -3422,6 +3464,18 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				asi.IsSmartEnabled = TRUE;
 			}
 			break;
+		case CMD_TYPE_JMS586:
+			if (GetSmartInfoJMS586(scsiBus, scsiPort, &asi))
+			{
+				CheckSsdSupport(asi);
+				// GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asiCheck);
+				// if (CheckSmartAttributeCorrect(&asi, &asiCheck)){}
+				asi.IsSmartSupported = TRUE;
+				asi.IsSmartCorrect = TRUE;
+				asi.IsThresholdCorrect = TRUE;
+				asi.IsSmartEnabled = TRUE;
+			}
+			break;
 #endif
 		default:
 			return FALSE;
@@ -3470,6 +3524,11 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.PowerOnRawValue -= 0x0DA753;
 		asi.DetectedPowerOnHours -= 0x0DA753;
 		asi.MeasuredPowerOnHours -= 0x0DA753;
+	}
+
+	if (asi.Model.Find(_T("JMicron RAlD")) == 0)
+	{
+		return FALSE;
 	}
 
 	if(asi.IsIdInfoIncorrect && (! IsAdvancedDiskSearch || commandType >= CMD_TYPE_SAT))
@@ -3553,7 +3612,11 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 }
 
 
-BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, DWORD* diskSize, CString pnpDeviceId)
+BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, DWORD* diskSize, CString pnpDeviceId
+#ifdef JMICRON_USB_RAID_SUPPORT
+	, NVME_PORT* nvmePort
+#endif
+)
 {
 	if (vars.GetCount() >= MAX_DISK)
 	{
@@ -3676,22 +3739,34 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.PnpDeviceId = pnpDeviceId;
 	asi.MinorVersion = _T("");
 
-	asi.Model = asi.IdentifyDevice.N.Model;
-	asi.Model = asi.Model.Mid(0, 40);
-	asi.Model.TrimRight();
-
-	if (asi.Model.IsEmpty())
+	if (nvmePort == NULL)
 	{
-		return FALSE;
+		asi.Model = asi.IdentifyDevice.N.Model;
+		asi.Model = asi.Model.Mid(0, 40);
+		asi.Model.TrimRight();
+
+		if (asi.Model.IsEmpty())
+		{
+			return FALSE;
+		}
+
+		asi.SerialNumber = asi.IdentifyDevice.N.SerialNumber;
+		asi.SerialNumber = asi.SerialNumber.Mid(0, 20);
+		asi.SerialNumber.TrimRight();
+
+		asi.FirmwareRev = asi.IdentifyDevice.N.FirmwareRev;
+		asi.FirmwareRev = asi.FirmwareRev.Mid(0, 8);
+		asi.FirmwareRev.TrimRight();
 	}
+	else
+	{
+		asi.Model = nvmePort->ModelName;
+		asi.SerialNumber = nvmePort->SerialNumber;
+		asi.Model.TrimRight();
+		asi.SerialNumber.TrimRight();
 
-	asi.SerialNumber = asi.IdentifyDevice.N.SerialNumber;
-	asi.SerialNumber = asi.SerialNumber.Mid(0, 20);
-	asi.SerialNumber.TrimRight();
-
-	asi.FirmwareRev = asi.IdentifyDevice.N.FirmwareRev;
-	asi.FirmwareRev = asi.FirmwareRev.Mid(0, 8);
-	asi.FirmwareRev.TrimRight();
+		asi.TotalDiskSize = (((DWORD64)nvmePort->Capacity << 32) + (DWORD64)nvmePort->CapacityOffset) * (DWORD64)nvmePort->SectorSize / 1000 / 1000;
+	}
 
 	asi.ModelSerial = GetModelSerial(asi.Model, asi.SerialNumber);
 
@@ -3710,32 +3785,12 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.IsVolatileWriteCachePresent = TRUE;
 	}
 
-	/*
-	ULONG64 totalDiskSizeByte =
-		(ULONG64)
-		( ((ULONG64)asi.IdentifyDevice.B.Bin[287] << 56)
-		+ ((ULONG64)asi.IdentifyDevice.B.Bin[286] << 48)
-		+ ((ULONG64)asi.IdentifyDevice.B.Bin[285] << 40)
-		+ ((ULONG64)asi.IdentifyDevice.B.Bin[284] << 32)
-		+ ((ULONG64)asi.IdentifyDevice.B.Bin[283] << 24)
-		+ ((ULONG64)asi.IdentifyDevice.B.Bin[282] << 16)
-		+ ((ULONG64)asi.IdentifyDevice.B.Bin[281] <<  8)
-		+ ((ULONG64)asi.IdentifyDevice.B.Bin[280]));
-	asi.NumberOfSectors = (ULONG64)
-	          (((ULONG64)asi.IdentifyDevice.B.Bin[17]) << 56)
-			+ (((ULONG64)asi.IdentifyDevice.B.Bin[16]) << 48)
-			+ (((ULONG64)asi.IdentifyDevice.B.Bin[15]) << 40)
-			+ (((ULONG64)asi.IdentifyDevice.B.Bin[14]) << 32)
-			+ (((ULONG64)asi.IdentifyDevice.B.Bin[13]) << 24)
-			+ (((ULONG64)asi.IdentifyDevice.B.Bin[12]) << 16)
-			+ (((ULONG64)asi.IdentifyDevice.B.Bin[11]) << 8)
-			+ (((ULONG64)asi.IdentifyDevice.B.Bin[10]));
-	*/
-
 	// Check duplicate device
 	for (int i = 0; i < vars.GetCount(); i++)
 	{
-		if (asi.Model.Compare(vars[i].Model) == 0 && asi.SerialNumber.Compare(vars[i].SerialNumber) == 0)
+		if ( (commandType == CMD_TYPE_JMS586 && asi.SerialNumber.Compare(vars[i].SerialNumber) == 0)
+		||   (asi.Model.Compare(vars[i].Model) == 0 && asi.SerialNumber.Compare(vars[i].SerialNumber) == 0)
+		)
 		{
 			return FALSE;
 		}
@@ -3759,6 +3814,8 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	||  (commandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_REALTEK && GetSmartAttributeNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &asi))
+	||  (commandType == CMD_TYPE_JMS586 && GetSmartAttributeNVMeJMS586(scsiPort, scsiTargetId, &asi))
+
 		)
 	{
 		asi.IsSmartSupported = TRUE;
@@ -3775,48 +3832,9 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		}
 
 		asi.HostReads = (INT)((*((UINT64*)&asi.SmartReadData[0x20]) * 1000) >> 21);// * 512 * 1000 / 1024 / 1024 / 1024
-		/*asi.HostReads = (ULONG64)
-		         (((ULONG64)asi.SmartReadData[0x27] << 56)
-				+ ((ULONG64)asi.SmartReadData[0x26] << 48)
-				+ ((ULONG64)asi.SmartReadData[0x25] << 40)
-				+ ((ULONG64)asi.SmartReadData[0x24] << 32)
-				+ ((ULONG64)asi.SmartReadData[0x23] << 24)
-				+ ((ULONG64)asi.SmartReadData[0x22] << 16)
-				+ ((ULONG64)asi.SmartReadData[0x21] << 8)
-				+ ((ULONG64)asi.SmartReadData[0x20])) * 512 * 1000 / 1024 / 1024 / 1024;*/
-
 		asi.HostWrites = (INT)((*((UINT64*)&asi.SmartReadData[0x30]) * 1000) >> 21);// * 512 * 1000 / 1024 / 1024 / 1024
-		/*asi.HostWrites = (ULONG64)
-		         (((ULONG64)asi.SmartReadData[0x37] << 56)
-				+ ((ULONG64)asi.SmartReadData[0x36] << 48)
-				+ ((ULONG64)asi.SmartReadData[0x35] << 40)
-				+ ((ULONG64)asi.SmartReadData[0x34] << 32)
-				+ ((ULONG64)asi.SmartReadData[0x33] << 24)
-				+ ((ULONG64)asi.SmartReadData[0x32] << 16)
-				+ ((ULONG64)asi.SmartReadData[0x31] << 8)
-				+ ((ULONG64)asi.SmartReadData[0x30])) * 512 * 1000 / 1024 / 1024 / 1024;*/
-
 		asi.PowerOnCount = (DWORD)*((UINT64*)&asi.SmartReadData[0x70]);
-		/*asi.PowerOnCount = (ULONG64)
-			     (((ULONG64)asi.SmartReadData[0x77] << 56)
-				+ ((ULONG64)asi.SmartReadData[0x76] << 48)
-				+ ((ULONG64)asi.SmartReadData[0x75] << 40)
-				+ ((ULONG64)asi.SmartReadData[0x74] << 32)
-				+ ((ULONG64)asi.SmartReadData[0x73] << 24)
-				+ ((ULONG64)asi.SmartReadData[0x72] << 16)
-				+ ((ULONG64)asi.SmartReadData[0x71] << 8)
-				+ ((ULONG64)asi.SmartReadData[0x70]));*/
-
 		asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (INT)*((UINT64*)&asi.SmartReadData[0x80]);
-		/*asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (ULONG64)
-				 (((ULONG64)asi.SmartReadData[0x87] << 56)
-				+ ((ULONG64)asi.SmartReadData[0x86] << 48)
-				+ ((ULONG64)asi.SmartReadData[0x85] << 40)
-				+ ((ULONG64)asi.SmartReadData[0x84] << 32)
-				+ ((ULONG64)asi.SmartReadData[0x83] << 24)
-				+ ((ULONG64)asi.SmartReadData[0x82] << 16)
-				+ ((ULONG64)asi.SmartReadData[0x81] << 8)
-				+ ((ULONG64)asi.SmartReadData[0x80]));*/
 
 		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
 		GetTransferModePCIe(asi.CurrentTransferMode, asi.MaxTransferMode, GetPCIeSlotSpeed(physicalDriveId, true));
@@ -3827,6 +3845,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 		asi.IsSmartSupported = TRUE;
 		asi.Interface = _T("NVM Express"); 
+
 		if (asi.IdentifyDevice.N.MajorVersion == 0)
 		{
 			asi.MajorVersion = _T("NVM Express 1.0/1.1");
@@ -3835,6 +3854,21 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			asi.MajorVersion.Format(_T("NVM Express %d.%d"), asi.IdentifyDevice.N.MajorVersion, asi.IdentifyDevice.N.MinorVersion);
 		}
+
+		if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586)
+		{
+			asi.Interface = L"USB (NVMe/JMicron JMS586)";
+			asi.MajorVersion = L"NVM Express";
+
+			static const TCHAR* pcieSpeed[4] = { L"Gen 1.0", L"Gen 2.0", L"Gen 3.0", L"Gen 4.0" };
+			static const TCHAR* pcieLane[5] = { L"x1", L"x2", L"x4", L"x8", L"x16" };
+			if ((0 <= nvmePort->PCIeSpeed && nvmePort->PCIeSpeed < 4)
+				&& (0 <= nvmePort->PCIeLANE && nvmePort->PCIeLANE < 5))
+			{
+				asi.CurrentTransferMode.Format(L"%s %s", pcieSpeed[nvmePort->PCIeSpeed], pcieLane[nvmePort->PCIeLANE]);
+			}
+		}
+
 		// +AMD_RC2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		if (commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2) {
 			asi.MajorVersion = L"";
@@ -3993,7 +4027,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 		asi.DiskVendorId = SSD_VENDOR_KINGSTON;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
-	else if (asi.Model.Find(_T("Corsair")) == 0)
+	else if (IsSsdCorsair(asi))
 	{
 		asi.SmartKeyName = _T("SmartCorsair");
 		asi.DiskVendorId = SSD_VENDOR_CORSAIR;
@@ -4015,6 +4049,12 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 	{
 		asi.SmartKeyName = _T("SmartKioxia");
 		asi.DiskVendorId = SSD_VENDOR_KIOXIA;
+		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
+	}
+	else if (IsSsdSiliconMotionCVC(asi))
+	{
+		asi.SmartKeyName = _T("SmartSiliconMotionCVC");
+		asi.DiskVendorId = SSD_VENDOR_SILICONMOTION_CVC;
 		asi.SsdVendorString = ssdVendorString[asi.DiskVendorId];
 	}
 	else if (IsSsdSiliconMotion(asi))
@@ -4092,7 +4132,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			}
 			break;
 		case 0xCA:
-			if (asi.DiskVendorId == SSD_VENDOR_MICRON || asi.DiskVendorId == SSD_VENDOR_MICRON_MU03 || asi.DiskVendorId == SSD_VENDOR_INTEL_DC)
+			if (asi.DiskVendorId == SSD_VENDOR_MICRON || asi.DiskVendorId == SSD_VENDOR_MICRON_MU03 || asi.DiskVendorId == SSD_VENDOR_INTEL_DC || asi.DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue;
 				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
@@ -4190,9 +4230,9 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				asi.NandWrites = *((INT*)&asi.Attribute[j].RawValue[0]);//(INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
 			}
-			else if (asi.DiskVendorId == SSD_VENDOR_PLEXTOR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SEAGATE)
+			else if (asi.DiskVendorId == SSD_VENDOR_PLEXTOR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SEAGATE ||  asi.DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC)
 			{
-				asi.NandWrites = *((INT*)&asi.Attribute[j].RawValue[0]);//(INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
+				asi.NandWrites = *((INT*)&asi.Attribute[j].RawValue[0]);
 			}
 			else if (asi.DiskVendorId == SSD_VENDOR_JMICRON)
 			{
@@ -4284,6 +4324,10 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			else if (asi.DiskVendorId == SSD_VENDOR_TOSHIBA && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
 			{
 				asi.HostWrites = *((INT*)&asi.Attribute[j].RawValue[0]);//(INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
+			}
+			else if (asi.DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
+			{
+				asi.HostWrites = *((INT*)&asi.Attribute[j].RawValue[0]);
 			}
 			else if (asi.DiskVendorId == SSD_VENDOR_INTEL_DC)
 			{
@@ -4403,6 +4447,10 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			else if (asi.DiskVendorId == SSD_VENDOR_TOSHIBA && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
 			{
 				asi.HostReads = *((INT*)&asi.Attribute[j].RawValue[0]);//(INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
+			}
+			else if (asi.DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
+			{
+				asi.HostReads = *((INT*)&asi.Attribute[j].RawValue[0]);
 			}
 			else if(asi.DiskVendorId == SSD_VENDOR_INTEL || asi.DiskVendorId == SSD_VENDOR_TOSHIBA || asi.DiskVendorId == SSD_VENDOR_SILICONMOTION)
 			{
@@ -5383,6 +5431,22 @@ BOOL CAtaSmart::IsSsdKingston(ATA_SMART_INFO &asi)
 	return flagSmartType;
 }
 
+BOOL CAtaSmart::IsSsdCorsair(ATA_SMART_INFO& asi)
+{
+	BOOL flagSmartType = FALSE;
+
+	if (asi.Model.Find(L"Corsair") == 0)
+	{
+		flagSmartType = TRUE;
+		if (asi.Model.Find(_T("Voyager GTX")) >= 0)
+		{
+			asi.HostReadsWritesUnit = HOST_READS_WRITES_1MB;
+		}
+	}
+
+	return flagSmartType;
+}
+
 BOOL CAtaSmart::IsSsdToshiba(ATA_SMART_INFO &asi)
 {
 	BOOL flagSmartType = FALSE;
@@ -5530,6 +5594,18 @@ BOOL CAtaSmart::IsSsdRecadata(ATA_SMART_INFO& asi)
 {
 	BOOL flagSmartType = FALSE;
 	if (asi.Model.Find(_T("RECADATA")) == 0) 
+	{
+		flagSmartType = TRUE;
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+	}
+
+	return flagSmartType;
+}
+
+BOOL CAtaSmart::IsSsdSiliconMotionCVC(ATA_SMART_INFO& asi)
+{
+	BOOL flagSmartType = FALSE;
+	if (asi.Model.Find(_T("CVC-")) >= 0)
 	{
 		flagSmartType = TRUE;
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
@@ -10610,6 +10686,99 @@ BOOL CAtaSmart::GetSmartInfoJMB39X(INT index, BYTE port, ATA_SMART_INFO* asi)
 	return FALSE;
 }
 
+BOOL CAtaSmart::AddDiskJMS586(INT index)
+{
+	if (!hJMS586) { return FALSE; }
+	IDENTIFY_DEVICE identify = { 0 };
+	NVME_PORT nvmePort = { 0 };
+
+	/*
+	for (int i = 0; i < 5; i++)
+	{
+		if (DoIdentifyDeviceJMS586(index, i, &identify))
+		{
+			AddDisk(-1, i, NULL, index, 0xA0, CMD_TYPE_JMS586, &identify);
+		}
+	}
+	*/
+
+	for (int i = 0; i < 5 /*MAX_DISK_IN_CONTROLLER*/; i++)
+	{
+		if (GetNVMePortInfoJMS586(index, i, &nvmePort))
+		{
+			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586, &identify, 0, L"", &nvmePort);
+		}
+	}
+
+	return TRUE;
+}
+
+BOOL CAtaSmart::DoIdentifyDeviceJMS586(INT index, BYTE port, IDENTIFY_DEVICE* identify)
+{
+	if (!hJMS586) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetIdentifyInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	return pGetIdentifyInfoJMS586(index, port, (UNION_IDENTIFY_DEVICE*)identify);
+}
+
+BOOL CAtaSmart::GetSmartInfoJMS586(INT index, BYTE port, ATA_SMART_INFO* asi)
+{
+	if (!hJMS586) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetSmartInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	pGetSmartInfoJMS586(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+	FillSmartData(asi);
+	FillSmartThreshold(asi);
+
+	if (asi->AttributeCount == 0)
+	{
+		Sleep(1000);
+		pGetSmartInfoJMS586(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+		FillSmartData(asi);
+		FillSmartThreshold(asi);
+	}
+
+	if (asi->AttributeCount > 0)
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
+BOOL CAtaSmart::GetNVMePortInfoJMS586(INT index, BYTE port, NVME_PORT* nvmePort)
+{
+	if (!hJMS586) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetNVMePortInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	return pGetNVMePortInfoJMS586(index, port, nvmePort);
+}
+
+BOOL CAtaSmart::GetNVMeSmartInfoJMS586(INT index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo)
+{
+	if (!hJMS586) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetNVMeSmartInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	return pGetNVMeSmartInfoJMS586(index, port, smartInfo);
+}
+
+BOOL CAtaSmart::GetSmartAttributeNVMeJMS586(INT index, INT port, ATA_SMART_INFO* asi)
+{
+	BOOL flag = FALSE;
+	UNION_SMART_ATTRIBUTE smartInfo;
+	flag = GetNVMeSmartInfoJMS586(index, port, &smartInfo);
+	memcpy_s(&(asi->SmartReadData), 512, smartInfo.B.b, 512);
+
+	return flag;
+}
+
 #endif
 
 /*---------------------------------------------------------------------------*/
@@ -10745,7 +10914,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				}
 				break;
 			case 0xCA:
-				if (asi->DiskVendorId == SSD_VENDOR_MICRON || asi->DiskVendorId == SSD_VENDOR_MICRON_MU03 || asi->DiskVendorId == SSD_VENDOR_INTEL_DC)
+				if (asi->DiskVendorId == SSD_VENDOR_MICRON || asi->DiskVendorId == SSD_VENDOR_MICRON_MU03 || asi->DiskVendorId == SSD_VENDOR_INTEL_DC || asi->DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC)
 				{
 					asi->Life = asi->Attribute[j].CurrentValue;
 					if (asi->Life < 0 || asi->Life > 100) { asi->Life = -1; }
@@ -10843,9 +11012,9 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				{
 					asi->NandWrites = *(INT*)&asi->Attribute[j].RawValue[0];// (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
 				}
-				else if (asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SEAGATE || asi->DiskVendorId == SSD_VENDOR_YMTC)
+				else if (asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SEAGATE || asi->DiskVendorId == SSD_VENDOR_YMTC || asi->DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC)
 				{
-					asi->NandWrites = *(INT*)&asi->Attribute[j].RawValue[0];//(INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
+					asi->NandWrites = *(INT*)&asi->Attribute[j].RawValue[0];
 				}
 				else if (asi->DiskVendorId == SSD_VENDOR_JMICRON)
 				{
@@ -10938,6 +11107,10 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				else if (asi->DiskVendorId == SSD_VENDOR_TOSHIBA && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
 				{
 					asi->HostWrites = *(INT*)&asi->Attribute[j].RawValue[0];//(INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
+				}
+				else if (asi->DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
+				{
+					asi->HostWrites = *((INT*)&asi->Attribute[j].RawValue[0]);
 				}
 				else if (asi->DiskVendorId == SSD_VENDOR_INTEL_DC)
 				{
@@ -11059,6 +11232,10 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				else if (asi->DiskVendorId == SSD_VENDOR_TOSHIBA && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
 				{
 					asi->HostReads = *(INT*)&asi->Attribute[j].RawValue[0];//(INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
+				}
+				else if (asi->DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC && asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
+				{
+					asi->HostReads = *(INT*)&asi->Attribute[j].RawValue[0];
 				}
 				else if(asi->DiskVendorId == SSD_VENDOR_INTEL || asi->DiskVendorId == SSD_VENDOR_TOSHIBA || asi->DiskVendorId == SSD_VENDOR_SILICONMOTION)
 				{
@@ -11529,7 +11706,7 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 		|| (vars[i].Attribute[j].Id == 0xAD && vars[i].DiskVendorId == SSD_VENDOR_KIOXIA)
 		|| (vars[i].Attribute[j].Id == 0xB1 && vars[i].DiskVendorId == SSD_VENDOR_SAMSUNG)
 		|| (vars[i].Attribute[j].Id == 0xBB && vars[i].DiskVendorId == SSD_VENDOR_MTRON)
-		|| (vars[i].Attribute[j].Id == 0xCA && (vars[i].DiskVendorId == SSD_VENDOR_MICRON || vars[i].DiskVendorId == SSD_VENDOR_MICRON_MU03 || vars[i].DiskVendorId == SSD_VENDOR_INTEL_DC))
+		|| (vars[i].Attribute[j].Id == 0xCA && (vars[i].DiskVendorId == SSD_VENDOR_MICRON || vars[i].DiskVendorId == SSD_VENDOR_MICRON_MU03 || vars[i].DiskVendorId == SSD_VENDOR_INTEL_DC || vars[i].DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC))
 		|| (vars[i].Attribute[j].Id == 0xD1 && vars[i].DiskVendorId == SSD_VENDOR_INDILINX)
 		|| (vars[i].Attribute[j].Id == 0xE7 && (vars[i].DiskVendorId == SSD_VENDOR_SANDFORCE || vars[i].DiskVendorId == SSD_VENDOR_CORSAIR || vars[i].DiskVendorId == SSD_VENDOR_KINGSTON || vars[i].DiskVendorId == SSD_VENDOR_SKHYNIX
 			                                || vars[i].DiskVendorId == SSD_VENDOR_REALTEK || vars[i].DiskVendorId == SSD_VENDOR_SANDISK || vars[i].DiskVendorId == SSD_VENDOR_SSSTC || vars[i].DiskVendorId == SSD_VENDOR_APACER || vars[i].DiskVendorId == SSD_VENDOR_PHISON

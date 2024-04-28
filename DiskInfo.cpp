@@ -208,44 +208,45 @@ BOOL CDiskInfoApp::InitInstance()
 	}
 	m_OpusDecPath.Format(_T("%s\\%s"), tmp, OPUS_DEC_PATH);
 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-	m_VoicePath.Format(_T("%s\\%s"), tmp, SHIZUKU_VOICE_PATH);
-	#ifdef KUREI_KEI_SUPPORT
-		m_VoicePath.Format(_T("%s\\%s"), tmp, KUREI_KEI_VOICE_PATH);
-	#endif
-	#ifdef AOI_SUPPORT
-		TCHAR str[256];
-		GetPrivateProfileStringFx(_T("Setting"), _T("Language"), _T(""), str, 256, m_Ini);
-		cstr = str;
+#ifdef SUISHO_AOI_SUPPORT
+	TCHAR str[256];
+	GetPrivateProfileStringFx(_T("Setting"), _T("Language"), _T(""), str, 256, m_Ini);
+	cstr = str;
 
-		if (cstr.IsEmpty()) // First Time
-		{
-			if (GetUserDefaultLCID() == 0x0411)// Japanese
-			{
-				GetPrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("Japanese"), str, 256, m_Ini);
-				WritePrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("Japanese"), m_Ini);
-			}
-			else
-			{
-				GetPrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("English"), str, 256, m_Ini);
-				WritePrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("English"), m_Ini);
-			}
-		}
-		else
+	if (cstr.IsEmpty()) // First Time
+	{
+		if (GetUserDefaultLCID() == 0x0411)// Japanese
 		{
 			GetPrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("Japanese"), str, 256, m_Ini);
-		}
-		
-		m_VoiceLanguage = str;
-		if (m_VoiceLanguage.Find(L"Japanese") == 0)
-		{
-			m_VoicePath.Format(_T("%s\\%s"), tmp, AOI_VOICE_JA_PATH);
+			WritePrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("Japanese"), m_Ini);
 		}
 		else
 		{
-			m_VoicePath.Format(_T("%s\\%s"), tmp, AOI_VOICE_EN_PATH);
-		}			
-	#endif
+			GetPrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("English"), str, 256, m_Ini);
+			WritePrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("English"), m_Ini);
+		}
+	}
+	else
+	{
+		GetPrivateProfileStringFx(_T("Setting"), _T("VoiceLanguage"), _T("Japanese"), str, 256, m_Ini);
+	}
+		
+	m_VoiceLanguage = str;
+	if (m_VoiceLanguage.Find(L"Japanese") == 0)
+	{
+		m_VoicePath.Format(_T("%s\\%s"), tmp, AOI_VOICE_JA_PATH);
+	}
+	else
+	{
+		m_VoicePath.Format(_T("%s\\%s"), tmp, AOI_VOICE_EN_PATH);
+	}
+
+#elif MSI_MEI_SUPPORT
+	m_VoicePath.Format(_T("%s\\%s"), tmp, MSI_MEI_VOICE_PATH);
+#elif KUREI_KEI_SUPPORT
+	m_VoicePath.Format(_T("%s\\%s"), tmp, KUREI_KEI_VOICE_PATH);
+#elif SUISHO_SHIZUKU_SUPPORT
+	m_VoicePath.Format(_T("%s\\%s"), tmp, SHIZUKU_VOICE_PATH);
 #endif
 	
 	m_ThemeIndex = MENU_THEME_INDEX;

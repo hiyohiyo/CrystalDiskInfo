@@ -172,8 +172,8 @@ void FixDarkScrollBar()
 
 BOOL InitDarkMode()
 {
-	HMODULE ntdll = GetModuleHandle(L"ntdll.dll");
-	HMODULE user32 = GetModuleHandle(L"user32.dll");
+	HMODULE ntdll = GetModuleHandleW(L"ntdll.dll");
+	HMODULE user32 = GetModuleHandleW(L"user32.dll");
 	if (!ntdll || !user32) return FALSE;
 	auto RtlGetNtVersionNumbers = reinterpret_cast<fnRtlGetNtVersionNumbers>(GetProcAddress(ntdll, "RtlGetNtVersionNumbers"));
 	if (RtlGetNtVersionNumbers)

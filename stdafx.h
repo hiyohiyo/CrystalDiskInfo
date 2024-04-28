@@ -67,8 +67,8 @@
 #define PROJECT_NAME			_T("CrystalDiskInfo")
 #define PRODUCT_NAME			_T("CrystalDiskInfo")
 
-#if AOI_SUPPORT
-	#define PRODUCT_SHORT_NAME		_T("CDI 9 AE")
+#ifdef SUISHO_AOI_SUPPORT
+	#define PRODUCT_SHORT_NAME		_T("CDI AE")
 	#ifdef _M_ARM
 	#define PRODUCT_EDITION			_T("Aoi Edition ARM32")
 	#elif _M_ARM64
@@ -78,8 +78,19 @@
 	#else
 	#define PRODUCT_EDITION			_T("Aoi Edition x86")
 	#endif
+#elif MSI_MEI_SUPPORT
+	#define PRODUCT_SHORT_NAME		_T("CDI MMME")
+	#ifdef _M_ARM
+	#define PRODUCT_EDITION			_T("MSI Mei Mihoshi Edition ARM32")
+	#elif _M_ARM64
+	#define PRODUCT_EDITION			_T("MSI Mei Mihoshi Edition ARM64")
+	#elif _M_X64
+	#define PRODUCT_EDITION			_T("MSI Mei Mihoshi Edition x64")
+	#else
+	#define PRODUCT_EDITION			_T("MSI Mei Mihoshi Edition x86")
+#endif
 #elif KUREI_KEI_SUPPORT
-	#define PRODUCT_SHORT_NAME		_T("CDI 9 KKE")
+	#define PRODUCT_SHORT_NAME		_T("CDI KKE")
 	#ifdef _M_ARM
 	#define PRODUCT_EDITION			_T("Kurei Kei Edition ARM32")
 	#elif _M_ARM64
@@ -90,7 +101,7 @@
 	#define PRODUCT_EDITION			_T("Kurei Kei Edition x86")
 	#endif
 #elif SUISHO_SHIZUKU_SUPPORT
-	#define PRODUCT_SHORT_NAME		_T("CDI 9 SE")
+	#define PRODUCT_SHORT_NAME		_T("CDI SE")
 	#ifdef _M_ARM32
 	#define PRODUCT_EDITION			_T("Shizuku Edition ARM32")
 	#elif _M_ARM64
@@ -101,7 +112,7 @@
 	#define PRODUCT_EDITION			_T("Shizuku Edition x86")
 	#endif
 #else
-	#define PRODUCT_SHORT_NAME		_T("CDI 9")
+	#define PRODUCT_SHORT_NAME		_T("CDI")
 	#ifdef _M_ARM
 	#define PRODUCT_EDITION			_T("ARM32")
 	#elif _M_ARM64
@@ -113,22 +124,29 @@
 	#endif
 #endif
 
-#define PRODUCT_VERSION				L"9.2.1"
-#define PRODUCT_RELEASE				L"2023/11/21"
-#define PRODUCT_COPY_YEAR			L"2008-2023"
+#define PRODUCT_VERSION				L"9.3.0"
+#define PRODUCT_RELEASE				L"2024/04/30"
+#define PRODUCT_COPY_YEAR			L"2008-2024"
 #define PRODUCT_LICENSE				L"MIT License"
 
-#ifdef AOI_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2023 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2023 nijihashi sola"
+#ifdef SUISHO_AOI_SUPPORT
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2024 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2023-2024 nijihashi sola"
+
+#elif MSI_MEI_SUPPORT
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2024 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2024 Micro-Star INT'L CO., LTD."
+
 #elif KUREI_KEI_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2023 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2017-2023 Pronama LLC"
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2024 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2017-2024 Pronama LLC"
+
 #elif SUISHO_SHIZUKU_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2023 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2012-2023 kirino kasumu"
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2024 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2012-2024 kirino kasumu"
+
 #else
-#define PRODUCT_COPYRIGHT_1			L"© 2008-2023 hiyohiyo"
+#define PRODUCT_COPYRIGHT_1			L"© 2008-2024 hiyohiyo"
 #define PRODUCT_COPYRIGHT_2			L""
 #endif
 
@@ -146,14 +164,56 @@
 
 #define TIMER_UPDATE_DIALOG			500
 
+#ifdef MSI_MEI_SUPPORT
+#define URL_MAIN_JA					L"https://jp.msi.com/"
+#define URL_MAIN_EN 				L"https://www.msi.com/"
+#elif KUREI_KEI_SUPPORT
+#define URL_MAIN_JA					L"https://pronama.jp/2017/08/04/crystaldiskinfo-kurei-kei-edition-release/"
+#define URL_MAIN_EN 				L"https://pronama.jp/2017/08/04/crystaldiskinfo-kurei-kei-edition-release/"
+#else
+#define URL_MAIN_JA					L"https://crystalmark.info/ja/"
+#define URL_MAIN_EN 				L"https://crystalmark.info/en/"
+#endif
+
 #define URL_CRYSTAL_DEW_WORLD_JA	L"https://crystalmark.info/ja/"
 #define URL_CRYSTAL_DEW_WORLD_EN 	L"https://crystalmark.info/en/"
 
-#define	URL_PROJECT_SHIZUKU_JA		L"https://suishoshizuku.com/ja/"
-#define	URL_PROJECT_SHIZUKU_EN		L"https://suishoshizuku.com/en/"
+#define	URL_VERSION_JA				L"https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-history/"
+#define	URL_VERSION_EN				L"https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-history/"
+#define	URL_LICENSE_JA				L"https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-license/"
+#define	URL_LICENSE_EN				L"https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-license/"
 
-#define URL_AOI		                L"https://crystalmark.info/"
-#define URL_PRONAMA	                L"https://pronama.jp/2017/08/04/crystaldiskinfo-kurei-kei-edition-release/"
+#define URL_HELP_JA					L"https://crystalmark.info/ja/software/crystaldiskinfo/"
+#define URL_HELP_EN 				L"https://crystalmark.info/en/software/crystaldiskinfo/"
+
+#ifdef SUISHO_AOI_SUPPORT
+#define	URL_PROJECT_SITE_1		    L"https://twitter.com/sola_no_crayon"
+#define URL_PROJECT_SITE_2		    L"https://twitter.com/harakeiko0718"
+#define URL_PROJECT_SITE_3	        L"https://instagram.com/kotomi_wicke?igshid=OGQ5ZDc2ODk2ZA=="
+#define URL_PROJECT_SITE_4			L"https://twitter.com/bellche"
+#define URL_PROJECT_SITE_5			L""
+
+#elif MSI_MEI_SUPPORT
+#define	URL_PROJECT_SITE_1		    L"https://jp.msi.com/Landing/mihoshimei/nb"
+#define URL_PROJECT_SITE_2		    L"https://twitter.com/hoshi_u3"
+#define URL_PROJECT_SITE_3	        L"https://twitter.com/mokowata"
+#define URL_PROJECT_SITE_4			L"https://jp.msi.com/"
+#define URL_PROJECT_SITE_5			L"https://jp.msi.com/"
+
+#elif KUREI_KEI_SUPPORT
+#define	URL_PROJECT_SITE_1		    L"https://pronama.jp/crystaldiskinfo"
+#define URL_PROJECT_SITE_2		    L"https://pronama.jp/ixy"
+#define URL_PROJECT_SITE_3	        L"https://pronama.jp/uesakasumire"
+#define URL_PROJECT_SITE_4			L"https://pronama.jp/crystaldiskinfo"
+#define URL_PROJECT_SITE_5			L""
+
+#elif SUISHO_SHIZUKU_SUPPORT
+#define	URL_PROJECT_SITE_1		    L"https://twitter.com/kirinokasumu"
+#define URL_PROJECT_SITE_2		    L"https://linux-ha.osdn.jp/wp/"
+#define URL_PROJECT_SITE_3	        L"https://ch.nicovideo.jp/oss"
+#define URL_PROJECT_SITE_4			L"https://twitter.com/bellche"
+#define URL_PROJECT_SITE_5			L"https://suishoshizuku.com/"
+#endif
 
 #ifdef MAX_DRIVE_20
 #define MAX_DRIVE_MENU              20
@@ -163,39 +223,7 @@
 
 #define CERTNAME_JMS56X				L"Open Source Developer, Noriyuki Miyazaki"
 #define CERTNAME_JMB39X				L"Open Source Developer, Noriyuki Miyazaki"
-
-
-#ifdef SUISHO_SHIZUKU_SUPPORT
-
-#ifdef AOI_SUPPORT
-#define	URL_PROJECT_SITE_1		    L"https://twitter.com/sola_no_crayon"
-#define URL_PROJECT_SITE_2		    L"https://twitter.com/harakeiko0718"
-#define URL_PROJECT_SITE_3	        L"https://instagram.com/kotomi_wicke?igshid=OGQ5ZDc2ODk2ZA=="
-#define URL_PROJECT_SITE_4			L"https://twitter.com/bellche"
-#define URL_PROJECT_SITE_5			L""
-#elif KUREI_KEI_SUPPORT
-#define	URL_PROJECT_SITE_1		    L"https://pronama.jp/crystaldiskinfo"
-#define URL_PROJECT_SITE_2		    L"https://pronama.jp/ixy"
-#define URL_PROJECT_SITE_3	        L"https://pronama.jp/uesakasumire"
-#define URL_PROJECT_SITE_4			L"https://pronama.jp/crystaldiskinfo"
-#define URL_PROJECT_SITE_5			L""
-#else
-#define	URL_PROJECT_SITE_1		    L"https://twitter.com/kirinokasumu"
-#define URL_PROJECT_SITE_2		    L"https://linux-ha.osdn.jp/wp/"
-#define URL_PROJECT_SITE_3	        L"https://ch.nicovideo.jp/oss"
-#define URL_PROJECT_SITE_4			L"https://twitter.com/bellche"
-#define URL_PROJECT_SITE_5			L"https://suishoshizuku.com/"
-#endif
-
-#endif
-
-#define	URL_VERSION_JA				L"https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-history/"
-#define	URL_VERSION_EN				L"https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-history/"
-#define	URL_LICENSE_JA				L"https://crystalmark.info/ja/software/crystaldiskinfo/crystaldiskinfo-license/"
-#define	URL_LICENSE_EN				L"https://crystalmark.info/en/software/crystaldiskinfo/crystaldiskinfo-license/"
-
-#define URL_HTML_HELP_JA			L"https://crystalmark.info/ja/software/crystaldiskinfo/"
-#define URL_HTML_HELP_EN 			L"https://crystalmark.info/en/software/crystaldiskinfo/"
+#define CERTNAME_JMS586				L"Open Source Developer, Noriyuki Miyazaki"
 
 #define URL_AMD_RC2T7_JA			L"https://thilmera.com/project/AMD_RC2t7/?lang=ja"
 #define URL_AMD_RC2T7_EN 			L"https://thilmera.com/project/AMD_RC2t7/?lang=en"
