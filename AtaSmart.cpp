@@ -5135,6 +5135,7 @@ BOOL CAtaSmart::IsSsdOcz(ATA_SMART_INFO &asi)
 	if (modelUpper.Find(_T("RADEON R7")) == 0)
 	{
 		flagSmartType = TRUE;
+		return TRUE;
 	}
 
 	// OCZ-TRION100 2015/11/25
