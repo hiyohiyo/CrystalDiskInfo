@@ -1,11 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Marián Hikaník, Ján Kinčeš, Maxix
-<<<<<<< HEAD
 VERSION=9.3.0
-=======
-VERSION=9.2.3
->>>>>>> origin/master
 
 [Language]
 LANGUAGE=Slovensky
@@ -123,12 +119,9 @@ DRIVE_MENU_NUMBER=Zobraziť číslo jednotky
 
 ;9.2.0
 VOICE=Hlas
-<<<<<<< HEAD
 
 ;9.3.0
 STARTUP_VOICE=Hlas pri spustení
-=======
->>>>>>> origin/master
 
 [TrayMenu]
 EXIT=Ukončiť
@@ -1681,7 +1674,6 @@ F2=Celkový počet čítaní hostiteľa 64 GB
 F4=Aktivácie teplotnej brzdy počas životnosti
 F5=Zostávajúce percentá životnosti jednotky
 FD=Zostávajúce testy SPI
-<<<<<<< HEAD
 
 [SmartSiliconMotionCVC] ;Added 9.3.0
 05=Počet opätovne pridelených
@@ -1730,5 +1722,3 @@ E9=Flash Write Sector Count
 EA=Flash Read Sector Count
 F1=Write Sector Count
 F2=Read Sector Count
-=======
->>>>>>> origin/master
