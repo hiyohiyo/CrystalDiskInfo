@@ -2753,6 +2753,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.IsSsd = (identify->A.SerialAtaCapabilities & 1);
 		asi.IsSmartSupported = TRUE;
 		asi.Interface = (identify->A.CurrentMediaSerialNo[0] == 'N' ? _T("AMD_RC2") : _T("AMD_RC2 (Serial ATA)"));
+		asi.sasPhyEntity.bPortIdentifier = (UCHAR)scsiBus;//DiskNumber from AddDiskAMD_RC2(). Use for sorting.
 		asi.CurrentTransferMode = identify->A.CurrentMediaSerialNo;//tmp
 		asi.CurrentTransferMode.Replace(L"HDD", L"");
 		asi.CurrentTransferMode.Replace(L"SSD", L"");
@@ -2760,7 +2761,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.CurrentTransferMode.Replace(L"6Gb", L"SATA/600");
 		asi.CurrentTransferMode.Replace(L"3Gb", L"SATA/300");
 		asi.CurrentTransferMode.Replace(L"1.5Gb", L"SATA/150");
-		asi.CurrentTransferMode.Replace(L"1Gb", L"SATA/150");
+		asi.CurrentTransferMode.Replace(L"[N/A]", L"SATA/---");//values: "[N/A]", "1.5Gb", "3Gb", "6Gb"
 		asi.CurrentTransferMode.Replace(L" ", L"");
 		asi.MaxTransferMode = L"----";
 
@@ -3872,6 +3873,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		// +AMD_RC2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		if (commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2) {
 			asi.MajorVersion = L"";
+			asi.sasPhyEntity.bPortIdentifier = (UCHAR)scsiBus;//DiskNumber from AddDiskAMD_RC2(). Use for sorting.
 			asi.CurrentTransferMode = identify->N.Reserved3;//tmp
 			asi.CurrentTransferMode.Replace(L"NVMe", L"PCIe");
 			asi.CurrentTransferMode.Replace(L"Gen1", L"1.0");
