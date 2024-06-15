@@ -900,8 +900,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 3, 0, 0
- PRODUCTVERSION 9, 3, 0, 0
+ FILEVERSION 9, 3, 1, 0
+ PRODUCTVERSION 9, 3, 1, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -922,8 +922,8 @@ BEGIN
             VALUE "Comments", "https://crystalmark.info/ MIT License"
 #endif
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.3.0.0"
-            VALUE "ProductVersion", "9.3.0.0"
+            VALUE "FileVersion", "9.3.1.0"
+            VALUE "ProductVersion", "9.3.1.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 
@@ -1386,6 +1386,7 @@ BEGIN
             MENUITEM "SSD - WDC",                   ID_SSD_WDC
             MENUITEM "SSD - YMTC",                  ID_SSD_YMTC
             MENUITEM "SSD - Silicon Motion CVC",    ID_SSD_SILICONMOTION_CVC
+            MENUITEM "SSD - ADATA Industrial",      ID_SSD_ADATA_INDUSTRIAL
         END
         MENUITEM "Paint Weekend",               ID_PAINT_WEEKEND
     END

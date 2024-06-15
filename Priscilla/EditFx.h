@@ -23,7 +23,7 @@ public:
 	virtual ~CEditFx();
 
 	// Control
-	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, LPCTSTR imagePath,
+	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, LPCWSTR imagePath,
 		 int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame, BOOL bMultiLine = FALSE);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);

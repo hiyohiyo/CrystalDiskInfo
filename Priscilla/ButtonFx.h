@@ -8,7 +8,6 @@
 #pragma once
 
 #include "CommonFx.h"
-#include <afxtempl.h>
 #include <atlimage.h>
 #include <gdiplus.h>
 #pragma comment(lib, "Gdiplus.lib")
@@ -25,8 +24,8 @@ public:
 
 	// Control
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
-		LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame);
-	BOOL ReloadImage(LPCTSTR imagePath, UINT imageCount);
+		LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame);
+	BOOL ReloadImage(LPCWSTR imagePath, UINT imageCount);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);

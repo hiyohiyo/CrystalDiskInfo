@@ -8,18 +8,6 @@
 #include "../stdafx.h"
 #include "ComboBoxFx.h"
 
-#if _MSC_VER == 1310
-#define ON_WM_MOUSEHOVER() \
-	{ 0x2A1 /*WM_MOUSEHOVER*/, 0, 0, 0, AfxSig_vwp, \
-		(AFX_PMSG)(AFX_PMSGW) \
-		(static_cast< void (AFX_MSG_CALL CWnd::*)(UINT, CPoint) > (OnMouseHover)) },
-
-#define ON_WM_MOUSELEAVE() \
-	{ 0x2A3 /*WM_MOUSELEAVE*/, 0, 0, 0, AfxSig_vv, \
-		(AFX_PMSG)(AFX_PMSGW) \
-		(static_cast< void (AFX_MSG_CALL CWnd::*)(void) > (OnMouseLeave)) },
-#endif
-
 ////------------------------------------------------
 //   CComboBoxFx
 ////------------------------------------------------
@@ -31,7 +19,6 @@ CComboBoxFx::CComboBoxFx()
 	m_Y = 0;
 	m_ZoomRatio = 1.0;
 	m_bHighContrast = FALSE;
-	m_bDarkMode = FALSE;
 	m_RenderMode = SystemDraw;
 	m_Margin.top = 0;
 	m_Margin.left = 0;
@@ -45,7 +32,7 @@ CComboBoxFx::CComboBoxFx()
 
 	// Image
 	m_ImageCount = 0;
-	m_ImagePath = _T("");
+	m_ImagePath = L"";
 	m_BkDC = NULL;
 	m_bBkBitmapInit = FALSE;
 	m_bBkLoad = FALSE;
@@ -181,16 +168,12 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 			for (int x = 0; x < m_CtrlSize.cx; x++)
 			{
 				DWORD p = (y * m_CtrlSize.cx + x) * 4;
-#if _MSC_VER > 1310
 #pragma warning( disable : 6386 )
-#endif
 				bitmapBits[p + 0] = b;
 				bitmapBits[p + 1] = g;
 				bitmapBits[p + 2] = r;
 				bitmapBits[p + 3] = a;
-#if _MSC_VER > 1310
 #pragma warning( default : 6386 )
-#endif
 			}
 		}
 
@@ -428,10 +411,8 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 				int cn = (baseY + py) * CtlLineBytes;
 				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
 				{
-#if _MSC_VER > 1310
 #pragma warning( disable : 6385 )
 #pragma warning( disable : 6386 )
-#endif
 					BYTE a = CtlBuffer[cn + 3];
 					BYTE na = 255 - a;
 					DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
@@ -439,10 +420,8 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 					DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
 					dn += (DstBmpInfo.bmBitsPixel / 8);
 					cn += (CtlBmpInfo.bmBitsPixel / 8);
-#if _MSC_VER > 1310
 #pragma warning( default : 6386 )
 #pragma warning( default : 6385 )
-#endif
 				}
 			}
 
@@ -617,11 +596,11 @@ void CComboBoxFx::SetFontEx(CString face, int size, int sizeToolTip, double zoom
 
 	if (face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, _T("%s"), face.GetString());
+		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, _T(""));
+		wsprintf(logFont.lfFaceName, L"");
 	}
 
 	m_Font.DeleteObject();
@@ -669,18 +648,16 @@ void CComboBoxFx::OnMouseMove(UINT nFlags, CPoint point)
 
 void CComboBoxFx::OnMouseHover(UINT nFlags, CPoint point)
 {
-#if _MSC_VER > 1310
 	CComboBox::OnMouseHover(nFlags, point);
-#endif
+
 	m_bHover = TRUE;
 	Invalidate();
 }
 
 void CComboBoxFx::OnMouseLeave()
 {
-#if _MSC_VER > 1310
 	CComboBox::OnMouseLeave();
-#endif
+
 	m_bTrackingNow = FALSE;
 	m_bHover = FALSE;
 	Invalidate();
@@ -700,22 +677,13 @@ void CComboBoxFx::OnKillfocus()
 
 BOOL CComboBoxFx::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
-	HCURSOR hCursor = NULL;
 	if (m_bHandCursor)
 	{
-		hCursor = AfxGetApp()->LoadStandardCursor(IDC_HAND);
-		if (hCursor)
-		{
-			::SetCursor(hCursor);
-		}
+		::SetCursor(AfxGetApp()->LoadStandardCursor(IDC_HAND));
 	}
 	else
 	{
-		hCursor = AfxGetApp()->LoadStandardCursor(IDC_ARROW);
-		if (hCursor)
-		{
-			::SetCursor(hCursor);
-		}
+		::SetCursor(AfxGetApp()->LoadStandardCursor(IDC_ARROW));
 	}
 
 	return TRUE;
@@ -770,7 +738,7 @@ void CComboBoxFx::InitToolTip()
 		m_ToolTip.Create(this, TTS_ALWAYSTIP | TTS_BALLOON | TTS_NOANIMATE | TTS_NOFADE);
 		m_ToolTip.Activate(FALSE);
 		m_ToolTip.SetFont(&m_FontToolTip);
-		m_ToolTip.SendMessage(TTM_SETMAXTIPWIDTH, 0, 1024);
+		m_ToolTip.SendMessageW(TTM_SETMAXTIPWIDTH, 0, 1024);
 		m_ToolTip.SetDelayTime(TTDT_AUTOPOP, 8000);
 		m_ToolTip.SetDelayTime(TTDT_INITIAL, 500);
 		m_ToolTip.SetDelayTime(TTDT_RESHOW, 100);

@@ -190,11 +190,11 @@ void CHeaderCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double f
 	logFont.lfWeight = fontWeight;
 	if (face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, _T("%s"), face.GetString());
+		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, _T(""));
+		wsprintf(logFont.lfFaceName, L"");
 	}
 
 	m_Font.DeleteObject();

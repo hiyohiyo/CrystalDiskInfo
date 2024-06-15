@@ -8,18 +8,6 @@
 #include "../stdafx.h"
 #include "ButtonFx.h"
 
-#if _MSC_VER == 1310
-#define ON_WM_MOUSEHOVER() \
-	{ 0x2A1 /*WM_MOUSEHOVER*/, 0, 0, 0, AfxSig_vwp, \
-		(AFX_PMSG)(AFX_PMSGW) \
-		(static_cast< void (AFX_MSG_CALL CWnd::*)(UINT, CPoint) > (OnMouseHover)) },
-
-#define ON_WM_MOUSELEAVE() \
-	{ 0x2A3 /*WM_MOUSELEAVE*/, 0, 0, 0, AfxSig_vv, \
-		(AFX_PMSG)(AFX_PMSGW) \
-		(static_cast< void (AFX_MSG_CALL CWnd::*)(void) > (OnMouseLeave)) },
-#endif
-
 ////------------------------------------------------
 //   CButtonFx
 ////------------------------------------------------
@@ -55,12 +43,6 @@ CButtonFx::CButtonFx()
 	m_bTrackingNow = FALSE;
 	m_bHandCursor = FALSE;
 	m_bSelected = FALSE;
-
-	// Margin
-	m_Margin.top = 0;
-	m_Margin.left = 0;
-	m_Margin.bottom = 0;
-	m_Margin.right = 0;
 }
 
 CButtonFx::~CButtonFx()
@@ -86,7 +68,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
-	LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame)
+	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -176,16 +158,12 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 			for (int x = 0; x < m_CtrlSize.cx; x++)
 			{
 				DWORD p = (y * m_CtrlSize.cx + x) * 4;
-#if _MSC_VER > 1310
 #pragma warning( disable : 6386 )
-#endif
 				bitmapBits[p + 0] = b;
 				bitmapBits[p + 1] = g;
 				bitmapBits[p + 2] = r;
 				bitmapBits[p + 3] = a;
-#if _MSC_VER > 1310
 #pragma warning( default : 6386 )
-#endif
 			}
 		}
 
@@ -198,7 +176,7 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 	return TRUE;
 }
 
-BOOL CButtonFx::ReloadImage(LPCTSTR imagePath, UINT imageCount)
+BOOL CButtonFx::ReloadImage(LPCWSTR imagePath, UINT imageCount)
 {
 	if (imagePath != NULL && m_ImagePath.Compare(imagePath) == 0)
 	{
@@ -333,60 +311,47 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 			ctrlBitmap.GetBitmap(&CtlBmpInfo);
 			DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
 			DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
+			BYTE* DstBuffer = new BYTE[DstMemSize];
+			bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
+			BYTE* CtlBuffer = new BYTE[CtlMemSize];
+			ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
-			if ((DstBmpInfo.bmWidthBytes != CtlBmpInfo.bmWidthBytes)
-			||  (DstBmpInfo.bmHeight != CtlBmpInfo.bmHeight / m_ImageCount))
+			int baseY = m_CtrlSize.cy * no;
+			for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
 			{
-				// Error Check //
+				int dn = py * DstLineBytes;
+				int cn = (baseY + py) * CtlLineBytes;
+				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+				{
+#pragma warning( disable : 6385 )
+#pragma warning( disable : 6386 )
+					BYTE a = CtlBuffer[cn + 3];
+					BYTE na = 255 - a;
+					DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+					DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+					DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+					dn += (DstBmpInfo.bmBitsPixel / 8);
+					cn += (CtlBmpInfo.bmBitsPixel / 8);
+#pragma warning( default : 6386 )
+#pragma warning( default : 6385 )
+				}
+			}
+
+			if (color == 32)
+			{
+				DrawBmp.SetBitmapBits(DstMemSize, DstBuffer);
 			}
 			else
 			{
-				BYTE* DstBuffer = new BYTE[DstMemSize];
-				bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
-				BYTE* CtlBuffer = new BYTE[CtlMemSize];
-				ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
-
-				int baseY = m_CtrlSize.cy * no;
-				for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
-				{
-					int dn = py * DstLineBytes;
-					int cn = (baseY + py) * CtlLineBytes;
-					for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
-					{
-#if _MSC_VER > 1310
-#pragma warning( disable : 6385 )
-#pragma warning( disable : 6386 )
-#endif
-						BYTE a = CtlBuffer[cn + 3];
-						BYTE na = 255 - a;
-						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
-						DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
-						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
-						dn += (DstBmpInfo.bmBitsPixel / 8);
-						cn += (CtlBmpInfo.bmBitsPixel / 8);
-#if _MSC_VER > 1310
-#pragma warning( default : 6386 )
-#pragma warning( default : 6385 )
-#endif
-					}
-				}
-
-				if (color == 32)
-				{
-					DrawBmp.SetBitmapBits(DstMemSize, DstBuffer);
-				}
-				else
-				{
-					bk32Bitmap->SetBitmapBits(DstMemSize, DstBuffer);
-					::BitBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
-					bk32Image.ReleaseDC();
-				}
-				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
-
-				delete[] DstBuffer;
-				delete[] CtlBuffer;
+				bk32Bitmap->SetBitmapBits(DstMemSize, DstBuffer);
+				::BitBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
+				bk32Image.ReleaseDC();
 			}
+			DrawString(pDrawBmpDC, lpDrawItemStruct);
+			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+
+			delete[] DstBuffer;
+			delete[] CtlBuffer;
 		}
 		else
 		{
@@ -473,11 +438,11 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	CString resToken;
 	int curPos = 0;
-	resToken = title.Tokenize(_T("\r\n"), curPos);
-	while (resToken != _T(""))
+	resToken = title.Tokenize(L"\r\n", curPos);
+	while (resToken != L"")
 	{
 		arr.Add(resToken);
-		resToken = title.Tokenize(_T("\r\n"), curPos);
+		resToken = title.Tokenize(L"\r\n", curPos);
 	}
 
 	for (int i = 0; i < arr.GetCount(); i++)
@@ -622,11 +587,11 @@ void CButtonFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRa
 
 	if (face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, _T("%s"), face.GetString());
+		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, _T(""));
+		wsprintf(logFont.lfFaceName, L"");
 	}
 
 	m_Font.DeleteObject();
@@ -670,9 +635,7 @@ void CButtonFx::OnMouseMove(UINT nFlags, CPoint point)
 
 void CButtonFx::OnMouseHover(UINT nFlags, CPoint point)
 {
-#if _MSC_VER > 1310
 	CButton::OnMouseHover(nFlags, point);
-#endif
 
 	m_bHover = TRUE;
 	Invalidate();
@@ -680,9 +643,7 @@ void CButtonFx::OnMouseHover(UINT nFlags, CPoint point)
 
 void CButtonFx::OnMouseLeave()
 {
-#if _MSC_VER > 1310
 	CButton::OnMouseLeave();
-#endif
 
 	m_bTrackingNow = FALSE;
 	m_bHover = FALSE;
@@ -703,22 +664,13 @@ void CButtonFx::OnKillfocus()
 
 BOOL CButtonFx::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
-	HCURSOR hCursor = NULL;
 	if (m_bHandCursor)
 	{
-		hCursor = AfxGetApp()->LoadStandardCursor(IDC_HAND);
-		if (hCursor)
-		{
-			::SetCursor(hCursor);
-		}		
+		::SetCursor(AfxGetApp()->LoadStandardCursor(IDC_HAND));
 	}
 	else
 	{
-		hCursor = AfxGetApp()->LoadStandardCursor(IDC_ARROW);
-		if (hCursor)
-		{
-			::SetCursor(hCursor);
-		}
+		::SetCursor(AfxGetApp()->LoadStandardCursor(IDC_ARROW));
 	}
 
 	return TRUE;
@@ -778,7 +730,7 @@ void CButtonFx::InitToolTip()
 		m_ToolTip.Create(this, TTS_ALWAYSTIP | TTS_BALLOON | TTS_NOANIMATE | TTS_NOFADE);
 		m_ToolTip.Activate(FALSE);
 		m_ToolTip.SetFont(&m_FontToolTip);
-		m_ToolTip.SendMessage(TTM_SETMAXTIPWIDTH, 0, 1024);
+		m_ToolTip.SendMessageW(TTM_SETMAXTIPWIDTH, 0, 1024);
 		m_ToolTip.SetDelayTime(TTDT_AUTOPOP, 8000);
 		m_ToolTip.SetDelayTime(TTDT_INITIAL, 500);
 		m_ToolTip.SetDelayTime(TTDT_RESHOW, 100);

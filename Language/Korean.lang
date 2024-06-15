@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Lyttiya, Gihun Ham, 로웰
-VERSION=9.0.0
+VERSION=9.3.0
 
 [Language]
 LANGUAGE=한국어
@@ -9,7 +9,7 @@ CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
 LOCALE_ID=0x0412
 
 [Url]
-WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/Self-Monitoring%2C_Analysis_and_Reporting_Technology
+WIKIPEDIA_SMART=https://ko.wikipedia.org/wiki/S.M.A.R.T.
 
 [Menu]
 FILE=파일(&F)
@@ -19,14 +19,14 @@ EDIT=편집(&E)
 COPY=복사(&C)
 FUNCTION=기능(&U)
 HIDE_SMART_INFO=S.M.A.R.T. 정보 숨기기(&S)
-HIDE_SERIAL_NUMBER=일련 번호 숨기기(&N)
+HIDE_SERIAL_NUMBER=일련번호 숨기기(&N)
 SHOW_DRIVE_LETTER=드라이브 문자 표시(&L)
 ADVANCED_DISK_SEARCH=고급 디스크 검색(&A)
 EVENT_LOG=이벤트 기록(&E)
 AAM_APM_CONTROL=자동 소음 관리(AAM)/고급 전원 관리(APM) 제어(&M)
 AUTO_AAM_APM_ADAPTION=자동 소음 관리(AAM)/고급 전원 관리(APM) 채용(&P)
 RESIDENT=트레이 아이콘에 표시(&I)
-STARTUP=시스템 시작시 자동 실행(&S)
+STARTUP=시스템 시작 시 자동 실행(&S)
 OPEN_DISK_MANAGEMENT="디스크 관리" 열기(&D)
 OPEN_DEVICE_MANAGER="장치 관리자" 열기(&M)
 ADVANCED_FEATURE=고급 기능(&F)
@@ -42,9 +42,9 @@ GRAPH=그래프(&G)
 THEME=테마(&T)
 DISK=디스크(&D)
 HELP=도움말(&H)
-HELP=도움말 [웹](&H)
+HELP_WEB=도움말 [Web](&H)
 HELP_ABOUT=CrystalDiskInfo 정보(&A)
-HELP_ABOUT_SMART=S.M.A.R.T. 위키백과 웹 정보(&S)
+HELP_ABOUT_SMART=S.M.A.R.T.에 대해서 (위키백과) [Web](&S)
 LANGUAGE=언어
 ITEM=항목(&I)
 TEMPERATURE_TYPE=온도 표시(&E)
@@ -62,7 +62,7 @@ SOUTH_EAST=오른쪽 아래(&S)
 MAX_PLOT_POINT=최대 표시 지점(&M)
 TIME_FORMAT=시간 표시 형식(&T)
 PAINT_WEEKEND=주간 색칠 표시(&P)
-ALL=모두(&A)
+ALL=전체(&A)
 
 ;2.7.0
 COPY_OPTION=클립보드로 복사할 방식 선택(&O)
@@ -88,7 +88,7 @@ WORKAROUND=해결 방법(&O)
 ;4.0.0
 ALERT_MAIL=메일 경고
 MAIL_SETTINGS=메일 설정
-SMART_IN_ENGLISH=영문 S.M.A.R.T.
+SMART_IN_ENGLISH=영문 S.M.A.R.T.로 표시
 FONT_SETTING=글꼴 설정
 
 ;5.0.0
@@ -117,10 +117,10 @@ DRIVE_LETTER=드라이브 문자
 DRIVE_MENU_NUMBER=드라이브 표시 대수
 
 ;9.2.0
-VOICE=Voice
+VOICE=음성
 
 ;9.3.0
-STARTUP_VOICE=Startup Voice
+STARTUP_VOICE=시작 시 재생할 음성
 
 [TrayMenu]
 EXIT=종료
@@ -162,13 +162,13 @@ DISK=디스크
 LIST_ID=ID
 LIST_CURRENT=현재
 LIST_WORST=최악
-LIST_THRESHOLD=임계값
-LIST_RAW_VALUES=원시값
+LIST_THRESHOLD=임계 값
+LIST_RAW_VALUES=원시 값
 ;LIST_DESCRIPTION=설명
 LIST_ATTRIBUTE_NAME=특성 이름
 
 FIRMWARE=펌웨어
-SERIAL_NUMBER=일련 번호
+SERIAL_NUMBER=일련번호
 INTERFACE=인터페이스
 STANDARD=표준
 TRANSFER_MODE=전송 모드
@@ -211,7 +211,7 @@ ENABLED=사용
 DISABLED=사용 안 함
 
 [Message]
-DETECT_UNIT_POWER_ON_HOURS="사용 시간" 단위 검색 중입니다... (약 130초 필요.)
+DETECT_UNIT_POWER_ON_HOURS="사용 시간" 단위를 검색하고 있습니다... (약 130초 필요.)
 DETECT_DISK=디스크를 검색하고 있습니다...
 PLEASE_ENABLE_WMI=WMI(Windows 관리 도구)를 활성화하세요
 PLEASE_RESTART_THIS_APPLICATION=이 응용 프로그램 테마를 변경하려면 다시 시작하세요
@@ -361,7 +361,7 @@ F1=총 쓰기량 (호스트)
 F2=총 읽기량 (호스트)
 
 [SmartMtron]
-BB=전체 삭제 수
+BB=총 삭제 횟수
 
 [SmartIndilinx]
 01=읽기 오류율
@@ -461,7 +461,7 @@ B8=오류 검출 횟수
 E9=미디어 소모 지표
 
 [SmartSandForce] ;Updated 3.7.0
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 블록 수
 09=사용 시간
 0C=사용 횟수
@@ -510,7 +510,7 @@ AD=삭제 횟수
 
 [SmartMicron] ;Added 4.0.0/ Updated 6.6.0
 ; RAIN = Redundant Array of Independent NAND (복수 배열 독립 NAND)
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 NAND 블록 수
 09=사용 시간
 0C=사용 횟수
@@ -538,7 +538,7 @@ C4=재할당된 이벤트 수
 C5=보류 중인 섹터 수
 C6=회복 불가능한 오류 횟수 (스마트 오프라인 검사)
 C7=울트라 DMA CRC 오류율
-CA=남은 수명(%)
+CA=남은 수명 (%)
 CE=쓰기 오류율
 D2=성공적인 RAIN 복구 횟수
 EA=총 읽기 바이트
@@ -561,7 +561,7 @@ DF=총 백그라운드 스캔 횟수
 
 [SmartMicronMU02] ;Updated 6.6.0
 ; RAIN = Redundant Array of Independent NAND (복수 배열 독립 NAND)
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 섹터 수
 09=사용 시간
 0C=사용 횟수
@@ -588,7 +588,7 @@ C4=재할당된 이벤트 수
 C5=보류 중인 섹터 수
 C6=회복 불가능한 오류 횟수 (스마트 오프라인 검사)
 C7=울트라 DMA CRC 오류율
-CA=남은 수명(%)
+CA=남은 수명 (%)
 CE=쓰기 오류율
 D2=성공적인 RAIN 복구 횟수
 EA=총 읽기 바이트 수
@@ -611,7 +611,7 @@ A4=총 삭제 횟수 (NAND)
 A5=최대 삭제 횟수 (NAND)
 A6=최소 삭제 횟수 (NAND)
 A7=평균 삭제 횟수 (NAND)
-A9=남은 수명(%)
+A9=남은 수명 (%)
 B5=쓰기 삭제 횟수
 B6=삭제 실패 횟수
 C0=전원 차단에 의한 자기 헤드 대피 횟수
@@ -632,7 +632,7 @@ FE=총 백그라운드 스캔 제한 횟수
 DF=총 백그라운드 스캔 횟수
 
 [SmartOcz] ;Added 4.5.0
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 03=스핀 업 시간
 04=시작/정지 횟수
 05=재할당된 섹터 수
@@ -683,8 +683,8 @@ B1=웨어 레벨링 횟수
 B2=사용된 예비 블록 수 (최악의 경우)
 B3=총 사용된 예비 블록 수
 B4=총 사용되지 않은 예비 블록 수
-B5=총 쓰기 실패 횟수
-B6=총 삭제 실패 횟수
+B5=쓰기 실패 횟수
+B6=삭제 실패 횟수
 B7=SATA 인터페이스 다운시프트 횟수
 B8=엔드 투 엔드 데이터 오류 정정 횟수
 BB=회복 불가능한 오류 횟수
@@ -710,7 +710,7 @@ AD=평균 쓰기/삭제 횟수
 AE=예기치 않은 전원 손실 횟수
 BB=보고된 회복 불가능한 오류 횟수
 C2=온도
-E6=총 쓰기/삭제 횟수(%)
+E6=총 쓰기/삭제 횟수 (%)
 E8=남은 예비 블록 수
 EA=총 쓰기/삭제 횟수(배드 블록 %)
 F1=총 쓰기량 (호스트)
@@ -758,7 +758,7 @@ F9=총 NAND 쓰기 횟수 (페이지)
 FB=총 NAND 읽기 횟수 (NAND)
 
 [SmartCorsair] ;Added 6.2.0
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 블록 수
 09=사용 시간
 0C=사용 횟수
@@ -878,7 +878,7 @@ F6=총 삭제 횟수
 0F=오류 정보 기록 항목 수
 
 [SmartRealtek] ; Added by Realtek
-01=읽기 오류율
+01=원시 데이터 오류율
 05=재할당된 섹터 수
 09=사용 시간
 0C=사용 횟수
@@ -928,8 +928,8 @@ B1=웨어 레벨링 횟수
 B2=사용된 예비 블록 수 (최악의 경우)
 B3=사용된 예비 블록 수 (SSD)
 B4=사용되지 않은 예비 블록 수 (SSD)
-B5=쓰기 실패 횟수 (SSD)
-B6=삭제 실패 횟수 (SSD)
+B5=쓰기 실패 횟수 (SSD 전체)
+B6=삭제 실패 횟수 (SSD 전체)
 B7=SATA 다운시프트 횟수
 B8=엔드 투 엔드 오류 감지 횟수
 BB=회복 불가능한 오류 횟수
@@ -1041,7 +1041,7 @@ A5=예약됨
 A6=예약됨
 A7=평균 삭제 횟수
 A8=예약됨
-A9=남은 수명(%)
+A9=남은 수명 (%)
 B1=예약됨
 B5=쓰기 실패 횟수
 B6=삭제 실패 횟수
@@ -1050,7 +1050,7 @@ C2=온도
 C3=복구된 하드웨어 ECC 오류 횟수
 C4=재할당된 이벤트 수
 C7=UDMA CRC 오류 횟수
-E7=남은 수명(%)
+E7=남은 수명 (%)
 E8=사용되지 않은 예비 블록 수
 F1=총 쓰기량 (호스트)
 F2=총 읽기량 (호스트)
@@ -1114,7 +1114,7 @@ F5=최대 삭제 횟수
 F6=총 삭제 횟수
 
 [SmartSsstc]
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 블록 수
 09=사용 시간
 0C=사용 횟수
@@ -1138,7 +1138,7 @@ C3=ECC 비율
 C6=회복 불가능한 오류 횟수 (오프라인)
 C7=SATA CRC 오류 횟수
 E5=전원 손실 보호 실패 횟수
-E7=남은 수명(%)
+E7=남은 수명 (%)
 E8=사용 가능한 예비 공간
 E9=총 쓰기량 (NAND)
 F1=총 쓰기량 (호스트)
@@ -1147,7 +1147,7 @@ F3=총 쓰기량 (NAND)
 
 [SmartIntelDc]
 ;https://github.com/hiyohiyo/CrystalDiskInfo/issues/18
-01=읽기 오류 횟수
+01=원시 데이터 읽기 오류 횟수
 05=재할당된 플래시 블록 수
 09=사용 시간
 0C=사용 횟수
@@ -1167,7 +1167,7 @@ C2=온도
 C5=보류 중인 섹터 수
 C6=회복 불가능한 오류 횟수 (오프라인)
 C7=CRC 오류 횟수
-CA=남은 수명(%)
+CA=남은 수명 (%)
 E2=일정 시간 부하 미디어 소모
 E3=일정 시간 부하 읽기/쓰기 비율
 E4=일정 시간 부하 타이머
@@ -1211,7 +1211,7 @@ A6=최소 삭제 횟수
 A7=평균 삭제 횟수
 A8=최대 삭제 횟수 (스펙)
 A9=남은 수명
-AF=총 쓰기 실패 횟수 (최악의 다이)
+AF=쓰기 실패 횟수 (최악의 다이)
 B0=총 삭제 실패 횟수 (최악의 다이)
 B1=웨어 레벨링 횟수
 B2=런타임 잘못된 블록 수
@@ -1300,8 +1300,8 @@ F2=총 읽기량 (호스트)
 FA=읽기 재시도 횟수 (NAND)
 
 [SmartSeagateIronWolf]
-; https://www.seagate.com/jp/ja/internal-hard-drives/ssd/ironwolf-nas-ssd/#specs
-01=읽기 오류율
+; https://www.seagate.com/www-content/manuals/ironwolf-110-ssd/pdf/IronWolf_110_SSD_PM-100841919_B.pdf
+01=원시 데이터 읽기 오류율
 05=재할당된 섹터 수
 09=사용 시간
 0C=사용 횟수
@@ -1436,7 +1436,7 @@ F3=NAND 온도
 F5=비트 오류 횟수
 
 [SmartScy] ;Added 8.12.8
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 섹터 수
 07=탐색 오류율
 09=사용 시간
@@ -1484,7 +1484,7 @@ F2=총 읽기량 (호스트)
 F5=총 쓰기량 (NAND)
 
 [SmartSanDiskHp] ;Added 8.17.0
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 블록 수
 09=사용 시간
 0C=사용 횟수
@@ -1511,7 +1511,7 @@ F4=발열 제어 상태
 F9=총 쓰기량 (NAND/TLC)
 
 [SmartSanDiskHpVenus] ;Added 8.17.0
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 블록 수
 09=사용 시간
 0C=사용 횟수
@@ -1547,8 +1547,8 @@ B1=웨어 레벨링 횟수
 B2=사용된 예비 블록 수 (최악의 경우)
 B3=사용된 예비 블록 수 (SSD)
 B4=남은 예비 블록 수 (SSD)
-B5=쓰기 실패 횟수 (SSD)
-B6=삭제 실패 횟수 (SSD)
+B5=쓰기 실패 횟수 (SSD 전체)
+B6=삭제 실패 횟수 (SSD 전체)
 BB=회복 불가능한 오류 횟수
 C2=온도
 C3=ECC 비율
@@ -1619,7 +1619,7 @@ F4=발열 제어 상태
 F9=총 쓰기량 (NAND/TLC)
 
 [SmartMicronMU03] ;Added 8.17.0
-01=읽기 오류율
+01=원시 데이터 읽기 오류율
 05=재할당된 NAND 블록 수
 09=사용 시간
 0C=사용 횟수
@@ -1664,12 +1664,60 @@ BF=깔끔한 종료 횟수
 C0=예기치 않은 전원 손실 횟수
 C2=온도
 C4=재할당된 이벤트 수
-E6=총 쓰기/삭제 횟수(%)
+E6=총 쓰기/삭제 횟수 (%)
 E8=남은 예비 블록 수
 E9=총 쓰기량 (NAND 64GB)
 EB=축전기 건강 상태
 F1=총 쓰기량 (호스트 64GB)
 F2=총 읽기량 (호스트 64GB)
 F4=발열 제어 활성화 횟수
-F5=남은 수명(%)
+F5=남은 수명 (%)
 FD=남은 SPI 테스트 횟수
+
+[SmartSiliconMotionCVC] ;Added 9.3.0
+05=재할당된 횟수
+09=사용 시간
+0C=사용 횟수
+A5=SLC 캐시
+AA=증가한 배드 블록 수
+AB=총 쓰기 실패 횟수
+AC=삭제 실패 횟수
+AD=평균 삭제 횟수
+AE=예기치 않은 전원 손실 횟수
+AF=쓰기 실패 횟수 (최악의 경우)
+B7=총 SATA 연결 속도 다운시프트 횟수
+B8=엔드 투 엔드 데이터 오류 정정 횟수
+BB=회복 불가능한 오류 횟수
+BD=최대 삭제 횟수
+BE=온도
+BF=최소 삭제 횟수
+C3=읽기 오류율
+C6=회복 불가능한 섹터 수 (오프라인 검사)
+C7=SATA CRC 오류 횟수
+CA=SSD 남은 수명
+E8=총 사용 가능한 횟수
+E9=총 쓰기량 (TLC NAND)
+F1=총 쓰기량 (호스트)
+F2=총 읽기량 (호스트)
+94=RAID 이벤트 횟수
+95=RAID 회복 불가능한 오류 횟수
+A7=SSD 보호 모드
+93=소프트 재시도 이벤트 횟수
+EA=총 쓰기량 (SLC NAND)
+
+[SmartAdataIndustrial] ;Added 9.3.1
+09=Power-On hours Count
+0C=Drive Power Cycle Count
+A7=SSD Protect Mode
+A8=SATA PHY Error Count
+A9=Bad Block Count
+AD=Erase Count
+AF=Bad Cluster Table Count
+B4=Spare block count left
+C0=Unexpected Power Loss Count
+C2=Temperature
+E7=SSD life left
+E9=Flash Write Sector Count
+EA=Flash Read Sector Count
+F1=Write Sector Count
+F2=Read Sector Count

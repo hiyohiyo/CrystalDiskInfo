@@ -174,13 +174,14 @@ typedef union _UNION_SMART_THRESHOLD
 	BYTE512 B;
 } UNION_SMART_THRESHOLD;
 
+#define DISKNAME_LENGTH									(20+1)	
 #define MODELNAME_LENGTH								(20+1)
 #define SERIALNUMBER_LENGTH								(20+1)
 #define DISK_FIRMWAREVERSION_LENGTH						9
 
 typedef struct _NVME_PORT
 {
-	uint8_t			ModelName[MODELNAME_LENGTH];					/* Model name of disk		*/
+	uint8_t			ModelName[DISKNAME_LENGTH];						/* Model name of disk		*/
 	uint8_t			SerialNumber[SERIALNUMBER_LENGTH];				/* Serial number of disk	*/
 	uint32_t		SectorSize;										/* 512 bytes or 4K          */
 	uint32_t		Capacity;										/* Disk capacity        	*/

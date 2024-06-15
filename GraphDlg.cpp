@@ -252,6 +252,7 @@ BEGIN_MESSAGE_MAP(CGraphDlg, CDHtmlMainDialog)
 	ON_COMMAND(ID_SSD_SANDISK_LENOVO_HELEN_VENUS, &CGraphDlg::OnSsdSanDiskLenovoHelenVenus)
 
 	ON_COMMAND(ID_SSD_SILICONMOTION_CVC, &CGraphDlg::OnSsdSiliconMotionCVC)
+	ON_COMMAND(ID_SSD_ADATA_INDUSTRIAL, &CGraphDlg::OnSsdAdataIndustrial)
 
 
 END_MESSAGE_MAP()
@@ -1440,6 +1441,7 @@ void CGraphDlg::InitMenu()
 	case CAtaSmart::SSD_VENDOR_YMTC: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_YMTC, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_SCY: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SCY, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_SILICONMOTION_CVC: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_SILICONMOTION_CVC, MF_BYCOMMAND); break;
+	case CAtaSmart::SSD_VENDOR_ADATA_INDUSTRIAL: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_ADATA_INDUSTRIAL, MF_BYCOMMAND); break;
 
 	case CAtaSmart::SSD_VENDOR_JMICRON_60X: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_JMICRON_60X, MF_BYCOMMAND); break;
 	case CAtaSmart::SSD_VENDOR_JMICRON_61X: menu->CheckMenuRadioItem(ID_HDD, ID_SSD_MAX, ID_SSD_JMICRON_61X, MF_BYCOMMAND); break;
@@ -1759,6 +1761,7 @@ void CGraphDlg::OnSsdKingstonDC500() { SetAttribute(ID_SSD_KINGSTON_DC500, CAtaS
 void CGraphDlg::OnSsdKingstonSA400() { SetAttribute(ID_SSD_KINGSTON_SA400, CAtaSmart::SSD_VENDOR_KINGSTON_SA400); }
 
 void CGraphDlg::OnSsdSiliconMotionCVC() { SetAttribute(ID_SSD_SILICONMOTION_CVC, CAtaSmart::SSD_VENDOR_SILICONMOTION_CVC); }
+void CGraphDlg::OnSsdAdataIndustrial() { SetAttribute(ID_SSD_ADATA_INDUSTRIAL, CAtaSmart::SSD_VENDOR_ADATA_INDUSTRIAL); }
 
 
 void CGraphDlg::SetAttribute(DWORD id, DWORD type)

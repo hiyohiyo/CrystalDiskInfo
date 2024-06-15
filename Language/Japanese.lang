@@ -1,6 +1,6 @@
 [Information]
 TRANSLATOR=hiyohiyo
-VERSION=9.3.0
+VERSION=9.3.1
 
 [Language]
 LANGUAGE=日本語
@@ -1667,32 +1667,49 @@ F5=残り寿命
 FD=SPI Tests Remaining
 
 [SmartSiliconMotionCVC] ;Added 9.3.0
-05=Re-Assigned Count
-09=Power-On Hours Count
-0C=Drive Power Cycle Count
-A5=SLC Cache
-AA=Grown Bad Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Avg Erase Count
-AE=Unexpected Power Loss Count
-AF=Program Fail Count (Worst case)
-B7=Total SATA Link Speed Downshift
-B8=End-to-End Data Errors corrected
-BB=Uncorrectable Errors
-BD=Max Erase Count
-BE=Temperature
-BF=Min Erase Count
-C3=Read Error Rate
-C6=Off-Line Scan Uncorrectable Sector Count
-C7=SATA CRC Error Count
-CA=SSD Life Left
-E8=Total Spare Counts
-E9=TLC NAND Write
-F1=Host Write
-F2=Host Read
-94=RAID Event Count
-95=RAID Uncorrectable Count
-A7=SSD Protect Mode
-93=Soft Retry Event Count
-EA=SLC NAND Write
+05=代替処理済のブロック数
+09=使用時間
+0C=電源投入回数
+A5=SLC キャッシュ
+AA=新規不良ブロック数
+AB=書き込み失敗回数
+AC=消去失敗回数
+AD=平均ブロック消去回数
+AE=予期せぬ電源断回数
+AF=書き換え失敗回数 (ワーストケース)
+B7=SATA インターフェースダウンシフト
+B8=エラー訂正回数
+BB=訂正不可能エラー数
+BD=最大消去回数
+BE=温度
+BF=最小消去回数
+C3=リードエラーレート
+C6=回復不可能セクタ数
+C7=SATA CRC エラー数
+CA=残り寿命
+E8=残り予備ブロック
+E9=総書き込み量（TLC NAND）
+F1=総書き込み量 (ホスト)
+F2=総読み込み量 (ホスト)
+94=RAID イベント回数
+95=RAID 訂正不可能回数
+A7=SSD プロテクトモード
+93=ソフトリトライイベント回数
+EA=総書き込み量（SLC NAND）
+
+[SmartAdataIndustrial] ;Added 9.3.1
+09=使用時間
+0C=電源投入回数
+A7=SSD プロテクトモード
+A8=SATA PHY エラー数
+A9=不良ブロック数
+AD=消去ブロック数
+AF=不良クラスタテーブル数
+B4=残り予備ブロック
+C0=予期せぬ電源断回数
+C2=温度
+E7=残り寿命
+E9=総書き込み量 (NAND)
+EA=総読み込み量 (NAND)
+F1=総書き込み量 (ホスト)
+F2=総読み込み量 (ホスト)

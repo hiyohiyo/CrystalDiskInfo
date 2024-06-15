@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=hiyohiyo
-VERSION=9.3.0
+VERSION=9.3.1
 
 [Language]
 LANGUAGE=English
@@ -667,6 +667,9 @@ FB=NAND Read Count
 ;Updated 6.7.0
 F1=Total Host Writes
 F2=Total Host Reads
+
+;Updated 9.4.0
+F9=Total NAND Writes
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=Read Error Rate
@@ -1705,3 +1708,20 @@ F2=Host Read
 A7=SSD Protect Mode
 93=Soft Retry Event Count
 EA=SLC NAND Write
+
+[SmartAdataIndustrial] ;Added 9.3.1
+09=Power-On hours Count
+0C=Drive Power Cycle Count
+A7=SSD Protect Mode
+A8=SATA PHY Error Count
+A9=Bad Block Count
+AD=Erase Count
+AF=Bad Cluster Table Count
+B4=Spare block count left
+C0=Unexpected Power Loss Count
+C2=Temperature
+E7=SSD life left
+E9=Flash Write Sector Count
+EA=Flash Read Sector Count
+F1=Write Sector Count
+F2=Read Sector Count

@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=謝慶憲, chriszxl (小良奇), haobinnan
-VERSION=9.0.1
+VERSION=9.3.0
 
 [Language]
 LANGUAGE=正體中文
@@ -117,10 +117,10 @@ DRIVE_LETTER=磁碟機代號
 DRIVE_MENU_NUMBER=顯示磁碟機數量
 
 ;9.2.0
-VOICE=Voice
+VOICE=語音
 
 ;9.3.0
-STARTUP_VOICE=Startup Voice
+STARTUP_VOICE=啟動語音
 
 [TrayMenu]
 EXIT=結束
@@ -1661,3 +1661,51 @@ F2=對 SSD 累計讀取 64GB
 F4=存留期動態熱能管理機制啟用
 F5=磁碟機剩餘壽命百分比
 FD=剩餘 SPI 測試
+
+[SmartSiliconMotionCVC] ;Added 9.3.0
+05=重新分配計數
+09=總通電時間
+0C=磁碟開關電源次數
+A5=SLC 快取
+AA=增長的損壞區塊數
+AB=程式失敗次數
+AC=抹除失敗次數
+AD=平均抹除次數
+AE=未預期的電源中斷次數
+AF=程式失敗次數 (最壞情況)
+B7=SATA 連結總速度降低
+B8=終端校驗資料出錯已校正
+BB=無法校正的錯誤
+BD=最大抹除次數
+BE=溫度
+BF=最小抹除次數
+C3=讀取錯誤率
+C6=離線掃描無法校正的磁區計數
+C7=SATA CRC 錯誤次數
+CA=SSD 壽命剩下
+E8=備用總數
+E9=TLC NAND 寫入
+F1=主機寫入
+F2=主機讀取
+94=RAID 事件計數
+95=RAID 無法校正計數
+A7=SSD 保護模式
+93=軟重試事件計數
+EA=SLC NAND 寫入
+
+[SmartAdataIndustrial] ;Added 9.3.1
+09=Power-On hours Count
+0C=Drive Power Cycle Count
+A7=SSD Protect Mode
+A8=SATA PHY Error Count
+A9=Bad Block Count
+AD=Erase Count
+AF=Bad Cluster Table Count
+B4=Spare block count left
+C0=Unexpected Power Loss Count
+C2=Temperature
+E7=SSD life left
+E9=Flash Write Sector Count
+EA=Flash Read Sector Count
+F1=Write Sector Count
+F2=Read Sector Count

@@ -969,7 +969,9 @@
 #define ID_SSD_SANDISK_LENOVO_HELEN_VENUS 33048
 
 #define ID_SSD_SILICONMOTION_CVC		33049
-#define ID_SSD_MAX                      33050
+#define ID_SSD_ADATA_INDUSTRIAL		    33050
+
+#define ID_SSD_MAX                      33051
 
 #define ID_ATA_PASS_THROUGH_SMART       33052
 #define ID_ALERT_MAIL                   33053

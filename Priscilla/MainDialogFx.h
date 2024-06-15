@@ -39,7 +39,6 @@ protected:
 	void SetWindowTitle(CString message);
 	void UpdateThemeInfo();
 	COLORREF GetControlColor(CString name, BYTE defaultColor, CString theme);
-	COLORREF GetBackgroundColor(CString name, CString theme);
 	BYTE GetControlAlpha(CString name, BYTE defaultAlpha, CString theme);
 	BYTE GetCharacterPosition(CString theme);
 	CString GetParentTheme(int i, CString theme);

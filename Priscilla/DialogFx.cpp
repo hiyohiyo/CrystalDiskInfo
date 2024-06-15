@@ -47,10 +47,8 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_FontRatio = 1.0;
 	m_FontRender = CLEARTYPE_NATURAL_QUALITY;
 
-	m_SizeX = 0;
 	m_MaxSizeX = 65535;
 	m_MinSizeX = 0;
-	m_SizeY = 0;
 	m_MaxSizeY = 65535;
 	m_MinSizeY = 0;
 
@@ -58,40 +56,6 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_Dpi = 96;
 	m_ZoomRatio = 1.0;
 	m_ZoomType = ZoomTypeAuto;
-
-	// Color for SubClass
-	m_LabelText = 0x00000000;
-	m_MeterText = 0x00000000;
-	m_ComboText = 0x00000000;
-	m_ComboTextSelected = 0x00808080;
-	m_ComboBk = 0x00FFFFFF;
-	m_ComboBkSelected = 0x00808080;
-	m_ButtonText = 0x00000000;
-	m_EditText = 0x00000000;
-	m_EditBk = 0x00FFFFFF;
-	m_ListText1 = 0x00000000;
-	m_ListText2 = 0x00000000;
-	m_ListTextSelected = 0x00000000;
-	m_ListBk1 = 0x00FFFFFF;
-	m_ListBk2 = 0x00FFFFFF;
-	m_ListBkSelected = 0x00808080;
-	m_ListLine1 = 0x00000000;
-	m_ListLine2 = 0x00000000;
-	m_Glass = 0x00808080;
-	m_Frame = 0x00808080;
-	m_Background = 0xFFFFFFFF; // Disabled
-
-	m_ComboAlpha = 0;
-	m_EditAlpha = 0;
-	m_GlassAlpha = 0;
-
-	m_CharacterPosition = 0;
-
-	// Theme for SubClass
-	m_OffsetX = 0;
-
-	// Voice for SubClass
-	m_VoiceVolume = 0;
 }
 
 CDialogFx::~CDialogFx()
@@ -131,39 +95,28 @@ BOOL CDialogFx::Create(UINT nIDTemplate, CWnd* pDlgWnd, UINT menuId, CWnd* pPare
 	return CDialog::Create(nIDTemplate, pParentWnd);
 }
 
-int CDialogFx::GetDpi()
-{
-	INT dpi = 96;
-	CDC* pDC = GetDC();
-	dpi = GetDeviceCaps(pDC->m_hDC, LOGPIXELSY);
-	ReleaseDC(pDC);
-
-	HMODULE hModule = GetModuleHandle(_T("Shcore.dll"));
-	if (hModule)
-	{
-		typedef HRESULT(WINAPI* FuncGetDpiForMonitor) (HMONITOR hmonitor, UINT dpiType, UINT* dpiX, UINT* dpiY);
-		typedef HMONITOR(WINAPI* FuncMonitorFromWindow) (HWND hwnd, DWORD dwFlags);
-		
-		FuncGetDpiForMonitor pGetDpiForMonitor = (FuncGetDpiForMonitor)GetProcAddress(hModule, "GetDpiForMonitor");
-		FuncMonitorFromWindow pMonitorFromWindow = (FuncMonitorFromWindow)GetProcAddress(hModule, "MonitorFromWindow");
-
-		if (pGetDpiForMonitor && pMonitorFromWindow)
-		{
-			UINT dpiX, dpiY;
-			pGetDpiForMonitor(pMonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), 0, &dpiX, &dpiY);
-			dpi = dpiY;
-		}
-	}
-
-	return dpi;
-}
-
 BOOL CDialogFx::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
 	m_bHighContrast = IsHighContrast();
-	m_Dpi = GetDpi();
+	CDC *pDC = GetDC();
+	m_Dpi = GetDeviceCaps(pDC->m_hDC, LOGPIXELSY);
+	ReleaseDC(pDC);
+
+	HMODULE hModule = GetModuleHandle(L"Shcore.dll");
+	if (hModule)
+	{
+		typedef HRESULT(WINAPI* FuncGetDpiForMonitor) (HMONITOR hmonitor, UINT dpiType, UINT* dpiX, UINT* dpiY);
+		FuncGetDpiForMonitor pGetDpiForMonitor = (FuncGetDpiForMonitor)GetProcAddress(hModule, "GetDpiForMonitor");
+		if (pGetDpiForMonitor)
+		{
+			UINT dpiX, dpiY;
+			pGetDpiForMonitor(MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), 0, &dpiX, &dpiY);
+			m_Dpi = dpiY;
+		}
+	}
+
 	m_hAccelerator = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR));
 
 	// m_bInitializing = FALSE;
@@ -199,7 +152,6 @@ void CDialogFx::PostNcDestroy()
 
 void CDialogFx::UpdateDialogSize()
 {
-#if _MSC_VER > 1310
 	if (! m_bDisableDarkMode)
 	{
 		m_bDarkMode = SetDarkMode(m_hWnd);
@@ -209,7 +161,6 @@ void CDialogFx::UpdateDialogSize()
 		UnsetDarkMode(m_hWnd);
 		m_bDarkMode = FALSE;
 	}
-#endif
 }
 
 void CDialogFx::SetClientSize(int sizeX, int sizeY, double zoomRatio)
@@ -314,12 +265,7 @@ void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 
 		m_BrushDlg.DeleteObject();
 		COLORREF bkColor;
-
-		if (m_Background != 0xFFFFFFFF)
-		{
-			bkColor = m_Background;
-		}
-		else if (bDarkMode)
+		if (bDarkMode)
 		{
 			bkColor = RGB(32, 32, 32);
 		}
@@ -337,7 +283,7 @@ void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 
 void CDialogFx::SetWindowTitle(CString title)
 {
-	SetWindowText(_T(" ") + title + _T(" "));
+	SetWindowText(L" " + title + L" ");
 }
 
 void CDialogFx::OnOK()
@@ -452,28 +398,28 @@ BOOL CDialogFx::IsDisableDarkMode()
 CString CDialogFx::IP(CString imageName) /// ImagePath
 {
 	CString imagePath;
-	imagePath.Format(_T("%s%s\\%s-%03d.png"), m_ThemeDir.GetString(), m_CurrentTheme.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
+	imagePath.Format(L"%s%s\\%s-%03d.png", m_ThemeDir.GetString(), m_CurrentTheme.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
 	if (IsFileExist(imagePath))
 	{
 		return imagePath;
 	}
-	imagePath.Format(_T("%s%s\\%s-%03d.png"), m_ThemeDir.GetString(), m_ParentTheme1.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
+	imagePath.Format(L"%s%s\\%s-%03d.png", m_ThemeDir.GetString(), m_ParentTheme1.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
 	if (IsFileExist(imagePath))
 	{
 		return imagePath;
 	}
-	imagePath.Format(_T("%s%s\\%s-%03d.png"), m_ThemeDir.GetString(), m_ParentTheme2.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
+	imagePath.Format(L"%s%s\\%s-%03d.png", m_ThemeDir.GetString(), m_ParentTheme2.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
 	if (IsFileExist(imagePath))
 	{
 		return imagePath;
 	}
-	imagePath.Format(_T("%s%s\\%s-%03d.png"), m_ThemeDir.GetString(), m_DefaultTheme.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
+	imagePath.Format(L"%s%s\\%s-%03d.png", m_ThemeDir.GetString(), m_DefaultTheme.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
 	if (IsFileExist(imagePath))
 	{
 		return imagePath;
 	}
 
-	return _T("");
+	return L"";
 }
 
 CString CDialogFx::i18n(CString section, CString key, BOOL inEnglish)
@@ -483,16 +429,16 @@ CString CDialogFx::i18n(CString section, CString key, BOOL inEnglish)
 
 	if(inEnglish)
 	{
-		GetPrivateProfileStringFx(section, key, _T(""), str, 256, m_DefaultLangPath);
+		GetPrivateProfileStringFx(section, key, L"", str, 256, m_DefaultLangPath);
 		cstr = str;
 	}
 	else
 	{
-		GetPrivateProfileStringFx(section, key, _T(""), str, 256, m_CurrentLangPath);
+		GetPrivateProfileStringFx(section, key, L"", str, 256, m_CurrentLangPath);
 		cstr = str;
 		if(cstr.IsEmpty())
 		{
-			GetPrivateProfileStringFx(section, key, _T(""), str, 256, m_DefaultLangPath);
+			GetPrivateProfileStringFx(section, key, L"", str, 256, m_DefaultLangPath);
 			cstr = str;
 		}
 	}
@@ -503,18 +449,17 @@ CString CDialogFx::i18n(CString section, CString key, BOOL inEnglish)
 void CDialogFx::OpenUrl(CString url)
 {
 	INT_PTR result = 0;
-	result = (INT_PTR)(ShellExecute(NULL, _T("open"), url, NULL, NULL, SW_SHOWNORMAL));
+	result = (INT_PTR)(ShellExecute(NULL, L"open", url, NULL, NULL, SW_SHOWNORMAL));
 	if(result <= 32)
 	{
 		CString args;
-		args.Format(_T("url.dll,FileProtocolHandler %s"), url.GetString());
-		ShellExecute(NULL, _T("open"), _T("rundll32.exe"), args, NULL, SW_SHOWNORMAL);
+		args.Format(L"url.dll,FileProtocolHandler %s", url.GetString());
+		ShellExecuteW(NULL, L"open", L"rundll32.exe", args, NULL, SW_SHOWNORMAL);
 	}
 }
 
 void CDialogFx::SetLayeredWindow(HWND hWnd, BYTE alpha)
 {
-#if _MSC_VER > 1310
 	if (IsWin2k()) { return; }
 
 	::SetWindowLong(hWnd, GWL_EXSTYLE, ::GetWindowLong(hWnd, GWL_EXSTYLE) ^ WS_EX_LAYERED);
@@ -527,7 +472,6 @@ void CDialogFx::SetLayeredWindow(HWND hWnd, BYTE alpha)
 	{
 		::SetLayeredWindowAttributes(hWnd, 0, alpha, LWA_ALPHA);
 	}
-#endif
 }
 
 //------------------------------------------------
@@ -596,16 +540,13 @@ afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 	m_Dpi = (INT)HIWORD(wParam);
 
-#if _MSC_VER > 1310
-	if (IsWindowsBuildOrGreater(16299)) // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+	if (IsWindowBuildOrGreater(16299)) // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
 	{
 		ChangeZoomType(m_ZoomType);
 		m_bDpiChanging = TRUE;
 		SetTimer(TimerUpdateDialogSizeDpiChanged, TIMER_UPDATE_DIALOG, NULL);
 	}
-	else 
-#endif	
-	if(m_ZoomType == ZoomTypeAuto)
+	else if(m_ZoomType == ZoomTypeAuto)
 	{
 		DWORD oldZoomRatio = (DWORD)(m_ZoomRatio * 100);
 		if (ChangeZoomType(m_ZoomType) != oldZoomRatio)
@@ -651,8 +592,7 @@ afx_msg LRESULT CDialogFx::OnSettingChange(WPARAM wParam, LPARAM lParam)
 {
 	if (m_bInitializing) { return 0; }
 
-	if (!lstrcmp(LPCTSTR(lParam), _T("ImmersiveColorSet")))
-	{
+	if (!lstrcmp(LPCTSTR(lParam), L"ImmersiveColorSet")) {
 		SetTimer(TimerUpdateDialogSizeSettingChange, TIMER_UPDATE_DIALOG, NULL);
 	}
 

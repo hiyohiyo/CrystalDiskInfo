@@ -104,7 +104,9 @@ static const TCHAR* ssdVendorString[] =
 	_T(""),	  // _T("SmartSanDiskLenovo"),
 	_T(""),	  // _T("SmartSanDiskLenovoHelenVenus"),
 	_T(""),	  // _T("SmartSanDiskCloud"),
-	_T("mc"),	  // _T("SmartSiliconMotionCVC"),
+	_T("mc"), // _T("SmartSiliconMotionCVC"),
+	_T("ai"), // _T("SmartAdataIndustrial"),
+
 };
 
 static const TCHAR* attributeString[] =
@@ -159,6 +161,7 @@ static const TCHAR* attributeString[] =
 	_T("SmartSanDiskLenovoHelenVenus"),
 	_T("SmartSanDiskCloud"),
 	_T("SmartSiliconMotionCVC"),
+	_T("SmartAdataIndustrial"),
 };
 
 static const TCHAR* deviceFormFactorString[] =
@@ -249,6 +252,7 @@ public:
 		SSD_VENDOR_SANDISK_CLOUD = 48,
 
 		SSD_VENDOR_SILICONMOTION_CVC = 49,
+		SSD_VENDOR_ADATA_INDUSTRIAL = 50,
 
 		SSD_VENDOR_MAX = 99,
 
@@ -2142,8 +2146,9 @@ protected:
 	BOOL IsSsdScy(ATA_SMART_INFO& asi);
 	BOOL IsSsdRecadata(ATA_SMART_INFO& asi);
 	BOOL IsSsdGeneral(ATA_SMART_INFO& asi);
-
-//	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
+	BOOL IsSsdAdataIndustrial(ATA_SMART_INFO& asi);
+		
+	//	INT CheckPlextorNandWritesUnit(ATA_SMART_INFO &asi);
 
 	static int __cdecl CompareDriveLetter(const void *p1, const void *p2);
 	static int __cdecl ComparePhysicalDriveId(const void* p1, const void* p2);
