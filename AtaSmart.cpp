@@ -5140,13 +5140,6 @@ BOOL CAtaSmart::IsSsdOcz(ATA_SMART_INFO &asi)
 	CString modelUpper = asi.Model;
 	modelUpper.MakeUpper();
 
-	// Radeon R7 2024/06/13
-	if (modelUpper.Find(_T("RADEON R7")) == 0)
-	{
-		flagSmartType = TRUE;
-		return TRUE;
-	}
-
 	// OCZ-TRION100 2015/11/25
 	if (modelUpper.Find(_T("OCZ-TRION")) == 0)
 	{
@@ -5177,6 +5170,13 @@ BOOL CAtaSmart::IsSsdOczVector(ATA_SMART_INFO &asi)
 	BOOL flagSmartType = FALSE;
 	CString modelUpper = asi.Model;
 	modelUpper.MakeUpper();
+
+	// Radeon R7 2024/06/13
+	if (modelUpper.Find(_T("RADEON R7")) == 0)
+	{
+		flagSmartType = TRUE;
+		return TRUE;
+	}
 
 	/*
 	// 2013/1/19
