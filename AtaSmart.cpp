@@ -109,7 +109,9 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 		||  (vars[i].CommandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_REALTEK && GetSmartAttributeNVMeRealtek(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+#ifdef JMICRON_USB_RAID_SUPPORT
 		||  (vars[i].CommandType == CMD_TYPE_JMS586 && GetSmartAttributeNVMeJMS586(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+#endif
 			)
 		{
 			vars[i].Temperature = vars[i].SmartReadData[0x2] * 256 + vars[i].SmartReadData[0x1] - 273;
@@ -2753,7 +2755,6 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.IsSsd = (identify->A.SerialAtaCapabilities & 1);
 		asi.IsSmartSupported = TRUE;
 		asi.Interface = (identify->A.CurrentMediaSerialNo[0] == 'N' ? _T("AMD_RC2") : _T("AMD_RC2 (Serial ATA)"));
-		asi.sasPhyEntity.bPortIdentifier = (UCHAR)scsiBus;//DiskNumber from AddDiskAMD_RC2(). Use for sorting.
 		asi.CurrentTransferMode = identify->A.CurrentMediaSerialNo;//tmp
 		asi.CurrentTransferMode.Replace(L"HDD", L"");
 		asi.CurrentTransferMode.Replace(L"SSD", L"");
@@ -2761,7 +2762,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.CurrentTransferMode.Replace(L"6Gb", L"SATA/600");
 		asi.CurrentTransferMode.Replace(L"3Gb", L"SATA/300");
 		asi.CurrentTransferMode.Replace(L"1.5Gb", L"SATA/150");
-		asi.CurrentTransferMode.Replace(L"[N/A]", L"SATA/---");//values: "[N/A]", "1.5Gb", "3Gb", "6Gb"
+		asi.CurrentTransferMode.Replace(L"1Gb", L"SATA/150");
 		asi.CurrentTransferMode.Replace(L" ", L"");
 		asi.MaxTransferMode = L"----";
 
@@ -3740,8 +3741,10 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.PnpDeviceId = pnpDeviceId;
 	asi.MinorVersion = _T("");
 
+#ifdef JMICRON_USB_RAID_SUPPORT
 	if (nvmePort == NULL)
 	{
+#endif
 		asi.Model = asi.IdentifyDevice.N.Model;
 		asi.Model = asi.Model.Mid(0, 40);
 		asi.Model.TrimRight();
@@ -3758,6 +3761,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.FirmwareRev = asi.IdentifyDevice.N.FirmwareRev;
 		asi.FirmwareRev = asi.FirmwareRev.Mid(0, 8);
 		asi.FirmwareRev.TrimRight();
+#ifdef JMICRON_USB_RAID_SUPPORT
 	}
 	else
 	{
@@ -3768,7 +3772,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 
 		asi.TotalDiskSize = (((DWORD64)nvmePort->Capacity << 32) + (DWORD64)nvmePort->CapacityOffset) * (DWORD64)nvmePort->SectorSize / 1000 / 1000;
 	}
-
+#endif
 	asi.ModelSerial = GetModelSerial(asi.Model, asi.SerialNumber);
 
 	if (diskSize != NULL)
@@ -3815,7 +3819,9 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	||  (commandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_REALTEK && GetSmartAttributeNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &asi))
+#ifdef JMICRON_USB_RAID_SUPPORT
 	||  (commandType == CMD_TYPE_JMS586 && GetSmartAttributeNVMeJMS586(scsiPort, scsiTargetId, &asi))
+#endif
 
 		)
 	{
@@ -3861,6 +3867,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			asi.Interface = L"USB (NVMe/JMicron JMS586)";
 			asi.MajorVersion = L"NVM Express";
 
+#ifdef JMICRON_USB_RAID_SUPPORT
 			static const TCHAR* pcieSpeed[4] = { L"Gen 1.0", L"Gen 2.0", L"Gen 3.0", L"Gen 4.0" };
 			static const TCHAR* pcieLane[5] = { L"x1", L"x2", L"x4", L"x8", L"x16" };
 			if ((0 <= nvmePort->PCIeSpeed && nvmePort->PCIeSpeed < 4)
@@ -3868,12 +3875,12 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			{
 				asi.CurrentTransferMode.Format(L"%s %s", pcieSpeed[nvmePort->PCIeSpeed], pcieLane[nvmePort->PCIeLANE]);
 			}
+#endif
 		}
 
 		// +AMD_RC2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		if (commandType == COMMAND_TYPE::CMD_TYPE_AMD_RC2) {
 			asi.MajorVersion = L"";
-			asi.sasPhyEntity.bPortIdentifier = (UCHAR)scsiBus;//DiskNumber from AddDiskAMD_RC2(). Use for sorting.
 			asi.CurrentTransferMode = identify->N.Reserved3;//tmp
 			asi.CurrentTransferMode.Replace(L"NVMe", L"PCIe");
 			asi.CurrentTransferMode.Replace(L"Gen1", L"1.0");
@@ -6826,7 +6833,7 @@ BOOL CAtaSmart::ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, 
 		return	FALSE;
 	}
 
-	if (TRUE || m_bAtaPassThrough)
+	//if (TRUE || m_bAtaPassThrough) // *Always TRUE if
 	{
 		ATA_PASS_THROUGH_EX_WITH_BUFFERS ab = {};
 		//::ZeroMemory(&ab, sizeof(ab));
