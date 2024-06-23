@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Lyttiya, Gihun Ham, 로웰
-VERSION=9.3.0
+VERSION=9.3.1
 
 [Language]
 LANGUAGE=한국어
@@ -666,6 +666,9 @@ FB=총 읽기량 (NAND)
 ;Updated 6.7.0
 F1=총 쓰기량 (호스트)
 F2=총 읽기량 (호스트)
+
+;Updated 9.3.1
+F9=총 쓰기량 (NAND)
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=읽기 오류율
@@ -1706,18 +1709,18 @@ A7=SSD 보호 모드
 EA=총 쓰기량 (SLC NAND)
 
 [SmartAdataIndustrial] ;Added 9.3.1
-09=Power-On hours Count
-0C=Drive Power Cycle Count
-A7=SSD Protect Mode
-A8=SATA PHY Error Count
-A9=Bad Block Count
-AD=Erase Count
-AF=Bad Cluster Table Count
-B4=Spare block count left
-C0=Unexpected Power Loss Count
-C2=Temperature
-E7=SSD life left
-E9=Flash Write Sector Count
-EA=Flash Read Sector Count
-F1=Write Sector Count
-F2=Read Sector Count
+09=사용 시간
+0C=사용 횟수
+A7=SSD 보호 모드
+A8=SATA PHY 오류 횟수
+A9=배드 블록 수
+AD=삭제 횟수
+AF=배드 클러스터 테이블 수
+B4=남은 예비 블록 수
+C0=예기치 않은 전원 손실 횟수
+C2=온도
+E7=남은 수명
+E9=총 쓰기량 (플래시)
+EA=총 읽기량 (플래시)
+F1=쓰기 영역 횟수 (호스트)
+F2=읽기 영역 횟수 (호스트)

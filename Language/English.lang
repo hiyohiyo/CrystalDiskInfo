@@ -668,7 +668,7 @@ FB=NAND Read Count
 F1=Total Host Writes
 F2=Total Host Reads
 
-;Updated 9.4.0
+;Updated 9.3.1
 F9=Total NAND Writes
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)

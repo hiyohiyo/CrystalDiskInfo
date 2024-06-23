@@ -36,7 +36,8 @@ BOOL IsDarkModeSupport();
 BOOL HasSidebar();
 DWORD GetIeVersion();
 // DWORD GetWin10Version();
-void GetOsName(CString& OsFullName);
+void GetOsName(CString& osName);
+void GetOsNameWmi(CString& osName);
 
 ////------------------------------------------------
 //   Define
