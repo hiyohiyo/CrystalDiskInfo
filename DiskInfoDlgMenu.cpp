@@ -1392,7 +1392,6 @@ void CDiskInfoDlg::OnUsbASM1352R()
 	DrawMenuBar();
 }
 
-#ifdef JMICRON_USB_RAID_SUPPORT
 void CDiskInfoDlg::OnUsbJMS56X()
 {
 	CMenu* menu = GetMenu();
@@ -1431,25 +1430,43 @@ void CDiskInfoDlg::OnUsbJMB39X()
 	DrawMenuBar();
 }
 
-void CDiskInfoDlg::OnUsbJMS586()
+void CDiskInfoDlg::OnUsbJMS586_20()
 {
 	CMenu* menu = GetMenu();
-	if (m_Ata.FlagUsbJMS586)
+	if (m_Ata.FlagUsbJMS586_20)
 	{
-		m_Ata.FlagUsbJMS586 = FALSE;
-		menu->CheckMenuItem(ID_USB_JMS586, MF_UNCHECKED);
-		WritePrivateProfileStringFx(_T("Setting"), _T("JMS586"), _T("0"), m_Ini);
+		m_Ata.FlagUsbJMS586_20 = FALSE;
+		menu->CheckMenuItem(ID_USB_JMS586_20, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMS586_20"), _T("0"), m_Ini);
 	}
 	else
 	{
-		m_Ata.FlagUsbJMS586 = TRUE;
-		menu->CheckMenuItem(ID_USB_JMS586, MF_CHECKED);
-		WritePrivateProfileStringFx(_T("Setting"), _T("JMS586"), _T("1"), m_Ini);
+		m_Ata.FlagUsbJMS586_20 = TRUE;
+		menu->CheckMenuItem(ID_USB_JMS586_20, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMS586_20"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
 }
-#endif
+
+void CDiskInfoDlg::OnUsbJMS586_40()
+{
+	CMenu* menu = GetMenu();
+	if (m_Ata.FlagUsbJMS586_40)
+	{
+		m_Ata.FlagUsbJMS586_40 = FALSE;
+		menu->CheckMenuItem(ID_USB_JMS586_40, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMS586_40"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_Ata.FlagUsbJMS586_40 = TRUE;
+		menu->CheckMenuItem(ID_USB_JMS586_40, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("JMS586_40"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
 
 void CDiskInfoDlg::OnUsbEnableAll()
 {
@@ -1463,7 +1480,8 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbASM1352R = FALSE;
 	m_Ata.FlagUsbJMS56X = FALSE;
 	m_Ata.FlagUsbJMB39X = FALSE;
-	m_Ata.FlagUsbJMS586 = FALSE;
+	m_Ata.FlagUsbJMS586_20 = FALSE;
+	m_Ata.FlagUsbJMS586_40 = FALSE;
 	m_Ata.FlagUsbMemory  = FALSE;
 	//	m_Ata.FlagUsbSat16 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron3 = FALSE;
@@ -1481,7 +1499,8 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbASM1352R();
 	OnUsbJMS56X();
 	OnUsbJMB39X();
-	OnUsbJMS586();
+	OnUsbJMS586_20();
+	OnUsbJMS586_40();
 	OnUsbMemory();
 //	OnUsbSat16();
 	OnUsbNVMeJMicron3();
@@ -1502,7 +1521,8 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbASM1352R = TRUE;
 	m_Ata.FlagUsbJMS56X = TRUE;
 	m_Ata.FlagUsbJMB39X = TRUE;
-	m_Ata.FlagUsbJMS586 = TRUE;
+	m_Ata.FlagUsbJMS586_20 = TRUE;
+	m_Ata.FlagUsbJMS586_40 = TRUE;
 	m_Ata.FlagUsbMemory  = TRUE;
 //	m_Ata.FlagUsbSat16 = FALSE;
 	m_Ata.FlagUsbNVMeJMicron3 = TRUE;
@@ -1520,7 +1540,8 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbASM1352R();
 	OnUsbJMS56X();
 	OnUsbJMB39X();
-	OnUsbJMS586();
+	OnUsbJMS586_20();
+	OnUsbJMS586_40();
 	OnUsbMemory();
 //	OnUsbSat16();
 	OnUsbNVMeJMicron3();

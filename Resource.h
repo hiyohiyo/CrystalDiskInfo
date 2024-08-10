@@ -1030,8 +1030,9 @@
 #define ID_USB_JMS56X                   33139
 #define ID_USB_JMB39X                   33140
 #define ID_INTEL_VROC                   33141
-#define ID_USB_JMS586                   33142
-#define ID_STARTUP_VOICE                33143
+#define ID_USB_JMS586_20                33142
+#define ID_USB_JMS586_40                33143
+#define ID_STARTUP_VOICE                33144
 
 #define ID_DRIVE_MENU_8                 33150
 #define ID_DRIVE_MENU_10                33151

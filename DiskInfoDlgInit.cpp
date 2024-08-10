@@ -185,7 +185,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 #ifdef JMICRON_USB_RAID_SUPPORT
 	m_Ata.FlagUsbJMS56X = !GetPrivateProfileInt(_T("Setting"), _T("JMS56X"), 0, m_Ini); // Default Off
 	m_Ata.FlagUsbJMB39X = !GetPrivateProfileInt(_T("Setting"), _T("JMB39X"), 0, m_Ini); // Default Off
-	m_Ata.FlagUsbJMS586 = !GetPrivateProfileInt(_T("Setting"), _T("JMS586"), 0, m_Ini); // Default Off
+	m_Ata.FlagUsbJMS586_20 = !GetPrivateProfileInt(_T("Setting"), _T("JMS586_20"), 0, m_Ini); // Default Off
+	m_Ata.FlagUsbJMS586_40 = !GetPrivateProfileInt(_T("Setting"), _T("JMS586_40"), 0, m_Ini); // Default Off
 #endif
 
 	OnUsbSat();
@@ -208,7 +209,8 @@ BOOL CDiskInfoDlg::OnInitDialog()
 #ifdef JMICRON_USB_RAID_SUPPORT
 	OnUsbJMS56X();
 	OnUsbJMB39X();
-	OnUsbJMS586();
+	OnUsbJMS586_20();
+	OnUsbJMS586_40();
 #endif
 
 	DebugPrint(_T("InitAta"));

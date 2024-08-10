@@ -174,14 +174,14 @@ typedef union _UNION_SMART_THRESHOLD
 	BYTE512 B;
 } UNION_SMART_THRESHOLD;
 
-#define DISKNAME_LENGTH									(20+1)	
+#define DISKNAME_LENGTH									(40+1)	
 #define MODELNAME_LENGTH								(20+1)
 #define SERIALNUMBER_LENGTH								(20+1)
 #define DISK_FIRMWAREVERSION_LENGTH						9
 
-typedef struct _NVME_PORT
+typedef struct _NVME_PORT_40
 {
-	uint8_t			ModelName[DISKNAME_LENGTH];						/* Model name of disk		*/
+	uint8_t			ModelName[41];									/* Model name of disk		*/
 	uint8_t			SerialNumber[SERIALNUMBER_LENGTH];				/* Serial number of disk	*/
 	uint32_t		SectorSize;										/* 512 bytes or 4K          */
 	uint32_t		Capacity;										/* Disk capacity        	*/
@@ -194,7 +194,24 @@ typedef struct _NVME_PORT
 	uint8_t         PCIeLANE;                                       /* PCIe LANE                */
 	uint16_t		PortErrorStatus;								/* NVMe port error status	*/
 	uint8_t         DiskType;
-} NVME_PORT;
+} NVME_PORT_40;
+
+typedef struct _NVME_PORT_20
+{
+	uint8_t			ModelName[21];									/* Model name of disk		*/
+	uint8_t			SerialNumber[SERIALNUMBER_LENGTH];				/* Serial number of disk	*/
+	uint32_t		SectorSize;										/* 512 bytes or 4K          */
+	uint32_t		Capacity;										/* Disk capacity        	*/
+	uint32_t		CapacityOffset;									/* Disk capacity        	*/
+	uint8_t			DeviceState;									/* Device State				*/
+	uint8_t			RaidIndex;										/* RAID Index				*/
+	uint8_t			MemberIndex;									/* Member Index				*/
+	uint8_t			PortType;										/* Port Type				*/
+	uint8_t			PCIeSpeed;										/* PCIe Speed				*/
+	uint8_t         PCIeLANE;                                       /* PCIe LANE                */
+	uint16_t		PortErrorStatus;								/* NVMe port error status	*/
+	uint8_t         DiskType;
+} NVME_PORT_20;
 
 #pragma	pack(pop)
 
@@ -216,11 +233,20 @@ typedef int(WINAPI* _GetControllerCountJMB39X) ();
 typedef BOOL(WINAPI* _GetSmartInfoJMB39X) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
 typedef BOOL(WINAPI* _GetIdentifyInfoJMB39X) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
 
-// JMicron JMS586 API
-typedef DWORD(WINAPI* _GetDllVersionJMS586) (PBYTE major, PBYTE minor, PBYTE revision, PBYTE release);
-typedef int(WINAPI* _GetControllerCountJMS586) ();
-typedef BOOL(WINAPI* _GetSmartInfoJMS586) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
-typedef BOOL(WINAPI* _GetIdentifyInfoJMS586) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
+// JMicron JMS586_Old API
+typedef DWORD(WINAPI* _GetDllVersionJMS586_20) (PBYTE major, PBYTE minor, PBYTE revision, PBYTE release);
+typedef int(WINAPI* _GetControllerCountJMS586_20) ();
+typedef BOOL(WINAPI* _GetSmartInfoJMS586_20) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
+typedef BOOL(WINAPI* _GetIdentifyInfoJMS586_20) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
 
-typedef BOOL(WINAPI* _GetNVMePortInfoJMS586) (int index, unsigned char port, NVME_PORT* nvmePort);
-typedef BOOL(WINAPI* _GetNVMeSmartInfoJMS586) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* smartInfo);
+typedef BOOL(WINAPI* _GetNVMePortInfoJMS586_20) (int index, unsigned char port, NVME_PORT_20* nvmePort);
+typedef BOOL(WINAPI* _GetNVMeSmartInfoJMS586_20) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* smartInfo);
+
+// JMicron JMS586_New API
+typedef DWORD(WINAPI* _GetDllVersionJMS586_40) (PBYTE major, PBYTE minor, PBYTE revision, PBYTE release);
+typedef int(WINAPI* _GetControllerCountJMS586_40) ();
+typedef BOOL(WINAPI* _GetSmartInfoJMS586_40) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
+typedef BOOL(WINAPI* _GetIdentifyInfoJMS586_40) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
+
+typedef BOOL(WINAPI* _GetNVMePortInfoJMS586_40) (int index, unsigned char port, NVME_PORT_40* nvmePort);
+typedef BOOL(WINAPI* _GetNVMeSmartInfoJMS586_40) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* smartInfo);

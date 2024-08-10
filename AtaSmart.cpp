@@ -70,7 +70,8 @@ CAtaSmart::~CAtaSmart()
 #ifdef JMICRON_USB_RAID_SUPPORT
 	DeinitializeJMS56X(&hJMS56X);
 	DeinitializeJMB39X(&hJMB39X);
-	DeinitializeJMS586(&hJMS586);
+	DeinitializeJMS586_20(&hJMS586_20);
+	DeinitializeJMS586_40(&hJMS586_40);
 #endif
 
 	safeCloseHandle(hMutexJMicron);
@@ -110,7 +111,8 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 		||  (vars[i].CommandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_REALTEK && GetSmartAttributeNVMeRealtek(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 #ifdef JMICRON_USB_RAID_SUPPORT
-		||  (vars[i].CommandType == CMD_TYPE_JMS586 && GetSmartAttributeNVMeJMS586(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_JMS586_40 && GetSmartAttributeNVMeJMS586_40(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_JMS586_20 && GetSmartAttributeNVMeJMS586_20(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 #endif
 			)
 		{
@@ -283,8 +285,15 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			}
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
-		case CMD_TYPE_JMS586:
-			if (!GetSmartInfoJMS586(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i])))
+		case CMD_TYPE_JMS586_40:
+			if (!GetSmartInfoJMS586_40(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i])))
+			{
+				return SMART_STATUS_NO_CHANGE;
+			}
+			vars[i].DiskStatus = CheckDiskStatus(i);
+			break;
+		case CMD_TYPE_JMS586_20:
+			if (!GetSmartInfoJMS586_20(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i])))
 			{
 				return SMART_STATUS_NO_CHANGE;
 			}
@@ -345,8 +354,11 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 	case CMD_TYPE_JMB39X:
 		flag = DoIdentifyDeviceJMB39X(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i].IdentifyDevice));
 		break;
-	case CMD_TYPE_JMS586:
-		flag = DoIdentifyDeviceJMS586(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i].IdentifyDevice));
+	case CMD_TYPE_JMS586_40:
+		flag = DoIdentifyDeviceJMS586_40(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i].IdentifyDevice));
+		break;
+	case CMD_TYPE_JMS586_20:
+		flag = DoIdentifyDeviceJMS586_20(vars[i].ScsiBus, vars[i].ScsiPort, &(vars[i].IdentifyDevice));
 		break;
 #endif
 	default:
@@ -472,7 +484,8 @@ BOOL CAtaSmart::SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param)
 	case CMD_TYPE_AMD_RC2:// +AMD_RC2
 	case CMD_TYPE_JMS56X:
 	case CMD_TYPE_JMB39X:
-	case CMD_TYPE_JMS586:
+	case CMD_TYPE_JMS586_40:
+	case CMD_TYPE_JMS586_20:
 	default:
 		return FALSE;
 		break;
@@ -2150,18 +2163,18 @@ safeRelease:
 	// DebugPrint(_T("OK:qsort"));
 
 
-			///////////////////////////////
-			// JMicron USB RAID
-			///////////////////////////////
+	///////////////////////////////
+	// JMicron USB RAID
+	///////////////////////////////
 	#ifdef JMICRON_USB_RAID_SUPPORT
-		if (FlagUsbJMS586)
+		if (FlagUsbJMS586_40)
 		{
-			DebugPrint(L"JMS586");
+			DebugPrint(L"JMS586_40");
 
-			if (InitializeJMS586(&hJMS586))
+			if (InitializeJMS586_40(&hJMS586_40))
 			{
 				int count = 0;
-				count = pGetControllerCountJMS586();
+				count = pGetControllerCountJMS586_40();
 
 				CString cstr;
 				cstr.Format(L"ControllerCount: %d", count);
@@ -2169,13 +2182,30 @@ safeRelease:
 
 				for (int i = 0; i < count; i++)
 				{
-					AddDiskJMS586(i);
+					AddDiskJMS586_40(i);
+				}
+			}
+		}
+		if (FlagUsbJMS586_20)
+		{
+			DebugPrint(L"JMS586_20");
+
+			if (InitializeJMS586_20(&hJMS586_20))
+			{
+				int count = 0;
+				count = pGetControllerCountJMS586_20();
+
+				CString cstr;
+				cstr.Format(L"ControllerCount: %d", count);
+				DebugPrint(cstr);
+
+				for (int i = 0; i < count; i++)
+				{
+					AddDiskJMS586_20(i);
 				}
 			}
 		}
 	#endif
-
-
 
 	// Advanced Disk Search
 	if(IsAdvancedDiskSearch)
@@ -2795,7 +2825,19 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
 		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
 	}
-	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586)
+	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586_40)
+	{
+		asi.Major = 0;
+		asi.IsSmartSupported = TRUE;
+		asi.Interface = L"USB (JMicron JMS586 New)";
+		asi.CurrentTransferMode = L"---";
+		asi.MaxTransferMode = L"----";
+
+		if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0002) { asi.MaxTransferMode = L"SATA/150"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
+	}
+	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586_20)
 	{
 		asi.Major = 0;
 		asi.IsSmartSupported = TRUE;
@@ -2979,7 +3021,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.IsLba48Supported = TRUE;
 		asi.DiskSizeChs = 0;
 	}
-	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS56X || commandType == COMMAND_TYPE::CMD_TYPE_JMB39X || commandType == COMMAND_TYPE::CMD_TYPE_JMS586)
+	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS56X || commandType == COMMAND_TYPE::CMD_TYPE_JMB39X || commandType == COMMAND_TYPE::CMD_TYPE_JMS586_20 || commandType == COMMAND_TYPE::CMD_TYPE_JMS586_40)
 	{
 		asi.IsLba48Supported = TRUE;
 		asi.DiskSizeChs = 0;
@@ -3466,8 +3508,20 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 				asi.IsSmartEnabled = TRUE;
 			}
 			break;
-		case CMD_TYPE_JMS586:
-			if (GetSmartInfoJMS586(scsiBus, scsiPort, &asi))
+		case CMD_TYPE_JMS586_40:
+			if (GetSmartInfoJMS586_40(scsiBus, scsiPort, &asi))
+			{
+				CheckSsdSupport(asi);
+				// GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asiCheck);
+				// if (CheckSmartAttributeCorrect(&asi, &asiCheck)){}
+				asi.IsSmartSupported = TRUE;
+				asi.IsSmartCorrect = TRUE;
+				asi.IsThresholdCorrect = TRUE;
+				asi.IsSmartEnabled = TRUE;
+			}
+			break;
+		case CMD_TYPE_JMS586_20:
+			if (GetSmartInfoJMS586_20(scsiBus, scsiPort, &asi))
 			{
 				CheckSsdSupport(asi);
 				// GetSmartInfoJMicronUsbRaid(scsiBus, scsiPort, &asiCheck);
@@ -3614,10 +3668,8 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 }
 
 
-BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, DWORD* diskSize, CString pnpDeviceId
-#ifdef JMICRON_USB_RAID_SUPPORT
-	, NVME_PORT* nvmePort
-#endif
+BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, DWORD* diskSize,
+	CString pnpDeviceId, NVME_PORT_20* nvmePort20, NVME_PORT_40* nvmePort40
 )
 {
 	if (vars.GetCount() >= MAX_DISK)
@@ -3741,10 +3793,24 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.PnpDeviceId = pnpDeviceId;
 	asi.MinorVersion = _T("");
 
-#ifdef JMICRON_USB_RAID_SUPPORT
-	if (nvmePort == NULL)
+	if (nvmePort20 != NULL)
 	{
-#endif
+		asi.Model = nvmePort20->ModelName;
+		asi.SerialNumber = nvmePort20->SerialNumber;
+		asi.Model.TrimRight();
+		asi.SerialNumber.TrimRight();
+		asi.TotalDiskSize = (((DWORD64)nvmePort20->Capacity << 32) + (DWORD64)nvmePort20->CapacityOffset) * (DWORD64)nvmePort20->SectorSize / 1000 / 1000;
+	}
+	else if (nvmePort40 != NULL)
+	{
+		asi.Model = nvmePort40->ModelName;
+		asi.SerialNumber = nvmePort40->SerialNumber;
+		asi.Model.TrimRight();
+		asi.SerialNumber.TrimRight();
+		asi.TotalDiskSize = (((DWORD64)nvmePort40->Capacity << 32) + (DWORD64)nvmePort40->CapacityOffset) * (DWORD64)nvmePort40->SectorSize / 1000 / 1000;
+	}
+	else
+	{
 		asi.Model = asi.IdentifyDevice.N.Model;
 		asi.Model = asi.Model.Mid(0, 40);
 		asi.Model.TrimRight();
@@ -3761,18 +3827,8 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.FirmwareRev = asi.IdentifyDevice.N.FirmwareRev;
 		asi.FirmwareRev = asi.FirmwareRev.Mid(0, 8);
 		asi.FirmwareRev.TrimRight();
-#ifdef JMICRON_USB_RAID_SUPPORT
 	}
-	else
-	{
-		asi.Model = nvmePort->ModelName;
-		asi.SerialNumber = nvmePort->SerialNumber;
-		asi.Model.TrimRight();
-		asi.SerialNumber.TrimRight();
 
-		asi.TotalDiskSize = (((DWORD64)nvmePort->Capacity << 32) + (DWORD64)nvmePort->CapacityOffset) * (DWORD64)nvmePort->SectorSize / 1000 / 1000;
-	}
-#endif
 	asi.ModelSerial = GetModelSerial(asi.Model, asi.SerialNumber);
 
 	if (diskSize != NULL)
@@ -3793,7 +3849,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	// Check duplicate device
 	for (int i = 0; i < vars.GetCount(); i++)
 	{
-		if ( (commandType == CMD_TYPE_JMS586 && asi.SerialNumber.Compare(vars[i].SerialNumber) == 0)
+		if ( ((commandType == CMD_TYPE_JMS586_20 || commandType == CMD_TYPE_JMS586_40 )&& asi.SerialNumber.Compare(vars[i].SerialNumber) == 0)
 		||   (asi.Model.Compare(vars[i].Model) == 0 && asi.SerialNumber.Compare(vars[i].SerialNumber) == 0)
 		)
 		{
@@ -3820,7 +3876,8 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	||  (commandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_REALTEK && GetSmartAttributeNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &asi))
 #ifdef JMICRON_USB_RAID_SUPPORT
-	||  (commandType == CMD_TYPE_JMS586 && GetSmartAttributeNVMeJMS586(scsiPort, scsiTargetId, &asi))
+	||  (commandType == CMD_TYPE_JMS586_40 && GetSmartAttributeNVMeJMS586_40(scsiPort, scsiTargetId, &asi))
+	||  (commandType == CMD_TYPE_JMS586_20 && GetSmartAttributeNVMeJMS586_20(scsiPort, scsiTargetId, &asi))
 #endif
 
 		)
@@ -3862,20 +3919,32 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 			asi.MajorVersion.Format(_T("NVM Express %d.%d"), asi.IdentifyDevice.N.MajorVersion, asi.IdentifyDevice.N.MinorVersion);
 		}
 
-		if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586)
+		if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586_40 && nvmePort40 != NULL)
 		{
-			asi.Interface = L"USB (NVMe/JMicron JMS586)";
+			asi.Interface = L"USB (NVMe/JMS586 New)";
 			asi.MajorVersion = L"NVM Express";
-
-#ifdef JMICRON_USB_RAID_SUPPORT
 			static const TCHAR* pcieSpeed[4] = { L"Gen 1.0", L"Gen 2.0", L"Gen 3.0", L"Gen 4.0" };
 			static const TCHAR* pcieLane[5] = { L"x1", L"x2", L"x4", L"x8", L"x16" };
-			if ((0 <= nvmePort->PCIeSpeed && nvmePort->PCIeSpeed < 4)
-				&& (0 <= nvmePort->PCIeLANE && nvmePort->PCIeLANE < 5))
+			if (
+				(0 <= nvmePort40->PCIeSpeed && nvmePort40->PCIeSpeed < 4)
+			&&  (0 <= nvmePort40->PCIeLANE && nvmePort40->PCIeLANE < 5)
+				)
 			{
-				asi.CurrentTransferMode.Format(L"%s %s", pcieSpeed[nvmePort->PCIeSpeed], pcieLane[nvmePort->PCIeLANE]);
+				asi.CurrentTransferMode.Format(L"%s %s", pcieSpeed[nvmePort40->PCIeSpeed], pcieLane[nvmePort40->PCIeLANE]);
 			}
-#endif
+		}
+
+		if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586_20 && nvmePort20 != NULL)
+		{
+			asi.Interface = L"USB (NVMe/JMS586)";
+			asi.MajorVersion = L"NVM Express";
+			static const TCHAR* pcieSpeed[4] = { L"Gen 1.0", L"Gen 2.0", L"Gen 3.0", L"Gen 4.0" };
+			static const TCHAR* pcieLane[5] = { L"x1", L"x2", L"x4", L"x8", L"x16" };
+			if ((0 <= nvmePort20->PCIeSpeed && nvmePort20->PCIeSpeed < 4)
+				&& (0 <= nvmePort20->PCIeLANE && nvmePort20->PCIeLANE < 5))
+			{
+				asi.CurrentTransferMode.Format(L"%s %s", pcieSpeed[nvmePort20->PCIeSpeed], pcieLane[nvmePort20->PCIeLANE]);
+			}
 		}
 
 		// +AMD_RC2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -10736,11 +10805,11 @@ BOOL CAtaSmart::GetSmartInfoJMB39X(INT index, BYTE port, ATA_SMART_INFO* asi)
 	return FALSE;
 }
 
-BOOL CAtaSmart::AddDiskJMS586(INT index)
+BOOL CAtaSmart::AddDiskJMS586_20(INT index)
 {
-	if (!hJMS586) { return FALSE; }
+	if (!hJMS586_20) { return FALSE; }
 	IDENTIFY_DEVICE identify = { 0 };
-	NVME_PORT nvmePort = { 0 };
+	NVME_PORT_20 nvmePort = { 0 };
 
 	/*
 	for (int i = 0; i < 5; i++)
@@ -10754,40 +10823,40 @@ BOOL CAtaSmart::AddDiskJMS586(INT index)
 
 	for (int i = 0; i < 5 /*MAX_DISK_IN_CONTROLLER*/; i++)
 	{
-		if (GetNVMePortInfoJMS586(index, i, &nvmePort))
+		if (GetNVMePortInfoJMS586_20(index, i, &nvmePort))
 		{
-			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586, &identify, 0, L"", &nvmePort);
+			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_20, &identify, 0, L"", &nvmePort);
 		}
 	}
 
 	return TRUE;
 }
 
-BOOL CAtaSmart::DoIdentifyDeviceJMS586(INT index, BYTE port, IDENTIFY_DEVICE* identify)
+BOOL CAtaSmart::DoIdentifyDeviceJMS586_20(INT index, BYTE port, IDENTIFY_DEVICE* identify)
 {
-	if (!hJMS586) { return FALSE; }
+	if (!hJMS586_20) { return FALSE; }
 	CString cstr;
 	cstr.Format(L"GetIdentifyInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
 
-	return pGetIdentifyInfoJMS586(index, port, (UNION_IDENTIFY_DEVICE*)identify);
+	return pGetIdentifyInfoJMS586_20(index, port, (UNION_IDENTIFY_DEVICE*)identify);
 }
 
-BOOL CAtaSmart::GetSmartInfoJMS586(INT index, BYTE port, ATA_SMART_INFO* asi)
+BOOL CAtaSmart::GetSmartInfoJMS586_20(INT index, BYTE port, ATA_SMART_INFO* asi)
 {
-	if (!hJMS586) { return FALSE; }
+	if (!hJMS586_20) { return FALSE; }
 	CString cstr;
 	cstr.Format(L"GetSmartInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
 
-	pGetSmartInfoJMS586(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+	pGetSmartInfoJMS586_20(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
 	FillSmartData(asi);
 	FillSmartThreshold(asi);
 
 	if (asi->AttributeCount == 0)
 	{
 		Sleep(1000);
-		pGetSmartInfoJMS586(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+		pGetSmartInfoJMS586_20(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
 		FillSmartData(asi);
 		FillSmartThreshold(asi);
 	}
@@ -10799,31 +10868,114 @@ BOOL CAtaSmart::GetSmartInfoJMS586(INT index, BYTE port, ATA_SMART_INFO* asi)
 	return FALSE;
 }
 
-BOOL CAtaSmart::GetNVMePortInfoJMS586(INT index, BYTE port, NVME_PORT* nvmePort)
+BOOL CAtaSmart::GetNVMePortInfoJMS586_20(INT index, BYTE port, NVME_PORT_20* nvmePort)
 {
-	if (!hJMS586) { return FALSE; }
+	if (!hJMS586_20) { return FALSE; }
 	CString cstr;
 	cstr.Format(L"GetNVMePortInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
 
-	return pGetNVMePortInfoJMS586(index, port, nvmePort);
+	return pGetNVMePortInfoJMS586_20(index, port, nvmePort);
 }
 
-BOOL CAtaSmart::GetNVMeSmartInfoJMS586(INT index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo)
+BOOL CAtaSmart::GetNVMeSmartInfoJMS586_20(INT index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo)
 {
-	if (!hJMS586) { return FALSE; }
+	if (!hJMS586_20) { return FALSE; }
 	CString cstr;
 	cstr.Format(L"GetNVMeSmartInfoFx: index %d, port %d", index, port);
 	DebugPrint(cstr);
 
-	return pGetNVMeSmartInfoJMS586(index, port, smartInfo);
+	return pGetNVMeSmartInfoJMS586_20(index, port, smartInfo);
 }
 
-BOOL CAtaSmart::GetSmartAttributeNVMeJMS586(INT index, INT port, ATA_SMART_INFO* asi)
+BOOL CAtaSmart::GetSmartAttributeNVMeJMS586_20(INT index, INT port, ATA_SMART_INFO* asi)
 {
 	BOOL flag = FALSE;
 	UNION_SMART_ATTRIBUTE smartInfo;
-	flag = GetNVMeSmartInfoJMS586(index, port, &smartInfo);
+	flag = GetNVMeSmartInfoJMS586_20(index, port, &smartInfo);
+	memcpy_s(&(asi->SmartReadData), 512, smartInfo.B.b, 512);
+
+	return flag;
+}
+
+BOOL CAtaSmart::AddDiskJMS586_40(INT index)
+{
+	if (!hJMS586_40) { return FALSE; }
+	IDENTIFY_DEVICE identify = { 0 };
+	NVME_PORT_40 nvmePort = { 0 };
+
+	for (int i = 0; i < 5 /*MAX_DISK_IN_CONTROLLER*/; i++)
+	{
+		if (GetNVMePortInfoJMS586_40(index, i, &nvmePort))
+		{
+			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_40, &identify, 0, L"", NULL, &nvmePort);
+		}
+	}
+
+	return TRUE;
+}
+
+BOOL CAtaSmart::DoIdentifyDeviceJMS586_40(INT index, BYTE port, IDENTIFY_DEVICE* identify)
+{
+	if (!hJMS586_40) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetIdentifyInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	return pGetIdentifyInfoJMS586_40(index, port, (UNION_IDENTIFY_DEVICE*)identify);
+}
+
+BOOL CAtaSmart::GetSmartInfoJMS586_40(INT index, BYTE port, ATA_SMART_INFO* asi)
+{
+	if (!hJMS586_40) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetSmartInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	pGetSmartInfoJMS586_40(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+	FillSmartData(asi);
+	FillSmartThreshold(asi);
+
+	if (asi->AttributeCount == 0)
+	{
+		Sleep(1000);
+		pGetSmartInfoJMS586_40(index, port, (UNION_SMART_ATTRIBUTE*)&(asi->SmartReadData), (UNION_SMART_THRESHOLD*)&(asi->SmartReadThreshold));
+		FillSmartData(asi);
+		FillSmartThreshold(asi);
+	}
+
+	if (asi->AttributeCount > 0)
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
+BOOL CAtaSmart::GetNVMePortInfoJMS586_40(INT index, BYTE port, NVME_PORT_40* nvmePort)
+{
+	if (!hJMS586_40) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetNVMePortInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	return pGetNVMePortInfoJMS586_40(index, port, nvmePort);
+}
+
+BOOL CAtaSmart::GetNVMeSmartInfoJMS586_40(INT index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo)
+{
+	if (!hJMS586_40) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetNVMeSmartInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	return pGetNVMeSmartInfoJMS586_40(index, port, smartInfo);
+}
+
+BOOL CAtaSmart::GetSmartAttributeNVMeJMS586_40(INT index, INT port, ATA_SMART_INFO* asi)
+{
+	BOOL flag = FALSE;
+	UNION_SMART_ATTRIBUTE smartInfo;
+	flag = GetNVMeSmartInfoJMS586_40(index, port, &smartInfo);
 	memcpy_s(&(asi->SmartReadData), 512, smartInfo.B.b, 512);
 
 	return flag;

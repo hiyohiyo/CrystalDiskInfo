@@ -629,7 +629,8 @@ public:
 #ifdef JMICRON_USB_RAID_SUPPORT
 	afx_msg void OnUsbJMS56X();
 	afx_msg void OnUsbJMB39X();
-	afx_msg void OnUsbJMS586();
+	afx_msg void OnUsbJMS586_20();
+	afx_msg void OnUsbJMS586_40();
 #endif
 	afx_msg void OnHealthStatus();
 	afx_msg void OnSoundSetting();
