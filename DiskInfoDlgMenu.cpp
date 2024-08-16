@@ -1392,6 +1392,25 @@ void CDiskInfoDlg::OnUsbASM1352R()
 	DrawMenuBar();
 }
 
+void CDiskInfoDlg::OnUsbRealtek9220DP()
+{
+	CMenu * menu = GetMenu();
+	if (m_Ata.FlagUsbRealtek9220DP)
+	{
+		m_Ata.FlagUsbRealtek9220DP = FALSE;
+		menu->CheckMenuItem(ID_USB_REALTEK9220DP, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("USB"), _T("REALTEK9220"), _T("0"), m_Ini);
+		}
+	else
+	{
+		m_Ata.FlagUsbRealtek9220DP = TRUE;
+		menu->CheckMenuItem(ID_USB_REALTEK9220DP, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("USB"), _T("REALTEK9220"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+}
+
 void CDiskInfoDlg::OnUsbJMS56X()
 {
 	CMenu* menu = GetMenu();
@@ -1497,6 +1516,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbASM1352R();
+	OnUsbRealtek9220DP();
 	OnUsbJMS56X();
 	OnUsbJMB39X();
 	OnUsbJMS586_20();
@@ -1538,6 +1558,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbASM1352R();
+	OnUsbRealtek9220DP();
 	OnUsbJMS56X();
 	OnUsbJMB39X();
 	OnUsbJMS586_20();

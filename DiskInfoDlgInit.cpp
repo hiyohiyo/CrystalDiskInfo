@@ -172,6 +172,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagUsbJmicron = ! GetPrivateProfileInt(_T("USB"), _T("JMicron"), 1, m_Ini);
 	m_Ata.FlagUsbCypress = ! GetPrivateProfileInt(_T("USB"), _T("Cypress"), 1, m_Ini);
 	m_Ata.FlagUsbASM1352R = !GetPrivateProfileInt(_T("USB"), _T("ASM1352R"), 1, m_Ini);
+	m_Ata.FlagUsbRealtek9220DP = !GetPrivateProfileInt(_T("USB"), _T("REALTEK9220DP"), 1, m_Ini);
 	m_Ata.FlagUsbMemory  = ! GetPrivateProfileInt(_T("USB"), _T("UsbMemory"), 0, m_Ini);
 //	m_Ata.FlagUsbSat16 = !GetPrivateProfileInt(_T("USB"), _T("UsbSAT16"), 1, m_Ini);
 	m_Ata.FlagUsbNVMeJMicron3 = !GetPrivateProfileInt(_T("USB"), _T("NVMeJMicron3"), 0, m_Ini);
@@ -197,6 +198,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnUsbJmicron();
 	OnUsbCypress();
 	OnUsbASM1352R();
+	OnUsbRealtek9220DP();
 	OnUsbMemory();
 //	OnUsbSat16();
 	OnUsbNVMeJMicron3();

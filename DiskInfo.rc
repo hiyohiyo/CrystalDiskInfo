@@ -1191,6 +1191,7 @@ BEGIN
                 MENUITEM "JMicron",                     ID_USB_JMICRON
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
                 MENUITEM "ASMedia ASM1352R",            ID_USB_ASM1352R
+                MENUITEM "Realtk 9220DP",               ID_USB_REALTEK9220DP
 #ifdef JMICRON_USB_RAID_SUPPORT
                 MENUITEM "JMicron JMS56X",              ID_USB_JMS56X
                 MENUITEM "JMicron JMB39X",              ID_USB_JMB39X

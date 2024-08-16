@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=謝慶憲, chriszxl (小良奇), haobinnan
-VERSION=9.3.0
+VERSION=9.3.2
 
 [Language]
 LANGUAGE=正體中文
@@ -658,6 +658,8 @@ FB=NAND 讀取次數
 ;Updated 6.7.0
 F1=對 SSD 累計寫入
 F2=對 SSD 累計讀取
+;Updated 9.3.1
+F9=總計 NAND 寫入
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=底層資料讀取錯誤率
@@ -1694,18 +1696,18 @@ A7=SSD 保護模式
 EA=SLC NAND 寫入
 
 [SmartAdataIndustrial] ;Added 9.3.1
-09=Power-On hours Count
-0C=Drive Power Cycle Count
-A7=SSD Protect Mode
-A8=SATA PHY Error Count
-A9=Bad Block Count
-AD=Erase Count
-AF=Bad Cluster Table Count
-B4=Spare block count left
-C0=Unexpected Power Loss Count
-C2=Temperature
-E7=SSD life left
-E9=Flash Write Sector Count
-EA=Flash Read Sector Count
-F1=Write Sector Count
-F2=Read Sector Count
+09=總通電時間
+0C=磁碟開關電源次數
+A7=SSD 保護模式
+A8=SATA PHY 錯誤次數
+A9=損壞區塊數
+AD=抹除次數
+AF=損壞叢集表數
+B4=剩餘備用區塊數
+C0=未預期的電源中斷次數
+C2=溫度
+E7=SSD 剩餘壽命
+E9=Flash 寫入磁區計數
+EA=Flash 讀取磁區計數
+F1=寫入磁區計數
+F2=讀取磁區計數

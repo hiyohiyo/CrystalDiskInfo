@@ -110,6 +110,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 		||  (vars[i].CommandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_NVME_REALTEK && GetSmartAttributeNVMeRealtek(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
+		||  (vars[i].CommandType == CMD_TYPE_NVME_REALTEK9220DP && GetSmartAttributeNVMeRealtek9220DP(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 #ifdef JMICRON_USB_RAID_SUPPORT
 		||  (vars[i].CommandType == CMD_TYPE_JMS586_40 && GetSmartAttributeNVMeJMS586_40(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
 		||  (vars[i].CommandType == CMD_TYPE_JMS586_20 && GetSmartAttributeNVMeJMS586_20(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i])))
@@ -247,6 +248,18 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			}
 			vars[i].DiskStatus = CheckDiskStatus(i);
 			break;
+		case CMD_TYPE_SAT_REALTEK9220DP:
+			WakeUp(vars[i].PhysicalDriveId);
+			if (RealtekSwitchMode(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, 1, 1))
+			{
+				if (!GetSmartAttributeSat(vars[i].PhysicalDriveId, vars[i].Target, &(vars[i])))
+				{
+					return SMART_STATUS_NO_CHANGE;
+				}
+				RealtekSwitchMode(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, 1, 0);
+				vars[i].DiskStatus = CheckDiskStatus(i);
+			}
+			break;
 		case CMD_TYPE_WMI:	
 			if(! GetSmartAttributeWmi(&(vars[i])))
 			{
@@ -339,6 +352,13 @@ BOOL CAtaSmart::UpdateIdInfo(DWORD i)
 	case CMD_TYPE_CYPRESS:
 		flag = DoIdentifyDeviceSat(vars[i].PhysicalDriveId, vars[i].Target, &(vars[i].IdentifyDevice), vars[i].CommandType);
 		break;
+	case CMD_TYPE_SAT_REALTEK9220DP:
+		if (RealtekSwitchMode(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, 1, 1))
+		{
+			flag = DoIdentifyDeviceSat(vars[i].PhysicalDriveId, vars[i].Target, &(vars[i].IdentifyDevice), vars[i].CommandType);
+			RealtekSwitchMode(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, 1, 0);
+		}
+		 break;
 	case CMD_TYPE_MEGARAID:
 		flag =  DoIdentifyDeviceMegaRAID(vars[i].ScsiPort, vars[i].ScsiTargetId, &(vars[i].IdentifyDevice));
 		break;
@@ -444,6 +464,7 @@ BOOL CAtaSmart::DisableApm(DWORD i)
 
 BOOL CAtaSmart::SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param)
 {
+	BOOL rtn = FALSE;
 	WakeUp(vars[i].PhysicalDriveId);
 	switch(vars[i].CommandType)
 	{
@@ -477,6 +498,14 @@ BOOL CAtaSmart::SendAtaCommand(DWORD i, BYTE main, BYTE sub, BYTE param)
 	case CMD_TYPE_JMICRON:
 	case CMD_TYPE_CYPRESS:
 		return SendAtaCommandSat(vars[i].PhysicalDriveId, vars[i].Target, main, sub, param, vars[i].CommandType);
+		break;
+	case CMD_TYPE_SAT_REALTEK9220DP:
+		if (RealtekSwitchMode(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, 1, 1))
+		{
+			rtn = SendAtaCommandSat(vars[i].PhysicalDriveId, vars[i].Target, main, sub, param, vars[i].CommandType);
+			RealtekSwitchMode(vars[i].PhysicalDriveId, vars[i].ScsiPort, vars[i].ScsiTargetId, 1, 0);
+			return rtn;
+			}
 		break;
 	case CMD_TYPE_MEGARAID:
 		return SendAtaCommandMegaRAID(vars[i].ScsiPort, vars[i].ScsiTargetId, main, sub, param);
@@ -2521,7 +2550,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		memcpy(&(asi.sasPhyEntity), sasPhyEntity, sizeof(CSMI_SAS_PHY_ENTITY));
 	}
 
-	if(commandType == CMD_TYPE_PHYSICAL_DRIVE || CMD_TYPE_SAT <= commandType && commandType <= CMD_TYPE_SAT_ASM1352R)
+	if(commandType == CMD_TYPE_PHYSICAL_DRIVE || CMD_TYPE_SAT <= commandType && commandType <= CMD_TYPE_SAT_REALTEK9220DP)
 	{
 		if(target == 0xB0)
 		{
@@ -3374,6 +3403,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 
 		case CMD_TYPE_SAT:
 		case CMD_TYPE_SAT_ASM1352R:
+		case CMD_TYPE_SAT_REALTEK9220DP:
 		case CMD_TYPE_SUNPLUS:
 		case CMD_TYPE_IO_DATA:
 		case CMD_TYPE_LOGITEC:
@@ -3761,7 +3791,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.AlarmTemperature = 0;
 	asi.IsNVMe = TRUE;
 
-	if (commandType == CMD_TYPE_NVME_JMICRON || commandType == CMD_TYPE_NVME_ASMEDIA || commandType == CMD_TYPE_NVME_REALTEK)
+	if (commandType == CMD_TYPE_NVME_JMICRON || commandType == CMD_TYPE_NVME_ASMEDIA || commandType == CMD_TYPE_NVME_REALTEK || commandType == CMD_TYPE_NVME_REALTEK9220DP)
 	{
 		asi.InterfaceType = INTERFACE_TYPE_USB;
 	}
@@ -3875,6 +3905,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	||  (commandType == CMD_TYPE_NVME_JMICRON && GetSmartAttributeNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_ASMEDIA && GetSmartAttributeNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_NVME_REALTEK && GetSmartAttributeNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &asi))
+	||  (commandType == CMD_TYPE_NVME_REALTEK9220DP && GetSmartAttributeNVMeRealtek9220DP(physicalDriveId, scsiPort, scsiTargetId, &asi))
 #ifdef JMICRON_USB_RAID_SUPPORT
 	||  (commandType == CMD_TYPE_JMS586_40 && GetSmartAttributeNVMeJMS586_40(scsiPort, scsiTargetId, &asi))
 	||  (commandType == CMD_TYPE_JMS586_20 && GetSmartAttributeNVMeJMS586_20(scsiPort, scsiTargetId, &asi))
@@ -6400,7 +6431,24 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)){return TRUE; }
+				BOOL flag = AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify);
+				
+				if (FlagUsbRealtek9220DP && RealtekRAIDMode(physicalDriveId, scsiPort, scsiTargetId))
+				{
+					debug.Format(_T("DoIdentifyDeviceNVMeRealtek 2"));
+					DebugPrint(debug);
+					if (RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 1))
+					{
+						if (DoIdentifyDeviceNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &identify))
+						{
+							debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK9220DP"));
+							DebugPrint(debug);
+							flag = AddDiskNVMe(physicalDriveId, (scsiPort + 1), (scsiTargetId + 1), scsiBus + 1, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK9220DP, &identify);
+						}
+						RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 0);
+					}
+				}
+				if (flag == TRUE) { return TRUE; }
 			}
 		}
 
@@ -6564,6 +6612,22 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 					DebugPrint(_T("AddDisk - ASM1352R"));
 					flag = AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT_ASM1352R, &identify, siliconImageType, NULL, pnpDeviceId);
 				}
+
+				if (FlagUsbRealtek9220DP && RealtekRAIDMode(physicalDriveId, scsiPort, scsiTargetId))
+				{
+					debug.Format(_T("DoIdentifyDeviceSat CMD_TYPE_SAT_REALTEK9220DP"));
+					DebugPrint(debug);
+					if (RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 1))
+					{
+						if (DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT_REALTEK9220DP))
+						{
+							DebugPrint(_T("AddDisk - CMD_TYPE_SAT_REALTEK9220DP"));
+							flag = AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT_REALTEK9220DP, &identify, siliconImageType, NULL, pnpDeviceId);
+						}
+						RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 0);
+					}
+				}
+
 				if (flag == TRUE) { return TRUE; }
 			}
 			
@@ -7527,6 +7591,142 @@ BOOL CAtaSmart::GetSmartAttributeNVMeASMedia(INT physicalDriveId, INT scsiPort, 
 /*---------------------------------------------------------------------------*/
 //  NVMe Realtek
 /*---------------------------------------------------------------------------*/
+
+BOOL CAtaSmart::RealtekRAIDMode(INT physicalDriveId, INT scsiPort, INT scsiTargetId)
+{
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
+	DWORD	length;
+	
+	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb = {};
+	
+	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
+	
+	if (!hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
+	{
+		return	FALSE;
+	}
+	sptwb.Spt.Length = sizeof(SCSI_PASS_THROUGH);
+	sptwb.Spt.PathId = 0;
+	sptwb.Spt.TargetId = 0;
+	sptwb.Spt.Lun = 0;
+	sptwb.Spt.CdbLength = 16;
+	sptwb.Spt.SenseInfoLength = 32;
+	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_IN;
+	sptwb.Spt.DataTransferLength = 1;
+	sptwb.Spt.TimeOutValue = 2;
+	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, DataBuf);
+	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, SenseBuf);
+	
+	sptwb.Spt.Cdb[0] = 0xE2;
+	sptwb.Spt.Cdb[4] = 0xD3;
+	sptwb.Spt.Cdb[12] = 0x01;
+	
+	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, DataBuf) + sptwb.Spt.DataTransferLength;
+	
+	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
+	&sptwb, length,
+	&sptwb, length, &dwReturned, NULL);
+	
+	if (bRet == FALSE)
+	{
+		safeCloseHandle(hIoCtrl);
+		return	FALSE;
+		}
+	
+	sptwb.Spt.Cdb[0] = 0xE2;
+	sptwb.Spt.Cdb[4] = 0xD2;
+	sptwb.Spt.Cdb[12] = 0x01;
+	
+	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, DataBuf) + sptwb.Spt.DataTransferLength;
+	
+	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
+			&sptwb, length,
+			&sptwb, length, &dwReturned, NULL);
+	
+	if (bRet == FALSE)
+	{
+		safeCloseHandle(hIoCtrl);
+		return	FALSE;
+	}
+	
+	DWORD count = 0;
+	for (int i = 0; i < 1; i++)
+	{
+		count += sptwb.DataBuf[i];
+	}
+	if (count == 0)
+	{
+		safeCloseHandle(hIoCtrl);
+		return	FALSE;
+	}
+	
+	safeCloseHandle(hIoCtrl);
+	
+	return (sptwb.DataBuf[0] > 0) ? TRUE : FALSE;
+}
+
+BOOL CAtaSmart::RealtekSwitchMode(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT dir, INT mode)
+{
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
+	DWORD	length;
+	
+	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb = {};
+	
+	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
+	CString tmp;
+	
+	if (!hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
+	{
+		return	FALSE;
+	}
+	
+	sptwb.Spt.Length = sizeof(SCSI_PASS_THROUGH);
+	sptwb.Spt.PathId = 0;
+	sptwb.Spt.TargetId = 0;
+	sptwb.Spt.Lun = 0;
+	sptwb.Spt.CdbLength = 16;
+	sptwb.Spt.SenseInfoLength = 16;
+	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_OUT;
+	sptwb.Spt.DataTransferLength = 0;
+	sptwb.Spt.TimeOutValue = 2;
+	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, DataBuf);
+	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, SenseBuf);
+	
+	if (dir)
+	{
+		// set
+		sptwb.Spt.Cdb[0] = 0xE3;
+		sptwb.Spt.Cdb[4] = 0x53;
+	}
+	else
+	{
+		// read
+		sptwb.Spt.Cdb[0] = 0xE2;
+		sptwb.Spt.Cdb[4] = 0xD4;
+	}
+	sptwb.Spt.Cdb[6] = mode;
+	
+	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, DataBuf) + sptwb.Spt.DataTransferLength;
+	
+	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
+			&sptwb, length,
+			&sptwb, length, &dwReturned, NULL);
+	
+	if (bRet == FALSE)
+	{
+		safeCloseHandle(hIoCtrl);
+		return	FALSE;
+	}
+	
+	safeCloseHandle(hIoCtrl);
+	
+	return TRUE;
+}
+
 BOOL CAtaSmart::DoIdentifyDeviceNVMeRealtek(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
 {
 	BOOL	bRet = FALSE;
@@ -7596,6 +7796,22 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeRealtek(INT physicalDriveId, INT scsiPort, I
 
 	safeCloseHandle(hIoCtrl);
 
+	return TRUE;
+}
+
+BOOL CAtaSmart::GetSmartAttributeNVMeRealtek9220DP(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO * asi)
+{
+	DebugPrint(_T("GetSmartAttributeNVMeRealtek9220DP"));
+	BOOL rtn = FALSE;
+	if (FlagUsbRealtek9220DP && RealtekRAIDMode(physicalDriveId, scsiPort, scsiTargetId))
+	{
+		if (RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 1))
+		{
+			rtn = GetSmartAttributeNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, asi);
+			RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 0);
+		}
+	}
+	
 	return TRUE;
 }
 
@@ -8822,6 +9038,20 @@ BOOL CAtaSmart::DoIdentifyDeviceSat(INT physicalDriveId, BYTE target, IDENTIFY_D
 		sptwb.Spt.Cdb[8] = target;
 		sptwb.Spt.Cdb[9] = ID_CMD;//COMMAND
 	}
+	else if (type == CMD_TYPE_SAT_REALTEK9220DP)
+	{
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+		sptwb.Spt.Cdb[1] = (4 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = 0;//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = 1;//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 0;//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = 0;//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = 0;//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;
+		sptwb.Spt.Cdb[9] = ID_CMD;//COMMAND
+	}
 	else if (type == CMD_TYPE_SUNPLUS)
 	{
 		sptwb.Spt.CdbLength = 12;
@@ -9063,6 +9293,20 @@ BOOL CAtaSmart::GetSmartAttributeSat(INT PhysicalDriveId, BYTE target, ATA_SMART
 		sptwb.Spt.Cdb[8] = target;
 		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
 	}
+	else if (type == CMD_TYPE_SAT_REALTEK9220DP)
+	{
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+		sptwb.Spt.Cdb[1] = (4 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = READ_ATTRIBUTES;//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = 1;//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 1;//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = SMART_CYL_LOW;//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = SMART_CYL_HI;//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;
+		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
+	}
 	else if(type == CMD_TYPE_SUNPLUS)
 	{
 		sptwb.Spt.CdbLength = 12;
@@ -9259,6 +9503,20 @@ BOOL CAtaSmart::GetSmartThresholdSat(INT physicalDriveId, BYTE target, ATA_SMART
 		sptwb.Spt.Cdb[8] = target;
 		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
 	}
+	else if (type == CMD_TYPE_SAT_REALTEK9220DP)
+	{
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1;//ATA PASS THROUGH(12) OPERATION CODE(A1h)
+		sptwb.Spt.Cdb[1] = (4 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=4(PIO Data-In),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = 0;//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = 1;//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 0;//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = 0;//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = 0;//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;
+		sptwb.Spt.Cdb[9] = ID_CMD;//COMMAND
+	}
 	else if(type == CMD_TYPE_SUNPLUS)
 	{
 		sptwb.Spt.CdbLength = 12;
@@ -9438,6 +9696,20 @@ BOOL CAtaSmart::ControlSmartStatusSat(INT physicalDriveId, BYTE target, BYTE com
 		sptwb.Spt.Cdb[8] = target;
 		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
 	}
+	else if (type == CMD_TYPE_SAT_REALTEK9220DP)
+	{
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1; //ATA PASS THROUGH (12) OPERATION CODE (A1h)
+		sptwb.Spt.Cdb[1] = (3 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=3(Non-Data),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = command;//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = 0;//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 1;//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = SMART_CYL_LOW;//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = SMART_CYL_HI;//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;
+		sptwb.Spt.Cdb[9] = SMART_CMD;//COMMAND
+	}
 	else if(type == CMD_TYPE_SUNPLUS)
 	{
 		sptwb.Spt.CdbLength = 12;
@@ -9603,6 +9875,22 @@ BOOL CAtaSmart::SendAtaCommandSat(INT physicalDriveId, BYTE target, BYTE main, B
 		sptwb.Spt.CdbLength = 12;
 		sptwb.Spt.Cdb[0] = 0xA1; //ATA PASS THROUGH (12) OPERATION CODE (A1h)
 		sptwb.Spt.Cdb[1] = (0xE << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=3(Non-Data),Reserved
+		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
+		sptwb.Spt.Cdb[3] = sub;		//FEATURES (7:0)
+		sptwb.Spt.Cdb[4] = param;		//SECTOR_COUNT (7:0)
+		sptwb.Spt.Cdb[5] = 0x00;		//LBA_LOW (7:0)
+		sptwb.Spt.Cdb[6] = 0x00;		//LBA_MID (7:0)
+		sptwb.Spt.Cdb[7] = 0x00;		//LBA_HIGH (7:0)
+		sptwb.Spt.Cdb[8] = target;		//DEVICE_HEAD
+		sptwb.Spt.Cdb[9] = main;		//COMMAND
+		sptwb.Spt.Cdb[10] = 0x00;
+		sptwb.Spt.Cdb[11] = 0x00;
+	}
+	else if (type == CMD_TYPE_SAT_REALTEK9220DP)
+	{
+		sptwb.Spt.CdbLength = 12;
+		sptwb.Spt.Cdb[0] = 0xA1; //ATA PASS THROUGH (12) OPERATION CODE (A1h)
+		sptwb.Spt.Cdb[1] = (3 << 1) | 0; //MULTIPLE_COUNT=0,PROTOCOL=3(Non-Data),Reserved
 		sptwb.Spt.Cdb[2] = (1 << 3) | (1 << 2) | 2;//OFF_LINE=0,CK_COND=0,Reserved=0,T_DIR=1(ToDevice),BYTE_BLOCK=1,T_LENGTH=2
 		sptwb.Spt.Cdb[3] = sub;		//FEATURES (7:0)
 		sptwb.Spt.Cdb[4] = param;		//SECTOR_COUNT (7:0)

@@ -34,6 +34,7 @@ static const TCHAR* commandTypeString[] =
 	_T("jm"),
 	_T("cy"),
 	_T("ar"), // ASM1352R
+	_T("rr"), // Realtek 9220DP
 	_T("cs"),
 	_T("cp"),
 	_T("wm"),
@@ -338,6 +339,7 @@ public:
 		CMD_TYPE_JMICRON,
 		CMD_TYPE_CYPRESS,
 		CMD_TYPE_SAT_ASM1352R,	// AMS1352 2nd drive
+		CMD_TYPE_SAT_REALTEK9220DP,
 		CMD_TYPE_CSMI,				// CSMI = Common Storage Management Interface
 		CMD_TYPE_CSMI_PHYSICAL_DRIVE, // CSMI = Common Storage Management Interface 
 		CMD_TYPE_WMI,
@@ -347,6 +349,7 @@ public:
 		CMD_TYPE_NVME_JMICRON,
 		CMD_TYPE_NVME_ASMEDIA,
 		CMD_TYPE_NVME_REALTEK,
+		CMD_TYPE_NVME_REALTEK9220DP,
 		CMD_TYPE_NVME_INTEL_RST,
 		CMD_TYPE_NVME_INTEL_VROC,
 		CMD_TYPE_MEGARAID,
@@ -1956,6 +1959,7 @@ public:
 	BOOL FlagMegaRAID = FALSE;
 	BOOL FlagIntelVROC = FALSE;
 	BOOL FlagUsbASM1352R = FALSE;
+	BOOL FlagUsbRealtek9220DP = FALSE;
 	BOOL FlagAMD_RC2 = FALSE;// +AMD_RC2
 #ifdef JMICRON_USB_RAID_SUPPORT
 	BOOL FlagUsbJMS56X = FALSE;
@@ -2025,6 +2029,10 @@ protected:
 	
 	BOOL DoIdentifyDeviceNVMeRealtek(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data);
 	BOOL GetSmartAttributeNVMeRealtek(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+
+	BOOL GetSmartAttributeNVMeRealtek9220DP(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+	BOOL RealtekRAIDMode(INT physicalDriveId, INT scsiPort, INT scsiTargetId);
+	BOOL RealtekSwitchMode(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT dir, INT mode);
 
 	BOOL DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);

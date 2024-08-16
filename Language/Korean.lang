@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Lyttiya, Gihun Ham, 로웰
-VERSION=9.3.1
+VERSION=9.3.2
 
 [Language]
 LANGUAGE=한국어
@@ -120,7 +120,7 @@ DRIVE_MENU_NUMBER=드라이브 표시 대수
 VOICE=음성
 
 ;9.3.0
-STARTUP_VOICE=시작 시 재생할 음성
+STARTUP_VOICE=시작시 음성 재생
 
 [TrayMenu]
 EXIT=종료
