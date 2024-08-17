@@ -13,9 +13,9 @@
 //   OS Info
 ////------------------------------------------------
 
+#if _MSC_VER > 1310
 BOOL IsWindowsVersionOrGreaterFx(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor = 0);
-BOOL IsWindowBuildOrGreater(DWORD build);
-
+BOOL IsWindowsBuildOrGreater(DWORD build);
 BOOL IsX64();
 BOOL IsIa64();
 BOOL IsArm32();
@@ -34,10 +34,24 @@ BOOL IsWin8orLater();
 BOOL IsWin81orLater();
 BOOL IsDarkModeSupport();
 BOOL HasSidebar();
+#endif
+
+#if _MSC_VER <= 1310
+#ifdef UNICODE
+BOOL IsCurrentUserLocalAdministrator(void);
+BOOL IsUserAdmin(VOID);
+#endif
+#endif
+
+BOOL IsNT4();
+BOOL IsWin9x();
+BOOL IsWin95();
+BOOL IsPC98();
+
 DWORD GetIeVersion();
 // DWORD GetWin10Version();
-void GetOsName(CString& osName);
-void GetOsNameWmi(CString& osName);
+void GetOsName(CString& osFullName, CString& osName, CString& osVersion, CString& osArchitecture);
+void GetOsNameWmi(CString& osFullName);
 
 ////------------------------------------------------
 //   Define

@@ -9,6 +9,7 @@
 #include "DialogFx.h"
 #include "UtilityFx.h"
 #include "OsInfoFx.h"
+#include "UAHMenuBar.h"
 
 class CMainDialogFx : public CDialogFx
 {
@@ -39,12 +40,14 @@ protected:
 	void SetWindowTitle(CString message);
 	void UpdateThemeInfo();
 	COLORREF GetControlColor(CString name, BYTE defaultColor, CString theme);
+	COLORREF GetBackgroundColor(CString name, CString theme);
 	BYTE GetControlAlpha(CString name, BYTE defaultAlpha, CString theme);
 	BYTE GetCharacterPosition(CString theme);
 	CString GetParentTheme(int i, CString theme);
 	CString GetRandomTheme();
 	void SaveImageDlg(CImage* image);
 
+	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	virtual BOOL CheckThemeEdition(CString name);

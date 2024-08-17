@@ -53,6 +53,7 @@ protected:
 	CString i18n(CString section, CString key, BOOL inEnglish = FALSE);
 	void OpenUrl(CString url);
 	void SetLayeredWindow(HWND hWnd, BYTE alpha);
+	int GetDpi();
 
 	// MessageMap
 	DECLARE_MESSAGE_MAP()
@@ -67,66 +68,67 @@ protected:
 
 protected:
 	// Dialog
-	BOOL m_bInitializing{};
-	BOOL m_bDpiChanging{};
-	BOOL m_bShowWindow{};
-	BOOL m_bModelessDlg{};
-	BOOL m_bHighContrast{};
-	BOOL m_bDarkMode{};
-	BOOL m_bDisableDarkMode{};
-	BOOL m_bBkImage{};
-	UINT m_MenuId{};
+	BOOL m_bInitializing;
+	BOOL m_bDpiChanging;
+	BOOL m_bShowWindow;
+	BOOL m_bModelessDlg;
+	BOOL m_bHighContrast;
+	BOOL m_bDarkMode;
+	BOOL m_bDisableDarkMode;
+	BOOL m_bBkImage;
+	UINT m_MenuId;
 	CWnd* m_ParentWnd;
 	CWnd* m_DlgWnd;
 	CString m_Ini;
-	HACCEL m_hAccelerator{};
-	BOOL m_bDrag{};
-	CString m_FontFace{};
-	BYTE m_FontRender{};
-	int m_FontScale{};
-	double m_FontRatio{};
+	HACCEL m_hAccelerator;
+	BOOL m_bDrag;
+	CString m_FontFace;
+	int m_FontScale;
+	double m_FontRatio;
+	BYTE m_FontRender;
 
-	int m_SizeX{};
-	int m_MaxSizeX{};
-	int m_MinSizeX{};
-	int m_SizeY{};
-	int m_MaxSizeY{};
-	int m_MinSizeY{};
+	int m_SizeX;
+	int m_MaxSizeX;
+	int m_MinSizeX;
+	int m_SizeY;
+	int m_MaxSizeY;
+	int m_MinSizeY;
 
 	// Zoom
-	int m_Dpi{};
-	DWORD m_ZoomType{};
-	double m_ZoomRatio{};
+	int m_Dpi;
+	DWORD m_ZoomType;
+	double m_ZoomRatio;
 
 	// Color for SubClass
-	COLORREF m_LabelText{};
-	COLORREF m_MeterText{};
-	COLORREF m_ComboText{};
-	COLORREF m_ComboTextSelected{};
-	COLORREF m_ComboBk{};
-	COLORREF m_ComboBkSelected{};
-	COLORREF m_ButtonText{};
-	COLORREF m_EditText{};
-	COLORREF m_EditBk{};
-	COLORREF m_ListText1{};
-	COLORREF m_ListText2{};
-	COLORREF m_ListTextSelected{};
-	COLORREF m_ListBk1{};
-	COLORREF m_ListBk2{};
-	COLORREF m_ListBkSelected{};
-	COLORREF m_ListLine1{};
-	COLORREF m_ListLine2{};
-	COLORREF m_Glass{};
-	COLORREF m_Frame{};
+	COLORREF m_LabelText;
+	COLORREF m_MeterText;
+	COLORREF m_ComboText;
+	COLORREF m_ComboTextSelected;
+	COLORREF m_ComboBk;
+	COLORREF m_ComboBkSelected;
+	COLORREF m_ButtonText;
+	COLORREF m_EditText;
+	COLORREF m_EditBk;
+	COLORREF m_ListText1;
+	COLORREF m_ListText2;
+	COLORREF m_ListTextSelected;
+	COLORREF m_ListBk1;
+	COLORREF m_ListBk2;
+	COLORREF m_ListBkSelected;
+	COLORREF m_ListLine1;
+	COLORREF m_ListLine2;
+	COLORREF m_Glass;
+	COLORREF m_Frame;
+	COLORREF m_Background;
 
-	BYTE     m_ComboAlpha{};
-	BYTE     m_EditAlpha{};
-	BYTE     m_GlassAlpha{};
+	BYTE     m_ComboAlpha;
+	BYTE     m_EditAlpha;
+	BYTE     m_GlassAlpha;
 
-	BYTE     m_CharacterPosition{};
+	BYTE     m_CharacterPosition;
 
 	// Theme for SubClass
-	int m_OffsetX{};
+	int m_OffsetX;
 	CString m_ThemeDir;
 	CString m_CurrentTheme;
 	CString m_DefaultTheme;
@@ -141,6 +143,11 @@ protected:
 	CString m_CurrentLangPath;
 	CString m_DefaultLangPath;
 	CString m_BackgroundName;
+
+	// Voice for SubClass
+	CString m_VoiceDir;
+	CString m_CurrentVoice;
+	INT     m_VoiceVolume;
 
 	// Class
 	CBitmap m_BkBitmap;

@@ -57,9 +57,6 @@
     <ClCompile Include="SettingDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AtaSmart.cpp">
       <Filter>Library Files</Filter>
     </ClCompile>
@@ -129,6 +126,12 @@
     <ClCompile Include="Priscilla\SliderCtrlFx.cpp">
       <Filter>Prscilla</Filter>
     </ClCompile>
+    <ClCompile Include="Priscilla\UAHMenuBar.cpp">
+      <Filter>Prscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h">
@@ -144,9 +147,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OptionDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SettingDlg.h">
@@ -170,13 +170,7 @@
     <ClInclude Include="SPTIUtil.h">
       <Filter>Library Files</Filter>
     </ClInclude>
-    <ClInclude Include="resourceS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SoundSettingDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HealthDlg.h">
@@ -250,6 +244,21 @@
     </ClInclude>
     <ClInclude Include="JMicronUsbRaidInit.h">
       <Filter>Library Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\UAHMenuBar.h">
+      <Filter>Prscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\resourceN.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\resourceS.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

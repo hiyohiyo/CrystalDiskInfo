@@ -5,7 +5,7 @@
 //      License : MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "HeaderCtrlFx.h"
 #include "OsInfoFx.h"
 
@@ -190,11 +190,11 @@ void CHeaderCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double f
 	logFont.lfWeight = fontWeight;
 	if (face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
+		wsprintf(logFont.lfFaceName, _T("%s"), (LPCTSTR)face);
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, L"");
+		wsprintf(logFont.lfFaceName, _T(""));
 	}
 
 	m_Font.DeleteObject();

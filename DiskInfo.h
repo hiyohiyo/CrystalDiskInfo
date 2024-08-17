@@ -10,7 +10,7 @@
 	#error "include 'stdafx.h' before including this file for PCH"
 #endif
 
-#include "resource.h"		// main symbols
+#include "Resource.h"		// main symbols
 
 // #define THEME_DIR					_T("CdiResource\\themes\\")
 // #define LANGUAGE_DIR				_T("CdiResource\\language\\")

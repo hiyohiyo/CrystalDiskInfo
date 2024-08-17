@@ -5,8 +5,20 @@
 //      License : MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "StaticFx.h"
+
+#if _MSC_VER <= 1310
+#define ON_WM_MOUSEHOVER() \
+	{ 0x2A1 /*WM_MOUSEHOVER*/, 0, 0, 0, AfxSig_vwp, \
+		(AFX_PMSG)(AFX_PMSGW) \
+		(static_cast< void (AFX_MSG_CALL CWnd::*)(UINT, CPoint) > (OnMouseHover)) },
+
+#define ON_WM_MOUSELEAVE() \
+	{ 0x2A3 /*WM_MOUSELEAVE*/, 0, 0, 0, AfxSig_vv, \
+		(AFX_PMSG)(AFX_PMSGW) \
+		(static_cast< void (AFX_MSG_CALL CWnd::*)(void) > (OnMouseLeave)) },
+#endif
 
 ////------------------------------------------------
 //   CStaticFx
@@ -52,6 +64,12 @@ CStaticFx::CStaticFx()
 	m_TextFormat = 0;
 	m_LabelFormat = DT_LEFT | DT_TOP | DT_SINGLELINE;
 	m_UnitFormat = DT_RIGHT | DT_BOTTOM | DT_SINGLELINE;
+
+	// Margin
+	m_Margin.top = 0;
+	m_Margin.left = 0;
+	m_Margin.bottom = 0;
+	m_Margin.right = 0;
 }
 
 CStaticFx::~CStaticFx()
@@ -77,7 +95,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
-	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame)
+	LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -118,7 +136,7 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 	}
 	else if (renderMode & SystemDraw)
 	{
-		ModifyStyle(BS_OWNERDRAW, m_TextAlign | SS_CENTERIMAGE);
+		ModifyStyle(SS_OWNERDRAW, m_TextAlign | SS_CENTERIMAGE);
 
 		return TRUE;
 	}
@@ -167,12 +185,16 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 			for (int x = 0; x < m_CtrlSize.cx; x++)
 			{
 				DWORD p = (y * m_CtrlSize.cx + x) * 4;
+#if _MSC_VER > 1310
 #pragma warning( disable : 6386 )
+#endif
 				bitmapBits[p + 0] = b;
 				bitmapBits[p + 1] = g;
 				bitmapBits[p + 2] = r;
 				bitmapBits[p + 3] = a;
+#if _MSC_VER > 1310
 #pragma warning( default : 6386 )
+#endif
 			}
 		}
 
@@ -315,82 +337,95 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 			ctrlBitmap.GetBitmap(&CtlBmpInfo);
 			DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
 			DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
-			BYTE* DstBuffer = new BYTE[DstMemSize];
-			bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
-			BYTE* CtlBuffer = new BYTE[CtlMemSize];
-			ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
-			if (m_bMeter)
+			if ((DstBmpInfo.bmWidthBytes != CtlBmpInfo.bmWidthBytes)
+			||  (DstBmpInfo.bmHeight != CtlBmpInfo.bmHeight / m_ImageCount))
 			{
-				int meter = (int)(m_CtrlSize.cx * m_MeterRatio);
-				int baseY;
-				baseY = m_CtrlSize.cy;
-				for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
-				{
-					int dn = py * DstLineBytes;
-					int cn = (baseY + py) * CtlLineBytes;
-					for (LONG px = 0; px < meter; px++)
-					{
-						BYTE a = CtlBuffer[cn + 3];
-						BYTE na = 255 - a;
-						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
-						DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
-						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
-						dn += (DstBmpInfo.bmBitsPixel / 8);
-						cn += (CtlBmpInfo.bmBitsPixel / 8);
-					}
-					cn -= baseY * CtlLineBytes;
-					for (LONG px = meter; px < DstBmpInfo.bmWidth; px++)
-					{
-						BYTE a = CtlBuffer[cn + 3];
-						BYTE na = 255 - a;
-						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
-						DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
-						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
-						dn += (DstBmpInfo.bmBitsPixel / 8);
-						cn += (CtlBmpInfo.bmBitsPixel / 8);
-					}
-				}
+				// Error Check //
 			}
 			else
 			{
-				int baseY = m_CtrlSize.cy * no;
-				for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+				BYTE* DstBuffer = new BYTE[DstMemSize];
+				bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
+				BYTE* CtlBuffer = new BYTE[CtlMemSize];
+				ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
+
+				if (m_bMeter)
 				{
-					int dn = py * DstLineBytes;
-					int cn = (baseY + py) * CtlLineBytes;
-					for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+					int meter = (int)(m_CtrlSize.cx * m_MeterRatio);
+					int baseY;
+					baseY = m_CtrlSize.cy;
+					for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
 					{
+						int dn = py * DstLineBytes;
+						int cn = (baseY + py) * CtlLineBytes;
+						for (LONG px = 0; px < meter; px++)
+						{
+							BYTE a = CtlBuffer[cn + 3];
+							BYTE na = 255 - a;
+							DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+							DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+							DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+							dn += (DstBmpInfo.bmBitsPixel / 8);
+							cn += (CtlBmpInfo.bmBitsPixel / 8);
+						}
+						cn -= baseY * CtlLineBytes;
+						for (LONG px = meter; px < DstBmpInfo.bmWidth; px++)
+						{
+							BYTE a = CtlBuffer[cn + 3];
+							BYTE na = 255 - a;
+							DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+							DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+							DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+							dn += (DstBmpInfo.bmBitsPixel / 8);
+							cn += (CtlBmpInfo.bmBitsPixel / 8);
+						}
+					}
+				}
+				else
+				{
+					int baseY = m_CtrlSize.cy * no;
+					for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+					{
+						int dn = py * DstLineBytes;
+						int cn = (baseY + py) * CtlLineBytes;
+						for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+						{
+#if _MSC_VER > 1310
 #pragma warning( disable : 6385 )
 #pragma warning( disable : 6386 )
-						BYTE a = CtlBuffer[cn + 3];
-						BYTE na = 255 - a;
-						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
-						DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
-						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
-						dn += (DstBmpInfo.bmBitsPixel / 8);
-						cn += (CtlBmpInfo.bmBitsPixel / 8);
+#endif
+							BYTE a = CtlBuffer[cn + 3];
+							BYTE na = 255 - a;
+							DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+							DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+							DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+							dn += (DstBmpInfo.bmBitsPixel / 8);
+							cn += (CtlBmpInfo.bmBitsPixel / 8);
+#if _MSC_VER > 1310
 #pragma warning( default : 6386 )
 #pragma warning( default : 6385 )
+#endif
+						}
 					}
 				}
-			}
 
-			if (color == 32)
-			{
-				DrawBmp.SetBitmapBits(DstMemSize, DstBuffer);
-			}
-			else
-			{
-				bk32Bitmap->SetBitmapBits(DstMemSize, DstBuffer);
-				::BitBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
-				bk32Image.ReleaseDC();
-			}
-			DrawString(pDrawBmpDC, lpDrawItemStruct);
-			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+				if (color == 32)
+				{
+					DrawBmp.SetBitmapBits(DstMemSize, DstBuffer);
+				}
+				else
+				{
+					bk32Bitmap->SetBitmapBits(DstMemSize, DstBuffer);
+					::BitBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
+					bk32Image.ReleaseDC();
+				}
+				DrawString(pDrawBmpDC, lpDrawItemStruct);
+				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 
-			delete[] DstBuffer;
-			delete[] CtlBuffer;
+				delete[] DstBuffer;
+				delete[] CtlBuffer;
+			}
 		}
 		else
 		{
@@ -510,9 +545,9 @@ void CStaticFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	if (m_bMeter && rect.Width() < extent.cx)
 	{
-		title.Replace(L",", L".");
-		int score = _wtoi(title);
-		title.Format(L"%d", score);
+		title.Replace(_T(","), _T("."));
+		int score = _tstoi((LPCTSTR)title);
+		title.Format(_T("%d"), score);
 		extent = drawDC->GetTextExtent(title);
 	}
 
@@ -653,11 +688,11 @@ void CStaticFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRa
 	logFont.lfWeight = fontWeight;
 	if (face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
+		wsprintf(logFont.lfFaceName, _T("%s"), (LPCTSTR)face);
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, L"");
+		wsprintf(logFont.lfFaceName, _T(""));
 	}
 
 	m_Font.DeleteObject();
@@ -700,7 +735,9 @@ void CStaticFx::OnMouseMove(UINT nFlags, CPoint point)
 
 void CStaticFx::OnMouseHover(UINT nFlags, CPoint point)
 {
+#if _MSC_VER > 1310
 	CStatic::OnMouseHover(nFlags, point);
+#endif
 
 	m_bHover = TRUE;
 	Invalidate();
@@ -708,7 +745,9 @@ void CStaticFx::OnMouseHover(UINT nFlags, CPoint point)
 
 void CStaticFx::OnMouseLeave()
 {
+#if _MSC_VER > 1310
 	CStatic::OnMouseLeave();
+#endif
 
 	m_bTrackingNow = FALSE;
 	m_bHover = FALSE;
@@ -729,13 +768,22 @@ void CStaticFx::OnKillfocus()
 
 BOOL CStaticFx::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
+	HCURSOR hCursor = NULL;
 	if (m_bHandCursor)
 	{
-		::SetCursor(AfxGetApp()->LoadStandardCursor(IDC_HAND));
+		hCursor = AfxGetApp()->LoadStandardCursor(IDC_HAND);
+		if (hCursor)
+		{
+			::SetCursor(hCursor);
+		}
 	}
 	else
 	{
-		::SetCursor(AfxGetApp()->LoadStandardCursor(IDC_ARROW));
+		hCursor = AfxGetApp()->LoadStandardCursor(IDC_ARROW);
+		if (hCursor)
+		{
+			::SetCursor(hCursor);
+		}
 	}
 
 	return TRUE;
@@ -789,7 +837,7 @@ void CStaticFx::InitToolTip()
 		m_ToolTip.Create(this, TTS_ALWAYSTIP | TTS_BALLOON | TTS_NOANIMATE | TTS_NOFADE);
 		m_ToolTip.Activate(FALSE);
 		m_ToolTip.SetFont(&m_FontToolTip);
-		m_ToolTip.SendMessageW(TTM_SETMAXTIPWIDTH, 0, 1024);
+		m_ToolTip.SendMessage(TTM_SETMAXTIPWIDTH, 0, 1024);
 		m_ToolTip.SetDelayTime(TTDT_AUTOPOP, 8000);
 		m_ToolTip.SetDelayTime(TTDT_INITIAL, 500);
 		m_ToolTip.SetDelayTime(TTDT_RESHOW, 100);

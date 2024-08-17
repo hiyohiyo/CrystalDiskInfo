@@ -5,7 +5,7 @@
 //      License : MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "SliderCtrlFx.h"
 #include "OsInfoFx.h"
 

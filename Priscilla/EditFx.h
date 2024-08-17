@@ -23,12 +23,13 @@ public:
 	virtual ~CEditFx();
 
 	// Control
-	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, LPCWSTR imagePath,
+	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, LPCTSTR imagePath,
 		 int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame, BOOL bMultiLine = FALSE);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);
 	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);
+	void SetBkColor(COLORREF bkColor);
 	void Adjust();
 
 	// Font
@@ -72,6 +73,7 @@ protected:
 	BOOL m_bDrawFrame;
 	COLORREF m_FrameColor;
 	BOOL m_bMultiLine;
+	COLORREF m_BkColor;
 
 	// Glass
 	COLORREF m_GlassColor;

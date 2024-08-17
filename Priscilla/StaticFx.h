@@ -31,7 +31,7 @@ public:
 
 	// Control
 	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
-		LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame);
+		LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);

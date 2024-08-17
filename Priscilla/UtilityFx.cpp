@@ -5,7 +5,7 @@
 //      License : MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "UtilityFx.h"
 
 #include <io.h>
@@ -36,14 +36,14 @@ void SetDebugMode(DWORD mode)
 void DebugPrint(CString cstr)
 {
 	static BOOL flag = TRUE;
-	static TCHAR file[MAX_PATH] = L"";
+	static TCHAR file[MAX_PATH] = _T("");
 	static DWORD first = (DWORD)GetTickCountFx();
 	CString output;
 
-	output.Format(L"%08d ", (DWORD)GetTickCountFx() - first);
+	output.Format(_T("%08d "), (DWORD)GetTickCountFx() - first);
 	output += cstr;
-	output.Append(L"\n");
-	output.Replace(L"\r", L"");
+	output.Append(_T("\n"));
+	output.Replace(_T("\r"), _T(""));
 
 	if (flag)
 	{
@@ -52,7 +52,11 @@ void DebugPrint(CString cstr)
 		if ((ptrEnd = _tcsrchr(file, '.')) != NULL)
 		{
 			*ptrEnd = '\0';
-			_tcscat_s(file, MAX_PATH, L".log");
+#if _MSC_VER <= 1310
+			_tcscat(file, _T(".log"));
+#else
+			_tcscat_s(file, MAX_PATH, _T(".log"));
+#endif		
 		}
 		DeleteFile(file);
 		flag = FALSE;
@@ -63,11 +67,16 @@ void DebugPrint(CString cstr)
 		return;
 	}
 
-	FILE* fp{};
-	_tfopen_s(&fp, file, L"ac");
+	FILE* fp = NULL;
+#if _MSC_VER <= 1310
+	fp = _tfopen(file, _T("ac"));
+#else
+	_tfopen_s(&fp, file, _T("ac"));
+#endif
+	
 	if (fp != NULL)
 	{
-		_ftprintf(fp, L"%s", (LPCTSTR)output);
+		_ftprintf(fp, _T("%s"), (LPCTSTR)output);
 		fflush(fp);
 		fclose(fp);
 	}
@@ -85,33 +94,42 @@ void DebugPrint(CString cstr)
 int GetFileVersion(const TCHAR* file, TCHAR* version)
 {
 	ULONG reserved = 0;
-	VS_FIXEDFILEINFO vffi{};
+	VS_FIXEDFILEINFO vffi = { 0 };
 	TCHAR* buf = NULL;
 	int  Locale = 0;
-	TCHAR str[256]{};
+	TCHAR str[256] = { 0 };
 
 	UINT size = GetFileVersionInfoSize((TCHAR*)file, &reserved);
 	TCHAR* vbuf = new TCHAR[size];
 	if (GetFileVersionInfo((TCHAR*)file, 0, size, vbuf))
 	{
-		VerQueryValue(vbuf, L"\\", (void**)&buf, &size);
+		VerQueryValue(vbuf, _T("\\"), (void**)&buf, &size);
 		CopyMemory(&vffi, buf, sizeof(VS_FIXEDFILEINFO));
 
-		VerQueryValue(vbuf, L"\\VarFileInfo\\Translation", (void**)&buf, &size);
+		VerQueryValue(vbuf, _T("\\VarFileInfo\\Translation"), (void**)&buf, &size);
 		CopyMemory(&Locale, buf, sizeof(int));
-		wsprintf(str, L"\\StringFileInfo\\%04X%04X\\%s",
-			LOWORD(Locale), HIWORD(Locale), L"FileVersion");
+		wsprintf(str, _T("\\StringFileInfo\\%04X%04X\\%s"),
+			LOWORD(Locale), HIWORD(Locale), _T("FileVersion"));
 		VerQueryValue(vbuf, str, (void**)&buf, &size);
 
+#if _MSC_VER <= 1310
+		_tcscpy(str, buf);
+#else
 		_tcscpy_s(str, 256, buf);
+#endif
+		
 		if (version != NULL)
 		{
+#if _MSC_VER <= 1310
+			_tcscpy(version,buf);
+#else
 			_tcscpy_s(version, 256, buf);
+#endif
 		}
 	}
 	delete[] vbuf;
 
-	if (_tcscmp(str, L"") != 0)
+	if (_tcscmp(str, _T("")) != 0)
 	{
 		return int(_tstof(str) * 100);
 	}
@@ -121,13 +139,45 @@ int GetFileVersion(const TCHAR* file, TCHAR* version)
 	}
 }
 
+void GetFileVersionEx(const TCHAR* file, CString& version)
+{
+	ULONG reserved = 0;
+	VS_FIXEDFILEINFO vffi = { 0 };
+	TCHAR* buf = NULL;
+	int  Locale = 0;
+	TCHAR str[256] = { 0 };
+
+	UINT size = GetFileVersionInfoSize((TCHAR*)file, &reserved);
+	TCHAR* vbuf = new TCHAR[size];
+	if (GetFileVersionInfo((TCHAR*)file, 0, size, vbuf))
+	{
+		VerQueryValue(vbuf, _T("\\"), (void**)&buf, &size);
+		CopyMemory(&vffi, buf, sizeof(VS_FIXEDFILEINFO));
+
+		if (vffi.dwSignature == 0xfeef04bd)
+		{
+			version.Format(_T("%d.%d.%d.%d"),
+				HIWORD(vffi.dwFileVersionMS),
+				LOWORD(vffi.dwFileVersionMS),
+				HIWORD(vffi.dwFileVersionLS),
+				LOWORD(vffi.dwFileVersionLS));
+		}
+	}
+	delete[] vbuf;
+}
+
 BOOL IsFileExist(const TCHAR* path)
 {
-	FILE* fp{};
-	errno_t err{};
+	FILE* fp = NULL;
 
-	err = _tfopen_s(&fp, path, L"rb");
+#if _MSC_VER <= 1310
+	fp = _tfopen(path, _T("rb"));
+	if (fp == NULL)
+#else
+	errno_t err = 0;
+	err = _tfopen_s(&fp, path, _T("rb"));
 	if (err != 0 || fp == NULL)
+#endif
 	{
 		return FALSE;
 	}
@@ -143,7 +193,7 @@ typedef ULONGLONG(WINAPI* FuncGetTickCount64)();
 
 ULONGLONG GetTickCountFx()
 {
-	HMODULE hModule = GetModuleHandle(L"kernel32.dll");
+	HMODULE hModule = GetModuleHandle(_T("kernel32.dll"));
 	FuncGetTickCount64 pGetTickCount64 = NULL;
 	if (hModule)
 	{
@@ -156,7 +206,11 @@ ULONGLONG GetTickCountFx()
 	}
 	else
 	{
+#if _MSC_VER <= 1310
+		return (ULONGLONG)GetTickCount();
+#else
 		return _Pragma("warning(suppress: 28159)") (ULONGLONG)GetTickCount();
+#endif
 	}
 }
 
@@ -186,6 +240,22 @@ DWORD B8toB32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 	return data;
 }
 
+void SplitCString(const CString& str, const CString& delimiter, CStringArray& arr)
+{
+	int startPos = 0;
+	while (startPos >= 0)
+	{
+		int endPos = str.Find(delimiter, startPos);
+		if (endPos == -1)
+		{
+			arr.Add(str.Mid(startPos));
+			break;
+		}
+		arr.Add(str.Mid(startPos, endPos - startPos));
+		startPos = endPos + lstrlen(delimiter);
+	}
+}
+
 ////------------------------------------------------
 //   .ini support function
 ////------------------------------------------------
@@ -194,14 +264,19 @@ DWORD GetPrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lp
 {
 	DWORD result = 0;
 	CString key = lpKeyName;
-	key.Replace(L"=", L"%#3D");
-	key.Replace(L"\"", L"%#22");
+	key.Replace(_T("="), _T("%#3D"));
+	key.Replace(_T("\""), _T("%#22"));
 	result = GetPrivateProfileString(lpAppName, key, lpDefault, lpReturnedString, nSize, lpFileName);
 
 	CString value = lpReturnedString;
-	value.Replace(L"%#3D", L"=");
-	value.Replace(L"%#22", L"\"");
-	_tcscpy_s(lpReturnedString, nSize, value.GetString());
+	value.Replace(_T("%#3D"), _T("="));
+	value.Replace(_T("%#22"), _T("\""));
+
+#if _MSC_VER <= 1310
+	_tcscpy(lpReturnedString, (LPCTSTR)value);
+#else
+	_tcscpy_s(lpReturnedString, nSize, (LPCTSTR)value);
+#endif
 
 	return result;
 }
@@ -209,8 +284,8 @@ DWORD GetPrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lp
 UINT GetPrivateProfileIntFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, INT nDefault, LPCTSTR lpFileName)
 {
 	CString key = lpKeyName;
-	key.Replace(L"=", L"%#3D");
-	key.Replace(L"\"", L"%#22");
+	key.Replace(_T("="), _T("%#3D"));
+	key.Replace(_T("\""), _T("%#22"));
 
 	return GetPrivateProfileInt(lpAppName, key, nDefault, lpFileName);
 }
@@ -218,14 +293,14 @@ UINT GetPrivateProfileIntFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, INT nDefault, 
 BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpString, LPCTSTR lpFileName)
 {
 	CString key = lpKeyName;
-	key.Replace(L"=", L"%#3D");
-	key.Replace(L"\"", L"%#22");
+	key.Replace(_T("="), _T("%#3D"));
+	key.Replace(_T("\""), _T("%#22"));
 
 	CString value = lpString;
-	value.Replace(L"=", L"%#3D");
-	value.Replace(L"\"", L"%#22");
+	value.Replace(_T("="), _T("%#3D"));
+	value.Replace(_T("\""), _T("%#22"));
 
-	value = L"\"" + value + L"\"";
+	value = _T("\"" + value + _T("\""));
 
 	return WritePrivateProfileString(lpAppName, key, value, lpFileName);
 }
@@ -233,12 +308,12 @@ BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR l
 ////------------------------------------------------
 //   Check CodeSign
 ////------------------------------------------------
-
+#if _MSC_VER > 1310
 #include <Softpub.h>
 #pragma comment(lib, "Wintrust.lib")
 #pragma comment(lib, "Crypt32.lib")
 
-BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath)
+BOOL CheckCodeSign(LPCWSTR certName, LPCWSTR filePath)
 {
 #ifdef _DEBUG
 	return TRUE;
@@ -273,7 +348,7 @@ BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath)
 			if (psProvSigner) {
 				psProvCert = WTHelperGetProvCertFromChain(psProvSigner, 0);
 				if (psProvCert) {
-					wchar_t szCertName[200] = {};
+					wchar_t szCertName[200] = {0};
 					DWORD dwStrType = CERT_X500_NAME_STR;
 					CertGetNameStringW(psProvCert->pCert, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, &dwStrType, szCertName, 200);
 					cert_chk = !(szCertName[0] == '\0' || wcscmp(szCertName, certName) != 0);
@@ -286,4 +361,339 @@ BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath)
 	if (!cert_chk)  return FALSE;
 
 	return TRUE;
+}
+#endif
+
+////------------------------------------------------
+//   Play Sound
+////------------------------------------------------
+
+#include <mmsystem.h>
+#include "digitalv.h"
+
+#pragma comment(lib, "winmm.lib")
+
+/*
+void ShowMciError(DWORD error)
+{
+	TCHAR errorBuf[MAXERRORLENGTH];
+
+	if (mciGetErrorString(error, (LPTSTR)errorBuf, MAXERRORLENGTH))
+	{
+		AfxMessageBox(errorBuf);
+	}
+	else
+	{
+		AfxMessageBox(_T("Unknown Error");
+	}
+}
+*/
+
+BOOL AlertSound(const CString& alertSoundPath, int volume)
+{
+#if _MSC_VER <= 1310
+	PlaySound(alertSoundPath, NULL, SND_SYNC);
+#else
+
+	static MCI_OPEN_PARMS mop = { 0 };
+	static MCI_PLAY_PARMS mpp = { 0 };
+	static MCI_GENERIC_PARMS mgp = { 0 };
+	MCIERROR error = 0;
+
+	if (mop.wDeviceID != 0)
+	{
+		// Stop and close
+		error = mciSendCommandW(mop.wDeviceID, MCI_STOP, 0, 0);
+		error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, 0, 0);
+		mop.wDeviceID = 0;
+		ZeroMemory(&mop, sizeof(MCI_OPEN_PARMS));
+		if (error)
+		{
+			// ShowMciError(error);
+			return FALSE;
+		}
+	}
+
+	if (alertSoundPath.Compare(_T("")) == 0) {
+		// Close
+		error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, 0, 0);
+		if (error)
+		{
+			// ShowMciError(error);
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	// Open
+	mop.lpstrElementName = (LPCTSTR)alertSoundPath;
+	mop.lpstrDeviceType = _T("MPEGVideo");
+	error = mciSendCommandW(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD_PTR)(&mop));
+	
+	if (error)
+	{
+		// ShowMciError(error);
+		return FALSE;
+	}
+
+	// Set volume
+	if (volume < 0 || volume > 100) { volume = 80; }
+
+	MCI_DGV_SETAUDIO_PARMS parms = { 0 };
+	parms.dwItem = MCI_DGV_SETAUDIO_VOLUME;
+	parms.dwValue = volume * 10; // 0-1000
+	error = mciSendCommand(mop.wDeviceID, MCI_SETAUDIO, MCI_DGV_SETAUDIO_ITEM | MCI_DGV_SETAUDIO_VALUE, (DWORD_PTR)&parms);
+	if (error)
+	{
+		// ShowMciError(error);
+		return FALSE;
+	}
+	// Seek
+	error = mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, reinterpret_cast<DWORD_PTR>(&mgp));
+	if (error)
+	{
+		// ShowMciError(error);
+		return FALSE;
+	}
+
+	// Play
+	error = mciSendCommandW(mop.wDeviceID, MCI_PLAY, 0, reinterpret_cast<DWORD_PTR>(&mpp));
+	if (error)
+	{
+		// ShowMciError(error);
+		return FALSE;
+	}
+#endif
+
+	return TRUE;
+}
+
+
+////------------------------------------------------
+//   Hash
+////------------------------------------------------
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <windows.h>
+#include <wincrypt.h>
+
+// UTF-8文字列を引数にとり、MD5ハッシュを128ビットのハッシュ値として返却する関数
+CStringA MD5(const CStringA& str)
+{
+	HCRYPTPROV hProv = 0;
+	HCRYPTHASH hHash = 0;
+	BYTE hash[16]; // MD5のハッシュ値は16バイト
+	DWORD hashLen = 16;
+	CStringA hashStr;
+
+	// Cryptographic Service Provider (CSP)を取得
+	if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
+		return "";
+	}
+
+	// MD5ハッシュオブジェクトを作成
+	if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash)) {
+		CryptReleaseContext(hProv, 0);
+		return "";
+	}
+
+	// CStringをUTF-8に変換してバイト配列を取得
+	std::string utf8Str(str);
+
+	// データをハッシュオブジェクトに追加
+	if (!CryptHashData(hHash, reinterpret_cast<const BYTE*>(utf8Str.c_str()), (DWORD)utf8Str.size(), 0)) {
+		CryptDestroyHash(hHash);
+		CryptReleaseContext(hProv, 0);
+		return "";
+	}
+
+	// ハッシュ値を取得
+	if (!CryptGetHashParam(hHash, HP_HASHVAL, hash, &hashLen, 0)) {
+		CryptDestroyHash(hHash);
+		CryptReleaseContext(hProv, 0);
+		return "";
+	}
+
+	// ハッシュ値を16進数文字列に変換
+	for (DWORD i = 0; i < hashLen; ++i) {
+		CString temp;
+		temp.Format(_T("%02x"), hash[i]);
+		hashStr += temp;
+	}
+
+	// リソースの解放
+	CryptDestroyHash(hHash);
+	CryptReleaseContext(hProv, 0);
+
+	return hashStr;
+}
+
+////------------------------------------------------
+//   Character Converter
+////------------------------------------------------
+
+CStringA C16T8(const CStringW& utf16str)
+{
+	CStringA utf8str(CW2A(utf16str, CP_UTF8));
+	return utf8str;
+}
+
+CStringW C8T16(const CStringA& utf8str)
+{
+	CStringW utf16str;
+	utf16str = CA2W(utf8str);
+	return utf16str;
+}
+
+CStringA URLEncode(const CStringA& str)
+{
+	CStringA encoded;
+	for (int i = 0; i < str.GetLength(); i++)
+	{
+		if (isalnum((BYTE)str[i]) || str[i] == '-' || str[i] == '_' || str[i] == '.' || str[i] == '~')
+		{
+			encoded += str[i];
+		}
+		else
+		{
+			encoded.AppendFormat("%%%02X", (BYTE)str[i]);
+		}
+	}
+	return encoded;
+}
+
+CStringA ANSI2UTF8(const CStringA& ansiStr)
+{
+	// Step 1: ANSI to UTF-16
+	int utf16Length = MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, NULL, 0);
+	wchar_t* utf16str = new wchar_t[utf16Length];
+	MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, utf16str, utf16Length);
+
+	// Step 2: UTF-16 to UTF-8
+	int utf8Length = WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, NULL, 0, NULL, NULL);
+	char* utf8str = new char[utf8Length];
+	WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, utf8str, utf8Length, NULL, NULL);
+
+	CStringA result(utf8str);
+
+	delete[] utf16str;
+	delete[] utf8str;
+
+	return result;
+}
+
+CStringA UE(const CStringW& utf16str)
+{
+	CStringA encoded;
+	CStringA utf8str(CW2A(utf16str, CP_UTF8));
+	encoded = URLEncode(utf8str);
+	return encoded;
+}
+
+CStringA UE(const CStringA& ansiStr)
+{
+	CStringA encoded;
+	encoded = URLEncode(ANSI2UTF8(ansiStr));
+	return encoded;
+}
+
+////------------------------------------------------
+//   QR Code
+////------------------------------------------------
+
+#ifdef OPTION_QR_CODE
+#include <atlimage.h>
+#include "qrcodegen.h"
+
+// ピクセルを設定するヘルパー関数
+void SetPixel(CImage& image, int x, int y, int scale, bool isBlack) {
+	for (int dy = 0; dy < scale; dy++) {
+		for (int dx = 0; dx < scale; dx++) {
+			image.SetPixelRGB(x * scale + dx, y * scale + dy, isBlack ? 0 : 255, isBlack ? 0 : 255, isBlack ? 0 : 255);
+		}
+	}
+}
+
+int SaveQRCode(CStringA& text, CString& fileName, int scale)
+{
+    // QRコードにエンコードするデータ
+    enum qrcodegen_Ecc errCorLvl = qrcodegen_Ecc_LOW;
+
+    // QRコードの生成
+    uint8_t qrcode[qrcodegen_BUFFER_LEN_MAX];
+    uint8_t tempBuffer[qrcodegen_BUFFER_LEN_MAX];
+    bool success = qrcodegen_encodeText(text, tempBuffer, qrcode, errCorLvl, qrcodegen_VERSION_MIN, qrcodegen_VERSION_MAX, qrcodegen_Mask_AUTO, true);
+
+    if (!success) {
+        return 1;
+    }
+
+    // QRコードのサイズを取得
+    int size = qrcodegen_getSize(qrcode);
+    //int scale = 6;  // 拡大スケール
+    int imageSize = size * scale;
+
+    // CImageオブジェクトの作成
+    CImage image;
+    image.Create(imageSize, imageSize, 24);
+
+    // 白で初期化
+    for (int y = 0; y < imageSize; y++) {
+        for (int x = 0; x < imageSize; x++) {
+            image.SetPixelRGB(x, y, 255, 255, 255);
+        }
+    }
+
+    // QRコードの描画
+    for (int y = 0; y < size; y++) {
+        for (int x = 0; x < size; x++) {
+            bool isBlack = qrcodegen_getModule(qrcode, x, y);
+            SetPixel(image, x, y, scale, isBlack);
+        }
+    }
+
+    // QRコードをPNGファイルとして保存
+    HRESULT hr = image.Save(fileName, Gdiplus::ImageFormatPNG);
+    if (FAILED(hr)) {
+        return 1;
+    }
+
+    return 0;
+}
+
+#endif
+
+////------------------------------------------------
+//   Clipboard
+////------------------------------------------------
+
+void SetClipboardText(CString clip)
+{
+	if (OpenClipboard(NULL))
+	{
+		HGLOBAL clipbuffer;
+		TCHAR* buffer = NULL;
+		EmptyClipboard();
+		clipbuffer = GlobalAlloc(GMEM_DDESHARE, sizeof(TCHAR) * (clip.GetLength() + 1));
+		if (clipbuffer != NULL)
+		{
+			buffer = (TCHAR*)GlobalLock(clipbuffer);
+			if (buffer != NULL)
+			{
+#if _MSC_VER <= 1310
+				_tcscpy(buffer, LPCTSTR(clip));
+#else
+				_tcscpy_s(buffer, clip.GetLength() + 1, LPCTSTR(clip));
+#endif
+			}
+			GlobalUnlock(clipbuffer);
+#ifdef UNICODE
+			SetClipboardData(CF_UNICODETEXT, clipbuffer);
+#else
+			SetClipboardData(CF_TEXT, clipbuffer);
+#endif
+		}
+		CloseClipboard();
+	}
 }

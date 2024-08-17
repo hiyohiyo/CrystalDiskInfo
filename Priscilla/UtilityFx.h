@@ -19,6 +19,7 @@ void DebugPrint(CString cstr);
 ////------------------------------------------------
 
 int GetFileVersion(const TCHAR* fileName, TCHAR* version = NULL);
+void GetFileVersionEx(const TCHAR* file, CString& version);
 BOOL IsFileExist(const TCHAR* fileName);
 
 ////------------------------------------------------
@@ -29,6 +30,7 @@ ULONGLONG GetTickCountFx();
 
 ULONG64 B8toB64(BYTE b0, BYTE b1 = 0, BYTE b2 = 0, BYTE b3 = 0, BYTE b4 = 0, BYTE b5 = 0, BYTE b6 = 0, BYTE b7 = 0);
 DWORD B8toB32(BYTE b0, BYTE b1 = 0, BYTE b2 = 0, BYTE b3 = 0);
+void SplitCString(const CString& str, const CString& delimiter, CStringArray& arr);
 
 ////------------------------------------------------
 //   .ini support function
@@ -42,4 +44,41 @@ BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR l
 //   Check CodeSign
 ////------------------------------------------------
 
-BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath);
+#if _MSC_VER > 1310
+BOOL CheckCodeSign(LPCWSTR certName, LPCWSTR filePath);
+#endif
+
+////------------------------------------------------
+//   Play Sound
+////------------------------------------------------
+
+BOOL AlertSound(const CString& alertSoundPath, int volume);
+
+////------------------------------------------------
+//   Hash
+////------------------------------------------------
+
+CStringA MD5(const CStringA& str);
+
+////------------------------------------------------
+//   Character Converter
+////------------------------------------------------
+
+CStringA C16T8(const CStringW& utf16str);
+CStringW C8T16(const CStringA& utf8str);
+CStringA URLEncode(const CStringA& str);
+CStringA ANSI2UTF8(const CStringA& ansiStr);
+CStringA UE(const CStringW& utf16str);
+CStringA UE(const CStringA& ansiStr);
+
+////------------------------------------------------
+//   QR Code
+////------------------------------------------------
+
+int SaveQRCode(CStringA& text, CString& fileName, int scale);
+
+////------------------------------------------------
+//   Clipboard
+////------------------------------------------------
+
+void SetClipboardText(CString clip);

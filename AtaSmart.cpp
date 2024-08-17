@@ -7111,7 +7111,7 @@ HANDLE CAtaSmart::CreateWorldMutex(CONST TCHAR* name)							// Create/Open a Mut
 	SECURITY_DESCRIPTOR       sdb[1]{};											// Security Descriptor Block
 	ACL                       acl[32];											// ACL Area
 	SID_IDENTIFIER_AUTHORITY  swa[1] = SECURITY_WORLD_SID_AUTHORITY;			// World access
-	TCHAR                     gtb[256];                                         // Global\\ text buffer
+	TCHAR                     gtb[256]{};                                       // Global\\ text buffer
 
 	InitializeSecurityDescriptor(sdb, SECURITY_DESCRIPTOR_REVISION);            // setup Security Descriptor
 

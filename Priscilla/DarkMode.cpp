@@ -5,7 +5,7 @@
 //                https://github.com/ysc3839/win32-darkmode/blob/master/LICENSE
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "OsInfoFx.h"
 #include "IatHook.h"
 
@@ -172,8 +172,8 @@ void FixDarkScrollBar()
 
 BOOL InitDarkMode()
 {
-	HMODULE ntdll = GetModuleHandle(L"ntdll.dll");
-	HMODULE user32 = GetModuleHandle(L"user32.dll");
+	HMODULE ntdll = GetModuleHandleW(L"ntdll.dll");
+	HMODULE user32 = GetModuleHandleW(L"user32.dll");
 	if (!ntdll || !user32) return FALSE;
 	auto RtlGetNtVersionNumbers = reinterpret_cast<fnRtlGetNtVersionNumbers>(GetProcAddress(ntdll, "RtlGetNtVersionNumbers"));
 	if (RtlGetNtVersionNumbers)

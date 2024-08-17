@@ -47,14 +47,14 @@
 
 #include <afxdhtml.h>			// HTML Dialogs
 
-#include "DHtmlDialogEx.h"		// CDHtmlDialogEx by hiyohiyo
-#include "DHtmlMainDialog.h"	// CDHtmlMainDialog by hiyohiyo
+#include "..\DHtmlDialogEx.h"		// CDHtmlDialogEx by hiyohiyo
+#include "..\DHtmlMainDialog.h"	// CDHtmlMainDialog by hiyohiyo
 
 #include <comutil.h>
 
 #include "CommonFx.h"
 #include "UtilityFx.h"
-#include "CompileOptions.h"
+#include "..\CompileOptions.h"
 
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #pragma warning(disable : 4996)
@@ -66,6 +66,7 @@
 // Version Information
 #define PROJECT_NAME			_T("CrystalDiskInfo")
 #define PRODUCT_NAME			_T("CrystalDiskInfo")
+#define PRODUCT_FILENAME		_T("CrystalDiskInfo")
 
 #ifdef SUISHO_AOI_SUPPORT
 	#define PRODUCT_SHORT_NAME		_T("CDI AE")
@@ -125,7 +126,7 @@
 #endif
 
 #define PRODUCT_VERSION				L"9.4.0 DEV"
-#define PRODUCT_RELEASE				L"2024/06/30"
+#define PRODUCT_RELEASE				L"2024/08/16"
 #define PRODUCT_COPY_YEAR			L"2008-2024"
 #define PRODUCT_LICENSE				L"MIT License"
 
@@ -155,6 +156,7 @@
 
 #define THEME_DIR					L"CdiResource\\themes\\"
 #define LANGUAGE_DIR				L"CdiResource\\language\\"
+#define VOICE_DIR					L"CdiResource\\voice\\"
 
 #define MENU_THEME_INDEX			3
 #define MENU_LANG_INDEX				6

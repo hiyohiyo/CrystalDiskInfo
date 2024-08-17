@@ -5,7 +5,7 @@
 //      License : MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "FontComboBoxFx.h"
 
 ////------------------------------------------------
@@ -74,7 +74,12 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	logfont.lfWeight = FW_NORMAL;
 	logfont.lfQuality = m_FontRender;
 	logfont.lfCharSet = DEFAULT_CHARSET;
+	
+#if _MSC_VER <= 1310
+	_tcscpy(logfont.lfFaceName, (LPCTSTR)title);
+#else
 	_tcscpy_s(logfont.lfFaceName, 32, (LPCTSTR)title);
+#endif
 	font.CreateFontIndirect(&logfont);
 	HGDIOBJ oldFont = pDC->SelectObject(&font);
 

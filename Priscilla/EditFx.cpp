@@ -5,7 +5,7 @@
 //      License : MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "EditFx.h"
 
 ////------------------------------------------------
@@ -22,11 +22,8 @@ CEditFx::CEditFx()
 	m_bDrawFrame = FALSE;
 	m_FrameColor = RGB(128, 128, 128);
 	m_RenderMode = OwnerDrawImage;
-	m_Margin.top = 0;
-	m_Margin.left = 0;
-	m_Margin.bottom = 0;
-	m_Margin.right = 0;
 	m_bMultiLine = FALSE;
+	m_BkColor = RGB(255, 255, 255);
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
@@ -41,6 +38,12 @@ CEditFx::CEditFx()
 	// Font
 	m_TextAlign = SS_LEFT;
 	m_TextColor = RGB(0, 0, 0);
+
+	// Margin
+	m_Margin.top = 0;
+	m_Margin.left = 0;
+	m_Margin.bottom = 0;
+	m_Margin.right = 0;
 }
 
 CEditFx::~CEditFx()
@@ -62,7 +65,7 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, 
-	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame, BOOL bMultiLine)
+	LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame, BOOL bMultiLine)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
@@ -98,6 +101,10 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 	m_bDrawFrame = bDrawFrame;
 
 	if (m_bHighContrast)
+	{
+		return TRUE;
+	}
+	else if (renderMode & SystemDraw)
 	{
 		return TRUE;
 	}
@@ -145,12 +152,16 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 			for (int x = 0; x < m_CtrlSize.cx; x++)
 			{
 				DWORD p = (y * m_CtrlSize.cx + x) * 4;
+#if _MSC_VER > 1310
 #pragma warning( disable : 6386 )
+#endif
 				bitmapBits[p + 0] = b;
 				bitmapBits[p + 1] = g;
 				bitmapBits[p + 2] = r;
 				bitmapBits[p + 3] = a;
+#if _MSC_VER > 1310
 #pragma warning( default : 6386 )
+#endif
 			}
 		}
 
@@ -175,17 +186,22 @@ void CEditFx::SetMargin(int top, int left, int bottom, int right, double zoomRat
 	m_Margin.bottom = (int)(bottom * zoomRatio);
 	m_Margin.right = (int)(right * zoomRatio);
 
-//	SetMargins(m_Margin.left, m_Margin.right);
+	if (GetWindowLongPtr(m_hWnd, GWL_STYLE) & ES_MULTILINE)
+	{
+		CRect rectGet, rectSet;
+		GetRect(rectGet);
 
-	CRect rectGet, rectSet;
-	GetRect(rectGet);
+		rectSet.top = m_Margin.top;
+		rectSet.bottom = rectGet.bottom - m_Margin.bottom - m_Margin.top;
+		rectSet.left = m_Margin.left;
+		rectSet.right = rectGet.right - m_Margin.right - m_Margin.left;
 
-	rectSet.top = m_Margin.top;
-	rectSet.bottom = rectGet.bottom - m_Margin.bottom - m_Margin.top;
-	rectSet.left = m_Margin.left;
-	rectSet.right = rectGet.right - m_Margin.right - m_Margin.left;
-
-	SetRect(rectSet);
+		SetRect(rectSet);
+	}
+	else
+	{
+		SetMargins(m_Margin.left, m_Margin.right);
+	}
 }
 
 CSize CEditFx::GetSize(void)
@@ -195,7 +211,7 @@ CSize CEditFx::GetSize(void)
 
 void CEditFx::SetDrawFrame(BOOL bDrawFrame)
 {
-	if (bDrawFrame && m_bHighContrast)
+	if (bDrawFrame)
 	{
 		ModifyStyleEx(0, WS_EX_STATICEDGE, SWP_DRAWFRAME);
 	}
@@ -212,6 +228,11 @@ void CEditFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
 	m_GlassAlpha = glassAlpha;
 }
 
+void CEditFx::SetBkColor(COLORREF bkColor)
+{
+	m_BkColor = bkColor;
+}
+
 void CEditFx::Adjust()
 {
 	CRect rectGet, rectSet;
@@ -219,7 +240,12 @@ void CEditFx::Adjust()
 
 	CClientDC dc(this);
 	HGDIOBJ oldFont = dc.SelectObject(&m_Font);
+#ifdef UNICODE
 	CSize size = dc.GetTextExtent(L"ÁAaPpQqYy8!");
+#else
+	CSize size = dc.GetTextExtent("AaPpQqYy8!");
+#endif
+	
 	dc.SelectObject(oldFont);
 
 	rectSet.top = (m_CtrlSize.cy - size.cy) / 2;
@@ -239,9 +265,17 @@ HBRUSH CEditFx::CtlColor(CDC* pDC, UINT nCtlColor)
 	}
 	else
 	{
+#ifdef UNICODE
 		pDC->SetTextColor(m_TextColor);
 		pDC->SetBkMode(TRANSPARENT);
 		return m_BkBrush;
+#else
+		pDC->SetTextColor(m_TextColor);
+		pDC->SetBkColor(m_BkColor);
+		pDC->SetBkMode(OPAQUE);
+
+		return CreateSolidBrush(m_BkColor);
+#endif
 	}
 }
 
@@ -362,75 +396,88 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 			ctrlBitmap.GetBitmap(&CtlBmpInfo);
 			DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
 			DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
-			BYTE* DstBuffer = new BYTE[DstMemSize];
-			bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
-			BYTE* CtlBuffer = new BYTE[CtlMemSize];
-			ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
-			int baseY = 0;
-			for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+			if ((DstBmpInfo.bmWidthBytes != CtlBmpInfo.bmWidthBytes)
+				|| (DstBmpInfo.bmHeight != CtlBmpInfo.bmHeight / m_ImageCount))
 			{
-				int dn = py * DstLineBytes;
-				int cn = (baseY + py) * CtlLineBytes;
-				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
-				{
-#pragma warning( disable : 6385 )
-#pragma warning( disable : 6386 )
-					BYTE a = CtlBuffer[cn + 3];
-					BYTE na = 255 - a;
-					CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
-					CtlBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
-					CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
-					dn += (DstBmpInfo.bmBitsPixel / 8);
-					cn += (CtlBmpInfo.bmBitsPixel / 8);
-#pragma warning( default : 6386 )
-#pragma warning( default : 6385 )
-				}
-			}
-
-			if (color == 32)
-			{
-				ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+				// Error Check //
 			}
 			else
 			{
-				bk32Bitmap->SetBitmapBits(CtlMemSize, CtlBuffer);
-				m_CtrlImage.Detach();
-				m_CtrlImage.Attach(ctrlBitmap);
-				::BitBlt(m_CtrlImage.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
-				m_CtrlImage.ReleaseDC();
-				bk32Image.ReleaseDC();
+				BYTE* DstBuffer = new BYTE[DstMemSize];
+				bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
+				BYTE* CtlBuffer = new BYTE[CtlMemSize];
+				ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
-				ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+				int baseY = 0;
+				for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+				{
+					int dn = py * DstLineBytes;
+					int cn = (baseY + py) * CtlLineBytes;
+					for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+					{
+#if _MSC_VER > 1310
+#pragma warning( disable : 6385 )
+#pragma warning( disable : 6386 )
+#endif
+						BYTE a = CtlBuffer[cn + 3];
+						BYTE na = 255 - a;
+						CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+						CtlBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+						CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+						dn += (DstBmpInfo.bmBitsPixel / 8);
+						cn += (CtlBmpInfo.bmBitsPixel / 8);
+#if _MSC_VER > 1310
+#pragma warning( default : 6386 )
+#pragma warning( default : 6385 )
+#endif
+					}
+				}
+
+				if (color == 32)
+				{
+					ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+				}
+				else
+				{
+					bk32Bitmap->SetBitmapBits(CtlMemSize, CtlBuffer);
+					m_CtrlImage.Detach();
+					m_CtrlImage.Attach(ctrlBitmap);
+					::BitBlt(m_CtrlImage.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
+					m_CtrlImage.ReleaseDC();
+					bk32Image.ReleaseDC();
+
+					ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+				}
+
+				if (m_bDrawFrame)
+				{
+					HGDIOBJ oldPen;
+					POINT point;
+					CPen pen1; pen1.CreatePen(PS_SOLID, 1, RGB(0xF8, 0xF8, 0xF8));
+					CPen pen2; pen2.CreatePen(PS_SOLID, 1, RGB(0x98, 0x98, 0x98));
+
+					HDC hDC = m_CtrlImage.GetDC();
+
+					oldPen = SelectObject(hDC, pen1);
+					MoveToEx(hDC, 0, m_CtrlSize.cy - 1, &point);
+					LineTo(hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+					LineTo(hDC, m_CtrlSize.cx - 1, 0);
+					LineTo(hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
+					SelectObject(hDC, pen2);
+					MoveToEx(hDC, 0, m_CtrlSize.cy - 2, &point);
+					LineTo(hDC, 0, 0);
+					LineTo(hDC, m_CtrlSize.cx - 1, 0);
+					SelectObject(hDC, oldPen);
+
+					pen1.DeleteObject();
+					pen2.DeleteObject();
+					m_CtrlImage.ReleaseDC();
+				}
+
+				delete[] DstBuffer;
+				delete[] CtlBuffer;
 			}
-
-			if (m_bDrawFrame)
-			{
-				HGDIOBJ oldPen;
-				POINT point;
-				CPen pen1; pen1.CreatePen(PS_SOLID, 1, RGB(0xF8, 0xF8, 0xF8));
-				CPen pen2; pen2.CreatePen(PS_SOLID, 1, RGB(0x98, 0x98, 0x98));
-
-				HDC hDC = m_CtrlImage.GetDC();
-
-				oldPen = SelectObject(hDC, pen1);
-				MoveToEx(hDC, 0, m_CtrlSize.cy - 1, &point);
-				LineTo(hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
-				LineTo(hDC, m_CtrlSize.cx - 1, 0);
-				LineTo(hDC, m_CtrlSize.cx - 1, m_CtrlSize.cy - 1);
-				SelectObject(hDC, pen2);
-				MoveToEx(hDC, 0, m_CtrlSize.cy - 2, &point);
-				LineTo(hDC, 0, 0);
-				LineTo(hDC, m_CtrlSize.cx - 1, 0);
-				SelectObject(hDC, oldPen);
-
-				pen1.DeleteObject();
-				pen2.DeleteObject();
-				m_CtrlImage.ReleaseDC();
-			}
-
-			delete[] DstBuffer;
-			delete[] CtlBuffer;
 		}
 	}
 }
@@ -449,11 +496,11 @@ void CEditFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRati
 	logFont.lfWeight = fontWeight;
 	if (face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
+		wsprintf(logFont.lfFaceName, _T("%s"), (LPCTSTR)face);
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, L"");
+		wsprintf(logFont.lfFaceName, _T(""));
 	}
 
 	m_Font.DeleteObject();
@@ -541,7 +588,7 @@ void CEditFx::InitToolTip()
 		m_ToolTip.Create(this, TTS_ALWAYSTIP | TTS_BALLOON | TTS_NOANIMATE | TTS_NOFADE);
 		m_ToolTip.Activate(FALSE);
 		m_ToolTip.SetFont(&m_FontToolTip);
-		m_ToolTip.SendMessageW(TTM_SETMAXTIPWIDTH, 0, 1024);
+		m_ToolTip.SendMessage(TTM_SETMAXTIPWIDTH, 0, 1024);
 		m_ToolTip.SetDelayTime(TTDT_AUTOPOP, 8000);
 		m_ToolTip.SetDelayTime(TTDT_INITIAL, 500);
 		m_ToolTip.SetDelayTime(TTDT_RESHOW, 100);

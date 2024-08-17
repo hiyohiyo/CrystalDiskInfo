@@ -83,8 +83,9 @@ void CDiskInfoDlg::SaveText(CString fileName)
 
 	clip.Replace(_T("%CONTROLLER_MAP%"), m_Ata.m_ControllerMap);
 
-	GetOsName(cstr);
-	clip.Replace(_T("%OS%"), cstr);
+	CString osFullName, osName, osVersion, osArchitecture;
+	GetOsName(osFullName, osName, osVersion, osArchitecture);
+	clip.Replace(_T("%OS%"), osFullName);
 
 	cstr = _T("");
 	temp = _T("");

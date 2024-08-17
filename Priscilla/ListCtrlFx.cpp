@@ -5,7 +5,7 @@
 //      License : MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "ListCtrlFx.h"
 #include "OsInfoFx.h"
 
@@ -63,7 +63,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 
 	if (m_bHighContrast)
 	{
-		SetBkImage((LPTSTR)L"");
+		SetBkImage((LPTSTR)_T(""));
 	}
 	else if (renderMode & OwnerDrawGlass || renderMode & OwnerDrawTransparent)
 	{
@@ -139,7 +139,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 	{
 		if(m_bNT6orLater)
 		{
-			SetBkImage((LPTSTR)L"");
+			SetBkImage((LPTSTR)_T(""));
 			SetBkColor(m_BkColor1);
 			m_Header.InitControl(x, y, zoomRatio, bkDC, NULL, m_TextColor1, m_BkColor1, m_LineColor1, m_RenderMode, m_bHighContrast, m_bDarkMode);
 		}
@@ -310,11 +310,11 @@ void CListCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fon
 	logFont.lfWeight = fontWeight;
 	if (face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
+		wsprintf(logFont.lfFaceName, _T("%s"), (LPCTSTR)face);
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, L"");
+		wsprintf(logFont.lfFaceName, _T(""));
 	}
 
 	m_Font.DeleteObject();

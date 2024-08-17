@@ -5,7 +5,7 @@
 //      License : MIT License
 /*---------------------------------------------------------------------------*/
 
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "MainDialogFx.h"
 #include <ctime>
 using namespace std;
@@ -20,37 +20,49 @@ CMainDialogFx::CMainDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_bResidentMinimize = FALSE;
 
 	// Theme
-	m_ThemeKeyName = L"Theme";
+	m_ThemeKeyName = _T("Theme");
 
 	TCHAR* ptrEnd;
 	TCHAR ini[MAX_PATH];
 	TCHAR tmp[MAX_PATH];
+	CString directry;
 
-#ifdef UWP
-	TCHAR appData[MAX_PATH];
+#if _MSC_VER > 1310
+#ifdef ADMIN// for CrystalDiskInfo
+	GetModuleFileName(NULL, ini, MAX_PATH);
+	if ((ptrEnd = _tcsrchr(ini, '.')) != NULL)
+	{
+		*ptrEnd = '\0';
+		_tcscat_s(ini, MAX_PATH, _T(".ini");
+		m_Ini = ini;
+	}
+#else
 	TCHAR drive[_MAX_DRIVE];
+	TCHAR ext[_MAX_EXT];
+	TCHAR appData[MAX_PATH];
 	TCHAR dir[_MAX_DIR];
 	TCHAR fileName[_MAX_FNAME];
-	TCHAR ext[_MAX_EXT];
-
 	GetModuleFileName(NULL, ini, MAX_PATH);
-	_wsplitpath(ini, drive, dir, fileName, ext);
+	_tsplitpath(ini, drive, dir, fileName, ext);
 	SHGetSpecialFolderPath(NULL, appData, CSIDL_APPDATA, 0);
-	m_Ini.Format(L"%s\\%s.ini", appData, fileName);
+	directry.Format(_T("%s\\%s"), appData, PRODUCT_FILENAME);
+	CreateDirectory(directry, NULL);
+	m_Ini.Format(_T("%s\\%s\\%s.ini"), appData, PRODUCT_FILENAME, fileName);
+#endif
 #else
 	GetModuleFileName(NULL, ini, MAX_PATH);
 	if ((ptrEnd = _tcsrchr(ini, '.')) != NULL)
 	{
 		*ptrEnd = '\0';
-		_tcscat_s(ini, MAX_PATH, L".ini");
+		_tcscat(ini, _T(".ini"));
 		m_Ini = ini;
 	}
 #endif
-
 	GetModuleFileName(NULL, tmp, MAX_PATH);
 	if ((ptrEnd = _tcsrchr(tmp, '\\')) != NULL) { *ptrEnd = '\0'; }
-	m_ThemeDir.Format(L"%s\\%s", tmp, THEME_DIR);
-	m_LangDir.Format(L"%s\\%s", tmp, LANGUAGE_DIR);
+	m_ThemeDir.Format(_T("%s\\%s"), tmp, THEME_DIR);
+	m_LangDir.Format(_T("%s\\%s"), tmp, LANGUAGE_DIR);
+	m_VoiceDir.Format(_T("%s\\%s"), tmp, VOICE_DIR);
 }
 
 CMainDialogFx::~CMainDialogFx()
@@ -61,6 +73,19 @@ BEGIN_MESSAGE_MAP(CMainDialogFx, CDialogFx)
 	ON_WM_WINDOWPOSCHANGING()
 	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
+
+
+LRESULT CMainDialogFx::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+#if _MSC_VER > 1310
+	LRESULT lr = 0;
+	if (UAHWndProc(m_hWnd, message, wParam, lParam, &lr)) {
+		return lr;
+	}
+#endif
+
+	return CDialogFx::WindowProc(message, wParam, lParam);
+}
 
 int CALLBACK HasFontProc(ENUMLOGFONTEX* lpelfe, NEWTEXTMETRICEX* lpntme, int FontType, LPARAM lParam)
 {
@@ -78,7 +103,7 @@ CString CMainDialogFx::GetDefaultFont()
 	BOOL hasFont = FALSE;
 	ZeroMemory(&logfont, sizeof(LOGFONT));
 	logfont.lfCharSet = DEFAULT_CHARSET;
-	::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)HasFontProc, (INT_PTR)(&hasFont), 0);
+	::EnumFontFamiliesEx(dc.m_hDC, &logfont, (FONTENUMPROC)HasFontProc, (INT_PTR)(&hasFont), 0);
 
 	if (hasFont)
 	{
@@ -136,11 +161,11 @@ void CMainDialogFx::SetWindowTitle(CString message)
 
 	if(! message.IsEmpty())
 	{
-		title.Format(L" %s - %s", PRODUCT_SHORT_NAME, message.GetString());
+		title.Format(_T(" %s - %s"), PRODUCT_SHORT_NAME, (LPCTSTR)message);
 	}
 	else
 	{
-		title.Format(L" %s %s %s", PRODUCT_NAME, PRODUCT_VERSION, PRODUCT_EDITION);
+		title.Format(_T(" %s %s %s"), PRODUCT_NAME, PRODUCT_VERSION, PRODUCT_EDITION);
 	}
 
 	SetWindowText(title);
@@ -163,33 +188,42 @@ void CMainDialogFx::InitThemeLang()
 	{
 		CString defaultTheme = m_DefaultTheme;
 
-		if (IsFileExist(m_ThemeDir + m_RecommendTheme + L"\\" + m_BackgroundName + L"-300.png"))
+		if (IsFileExist(m_ThemeDir + m_RecommendTheme + _T("\\") + m_BackgroundName + _T("-300.png")))
 		{
 			defaultTheme = m_RecommendTheme;
 		}
 
-		GetPrivateProfileStringFx(L"Setting", m_ThemeKeyName, defaultTheme, str, 256, m_Ini);
+		GetPrivateProfileStringFx(_T("Setting"), m_ThemeKeyName, defaultTheme, str, 256, m_Ini);
 		m_CurrentTheme = str;
 	}
 
 // Set Language
-	GetPrivateProfileStringFx(L"Setting", L"Language", L"", str, 256, m_Ini);
+	GetPrivateProfileStringFx(_T("Setting"), _T("Language"), _T(""), str, 256, m_Ini);
 
-	langPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), str);
-	m_DefaultLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), DEFAULT_LANGUAGE);
-
-	if(_tcscmp(str, L"") != 0 && IsFileExist((const TCHAR*)langPath))
+	langPath.Format(_T("%s\\%s.lang"), (LPCTSTR)m_LangDir, str);
+#ifdef UNICODE
+	m_DefaultLangPath.Format(_T("%s\\%s.lang"), (LPCTSTR)m_LangDir, DEFAULT_LANGUAGE);
+#else
+	m_DefaultLangPath.Format(_T("%s\\%s9x.lang"), (LPCTSTR)m_LangDir, DEFAULT_LANGUAGE);
+#endif
+	if(_tcscmp(str, _T("")) != 0 && IsFileExist((LPCTSTR)langPath))
 	{
 		m_CurrentLang = str;
-		m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), str);
+		m_CurrentLang.Replace(_T("9x"), _T(""));
+#ifdef UNICODE
+		m_CurrentLangPath.Format(_T("%s\\%s.lang"), (LPCTSTR)m_LangDir, (LPCTSTR)m_CurrentLang);
+#else
+		m_CurrentLangPath.Format(_T("%s\\%s9x.lang"), (LPCTSTR)m_LangDir, (LPCTSTR)m_CurrentLang);
+#endif
 	}
 	else
 	{
 		CString currentLocalID;
-		currentLocalID.Format(L"0x%04X", GetUserDefaultLCID());
+		currentLocalID.Format(_T("0x%04X"), GetUserDefaultLCID());
 		PrimaryLangID = PRIMARYLANGID(GetUserDefaultLCID());
 
-		langPath.Format(L"%s\\*.lang", (LPTSTR)m_LangDir.GetString());
+
+		langPath.Format(_T("%s\\*.lang"), (LPCTSTR)m_LangDir);
 
 		hFind = ::FindFirstFile(langPath, &findData);
 		if(hFind != INVALID_HANDLE_VALUE)
@@ -197,20 +231,41 @@ void CMainDialogFx::InitThemeLang()
 			do{
 				if(findData.dwFileAttributes != FILE_ATTRIBUTE_DIRECTORY)
 				{
-					i++;
+
 					CString cstr;
-					cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
-					GetPrivateProfileStringFx(L"Language", L"LOCALE_ID", L"", str, 256, cstr);
+					cstr = findData.cFileName;
+
+#ifdef UNICODE
+					if (cstr.Find(_T("9x.lang")) >= 0)
+					{
+						continue;
+					}
+#else
+					if (cstr.Find(_T("9x.lang")) == -1)
+					{
+						continue;
+					}
+#endif
+					i++;
+
+					cstr.Format(_T("%s\\%s"), (LPCTSTR)m_LangDir, findData.cFileName);
+					GetPrivateProfileStringFx(_T("Language"), _T("LOCALE_ID"), _T(""), str, 256, cstr);
 					if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){*ptrEnd = '\0';}
 
 					if(_tcsstr(str, currentLocalID) != NULL)
 					{
 						m_CurrentLang = findData.cFileName;
-						m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
+						m_CurrentLang.Replace(_T("9x"), _T(""));
+#ifdef UNICODE
+						m_CurrentLangPath.Format(_T("%s\\%s.lang"), (LPCTSTR)m_LangDir, findData.cFileName);
+#else
+						m_CurrentLangPath.Format(_T("%s\\%s9x.lang"), (LPCTSTR)m_LangDir, findData.cFileName);
+#endif
 					}
 					if(PrimaryLangID == PRIMARYLANGID(_tcstol(str, NULL, 16)))
 					{
 						PrimaryLang = findData.cFileName;
+						PrimaryLang.Replace(_T("9x"), _T(""));
 					}
 				}
 			}while(::FindNextFile(hFind, &findData) && i <= 0xFF);
@@ -222,12 +277,20 @@ void CMainDialogFx::InitThemeLang()
 			if(PrimaryLang.IsEmpty())
 			{
 				m_CurrentLang = DEFAULT_LANGUAGE;
-				m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), (LPTSTR)m_CurrentLang.GetString());
+#ifdef UNICODE
+				m_CurrentLangPath.Format(_T("%s\\%s.lang"), (LPCTSTR)m_LangDir, (LPCTSTR)m_CurrentLang);
+#else
+				m_CurrentLangPath.Format(_T("%s\\%s9x.lang"), (LPCTSTR)m_LangDir, (LPCTSTR)m_CurrentLang);
+#endif
 			}
 			else
 			{
 				m_CurrentLang = PrimaryLang;
-				m_CurrentLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), (LPTSTR)PrimaryLang.GetString());
+#ifdef UNICODE
+				m_CurrentLangPath.Format(_T("%s\\%s.lang"), (LPCTSTR)m_LangDir, (LPCTSTR)PrimaryLang);
+#else
+				m_CurrentLangPath.Format(_T("%s\\%s9x.lang"), (LPCTSTR)m_LangDir, (LPCTSTR)PrimaryLang);
+#endif
 			}	
 		}
 	}
@@ -254,12 +317,12 @@ void CMainDialogFx::InitMenu()
 	TCHAR *ptrEnd = NULL;
 	TCHAR str[256];
 
-	srand((unsigned int)std::time(nullptr));
+	srand((unsigned int)std::time(NULL));
 
 	menu.Attach(GetMenu()->GetSafeHmenu());
 	subMenu.Attach(menu.GetSubMenu(MENU_THEME_INDEX)->GetSafeHmenu());
 
-	themePath.Format(L"%s\\*.*", (LPTSTR)m_ThemeDir.GetString());
+	themePath.Format(_T("%s\\*.*"), (LPCTSTR)m_ThemeDir);
 
 	// Add Random as first choice.
 	subMenu.AppendMenu(MF_STRING, (UINT_PTR)WM_THEME_ID + i, m_RandomThemeLabel + m_RandomThemeName);
@@ -300,7 +363,7 @@ void CMainDialogFx::InitMenu()
 	if(m_CurrentTheme.Compare(m_RandomThemeLabel) == 0)
 	{
 		m_CurrentTheme = GetRandomTheme();
-		m_RandomThemeName = L" (" + m_CurrentTheme + L")";
+		m_RandomThemeName = _T(" (") + m_CurrentTheme + _T(")");
 		// Keep currentItemID the same as the first item if "Random".
 		currentItemID = WM_THEME_ID;
 
@@ -322,7 +385,7 @@ void CMainDialogFx::InitMenu()
 	subMenuAN.RemoveMenu(0, MF_BYPOSITION);
 	subMenuOZ.Attach(subMenu.GetSubMenu(1)->GetSafeHmenu()); // 2nd is "O~Z"
 	subMenuOZ.RemoveMenu(0, MF_BYPOSITION);
-	langPath.Format(L"%s\\*.lang", (LPTSTR)m_LangDir.GetString());
+	langPath.Format(_T("%s\\*.lang"), (LPCTSTR)m_LangDir);
 	i = 0;
 	hFind = ::FindFirstFile(langPath, &findData);
 	if(hFind != INVALID_HANDLE_VALUE)
@@ -330,19 +393,31 @@ void CMainDialogFx::InitMenu()
 		do{
 			if(findData.dwFileAttributes != FILE_ATTRIBUTE_DIRECTORY)
 			{
+				// Add Language
+				CString cstr;
+				cstr = findData.cFileName;
+#ifdef UNICODE
+				if (cstr.Find(_T("9x.lang")) >= 0)
+				{
+					continue;
+				}
+#else
+				if (cstr.Find(_T("9x.lang")) == -1)
+				{
+					continue;
+				}
+#endif			
 				newItemID = WM_LANGUAGE_ID + i;
 				i++;
 
-				// Add Language
-				CString cstr;
-				cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
-				GetPrivateProfileStringFx(L"Language", L"LANGUAGE", L"", str, 256, cstr);
+				cstr.Format(_T("%s\\%s"), (LPCTSTR)m_LangDir, findData.cFileName);
+				GetPrivateProfileStringFx(_T("Language"), _T("LANGUAGE"), _T(""), str, 256, cstr);
 				if((ptrEnd = _tcsrchr(findData.cFileName, L'.')) != NULL)
 				{
 					*ptrEnd = '\0';
 				}
 
-				cstr.Format(L"%s, [%s]", str, findData.cFileName);
+				cstr.Format(_T("%s, [%s]"), str, findData.cFileName);
 				if(L'A' <= findData.cFileName[0] && findData.cFileName[0] <= L'N')
 				{
 					subMenuAN.AppendMenu(MF_STRING, (UINT_PTR)newItemID, cstr);
@@ -353,7 +428,11 @@ void CMainDialogFx::InitMenu()
 				}
 				m_MenuArrayLang.Add(findData.cFileName);
 
-				if(m_CurrentLang.Compare(findData.cFileName) == 0)
+				cstr = findData.cFileName;
+#ifndef UNICODE
+				cstr.Replace(_T("9x"), _T(""));
+#endif
+				if(m_CurrentLang.Compare(cstr) == 0)
 				{
 					currentItemID = newItemID;
 					FlagHitLang = TRUE;
@@ -375,13 +454,13 @@ void CMainDialogFx::InitMenu()
 
 	if(! FlagHitLang)
 	{
-		AfxMessageBox(L"FATAL ERROR: Missing Language Files!!");
+		AfxMessageBox(_T("FATAL ERROR: Missing Language Files!!"));
 	}
 }
 
 BOOL CMainDialogFx::CheckThemeEdition(CString name)
 {
-	if (name.Find(L".") != 0) { return TRUE; }
+	if (name.Find(_T(".")) != 0) { return TRUE; }
 
 	return FALSE;
 }
@@ -393,7 +472,7 @@ BOOL CMainDialogFx::OnInitDialog()
 
 void CMainDialogFx::ChangeTheme(CString themeName)
 {
-	WritePrivateProfileStringFx(L"Setting", m_ThemeKeyName, themeName, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), m_ThemeKeyName, themeName, m_Ini);
 }
 
 BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam) 
@@ -410,8 +489,8 @@ BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam)
 		if (m_CurrentTheme.Compare(m_RandomThemeLabel) == 0)
 		{
 			m_CurrentTheme = GetRandomTheme();
-			m_RandomThemeLabel = L"Random";
-			m_RandomThemeName = L" (" + m_CurrentTheme + L")";
+			m_RandomThemeLabel = _T("Random");
+			m_RandomThemeName = _T(" (") + m_CurrentTheme + _T(")");
 
 			// ChangeTheme save the theme configuration to profile; so if we are on
 			// Random, then save Random to profile.
@@ -420,7 +499,7 @@ BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam)
 		else
 		{
 			ChangeTheme(m_MenuArrayTheme.GetAt(wParam - WM_THEME_ID));
-			m_RandomThemeName = L"";
+			m_RandomThemeName = _T("");
 		}
 
 		subMenu.ModifyMenu(WM_THEME_ID, MF_STRING, WM_THEME_ID, m_RandomThemeLabel + m_RandomThemeName);
@@ -491,8 +570,9 @@ void CMainDialogFx::RestoreWindowPosition()
 	rc.right = x + rw.right - rw.left;
 	rc.bottom = y + rw.bottom - rw.top;
 
+#if _MSC_VER > 1310
 	HMONITOR hMonitor = MonitorFromRect(&rc, MONITOR_DEFAULTTONULL);
-	if (hMonitor == nullptr)
+	if (hMonitor == NULL)
 	{
 		CenterWindow();
 	}
@@ -511,71 +591,75 @@ void CMainDialogFx::RestoreWindowPosition()
 			{
 				if (x < taskbarRect.Width()) // Overlap
 				{
-					SetWindowPos(nullptr, taskbarRect.Width(), y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+					SetWindowPos(NULL, taskbarRect.Width(), y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 				}
 				else
 				{
-					SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+					SetWindowPos(NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 				}
 			}
 			else // Top Side
 			{
 				if (y < taskbarRect.Height()) // Overlap
 				{
-					SetWindowPos(nullptr, x, taskbarRect.Height(), 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+					SetWindowPos(NULL, x, taskbarRect.Height(), 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 				}
 				else
 				{
-					SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+					SetWindowPos(NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 				}
 			}
 		}
 		else
 		{
-			SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+			SetWindowPos(NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 		}
 	}
+#else
+	CenterWindow();
+#endif
 }
 
 DWORD CMainDialogFx::GetZoomType()
 {
-	return GetPrivateProfileInt(L"Setting", L"ZoomType", ZoomTypeAuto, m_Ini);
+	return GetPrivateProfileInt(_T("Setting"), _T("ZoomType"), ZoomTypeAuto, m_Ini);
 }
 
 void CMainDialogFx::SetZoomType(DWORD zoomType)
 {
 	CString cstr;
-	cstr.Format(L"%d", m_ZoomType);
-	WritePrivateProfileStringFx(L"Setting", L"ZoomType", cstr, m_Ini);
+	cstr.Format(_T("%d"), m_ZoomType);
+	WritePrivateProfileStringFx(_T("Setting"), _T("ZoomType"), cstr, m_Ini);
 }
 
 void CMainDialogFx::UpdateThemeInfo()
 {
-	CString theme = m_ThemeDir + m_CurrentTheme + L"\\theme.ini";
+	CString theme = m_ThemeDir + m_CurrentTheme + _T("\\theme.ini");
 
-	m_LabelText = GetControlColor(L"LabelText", 0, theme);
-	m_MeterText = GetControlColor(L"MeterText", 0, theme);
-	m_ComboText = GetControlColor(L"ComboText", 0, theme);
-	m_ComboTextSelected = GetControlColor(L"ComboTextSelected", 0, theme);
-	m_ComboBk   = GetControlColor(L"ComboBk", 255, theme);
-	m_ComboBkSelected = GetControlColor(L"ComboBkSelected", 192, theme);
-	m_ButtonText= GetControlColor(L"ButtonText", 0, theme);
-	m_EditText  = GetControlColor(L"EditText", 0, theme);
-	m_EditBk    = GetControlColor(L"EditBk", 255, theme);
-	m_ListText1 = GetControlColor(L"ListText1", 0, theme);
-	m_ListText2 = GetControlColor(L"ListText2", 0, theme);
-	m_ListTextSelected = GetControlColor(L"ListTextSelected", 0, theme);
-	m_ListBk1 = GetControlColor(L"ListBk1", 255, theme);
-	m_ListBk2 = GetControlColor(L"ListBk2", 255, theme);
-	m_ListBkSelected = GetControlColor(L"ListBkSelected", 0, theme);
-	m_ListLine1 = GetControlColor(L"ListLine1", 0, theme);
-	m_ListLine2 = GetControlColor(L"ListLine2", 0, theme);
-	m_Glass = GetControlColor(L"Glass", 255, theme);
-	m_Frame = GetControlColor(L"Frame", 128, theme);
+	m_LabelText = GetControlColor(_T("LabelText"), 0, theme);
+	m_MeterText = GetControlColor(_T("MeterText"), 0, theme);
+	m_ComboText = GetControlColor(_T("ComboText"), 0, theme);
+	m_ComboTextSelected = GetControlColor(_T("ComboTextSelected"), 0, theme);
+	m_ComboBk   = GetControlColor(_T("ComboBk"), 255, theme);
+	m_ComboBkSelected = GetControlColor(_T("ComboBkSelected"), 192, theme);
+	m_ButtonText= GetControlColor(_T("ButtonText"), 0, theme);
+	m_EditText  = GetControlColor(_T("EditText"), 0, theme);
+	m_EditBk    = GetControlColor(_T("EditBk"), 255, theme);
+	m_ListText1 = GetControlColor(_T("ListText1"), 0, theme);
+	m_ListText2 = GetControlColor(_T("ListText2"), 0, theme);
+	m_ListTextSelected = GetControlColor(_T("ListTextSelected"), 0, theme);
+	m_ListBk1 = GetControlColor(_T("ListBk1"), 255, theme);
+	m_ListBk2 = GetControlColor(_T("ListBk2"), 255, theme);
+	m_ListBkSelected = GetControlColor(_T("ListBkSelected"), 0, theme);
+	m_ListLine1 = GetControlColor(_T("ListLine1"), 0, theme);
+	m_ListLine2 = GetControlColor(_T("ListLine2"), 0, theme);
+	m_Glass = GetControlColor(_T("Glass"), 255, theme);
+	m_Frame = GetControlColor(_T("Frame"), 128, theme);
+	m_Background = GetBackgroundColor(_T("Background"), theme);
 
-	m_ComboAlpha = GetControlAlpha(L"ComboAlpha", 255, theme);
-	m_EditAlpha = GetControlAlpha(L"EditAlpha", 255, theme);
-	m_GlassAlpha = GetControlAlpha(L"GlassAlpha", 128, theme);
+	m_ComboAlpha = GetControlAlpha(_T("ComboAlpha"), 255, theme);
+	m_EditAlpha = GetControlAlpha(_T("EditAlpha"), 255, theme);
+	m_GlassAlpha = GetControlAlpha(_T("GlassAlpha"), 128, theme);
 
 	m_CharacterPosition = GetCharacterPosition(theme);
 
@@ -587,23 +671,40 @@ COLORREF CMainDialogFx::GetControlColor(CString name, BYTE defaultColor, CString
 {
 	COLORREF reverseColor;
 
-	reverseColor = GetPrivateProfileInt(L"Color", name, RGB(defaultColor, defaultColor, defaultColor), theme);
+	reverseColor = GetPrivateProfileInt(_T("Color"), name, RGB(defaultColor, defaultColor, defaultColor), theme);
 	
 	COLORREF color = RGB(GetBValue(reverseColor), GetGValue(reverseColor), GetRValue(reverseColor));
 
 	return color;
 }
 
+COLORREF CMainDialogFx::GetBackgroundColor(CString name, CString theme)
+{
+	COLORREF reverseColor;
+
+	reverseColor = GetPrivateProfileInt(_T("Color"), name, 0xFFFFFFFF, theme);
+
+	if (reverseColor == 0xFFFFFFFF)
+	{
+		return 0xFFFFFFFF; // 0xFFFFFFF = Disabled
+	}
+	else
+	{
+		COLORREF color = RGB(GetBValue(reverseColor), GetGValue(reverseColor), GetRValue(reverseColor));
+		return color;
+	}	
+}
+
 BYTE CMainDialogFx::GetControlAlpha(CString name, BYTE defaultAlpha, CString theme)
 {
-	BYTE alpha = (BYTE)GetPrivateProfileInt(L"Alpha", name, defaultAlpha, theme);
+	BYTE alpha = (BYTE)GetPrivateProfileInt(_T("Alpha"), name, defaultAlpha, theme);
 	
 	return alpha;
 }
 
 BYTE CMainDialogFx::GetCharacterPosition(CString theme)
 {
-	BYTE position = (BYTE)GetPrivateProfileInt(L"Character", L"Position", 0, theme);
+	BYTE position = (BYTE)GetPrivateProfileInt(_T("Character"), _T("Position"), 0, theme);
 
 	return position;
 }
@@ -611,9 +712,9 @@ BYTE CMainDialogFx::GetCharacterPosition(CString theme)
 CString CMainDialogFx::GetParentTheme(int i, CString theme)
 {
 	CString cstr;
-	cstr.Format(L"ParentTheme%d", i);
+	cstr.Format(_T("ParentTheme%d"), i);
 	TCHAR str[256];
-	GetPrivateProfileStringFx(L"Info", cstr, L"", str, 256, theme);
+	GetPrivateProfileStringFx(_T("Info"), cstr, _T(""), str, 256, theme);
 	cstr = str;
 
 	return cstr;
@@ -627,9 +728,10 @@ CString CMainDialogFx::GetRandomTheme() {
 
 void CMainDialogFx::SaveImage()
 {
+#if _MSC_VER > 1310
 	BOOL bDwmEnabled = FALSE;
 
-	HMODULE hModule = LoadLibraryEx(L"dwmapi.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
+	HMODULE hModule = LoadLibraryEx(_T("dwmapi.dll"), NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
 	typedef HRESULT(WINAPI* FuncDwmGetWindowAttribute) (HWND hwnd, DWORD dwAttribute, PVOID pvAttribute, DWORD cbAttribute);
 	typedef HRESULT(WINAPI* FuncDwmIsCompositionEnabled)(BOOL* pfEnabled);
 	FuncDwmGetWindowAttribute pDwmGetWindowAttribute = NULL;
@@ -719,7 +821,7 @@ void CMainDialogFx::SaveImage()
 			}
 
 			pDwmGetWindowAttribute(m_hWnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rc2, sizeof(rc2));
-			// cstr.Format(L"Width=%d/%d, Height=%d/%d", rc1.Width(), rc2.Width(), rc1.Height(), rc2.Height());
+			// cstr.Format(_T("Width=%d/%d, Height=%d/%d"), rc1.Width(), rc2.Width(), rc1.Height(), rc2.Height());
 			// AfxMessageBox(cstr);
 			if (rc1.Width() > rc2.Width())
 			{
@@ -753,10 +855,10 @@ void CMainDialogFx::SaveImage()
 			image1->ReleaseDC();
 		}
 	}
-
 	SAFE_DELETE(image1);
 	SAFE_DELETE(image2);
 	SAFE_DELETE(image3);
+#endif
 }
 
 void CMainDialogFx::SaveImageDlg(CImage* image)
@@ -764,17 +866,17 @@ void CMainDialogFx::SaveImageDlg(CImage* image)
 	CString path;
 	SYSTEMTIME st;
 	GetLocalTime(&st);
-	path.Format(L"%s_%04d%02d%02d%02d%02d%02d", PRODUCT_NAME, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+	path.Format(_T("%s_%04d%02d%02d%02d%02d%02d"), PRODUCT_FILENAME, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
 
-	CString filter = L"PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp||";
-	CFileDialog save(FALSE, L"", path, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER, filter);
+	CString filter = _T("PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|BMP (*.bmp)|*.bmp||");
+	CFileDialog save(FALSE, _T(""), path, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER, filter);
 
 	if (save.DoModal() == IDOK)
 	{
 		HRESULT result = image->Save(save.GetPathName());
 		if (SUCCEEDED(result))
 		{
-			//	AfxMessageBox(L"SUCCEEDED");
+			//	AfxMessageBox(_T("SUCCEEDED");
 		}
 	}
 }
@@ -787,7 +889,7 @@ void CMainDialogFx::SaveImageDlg(CImage* image)
 
 #ifdef OPTION_TASK_TRAY
 
-UINT CMainDialogFx::wmTaskbarCreated = ::RegisterWindowMessage(L"TaskbarCreated");
+UINT CMainDialogFx::wmTaskbarCreated = ::RegisterWindowMessage(_T("TaskbarCreated"));
 
 // Add TaskTray
 BOOL CMainDialogFx::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
