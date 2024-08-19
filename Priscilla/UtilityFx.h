@@ -72,12 +72,6 @@ CStringA UE(const CStringW& utf16str);
 CStringA UE(const CStringA& ansiStr);
 
 ////------------------------------------------------
-//   QR Code
-////------------------------------------------------
-
-int SaveQRCode(CStringA& text, CString& fileName, int scale);
-
-////------------------------------------------------
 //   Clipboard
 ////------------------------------------------------
 
