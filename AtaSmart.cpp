@@ -6580,7 +6580,24 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)) { return TRUE; }
+				BOOL flag = AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify);
+				
+				if (FlagUsbRealtek9220DP && RealtekRAIDMode(physicalDriveId, scsiPort, scsiTargetId))
+				{
+					debug.Format(_T("DoIdentifyDeviceNVMeRealtek 2"));
+					DebugPrint(debug);
+					if (RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 1))
+					{
+						if (DoIdentifyDeviceNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &identify))
+						{
+							debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK9220DP"));
+							DebugPrint(debug);
+							flag = AddDiskNVMe(physicalDriveId, (scsiPort + 1), (scsiTargetId + 1), scsiBus + 1, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK9220DP, &identify);
+						}
+						RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 0);
+					}
+				}
+				if (flag == TRUE) { return TRUE; }
 			}
 		}
 
@@ -6719,7 +6736,24 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK"));
 				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify)) { return TRUE; }
+				BOOL flag = AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK, &identify);
+				
+				if (FlagUsbRealtek9220DP && RealtekRAIDMode(physicalDriveId, scsiPort, scsiTargetId))
+				{
+					debug.Format(_T("DoIdentifyDeviceNVMeRealtek 2"));
+					DebugPrint(debug);
+					if (RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 1))
+						{
+						if (DoIdentifyDeviceNVMeRealtek(physicalDriveId, scsiPort, scsiTargetId, &identify))
+						{
+							debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_REALTEK9220DP"));
+							DebugPrint(debug);
+							flag = AddDiskNVMe(physicalDriveId, (scsiPort + 1), (scsiTargetId + 1), scsiBus + 1, (BYTE)scsiTargetId, CMD_TYPE_NVME_REALTEK9220DP, &identify);
+						}
+						RealtekSwitchMode(physicalDriveId, scsiPort, scsiTargetId, 1, 0);
+					}
+				}
+				if (flag == TRUE) { return TRUE; }
 			}
 		}
 	}
