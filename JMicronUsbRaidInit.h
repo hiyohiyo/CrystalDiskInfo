@@ -183,11 +183,11 @@ BOOL InitializeJMS586_20(HMODULE* hModule)
 	wcscat_s(dllPath, MAX_PATH, DLL_DIR);
 
 #ifdef _M_ARM64
-	wcscat_s(dllPath, MAX_PATH, L"JMS586_20A64.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMS586A64.dll");
 #elif _M_X64
-	wcscat_s(dllPath, MAX_PATH, L"JMS586_20x64.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMS586x64.dll");
 #else
-	wcscat_s(dllPath, MAX_PATH, L"JMS586_20x86.dll");
+	wcscat_s(dllPath, MAX_PATH, L"JMS586x86.dll");
 #endif
 
 	if (!CheckCodeSign(CERTNAME_JMS586_20, dllPath)) { return FALSE; }

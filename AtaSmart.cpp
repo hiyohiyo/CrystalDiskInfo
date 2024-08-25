@@ -2858,7 +2858,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 	{
 		asi.Major = 0;
 		asi.IsSmartSupported = TRUE;
-		asi.Interface = L"USB (JMicron JMS586 New)";
+		asi.Interface = L"USB (JMicron JMS586 NewFW)";
 		asi.CurrentTransferMode = L"---";
 		asi.MaxTransferMode = L"----";
 
