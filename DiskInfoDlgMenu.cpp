@@ -1399,13 +1399,13 @@ void CDiskInfoDlg::OnUsbRealtek9220DP()
 	{
 		m_Ata.FlagUsbRealtek9220DP = FALSE;
 		menu->CheckMenuItem(ID_USB_REALTEK9220DP, MF_UNCHECKED);
-		WritePrivateProfileStringFx(_T("USB"), _T("REALTEK9220"), _T("0"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Realtek9220DP"), _T("0"), m_Ini);
 		}
 	else
 	{
 		m_Ata.FlagUsbRealtek9220DP = TRUE;
 		menu->CheckMenuItem(ID_USB_REALTEK9220DP, MF_CHECKED);
-		WritePrivateProfileStringFx(_T("USB"), _T("REALTEK9220"), _T("1"), m_Ini);
+		WritePrivateProfileStringFx(_T("USB"), _T("Realtek9220DP"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
