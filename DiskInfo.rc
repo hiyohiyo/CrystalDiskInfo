@@ -900,8 +900,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 4, 0, 0
- PRODUCTVERSION 9, 4, 0, 0
+ FILEVERSION 9, 4, 3, 0
+ PRODUCTVERSION 9, 4, 3, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -922,8 +922,8 @@ BEGIN
             VALUE "Comments", "https://crystalmark.info/ MIT License"
 #endif
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.4.0.0"
-            VALUE "ProductVersion", "9.4.0.0"
+            VALUE "FileVersion", "9.4.3.0"
+            VALUE "ProductVersion", "9.4.3.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 
@@ -1191,7 +1191,7 @@ BEGIN
                 MENUITEM "JMicron",                     ID_USB_JMICRON
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
                 MENUITEM "ASMedia ASM1352R",            ID_USB_ASM1352R
-                MENUITEM "Realtek 9220DP (Alpha)",      ID_USB_REALTEK9220DP
+                MENUITEM "Realtek RTL9220DP (Beta)",    ID_USB_REALTEK9220DP
 #ifdef JMICRON_USB_RAID_SUPPORT
                 MENUITEM "JMicron JMS56X",              ID_USB_JMS56X
                 MENUITEM "JMicron JMB39X",              ID_USB_JMB39X

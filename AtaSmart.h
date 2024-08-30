@@ -2033,6 +2033,7 @@ protected:
 	BOOL GetSmartAttributeNVMeRealtek9220DP(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 	BOOL RealtekRAIDMode(INT physicalDriveId, INT scsiPort, INT scsiTargetId);
 	BOOL RealtekSwitchMode(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT dir, INT mode);
+	BOOL isRealtekProduct(INT physicalDriveId, INT scsiPort, INT scsiTargetId);
 
 	BOOL DoIdentifyDeviceNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeNVMeSamsung(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);

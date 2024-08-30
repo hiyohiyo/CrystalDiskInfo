@@ -6630,7 +6630,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 					flag = AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT_ASM1352R, &identify, siliconImageType, NULL, pnpDeviceId);
 				}
 
-				if (FlagUsbRealtek9220DP && RealtekRAIDMode(physicalDriveId, scsiPort, scsiTargetId))
+				if (FlagUsbRealtek9220DP && isRealtekProduct(physicalDriveId, scsiPort, scsiTargetId) && RealtekRAIDMode(physicalDriveId, scsiPort, scsiTargetId))
 				{
 					debug.Format(_T("DoIdentifyDeviceSat CMD_TYPE_SAT_REALTEK9220DP"));
 					DebugPrint(debug);
@@ -7625,6 +7625,72 @@ BOOL CAtaSmart::GetSmartAttributeNVMeASMedia(INT physicalDriveId, INT scsiPort, 
 /*---------------------------------------------------------------------------*/
 //  NVMe Realtek
 /*---------------------------------------------------------------------------*/
+
+BOOL CAtaSmart::isRealtekProduct(INT physicalDriveId, INT scsiPort, INT scsiTargetId)
+{
+	BOOL	bRet = FALSE;
+	HANDLE	hIoCtrl = NULL;
+	DWORD	dwReturned = 0;
+	DWORD	length;
+	
+	SCSI_PASS_THROUGH_WITH_BUFFERS sptwb = {};
+	
+	hIoCtrl = GetIoCtrlHandle(physicalDriveId);
+	
+	if (!hIoCtrl || hIoCtrl == INVALID_HANDLE_VALUE)
+	{
+		return	FALSE;
+	}
+	sptwb.Spt.Length = sizeof(SCSI_PASS_THROUGH);
+	sptwb.Spt.PathId = 0;
+	sptwb.Spt.TargetId = 0;
+	sptwb.Spt.Lun = 0;
+	sptwb.Spt.CdbLength = 16;
+	sptwb.Spt.SenseInfoLength = 32;
+	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_IN;
+	sptwb.Spt.DataTransferLength = 512;
+	sptwb.Spt.TimeOutValue = 2;
+	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, DataBuf);
+	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, SenseBuf);
+	
+	sptwb.Spt.Cdb[0] = 0x12;
+	sptwb.Spt.Cdb[1] = 0x0;
+	sptwb.Spt.Cdb[2] = 0x0;
+	sptwb.Spt.Cdb[3] = (512 >> 8);
+	sptwb.Spt.Cdb[4] = 512 & 0xFF;
+	sptwb.Spt.Cdb[5] = 0x0;
+	
+	length = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS, DataBuf) + sptwb.Spt.DataTransferLength;
+	
+	bRet = ::DeviceIoControl(hIoCtrl, IOCTL_SCSI_PASS_THROUGH,
+				&sptwb, length,
+				&sptwb, length, &dwReturned, NULL);
+	
+	CString tmp;
+	tmp.Format(L"RealtekProduct IO fialed %d", bRet);
+	DebugPrint(tmp);
+	if (bRet == FALSE)
+	{
+		safeCloseHandle(hIoCtrl);
+		return	FALSE;
+	}
+	
+	bRet = false;
+	
+	if (strncmp((char*)sptwb.DataBuf + 32, "1.01", 4) == 0)
+	{
+		bRet = TRUE;
+	}
+	else if (strncmp((char*)sptwb.DataBuf + 8, "Realtek RTL9220DP", 17) == 0)
+	{
+		bRet = TRUE;
+	}
+	
+	tmp.Format(L"RealtekProduct get rtn %d", bRet);
+	DebugPrint(tmp);
+	
+	return bRet;
+}
 
 BOOL CAtaSmart::RealtekRAIDMode(INT physicalDriveId, INT scsiPort, INT scsiTargetId)
 {

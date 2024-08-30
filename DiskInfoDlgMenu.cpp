@@ -1507,6 +1507,7 @@ void CDiskInfoDlg::OnUsbEnableAll()
 	m_Ata.FlagUsbNVMeJMicron = FALSE;
 	m_Ata.FlagUsbNVMeASMedia = FALSE;
 	m_Ata.FlagUsbNVMeRealtek = FALSE;
+	m_Ata.FlagUsbRealtek9220DP = FALSE;
 
 	OnUsbSat();
 	OnUsbIodata();
@@ -1549,6 +1550,7 @@ void CDiskInfoDlg::OnUsbDisableAll()
 	m_Ata.FlagUsbNVMeJMicron = TRUE;
 	m_Ata.FlagUsbNVMeASMedia = TRUE;
 	m_Ata.FlagUsbNVMeRealtek = TRUE;
+	m_Ata.FlagUsbRealtek9220DP = TRUE;
 
 	OnUsbSat();
 	OnUsbIodata();
