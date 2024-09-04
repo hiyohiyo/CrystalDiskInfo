@@ -6623,6 +6623,20 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(_T("AddDisk - USB10"));
 				flag = AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT, &identify, siliconImageType, NULL, pnpDeviceId);
 
+				// for Buffalo SSD-SCTU3A
+				// https://x.com/openlibsys/status/1830947904993071271
+				CString cstr;
+				cstr = identify.A.Model;
+				if (flag && cstr.Find(L"SSD-SCTU3A") == 0 && DoIdentifyDeviceNVMeASMedia(physicalDriveId, scsiPort, scsiTargetId, &identify))
+				{
+					vars.RemoveAt(vars.GetCount() - 1);
+					debug.Format(_T("DoIdentifyDeviceNVMeASMedia"));
+					DebugPrint(debug);
+					debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_ASMEDIA"));
+					DebugPrint(debug);
+					if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_ASMEDIA, &identify)) { return TRUE; }
+				}
+
 				// for ASM1352R 
 				if (FlagUsbASM1352R && DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT_ASM1352R))
 				{
