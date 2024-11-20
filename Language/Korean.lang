@@ -334,6 +334,11 @@ FE=자유 낙하 보호
 F1=총 쓰기량 (호스트)
 F2=총 읽기량 (호스트)
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=읽기 오류율
 02=처리량 성능

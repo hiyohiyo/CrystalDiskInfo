@@ -315,6 +315,11 @@ FE=Ochrana proti pádu
 F1=Celkový zápis
 F2=Celkový čtení
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01= Počet chyb čtení 
 02= Průchodnost disku 

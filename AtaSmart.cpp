@@ -3699,7 +3699,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 
 
 BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, IDENTIFY_DEVICE* identify, DWORD* diskSize,
-	CString pnpDeviceId, NVME_PORT_20* nvmePort20, NVME_PORT_40* nvmePort40
+	CString pnpDeviceId, NVME_PORT_20* nvmePort20, NVME_PORT_40* nvmePort40, NVME_ID* nvmeId
 )
 {
 	if (vars.GetCount() >= MAX_DISK)
@@ -3831,9 +3831,10 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.SerialNumber.TrimRight();
 		asi.TotalDiskSize = (((DWORD64)nvmePort20->Capacity << 32) + (DWORD64)nvmePort20->CapacityOffset) * (DWORD64)nvmePort20->SectorSize / 1000 / 1000;
 	}
-	else if (nvmePort40 != NULL)
+	else if (nvmePort40 != NULL && nvmeId != NULL)
 	{
 		asi.Model = nvmePort40->ModelName;
+		asi.FirmwareRev = nvmeId->FirmwareRevision;
 		asi.SerialNumber = nvmePort40->SerialNumber;
 		asi.Model.TrimRight();
 		asi.SerialNumber.TrimRight();
@@ -11223,7 +11224,7 @@ BOOL CAtaSmart::AddDiskJMS586_20(INT index)
 	}
 	*/
 
-	for (int i = 0; i < 5 /*MAX_DISK_IN_CONTROLLER*/; i++)
+	for (int i = 0; i < 2 /*MAX_DISK_IN_CONTROLLER*/; i++)
 	{
 		if (GetNVMePortInfoJMS586_20(index, i, &nvmePort))
 		{
@@ -11305,19 +11306,40 @@ BOOL CAtaSmart::AddDiskJMS586_40(INT index)
 	if (!hJMS586_40) { return FALSE; }
 	IDENTIFY_DEVICE identify = { 0 };
 	NVME_PORT_40 nvmePort = { 0 };
+	NVME_ID nvmeId = { 0 };
 
-	for (int i = 0; i < 5 /*MAX_DISK_IN_CONTROLLER*/; i++)
+	for (int i = 0; i < 2 /*MAX_DISK_IN_CONTROLLER*/; i++)
 	{
 		if (GetNVMePortInfoJMS586_40(index, i, &nvmePort))
 		{
-			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_40, &identify, 0, L"", NULL, &nvmePort);
+			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_40, &identify, 0, L"", NULL, &nvmePort, &nvmeId);
+			
+			/*
+			int count = 0;
+			count = vars.GetCount();
+
+			BYTE cid = 0;
+
+			ControllerSerialNum2IdJMS586_40(index, &cid);
+			GetNVMeIdInfoJMS586_40(cid, i, &nvmeId);
+
+			// Stack is broken
+			count = vars.GetCount();
+
+			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_40, &identify, 0, L"", NULL, &nvmePort, &nvmeId);
+
+			if (GetNVMeIdInfoJMS586_40(index, i, &nvmeId))
+			{
+				AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_40, &identify, 0, L"", NULL, &nvmePort, &nvmeId);
+			}
+			*/
 		}
 	}
 
 	return TRUE;
 }
 
-BOOL CAtaSmart::DoIdentifyDeviceJMS586_40(INT index, BYTE port, IDENTIFY_DEVICE* identify)
+BOOL CAtaSmart::DoIdentifyDeviceJMS586_40(BYTE index, BYTE port, IDENTIFY_DEVICE* identify)
 {
 	if (!hJMS586_40) { return FALSE; }
 	CString cstr;
@@ -11327,7 +11349,7 @@ BOOL CAtaSmart::DoIdentifyDeviceJMS586_40(INT index, BYTE port, IDENTIFY_DEVICE*
 	return pGetIdentifyInfoJMS586_40(index, port, (UNION_IDENTIFY_DEVICE*)identify);
 }
 
-BOOL CAtaSmart::GetSmartInfoJMS586_40(INT index, BYTE port, ATA_SMART_INFO* asi)
+BOOL CAtaSmart::GetSmartInfoJMS586_40(BYTE index, BYTE port, ATA_SMART_INFO* asi)
 {
 	if (!hJMS586_40) { return FALSE; }
 	CString cstr;
@@ -11353,7 +11375,7 @@ BOOL CAtaSmart::GetSmartInfoJMS586_40(INT index, BYTE port, ATA_SMART_INFO* asi)
 	return FALSE;
 }
 
-BOOL CAtaSmart::GetNVMePortInfoJMS586_40(INT index, BYTE port, NVME_PORT_40* nvmePort)
+BOOL CAtaSmart::GetNVMePortInfoJMS586_40(BYTE index, BYTE port, NVME_PORT_40* nvmePort)
 {
 	if (!hJMS586_40) { return FALSE; }
 	CString cstr;
@@ -11363,7 +11385,7 @@ BOOL CAtaSmart::GetNVMePortInfoJMS586_40(INT index, BYTE port, NVME_PORT_40* nvm
 	return pGetNVMePortInfoJMS586_40(index, port, nvmePort);
 }
 
-BOOL CAtaSmart::GetNVMeSmartInfoJMS586_40(INT index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo)
+BOOL CAtaSmart::GetNVMeSmartInfoJMS586_40(BYTE index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo)
 {
 	if (!hJMS586_40) { return FALSE; }
 	CString cstr;
@@ -11373,7 +11395,7 @@ BOOL CAtaSmart::GetNVMeSmartInfoJMS586_40(INT index, BYTE port, UNION_SMART_ATTR
 	return pGetNVMeSmartInfoJMS586_40(index, port, smartInfo);
 }
 
-BOOL CAtaSmart::GetSmartAttributeNVMeJMS586_40(INT index, INT port, ATA_SMART_INFO* asi)
+BOOL CAtaSmart::GetSmartAttributeNVMeJMS586_40(BYTE index, BYTE port, ATA_SMART_INFO* asi)
 {
 	BOOL flag = FALSE;
 	UNION_SMART_ATTRIBUTE smartInfo;
@@ -11381,6 +11403,28 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMS586_40(INT index, INT port, ATA_SMART_IN
 	memcpy_s(&(asi->SmartReadData), 512, smartInfo.B.b, 512);
 
 	return flag;
+}
+
+BOOL CAtaSmart::GetNVMeIdInfoJMS586_40(BYTE index, BYTE port, NVME_ID* nvmeId)
+{
+	if (!hJMS586_40) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"GetNVMeIdInfoFx: index %d, port %d", index, port);
+	DebugPrint(cstr);
+
+	return pGetNVMeIdInfoJMS586_40(index, port, nvmeId);
+}
+
+
+BOOL CAtaSmart::ControllerSerialNum2IdJMS586_40(BYTE index, BYTE* cid)
+{
+	if (!hJMS586_40) { return FALSE; }
+	CString cstr;
+	cstr.Format(L"ControllerSerialNum2IdFx: index %d, cid %d", index, *cid);
+	DebugPrint(cstr);
+
+	//	return NULL;
+	return pControllerSerialNum2IdJMS586_40(index, cid);
 }
 
 #endif

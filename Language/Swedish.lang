@@ -328,9 +328,14 @@ F0=Head Flying Hours
 FA=Read Error Retry Rate
 FE=Free Fall Protection
 
-;4.5.0
+;Updated 5.4.0
 F1=Total LBAs Written
 F2=Total LBAs Read
+
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
 
 [SmartSsd]
 01=Read Error Rate

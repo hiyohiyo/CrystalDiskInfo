@@ -356,6 +356,11 @@ FF=Χρόνος ζωής που απομένει
 F1=Total Host Writes
 F2=Total Host Reads
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartMtron]
 BB=Συνολικές διαγραφές
 

@@ -45,7 +45,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 
 #ifdef SUISHO_AOI_SUPPORT
 	m_DefaultTheme = L"Aoi";
-	m_RecommendTheme = L"Aoi";
+	m_RecommendTheme = L"AoiLight";
 	m_ThemeKeyName = L"ThemeAoi";
 #elif MSI_MEI_SUPPORT
 	m_DefaultTheme = L"MSIMei";

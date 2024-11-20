@@ -330,6 +330,11 @@ FE=Free Fall Protection
 F1=Kabuuang nagsusulat ang host
 F2=Kabuuang nagsusulat ang host
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=Read Error Rate
 02=Throughput Performance

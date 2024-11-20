@@ -2,7 +2,7 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : MIT License
+//      License : The MIT License
 /*---------------------------------------------------------------------------*/
 
 #pragma once
@@ -156,9 +156,22 @@ typedef struct _BYTE512
 	BYTE b[512];
 } BYTE512;
 
+typedef struct _NVME_IDENTIFY_DEVICE
+{
+	CHAR		Reserved1[4];
+	CHAR		SerialNumber[20];
+	CHAR		Model[40];
+	CHAR		FirmwareRev[8];
+	CHAR		Reserved2[9];
+	CHAR		MinorVersion;
+	SHORT		MajorVersion;
+	CHAR		Reserved3[428];
+}NVME_IDENTIFY_DEVICE;
+
 typedef union _UNION_IDENTIFY_DEVICE
 {
 	IDENTIFY_DEVICE I;
+	NVME_IDENTIFY_DEVICE N;
 	BYTE512 B;
 } UNION_IDENTIFY_DEVICE;
 
@@ -213,6 +226,23 @@ typedef struct _NVME_PORT_20
 	uint8_t         DiskType;
 } NVME_PORT_20;
 
+typedef struct _NVME_ID
+{
+	uint16_t        PCIeVID;
+	uint16_t        PCIeSubSysVID;
+	uint8_t         ControllerMultIO;
+	uint8_t         MaxTransferSize;
+	uint16_t        ControllerID;
+	uint8_t         FirmwareRevision[8];
+	uint8_t         FGUID[16];
+	uint16_t        WarnTemperatureThreshold;
+	uint16_t        CriticalTemperatureThreshold;
+	uint16_t        MinThermalTemperature;
+	uint16_t        MaxThermalTemperature;
+	uint32_t        NumOFNamespace;
+	uint8_t         IeeeOuiID[3];
+} NVME_ID;
+
 #pragma	pack(pop)
 
 //-----------------------------------------------------------------------------
@@ -245,8 +275,11 @@ typedef BOOL(WINAPI* _GetNVMeSmartInfoJMS586_20) (int index, unsigned char port,
 // JMicron JMS586_New API
 typedef DWORD(WINAPI* _GetDllVersionJMS586_40) (PBYTE major, PBYTE minor, PBYTE revision, PBYTE release);
 typedef int(WINAPI* _GetControllerCountJMS586_40) ();
-typedef BOOL(WINAPI* _GetSmartInfoJMS586_40) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
-typedef BOOL(WINAPI* _GetIdentifyInfoJMS586_40) (int index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
+typedef BOOL(WINAPI* _GetSmartInfoJMS586_40) (BYTE index, unsigned char port, UNION_SMART_ATTRIBUTE* attribute, UNION_SMART_THRESHOLD* threshold);
+typedef BOOL(WINAPI* _GetIdentifyInfoJMS586_40) (BYTE index, unsigned char port, UNION_IDENTIFY_DEVICE* identify);
 
-typedef BOOL(WINAPI* _GetNVMePortInfoJMS586_40) (int index, unsigned char port, NVME_PORT_40* nvmePort);
-typedef BOOL(WINAPI* _GetNVMeSmartInfoJMS586_40) (int index, unsigned char port, UNION_SMART_ATTRIBUTE* smartInfo);
+typedef BOOL(WINAPI* _GetNVMePortInfoJMS586_40) (BYTE index, unsigned char port, NVME_PORT_40* nvmePort);
+typedef BOOL(WINAPI* _GetNVMeSmartInfoJMS586_40) (BYTE index, unsigned char port, UNION_SMART_ATTRIBUTE* smartInfo);
+typedef BOOL(WINAPI* _GetNVMeIdInfoJMS586_40) (BYTE index, unsigned char port, NVME_ID* nvmeId);
+typedef BOOL(WINAPI* _ControllerSerialNum2IdJMS586_40) (BYTE csn, BYTE* cid);
+

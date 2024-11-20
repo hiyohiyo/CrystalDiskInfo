@@ -358,6 +358,11 @@ FF=Durată de viață rămasă
 F1=Total scrieri gazdă
 F2=Total scrieri gazdă
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartMtron]
 BB=Număr ștergeri complete
 

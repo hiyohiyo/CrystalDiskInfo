@@ -361,6 +361,11 @@ FF=Esperança de vida
 F1=Nº escriptures a l'amfitrió
 F2=Nº lectures de l'amfitrió
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartMtron]
 BB=Nº d'esborrats
 

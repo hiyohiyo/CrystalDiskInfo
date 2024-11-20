@@ -54,6 +54,8 @@ _GetSmartInfoJMS586_40 pGetSmartInfoJMS586_40 = NULL;
 _GetIdentifyInfoJMS586_40 pGetIdentifyInfoJMS586_40 = NULL;
 _GetNVMePortInfoJMS586_40 pGetNVMePortInfoJMS586_40 = NULL;
 _GetNVMeSmartInfoJMS586_40 pGetNVMeSmartInfoJMS586_40 = NULL;
+_GetNVMeIdInfoJMS586_40 pGetNVMeIdInfoJMS586_40 = NULL;
+_ControllerSerialNum2IdJMS586_40 pControllerSerialNum2IdJMS586_40 = NULL;
 
 //-----------------------------------------------------------------------------
 //
@@ -265,6 +267,8 @@ BOOL InitializeJMS586_40(HMODULE* hModule)
 	pGetIdentifyInfoJMS586_40 = (_GetIdentifyInfoJMS586_40)GetProcAddress(*hModule, "GetIdentifyInfoFx");
 	pGetNVMePortInfoJMS586_40 = (_GetNVMePortInfoJMS586_40)GetProcAddress(*hModule, "GetNVMePortInfoFx");
 	pGetNVMeSmartInfoJMS586_40 = (_GetNVMeSmartInfoJMS586_40)GetProcAddress(*hModule, "GetNVMeSmartInfoFx");
+	pGetNVMeIdInfoJMS586_40 = (_GetNVMeIdInfoJMS586_40)GetProcAddress(*hModule, "GetNVMeIdInfoFx");
+	pControllerSerialNum2IdJMS586_40 = (_ControllerSerialNum2IdJMS586_40)GetProcAddress(*hModule, "ControllerSerialNum2IdFx");
 
 	//-----------------------------------------------------------------------------
 	// Check Functions
@@ -275,6 +279,8 @@ BOOL InitializeJMS586_40(HMODULE* hModule)
 		&& pGetIdentifyInfoJMS586_40
 		&& pGetNVMePortInfoJMS586_40
 		&& pGetNVMeSmartInfoJMS586_40
+		&& pGetNVMeIdInfoJMS586_40
+		&& pControllerSerialNum2IdJMS586_40
 		))
 	{
 		FreeLibrary(*hModule);

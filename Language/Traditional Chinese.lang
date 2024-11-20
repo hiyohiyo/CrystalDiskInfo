@@ -359,6 +359,11 @@ FF=剩餘壽命
 F1=對 SSD 累計寫入
 F2=對 SSD 累計讀取
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartMtron]
 BB=抹除次數總計
 

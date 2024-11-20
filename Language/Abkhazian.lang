@@ -335,6 +335,11 @@ FE=Ахалакаҳара аҽацәыхьчара
 F1=Хост-аҭаҩрақәа (зынӡа)
 F2=Хост-аԥхьарақәа (зынӡа)
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=Аԥхьара агхақәа рылассы-лассра
 02=Аусуралшара

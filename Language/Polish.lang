@@ -340,6 +340,11 @@ FE=Ochrona przed upadkiem
 F1=Suma zapisów hosta
 F2=Suma odczytów hosta
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=Współczynnik błędów odczytu
 02=Średnia wydajność dysku

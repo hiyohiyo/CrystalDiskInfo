@@ -563,41 +563,124 @@ CStringA URLEncode(const CStringA& str)
 	return encoded;
 }
 
-CStringA ANSI2UTF8(const CStringA& ansiStr)
+#if _MSC_VER <= 1310
+// ConvertINetString関数のプロトタイプ宣言
+typedef HRESULT(WINAPI* FuncConvertINetString)(
+	LPDWORD lpdwMode,
+	DWORD dwSrcEncoding,
+	DWORD dwDstEncoding,
+	LPBYTE lpSrcStr,
+	LPINT lpnSrcSize,
+	LPBYTE lpDstStr,
+	LPINT lpnDstSize
+	);
+
+BOOL ConvertEncoding(const CString& srcStr, DWORD srcCodePage, DWORD dstCodePage, CStringA& dstStr)
 {
-	// Step 1: ANSI to UTF-16
-	int utf16Length = MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, NULL, 0);
-	wchar_t* utf16str = new wchar_t[utf16Length];
-	MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, utf16str, utf16Length);
+	static BOOL initFlag = FALSE;
+	static FuncConvertINetString pConvertINetString = NULL;
 
-	// Step 2: UTF-16 to UTF-8
-	int utf8Length = WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, NULL, 0, NULL, NULL);
-	char* utf8str = new char[utf8Length];
-	WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, utf8str, utf8Length, NULL, NULL);
+	if (! pConvertINetString && ! initFlag)
+	{
+		initFlag = TRUE;
+		HMODULE hMlang = LoadLibrary(_T("mlang.dll"));
+		if (!hMlang)
+		{
+			return FALSE;
+		}
 
-	CStringA result(utf8str);
+		pConvertINetString = (FuncConvertINetString)GetProcAddress(hMlang, "ConvertINetString");
+		if (!pConvertINetString)
+		{
+			FreeLibrary(hMlang);
+			return FALSE;
+		}
+	}
 
-	delete[] utf16str;
-	delete[] utf8str;
+	DWORD dwMode = 0;
+	int srcLen = srcStr.GetLength() * sizeof(TCHAR);
+	int dstLen = 0;
+	HRESULT hr = pConvertINetString(&dwMode, srcCodePage, dstCodePage, (LPBYTE)srcStr.GetString(), &srcLen, NULL, &dstLen);
+	if (FAILED(hr) || dstLen <= 0)
+	{
+		return FALSE;
+	}
 
-	return result;
+	pConvertINetString(&dwMode, srcCodePage, dstCodePage, (LPBYTE)srcStr.GetString(), &srcLen, (LPBYTE)dstStr.GetBuffer(dstLen), &dstLen);
+	dstStr.ReleaseBuffer(dstLen);
+
+	return TRUE;
 }
 
+#ifdef UNICODE
+CStringA UTF16toUTF8(const CStringW& utf16str)
+{
+	if (IsNT4())
+	{
+		CStringA utf8str;
+		ConvertEncoding(utf16str, 1200 /*UTF-16*/, CP_UTF8, utf8str);
+		return utf8str;
+	}
+	else
+	{
+		CStringA utf8str;
+		int utf8Length = WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, NULL, 0, NULL, NULL);
+		if (utf8Length <= 0) { return ""; }
+		WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, utf8str.GetBuffer(utf8Length), utf8Length, NULL, NULL);
+		utf8str.ReleaseBuffer();
+		return utf8str;
+	}
+}
+#else
+CStringA ANSItoUTF8(const CStringA& ansiStr)
+{
+	if (IsNT4() || IsWin9x())
+	{
+		CStringA utf8str;
+		ConvertEncoding(ansiStr, GetACP(), CP_UTF8, utf8str);
+		return utf8str;
+	}
+	else
+	{
+		int utf16Length = MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, NULL, 0);
+		if (utf16Length <= 0) {	return ""; }
+		CStringW utf16str;
+		MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, utf16str.GetBuffer(utf16Length), utf16Length);
+		utf16str.ReleaseBuffer();
+		int utf8Length = WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, NULL, 0, NULL, NULL);
+		if (utf8Length <= 0) { return ""; }
+		CStringA utf8str;
+		WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, utf8str.GetBuffer(utf8Length), utf8Length, NULL, NULL);
+		utf8str.ReleaseBuffer();
+
+		return utf8str;
+	}
+}
+#endif
+#else
+
+CStringA UTF16toUTF8(const CStringW& utf16str)
+{
+	CStringA utf8str;
+	int utf8Length = WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, NULL, 0, NULL, NULL);
+	if (utf8Length <= 0){ return ""; }
+	WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, utf8str.GetBuffer(utf8Length), utf8Length, NULL, NULL);
+	utf8str.ReleaseBuffer();
+	return utf8str;
+}
+#endif
+
+#ifdef UNICODE
 CStringA UE(const CStringW& utf16str)
 {
-	CStringA encoded;
-	CStringA utf8str(CW2A(utf16str, CP_UTF8));
-	encoded = URLEncode(utf8str);
-	return encoded;
+	return URLEncode(UTF16toUTF8(utf16str));
 }
-
+#else
 CStringA UE(const CStringA& ansiStr)
 {
-	CStringA encoded;
-	encoded = URLEncode(ANSI2UTF8(ansiStr));
-	return encoded;
+	return URLEncode(ANSItoUTF8(ansiStr));
 }
-
+#endif
 ////------------------------------------------------
 //   Clipboard
 ////------------------------------------------------

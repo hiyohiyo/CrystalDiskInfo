@@ -331,6 +331,11 @@ FF=Jäljellä oleva elinaika
 F1=Laiteisännän kirjoituskertoja
 F2=Laiteisännän lukukertoja
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartMtron]
 BB=Täydellisiä tyhjennyskertoja
 

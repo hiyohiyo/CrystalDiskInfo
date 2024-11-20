@@ -208,7 +208,6 @@ DEFAULT=Default
 ENABLED=Enabled
 DISABLED=Disabled
 
-
 [Message]
 DETECT_UNIT_POWER_ON_HOURS=Откривање јединица за "Сага на време" (потребно око 130 сек.)
 DETECT_DISK=Налажење диска
@@ -331,6 +330,11 @@ FE=Заштита против пада
 ;Updated 5.4.0
 F1=Total Host Writes
 F2=Total Host Reads
+
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
 
 [SmartSsd]
 01=Износ грешке при читању

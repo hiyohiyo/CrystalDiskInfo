@@ -332,6 +332,11 @@ FE=Szabadesés védelem száma
 F1=Összes írás
 F2=Összes olvasás
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=Olvasási hibák száma
 02=Átviteli teljesítmény

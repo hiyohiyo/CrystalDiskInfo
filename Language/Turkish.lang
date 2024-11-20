@@ -333,6 +333,11 @@ FE=Serbest Düşme Koruması
 F1=Yazılan Toplamı
 F2=Okunan Toplamı
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=Okuma Hatası Oranı
 02=Çıkış Başarımı

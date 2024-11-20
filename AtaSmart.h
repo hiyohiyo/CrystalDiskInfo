@@ -2018,7 +2018,7 @@ protected:
 	BOOL ReadLogExtPd(INT physicalDriveId, BYTE target, BYTE logAddress, BYTE logPage, PBYTE data, DWORD dataSize);
 
 	BOOL AddDiskNVMe(INT PhysicalDriveId, INT ScsiPort, INT scsiTargetId, INT scsiBus, BYTE target, COMMAND_TYPE commandType, 
-		IDENTIFY_DEVICE* identify, DWORD* diskSize = NULL, CString pnpDeviceId = _T(""), NVME_PORT_20* nvmePort20 = NULL, NVME_PORT_40* nvmePort40 = NULL
+		IDENTIFY_DEVICE* identify, DWORD* diskSize = NULL, CString pnpDeviceId = _T(""), NVME_PORT_20* nvmePort20 = NULL, NVME_PORT_40* nvmePort40 = NULL, NVME_ID* nvmeId = NULL
 	);
 
 	BOOL DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify, BOOL flagUSB2mode);
@@ -2109,11 +2109,13 @@ protected:
 	BOOL GetSmartAttributeNVMeJMS586_20(INT index, INT port, ATA_SMART_INFO* asi);
 
 	BOOL AddDiskJMS586_40(INT index);
-	BOOL DoIdentifyDeviceJMS586_40(INT index, BYTE port, IDENTIFY_DEVICE* identify);
-	BOOL GetSmartInfoJMS586_40(INT index, BYTE port, ATA_SMART_INFO* asi);
-	BOOL GetNVMePortInfoJMS586_40(INT index, BYTE port, NVME_PORT_40* nvmePort);
-	BOOL GetNVMeSmartInfoJMS586_40(INT index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo);
-	BOOL GetSmartAttributeNVMeJMS586_40(INT index, INT port, ATA_SMART_INFO* asi);
+	BOOL DoIdentifyDeviceJMS586_40(BYTE index, BYTE port, IDENTIFY_DEVICE* identify);
+	BOOL GetSmartInfoJMS586_40(BYTE index, BYTE port, ATA_SMART_INFO* asi);
+	BOOL GetNVMePortInfoJMS586_40(BYTE index, BYTE port, NVME_PORT_40* nvmePort);
+	BOOL GetNVMeSmartInfoJMS586_40(BYTE index, BYTE port, UNION_SMART_ATTRIBUTE* smartInfo);
+	BOOL GetSmartAttributeNVMeJMS586_40(BYTE index, BYTE port, ATA_SMART_INFO* asi);
+	BOOL GetNVMeIdInfoJMS586_40(BYTE index, BYTE port, NVME_ID* nvmeId);
+	BOOL ControllerSerialNum2IdJMS586_40(BYTE csn, BYTE* cid);
 #endif
 
 	DWORD GetTransferMode(WORD w63, WORD w76, WORD w77, WORD w88, CString &currentTransferMode, CString &maxTransferMode, CString &Interface, INTERFACE_TYPE *interfaceType);

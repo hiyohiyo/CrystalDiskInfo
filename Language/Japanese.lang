@@ -1,6 +1,6 @@
 [Information]
 TRANSLATOR=hiyohiyo
-VERSION=9.3.1
+VERSION=9.5.0
 
 [Language]
 LANGUAGE=日本語
@@ -330,6 +330,11 @@ FE=落下保護
 ;4.5.0
 F1=総書き込み量 (ホスト)
 F2=総読み込み量 (ホスト)
+
+;Updated 9.5.0
+17=ヘリウムコンディション (Lower)
+18=ヘリウムコンディション (Upper)
+1B=MAMRヘルスモニター
 
 [SmartSsd]
 01=リードエラーレート

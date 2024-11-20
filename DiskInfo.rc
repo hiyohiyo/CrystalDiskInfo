@@ -1191,12 +1191,12 @@ BEGIN
                 MENUITEM "JMicron",                     ID_USB_JMICRON
                 MENUITEM "Cypress",                     ID_USB_CYPRESS
                 MENUITEM "ASMedia ASM1352R",            ID_USB_ASM1352R
-                MENUITEM "Realtek RTL9220DP (Beta)",    ID_USB_REALTEK9220DP
+                MENUITEM "Realtek RTL9220DP",           ID_USB_REALTEK9220DP
 #ifdef JMICRON_USB_RAID_SUPPORT
                 MENUITEM "JMicron JMS56X",              ID_USB_JMS56X
                 MENUITEM "JMicron JMB39X",              ID_USB_JMB39X
-                MENUITEM "JMicron JMS586 (Model 20bytes/Beta)",      ID_USB_JMS586_20
-                MENUITEM "JMicron JMS586 (Model 40bytes/NewFW/Alpha)",      ID_USB_JMS586_40
+                MENUITEM "JMicron JMS586 (Model 20bytes/Beta)",            ID_USB_JMS586_20
+//                MENUITEM "JMicron JMS586 (Model 40bytes/NewFW/Beta)",      ID_USB_JMS586_40
 #endif 
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
 //                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16

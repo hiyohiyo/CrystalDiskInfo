@@ -359,6 +359,11 @@ FF=Оставащ живот
 F1=Total Host Writes
 F2=Total Host Reads
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartMtron]
 BB=Общ брой на изтриванията
 

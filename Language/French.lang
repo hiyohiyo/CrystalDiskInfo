@@ -333,6 +333,11 @@ FE=Fonction conçue pour diminuer la probabilité de perte de données en détec
 F1=Total Ecriture Hôte
 F2=Total Lecture Hôte
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=Taux d'erreurs de lecture
 02=Performances du débit

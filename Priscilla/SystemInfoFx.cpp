@@ -331,7 +331,7 @@ void GetCpuInfo(CString& cpuInfo, CString& cpuName, int* clock, int* cores, int*
 
 	if (cpuInfo.IsEmpty())
 	{
-		TCHAR str[256];
+		TCHAR str[256] = {};
 		DWORD value = 0;
 		DWORD type = REG_SZ;
 		ULONG size = 256 * sizeof(TCHAR);
@@ -422,6 +422,9 @@ void GetCpuInfo(CString& cpuInfo, CString& cpuName, int* clock, int* cores, int*
 			cpuInfo += cstr;
 		}		
 	}
+
+	cpuInfo.Replace(_T("(R)"), _T(""));
+	cpuInfo.Replace(_T("(TM)"), _T(""));
 }
 
 void GetGpuInfo(CString& gpuInfo)
@@ -452,7 +455,7 @@ void GetGpuInfo(CString& gpuInfo)
 				pAdapter->GetDesc(&adapterDesc);
 
 				CString cstr;
-				cstr.Format(L"%s (%d MB)\n", adapterDesc.Description, (int)(adapterDesc.DedicatedVideoMemory / (1024 * 1024)));
+				cstr.Format(L"%s [%d MB]", adapterDesc.Description, (int)(adapterDesc.DedicatedVideoMemory / (1024 * 1024)));
 
 				if (cstr.Find(L"Microsoft Basic Render Driver") == 0)
 				{
@@ -476,6 +479,8 @@ void GetGpuInfo(CString& gpuInfo)
 
 	if (! gpuInfo.IsEmpty())
 	{
+		gpuInfo.Replace(_T("(R)"), _T(""));
+		gpuInfo.Replace(_T("(TM)"), _T(""));
 		return;
 	}
 #endif
@@ -551,7 +556,7 @@ void GetGpuInfo(CString& gpuInfo)
 
 	if (gpuInfo.IsEmpty())
 	{
-		TCHAR str[256];
+		TCHAR str[256] = {};
 		DWORD value = 0;
 		DWORD type = REG_SZ;
 		ULONG size = 256 * sizeof(TCHAR);
@@ -586,6 +591,9 @@ void GetGpuInfo(CString& gpuInfo)
 			}
 		}
 	}
+
+	gpuInfo.Replace(_T("(R)"), _T(""));
+	gpuInfo.Replace(_T("(TM)"), _T(""));
 }
 
 void GetBaseBoardInfo(CString& baseBoardInfo)
@@ -665,7 +673,7 @@ void GetBaseBoardInfo(CString& baseBoardInfo)
 
 	if (baseBoardInfo.IsEmpty())
 	{
-		TCHAR str[256];
+		TCHAR str[256] = {};
 		DWORD value = 0;
 		DWORD type = REG_SZ;
 		ULONG size = 256 * sizeof(TCHAR);
@@ -777,7 +785,7 @@ void GetComputerSystemInfo(CString& computerSystemInfo)
 
 	if (computerSystemInfo.IsEmpty())
 	{
-		TCHAR str[256];
+		TCHAR str[256] = {};
 		DWORD value = 0;
 		DWORD type = REG_SZ;
 		ULONG size = 256 * sizeof(TCHAR);
@@ -844,7 +852,7 @@ void GetScreenInfo(CString& screenInfo, int* width, int* height, int* color, CSt
 void GetMemoryInfo(CString& memoryInfo, int* size)
 {
 #if _MSC_VER > 1310
-	MEMORYSTATUSEX memory;
+	MEMORYSTATUSEX memory = {};
 	memory.dwLength = sizeof(memory);
 	GlobalMemoryStatusEx(&memory);
 

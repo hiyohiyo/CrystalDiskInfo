@@ -326,6 +326,11 @@ FE=Захист від вільного падіння
 F1=Всього записів хоста
 F2=Всього зчитувань хоста
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=Помилки зчитування
 02=Продуктивність 

@@ -331,6 +331,11 @@ FE=Vrije Val Bescherming
 F1=Totaal Host Schrijven
 F2=Totaal Host Lezen
 
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
+
 [SmartSsd]
 01=Lees Fout Factor
 02=Data Doorvoersnelheid

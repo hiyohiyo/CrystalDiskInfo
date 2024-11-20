@@ -328,9 +328,14 @@ F0=ساعات تحليق المقدمة
 FA=معدل محاولات خطأ القراءة
 FE=حماية حرة كاملة
 
-;4.5.0
+;Updated 5.4.0
 F1=المكتوبة LBA إجمالي
 F2=المقروءة LBA إجمالي
+
+;Updated 9.5.0
+17=Helium Condition Lower
+18=Helium Condition Upper
+1B=MAMR Health Monitor
 
 [SmartSsd]
 01=معدل خطأ القراءة
