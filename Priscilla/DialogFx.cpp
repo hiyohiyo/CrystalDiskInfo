@@ -246,7 +246,7 @@ void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 	double ratio = m_ZoomRatio;
 	m_bBkImage = FALSE;
 
-#if _MSC_VER >= 1900
+#if _MSC_VER > 1310
 	if (resize) { m_ZoomRatio = 3.0; }
 	hr = srcBitmap.Load(IP(m_BackgroundName));
 	if (resize) { m_ZoomRatio = ratio; }
@@ -263,7 +263,7 @@ void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 		CDC		baseDC;
 		CDC* pWndDC = GetDC();
 
-#if _MSC_VER >= 1900
+#if _MSC_VER > 1310
 		int w = (int)(m_ZoomRatio / 3.0 * srcBitmap.GetWidth());
 		int h = (int)(m_ZoomRatio / 3.0 * srcBitmap.GetHeight());
 #else
@@ -404,6 +404,7 @@ CString CDialogFx::GetFontFace()
 DWORD CDialogFx::ChangeZoomType(DWORD zoomType)
 {
 	DWORD current = (DWORD)(m_Dpi / 96.0 * 100);
+	int width = GetSystemMetrics(SM_CXSCREEN);
 
 	if(zoomType == ZoomTypeAuto)
 	{
@@ -427,6 +428,15 @@ DWORD CDialogFx::ChangeZoomType(DWORD zoomType)
 		{
 			zoomType = ZoomType125;
 		}
+#ifdef CRYSTALMARK_RETRO
+#ifdef SUISHO_SHIZUKU_SUPPORT
+		else if (width < 900) { zoomType = ZoomType050; }
+		else if (width < 1200){ zoomType = ZoomType075; }
+#else
+		else if (width < 732) { zoomType = ZoomType050; }
+		else if (width < 976) { zoomType = ZoomType075; }
+#endif
+#endif
 		else
 		{
 			zoomType = ZoomType100;

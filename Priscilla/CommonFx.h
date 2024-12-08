@@ -70,6 +70,8 @@ static const int OwnerDrawGlass       = 0x0004;
 static const int OwnerDrawTransparent = 0x0008;
 
 static const int ZoomTypeAuto =  0;
+static const int ZoomType050 = 50;
+static const int ZoomType075 = 75;
 static const int ZoomType100 = 100;
 static const int ZoomType125 = 125;
 static const int ZoomType150 = 150;

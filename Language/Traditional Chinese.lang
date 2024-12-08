@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=謝慶憲, chriszxl (小良奇), haobinnan
-VERSION=9.3.2
+VERSION=9.5.0
 
 [Language]
 LANGUAGE=正體中文
@@ -333,6 +333,12 @@ FE=自由跌落保護
 F1=對 SSD 累計寫入
 F2=對 SSD 累計讀取
 
+
+;Updated 9.5.0
+17=氦氣狀態下限
+18=氦氣狀態上限
+1B=MAMR 健康監控
+
 [SmartSsd]
 01=底層資料讀取錯誤率
 02=讀寫通量效能
@@ -358,12 +364,6 @@ FF=剩餘壽命
 ;Updated 5.4.0
 F1=對 SSD 累計寫入
 F2=對 SSD 累計讀取
-
-;Updated 9.5.0
-17=Helium Condition Lower
-18=Helium Condition Upper
-1B=MAMR Health Monitor
-
 [SmartMtron]
 BB=抹除次數總計
 

@@ -47,6 +47,7 @@ BOOL IsNT4();
 BOOL IsWin9x();
 BOOL IsWin95();
 BOOL IsPC98();
+BOOL IsNT51orlater();
 
 DWORD GetIeVersion();
 // DWORD GetWin10Version();

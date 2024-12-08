@@ -722,6 +722,34 @@ void CStaticFx::SetHandCursor(BOOL bHandCuror)
 
 void CStaticFx::OnMouseMove(UINT nFlags, CPoint point)
 {
+#if _MSC_VER <= 1310
+	typedef BOOL(WINAPI* Func_TrackMouseEvent)(LPTRACKMOUSEEVENT);
+	static Func_TrackMouseEvent p_TrackMouseEvent = NULL;
+	static BOOL bInit_TrackMouseEvent = FALSE;
+
+	if (bInit_TrackMouseEvent && p_TrackMouseEvent == NULL)
+	{
+		return; // TrackMouseEvent is not available
+	}
+	else
+	{
+		HMODULE hModule = GetModuleHandle(_T("user32.dll"));
+		if (hModule)
+		{
+			p_TrackMouseEvent = (Func_TrackMouseEvent)GetProcAddress(hModule, "TrackMouseEvent");
+		}
+	}
+
+	if (p_TrackMouseEvent != NULL)
+	{
+		TRACKMOUSEEVENT tme = { sizeof(TRACKMOUSEEVENT) };
+		tme.hwndTrack = m_hWnd;
+		tme.dwFlags = TME_LEAVE | TME_HOVER;
+		tme.dwHoverTime = 1;
+		m_bTrackingNow = p_TrackMouseEvent(&tme);
+	}
+	bInit_TrackMouseEvent = TRUE;
+#else
 	if (!m_bTrackingNow)
 	{
 		TRACKMOUSEEVENT tme = { sizeof(TRACKMOUSEEVENT) };
@@ -730,6 +758,8 @@ void CStaticFx::OnMouseMove(UINT nFlags, CPoint point)
 		tme.dwHoverTime = 1;
 		m_bTrackingNow = _TrackMouseEvent(&tme);
 	}
+#endif
+
 	CStatic::OnMouseMove(nFlags, point);
 }
 

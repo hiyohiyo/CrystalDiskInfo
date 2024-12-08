@@ -199,12 +199,6 @@ void getProcessorBrandString(char* brandString)
 
 void GetCpuInfo(CString& cpuInfo, CString& cpuName, int* clock, int* cores, int* threads)
 {
-
-#if _MSC_VER <= 1310
-	if (!IsWin9x())
-	{
-#endif
-
 	CString query = _T("Select * from Win32_Processor");
 
 	IWbemLocator*			pIWbemLocator = NULL;
@@ -241,9 +235,17 @@ void GetCpuInfo(CString& cpuInfo, CString& cpuName, int* clock, int* cores, int*
 							// UINT32 cores = 0;
 							// UINT32 threads = 0;
 
+#if defined(_M_IX86) || defined(_M_X64)
+							char brandString[49] = { 0 };
+							getProcessorBrandString(brandString);
+							name = brandString;
+							name.TrimLeft();
+							name.TrimRight();
+							cpuName = name;
+#endif
 							VARIANT pVal;
 							VariantInit(&pVal);
-							if (pCOMDev->Get(L"Name", 0L, &pVal, NULL, NULL) == WBEM_S_NO_ERROR && pVal.vt > VT_NULL)
+							if (name.IsEmpty() && pCOMDev->Get(L"Name", 0L, &pVal, NULL, NULL) == WBEM_S_NO_ERROR && pVal.vt > VT_NULL)
 							{
 								name = pVal.bstrVal;
 								name.TrimLeft();
@@ -325,10 +327,6 @@ void GetCpuInfo(CString& cpuInfo, CString& cpuName, int* clock, int* cores, int*
 	SAFE_RELEASE(pIWbemServices);
 	SAFE_RELEASE(pIWbemLocator);
 
-#if _MSC_VER <= 1310
-	}
-#endif
-
 	if (cpuInfo.IsEmpty())
 	{
 		TCHAR str[256] = {};
@@ -337,7 +335,15 @@ void GetCpuInfo(CString& cpuInfo, CString& cpuName, int* clock, int* cores, int*
 		ULONG size = 256 * sizeof(TCHAR);
 		HKEY  hKey = NULL;
 
-		if (! IsWin9x())
+#if defined(_M_IX86) || defined(_M_X64)
+		char brandString[49] = { 0 };
+		getProcessorBrandString(brandString);
+		cpuInfo = brandString;
+		cpuInfo.TrimLeft();
+		cpuInfo.TrimRight();
+#endif
+
+		if (cpuInfo.IsEmpty() && !IsWin9x())
 		{
 			if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0"), 0, KEY_READ, &hKey) == ERROR_SUCCESS)
 			{
@@ -349,17 +355,6 @@ void GetCpuInfo(CString& cpuInfo, CString& cpuName, int* clock, int* cores, int*
 				}
 			}
 		}
-
-#if defined(_M_IX86) || defined(_M_X64)
-		if (cpuInfo.IsEmpty())
-		{
-			char brandString[48] = { 0 };
-			getProcessorBrandString(brandString);
-			cpuInfo = brandString;
-			cpuInfo.TrimLeft();
-			cpuInfo.TrimRight();
-		}
-#endif
 
 #ifdef _M_IX86
 		if (cpuInfo.IsEmpty())
@@ -423,6 +418,9 @@ void GetCpuInfo(CString& cpuInfo, CString& cpuName, int* clock, int* cores, int*
 		}		
 	}
 
+
+	cpuName.Replace(_T("(R)"), _T(""));
+	cpuName.Replace(_T("(TM)"), _T(""));
 	cpuInfo.Replace(_T("(R)"), _T(""));
 	cpuInfo.Replace(_T("(TM)"), _T(""));
 }
@@ -817,6 +815,13 @@ void GetComputerSystemInfo(CString& computerSystemInfo)
 			RegCloseKey(hKey);
 		}
 	}
+
+#if _MSC_VER <= 1310
+	if (IsPC98())
+	{
+		computerSystemInfo = _T("[PC-98] ") + computerSystemInfo;
+	}
+#endif
 }
 
 void GetScreenInfo(CString& screenInfo, int* width, int* height, int* color, CString& smoothing)

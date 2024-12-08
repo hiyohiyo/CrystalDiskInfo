@@ -564,7 +564,171 @@ CStringA URLEncode(const CStringA& str)
 }
 
 #if _MSC_VER <= 1310
-// ConvertINetString関数のプロトタイプ宣言
+
+// https://github.com/roytam1/RetroZilla/commit/e44dd98dbf2effeff3305430835e889d76ec73b4#diff-065242b491de972d8519dbbae0c4c8dfb6a1a3c3eb8b9936d56a4c1ad63ec7abR126-R282
+/*** UTF16<-->UTF8 functions minicking MultiByteToWideChar/WideCharToMultiByte ***/
+int utf8GetMaskIndex(unsigned char n) {
+	if ((unsigned char)(n + 2) < 0xc2) return 1; // 00~10111111, fe, ff
+	if (n < 0xe0)                      return 2; // 110xxxxx
+	if (n < 0xf0)                      return 3; // 1110xxxx
+	if (n < 0xf8)                      return 4; // 11110xxx
+	if (n < 0xfc)                      return 5; // 111110xx
+	return 6; // 1111110x
+}
+
+int wc2Utf8Len(wchar_t** n, int* len) {
+	wchar_t* ch = *n, ch2;
+	int qch;
+	if ((0xD800 <= *ch && *ch <= 0xDBFF) && *len) {
+		ch2 = *(ch + 1);
+		if (0xDC00 <= ch2 && ch2 <= 0xDFFF) {
+			qch = 0x10000 + (((*ch - 0xD800) & 0x3ff) << 10) + ((ch2 - 0xDC00) & 0x3ff);
+			(*n)++;
+			(*len)--;
+		}
+	}
+	else
+		qch = (int)*ch;
+
+	if (qch <= 0x7f)           return 1;
+	else if (qch <= 0x7ff)     return 2;
+	else if (qch <= 0xffff)    return 3;
+	else if (qch <= 0x1fffff)  return 4;
+	else if (qch <= 0x3ffffff) return 5;
+	else                       return 6;
+}
+
+int Utf8ToWideChar(unsigned int unused1, unsigned long unused2, char* sb, int ss, wchar_t* wb, int ws) {
+	static const unsigned char utf8mask[] = { 0, 0xff, 0x1f, 0x0f, 0x07, 0x03, 0x01 };
+	char* p = (char*)(sb);
+	char* e = (char*)(sb + ss);
+	wchar_t* w = wb;
+	int cnt = 0, t, qch;
+
+	if (ss < 1) {
+		ss = lstrlenA(sb);
+		e = (char*)(sb + ss);
+	}
+
+	if (wb && ws) {
+		for (; p < e; ++w) {
+			t = utf8GetMaskIndex(*p);
+			qch = (*p++ & utf8mask[t]);
+			while (p < e && --t)
+				qch <<= 6, qch |= (*p++) & 0x3f;
+			if (qch < 0x10000) {
+				if (cnt <= ws)
+					*w = (wchar_t)qch;
+				cnt++;
+			}
+			else {
+				if (cnt + 2 <= ws) {
+					*w++ = (wchar_t)(0xD800 + (((qch - 0x10000) >> 10) & 0x3ff)),
+						*w = (wchar_t)(0xDC00 + (((qch - 0x10000)) & 0x3ff));
+				}
+				cnt += 2;
+			}
+		}
+		if (cnt < ws) {
+			*(wb + cnt) = 0;
+			return cnt;
+		}
+		else {
+			*(wb + ws) = 0;
+			return ws;
+		}
+	}
+	else {
+		for (t; p < e;) {
+			t = utf8GetMaskIndex(*p);
+			qch = (*p++ & utf8mask[t]);
+			while (p < e && --t)
+				qch <<= 6, qch |= (*p++) & 0x3f;
+			if (qch < 0x10000)
+				cnt++;
+			else
+				cnt += 2;
+		}
+		return cnt + 1;
+	}
+}
+
+int WideCharToUtf8(unsigned int unused1, unsigned long unused2, wchar_t* wb, int ws, char* sb, int ss) {
+	wchar_t* p = (wchar_t*)(wb);
+	wchar_t* e = (wchar_t*)(wb + ws);
+	wchar_t* oldp;
+	char* s = sb;
+	int cnt = 0, qch, t;
+
+	if (ws < 1) {
+		ws = lstrlenW(wb);
+		e = (wchar_t*)(wb + ws);
+	}
+
+	if (sb && ss) {
+		for (t; p < e; ++p) {
+			oldp = p;
+			t = wc2Utf8Len(&p, &ws);
+
+			if (p != oldp) { /* unicode surrogates encountered */
+				qch = 0x10000 + (((*oldp - 0xD800) & 0x3ff) << 10) + ((*p - 0xDC00) & 0x3ff);
+			}
+			else
+				qch = *p;
+
+			if (qch <= 0x7f)
+				*s++ = (char)(qch),
+				cnt++;
+			else if (qch <= 0x7ff)
+				*s++ = 0xc0 | (char)(qch >> 6),
+				*s++ = 0x80 | (char)(qch & 0x3f),
+				cnt += 2;
+			else if (qch <= 0xffff)
+				*s++ = 0xe0 | (char)(qch >> 12),
+				*s++ = 0x80 | (char)((qch >> 6) & 0x3f),
+				*s++ = 0x80 | (char)(qch & 0x3f),
+				cnt += 3;
+			else if (qch <= 0x1fffff)
+				*s++ = 0xf0 | (char)(qch >> 18),
+				*s++ = 0x80 | (char)((qch >> 12) & 0x3f),
+				*s++ = 0x80 | (char)((qch >> 6) & 0x3f),
+				*s++ = 0x80 | (char)(qch & 0x3f),
+				cnt += 4;
+			else if (qch <= 0x3ffffff)
+				*s++ = 0xf8 | (char)(qch >> 24),
+				*s++ = 0x80 | (char)((qch >> 18) & 0x3f),
+				*s++ = 0x80 | (char)((qch >> 12) & 0x3f),
+				*s++ = 0x80 | (char)((qch >> 6) & 0x3f),
+				*s++ = 0x80 | (char)(qch & 0x3f),
+				cnt += 5;
+			else
+				*s++ = 0xfc | (char)(qch >> 30),
+				*s++ = 0x80 | (char)((qch >> 24) & 0x3f),
+				*s++ = 0x80 | (char)((qch >> 18) & 0x3f),
+				*s++ = 0x80 | (char)((qch >> 12) & 0x3f),
+				*s++ = 0x80 | (char)((qch >> 6) & 0x3f),
+				*s++ = 0x80 | (char)(qch & 0x3f),
+				cnt += 6;
+		}
+		if (cnt < ss) {
+			*(sb + cnt) = 0;
+			return cnt;
+		}
+		else {
+			*(sb + ss) = 0;
+			return ss;
+		}
+	}
+	else {
+		for (t; p < e; ++p) {
+			t = wc2Utf8Len(&p, &ws);
+			cnt += t;
+		}
+		return cnt + 1;
+	}
+}
+/*** Ends ***/
+
 typedef HRESULT(WINAPI* FuncConvertINetString)(
 	LPDWORD lpdwMode,
 	DWORD dwSrcEncoding,
@@ -575,26 +739,49 @@ typedef HRESULT(WINAPI* FuncConvertINetString)(
 	LPINT lpnDstSize
 	);
 
-BOOL ConvertEncoding(const CString& srcStr, DWORD srcCodePage, DWORD dstCodePage, CStringA& dstStr)
-{
-	static BOOL initFlag = FALSE;
-	static FuncConvertINetString pConvertINetString = NULL;
+static FuncConvertINetString pConvertINetString = NULL;
+static BOOL bInitConvertINetString = FALSE;
 
-	if (! pConvertINetString && ! initFlag)
+BOOL InitConvertINetString()
+{
+	if(bInitConvertINetString)
 	{
-		initFlag = TRUE;
+		return TRUE;
+	}
+	BOOL result = FALSE;
+	if (! pConvertINetString)
+	{
 		HMODULE hMlang = LoadLibrary(_T("mlang.dll"));
 		if (!hMlang)
 		{
-			return FALSE;
+			result = FALSE;
 		}
 
 		pConvertINetString = (FuncConvertINetString)GetProcAddress(hMlang, "ConvertINetString");
 		if (!pConvertINetString)
 		{
 			FreeLibrary(hMlang);
-			return FALSE;
+			result = FALSE;
 		}
+		else
+		{
+			result = TRUE;
+		}
+	}
+	else
+	{
+		result = TRUE;
+	}
+
+	bInitConvertINetString = TRUE;
+	return result;
+}
+
+BOOL ConvertEncoding(const CString& srcStr, DWORD srcCodePage, DWORD dstCodePage, CStringA& dstStr)
+{
+	if (! pConvertINetString)
+	{
+		return FALSE;
 	}
 
 	DWORD dwMode = 0;
@@ -617,9 +804,26 @@ CStringA UTF16toUTF8(const CStringW& utf16str)
 {
 	if (IsNT4())
 	{
-		CStringA utf8str;
-		ConvertEncoding(utf16str, 1200 /*UTF-16*/, CP_UTF8, utf8str);
-		return utf8str;
+		if(pConvertINetString)
+		{
+			CStringA utf8str;
+			ConvertEncoding(utf16str, 1200 /*UTF-16*/, CP_UTF8, utf8str);
+			return utf8str;
+		}
+		else // No mlang.dll
+		{
+			// UTF-16 to UTF-8
+			CStringA utf8str;
+			WCHAR* utf16string = new WCHAR[(utf16str.GetLength() + 1) * 2];
+			wsprintf(utf16string, L"%s", utf16str);
+			int utf16Length = utf16str.GetLength();
+			int utf8Length = WideCharToUtf8(CP_UTF8, 0, utf16string, -1, NULL, 0);
+			if (utf8Length <= 0) { return ""; }
+			WideCharToUtf8(CP_UTF8, 0, utf16string, -1, utf8str.GetBuffer(utf8Length), utf8Length);
+			utf8str.ReleaseBuffer();
+			delete utf16string;
+			return utf8str;
+		}
 	}
 	else
 	{
@@ -636,9 +840,28 @@ CStringA ANSItoUTF8(const CStringA& ansiStr)
 {
 	if (IsNT4() || IsWin9x())
 	{
-		CStringA utf8str;
-		ConvertEncoding(ansiStr, GetACP(), CP_UTF8, utf8str);
-		return utf8str;
+		if (pConvertINetString)
+		{
+			CStringA utf8str;
+			ConvertEncoding(ansiStr, GetACP(), CP_UTF8, utf8str);
+			return utf8str;
+		}
+		else // No mlang.dll
+		{
+			// ANSI to UTF-16 to UTF-8
+			int utf16Length = MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, NULL, 0);
+			if (utf16Length <= 0) { return ""; }
+			CStringW utf16str;
+			MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, utf16str.GetBuffer(utf16Length), utf16Length);
+			utf16str.ReleaseBuffer();
+
+			CStringA utf8str;
+			int utf8Length = WideCharToUtf8(CP_UTF8, 0, utf16str.GetBuffer(utf16Length), -1, NULL, 0);
+			if (utf8Length <= 0) { return ""; }
+			WideCharToUtf8(CP_UTF8, 0, utf16str.GetBuffer(utf16Length), -1, utf8str.GetBuffer(utf8Length), utf8Length);
+			utf8str.ReleaseBuffer();
+			return utf8str;
+		}
 	}
 	else
 	{

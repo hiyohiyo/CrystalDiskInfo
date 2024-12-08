@@ -98,6 +98,16 @@ int CALLBACK HasFontProc(ENUMLOGFONTEX* lpelfe, NEWTEXTMETRICEX* lpntme, int Fon
 
 CString CMainDialogFx::GetDefaultFont()
 {
+#if _MSC_VER <= 1310
+	HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
+	LOGFONT lf = { 0 };
+
+	if (GetObject(hFont, sizeof(LOGFONT), &lf))
+	{
+		return lf.lfFaceName;
+	}
+#endif
+
 	CClientDC dc(this);
 	LOGFONT logfont;
 	BOOL hasFont = FALSE;
@@ -187,11 +197,17 @@ void CMainDialogFx::InitThemeLang()
 	if(m_CurrentTheme.IsEmpty())
 	{
 		CString defaultTheme = m_DefaultTheme;
-
+#if _MSC_VER > 1310
 		if (IsFileExist(m_ThemeDir + m_RecommendTheme + _T("\\") + m_BackgroundName + _T("-300.png")))
 		{
 			defaultTheme = m_RecommendTheme;
 		}
+#else
+		if (IsFileExist(m_ThemeDir + m_RecommendTheme + _T("\\") + m_BackgroundName + _T("-100.png")))
+		{
+			defaultTheme = m_RecommendTheme;
+		}
+#endif
 
 		GetPrivateProfileStringFx(_T("Setting"), m_ThemeKeyName, defaultTheme, str, 256, m_Ini);
 		m_CurrentTheme = str;

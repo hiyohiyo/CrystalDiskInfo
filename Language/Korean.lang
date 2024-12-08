@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Lyttiya, Gihun Ham, 로웰
-VERSION=9.3.2
+VERSION=9.5.0
 
 [Language]
 LANGUAGE=한국어
@@ -120,7 +120,7 @@ DRIVE_MENU_NUMBER=드라이브 표시 대수
 VOICE=음성
 
 ;9.3.0
-STARTUP_VOICE=시작시 음성 재생
+STARTUP_VOICE=시작 시 재생할 음성
 
 [TrayMenu]
 EXIT=종료
@@ -335,9 +335,9 @@ F1=총 쓰기량 (호스트)
 F2=총 읽기량 (호스트)
 
 ;Updated 9.5.0
-17=Helium Condition Lower
-18=Helium Condition Upper
-1B=MAMR Health Monitor
+17=헬륨 상태 (하단)
+18=헬륨 상태 (상단)
+1B=MAMR 상태 모니터
 
 [SmartSsd]
 01=읽기 오류율
@@ -672,7 +672,7 @@ FB=총 읽기량 (NAND)
 F1=총 쓰기량 (호스트)
 F2=총 읽기량 (호스트)
 
-;Updated 9.3.1
+;Updated 9.4.0
 F9=총 쓰기량 (NAND)
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)

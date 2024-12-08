@@ -586,6 +586,27 @@ BOOL IsPC98()
 	return b;
 }
 
+BOOL IsNT51orlater()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+
+		OSVERSIONINFO osvi = { 0 };
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if ((osvi.dwPlatformId == VER_PLATFORM_WIN32_NT)
+			&&
+			((osvi.dwMajorVersion == 5 && osvi.dwMinorVersion >= 1) || (osvi.dwMajorVersion > 5)))
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
 void GetOsName(CString& osFullName, CString& name, CString& version, CString& architecture)
 {
 	CString osName, osType, osCsd, osVersion, osBuild, osArchitecture, osDisplayVersion;
@@ -983,6 +1004,28 @@ void GetOsName(CString& osFullName, CString& name, CString& version, CString& ar
 					if (osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
 					{
 						osType = _T("Server Enterprise Edition");
+					}
+					else
+					{
+						osType = _T("Server");
+					}
+				}
+			}
+			else if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)
+			{
+				if (osvi.wProductType == VER_NT_WORKSTATION)
+				{
+					osType = _T("Professional");
+				}
+				else if (osvi.wProductType == VER_NT_SERVER || osvi.wProductType == VER_NT_DOMAIN_CONTROLLER)
+				{
+					if (osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
+					{
+						osType = _T("Advanced Server");
+					}
+					else if (osvi.wSuiteMask & VER_SUITE_DATACENTER)
+					{
+						osType = _T("Datacenter Server");
 					}
 					else
 					{
