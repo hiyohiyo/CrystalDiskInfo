@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Huoxingdawang, haobinnan, Intervenor, CrcbAk, chriszxl (小良奇), Ericus, 赵然, zby, yfdyh000, nkh0472
-VERSION=9.3.1
+VERSION=9.5.0
 
 [Language]
 LANGUAGE=简体中文
@@ -228,8 +228,8 @@ INFO_HEALTH_STATUS=信息 - 健康状态
 
 [Graph]
 PLEASE_SELECT_ITEM=请选择项目
-ACTUAL_VALUE=原始数据值
-NORMALIZED_VALUE=规范化当前值
+ACTUAL_VALUE=真实值(原始值)
+NORMALIZED_VALUE=正常值(当前值)
 ALL_ON=全开
 ALL_OFF=全关
 RESET=重置
@@ -334,6 +334,11 @@ FE=自由落体保护
 ;Updated 5.4.0
 F1=主机总计写入
 F2=主机总计读取
+
+;Updated 9.5.0
+17=氦气状态下限
+18=氦气状态上限
+1B=MAMR 健康监控
 
 [SmartSsd]
 01=读取错误率
