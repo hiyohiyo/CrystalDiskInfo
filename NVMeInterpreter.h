@@ -9,7 +9,7 @@
 #include <windows.h>
 
 static const int MAX_ATTRIBUTE = 30;
-static const int NVME_ATTRIBUTE = 15;
+static const int NVME_ATTRIBUTE = 18;
 
 #pragma pack(push,1)
 typedef	struct _SMART_ATTRIBUTE

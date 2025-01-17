@@ -885,6 +885,9 @@ F6=Total Erase Count
 0D=Unsafe Shutdowns
 0E=Media and Data Integrity Errors
 0F=Number of Error Information Log Entries
+10=Warning Composite Temperature Time
+11=Critical Composite Temperature Time
+12=Temperature Sensor
 
 [SmartRealtek] ;Added by Realtek
 01=Raw data error rate
