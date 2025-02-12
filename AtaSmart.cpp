@@ -8879,10 +8879,8 @@ BOOL CAtaSmart::IsNvmeTemperatureThresholdValid(INT physicalDriveId)
 		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
 	safeCloseHandle(hIoCtrl);
 
-	// 提取 Identify Controller 数据
 	BYTE* identifyControllerData = nptwb.Buffer + sizeof(STORAGE_PROPERTY_QUERY) + sizeof(STORAGE_PROTOCOL_SPECIFIC_DATA);
 
-	// 读取 WCTEMP (字节 266-267) 和 CCTEMP (字节 268-269)
 	SHORT wcTemp = *(SHORT*)(identifyControllerData + 266);
 	SHORT ccTemp = *(SHORT*)(identifyControllerData + 268);
 
