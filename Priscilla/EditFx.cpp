@@ -211,6 +211,7 @@ CSize CEditFx::GetSize(void)
 
 void CEditFx::SetDrawFrame(BOOL bDrawFrame)
 {
+#if _MSC_VER > 1310
 	if (bDrawFrame)
 	{
 		ModifyStyleEx(0, WS_EX_STATICEDGE, SWP_DRAWFRAME);
@@ -219,6 +220,30 @@ void CEditFx::SetDrawFrame(BOOL bDrawFrame)
 	{
 		ModifyStyleEx(WS_EX_STATICEDGE, 0, SWP_DRAWFRAME);
 	}
+#else
+	if (bDrawFrame)
+	{
+		if (IsNT3())
+		{
+			ModifyStyle(0, WS_BORDER, SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+		}
+		else
+		{
+			ModifyStyleEx(0, WS_EX_STATICEDGE, SWP_DRAWFRAME);
+		}
+	}
+	else
+	{
+		if (IsNT3())
+		{
+			ModifyStyle(WS_BORDER, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+		}
+		else
+		{
+			ModifyStyleEx(WS_EX_STATICEDGE, 0, SWP_DRAWFRAME);
+		}
+	}
+#endif
 	m_bDrawFrame = bDrawFrame;
 }
 

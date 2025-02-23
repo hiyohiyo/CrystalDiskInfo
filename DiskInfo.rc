@@ -900,8 +900,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 5, 0, 0
- PRODUCTVERSION 9, 5, 0, 0
+ FILEVERSION 9, 6, 0, 0
+ PRODUCTVERSION 9, 6, 0, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -922,8 +922,8 @@ BEGIN
             VALUE "Comments", "https://crystalmark.info/ MIT License"
 #endif
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.5.0.0"
-            VALUE "ProductVersion", "9.5.0.0"
+            VALUE "FileVersion", "9.6.0.0"
+            VALUE "ProductVersion", "9.6.0.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 
@@ -1196,13 +1196,12 @@ BEGIN
                 MENUITEM "JMicron JMS56X",              ID_USB_JMS56X
                 MENUITEM "JMicron JMB39X",              ID_USB_JMB39X
                 MENUITEM "JMicron JMS586 (Model 20bytes/Beta)",            ID_USB_JMS586_20
-//                MENUITEM "JMicron JMS586 (Model 40bytes/NewFW/Beta)",      ID_USB_JMS586_40
+                MENUITEM "JMicron JMS586 (Model 40bytes/NewFW/Beta)",      ID_USB_JMS586_40
 #endif 
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
 //                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16
-                MENUITEM "SCSI_NVME_TRANSLATION (JMicron for USB3/4)",   ID_USB_NVME_JMICRON3
-		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron for USB2/3/4)", ID_USB_NVME_JMICRON
-                MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA
+		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron)",            ID_USB_NVME_JMICRON
+                MENUITEM "SCSI_NVME_TRANSLATION (ASMedia/Phison)",     ID_USB_NVME_ASMEDIA
 				MENUITEM "SCSI_NVME_TRANSLATION (Realtek)",            ID_USB_NVME_REALTEK
 
                 MENUITEM SEPARATOR

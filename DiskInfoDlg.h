@@ -618,7 +618,6 @@ public:
 	afx_msg void OnUsbASM1352R();
 	afx_msg void OnUsbRealtek9220DP();
 //	afx_msg void OnUsbSat16();
-	afx_msg void OnUsbNVMeJMicron3();
 	afx_msg void OnUsbNVMeJMicron();
 	afx_msg void OnUsbNVMeASMedia();
 	afx_msg void OnUsbNVMeRealtek();

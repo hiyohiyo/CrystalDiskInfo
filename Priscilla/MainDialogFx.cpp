@@ -99,7 +99,12 @@ int CALLBACK HasFontProc(ENUMLOGFONTEX* lpelfe, NEWTEXTMETRICEX* lpntme, int Fon
 CString CMainDialogFx::GetDefaultFont()
 {
 #if _MSC_VER <= 1310
-	HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
+	int stockFont = DEFAULT_GUI_FONT;
+	if (IsNT3())
+	{
+		return _T("MS Shell Dlg");
+	}
+	HFONT hFont = (HFONT)GetStockObject(stockFont);
 	LOGFONT lf = { 0 };
 
 	if (GetObject(hFont, sizeof(LOGFONT), &lf))
@@ -383,7 +388,7 @@ void CMainDialogFx::InitMenu()
 		// Keep currentItemID the same as the first item if "Random".
 		currentItemID = WM_THEME_ID;
 
-		subMenu.ModifyMenu(WM_THEME_ID, MF_STRING, WM_THEME_ID, m_RandomThemeLabel + m_RandomThemeName);
+		SUBMENU_MODIFY_MENU(WM_THEME_ID, MF_STRING, WM_THEME_ID, m_RandomThemeLabel + m_RandomThemeName);
 	}
 	else if(! FlagHitTheme)
 	{
@@ -518,7 +523,7 @@ BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam)
 			m_RandomThemeName = _T("");
 		}
 
-		subMenu.ModifyMenu(WM_THEME_ID, MF_STRING, WM_THEME_ID, m_RandomThemeLabel + m_RandomThemeName);
+		SUBMENU_MODIFY_MENU(WM_THEME_ID, MF_STRING, WM_THEME_ID, m_RandomThemeLabel + m_RandomThemeName);
 		subMenu.CheckMenuRadioItem(WM_THEME_ID, WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize(),
 			(UINT)wParam, MF_BYCOMMAND);
 		subMenu.Detach();

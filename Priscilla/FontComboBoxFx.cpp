@@ -98,6 +98,18 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 			FillRect(lpDrawItemStruct->hDC, &rc, (HBRUSH)Brush);
 		}
 		DrawString(title, pDC, lpDrawItemStruct, textColor);
+
+#if _MSC_VER <= 1310
+		if (IsNT3() && IsWindowEnabled())
+		{
+			DWORD oldTextAlign = m_TextAlign;
+			HGDIOBJ myoldFont = pDC->SelectStockObject(SYSTEM_FONT);
+			m_TextAlign = ES_RIGHT;
+			DrawString(_T("v"), pDC, lpDrawItemStruct, textColor);
+			m_TextAlign = oldTextAlign;
+			pDC->SelectObject(myoldFont);
+		}
+#endif
 	}
 	else
 	{

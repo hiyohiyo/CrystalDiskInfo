@@ -43,6 +43,7 @@ BOOL IsUserAdmin(VOID);
 #endif
 #endif
 
+BOOL IsNT3();
 BOOL IsNT4();
 BOOL IsWin9x();
 BOOL IsWin95();

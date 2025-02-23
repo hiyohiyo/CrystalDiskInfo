@@ -30,6 +30,14 @@
 
 #define SAFE_DELETE(p) {if(p){delete (p);(p)=NULL;}}
 
+#if _MSC_VER > 1310
+#define MENU_MODIFY_MENU    menu->ModifyMenu
+#define SUBMENU_MODIFY_MENU subMenu.ModifyMenu
+#else
+#define MENU_MODIFY_MENU    if(!IsNT3())menu->ModifyMenu
+#define SUBMENU_MODIFY_MENU if(!IsNT3())subMenu.ModifyMenu
+#endif
+
 //------------------------------------------------
 // WM_APP
 //------------------------------------------------
@@ -71,6 +79,7 @@ static const int OwnerDrawTransparent = 0x0008;
 
 static const int ZoomTypeAuto =  0;
 static const int ZoomType050 = 50;
+static const int ZoomType064 = 64;
 static const int ZoomType075 = 75;
 static const int ZoomType100 = 100;
 static const int ZoomType125 = 125;

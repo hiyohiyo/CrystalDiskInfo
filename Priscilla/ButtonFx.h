@@ -24,13 +24,17 @@ public:
 	virtual ~CButtonFx();
 
 	// Control
-	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
+	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, HPALETTE hPal, CDC* bkDC,
 		LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame);
 	BOOL ReloadImage(LPCTSTR imagePath, UINT imageCount);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
 	void SetDrawFrame(BOOL bDrawFrame);
 	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);
+	void SetMeter(BOOL bMeter, double meterRatio);
+	void SetLabelUnit(CString label, CString unit);
+	void SetLabelUnitFormat(UINT labelFormat, UINT unitFormat);
+	void SetTextFormat(UINT format);
 
 	// Font
 	void SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio = 1.0,
@@ -84,10 +88,22 @@ protected:
 	BOOL m_bDarkMode;
 	BOOL m_bDrawFrame;
 	COLORREF m_FrameColor;
+	HPALETTE m_hPal;
+
+	CString m_Label;
+	CString m_Unit;
+
+	UINT m_TextFormat;
+	UINT m_LabelFormat;
+	UINT m_UnitFormat;
 
 	// Glass
 	COLORREF m_GlassColor;
 	BYTE m_GlassAlpha;
+
+	// Meter
+	BOOL m_bMeter;
+	double m_MeterRatio;
 
 	// Image
 	CString m_ImagePath;

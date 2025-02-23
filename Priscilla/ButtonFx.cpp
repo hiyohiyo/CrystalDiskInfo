@@ -34,10 +34,15 @@ CButtonFx::CButtonFx()
 	m_bDarkMode = FALSE;
 	m_bDrawFrame = FALSE;
 	m_FrameColor = RGB(128, 128, 128);
+	m_hPal = NULL;
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
 	m_GlassAlpha = 255;
+
+	// Meter
+	m_bMeter = FALSE;
+	m_MeterRatio = 0.0;
 
 	// Image
 	m_ImageCount = 0;
@@ -55,6 +60,11 @@ CButtonFx::CButtonFx()
 	m_bTrackingNow = FALSE;
 	m_bHandCursor = FALSE;
 	m_bSelected = FALSE;
+
+	// Text Format
+	m_TextFormat = 0;
+	m_LabelFormat = DT_LEFT | DT_TOP | DT_SINGLELINE;
+	m_UnitFormat = DT_RIGHT | DT_BOTTOM | DT_SINGLELINE;
 
 	// Margin
 	m_Margin.top = 0;
@@ -85,7 +95,7 @@ END_MESSAGE_MAP()
 // Control
 //------------------------------------------------
 
-BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
+BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRatio, HPALETTE hPal, CDC* bkDC,
 	LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame)
 {
 	m_X = (int)(x * zoomRatio);
@@ -94,6 +104,7 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 	m_CtrlSize.cy = (int)(height * zoomRatio + 0.5);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
 
+	m_hPal = hPal;
 	m_BkDC = bkDC;
 	m_ImagePath = imagePath;
 	m_ImageCount = imageCount;
@@ -246,6 +257,42 @@ void CButtonFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
 	m_GlassAlpha = glassAlpha;
 }
 
+void CButtonFx::SetMeter(BOOL bMeter, double meterRatio)
+{
+	m_bMeter = bMeter;
+	if (meterRatio > 1.0)
+	{
+		m_MeterRatio = 1.0;
+	}
+	else if (meterRatio > 0)
+	{
+		m_MeterRatio = meterRatio;
+	}
+	else
+	{
+		m_MeterRatio = 0.0;
+	}
+
+	Invalidate();
+}
+
+void CButtonFx::SetLabelUnit(CString label, CString unit)
+{
+	m_Label = label;
+	m_Unit = unit;
+}
+
+void CButtonFx::SetLabelUnitFormat(UINT labelFormat, UINT unitFormat)
+{
+	m_LabelFormat = labelFormat;
+	m_UnitFormat = unitFormat;
+}
+
+void CButtonFx::SetTextFormat(UINT format)
+{
+	m_TextFormat = format;
+}
+
 //------------------------------------------------
 // Draw Control
 //------------------------------------------------
@@ -257,7 +304,11 @@ void CButtonFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	CDC* drawDC = CDC::FromHandle(lpDrawItemStruct->hDC);
 	LoadCtrlBk(drawDC);
 
-	if (IsWindowEnabled())
+	if (! (GetStyle() & BS_NOTIFY))
+	{
+		DrawControl(drawDC, lpDrawItemStruct, m_CtrlBitmap, m_BkBitmap, ControlImageNormal);
+	}
+	else if (IsWindowEnabled())
 	{
 		if (m_bSelected && m_ImageCount > ControlImageSelected)
 		{
@@ -293,11 +344,29 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 {
 	CDC* pMemDC = new CDC;
 	CBitmap* pOldMemBitmap;
+	if(m_hPal && drawDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( drawDC->GetSafeHdc(), m_hPal, FALSE );
+		drawDC->RealizePalette();
+		drawDC->SetStretchBltMode(HALFTONE);
+	}
 	pMemDC->CreateCompatibleDC(drawDC);
+	if(m_hPal && pMemDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( pMemDC->GetSafeHdc(), m_hPal, FALSE );
+		pMemDC->RealizePalette();
+		pMemDC->SetStretchBltMode(HALFTONE);
+	}
 	pOldMemBitmap = pMemDC->SelectObject(&ctrlBitmap);
 	CDC* pBkDC = new CDC;
 	CBitmap* pOldBkBitmap;
 	pBkDC->CreateCompatibleDC(drawDC);
+	if(m_hPal && pBkDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( pBkDC->GetSafeHdc(), m_hPal, FALSE );
+		pBkDC->RealizePalette();
+		pBkDC->SetStretchBltMode(HALFTONE);
+	}
 	pOldBkBitmap = pBkDC->SelectObject(&bkBitmap);
 
 	CBitmap DrawBmp;
@@ -305,6 +374,12 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 	CDC* pDrawBmpDC = new CDC;
 	CBitmap* pOldDrawBitmap;
 	pDrawBmpDC->CreateCompatibleDC(drawDC);
+	if(m_hPal && pDrawBmpDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( pDrawBmpDC->GetSafeHdc(), m_hPal, FALSE );
+		pDrawBmpDC->RealizePalette();
+		pDrawBmpDC->SetStretchBltMode(HALFTONE);
+	}
 	pOldDrawBitmap = pDrawBmpDC->SelectObject(&DrawBmp);
 
 	int color = drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES);
@@ -322,7 +397,7 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 			else
 			{
 				bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
-				::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *pBkDC, 0, 0, SRCCOPY);
+				::StretchBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *pBkDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 				bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
 			}
 
@@ -346,6 +421,40 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 				BYTE* CtlBuffer = new BYTE[CtlMemSize];
 				ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
+				if (m_bMeter)
+				{
+					int meter = (int)(m_CtrlSize.cx * m_MeterRatio);
+					int baseY;
+					baseY = m_CtrlSize.cy;
+					for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+					{
+						int dn = py * DstLineBytes;
+						int cn = (baseY + py) * CtlLineBytes;
+						for (LONG px = 0; px < meter; px++)
+						{
+							BYTE a = CtlBuffer[cn + 3];
+							BYTE na = 255 - a;
+							DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+							DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+							DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+							dn += (DstBmpInfo.bmBitsPixel / 8);
+							cn += (CtlBmpInfo.bmBitsPixel / 8);
+						}
+						cn -= baseY * CtlLineBytes;
+						for (LONG px = meter; px < DstBmpInfo.bmWidth; px++)
+						{
+							BYTE a = CtlBuffer[cn + 3];
+							BYTE na = 255 - a;
+							DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+							DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+							DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+							dn += (DstBmpInfo.bmBitsPixel / 8);
+							cn += (CtlBmpInfo.bmBitsPixel / 8);
+						}
+					}
+				}
+				else
+				{
 				int baseY = m_CtrlSize.cy * no;
 				for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
 				{
@@ -368,6 +477,7 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 #pragma warning( default : 6386 )
 #pragma warning( default : 6385 )
 #endif
+						}
 					}
 				}
 
@@ -378,11 +488,11 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 				else
 				{
 					bk32Bitmap->SetBitmapBits(DstMemSize, DstBuffer);
-					::BitBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
+					::StretchBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 					bk32Image.ReleaseDC();
 				}
 				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+				drawDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 
 				delete[] DstBuffer;
 				delete[] CtlBuffer;
@@ -390,16 +500,27 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 		}
 		else
 		{
-			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
-			DrawString(pDrawBmpDC, lpDrawItemStruct);
-			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+			if (m_bMeter)
+			{
+				int meter = (int)(m_CtrlSize.cx * (m_MeterRatio));
+				pDrawBmpDC->StretchBlt(meter, 0, m_CtrlSize.cx - meter, m_CtrlSize.cy, pMemDC, meter, m_CtrlSize.cy * 0, m_CtrlSize.cx - meter, m_CtrlSize.cy, SRCCOPY);
+				pDrawBmpDC->StretchBlt(0, 0, meter, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * 1, meter, m_CtrlSize.cy, SRCCOPY);
+				DrawString(pDrawBmpDC, lpDrawItemStruct);
+				drawDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
+			}
+			else
+			{
+				pDrawBmpDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
+				DrawString(pDrawBmpDC, lpDrawItemStruct);
+				drawDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
+			}
 		}
 	}
 	else
 	{
-		pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+		pDrawBmpDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 		DrawString(pDrawBmpDC, lpDrawItemStruct);
-		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+		drawDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 	}
 
 	if (m_bDrawFrame)
@@ -468,6 +589,7 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 	rect.bottom -= m_Margin.bottom;
 	rect.right -= m_Margin.right;
 
+	HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
 	CArray<CString, CString> arr;
 	arr.RemoveAll();
 
@@ -480,41 +602,79 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 		resToken = title.Tokenize(_T("\r\n"), curPos);
 	}
 
-	for (int i = 0; i < arr.GetCount(); i++)
+	CSize extent;
+	if ((m_RenderMode & OwnerDrawTransparent) && m_bDarkMode)
 	{
-		CRect r;
-		r.top = rect.top + (LONG)(((double)rect.Height()) / arr.GetCount() * i);
-		r.bottom = rect.top + (LONG)(((double)rect.Height()) / arr.GetCount() * (i + 1.0));
-		r.left = rect.left;
-		r.right = rect.right;
+		SetTextColor(drawDC->m_hDC, RGB(255, 255, 255));
+	}
+	else
+	{
+		SetTextColor(drawDC->m_hDC, m_TextColor);
+	}
 
-		CRect rectI;
-		CSize extent;
-		HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
-		if ((m_RenderMode & OwnerDrawTransparent) && m_bDarkMode)
-		{
-			SetTextColor(drawDC->m_hDC, RGB(255, 255, 255));
-		}
-		else
-		{
-			SetTextColor(drawDC->m_hDC, m_TextColor);
-		}
-		GetTextExtentPoint32(drawDC->m_hDC, arr.GetAt(i), arr.GetAt(i).GetLength() + 1, &extent);
+	if (m_bMeter && rect.Width() < extent.cx)
+	{
+		title.Replace(_T(","), _T("."));
+		int score = _tstoi((LPCTSTR)title);
+		title.Format(_T("%d"), score);
+		extent = drawDC->GetTextExtent(title);
+	}
 
-		if (m_TextAlign == BS_LEFT)
-		{
-			drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
-		}
-		else if (m_TextAlign == BS_RIGHT)
-		{
-			drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
-		}
-		else
-		{
-			drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-		}
-
+	if (!m_Label.IsEmpty() && m_TextFormat != BS_CENTER)
+	{
+		drawDC->DrawText(title, title.GetLength(), rect, m_TextFormat);
 		drawDC->SelectObject(oldFont);
+
+		oldFont = drawDC->SelectObject(m_FontToolTip);
+		drawDC->DrawText(m_Label, m_Label.GetLength(), rect, m_LabelFormat);
+		drawDC->DrawText(m_Unit, m_Unit.GetLength(), rect, m_UnitFormat);
+	}
+	else if (!m_Label.IsEmpty())
+	{
+		drawDC->DrawText(title, title.GetLength(), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		drawDC->SelectObject(oldFont);
+
+		oldFont = drawDC->SelectObject(m_FontToolTip);
+		drawDC->DrawText(m_Label, m_Label.GetLength(), rect, m_LabelFormat);
+		drawDC->DrawText(m_Unit, m_Unit.GetLength(), rect, m_UnitFormat);
+	}
+	else
+	{
+		for (int i = 0; i < arr.GetCount(); i++)
+		{
+			CRect r;
+			r.top = rect.top + (LONG)(((double)rect.Height()) / arr.GetCount() * i);
+			r.bottom = rect.top + (LONG)(((double)rect.Height()) / arr.GetCount() * (i + 1.0));
+			r.left = rect.left;
+			r.right = rect.right;
+
+			CRect rectI;
+			HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
+			if ((m_RenderMode & OwnerDrawTransparent) && m_bDarkMode)
+			{
+				SetTextColor(drawDC->m_hDC, RGB(255, 255, 255));
+			}
+			else
+			{
+				SetTextColor(drawDC->m_hDC, m_TextColor);
+			}
+			GetTextExtentPoint32(drawDC->m_hDC, arr.GetAt(i), arr.GetAt(i).GetLength() + 1, &extent);
+
+			if (m_TextAlign == BS_LEFT)
+			{
+				drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+			}
+			else if (m_TextAlign == BS_RIGHT)
+			{
+				drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
+			}
+			else
+			{
+				drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			}
+
+			drawDC->SelectObject(oldFont);
+		}
 	}
 }
 
@@ -599,7 +759,7 @@ void CButtonFx::LoadCtrlBk(CDC* drawDC)
 			CDC* pMemDC = new CDC;
 			pMemDC->CreateCompatibleDC(drawDC);
 			pOldBitmap = pMemDC->SelectObject(&m_BkBitmap);
-			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BkDC, m_X, m_Y, SRCCOPY);
+			pMemDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BkDC, m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 			pMemDC->SelectObject(pOldBitmap);
 			pMemDC->DeleteDC();
 			delete pMemDC;
@@ -633,7 +793,7 @@ void CButtonFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRa
 	m_Font.CreateFontIndirect(&logFont);
 	SetFont(&m_Font);
 
-	logFont.lfHeight = (LONG)(-1 * sizeToolTip * zoomRatio);
+	logFont.lfHeight = (LONG)(-1 * sizeToolTip * zoomRatio * fontRatio);
 	m_FontToolTip.DeleteObject();
 	m_FontToolTip.CreateFontIndirect(&logFont);
 
