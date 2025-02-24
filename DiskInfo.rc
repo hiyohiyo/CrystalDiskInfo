@@ -930,27 +930,27 @@ BEGIN
     #ifdef SUISHO_AOI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Aoi Edition"
             VALUE "ProductName", "CrystalDiskInfo Aoi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2023-2024 nijihashi sola"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2023-2025 nijihashi sola"
 
     #elif MSI_MEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo MSI Mei Mihoshi Edition"
             VALUE "ProductName", "CrystalDiskInfo MSI Mei Mihoshi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2024 Micro-Star INT'L CO., LTD."
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2024-2025 Micro-Star INT'L CO., LTD."
 
     #elif KUREI_KEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Kurei Kei Edition"
             VALUE "ProductName", "CrystalDiskInfo Kurei Kei Edition"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2017-2024 Pronama LLC"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2017-2025 Pronama LLC"
 
     #elif SUISHO_SHIZUKU_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Shizuku Edition"
             VALUE "ProductName", "CrystalDiskInfo Shizuku Edition"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2012-2024 kirino kasumu"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2012-2025 kirino kasumu"
 
     #else
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "ProductName", "CrystalDiskInfo"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo"
     #endif
         END
     END
@@ -1225,6 +1225,7 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "Hide S.M.A.R.T. Information", ID_HIDE_SMART_INFO
             MENUITEM "Hide No S.M.A.R.T. Disk",     ID_HIDE_NO_SMART_DISK
+            MENUITEM "Hide RAID Volume",            ID_HIDE_RAID_VOLUME
         END
         POPUP "Workaround"
         BEGIN

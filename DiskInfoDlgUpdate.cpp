@@ -1740,6 +1740,8 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	menu->ModifyMenu(ID_HIDE_SERIAL_NUMBER, MF_STRING, ID_HIDE_SERIAL_NUMBER, cstr);
 	cstr = i18n(_T("Menu"), _T("HIDE_NO_SMART_DISK"));
 	menu->ModifyMenu(ID_HIDE_NO_SMART_DISK, MF_STRING, ID_HIDE_NO_SMART_DISK, cstr);
+	cstr = i18n(_T("Menu"), _T("HIDE_RAID_VOLUME"));
+	menu->ModifyMenu(ID_HIDE_RAID_VOLUME, MF_STRING, ID_HIDE_RAID_VOLUME, cstr);
 	cstr = i18n(_T("Menu"), _T("ADVANCED_DISK_SEARCH"));
 	menu->ModifyMenu(ID_ADVANCED_DISK_SEARCH, MF_STRING, ID_ADVANCED_DISK_SEARCH, cstr);
 	cstr = i18n(_T("Menu"), _T("EVENT_LOG"));
@@ -2083,6 +2085,15 @@ void CDiskInfoDlg::ChangeLang(CString LangName)
 	else
 	{
 		menu->CheckMenuItem(ID_HIDE_NO_SMART_DISK, MF_UNCHECKED);
+	}
+
+	if (m_bHideRAIDVolume)
+	{
+		menu->CheckMenuItem(ID_HIDE_RAID_VOLUME, MF_CHECKED);
+	}
+	else
+	{
+		menu->CheckMenuItem(ID_HIDE_RAID_VOLUME, MF_UNCHECKED);
 	}
 
 	if (m_bAdvancedDiskSearch)

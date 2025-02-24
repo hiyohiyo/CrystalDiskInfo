@@ -401,7 +401,7 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 	SetWindowTitle(i18n(_T("Message"), _T("DETECT_DISK")));
 	m_NowDetectingUnitPowerOnHours = FALSE;
 
-	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_bHideNoSmartDisk, m_bSortDriveLetter);
+	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_bHideNoSmartDisk, m_bSortDriveLetter, m_bHideRAIDVolume);
 	
 	DWORD errorCount = 0;
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)

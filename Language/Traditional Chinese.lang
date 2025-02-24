@@ -122,6 +122,9 @@ VOICE=語音
 ;9.3.0
 STARTUP_VOICE=啟動語音
 
+;9.5.0
+HIDE_RAID_VOLUME=Hide &RAID Volume
+
 [TrayMenu]
 EXIT=結束
 REFRESH=重新整理

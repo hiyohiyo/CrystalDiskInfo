@@ -1,6 +1,6 @@
 [Information]
 TRANSLATOR=hiyohiyo
-VERSION=9.5.0
+VERSION=9.6.0
 
 [Language]
 LANGUAGE=日本語
@@ -120,6 +120,9 @@ VOICE=ボイス
 
 ;9.3.0
 STARTUP_VOICE=起動ボイス
+
+;9.5.0
+HIDE_RAID_VOLUME=RAIDボリュームを隠す(&R)
 
 [TrayMenu]
 EXIT=終了

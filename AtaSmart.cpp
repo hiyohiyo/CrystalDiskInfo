@@ -708,7 +708,7 @@ BOOL CAtaSmart::MeasuredTimeUnit()
 }
 
 /* PUBLIC FUNCTION */
-VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk, BOOL flagSortDriveLetter)
+VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk, BOOL flagSortDriveLetter, BOOL flagHideRAIDVolume)
 {
 	/*
 	if (1)
@@ -2405,22 +2405,23 @@ safeRelease:
 	}
 
 	// [2023/02/25] Hide RAID Volume
-	/*
-	int count = (int)vars.GetCount();
-	if (count > 0)
+	if (flagHideRAIDVolume)
 	{
-		for (int i = count - 1; i >= 0; i--)
+		int count = (int)vars.GetCount();
+		if (count > 0)
 		{
-			CString model;
-			model = vars[i].Model;
-			model.MakeUpper();
-			if (model.Find(L"RAID") >= 0)
+			for (int i = count - 1; i >= 0; i--)
 			{
-				vars.RemoveAt(i);
+				CString model;
+				model = vars[i].Model;
+				model.MakeUpper();
+				if (model.Find(L"RAID") >= 0)
+				{
+					vars.RemoveAt(i);
+				}
 			}
 		}
 	}
-	*/
 
 	ATA_SMART_INFO* p = vars.GetData();
 
@@ -6317,7 +6318,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_STORAGE_QUERY"));
 			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify)){return TRUE; }
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify, &diskSize)){return TRUE; }
 		}
 
 		debug.Format(_T("DoIdentifyDeviceNVMeIntelVroc"));

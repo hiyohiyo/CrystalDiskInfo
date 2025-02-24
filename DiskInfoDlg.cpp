@@ -40,7 +40,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 {
 	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg - START");
 
-	m_Ini = ((CDiskInfoApp*)AfxGetApp())->m_Ini;
+//	m_Ini = ((CDiskInfoApp*)AfxGetApp())->m_Ini;
 	m_OffsetX = 0;
 
 #ifdef SUISHO_AOI_SUPPORT
@@ -167,6 +167,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_bGreenMode = (BOOL) GetPrivateProfileInt(_T("Setting"), _T("GreenMode"), 0, m_Ini);
 	m_bForceDisableDarkMode = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("ForceDisableDarkMode"), 0, m_Ini);
 	m_bNarrowDriveMenu = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("NarrowDriveMenu"), 0, m_Ini);
+	m_bHideRAIDVolume = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("HideRAIDVolume"), 1, m_Ini);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	#ifdef MSI_MEI_SUPPORT
@@ -792,6 +793,7 @@ BEGIN_MESSAGE_MAP(CDiskInfoDlg, CMainDialogFx)
 //	ON_COMMAND(ID_ALARM_HISTORY, &CDiskInfoDlg::OnAlarmHistory)
 	ON_COMMAND(ID_ALERT_SOUND, &CDiskInfoDlg::OnAlertSound)
 	ON_COMMAND(ID_HIDE_NO_SMART_DISK, &CDiskInfoDlg::OnHideNoSmartDisk)
+	ON_COMMAND(ID_HIDE_RAID_VOLUME, &CDiskInfoDlg::OnHideRAIDVolume)
 
 	ON_MESSAGE(MY_PLAY_ALERT_SOUND, OnPlayAlertSound)
 	ON_BN_CLICKED(IDC_BUTTON_DISK0, &CDiskInfoDlg::OnBnClickedButtonDisk0)

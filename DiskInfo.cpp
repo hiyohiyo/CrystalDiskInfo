@@ -85,7 +85,6 @@ BOOL CDiskInfoApp::InitInstance()
 		*ptrEnd = '\0';
 		m_Ini = ini;
 		m_Txt = ini;
-		// _tcscat_s(ini, MAX_PATH, _T("\\DiskInfo.ini"));
 	}
 	m_Ini += _T("\\DiskInfo.ini");
 	m_Txt += _T("\\DiskInfo.txt");

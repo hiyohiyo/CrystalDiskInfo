@@ -826,6 +826,27 @@ void CDiskInfoDlg::OnHideNoSmartDisk()
 	OnRescan();
 }
 
+void CDiskInfoDlg::OnHideRAIDVolume()
+{
+	CMenu* menu = GetMenu();
+	if (m_bHideRAIDVolume)
+	{
+		m_bHideRAIDVolume = FALSE;
+		menu->CheckMenuItem(ID_HIDE_RAID_VOLUME, MF_UNCHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("HideRAIDVolume"), _T("0"), m_Ini);
+	}
+	else
+	{
+		m_bHideRAIDVolume = TRUE;
+		menu->CheckMenuItem(ID_HIDE_RAID_VOLUME, MF_CHECKED);
+		WritePrivateProfileStringFx(_T("Setting"), _T("HideRAIDVolume"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+
+	OnRescan();
+}
+
 void CDiskInfoDlg::OnGadgetSupport()
 {
 	CMenu *menu = GetMenu();

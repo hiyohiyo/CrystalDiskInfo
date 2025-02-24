@@ -122,6 +122,9 @@ VOICE=음성
 ;9.3.0
 STARTUP_VOICE=시작 시 재생할 음성
 
+;9.5.0
+HIDE_RAID_VOLUME=Hide &RAID Volume
+
 [TrayMenu]
 EXIT=종료
 REFRESH=새로 고침
