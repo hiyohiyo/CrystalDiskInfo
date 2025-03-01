@@ -19,6 +19,7 @@ CHealthDlg::CHealthDlg(CWnd* pParent /*=NULL*/)
 {
 	p = (CDiskInfoDlg*)pParent;
 
+	m_DiskIndex = 0;
 	m_ZoomType = p->GetZoomType();
 	m_FontFace = p->GetFontFace();
 	m_FontScale = p->GetFontScale();
@@ -90,10 +91,10 @@ BOOL CHealthDlg::OnInitDialog()
 		+ _T(" - ") + i18n(_T("HealthStatus"), _T("THRESHOLD_OF_CAUTION"))
 		+ _T(" (") + i18n(_T("Dialog"), _T("LIST_RAW_VALUES")) + _T(")"));
 
-	m_CtrlScrollbar05.SetScrollRange(0x00, 0xFF);
-	m_CtrlScrollbarC5.SetScrollRange(0x00, 0xFF);
-	m_CtrlScrollbarC6.SetScrollRange(0x00, 0xFF);
-	m_CtrlScrollbarFF.SetScrollRange(0x00, 0x63);
+	m_CtrlScrollbar05.SetRange(0x00, 0xFF);
+	m_CtrlScrollbarC5.SetRange(0x00, 0xFF);
+	m_CtrlScrollbarC6.SetRange(0x00, 0xFF);
+	m_CtrlScrollbarFF.SetRange(0x00, 0x63);
 
 	m_bShowWindow = TRUE;
 
@@ -307,23 +308,23 @@ void CHealthDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	CString cstr;
 	if(*pScrollBar == m_CtrlScrollbar05)
 	{
-		m_Value05X.Format(L"%02Xh", m_CtrlScrollbar05.GetScrollPos());
-		m_Value05.Format(L"%d", m_CtrlScrollbar05.GetScrollPos());
+		m_Value05X.Format(L"%02Xh", m_CtrlScrollbar05.GetPos());
+		m_Value05.Format(L"%d", m_CtrlScrollbar05.GetPos());
 	}
 	else if(*pScrollBar == m_CtrlScrollbarC5)
 	{
-		m_ValueC5X.Format(L"%02Xh", m_CtrlScrollbarC5.GetScrollPos());
-		m_ValueC5.Format(L"%d", m_CtrlScrollbarC5.GetScrollPos());
+		m_ValueC5X.Format(L"%02Xh", m_CtrlScrollbarC5.GetPos());
+		m_ValueC5.Format(L"%d", m_CtrlScrollbarC5.GetPos());
 	}
 	else if(*pScrollBar == m_CtrlScrollbarC6)
 	{
-		m_ValueC6X.Format(L"%02Xh", m_CtrlScrollbarC6.GetScrollPos());
-		m_ValueC6.Format(L"%d", m_CtrlScrollbarC6.GetScrollPos());
+		m_ValueC6X.Format(L"%02Xh", m_CtrlScrollbarC6.GetPos());
+		m_ValueC6.Format(L"%d", m_CtrlScrollbarC6.GetPos());
 	}
 	else if(*pScrollBar == m_CtrlScrollbarFF)
 	{
-		m_ValueFFX.Format(L"%02Xh", m_CtrlScrollbarFF.GetScrollPos());
-		m_ValueFF.Format(L"%d", m_CtrlScrollbarFF.GetScrollPos());
+		m_ValueFFX.Format(L"%02Xh", m_CtrlScrollbarFF.GetPos());
+		m_ValueFF.Format(L"%d", m_CtrlScrollbarFF.GetPos());
 	}
 
 	UpdateData(FALSE);
@@ -335,22 +336,22 @@ void CHealthDlg::UpdateSelectDisk(DWORD index)
 {
 	if(p->m_Ata.vars[index].IsSsd)
 	{
-		m_CtrlScrollbar05.SetScrollPos(0);
-		m_CtrlScrollbarC5.SetScrollPos(0);
-		m_CtrlScrollbarC6.SetScrollPos(0);
+		m_CtrlScrollbar05.SetPos(0);
+		m_CtrlScrollbarC5.SetPos(0);
+		m_CtrlScrollbarC6.SetPos(0);
 		if(p->m_Ata.vars[index].Life < 0)
 		{
-			m_CtrlScrollbarFF.SetScrollPos(0);
+			m_CtrlScrollbarFF.SetPos(0);
 			m_CtrlScrollbarFF.EnableWindow(FALSE);
 			m_ValueFF = L"";
 			m_ValueFFX = L"";
 		}
 		else
 		{
-			m_CtrlScrollbarFF.SetScrollPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionFF"), p->m_Ata.vars[index].ModelSerial, 10, m_Ini));
+			m_CtrlScrollbarFF.SetPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionFF"), p->m_Ata.vars[index].ModelSerial, 10, m_Ini));
 			m_CtrlScrollbarFF.EnableWindow(TRUE);
-			m_ValueFF.Format(_T("%d"), m_CtrlScrollbarFF.GetScrollPos());
-			m_ValueFFX.Format(_T("%02Xh"), m_CtrlScrollbarFF.GetScrollPos());
+			m_ValueFF.Format(_T("%d"), m_CtrlScrollbarFF.GetPos());
+			m_ValueFFX.Format(_T("%02Xh"), m_CtrlScrollbarFF.GetPos());
 		}
 		m_CtrlScrollbar05.EnableWindow(FALSE);
 		m_CtrlScrollbarC5.EnableWindow(FALSE);
@@ -364,21 +365,21 @@ void CHealthDlg::UpdateSelectDisk(DWORD index)
 	}
 	else
 	{
-		m_CtrlScrollbar05.SetScrollPos(GetPrivateProfileIntFx(_T("ThreasholdOfCaution05"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
-		m_CtrlScrollbarC5.SetScrollPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionC5"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
-		m_CtrlScrollbarC6.SetScrollPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionC6"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
-		m_CtrlScrollbarFF.SetScrollPos(0);
+		m_CtrlScrollbar05.SetPos(GetPrivateProfileIntFx(_T("ThreasholdOfCaution05"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
+		m_CtrlScrollbarC5.SetPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionC5"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
+		m_CtrlScrollbarC6.SetPos(GetPrivateProfileIntFx(_T("ThreasholdOfCautionC6"), p->m_Ata.vars[index].ModelSerial, 1, m_Ini));
+		m_CtrlScrollbarFF.SetPos(0);
 
 		m_CtrlScrollbar05.EnableWindow(TRUE);
 		m_CtrlScrollbarC5.EnableWindow(TRUE);
 		m_CtrlScrollbarC6.EnableWindow(TRUE);
 		m_CtrlScrollbarFF.EnableWindow(FALSE);
-		m_Value05.Format(_T("%d"), m_CtrlScrollbar05.GetScrollPos());
-		m_ValueC5.Format(_T("%d"), m_CtrlScrollbarC5.GetScrollPos());
-		m_ValueC6.Format(_T("%d"), m_CtrlScrollbarC6.GetScrollPos());
-		m_Value05X.Format(_T("%02Xh"), m_CtrlScrollbar05.GetScrollPos());
-		m_ValueC5X.Format(_T("%02Xh"), m_CtrlScrollbarC5.GetScrollPos());
-		m_ValueC6X.Format(_T("%02Xh"), m_CtrlScrollbarC6.GetScrollPos());
+		m_Value05.Format(_T("%d"), m_CtrlScrollbar05.GetPos());
+		m_ValueC5.Format(_T("%d"), m_CtrlScrollbarC5.GetPos());
+		m_ValueC6.Format(_T("%d"), m_CtrlScrollbarC6.GetPos());
+		m_Value05X.Format(_T("%02Xh"), m_CtrlScrollbar05.GetPos());
+		m_ValueC5X.Format(_T("%02Xh"), m_CtrlScrollbarC5.GetPos());
+		m_ValueC6X.Format(_T("%02Xh"), m_CtrlScrollbarC6.GetPos());
 		m_ValueFF = L"";
 		m_ValueFFX = L"";
 	}
@@ -411,22 +412,22 @@ void CHealthDlg::OnDefault()
 {
 	if(! p->m_Ata.vars[m_DiskIndex].IsSsd)
 	{
-		m_CtrlScrollbar05.SetScrollPos(1);
-		m_CtrlScrollbarC5.SetScrollPos(1);
-		m_CtrlScrollbarC6.SetScrollPos(1);
-		m_Value05.Format(_T("%d"), m_CtrlScrollbar05.GetScrollPos());
-		m_ValueC5.Format(_T("%d"), m_CtrlScrollbarC5.GetScrollPos());
-		m_ValueC6.Format(_T("%d"), m_CtrlScrollbarC6.GetScrollPos());
-		m_Value05X.Format(_T("%02Xh"), m_CtrlScrollbar05.GetScrollPos());
-		m_ValueC5X.Format(_T("%02Xh"), m_CtrlScrollbarC5.GetScrollPos());
-		m_ValueC6X.Format(_T("%02Xh"), m_CtrlScrollbarC6.GetScrollPos());
+		m_CtrlScrollbar05.SetPos(1);
+		m_CtrlScrollbarC5.SetPos(1);
+		m_CtrlScrollbarC6.SetPos(1);
+		m_Value05.Format(_T("%d"), m_CtrlScrollbar05.GetPos());
+		m_ValueC5.Format(_T("%d"), m_CtrlScrollbarC5.GetPos());
+		m_ValueC6.Format(_T("%d"), m_CtrlScrollbarC6.GetPos());
+		m_Value05X.Format(_T("%02Xh"), m_CtrlScrollbar05.GetPos());
+		m_ValueC5X.Format(_T("%02Xh"), m_CtrlScrollbarC5.GetPos());
+		m_ValueC6X.Format(_T("%02Xh"), m_CtrlScrollbarC6.GetPos());
 
 	}
 	else if(p->m_Ata.vars[m_DiskIndex].Life >= 0)
 	{
-		m_CtrlScrollbarFF.SetScrollPos(10);
-		m_ValueFF.Format(_T("%d"), m_CtrlScrollbarFF.GetScrollPos());
-		m_ValueFFX.Format(_T("%02Xh"), m_CtrlScrollbarFF.GetScrollPos());
+		m_CtrlScrollbarFF.SetPos(10);
+		m_ValueFF.Format(_T("%d"), m_CtrlScrollbarFF.GetPos());
+		m_ValueFFX.Format(_T("%02Xh"), m_CtrlScrollbarFF.GetPos());
 	}
 	UpdateData(FALSE);
 }

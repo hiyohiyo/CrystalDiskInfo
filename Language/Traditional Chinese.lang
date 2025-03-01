@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=謝慶憲, chriszxl (小良奇), haobinnan
-VERSION=9.5.0
+VERSION=9.6.0
 
 [Language]
 LANGUAGE=正體中文
@@ -123,7 +123,7 @@ VOICE=語音
 STARTUP_VOICE=啟動語音
 
 ;9.5.0
-HIDE_RAID_VOLUME=Hide &RAID Volume
+HIDE_RAID_VOLUME=隱藏 RAID 磁碟區(&R)
 
 [TrayMenu]
 EXIT=結束

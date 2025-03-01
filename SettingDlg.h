@@ -14,6 +14,7 @@
 #include "StaticFx.h"
 #include "ButtonFx.h"
 #include "ComboBoxFx.h"
+#include "SliderCtrlFx.h"
 
 class CSettingDlg : public CDialogFx
 {
@@ -84,6 +85,6 @@ protected:
 	CButtonFx m_CtrlEnableApm;
 	CButtonFx m_CtrlDisableApm;
 	CComboBoxFx	m_CtrlSelectDisk;
-	CScrollBar m_AamScrollbar;
-	CScrollBar m_ApmScrollbar;
+	CSliderCtrlFx m_AamScrollbar;
+	CSliderCtrlFx m_ApmScrollbar;
 };

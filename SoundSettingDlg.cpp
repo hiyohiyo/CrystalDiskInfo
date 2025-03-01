@@ -19,6 +19,8 @@ CSoundSettingDlg::CSoundSettingDlg(CWnd* pParent /*=NULL*/)
 {
 	p = (CDiskInfoDlg*)pParent;
 
+	m_CurrentVolume = 0;
+	m_InitialVolume = 0;
 	m_ZoomType = p->GetZoomType();
 	m_FontFace = p->GetFontFace();
 	m_FontScale = p->GetFontScale();

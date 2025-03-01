@@ -19,6 +19,7 @@ CSettingDlg::CSettingDlg(CWnd* pParent /*=NULL*/)
 {
 	p = (CDiskInfoDlg*)pParent;
 
+	m_DiskIndex = 0;
 	m_ZoomType = p->GetZoomType();
 	m_FontFace = p->GetFontFace();
 	m_FontScale = p->GetFontScale();
@@ -85,8 +86,8 @@ BOOL CSettingDlg::OnInitDialog()
 
 	SetWindowTitle(i18n(_T("WindowTitle"), _T("AAM_APM_CONTROL")));
 
-	m_AamScrollbar.SetScrollRange(0x80, 0xFE);
-	m_ApmScrollbar.SetScrollRange(0x01, 0xFE);
+	m_AamScrollbar.SetRange(0x80, 0xFE);
+	m_ApmScrollbar.SetRange(0x01, 0xFE);
 
 	m_bShowWindow = TRUE;
 	InitLang();
@@ -304,7 +305,7 @@ void CSettingDlg::OnEnableAam()
 		return ;
 	}
 
-	int targetValue = m_AamScrollbar.GetScrollPos();
+	int targetValue = m_AamScrollbar.GetPos();
 	p->m_Ata.EnableAam(m_DiskIndex, (BYTE)targetValue);
 	p->m_Ata.UpdateIdInfo(m_DiskIndex);
 
@@ -312,7 +313,7 @@ void CSettingDlg::OnEnableAam()
 	{
 		m_AamStatus = _T("ON");
 	}
-	m_AamScrollbar.SetScrollPos(p->m_Ata.GetAamValue(m_DiskIndex));
+	m_AamScrollbar.SetPos(p->m_Ata.GetAamValue(m_DiskIndex));
 	m_CurrentAam.Format(_T("%02Xh"), p->m_Ata.GetAamValue(m_DiskIndex));
 	m_RecommendAam.Format(_T("%02Xh"), p->m_Ata.GetRecommendAamValue(m_DiskIndex));
 	UpdateData(FALSE);
@@ -338,7 +339,7 @@ void  CSettingDlg::OnDisableAam()
 	{
 		m_AamStatus = _T("OFF");
 	}
-	m_AamScrollbar.SetScrollPos(p->m_Ata.GetAamValue(m_DiskIndex));
+	m_AamScrollbar.SetPos(p->m_Ata.GetAamValue(m_DiskIndex));
 	m_CurrentAam.Format(_T("%02Xh"), p->m_Ata.GetAamValue(m_DiskIndex));
 	m_RecommendAam.Format(_T("%02Xh"), p->m_Ata.GetRecommendAamValue(m_DiskIndex));
 	UpdateData(FALSE);
@@ -357,7 +358,7 @@ void  CSettingDlg::OnEnableApm()
 		return ;
 	}
 
-	int targetValue = m_ApmScrollbar.GetScrollPos();
+	int targetValue = m_ApmScrollbar.GetPos();
 	p->m_Ata.EnableApm(m_DiskIndex, (BYTE)targetValue);
 	p->m_Ata.UpdateIdInfo(m_DiskIndex);
 
@@ -365,7 +366,7 @@ void  CSettingDlg::OnEnableApm()
 	{
 		m_ApmStatus = _T("ON");
 	}
-	m_ApmScrollbar.SetScrollPos(p->m_Ata.GetApmValue(m_DiskIndex));
+	m_ApmScrollbar.SetPos(p->m_Ata.GetApmValue(m_DiskIndex));
 	m_CurrentApm.Format(_T("%02Xh"), p->m_Ata.GetApmValue(m_DiskIndex));
 	UpdateData(FALSE);
 
@@ -390,7 +391,7 @@ void  CSettingDlg::OnDisableApm()
 	{
 		m_ApmStatus = _T("OFF");
 	}
-	m_ApmScrollbar.SetScrollPos(p->m_Ata.GetApmValue(m_DiskIndex));
+	m_ApmScrollbar.SetPos(p->m_Ata.GetApmValue(m_DiskIndex));
 	m_CurrentApm.Format(_T("%02Xh"), p->m_Ata.GetApmValue(m_DiskIndex));
 	UpdateData(FALSE);
 
@@ -403,11 +404,11 @@ void  CSettingDlg::OnDisableApm()
 
 void CSettingDlg::UpdateSelectDisk(DWORD index)
 {
-	m_AamScrollbar.SetScrollPos(p->m_Ata.GetAamValue(index));
+	m_AamScrollbar.SetPos(p->m_Ata.GetAamValue(index));
 	m_CurrentAam.Format(_T("%02Xh"), p->m_Ata.GetAamValue(index));
 	m_RecommendAam.Format(_T("%02Xh"), p->m_Ata.GetRecommendAamValue(index));
 
-	m_ApmScrollbar.SetScrollPos(p->m_Ata.GetApmValue(index));
+	m_ApmScrollbar.SetPos(p->m_Ata.GetApmValue(index));
 	m_CurrentApm.Format(_T("%02Xh"), p->m_Ata.GetApmValue(index));
 
 	if(p->m_Ata.vars.GetAt(index).IsAamSupported 
@@ -498,11 +499,11 @@ void CSettingDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	if(*pScrollBar == m_AamScrollbar)
 	{
-		m_CurrentAam.Format(_T("%02Xh"), m_AamScrollbar.GetScrollPos());
+		m_CurrentAam.Format(_T("%02Xh"), m_AamScrollbar.GetPos());
 	}
 	else if(*pScrollBar == m_ApmScrollbar)
 	{
-		m_CurrentApm.Format(_T("%02Xh"), m_ApmScrollbar.GetScrollPos());
+		m_CurrentApm.Format(_T("%02Xh"), m_ApmScrollbar.GetPos());
 	}
 
 	UpdateData(FALSE);

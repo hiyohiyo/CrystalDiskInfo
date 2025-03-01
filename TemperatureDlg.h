@@ -10,6 +10,7 @@
 #include "StaticFx.h"
 #include "ButtonFx.h"
 #include "ComboBoxFx.h"
+#include "SliderCtrlFx.h"
 
 class CTemperatureDlg : public CDialogFx
 {
@@ -42,7 +43,7 @@ protected:
 	DWORD m_DiskIndex;
 	CString m_ValueTemperature;
 	CString m_ValueTemperatureF;
-	CScrollBar m_CtrlScrollbarTemperature;
+	CSliderCtrlFx m_CtrlScrollbarTemperature;
 	CStaticFx m_CtrlValueTemperature;
 	CStaticFx m_CtrlValueTemperatureF;
 	CComboBoxFx m_CtrlSelectDisk;
