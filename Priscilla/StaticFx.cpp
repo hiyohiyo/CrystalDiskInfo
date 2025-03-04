@@ -35,6 +35,7 @@ CStaticFx::CStaticFx()
 	m_DrawFrame = FALSE;
 	m_bDrawFrameEx = FALSE;
 	m_FrameColor = RGB(128, 128, 128);
+	m_hPal = NULL;
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
@@ -94,7 +95,7 @@ END_MESSAGE_MAP()
 // Control
 //------------------------------------------------
 
-BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
+BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRatio, HPALETTE hPal, CDC* bkDC,
 	LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame)
 {
 	m_X = (int)(x * zoomRatio);
@@ -103,6 +104,7 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
 
+	m_hPal = hPal;
 	m_BkDC = bkDC;
 	m_ImagePath = imagePath;
 	m_ImageCount = imageCount;
@@ -297,11 +299,29 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 {
 	CDC* pMemDC = new CDC;
 	CBitmap* pOldMemBitmap;
+	if(m_hPal && drawDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( drawDC->GetSafeHdc(), m_hPal, FALSE );
+		drawDC->RealizePalette();
+		drawDC->SetStretchBltMode(HALFTONE);
+	}
 	pMemDC->CreateCompatibleDC(drawDC);
+	if(m_hPal && pMemDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( pMemDC->GetSafeHdc(), m_hPal, FALSE );
+		pMemDC->RealizePalette();
+		pMemDC->SetStretchBltMode(HALFTONE);
+	}
 	pOldMemBitmap = pMemDC->SelectObject(&ctrlBitmap);
 	CDC* pBkDC = new CDC;
 	CBitmap* pOldBkBitmap;
 	pBkDC->CreateCompatibleDC(drawDC);
+	if(m_hPal && pBkDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( pBkDC->GetSafeHdc(), m_hPal, FALSE );
+		pBkDC->RealizePalette();
+		pBkDC->SetStretchBltMode(HALFTONE);
+	}
 	pOldBkBitmap = pBkDC->SelectObject(&bkBitmap);
 
 	CBitmap DrawBmp;
@@ -309,6 +329,12 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 	CDC* pDrawBmpDC = new CDC;
 	CBitmap* pOldDrawBitmap;
 	pDrawBmpDC->CreateCompatibleDC(drawDC);
+	if(m_hPal && pDrawBmpDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( pDrawBmpDC->GetSafeHdc(), m_hPal, FALSE );
+		pDrawBmpDC->RealizePalette();
+		pDrawBmpDC->SetStretchBltMode(HALFTONE);
+	}
 	pOldDrawBitmap = pDrawBmpDC->SelectObject(&DrawBmp);
 
 	int color = drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES);
@@ -326,7 +352,7 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 			else
 			{
 				bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
-				::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *pBkDC, 0, 0, SRCCOPY);
+				::StretchBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *pBkDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 				bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
 			}
 
@@ -417,11 +443,11 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 				else
 				{
 					bk32Bitmap->SetBitmapBits(DstMemSize, DstBuffer);
-					::BitBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
+					::StretchBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 					bk32Image.ReleaseDC();
 				}
 				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+				drawDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 
 				delete[] DstBuffer;
 				delete[] CtlBuffer;
@@ -432,24 +458,24 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 			if (m_bMeter)
 			{
 				int meter = (int)(m_CtrlSize.cx * (m_MeterRatio));
-				pDrawBmpDC->BitBlt(meter, 0, m_CtrlSize.cx - meter, m_CtrlSize.cy, pMemDC, meter, m_CtrlSize.cy * 0, SRCCOPY);
-				pDrawBmpDC->BitBlt(0, 0, meter, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * 1, SRCCOPY);
+				pDrawBmpDC->StretchBlt(meter, 0, m_CtrlSize.cx - meter, m_CtrlSize.cy, pMemDC, meter, m_CtrlSize.cy * 0, m_CtrlSize.cx - meter, m_CtrlSize.cy, SRCCOPY);
+				pDrawBmpDC->StretchBlt(0, 0, meter, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * 1, meter, m_CtrlSize.cy, SRCCOPY);
 				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+				drawDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 			}
 			else
 			{
-				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy* no, SRCCOPY);
+				pDrawBmpDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy* no, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+				drawDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 			}
 		}
 	}
 	else
 	{
-		pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy* no, SRCCOPY);
+		pDrawBmpDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy* no, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 		DrawString(pDrawBmpDC, lpDrawItemStruct);
-		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+		drawDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 	}
 
 
@@ -665,7 +691,7 @@ void CStaticFx::LoadCtrlBk(CDC* drawDC)
 			CDC* pMemDC = new CDC;
 			pMemDC->CreateCompatibleDC(drawDC);
 			pOldBitmap = pMemDC->SelectObject(&m_BkBitmap);
-			pMemDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BkDC, m_X, m_Y, SRCCOPY);
+			pMemDC->StretchBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, m_BkDC, m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy, SRCCOPY);
 			pMemDC->SelectObject(pOldBitmap);
 			pMemDC->DeleteDC();
 			delete pMemDC;
@@ -699,7 +725,7 @@ void CStaticFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRa
 	m_Font.CreateFontIndirect(&logFont);
 	SetFont(&m_Font);
 
-	logFont.lfHeight = (LONG)(-1 * sizeToolTip * zoomRatio);
+	logFont.lfHeight = (LONG)(-1 * sizeToolTip * zoomRatio * fontRatio);
 	m_FontToolTip.DeleteObject();
 	m_FontToolTip.CreateFontIndirect(&logFont);
 

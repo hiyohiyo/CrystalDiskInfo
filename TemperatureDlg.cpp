@@ -19,6 +19,7 @@ CTemperatureDlg::CTemperatureDlg(CWnd* pParent /*=NULL*/)
 {
 	p = (CDiskInfoDlg*)pParent;
 
+	m_DiskIndex = 0;
 	m_ZoomType = p->GetZoomType();
 	m_FontScale = p->GetFontScale();
 	m_FontRatio = p->GetFontRatio();
@@ -62,7 +63,7 @@ BOOL CTemperatureDlg::OnInitDialog()
 
 	SetWindowTitle(i18n(_T("Alarm"), _T("ALARM_TEMPERATURE")));
 
-	m_CtrlScrollbarTemperature.SetScrollRange(20, 80);
+	m_CtrlScrollbarTemperature.SetRange(10, 90);
 
 	m_bShowWindow = TRUE;
 
@@ -98,14 +99,14 @@ void CTemperatureDlg::UpdateDialogSize()
 	m_CtrlScrollbarTemperature.MoveWindow((int)(8 * m_ZoomRatio), (int)(44 * m_ZoomRatio), (int)(280 * m_ZoomRatio), (int)(20 * m_ZoomRatio));
 	m_CtrlValueTemperature.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
    	m_CtrlValueTemperatureF.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
-	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
-	m_CtrlValueTemperatureF.InitControl(344, 44, 48, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlValueTemperature.InitControl(292, 44, 48, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlValueTemperatureF.InitControl(344, 44, 48, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
 
 	m_CtrlApply.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 	m_CtrlDefault.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 
-	m_CtrlApply.InitControl(220, 80, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
-	m_CtrlDefault.InitControl(20, 80, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlApply.InitControl(220, 80, 160, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlDefault.InitControl(20, 80, 160, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
 
 	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
@@ -207,8 +208,8 @@ void CTemperatureDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	CString cstr;
 	if (*pScrollBar == m_CtrlScrollbarTemperature)
 	{
-		m_ValueTemperature.Format(L"%d °C", m_CtrlScrollbarTemperature.GetScrollPos());
-		m_ValueTemperatureF.Format(L"%d °F", m_CtrlScrollbarTemperature.GetScrollPos() * 9 / 5 + 32);
+		m_ValueTemperature.Format(L"%d °C", m_CtrlScrollbarTemperature.GetPos());
+		m_ValueTemperatureF.Format(L"%d °F", m_CtrlScrollbarTemperature.GetPos() * 9 / 5 + 32);
 	}
 
 	UpdateData(FALSE);
@@ -220,16 +221,16 @@ void CTemperatureDlg::UpdateSelectDisk(DWORD index)
 {
 	if (p->m_Ata.vars[index].IsSsd)
 	{
-		m_CtrlScrollbarTemperature.SetScrollPos(GetPrivateProfileIntFx(_T("AlarmTemperature"), p->m_Ata.vars[index].ModelSerial, 60, m_Ini));
+		m_CtrlScrollbarTemperature.SetPos(GetPrivateProfileIntFx(_T("AlarmTemperature"), p->m_Ata.vars[index].ModelSerial, 60, m_Ini));
 	}
 	else
 	{
-		m_CtrlScrollbarTemperature.SetScrollPos(GetPrivateProfileIntFx(_T("AlarmTemperature"), p->m_Ata.vars[index].ModelSerial, 50, m_Ini));
+		m_CtrlScrollbarTemperature.SetPos(GetPrivateProfileIntFx(_T("AlarmTemperature"), p->m_Ata.vars[index].ModelSerial, 50, m_Ini));
 	}
 	m_CtrlScrollbarTemperature.EnableWindow(TRUE);
 
-	m_ValueTemperature.Format(L"%d °C", m_CtrlScrollbarTemperature.GetScrollPos());
-	m_ValueTemperatureF.Format(L"%d °F", m_CtrlScrollbarTemperature.GetScrollPos() * 9 / 5 + 32);
+	m_ValueTemperature.Format(L"%d °C", m_CtrlScrollbarTemperature.GetPos());
+	m_ValueTemperatureF.Format(L"%d °F", m_CtrlScrollbarTemperature.GetPos() * 9 / 5 + 32);
 	UpdateData(FALSE);
 }
 
@@ -246,15 +247,15 @@ void CTemperatureDlg::OnDefault()
 {
 	if (p->m_Ata.vars[m_DiskIndex].IsSsd)
 	{
-		m_CtrlScrollbarTemperature.SetScrollPos(60);
+		m_CtrlScrollbarTemperature.SetPos(60);
 	}
 	else
 	{
-		m_CtrlScrollbarTemperature.SetScrollPos(50);
+		m_CtrlScrollbarTemperature.SetPos(50);
 	}
 	
-	m_ValueTemperature.Format(L"%d °C", m_CtrlScrollbarTemperature.GetScrollPos());
-	m_ValueTemperatureF.Format(L"%d °F", m_CtrlScrollbarTemperature.GetScrollPos() * 9 / 5 + 32);
+	m_ValueTemperature.Format(L"%d °C", m_CtrlScrollbarTemperature.GetPos());
+	m_ValueTemperatureF.Format(L"%d °F", m_CtrlScrollbarTemperature.GetPos() * 9 / 5 + 32);
 
 	UpdateData(FALSE);
 }

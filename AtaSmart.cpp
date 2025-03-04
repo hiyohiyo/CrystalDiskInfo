@@ -708,7 +708,7 @@ BOOL CAtaSmart::MeasuredTimeUnit()
 }
 
 /* PUBLIC FUNCTION */
-VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk, BOOL flagSortDriveLetter)
+VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk, BOOL flagSortDriveLetter, BOOL flagHideRAIDVolume)
 {
 	/*
 	if (1)
@@ -2405,17 +2405,20 @@ safeRelease:
 	}
 
 	// [2023/02/25] Hide RAID Volume
-	int count = (int)vars.GetCount();
-	if (count > 0)
+	if (flagHideRAIDVolume)
 	{
-		for (int i = count - 1; i >= 0; i--)
+		int count = (int)vars.GetCount();
+		if (count > 0)
 		{
-			CString model;
-			model = vars[i].Model;
-			model.MakeUpper();
-			if (model.Find(L"RAID") >= 0)
+			for (int i = count - 1; i >= 0; i--)
 			{
-				vars.RemoveAt(i);
+				CString model;
+				model = vars[i].Model;
+				model.MakeUpper();
+				if (model.Find(L"RAID") >= 0)
+				{
+					vars.RemoveAt(i);
+				}
 			}
 		}
 	}
@@ -6315,7 +6318,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_STORAGE_QUERY"));
 			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify)){return TRUE; }
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify, &diskSize)){return TRUE; }
 		}
 
 		debug.Format(_T("DoIdentifyDeviceNVMeIntelVroc"));
@@ -6403,17 +6406,9 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				DebugPrint(_T("AddDisk - USB1B"));
 				if (AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_SAT, &identify, siliconImageType, NULL, pnpDeviceId)){return TRUE; }
 			}
-			if (FlagUsbNVMeJMicron3 && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify, FALSE))
+			if (FlagUsbNVMeJMicron && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify))
 			{
 				debug.Format(_T("DoIdentifyDeviceNVMeJMicron"));
-				DebugPrint(debug);
-				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
-				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)){return TRUE; }
-			}
-			if (FlagUsbNVMeJMicron && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify, TRUE))
-			{
-				debug.Format(_T("DoIdentifyDeviceNVMeJMicron: USB2.0 mode"));
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
 				DebugPrint(debug);
@@ -6551,17 +6546,9 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		
 		if (interfaceType == INTERFACE_TYPE_USB && flagNVMe)
 		{
-			if (FlagUsbNVMeJMicron3 && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify, FALSE))
+			if (FlagUsbNVMeJMicron && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify))
 			{
 				debug.Format(_T("DoIdentifyDeviceNVMeJMicron"));
-				DebugPrint(debug);
-				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
-				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)) { return TRUE; }
-			}
-			if (FlagUsbNVMeJMicron && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify, TRUE))
-			{
-				debug.Format(_T("DoIdentifyDeviceNVMeJMicron: USB2.0 mode"));
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
 				DebugPrint(debug);
@@ -6719,17 +6706,9 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 				if (AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xB0, CMD_TYPE_PROLIFIC, &identify, siliconImageType, NULL, pnpDeviceId)) { return TRUE; }
 			}
 			// USB-NVMe
-			if (FlagUsbNVMeJMicron3 && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify, FALSE))
+			if (FlagUsbNVMeJMicron && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify))
 			{
 				debug.Format(_T("DoIdentifyDeviceNVMeJMicron"));
-				DebugPrint(debug);
-				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
-				DebugPrint(debug);
-				if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_JMICRON, &identify)) { return TRUE; }
-			}
-			if (FlagUsbNVMeJMicron && DoIdentifyDeviceNVMeJMicron(physicalDriveId, scsiPort, scsiTargetId, &identify, TRUE))
-			{
-				debug.Format(_T("DoIdentifyDeviceNVMeJMicron: USB2.0 mode"));
 				DebugPrint(debug);
 				debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_JMICRON"));
 				DebugPrint(debug);
@@ -7239,7 +7218,7 @@ void CAtaSmart::ReleaseMutexJMicron()
 	}
 }
 
-BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, BOOL flagUsb2mode)
+BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data)
 {
 	BOOL	bRet = FALSE;
 	HANDLE	hIoCtrl = NULL;
@@ -7247,12 +7226,6 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	DWORD	length;
 
 	DWORD transferLength = 4096;
-
-	// 2023/02/19 Workaround for JMS583 firmware bug...
-	if (flagUsb2mode)
-	{
-		transferLength = 512;
-	}
 
 	SCSI_PASS_THROUGH_WITH_BUFFERS24 sptwb = {};
 
@@ -7276,7 +7249,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.Lun = 0;
 	sptwb.Spt.SenseInfoLength = 24;
 	sptwb.Spt.DataIn = SCSI_IOCTL_DATA_OUT;
-	sptwb.Spt.DataTransferLength = transferLength;
+	sptwb.Spt.DataTransferLength = 512;
 	sptwb.Spt.TimeOutValue = 2;
 	sptwb.Spt.DataBufferOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, DataBuf);
 	sptwb.Spt.SenseInfoOffset = offsetof(SCSI_PASS_THROUGH_WITH_BUFFERS24, SenseBuf);
@@ -7286,7 +7259,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.Cdb[1] = 0x80; // ADMIN
 	sptwb.Spt.Cdb[2] = 0;
 	sptwb.Spt.Cdb[3] = 0;
-	sptwb.Spt.Cdb[4] = 2;
+	sptwb.Spt.Cdb[4] = 0x02;
 	sptwb.Spt.Cdb[5] = 0;
 	sptwb.Spt.Cdb[6] = 0;
 	sptwb.Spt.Cdb[7] = 0;
@@ -7332,7 +7305,7 @@ BOOL CAtaSmart::DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, I
 	sptwb.Spt.Cdb[1] = 0x82; // ADMIN + DMA-IN
 	sptwb.Spt.Cdb[2] = 0;
 	sptwb.Spt.Cdb[3] = 0;
-	sptwb.Spt.Cdb[4] = 2;
+	sptwb.Spt.Cdb[4] = 0x10;
 	sptwb.Spt.Cdb[5] = 0;
 	sptwb.Spt.Cdb[6] = 0;
 	sptwb.Spt.Cdb[7] = 0;
@@ -7406,7 +7379,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 	sptwb.Spt.Cdb[1] = 0x80; // ADMIN
 	sptwb.Spt.Cdb[2] = 0;
 	sptwb.Spt.Cdb[3] = 0;
-	sptwb.Spt.Cdb[4] = 2;
+	sptwb.Spt.Cdb[4] = 0x2;
 	sptwb.Spt.Cdb[5] = 0;
 	sptwb.Spt.Cdb[6] = 0;
 	sptwb.Spt.Cdb[7] = 0;
@@ -7460,7 +7433,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, 
 	sptwb.Spt.Cdb[1] = 0x82; // ADMIN + DMA-IN
 	sptwb.Spt.Cdb[2] = 0;
 	sptwb.Spt.Cdb[3] = 0;
-	sptwb.Spt.Cdb[4] = 2;
+	sptwb.Spt.Cdb[4] = 0x2;
 	sptwb.Spt.Cdb[5] = 0;
 	sptwb.Spt.Cdb[6] = 0;
 	sptwb.Spt.Cdb[7] = 0;
@@ -11312,27 +11285,12 @@ BOOL CAtaSmart::AddDiskJMS586_40(INT index)
 	{
 		if (GetNVMePortInfoJMS586_40(index, i, &nvmePort))
 		{
-			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_40, &identify, 0, L"", NULL, &nvmePort, &nvmeId);
-			
-			/*
-			int count = 0;
-			count = vars.GetCount();
-
 			BYTE cid = 0;
-
 			ControllerSerialNum2IdJMS586_40(index, &cid);
-			GetNVMeIdInfoJMS586_40(cid, i, &nvmeId);
-
-			// Stack is broken
-			count = vars.GetCount();
-
-			AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_40, &identify, 0, L"", NULL, &nvmePort, &nvmeId);
-
-			if (GetNVMeIdInfoJMS586_40(index, i, &nvmeId))
+			if(GetNVMeIdInfoJMS586_40(cid, i, &nvmeId))
 			{
 				AddDiskNVMe(-1, index, i, -1, -1, CMD_TYPE_JMS586_40, &identify, 0, L"", NULL, &nvmePort, &nvmeId);
 			}
-			*/
 		}
 	}
 

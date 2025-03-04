@@ -175,7 +175,6 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	m_Ata.FlagUsbRealtek9220DP = !GetPrivateProfileInt(_T("USB"), _T("RTL9220DP"), 0, m_Ini);
 	m_Ata.FlagUsbMemory  = ! GetPrivateProfileInt(_T("USB"), _T("UsbMemory"), 0, m_Ini);
 //	m_Ata.FlagUsbSat16 = !GetPrivateProfileInt(_T("USB"), _T("UsbSAT16"), 1, m_Ini);
-	m_Ata.FlagUsbNVMeJMicron3 = !GetPrivateProfileInt(_T("USB"), _T("NVMeJMicron3"), 0, m_Ini);
 	m_Ata.FlagUsbNVMeJMicron = !GetPrivateProfileInt(_T("USB"), _T("NVMeJMicron"), 1, m_Ini);
 	m_Ata.FlagUsbNVMeASMedia = !GetPrivateProfileInt(_T("USB"), _T("NVMeASMedia"), 1, m_Ini);
 	m_Ata.FlagUsbNVMeRealtek = !GetPrivateProfileInt(_T("USB"), _T("NVMeRealtek"), 1, m_Ini);
@@ -201,7 +200,6 @@ BOOL CDiskInfoDlg::OnInitDialog()
 	OnUsbRealtek9220DP();
 	OnUsbMemory();
 //	OnUsbSat16();
-	OnUsbNVMeJMicron3();
 	OnUsbNVMeJMicron();
 	OnUsbNVMeASMedia();
 	OnUsbNVMeRealtek();
@@ -403,7 +401,7 @@ void CDiskInfoDlg::InitAta(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChang
 	SetWindowTitle(i18n(_T("Message"), _T("DETECT_DISK")));
 	m_NowDetectingUnitPowerOnHours = FALSE;
 
-	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_bHideNoSmartDisk, m_bSortDriveLetter);
+	m_Ata.Init(useWmi, advancedDiskSearch, flagChangeDisk, workaroundHD204UI, workaroundAdataSsd, m_bHideNoSmartDisk, m_bSortDriveLetter, m_bHideRAIDVolume);
 	
 	DWORD errorCount = 0;
 	for(int i = 0; i < m_Ata.vars.GetCount(); i++)

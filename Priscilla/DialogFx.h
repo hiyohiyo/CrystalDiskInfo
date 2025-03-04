@@ -57,6 +57,7 @@ protected:
 
 	// MessageMap
 	DECLARE_MESSAGE_MAP()
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
@@ -86,6 +87,7 @@ protected:
 	int m_FontScale;
 	double m_FontRatio;
 	BYTE m_FontRender;
+	HPALETTE m_hPal;
 
 	int m_SizeX;
 	int m_MaxSizeX;

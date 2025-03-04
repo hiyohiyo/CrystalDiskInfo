@@ -459,6 +459,26 @@ DWORD GetIeVersion()
 }
 #endif
 
+BOOL IsNT3()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+
+		OSVERSIONINFO osvi = { 0 };
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if ((osvi.dwPlatformId == VER_PLATFORM_WIN32_NT)
+			&& (osvi.dwMajorVersion == 3))
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
 BOOL IsNT4()
 {
 	static BOOL b = -1;
@@ -688,12 +708,19 @@ void GetOsName(CString& osFullName, CString& name, CString& version, CString& ar
 		OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
 		GetVersionEx((OSVERSIONINFO*)&osvi);
 	#endif
-
 #else
 	OSVERSIONINFOEXW osviw = { sizeof(osviw), 0, 0, 0, 0, {0}, 0, 0 };
 	OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
 
 	GetVersionEx((OSVERSIONINFO*)&osvi);
+	if (osvi.dwMajorVersion == 0) // Windows NT 3.51, NT 4.0 SP4 or earlier
+	{
+		osvi.dwMajorVersion = osv.dwMajorVersion;
+		osvi.dwMinorVersion = osv.dwMinorVersion;
+		osvi.dwBuildNumber = osv.dwBuildNumber;
+		osvi.dwPlatformId = osv.dwPlatformId;
+		wsprintf(osvi.szCSDVersion, osv.szCSDVersion);
+	}
 
 	if (osvi.dwMajorVersion >= 6 && GetVersionFx((OSVERSIONINFOEXW*)&osviw))
 	{
@@ -1208,6 +1235,8 @@ void GetOsName(CString& osFullName, CString& name, CString& version, CString& ar
 			architecture = osArchitecture;
 		}	
 	}
+
+	osFullName.Replace(_T("  "), _T(" "));
 }
 
 //------------------------------------------------

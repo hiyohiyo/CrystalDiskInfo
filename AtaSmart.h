@@ -1750,7 +1750,7 @@ public:
 	BYTE GetRecommendAamValue(DWORD index);
 	BYTE GetRecommendApmValue(DWORD index);
 
-	VOID Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk, BOOL flagSortDriveLetter);
+	VOID Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk, BOOL workaroundHD204UI, BOOL workaroundAdataSsd, BOOL flagHideNoSmartDisk, BOOL flagSortDriveLetter, BOOL flagHideRAIDVolume);
 	BOOL MeasuredTimeUnit();
 	DWORD GetPowerOnHours(DWORD rawValue, DWORD timeUnitType);
 	DWORD GetPowerOnHoursEx(DWORD index, DWORD timeUnitType);
@@ -1952,7 +1952,6 @@ public:
 	BOOL FlagUsbCypress = FALSE;
 	BOOL FlagUsbMemory = FALSE;
 //	BOOL FlagUsbSat16 = FALSE;
-	BOOL FlagUsbNVMeJMicron3 = FALSE;
 	BOOL FlagUsbNVMeJMicron = FALSE;
 	BOOL FlagUsbNVMeASMedia = FALSE;
 	BOOL FlagUsbNVMeRealtek = FALSE;
@@ -2021,7 +2020,7 @@ protected:
 		IDENTIFY_DEVICE* identify, DWORD* diskSize = NULL, CString pnpDeviceId = _T(""), NVME_PORT_20* nvmePort20 = NULL, NVME_PORT_40* nvmePort40 = NULL, NVME_ID* nvmeId = NULL
 	);
 
-	BOOL DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify, BOOL flagUSB2mode);
+	BOOL DoIdentifyDeviceNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeNVMeJMicron(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
 
 	BOOL DoIdentifyDeviceNVMeASMedia(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);

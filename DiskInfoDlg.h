@@ -236,6 +236,8 @@ protected:
 	BOOL m_bForceDisableDarkMode{};
 	BOOL m_bSortDriveLetter{};
 	BOOL m_bHalfDriveMenu{};
+	BOOL m_bHideRAIDVolume{};
+
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	BOOL m_bStartupVoice{};
@@ -618,7 +620,6 @@ public:
 	afx_msg void OnUsbASM1352R();
 	afx_msg void OnUsbRealtek9220DP();
 //	afx_msg void OnUsbSat16();
-	afx_msg void OnUsbNVMeJMicron3();
 	afx_msg void OnUsbNVMeJMicron();
 	afx_msg void OnUsbNVMeASMedia();
 	afx_msg void OnUsbNVMeRealtek();
@@ -681,6 +682,8 @@ public:
 //	afx_msg void OnAlarmHistory();
 	afx_msg void OnAlertSound();
 	afx_msg void OnHideNoSmartDisk();
+	afx_msg void OnHideRAIDVolume();
+
 	afx_msg void OnBnClickedButtonDisk0();
 	afx_msg void OnBnClickedButtonDisk1();
 	afx_msg void OnBnClickedButtonDisk2();

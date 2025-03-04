@@ -147,6 +147,13 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 
 	if (renderMode & SystemDraw)
 	{
+#if _MSC_VER <= 1310
+		if (IsNT3())
+		{
+			ModifyStyle(0, WS_BORDER, SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+		}
+#endif
+
 		return TRUE;
 	}
 	else
@@ -349,6 +356,16 @@ void CComboBoxFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 			FillRect(lpDrawItemStruct->hDC, &rc, (HBRUSH)Brush);
 		}
 		DrawString(title, pDC, lpDrawItemStruct, textColor);
+
+#if _MSC_VER <= 1310
+		if (IsNT3() && IsWindowEnabled())
+		{
+			DWORD oldTextAlign = m_TextAlign;
+			m_TextAlign = ES_RIGHT;
+			DrawString(_T("v"), pDC, lpDrawItemStruct, textColor);
+			m_TextAlign = oldTextAlign;
+		}
+#endif
 	}
 	else
 	{

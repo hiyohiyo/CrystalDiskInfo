@@ -899,8 +899,8 @@
 #define ID_USB_DISABLE_ALL              32981
 #define ID_HEALTH_STATUS                32982
 #define ID_EDIT_OPTIONS                 32983
-#define ID_USB_NVME_JMICRON3            32984
-// #define ID_USB_SAT16                    32984
+//#define ID_USB_NVME_JMICRON3            32984
+//#define ID_USB_SAT16                    32984
 #define ID_DUMP_IDENTIFY_DEVICE         32985
 #define ID_DUMP_SMART_READ_DATA         32986
 #define ID_DUMP_SMART_READ_THRESHOLD    32987
@@ -1034,6 +1034,7 @@
 #define ID_USB_JMS586_40                33143
 #define ID_STARTUP_VOICE                33144
 #define ID_USB_REALTEK9220DP            33145
+#define ID_HIDE_RAID_VOLUME             33146
 
 #define ID_DRIVE_MENU_8                 33150
 #define ID_DRIVE_MENU_10                33151

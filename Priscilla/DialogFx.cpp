@@ -48,6 +48,7 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_FontScale = 100;
 	m_FontRatio = 1.0;
 	m_FontRender = CLEARTYPE_NATURAL_QUALITY;
+	m_hPal = NULL;
 
 	m_SizeX = 0;
 	m_MaxSizeX = 65535;
@@ -98,9 +99,11 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 
 CDialogFx::~CDialogFx()
 {
+	if(m_hPal) DeleteObject(m_hPal);
 }
 
 BEGIN_MESSAGE_MAP(CDialogFx, CDialog)
+	ON_WM_SIZE()
 	ON_WM_TIMER()
 	ON_WM_ERASEBKGND()
 	ON_MESSAGE(WM_DPICHANGED, &CDialogFx::OnDpiChanged)
@@ -171,6 +174,16 @@ BOOL CDialogFx::OnInitDialog()
 	// m_bInitializing = FALSE;
 
 	return TRUE;
+}
+
+void CDialogFx::OnSize(UINT nType, int cx, int cy)
+{
+	CDialog::OnSize(nType, cx, cy);
+
+	if (nType == SIZE_RESTORED)
+	{
+		Invalidate();
+	}
 }
 
 BOOL CDialogFx::PreTranslateMessage(MSG* pMsg) 
@@ -256,6 +269,13 @@ void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 	if (resize) { m_ZoomRatio = ratio; }
 #endif
 
+	HDC hScreenDC = ::GetDC(NULL); // get desktop DC
+	if(!m_hPal && GetDeviceCaps(hScreenDC, RASTERCAPS) & RC_PALETTE)
+	{
+		m_hPal = CreateHalftonePalette(hScreenDC);
+	}
+	DeleteDC(hScreenDC); // delete it after use
+
 	if (SUCCEEDED(hr))
 	{
 		m_bBkImage = TRUE;
@@ -270,13 +290,33 @@ void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 		int w = (int)(m_ZoomRatio * srcBitmap.GetWidth());
 		int h = (int)(m_ZoomRatio * srcBitmap.GetHeight());
 #endif
-		baseBitmap.CreateCompatibleBitmap(pWndDC, srcBitmap.GetWidth(), srcBitmap.GetHeight());
+		int orgw = srcBitmap.GetWidth();
+		int orgh = srcBitmap.GetHeight();
+		if(m_hPal && pWndDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+		{
+			SelectPalette( pWndDC->GetSafeHdc(), m_hPal, TRUE );
+			pWndDC->RealizePalette();
+			pWndDC->SetStretchBltMode(HALFTONE);
+		}
+		baseBitmap.CreateCompatibleBitmap(pWndDC, orgw, orgh);
 		baseDC.CreateCompatibleDC(pWndDC);
+		if(m_hPal && baseDC.GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+		{
+			SelectPalette( baseDC.GetSafeHdc(), m_hPal, FALSE );
+			baseDC.RealizePalette();
+			baseDC.SetStretchBltMode(HALFTONE);
+		}
 
 		m_BkBitmap.DeleteObject();
 		m_BkDC.DeleteDC();
 		m_BkBitmap.CreateCompatibleBitmap(pWndDC, w, h);
 		m_BkDC.CreateCompatibleDC(pWndDC);
+		if(m_hPal && baseDC.GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+		{
+			SelectPalette( m_BkDC.GetSafeHdc(), m_hPal, FALSE );
+			m_BkDC.RealizePalette();
+			m_BkDC.SetStretchBltMode(HALFTONE);
+		}
 
 		ReleaseDC(pWndDC);
 
@@ -286,12 +326,20 @@ void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
 		srcBitmap.BitBlt(baseDC.GetSafeHdc(), 0, 0, SRCCOPY);
 		srcBitmap.Destroy();
 
-		Bitmap* pBitmap = Bitmap::FromHBITMAP((HBITMAP)baseBitmap.GetSafeHandle(), NULL);
-		Graphics	g(m_BkDC.GetSafeHdc());
-		g.SetInterpolationMode(InterpolationModeHighQualityBicubic);
-		g.DrawImage(pBitmap, 0, 0, w, h);
+		if(m_hPal || (LOBYTE(LOWORD(GetVersion()))) == 3)
+		{
+			m_BkDC.StretchBlt(0, 0, w, h, &baseDC, 0, 0,  orgw, orgh, SRCCOPY);
+		}
+		else
+		{
+			Bitmap* pBitmap = Bitmap::FromHBITMAP((HBITMAP)baseBitmap.GetSafeHandle(), NULL);
+			Graphics	g(m_BkDC.GetSafeHdc());
+			g.SetInterpolationMode(InterpolationModeHighQualityBicubic);
+			g.DrawImage(pBitmap, 0, 0, w, h);
 
-		delete	pBitmap;
+			delete	pBitmap;
+		}
+
 		baseBitmap.DeleteObject();
 		baseDC.DeleteDC();
 
@@ -433,7 +481,8 @@ DWORD CDialogFx::ChangeZoomType(DWORD zoomType)
 		else if (width < 900) { zoomType = ZoomType050; }
 		else if (width < 1200){ zoomType = ZoomType075; }
 #else
-		else if (width < 732) { zoomType = ZoomType050; }
+//		else if (width < 732) { zoomType = ZoomType050; }
+		else if (width < 732) { zoomType = ZoomType064; }
 		else if (width < 976) { zoomType = ZoomType075; }
 #endif
 #endif
@@ -593,10 +642,17 @@ BOOL CDialogFx::OnEraseBkgnd(CDC* pDC)
 		return CDialog::OnEraseBkgnd(pDC);
 	}
 
+	if(m_hPal && pDC->GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
+	{
+		SelectPalette( pDC->GetSafeHdc(), m_hPal, TRUE );
+		pDC->RealizePalette();
+		pDC->SetStretchBltMode(HALFTONE);
+	}
+
 	CRect rect;
 	GetClientRect(&rect);
 		
-	return pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &m_BkDC, 0, 0, SRCCOPY);
+	return pDC->StretchBlt(0, 0, rect.Width(), rect.Height(), &m_BkDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);
 }
 
 afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
