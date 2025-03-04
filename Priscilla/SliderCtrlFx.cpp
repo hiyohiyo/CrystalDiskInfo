@@ -27,6 +27,10 @@ CSliderCtrlFx::~CSliderCtrlFx()
 	m_BkBrush.DeleteObject();
 }
 
+BEGIN_MESSAGE_MAP(CSliderCtrlFx, CSliderCtrl)
+	ON_WM_KEYDOWN()
+END_MESSAGE_MAP()
+
 BOOL CSliderCtrlFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, int renderMode, BOOL bHighContrast, BOOL bDarkMode, int min, int max, int pos)
 {
 	m_X = (int)(x * zoomRatio);
@@ -106,4 +110,20 @@ void CSliderCtrlFx::LoadCtrlBk(CDC* drawDC)
 			m_bBkLoad = TRUE;
 		}
 	}
+}
+
+void CSliderCtrlFx::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if (nChar == VK_UP)
+	{
+		PostMessage(WM_KEYDOWN, VK_RIGHT, nFlags);
+		return;
+	}
+	else if (nChar == VK_DOWN)
+	{
+		PostMessage(WM_KEYDOWN, VK_LEFT, nFlags);
+		return;
+	}
+
+	CSliderCtrl::OnKeyDown(nChar, nRepCnt, nFlags);
 }

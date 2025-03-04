@@ -211,6 +211,21 @@ OK=OK
 ENABLED=Zapnuté
 DISABLED=Vypnuté
 
+;9.0.0
+DRIVE_SORT_METHOD=Drive Sort Method
+PHYSICAL_DRIVE_ID=Physical Drive ID
+DRIVE_LETTER=Drive Letter
+DRIVE_MENU_NUMBER=Display Number of Drives
+
+;9.2.0
+VOICE=Voice
+
+;9.3.0
+STARTUP_VOICE=Startup Voice
+
+;9.5.0
+HIDE_RAID_VOLUME=Hide &RAID Volume
+
 [Message]
 DETECT_UNIT_POWER_ON_HOURS=Detekcia hodín napájania (vyžaduje cca 130 sekúnd)
 DETECT_DISK=Deteguje sa disk

@@ -19,6 +19,7 @@ CSettingDlg::CSettingDlg(CWnd* pParent /*=NULL*/)
 {
 	p = (CDiskInfoDlg*)pParent;
 
+	m_DiskIndex = 0;
 	m_ZoomType = p->GetZoomType();
 	m_FontFace = p->GetFontFace();
 	m_FontScale = p->GetFontScale();
@@ -85,8 +86,8 @@ BOOL CSettingDlg::OnInitDialog()
 
 	SetWindowTitle(i18n(_T("WindowTitle"), _T("AAM_APM_CONTROL")));
 
-	m_AamScrollbar.SetScrollRange(0x80, 0xFE);
-	m_ApmScrollbar.SetScrollRange(0x01, 0xFE);
+	m_AamScrollbar.SetRange(0x80, 0xFE);
+	m_ApmScrollbar.SetRange(0x01, 0xFE);
 
 	m_bShowWindow = TRUE;
 	InitLang();
@@ -155,25 +156,25 @@ void CSettingDlg::UpdateDialogSize()
 	m_CtrlEnableApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 	m_CtrlDisableApm.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 
-	m_CtrlLabelAam.InitControl(8, 44, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, CStaticFx::Border::UNDERLINE);
-	m_CtrlLabelApm.InitControl(8, 188, 384, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, CStaticFx::Border::UNDERLINE);
+	m_CtrlLabelAam.InitControl(8, 44, 384, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, CStaticFx::Border::UNDERLINE);
+	m_CtrlLabelApm.InitControl(8, 188, 384, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, CStaticFx::Border::UNDERLINE);
 
-	m_CtrlLabelAamLow.InitControl(16, 72, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
-	m_CtrlLabelAamHigh.InitControl(176, 72, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
-	m_CtrlLabelAamRecommend.InitControl(176, 120, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
-	m_CtrlLabelApmLow.InitControl(16, 216, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
-	m_CtrlLabelApmHigh.InitControl(176, 216, 160, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlLabelAamLow.InitControl(16, 72, 160, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlLabelAamHigh.InitControl(176, 72, 160, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlLabelAamRecommend.InitControl(176, 120, 160, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlLabelApmLow.InitControl(16, 216, 160, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlLabelApmHigh.InitControl(176, 216, 160, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_RIGHT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
 
-	m_CtrlAamStatus.InitControl(344, 72, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
-	m_CtrlCurrentAam.InitControl(344, 96, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
-	m_CtrlRecommendAam.InitControl(344, 120, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
-	m_CtrlApmStatus.InitControl(344, 216, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
-	m_CtrlCurrentApm.InitControl(344, 240, 40, 20, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlAamStatus.InitControl(344, 72, 40, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlCurrentAam.InitControl(344, 96, 40, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlRecommendAam.InitControl(344, 120, 40, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlApmStatus.InitControl(344, 216, 40, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
+	m_CtrlCurrentApm.InitControl(344, 240, 40, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, TRUE);
 
-	m_CtrlEnableAam.InitControl(220, 148, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
-	m_CtrlDisableAam.InitControl(20, 148, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
-	m_CtrlEnableApm.InitControl(220, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
-	m_CtrlDisableApm.InitControl(20, 272, 160, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlEnableAam.InitControl(220, 148, 160, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlDisableAam.InitControl(20, 148, 160, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlEnableApm.InitControl(220, 272, 160, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
+	m_CtrlDisableApm.InitControl(20, 272, 160, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, SystemDraw, m_bHighContrast, m_bDarkMode, FALSE);
 
 	m_CtrlSelectDisk.SetFontEx(m_FontFace, 12, 12, m_ZoomRatio, m_FontRatio);
 	m_CtrlSelectDisk.InitControl(8, 8, 384, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
@@ -304,7 +305,7 @@ void CSettingDlg::OnEnableAam()
 		return ;
 	}
 
-	int targetValue = m_AamScrollbar.GetScrollPos();
+	int targetValue = m_AamScrollbar.GetPos();
 	p->m_Ata.EnableAam(m_DiskIndex, (BYTE)targetValue);
 	p->m_Ata.UpdateIdInfo(m_DiskIndex);
 
@@ -312,7 +313,7 @@ void CSettingDlg::OnEnableAam()
 	{
 		m_AamStatus = _T("ON");
 	}
-	m_AamScrollbar.SetScrollPos(p->m_Ata.GetAamValue(m_DiskIndex));
+	m_AamScrollbar.SetPos(p->m_Ata.GetAamValue(m_DiskIndex));
 	m_CurrentAam.Format(_T("%02Xh"), p->m_Ata.GetAamValue(m_DiskIndex));
 	m_RecommendAam.Format(_T("%02Xh"), p->m_Ata.GetRecommendAamValue(m_DiskIndex));
 	UpdateData(FALSE);
@@ -338,7 +339,7 @@ void  CSettingDlg::OnDisableAam()
 	{
 		m_AamStatus = _T("OFF");
 	}
-	m_AamScrollbar.SetScrollPos(p->m_Ata.GetAamValue(m_DiskIndex));
+	m_AamScrollbar.SetPos(p->m_Ata.GetAamValue(m_DiskIndex));
 	m_CurrentAam.Format(_T("%02Xh"), p->m_Ata.GetAamValue(m_DiskIndex));
 	m_RecommendAam.Format(_T("%02Xh"), p->m_Ata.GetRecommendAamValue(m_DiskIndex));
 	UpdateData(FALSE);
@@ -357,7 +358,7 @@ void  CSettingDlg::OnEnableApm()
 		return ;
 	}
 
-	int targetValue = m_ApmScrollbar.GetScrollPos();
+	int targetValue = m_ApmScrollbar.GetPos();
 	p->m_Ata.EnableApm(m_DiskIndex, (BYTE)targetValue);
 	p->m_Ata.UpdateIdInfo(m_DiskIndex);
 
@@ -365,7 +366,7 @@ void  CSettingDlg::OnEnableApm()
 	{
 		m_ApmStatus = _T("ON");
 	}
-	m_ApmScrollbar.SetScrollPos(p->m_Ata.GetApmValue(m_DiskIndex));
+	m_ApmScrollbar.SetPos(p->m_Ata.GetApmValue(m_DiskIndex));
 	m_CurrentApm.Format(_T("%02Xh"), p->m_Ata.GetApmValue(m_DiskIndex));
 	UpdateData(FALSE);
 
@@ -390,7 +391,7 @@ void  CSettingDlg::OnDisableApm()
 	{
 		m_ApmStatus = _T("OFF");
 	}
-	m_ApmScrollbar.SetScrollPos(p->m_Ata.GetApmValue(m_DiskIndex));
+	m_ApmScrollbar.SetPos(p->m_Ata.GetApmValue(m_DiskIndex));
 	m_CurrentApm.Format(_T("%02Xh"), p->m_Ata.GetApmValue(m_DiskIndex));
 	UpdateData(FALSE);
 
@@ -403,11 +404,11 @@ void  CSettingDlg::OnDisableApm()
 
 void CSettingDlg::UpdateSelectDisk(DWORD index)
 {
-	m_AamScrollbar.SetScrollPos(p->m_Ata.GetAamValue(index));
+	m_AamScrollbar.SetPos(p->m_Ata.GetAamValue(index));
 	m_CurrentAam.Format(_T("%02Xh"), p->m_Ata.GetAamValue(index));
 	m_RecommendAam.Format(_T("%02Xh"), p->m_Ata.GetRecommendAamValue(index));
 
-	m_ApmScrollbar.SetScrollPos(p->m_Ata.GetApmValue(index));
+	m_ApmScrollbar.SetPos(p->m_Ata.GetApmValue(index));
 	m_CurrentApm.Format(_T("%02Xh"), p->m_Ata.GetApmValue(index));
 
 	if(p->m_Ata.vars.GetAt(index).IsAamSupported 
@@ -498,11 +499,11 @@ void CSettingDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	if(*pScrollBar == m_AamScrollbar)
 	{
-		m_CurrentAam.Format(_T("%02Xh"), m_AamScrollbar.GetScrollPos());
+		m_CurrentAam.Format(_T("%02Xh"), m_AamScrollbar.GetPos());
 	}
 	else if(*pScrollBar == m_ApmScrollbar)
 	{
-		m_CurrentApm.Format(_T("%02Xh"), m_ApmScrollbar.GetScrollPos());
+		m_CurrentApm.Format(_T("%02Xh"), m_ApmScrollbar.GetPos());
 	}
 
 	UpdateData(FALSE);

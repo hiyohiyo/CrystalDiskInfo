@@ -795,10 +795,14 @@ CAPTION "AAM/APM Control"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     COMBOBOX        IDC_SELECT_DISK,7,7,319,30, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
-    SCROLLBAR       IDC_AAM_SCROLLBAR,20,68,240,11
+    // SCROLLBAR       IDC_AAM_SCROLLBAR,20,68,240,11
+    CONTROL         "", IDC_AAM_SCROLLBAR, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | TBS_FIXEDLENGTH | WS_TABSTOP, 0, 0, 100, 10
+
     PUSHBUTTON      "Disable",IDC_BUTTON_DISABLE_AAM,67,103,50,14,BS_CENTER
     PUSHBUTTON      "Enable",IDC_BUTTON_ENABLE_AAM,171,104,50,14,BS_CENTER
-    SCROLLBAR       IDC_APM_SCROLLBAR,22,171,134,11
+    // SCROLLBAR       IDC_APM_SCROLLBAR,22,171,134,11
+    CONTROL         "", IDC_APM_SCROLLBAR, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | TBS_FIXEDLENGTH | WS_TABSTOP, 0, 0, 100, 10
+
     PUSHBUTTON      "Disable",IDC_BUTTON_DISABLE_APM,65,207,50,14,BS_CENTER
     PUSHBUTTON      "Enable",IDC_BUTTON_ENABLE_APM,175,209,50,14,BS_CENTER
     LTEXT           "Automatic Acoustic Management (AAM)",IDC_LABEL_AAM,15,27,301,15
@@ -821,7 +825,9 @@ IDD_TEMPERATURE DIALOGEX 0, 0, 333, 248
 	FONT 8, "MS Shell Dlg", 400, 0, 0x1
 	BEGIN
 	COMBOBOX        IDC_SELECT_DISK, 7, 7, 319, 30, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
-	SCROLLBAR       IDC_SCROLLBAR_TEMPERATURE, 20, 46, 134, 11
+	// SCROLLBAR       IDC_SCROLLBAR_TEMPERATURE, 20, 46, 134, 11
+    CONTROL         "", IDC_SCROLLBAR_TEMPERATURE, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | TBS_FIXEDLENGTH | WS_TABSTOP, 0, 0, 100, 10
+
 	PUSHBUTTON      "default", IDC_DEFAULT, 55, 185, 83, 14, BS_CENTER
 	PUSHBUTTON      "apply", IDC_APPLY, 185, 185, 83, 14, BS_CENTER
 	CTEXT           "", IDC_VALUE_TEMPERATURE, 195, 47, 33, 8
@@ -834,10 +840,15 @@ CAPTION "Health Status Setting"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     COMBOBOX        IDC_SELECT_DISK,7,7,319,30, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
-    SCROLLBAR       IDC_SCROLLBAR_05,20,46,134,11
-    SCROLLBAR       IDC_SCROLLBAR_C5,17,86,134,11
-    SCROLLBAR       IDC_SCROLLBAR_C6,15,128,134,11
-    SCROLLBAR       IDC_SCROLLBAR_FF,15,162,134,11
+    // SCROLLBAR       IDC_SCROLLBAR_05,20,46,134,11
+    // SCROLLBAR       IDC_SCROLLBAR_C5,17,86,134,11
+    // SCROLLBAR       IDC_SCROLLBAR_C6,15,128,134,11
+    // SCROLLBAR       IDC_SCROLLBAR_FF,15,162,134,11
+    CONTROL         "", IDC_SCROLLBAR_05, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | TBS_FIXEDLENGTH | WS_TABSTOP, 0, 0, 100, 10
+    CONTROL         "", IDC_SCROLLBAR_C5, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | TBS_FIXEDLENGTH | WS_TABSTOP, 0, 0, 100, 10
+    CONTROL         "", IDC_SCROLLBAR_C6, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | TBS_FIXEDLENGTH | WS_TABSTOP, 0, 0, 100, 10
+    CONTROL         "", IDC_SCROLLBAR_FF, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | TBS_FIXEDLENGTH | WS_TABSTOP, 0, 0, 100, 10
+
     PUSHBUTTON      "default",IDC_DEFAULT,55,185,83,14,BS_CENTER
     PUSHBUTTON      "apply",IDC_APPLY,185,185,83,14,BS_CENTER
     LTEXT           "",IDC_LABEL_05,7,24,286,13
@@ -900,8 +911,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 5, 0, 0
- PRODUCTVERSION 9, 5, 0, 0
+ FILEVERSION 9, 6, 2, 0
+ PRODUCTVERSION 9, 6, 2, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -922,35 +933,35 @@ BEGIN
             VALUE "Comments", "https://crystalmark.info/ MIT License"
 #endif
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.5.0.0"
-            VALUE "ProductVersion", "9.5.0.0"
+            VALUE "FileVersion", "9.6.2.0"
+            VALUE "ProductVersion", "9.6.2.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 
     #ifdef SUISHO_AOI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Aoi Edition"
             VALUE "ProductName", "CrystalDiskInfo Aoi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2023-2024 nijihashi sola"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2023-2025 nijihashi sola"
 
     #elif MSI_MEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo MSI Mei Mihoshi Edition"
             VALUE "ProductName", "CrystalDiskInfo MSI Mei Mihoshi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2024 Micro-Star INT'L CO., LTD."
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2024-2025 Micro-Star INT'L CO., LTD."
 
     #elif KUREI_KEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Kurei Kei Edition"
             VALUE "ProductName", "CrystalDiskInfo Kurei Kei Edition"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2017-2024 Pronama LLC"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2017-2025 Pronama LLC"
 
     #elif SUISHO_SHIZUKU_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Shizuku Edition"
             VALUE "ProductName", "CrystalDiskInfo Shizuku Edition"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo, (C) 2012-2024 kirino kasumu"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2012-2025 kirino kasumu"
 
     #else
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "ProductName", "CrystalDiskInfo"
-            VALUE "LegalCopyright", "(C) 2008-2024 hiyohiyo"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo"
     #endif
         END
     END
@@ -1196,13 +1207,12 @@ BEGIN
                 MENUITEM "JMicron JMS56X",              ID_USB_JMS56X
                 MENUITEM "JMicron JMB39X",              ID_USB_JMB39X
                 MENUITEM "JMicron JMS586 (Model 20bytes/Beta)",            ID_USB_JMS586_20
-//                MENUITEM "JMicron JMS586 (Model 40bytes/NewFW/Beta)",      ID_USB_JMS586_40
+                MENUITEM "JMicron JMS586 (Model 40bytes/NewFW/Beta)",      ID_USB_JMS586_40
 #endif 
                 MENUITEM "USB Memory (SAT)",            ID_USB_MEMORY
 //                MENUITEM "SCSI_ATA_TRANSLATION_16BYTE (Samsung SATA SSD Life)",   ID_USB_SAT16
-                MENUITEM "SCSI_NVME_TRANSLATION (JMicron for USB3/4)",   ID_USB_NVME_JMICRON3
-		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron for USB2/3/4)", ID_USB_NVME_JMICRON
-                MENUITEM "SCSI_NVME_TRANSLATION (ASMedia)",            ID_USB_NVME_ASMEDIA
+		        MENUITEM "SCSI_NVME_TRANSLATION (JMicron)",            ID_USB_NVME_JMICRON
+                MENUITEM "SCSI_NVME_TRANSLATION (ASMedia/Phison)",     ID_USB_NVME_ASMEDIA
 				MENUITEM "SCSI_NVME_TRANSLATION (Realtek)",            ID_USB_NVME_REALTEK
 
                 MENUITEM SEPARATOR
@@ -1226,6 +1236,7 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "Hide S.M.A.R.T. Information", ID_HIDE_SMART_INFO
             MENUITEM "Hide No S.M.A.R.T. Disk",     ID_HIDE_NO_SMART_DISK
+            MENUITEM "Hide RAID Volume",            ID_HIDE_RAID_VOLUME
         END
         POPUP "Workaround"
         BEGIN

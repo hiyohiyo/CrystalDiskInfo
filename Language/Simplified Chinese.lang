@@ -123,6 +123,8 @@ VOICE=语音
 ;9.3.0
 STARTUP_VOICE=启动语音
 
+;9.5.0
+HIDE_RAID_VOLUME=Hide &RAID Volume
 [TrayMenu]
 EXIT=退出
 REFRESH=刷新

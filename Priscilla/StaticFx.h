@@ -30,7 +30,7 @@ public:
 	virtual ~CStaticFx();
 
 	// Control
-	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC,
+	BOOL InitControl(int x, int y, int width, int height, double zoomRatio, HPALETTE hPal, CDC* bkDC,
 		LPCTSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, DWORD drawFrame);
 	void SetMargin(int top, int left, int bottom, int right, double zoomRatio);
 	CSize GetSize(void);
@@ -94,6 +94,7 @@ protected:
 	DWORD m_DrawFrame;
 	BOOL m_bDrawFrameEx;
 	COLORREF m_FrameColor;
+	HPALETTE m_hPal;
 
 	CString m_Label;
 	CString m_Unit;

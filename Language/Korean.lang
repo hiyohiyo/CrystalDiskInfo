@@ -1,7 +1,8 @@
+KR
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Lyttiya, Gihun Ham, 로웰
-VERSION=9.5.0
+VERSION=9.6.0
 
 [Language]
 LANGUAGE=한국어
@@ -121,6 +122,9 @@ VOICE=음성
 
 ;9.3.0
 STARTUP_VOICE=시작 시 재생할 음성
+
+;9.5.0
+HIDE_RAID_VOLUME=RAID 볼륨 숨기기(&R)
 
 [TrayMenu]
 EXIT=종료

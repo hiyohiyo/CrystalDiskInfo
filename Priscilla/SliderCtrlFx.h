@@ -26,6 +26,10 @@ public:
 	CBrush m_BkBrush;
 
 protected:
+	// Message Map
+	DECLARE_MESSAGE_MAP()
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+
 	// Image
 	void SetBkReload(void);
 	void LoadCtrlBk(CDC* drawDC);

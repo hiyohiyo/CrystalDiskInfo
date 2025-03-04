@@ -1,6 +1,6 @@
 [Information]
 TRANSLATOR=hiyohiyo
-VERSION=9.5.0
+VERSION=9.6.0
 
 [Language]
 LANGUAGE=日本語
@@ -120,6 +120,9 @@ VOICE=ボイス
 
 ;9.3.0
 STARTUP_VOICE=起動ボイス
+
+;9.5.0
+HIDE_RAID_VOLUME=RAIDボリュームを隠す(&R)
 
 [TrayMenu]
 EXIT=終了
@@ -1645,8 +1648,8 @@ F1=総書き込み量
 F2=総読み込み量
 F3=総書き込みページ数
 F6=総書き込みセクタ数 (ホスト)
-F7=総書き込みセクタ数 (ホスト)
-F8=総書き込みページ数 (FTL)
+F7=総書き込み NAND ページ数 (ホスト)
+F8=総書き込み NAND ページ数 (FTL)
 
 [SmartSanDiskCloud] ;Added 9.0.0
 05=代替処理済のブロック数

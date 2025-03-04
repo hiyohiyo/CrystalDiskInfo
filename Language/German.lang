@@ -111,6 +111,8 @@ VOICE=Voice
 ;9.3.0
 STARTUP_VOICE=Startup Voice
 
+;9.5.0
+HIDE_RAID_VOLUME=Hide &RAID Volume
 [TrayMenu]
 EXIT=Beenden
 REFRESH=Aktualisieren

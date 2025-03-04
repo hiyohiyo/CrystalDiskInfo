@@ -10,6 +10,7 @@
 #include "StaticFx.h"
 #include "ButtonFx.h"
 #include "ComboBoxFx.h"
+#include "SliderCtrlFx.h"
 
 class CHealthDlg : public CDialogFx
 {
@@ -53,10 +54,10 @@ protected:
 	CString m_LabelC6;
 	CString m_LabelFF;
 
-	CScrollBar m_CtrlScrollbar05;
-	CScrollBar m_CtrlScrollbarC5;
-	CScrollBar m_CtrlScrollbarC6;
-	CScrollBar m_CtrlScrollbarFF;
+	CSliderCtrlFx m_CtrlScrollbar05;
+	CSliderCtrlFx m_CtrlScrollbarC5;
+	CSliderCtrlFx m_CtrlScrollbarC6;
+	CSliderCtrlFx m_CtrlScrollbarFF;
 	CStaticFx m_CtrlValue05;
 	CStaticFx m_CtrlValueC5;
 	CStaticFx m_CtrlValueC6;

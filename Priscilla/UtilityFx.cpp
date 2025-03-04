@@ -185,6 +185,20 @@ BOOL IsFileExist(const TCHAR* path)
 	return TRUE;
 }
 
+BOOL CanWriteFile(const TCHAR* path)
+{
+	HANDLE hFile = CreateFileW(	path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_DELETE_ON_CLOSE, NULL);
+
+	if (hFile == INVALID_HANDLE_VALUE) { return FALSE; }
+	const char* testData = "1";
+	DWORD bytesWritten;
+	BOOL writeResult = WriteFile(hFile, testData, (DWORD)strlen(testData), &bytesWritten, NULL);
+	CloseHandle(hFile);
+
+	return writeResult;
+}
+
+
 ////------------------------------------------------
 //   Utility
 ////------------------------------------------------
@@ -472,62 +486,74 @@ BOOL AlertSound(const CString& alertSoundPath, int volume)
 ////------------------------------------------------
 //   Hash
 ////------------------------------------------------
+
+#if _MSC_VER > 1310
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <windows.h>
 #include <wincrypt.h>
-
-// UTF-8文字列を引数にとり、MD5ハッシュを128ビットのハッシュ値として返却する関数
 CStringA MD5(const CStringA& str)
 {
 	HCRYPTPROV hProv = 0;
 	HCRYPTHASH hHash = 0;
-	BYTE hash[16]; // MD5のハッシュ値は16バイト
+	BYTE hash[16];
 	DWORD hashLen = 16;
 	CStringA hashStr;
 
-	// Cryptographic Service Provider (CSP)を取得
 	if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
 		return "";
 	}
 
-	// MD5ハッシュオブジェクトを作成
 	if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash)) {
 		CryptReleaseContext(hProv, 0);
 		return "";
 	}
 
-	// CStringをUTF-8に変換してバイト配列を取得
 	std::string utf8Str(str);
 
-	// データをハッシュオブジェクトに追加
 	if (!CryptHashData(hHash, reinterpret_cast<const BYTE*>(utf8Str.c_str()), (DWORD)utf8Str.size(), 0)) {
 		CryptDestroyHash(hHash);
 		CryptReleaseContext(hProv, 0);
 		return "";
 	}
 
-	// ハッシュ値を取得
 	if (!CryptGetHashParam(hHash, HP_HASHVAL, hash, &hashLen, 0)) {
 		CryptDestroyHash(hHash);
 		CryptReleaseContext(hProv, 0);
 		return "";
 	}
 
-	// ハッシュ値を16進数文字列に変換
 	for (DWORD i = 0; i < hashLen; ++i) {
 		CString temp;
 		temp.Format(_T("%02x"), hash[i]);
 		hashStr += temp;
 	}
 
-	// リソースの解放
 	CryptDestroyHash(hHash);
 	CryptReleaseContext(hProv, 0);
 
 	return hashStr;
 }
+#else
+#include "md5.h"
+CStringA MD5(const CStringA& str)
+{
+	char* input = (char*)(LPCSTR)str;
+	uint8_t result[16] = { 0 };
+	md5String(input, result);
+
+	CStringA hashStr;
+	for (int i = 0; i < 16; ++i)
+	{
+		CStringA byteStr;
+		byteStr.Format("%02x", result[i]);
+		hashStr += byteStr;
+	}
+
+	return hashStr;
+}
+#endif
 
 ////------------------------------------------------
 //   Character Converter
