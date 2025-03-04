@@ -40,7 +40,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 {
 	DebugPrint(L"CDiskInfoDlg::CDiskInfoDlg - START");
 
-//	m_Ini = ((CDiskInfoApp*)AfxGetApp())->m_Ini;
+	m_Ini = ((CDiskInfoApp*)AfxGetApp())->m_Ini;
 	m_OffsetX = 0;
 
 #ifdef SUISHO_AOI_SUPPORT

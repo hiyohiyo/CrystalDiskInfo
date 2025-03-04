@@ -185,6 +185,20 @@ BOOL IsFileExist(const TCHAR* path)
 	return TRUE;
 }
 
+BOOL CanWriteFile(const TCHAR* path)
+{
+	HANDLE hFile = CreateFileW(	path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_DELETE_ON_CLOSE, NULL);
+
+	if (hFile == INVALID_HANDLE_VALUE) { return FALSE; }
+	const char* testData = "1";
+	DWORD bytesWritten;
+	BOOL writeResult = WriteFile(hFile, testData, (DWORD)strlen(testData), &bytesWritten, NULL);
+	CloseHandle(hFile);
+
+	return writeResult;
+}
+
+
 ////------------------------------------------------
 //   Utility
 ////------------------------------------------------
