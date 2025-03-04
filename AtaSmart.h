@@ -621,6 +621,7 @@ protected:
 #define NVME_IOCTL_CMD_DW_SIZE 16
 #define NVME_IOCTL_COMPLETE_DW_SIZE 4
 #define NVME_PT_TIMEOUT 40
+#define NVME_IDENTIFY_DATA_SIZE 4096
 
 #define IOCTL_SCSI_GET_ADDRESS \
 	CTL_CODE(IOCTL_SCSI_BASE, 0x0406, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -1800,6 +1801,7 @@ public:
 		BOOL				IsApmEnabled{};
 		BOOL				IsNcqSupported{};
 		BOOL				IsNvCacheSupported{};
+		BOOL				IsNvWCTempSupported{};
 		BOOL				IsDeviceSleepSupported{};
 		BOOL				IsStreamingSupported{};
 		BOOL				IsGplSupported{};
@@ -2051,6 +2053,8 @@ protected:
 
 	BOOL DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize);
 	BOOL GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+
+	BOOL CAtaSmart::IsNvmeTemperatureThresholdValid(INT physicalDriveId);
 
 	BOOL DoIdentifyDeviceScsi(INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);

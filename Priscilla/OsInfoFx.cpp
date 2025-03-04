@@ -693,7 +693,7 @@ void GetOsName(CString& osFullName, CString& name, CString& version, CString& ar
 		osFullName.Format(_T("%s [%s Build %s]"), (LPCTSTR)osName, (LPCTSTR)osVersion, (LPCTSTR)osBuild);
 
 		name = osName;
-		version = osVersion;
+		version.Format(_T("%s Build %s"), (LPCTSTR)osVersion, (LPCTSTR)osBuild);
 		architecture = _T("x86");
 
 		return;

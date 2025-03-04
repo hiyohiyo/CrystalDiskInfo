@@ -24,6 +24,9 @@ CDHtmlMainDialog::CDHtmlMainDialog(UINT dlgResouce, UINT dlgHtml,
 	m_bInitializing = TRUE;
 	m_bWindoowMinimizeOnce = TRUE;
 	m_bResidentMinimize = FALSE;
+
+	m_bResident = FALSE;
+	m_bStartup = FALSE;
 }
 
 CDHtmlMainDialog::~CDHtmlMainDialog()

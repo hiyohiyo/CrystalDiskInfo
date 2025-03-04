@@ -1153,7 +1153,7 @@ void GetGpuInfo(CString& gpuInfo)
 				pAdapter->GetDesc(&adapterDesc);
 
 				CString cstr;
-				cstr.Format(L"%s [%d MB]", adapterDesc.Description, (int)(adapterDesc.DedicatedVideoMemory / (1024 * 1024)));
+				cstr.Format(L"%s [%dMB]", adapterDesc.Description, (int)(adapterDesc.DedicatedVideoMemory / (1024 * 1024)));
 
 				if (cstr.Find(L"Microsoft Basic Render Driver") == 0)
 				{
@@ -1666,12 +1666,12 @@ void GetMemoryInfo(CString& memoryInfo, int* size)
 
 	if ((int)(memory.ullTotalPhys / 1024 / 1024 / 1024 + 1) > 1)
 	{
-		memoryInfo.Format(_T("%.1f GB"), (memory.ullTotalPhys / 1024.0 / 1024 / 1024));
+		memoryInfo.Format(_T("%.1fGB"), (memory.ullTotalPhys / 1024.0 / 1024 / 1024));
 
 	}
 	else
 	{
-		memoryInfo.Format(_T("%d MB"), (int)(memory.ullTotalPhys / 1024.0 / 1024 + 1));
+		memoryInfo.Format(_T("%dMB"), (int)(memory.ullTotalPhys / 1024.0 / 1024 + 1));
 	}
 	if(size != NULL){*size = (int)(memory.ullTotalPhys / 1024.0 / 1024 + 1);}
 #else
@@ -1693,12 +1693,12 @@ void GetMemoryInfo(CString& memoryInfo, int* size)
 
 		if ((int)(memory.ullTotalPhys / 1024 / 1024 / 1024 + 1) > 1)
 		{
-			memoryInfo.Format(_T("%.1f GB"), (memory.ullTotalPhys / 1024.0 / 1024 / 1024));
+			memoryInfo.Format(_T("%.1fGB"), (memory.ullTotalPhys / 1024.0 / 1024 / 1024));
 
 		}
 		else
 		{
-			memoryInfo.Format(_T("%d MB"), (int)(memory.ullTotalPhys / 1024.0 / 1024 + 1));
+			memoryInfo.Format(_T("%dMB"), (int)(memory.ullTotalPhys / 1024.0 / 1024 + 1));
 		}
 		if (size != NULL) { *size = (int)(memory.ullTotalPhys / 1024.0 / 1024 + 1); }
 	}
@@ -1710,12 +1710,12 @@ void GetMemoryInfo(CString& memoryInfo, int* size)
 
 		if ((int)(memory.dwTotalPhys / 1024 / 1024 / 1024 + 1) > 1)
 		{
-			memoryInfo.Format(_T("%.1f GB"), (memory.dwTotalPhys / 1024.0 / 1024 / 1024));
+			memoryInfo.Format(_T("%.1fGB"), (memory.dwTotalPhys / 1024.0 / 1024 / 1024));
 
 		}
 		else
 		{
-			memoryInfo.Format(_T("%d MB"), (int)(memory.dwTotalPhys / 1024.0 / 1024 + 1));
+			memoryInfo.Format(_T("%dMB"), (int)(memory.dwTotalPhys / 1024.0 / 1024 + 1));
 }
 		if (size != NULL) { *size = (int)(memory.dwTotalPhys / 1024.0 / 1024 + 1); }
 	}

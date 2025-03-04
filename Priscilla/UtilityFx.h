@@ -21,6 +21,7 @@ void DebugPrint(CString cstr);
 int GetFileVersion(const TCHAR* fileName, TCHAR* version = NULL);
 void GetFileVersionEx(const TCHAR* file, CString& version);
 BOOL IsFileExist(const TCHAR* fileName);
+BOOL CanWriteFile(const TCHAR* fileName);
 
 ////------------------------------------------------
 //   Utility

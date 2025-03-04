@@ -10,6 +10,8 @@
 #include <comutil.h>
 
 #include "AtaSmart.h"
+#include <nvme.h>
+#include <ntddstor.h>
 #include "Priscilla/UtilityFx.h"
 #include <wbemcli.h>
 
@@ -95,7 +97,7 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 
 	if (vars[i].DiskVendorId == SSD_VENDOR_NVME)
 	{
-		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
+		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute), vars[i].IsNvWCTempSupported);
 
 		if (
 #if ! defined(_M_ARM) && ! defined(_M_ARM64)
@@ -3740,6 +3742,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.IsAamEnabled = FALSE;
 	asi.IsApmEnabled = FALSE;
 	asi.IsNvCacheSupported = FALSE;
+	asi.IsNvWCTempSupported = FALSE;
 	asi.IsDeviceSleepSupported = FALSE;
 	asi.IsStreamingSupported = FALSE;
 	asi.IsGplSupported = FALSE;
@@ -3935,7 +3938,7 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.PowerOnCount = (DWORD)*((UINT64*)&asi.SmartReadData[0x70]);
 		asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (INT)*((UINT64*)&asi.SmartReadData[0x80]);
 
-		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
+		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute, asi.IsNvWCTempSupported);
 		GetTransferModePCIe(asi.CurrentTransferMode, asi.MaxTransferMode, GetPCIeSlotSpeed(physicalDriveId, true));
 		asi.AttributeCount = NVME_ATTRIBUTE;
 
@@ -6318,7 +6321,7 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		{
 			debug.Format(_T("AddDiskNVMe - CMD_TYPE_NVME_STORAGE_QUERY"));
 			DebugPrint(debug);
-			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify, &diskSize)){return TRUE; }
+			if (AddDiskNVMe(physicalDriveId, scsiPort, scsiTargetId, scsiBus, (BYTE)scsiTargetId, CMD_TYPE_NVME_STORAGE_QUERY, &identify)){return TRUE; }
 		}
 
 		debug.Format(_T("DoIdentifyDeviceNVMeIntelVroc"));
@@ -8815,7 +8818,52 @@ BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiP
 
 	memcpy_s(&(asi->SmartReadData), 512, nptwb.Buffer, 512);
 
+	asi->IsNvWCTempSupported = IsNvmeTemperatureThresholdValid(physicalDriveId);
+
 	return bRet;
+}
+
+
+BOOL CAtaSmart::IsNvmeTemperatureThresholdValid(INT physicalDriveId)
+{
+	CString path;
+	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
+
+	HANDLE hIoCtrl = CreateFile(path, GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+	StorageQuery::TStorageQueryWithBuffer nptwb;
+	BOOL bRet = 0;
+	ZeroMemory(&nptwb, sizeof(nptwb));
+
+	DWORD dwReturned = 0;
+
+	nptwb.ProtocolSpecific.ProtocolType = StorageQuery::ProtocolTypeNvme;
+	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeIdentify;
+	nptwb.ProtocolSpecific.ProtocolDataOffset = sizeof(StorageQuery::TStorageProtocolSpecificData);
+	nptwb.ProtocolSpecific.ProtocolDataLength = 4096;
+	nptwb.Query.PropertyId = StorageQuery::StorageAdapterProtocolSpecificProperty;
+	nptwb.Query.QueryType = StorageQuery::PropertyStandardQuery;
+	nptwb.ProtocolSpecific.ProtocolDataRequestValue = 1; /*NVME_IDENTIFY_CNS_CONTROLLER*/
+	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0;
+	dwReturned = 0;
+
+	bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
+		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
+	safeCloseHandle(hIoCtrl);
+
+	BYTE* identifyControllerData = nptwb.Buffer + sizeof(STORAGE_PROPERTY_QUERY) + sizeof(STORAGE_PROTOCOL_SPECIFIC_DATA);
+
+	SHORT wcTemp = *(SHORT*)(identifyControllerData + 266);
+	SHORT ccTemp = *(SHORT*)(identifyControllerData + 268);
+
+	if (wcTemp != 0 || ccTemp != 0)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+
 }
 
 /*---------------------------------------------------------------------------*/
