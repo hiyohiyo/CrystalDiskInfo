@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Huoxingdawang, haobinnan, Intervenor, CrcbAk, chriszxl (小良奇), Ericus, 赵然, zby, yfdyh000, nkh0472
-VERSION=9.5.0
+VERSION=9.6.0
 
 [Language]
 LANGUAGE=简体中文
@@ -124,7 +124,7 @@ VOICE=语音
 STARTUP_VOICE=启动语音
 
 ;9.5.0
-HIDE_RAID_VOLUME=Hide &RAID Volume
+HIDE_RAID_VOLUME=隐藏 RAID 卷(&R)
 [TrayMenu]
 EXIT=退出
 REFRESH=刷新
