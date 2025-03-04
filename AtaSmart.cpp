@@ -97,7 +97,11 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 
 	if (vars[i].DiskVendorId == SSD_VENDOR_NVME)
 	{
-		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute), vars[i].IsNvWCTempSupported);
+		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
+
+		if (vars[i].IsNvWCTempSupported) {
+			ExtraNVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
+		}
 
 		if (
 #if ! defined(_M_ARM) && ! defined(_M_ARM64)
@@ -3938,7 +3942,10 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.PowerOnCount = (DWORD)*((UINT64*)&asi.SmartReadData[0x70]);
 		asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (INT)*((UINT64*)&asi.SmartReadData[0x80]);
 
-		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute, asi.IsNvWCTempSupported);
+		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
+		if (asi.IsNvWCTempSupported) {
+			ExtraNVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
+		}
 		GetTransferModePCIe(asi.CurrentTransferMode, asi.MaxTransferMode, GetPCIeSlotSpeed(physicalDriveId, true));
 		asi.AttributeCount = NVME_ATTRIBUTE;
 

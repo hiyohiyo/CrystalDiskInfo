@@ -25,4 +25,6 @@ typedef	struct _SMART_ATTRIBUTE
 
 typedef SMART_ATTRIBUTE SMART_ATTRIBUTE_LIST[MAX_ATTRIBUTE];
 
-void NVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted, BOOL IsNvWCTempSupported);
+void NVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted);
+
+void ExtraNVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted);

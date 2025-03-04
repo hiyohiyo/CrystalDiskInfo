@@ -175,7 +175,7 @@ SMART_ATTRIBUTE SeperateTemperatureSensor(UCHAR* NVMeSmartBuf)
 	return attr;
 }
 
-void NVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted, BOOL IsNvWCTempSupported)
+void NVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted)
 {
 	SMART_ATTRIBUTE_LIST* ATASmartBuf = (SMART_ATTRIBUTE_LIST*) ATASmartBufUncasted;
 	int IdxInBuf = 0;
@@ -194,9 +194,12 @@ void NVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted, BOOL Is
 	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateUnsafeShutdownsFrom(NVMeSmartBuf));
 	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateMediaErrorsFrom(NVMeSmartBuf));
 	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateNumberOfErrorsFrom(NVMeSmartBuf));
-	if (IsNvWCTempSupported) {
-		AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateWarningCompositeTemperatureTime(NVMeSmartBuf));
-		AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateCriticalCompositeTemperatureTime(NVMeSmartBuf));
-	}
-	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateTemperatureSensor(NVMeSmartBuf));
+    AddToATASmartBuf(ATASmartBuf, IdxInBuf+=2, SeperateTemperatureSensor(NVMeSmartBuf));
+}
+
+void ExtraNVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted) {
+	SMART_ATTRIBUTE_LIST* ATASmartBuf = (SMART_ATTRIBUTE_LIST*)ATASmartBufUncasted;
+	int IdxInBuf = 15;
+	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateWarningCompositeTemperatureTime(NVMeSmartBuf));
+	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateCriticalCompositeTemperatureTime(NVMeSmartBuf));
 }
