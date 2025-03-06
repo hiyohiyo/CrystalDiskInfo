@@ -1800,6 +1800,8 @@ public:
 		BOOL				IsApmEnabled{};
 		BOOL				IsNcqSupported{};
 		BOOL				IsNvCacheSupported{};
+		BOOL				IsNvmeThresholdSupported{};
+		BOOL				IsNvmeThermalManagementSupported{};
 		BOOL				IsDeviceSleepSupported{};
 		BOOL				IsStreamingSupported{};
 		BOOL				IsGplSupported{};
@@ -2051,6 +2053,10 @@ protected:
 
 	BOOL DoIdentifyDeviceNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* data, DWORD* diskSize);
 	BOOL GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
+
+	BOOL GetNvMeIdentifyControllerData(INT physicalDriveId, BYTE* data);
+	BOOL IsNVMeTemperatureThresholdDefined(BYTE* identifyControllerData);
+	BOOL IsNVMeThermalManagementTemperatureDefined(BYTE* identifyControllerData);
 
 	BOOL DoIdentifyDeviceScsi(INT scsiPort, INT scsiTargetId, IDENTIFY_DEVICE* identify);
 	BOOL GetSmartAttributeScsi(INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi);
