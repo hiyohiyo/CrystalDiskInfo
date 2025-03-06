@@ -8834,10 +8834,10 @@ BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiP
 	memcpy_s(&(asi->SmartReadData), 512, nptwb.Buffer, 512);
 
 	BYTE NvmeIdentifyControllerData[4096] = {};
-	GetNvMeIdentifyControllerData(physicalDriveId, NvmeIdentifyControllerData);
-	asi->IsNvmeThresholdSupported = IsNVMeTemperatureThresholdDefined(NvmeIdentifyControllerData);
-	asi->IsNvmeThermalManagementSupported = IsNVMeThermalManagementTemperatureDefined(NvmeIdentifyControllerData);
-
+	if(GetNvMeIdentifyControllerData(physicalDriveId, NvmeIdentifyControllerData)){
+		asi->IsNvmeThresholdSupported = IsNVMeTemperatureThresholdDefined(NvmeIdentifyControllerData);
+		asi->IsNvmeThermalManagementSupported = IsNVMeThermalManagementTemperatureDefined(NvmeIdentifyControllerData);
+	}
 	return bRet;
 }
 
@@ -8849,15 +8849,15 @@ BOOL CAtaSmart::GetNvMeIdentifyControllerData(INT physicalDriveId, BYTE* outBuff
 
 	HANDLE hIoCtrl = CreateFile(path, GENERIC_READ | GENERIC_WRITE,
 		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	StorageQuery::TStorageQueryWithBuffer nptwb = {};
 	BOOL bRet = 0;
+	ZeroMemory(&nptwb, sizeof(nptwb));
 
 	if (hIoCtrl == INVALID_HANDLE_VALUE)
 	{
 		return false;
 	}
 
-	StorageQuery::TStorageQueryWithBuffer nptwb = {};
-	ZeroMemory(&nptwb, sizeof(nptwb));
 
 	nptwb.ProtocolSpecific.ProtocolType = StorageQuery::ProtocolTypeNvme;
 	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeIdentify;
@@ -8876,7 +8876,7 @@ BOOL CAtaSmart::GetNvMeIdentifyControllerData(INT physicalDriveId, BYTE* outBuff
 
 	memcpy_s(outBuffer, sizeof(NVME_IDENTIFY_DEVICE), nptwb.Buffer, sizeof(NVME_IDENTIFY_DEVICE));
 
-	return true;
+	return bRet;
 }
 
 
