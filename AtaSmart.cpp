@@ -10,8 +10,6 @@
 #include <comutil.h>
 
 #include "AtaSmart.h"
-#include <nvme.h>
-#include <ntddstor.h>
 #include "Priscilla/UtilityFx.h"
 #include <wbemcli.h>
 
@@ -99,8 +97,12 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 	{
 		NVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
 
-		if (vars[i].IsNvWCTempSupported) {
-			ExtraNVMeSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
+		if (vars[i].IsNvmeThresholdSupported) {
+			NVMeCompositeTemperatureSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
+		}
+
+		if (vars[i].IsNvmeThermalManagementSupported) {
+			NVMeThermalManagementTemperatureSmartToATASmart(vars[i].SmartReadData, &(vars[i].Attribute));
 		}
 
 		if (
@@ -3746,7 +3748,8 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 	asi.IsAamEnabled = FALSE;
 	asi.IsApmEnabled = FALSE;
 	asi.IsNvCacheSupported = FALSE;
-	asi.IsNvWCTempSupported = FALSE;
+	asi.IsNvmeThresholdSupported = FALSE;
+	asi.IsNvmeThermalManagementSupported = FALSE;
 	asi.IsDeviceSleepSupported = FALSE;
 	asi.IsStreamingSupported = FALSE;
 	asi.IsGplSupported = FALSE;
@@ -3943,9 +3946,14 @@ BOOL CAtaSmart::AddDiskNVMe(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 		asi.MeasuredPowerOnHours = asi.DetectedPowerOnHours = (INT)*((UINT64*)&asi.SmartReadData[0x80]);
 
 		NVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
-		if (asi.IsNvWCTempSupported) {
-			ExtraNVMeSmartToATASmart(asi.SmartReadData, &asi.Attribute);
+
+		if (asi.IsNvmeThresholdSupported) {
+			NVMeCompositeTemperatureSmartToATASmart(asi.SmartReadData, &asi.Attribute);
 		}
+		if (asi.IsNvmeThermalManagementSupported) {
+			NVMeThermalManagementTemperatureSmartToATASmart(asi.SmartReadData, &asi.Attribute);
+		}
+
 		GetTransferModePCIe(asi.CurrentTransferMode, asi.MaxTransferMode, GetPCIeSlotSpeed(physicalDriveId, true));
 		asi.AttributeCount = NVME_ATTRIBUTE;
 
@@ -8825,25 +8833,31 @@ BOOL CAtaSmart::GetSmartAttributeNVMeStorageQuery(INT physicalDriveId, INT scsiP
 
 	memcpy_s(&(asi->SmartReadData), 512, nptwb.Buffer, 512);
 
-	asi->IsNvWCTempSupported = IsNvmeTemperatureThresholdValid(physicalDriveId);
+	BYTE NvmeIdentifyControllerData[4096] = {};
+	GetNvMeIdentifyControllerData(physicalDriveId, NvmeIdentifyControllerData);
+	asi->IsNvmeThresholdSupported = IsNVMeTemperatureThresholdDefined(NvmeIdentifyControllerData);
+	asi->IsNvmeThermalManagementSupported = IsNVMeThermalManagementTemperatureDefined(NvmeIdentifyControllerData);
 
 	return bRet;
 }
 
 
-BOOL CAtaSmart::IsNvmeTemperatureThresholdValid(INT physicalDriveId)
+BOOL CAtaSmart::GetNvMeIdentifyControllerData(INT physicalDriveId, BYTE* outBuffer)
 {
 	CString path;
 	path.Format(L"\\\\.\\PhysicalDrive%d", physicalDriveId);
 
 	HANDLE hIoCtrl = CreateFile(path, GENERIC_READ | GENERIC_WRITE,
 		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-
-	StorageQuery::TStorageQueryWithBuffer nptwb;
 	BOOL bRet = 0;
-	ZeroMemory(&nptwb, sizeof(nptwb));
 
-	DWORD dwReturned = 0;
+	if (hIoCtrl == INVALID_HANDLE_VALUE)
+	{
+		return false;
+	}
+
+	StorageQuery::TStorageQueryWithBuffer nptwb = {};
+	ZeroMemory(&nptwb, sizeof(nptwb));
 
 	nptwb.ProtocolSpecific.ProtocolType = StorageQuery::ProtocolTypeNvme;
 	nptwb.ProtocolSpecific.DataType = StorageQuery::NVMeDataTypeIdentify;
@@ -8853,25 +8867,35 @@ BOOL CAtaSmart::IsNvmeTemperatureThresholdValid(INT physicalDriveId)
 	nptwb.Query.QueryType = StorageQuery::PropertyStandardQuery;
 	nptwb.ProtocolSpecific.ProtocolDataRequestValue = 1; /*NVME_IDENTIFY_CNS_CONTROLLER*/
 	nptwb.ProtocolSpecific.ProtocolDataRequestSubValue = 0;
-	dwReturned = 0;
+
+	DWORD dwReturned = 0;
 
 	bRet = DeviceIoControl(hIoCtrl, IOCTL_STORAGE_QUERY_PROPERTY,
 		&nptwb, sizeof(nptwb), &nptwb, sizeof(nptwb), &dwReturned, NULL);
 	safeCloseHandle(hIoCtrl);
 
-	BYTE* identifyControllerData = nptwb.Buffer + sizeof(STORAGE_PROPERTY_QUERY) + sizeof(STORAGE_PROTOCOL_SPECIFIC_DATA);
+	memcpy_s(outBuffer, sizeof(NVME_IDENTIFY_DEVICE), nptwb.Buffer, sizeof(NVME_IDENTIFY_DEVICE));
 
-	SHORT wcTemp = *(SHORT*)(identifyControllerData + 266);
-	SHORT ccTemp = *(SHORT*)(identifyControllerData + 268);
-
-	if (wcTemp != 0 || ccTemp != 0)
-	{
-		return TRUE;
-	}
-
-	return FALSE;
-
+	return true;
 }
+
+
+BOOL CAtaSmart::IsNVMeTemperatureThresholdDefined(BYTE* identifyControllerData)
+{
+	SHORT WCTemp = *(SHORT*)(identifyControllerData + 266);
+	SHORT CCTemp = *(SHORT*)(identifyControllerData + 268);
+
+	return (WCTemp != 0 || CCTemp != 0);
+}
+
+BOOL CAtaSmart::IsNVMeThermalManagementTemperatureDefined(BYTE* identifyControllerData)
+{
+	SHORT minTMT = *(SHORT*)(identifyControllerData + 324);
+	SHORT maxTMT = *(SHORT*)(identifyControllerData + 326);
+
+	return (minTMT != 0 || maxTMT != 0);
+}
+
 
 /*---------------------------------------------------------------------------*/
 //  \\\\.\\ScsiX

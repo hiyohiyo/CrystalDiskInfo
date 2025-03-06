@@ -166,15 +166,6 @@ SMART_ATTRIBUTE SeperateCriticalCompositeTemperatureTime(UCHAR* NVMeSmartBuf)
 	return attr;
 }
 
-SMART_ATTRIBUTE SeperateTemperatureSensor(UCHAR* NVMeSmartBuf)
-{
-	const int TemperatureSensorStart = 200;
-	SMART_ATTRIBUTE attr = {};
-	attr.Id = 18;
-	memcpy(attr.RawValue, &NVMeSmartBuf[TemperatureSensorStart], 2);
-	return attr;
-}
-
 void NVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted)
 {
 	SMART_ATTRIBUTE_LIST* ATASmartBuf = (SMART_ATTRIBUTE_LIST*) ATASmartBufUncasted;
@@ -194,12 +185,42 @@ void NVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted)
 	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateUnsafeShutdownsFrom(NVMeSmartBuf));
 	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateMediaErrorsFrom(NVMeSmartBuf));
 	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateNumberOfErrorsFrom(NVMeSmartBuf));
-    AddToATASmartBuf(ATASmartBuf, IdxInBuf+=2, SeperateTemperatureSensor(NVMeSmartBuf));
+	NVMeTemperatureSensorSmartToATASmart(NVMeSmartBuf, ATASmartBuf);
 }
 
-void ExtraNVMeSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted) {
+void NVMeCompositeTemperatureSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted) {
 	SMART_ATTRIBUTE_LIST* ATASmartBuf = (SMART_ATTRIBUTE_LIST*)ATASmartBufUncasted;
 	int IdxInBuf = 15;
 	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateWarningCompositeTemperatureTime(NVMeSmartBuf));
 	AddToATASmartBuf(ATASmartBuf, IdxInBuf++, SeperateCriticalCompositeTemperatureTime(NVMeSmartBuf));
+}
+
+void NVMeTemperatureSensorSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted) {
+	SMART_ATTRIBUTE_LIST* ATASmartBuf = (SMART_ATTRIBUTE_LIST*)ATASmartBufUncasted;
+	int IdxInBuf = 17;
+	const int TemperatureSensorStart = 200;
+	const int MaxSensors = 8;
+
+	for (int i = 0; i < MaxSensors; i++) {
+		SMART_ATTRIBUTE attr = {};
+		attr.Id = ++IdxInBuf;
+		memcpy(attr.RawValue, &NVMeSmartBuf[TemperatureSensorStart + i*2], 2);
+		if (attr.RawValue[0] || attr.RawValue[1]) {
+			AddToATASmartBuf(ATASmartBuf, IdxInBuf, attr);
+		}
+	}
+}
+
+void NVMeThermalManagementTemperatureSmartToATASmart(UCHAR* NVMeSmartBuf, void* ATASmartBufUncasted) {
+	SMART_ATTRIBUTE_LIST* ATASmartBuf = (SMART_ATTRIBUTE_LIST*)ATASmartBufUncasted;
+	int IdxInBuf = 25;
+	const int TemperatureSensorStart = 216;
+	const int MaxEntries = 4;
+
+	for (int i = 0; i < MaxEntries; i++) {
+		SMART_ATTRIBUTE attr = {};
+		attr.Id = ++IdxInBuf;
+		memcpy(attr.RawValue, &NVMeSmartBuf[TemperatureSensorStart + i*4], 4);
+		AddToATASmartBuf(ATASmartBuf, IdxInBuf, attr);
+	}
 }
