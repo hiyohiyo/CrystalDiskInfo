@@ -65,9 +65,8 @@ CStringA MD5(const CStringA& str);
 //   Character Converter
 ////------------------------------------------------
 
-BOOL InitConvertINetString();
-CStringA C16T8(const CStringW& utf16str);
-CStringW C8T16(const CStringA& utf8str);
+CStringW UTF8toUTF16(const CStringA& utf8str);
+CStringA UTF16toUTF8(const CStringW& utf16str);
 CStringA URLEncode(const CStringA& str);
 CStringA UE(const CStringW& utf16str);
 CStringA UE(const CStringA& ansiStr);

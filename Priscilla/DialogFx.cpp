@@ -182,6 +182,7 @@ void CDialogFx::OnSize(UINT nType, int cx, int cy)
 
 	if (nType == SIZE_RESTORED)
 	{
+		UpdateBackground(TRUE, FALSE);
 		Invalidate();
 	}
 }
@@ -451,11 +452,12 @@ CString CDialogFx::GetFontFace()
 
 DWORD CDialogFx::ChangeZoomType(DWORD zoomType)
 {
-	DWORD current = (DWORD)(m_Dpi / 96.0 * 100);
+	DWORD current = (DWORD)ceil(m_Dpi / 96.0 * 100);
 	int width = GetSystemMetrics(SM_CXSCREEN);
 
 	if(zoomType == ZoomTypeAuto)
 	{
+#if _MSC_VER > 1310
 		if (current >= 300)
 		{
 			zoomType = ZoomType300;
@@ -464,7 +466,9 @@ DWORD CDialogFx::ChangeZoomType(DWORD zoomType)
 		{
 			zoomType = ZoomType250;
 		}
-		else if(current >= 200)
+		else
+#endif
+		if(current >= 200)
 		{
 			zoomType = ZoomType200;
 		}

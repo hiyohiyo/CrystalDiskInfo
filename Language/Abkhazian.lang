@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Abukhba Andrei, Sergei Gindia
-VERSION=9.0.0
+VERSION=9.6.0
 
 [Language]
 LANGUAGE=Аԥсуа 
@@ -868,7 +868,7 @@ F4=Аныхрақәа бжьаратәла
 F5=Аныхрақәа рмаксимум
 F6=Аныхрақәа (зынӡа)
 
-[SmartNVMe] ;Added 6.7.0
+[SmartNVMe] ;Added 9.7.0
 01=Акритикатә гаҽанҵара
 02=Еилоу атемпература
 03=Имҩарту аҭаҵәах
@@ -884,6 +884,20 @@ F6=Аныхрақәа (зынӡа)
 0D=Ишәарҭоу аҿыхрақәа
 0E=Аныҟәгагеи адырқәеи реибгара агха
 0F=Агхақәа ринформациа ажурнал ахь аҭаҩрақәа
+10=Warning Composite Temperature Time
+11=Critical Composite Temperature Time
+12=Temperature Sensor 1
+13=Temperature Sensor 2
+14=Temperature Sensor 3
+15=Temperature Sensor 4
+16=Temperature Sensor 5
+17=Temperature Sensor 6
+18=Temperature Sensor 7
+19=Temperature Sensor 8
+1A=Thermal Management Temperature 1 Transition Count
+1B=Thermal Management Temperature 2 Transition Count
+1C=Total Time For Thermal Management Temperature 1
+1D=Total Time For Thermal Management Temperature 2
 
 [SmartRealtek] ;Added by Realtek
 01=Raw-адырқәа агхақәа рылассы-лассра
@@ -1683,49 +1697,49 @@ F5=Адиск ахархәаразы иазаанхаз аҿҳәара, %
 FD=Иаанхаз SPI-тестқәа
 
 [SmartSiliconMotionCVC] ;Added 9.3.0
-05=Re-Assigned Count
-09=Power-On Hours Count
-0C=Drive Power Cycle Count
-A5=SLC Cache
-AA=Grown Bad Block Count
-AB=Program Fail Count
-AC=Erase Fail Count
-AD=Avg Erase Count
-AE=Unexpected Power Loss Count
-AF=Program Fail Count (Worst case)
-B7=Total SATA Link Speed Downshift
-B8=End-to-End Data Errors corrected
-BB=Uncorrectable Errors
-BD=Max Erase Count
-BE=Temperature
-BF=Min Erase Count
-C3=Read Error Rate
-C6=Off-Line Scan Uncorrectable Sector Count
-C7=SATA CRC Error Count
-CA=SSD Life Left
-E8=Total Spare Counts
-E9=TLC NAND Write
-F1=Host Write
-F2=Host Read
-94=RAID Event Count
-95=RAID Uncorrectable Count
-A7=SSD Protect Mode
-93=Soft Retry Event Count
-EA=SLC NAND Write
+05=Ҿыц иазалху (зынӡа)
+09=Аусура асааҭқәа (зынӡа)
+0C=Адиск аресурс ациклқәа (зынӡа)
+A5=SLC Акеш
+AA=Иԥхасҭоу аблокқәа реизҳара (зынӡа)
+AB=Апрограмматә гхақәа
+AC=Аныхрақәа рыгхақәа
+AD=Аныхрақәа бжьаратәла
+AE=Иаалырҟьаны афымцамч аиԥҟьарақәа
+AF=Апрограмматә гхақәа (зынӡа, иреицәаӡоу ахҭыс)
+B7=SATA аццакыра агхарақәа (зынӡа)
+B8=End-to-End ириашоу адырқәа рыгхақәа
+BB=Зыриашара амуа агхақәа
+BD=Аныхрақәа рмаксимум
+BE=Атемпература
+BF=Аныхрақәа рминимум
+C3=Аԥхьара агхақәа рылассы-лассра
+C6=Оффлаин агәаҭараан иузмыриашо агхақәа
+C7=SATA CRC агхақәа (зынӡа)
+CA=SSD иаанхаз аресурс
+E8=Ирезерву (зынӡа)
+E9=TLC NAND аҭаҩра
+F1=Хост-аҭаҩрақәа
+F2=Хост-аԥхьарақәа
+94=RAID ахҭысқәа
+95=RAID зыриашара амуа
+A7=SSD ихьчоу арежим
+93=Программала еиҭанагӡоу ахҭысқәа
+EA=SLC NAND аҭаҩра
 
 [SmartAdataIndustrial] ;Added 9.3.1
-09=Power-On hours Count
-0C=Drive Power Cycle Count
-A7=SSD Protect Mode
-A8=SATA PHY Error Count
-A9=Bad Block Count
-AD=Erase Count
-AF=Bad Cluster Table Count
-B4=Spare block count left
-C0=Unexpected Power Loss Count
-C2=Temperature
-E7=SSD life left
-E9=Flash Write Sector Count
-EA=Flash Read Sector Count
-F1=Write Sector Count
-F2=Read Sector Count
+09=Аусура асааҭқәа (зынӡа)
+0C=Адиск аресурс ациклқәа (зынӡа)
+A7=SSD ихьчоу арежим
+A8=SATA PHY агхақәа (зынӡа)
+A9=Иԥхасҭоу аблокқәа (зынӡа)
+AD=Аныхрақәа
+AF=Иԥхасҭоу акластерқәа ртаблицақәа
+B4=Иаанхаз иҭаҵәаху аблокқәа (зынӡа)
+C0=Иаалырҟьаны афымцамч аиԥҟьарақәа
+C2=Атемпература
+E7=SSD иаанхаз аресурс
+E9=Flash аҭаҩратә секторқәа
+EA=Flash аԥхьаратә секторқәа
+F1=Аҭаҩратә секторқәа
+F2=Аԥхьаратә секторқәа

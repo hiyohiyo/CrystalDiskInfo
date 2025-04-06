@@ -872,7 +872,7 @@ F4=Average Erase Count
 F5=Max Erase Count
 F6=Total Erase Count
 
-[SmartNVMe] ;Added 6.7.0
+[SmartNVMe] ;Added 9.7.0
 01=Critical Warning
 02=Composite Temperature
 03=Available Spare
@@ -902,7 +902,6 @@ F6=Total Erase Count
 1B=Thermal Management Temperature 2 Transition Count
 1C=Total Time For Thermal Management Temperature 1
 1D=Total Time For Thermal Management Temperature 2
-
 
 [SmartRealtek] ;Added by Realtek
 01=Raw data error rate

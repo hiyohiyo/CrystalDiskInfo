@@ -870,7 +870,7 @@ F4=Mitjana d'esborrats
 F5=Nº màxim d'esborrats
 F6=Nº d'esborrats
 
-[SmartNVMe] ;Added 6.7.0
+[SmartNVMe] ;Added 9.7.0
 01=Avisos crítics
 02=Temperatura composta
 03=Reserves disponibles
@@ -886,6 +886,20 @@ F6=Nº d'esborrats
 0D=Apagats no segurs
 0E=Errors de integritat de dades y del suport
 0F=Nº de entrades en el registro de informació d'errors
+10=Warning Composite Temperature Time
+11=Critical Composite Temperature Time
+12=Temperature Sensor 1
+13=Temperature Sensor 2
+14=Temperature Sensor 3
+15=Temperature Sensor 4
+16=Temperature Sensor 5
+17=Temperature Sensor 6
+18=Temperature Sensor 7
+19=Temperature Sensor 8
+1A=Thermal Management Temperature 1 Transition Count
+1B=Thermal Management Temperature 2 Transition Count
+1C=Total Time For Thermal Management Temperature 1
+1D=Total Time For Thermal Management Temperature 2
 
 [SmartRealtek] ;Added by Realtek
 01=Taxa d'errors de dades sense processar

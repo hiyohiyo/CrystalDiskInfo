@@ -868,7 +868,7 @@ F4=Povprečno štev. brisanj
 F5=Največje štev. brisanj
 F6=Skup. štev. brisanj
 
-[SmartNVMe] ;Added 6.7.0
+[SmartNVMe] ;Added 9.7.0
 01=Kritično opozorilo
 02=Sestavljena temperatura
 03=Dostopna rezerva
@@ -884,6 +884,20 @@ F6=Skup. štev. brisanj
 0D=Nevarnih zaustavitev sistema
 0E=Napak celovitosti medijev in podatkov
 0F=Štev. vnosov v dnevnik informacij o napakah
+10=Warning Composite Temperature Time
+11=Critical Composite Temperature Time
+12=Temperature Sensor 1
+13=Temperature Sensor 2
+14=Temperature Sensor 3
+15=Temperature Sensor 4
+16=Temperature Sensor 5
+17=Temperature Sensor 6
+18=Temperature Sensor 7
+19=Temperature Sensor 8
+1A=Thermal Management Temperature 1 Transition Count
+1B=Thermal Management Temperature 2 Transition Count
+1C=Total Time For Thermal Management Temperature 1
+1D=Total Time For Thermal Management Temperature 2
 
 [SmartRealtek] ;Added by Realtek
 01=Stopnja napak surovih podatkov

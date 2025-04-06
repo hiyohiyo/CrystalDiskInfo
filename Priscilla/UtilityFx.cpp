@@ -187,7 +187,7 @@ BOOL IsFileExist(const TCHAR* path)
 
 BOOL CanWriteFile(const TCHAR* path)
 {
-	HANDLE hFile = CreateFileW(	path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_DELETE_ON_CLOSE, NULL);
+	HANDLE hFile = CreateFile(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_DELETE_ON_CLOSE, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE) { return FALSE; }
 	const char* testData = "1";
@@ -559,19 +559,6 @@ CStringA MD5(const CStringA& str)
 //   Character Converter
 ////------------------------------------------------
 
-CStringA C16T8(const CStringW& utf16str)
-{
-	CStringA utf8str(CW2A(utf16str, CP_UTF8));
-	return utf8str;
-}
-
-CStringW C8T16(const CStringA& utf8str)
-{
-	CStringW utf16str;
-	utf16str = CA2W(utf8str);
-	return utf16str;
-}
-
 CStringA URLEncode(const CStringA& str)
 {
 	CStringA encoded;
@@ -755,101 +742,21 @@ int WideCharToUtf8(unsigned int unused1, unsigned long unused2, wchar_t* wb, int
 }
 /*** Ends ***/
 
-typedef HRESULT(WINAPI* FuncConvertINetString)(
-	LPDWORD lpdwMode,
-	DWORD dwSrcEncoding,
-	DWORD dwDstEncoding,
-	LPBYTE lpSrcStr,
-	LPINT lpnSrcSize,
-	LPBYTE lpDstStr,
-	LPINT lpnDstSize
-	);
-
-static FuncConvertINetString pConvertINetString = NULL;
-static BOOL bInitConvertINetString = FALSE;
-
-BOOL InitConvertINetString()
-{
-	if(bInitConvertINetString)
-	{
-		return TRUE;
-	}
-	BOOL result = FALSE;
-	if (! pConvertINetString)
-	{
-		HMODULE hMlang = LoadLibrary(_T("mlang.dll"));
-		if (!hMlang)
-		{
-			result = FALSE;
-		}
-
-		pConvertINetString = (FuncConvertINetString)GetProcAddress(hMlang, "ConvertINetString");
-		if (!pConvertINetString)
-		{
-			FreeLibrary(hMlang);
-			result = FALSE;
-		}
-		else
-		{
-			result = TRUE;
-		}
-	}
-	else
-	{
-		result = TRUE;
-	}
-
-	bInitConvertINetString = TRUE;
-	return result;
-}
-
-BOOL ConvertEncoding(const CString& srcStr, DWORD srcCodePage, DWORD dstCodePage, CStringA& dstStr)
-{
-	if (! pConvertINetString)
-	{
-		return FALSE;
-	}
-
-	DWORD dwMode = 0;
-	int srcLen = srcStr.GetLength() * sizeof(TCHAR);
-	int dstLen = 0;
-	HRESULT hr = pConvertINetString(&dwMode, srcCodePage, dstCodePage, (LPBYTE)srcStr.GetString(), &srcLen, NULL, &dstLen);
-	if (FAILED(hr) || dstLen <= 0)
-	{
-		return FALSE;
-	}
-
-	pConvertINetString(&dwMode, srcCodePage, dstCodePage, (LPBYTE)srcStr.GetString(), &srcLen, (LPBYTE)dstStr.GetBuffer(dstLen), &dstLen);
-	dstStr.ReleaseBuffer(dstLen);
-
-	return TRUE;
-}
-
 #ifdef UNICODE
 CStringA UTF16toUTF8(const CStringW& utf16str)
 {
-	if (IsNT4())
+	if (IsNT3() || IsNT4())
 	{
-		if(pConvertINetString)
-		{
-			CStringA utf8str;
-			ConvertEncoding(utf16str, 1200 /*UTF-16*/, CP_UTF8, utf8str);
-			return utf8str;
-		}
-		else // No mlang.dll
-		{
-			// UTF-16 to UTF-8
-			CStringA utf8str;
-			WCHAR* utf16string = new WCHAR[(utf16str.GetLength() + 1) * 2];
-			wsprintf(utf16string, L"%s", utf16str);
-			int utf16Length = utf16str.GetLength();
-			int utf8Length = WideCharToUtf8(CP_UTF8, 0, utf16string, -1, NULL, 0);
-			if (utf8Length <= 0) { return ""; }
-			WideCharToUtf8(CP_UTF8, 0, utf16string, -1, utf8str.GetBuffer(utf8Length), utf8Length);
-			utf8str.ReleaseBuffer();
-			delete utf16string;
-			return utf8str;
-		}
+		CStringA utf8str;
+		WCHAR* utf16string = new WCHAR[(utf16str.GetLength() + 1) * 2];
+		wsprintf(utf16string, L"%s", utf16str);
+		int utf16Length = utf16str.GetLength();
+		int utf8Length = WideCharToUtf8(CP_UTF8, 0, utf16string, -1, NULL, 0);
+		if (utf8Length <= 0) { return ""; }
+		WideCharToUtf8(CP_UTF8, 0, utf16string, -1, utf8str.GetBuffer(utf8Length), utf8Length);
+		utf8str.ReleaseBuffer();
+		delete utf16string;
+		return utf8str;
 	}
 	else
 	{
@@ -861,61 +768,51 @@ CStringA UTF16toUTF8(const CStringW& utf16str)
 		return utf8str;
 	}
 }
+
+CStringW UTF8toUTF16(const CStringA& utf8str)
+{
+	CStringW utf16str;
+	CHAR* utf8string = new CHAR[(utf8str.GetLength() + 1) * 2];
+	sprintf(utf8string, "%s", utf8str);
+	int utf8Length = utf8str.GetLength();
+	int utf16Length = Utf8ToWideChar(1200, 0, utf8string, -1, NULL, 0);
+	if (utf16Length <= 0) { return L""; }
+	Utf8ToWideChar(1200, 0, utf8string, -1, utf16str.GetBuffer(utf16Length), utf16Length);
+	utf16str.ReleaseBuffer();
+	delete utf8string;
+	return utf16str;
+}
+
 #else
 CStringA ANSItoUTF8(const CStringA& ansiStr)
 {
-	if (IsNT4() || IsWin9x())
-	{
-		if (pConvertINetString)
-		{
-			CStringA utf8str;
-			ConvertEncoding(ansiStr, GetACP(), CP_UTF8, utf8str);
-			return utf8str;
-		}
-		else // No mlang.dll
-		{
-			// ANSI to UTF-16 to UTF-8
-			int utf16Length = MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, NULL, 0);
-			if (utf16Length <= 0) { return ""; }
-			CStringW utf16str;
-			MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, utf16str.GetBuffer(utf16Length), utf16Length);
-			utf16str.ReleaseBuffer();
+	int utf16Length = MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, NULL, 0);
+	if (utf16Length <= 0) { return ""; }
+	CStringW utf16str;
+	MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, utf16str.GetBuffer(utf16Length), utf16Length);
+	utf16str.ReleaseBuffer();
 
-			CStringA utf8str;
-			int utf8Length = WideCharToUtf8(CP_UTF8, 0, utf16str.GetBuffer(utf16Length), -1, NULL, 0);
-			if (utf8Length <= 0) { return ""; }
-			WideCharToUtf8(CP_UTF8, 0, utf16str.GetBuffer(utf16Length), -1, utf8str.GetBuffer(utf8Length), utf8Length);
-			utf8str.ReleaseBuffer();
-			return utf8str;
-		}
-	}
-	else
-	{
-		int utf16Length = MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, NULL, 0);
-		if (utf16Length <= 0) {	return ""; }
-		CStringW utf16str;
-		MultiByteToWideChar(CP_ACP, 0, ansiStr, -1, utf16str.GetBuffer(utf16Length), utf16Length);
-		utf16str.ReleaseBuffer();
-		int utf8Length = WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, NULL, 0, NULL, NULL);
-		if (utf8Length <= 0) { return ""; }
-		CStringA utf8str;
-		WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, utf8str.GetBuffer(utf8Length), utf8Length, NULL, NULL);
-		utf8str.ReleaseBuffer();
-
-		return utf8str;
-	}
+	CStringA utf8str;
+	int utf8Length = WideCharToUtf8(CP_UTF8, 0, utf16str.GetBuffer(utf16Length), -1, NULL, 0);
+	if (utf8Length <= 0) { return ""; }
+	WideCharToUtf8(CP_UTF8, 0, utf16str.GetBuffer(utf16Length), -1, utf8str.GetBuffer(utf8Length), utf8Length);
+	utf8str.ReleaseBuffer();
+	return utf8str;
 }
 #endif
 #else
 
 CStringA UTF16toUTF8(const CStringW& utf16str)
 {
-	CStringA utf8str;
-	int utf8Length = WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, NULL, 0, NULL, NULL);
-	if (utf8Length <= 0){ return ""; }
-	WideCharToMultiByte(CP_UTF8, 0, utf16str, -1, utf8str.GetBuffer(utf8Length), utf8Length, NULL, NULL);
-	utf8str.ReleaseBuffer();
+	CStringA utf8str(CW2A(utf16str, CP_UTF8));
 	return utf8str;
+}
+
+CStringW UTF8toUTF16(const CStringA& utf8str)
+{
+	CStringW utf16str;
+	utf16str = CA2W(utf8str);
+	return utf16str;
 }
 #endif
 

@@ -911,8 +911,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 6, 2, 0
- PRODUCTVERSION 9, 6, 2, 0
+ FILEVERSION 9, 7, 0, 0
+ PRODUCTVERSION 9, 7, 0, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -933,8 +933,8 @@ BEGIN
             VALUE "Comments", "https://crystalmark.info/ MIT License"
 #endif
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.6.2.0"
-            VALUE "ProductVersion", "9.6.2.0"
+            VALUE "FileVersion", "9.7.0.0"
+            VALUE "ProductVersion", "9.7.0.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 

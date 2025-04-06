@@ -92,11 +92,8 @@ LRESULT CMainDialogFx::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 int CALLBACK HasFontProc(ENUMLOGFONTEX* lpelfe, NEWTEXTMETRICEX* lpntme, int FontType, LPARAM lParam)
 {
-	if (_tcscmp(lpelfe->elfLogFont.lfFaceName, DEFAULT_FONT_FACE_1) == 0)
-	{
-		lParam = TRUE;
-	}
-	return TRUE;
+	*(BOOL*)lParam = TRUE;
+	return 0;
 }
 
 CString CMainDialogFx::GetDefaultFont()
@@ -120,8 +117,9 @@ CString CMainDialogFx::GetDefaultFont()
 	LOGFONT logfont;
 	BOOL hasFont = FALSE;
 	ZeroMemory(&logfont, sizeof(LOGFONT));
+	lstrcpy(logfont.lfFaceName, DEFAULT_FONT_FACE_1);
 	logfont.lfCharSet = DEFAULT_CHARSET;
-	::EnumFontFamiliesEx(dc.m_hDC, &logfont, (FONTENUMPROC)HasFontProc, (INT_PTR)(&hasFont), 0);
+	::EnumFontFamiliesEx(dc.m_hDC, &logfont, (FONTENUMPROC)HasFontProc, (LPARAM)(&hasFont), 0);
 
 	if (hasFont)
 	{
@@ -478,7 +476,7 @@ void CMainDialogFx::InitMenu()
 
 	if(! FlagHitLang)
 	{
-		AfxMessageBox(_T("FATAL ERROR: Missing Language Files!!"));
+		AfxMessageBox(_T("FATAL ERROR: Missing Language File!!"));
 	}
 }
 

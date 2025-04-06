@@ -49,6 +49,7 @@ BOOL IsWin9x();
 BOOL IsWin95();
 BOOL IsPC98();
 BOOL IsNT51orlater();
+BOOL IsRunningOnWine();
 
 DWORD GetIeVersion();
 // DWORD GetWin10Version();
@@ -154,7 +155,6 @@ void GetOsNameWmi(CString& osFullName);
 #define PRODUCT_CORE_SINGLELANGUAGE                 0x00000064
 #define PRODUCT_CORE                                0x00000065
 #define PRODUCT_PROFESSIONAL_WMC                    0x00000067
-#define PRODUCT_MOBILE_CORE                         0x00000068
 #define PRODUCT_EMBEDDED_INDUSTRY_EVAL              0x00000069
 #define PRODUCT_EMBEDDED_INDUSTRY_E_EVAL            0x0000006A
 #define PRODUCT_EMBEDDED_EVAL                       0x0000006B
@@ -182,6 +182,7 @@ void GetOsNameWmi(CString& osFullName);
 #define PRODUCT_ENTERPRISE_S_EVALUATION             0x00000081
 #define PRODUCT_ENTERPRISE_S_N_EVALUATION           0x00000082
 #define PRODUCT_HOLOGRAPHIC                         0x00000087
+#define PRODUCT_HOLOGRAPHIC_BUSINESS                0x00000088
 #define PRODUCT_PRO_SINGLE_LANGUAGE                 0x0000008A
 #define PRODUCT_PRO_CHINA                           0x0000008B
 #define PRODUCT_ENTERPRISE_SUBSCRIPTION             0x0000008C
@@ -206,7 +207,35 @@ void GetOsNameWmi(CString& osFullName);
 #define PRODUCT_SERVERRDSH                          0x000000AF
 #define PRODUCT_CLOUD                               0x000000B2
 #define PRODUCT_CLOUDN                              0x000000B3
+#define PRODUCT_HUBOS                               0x000000B4
+#define PRODUCT_ONECOREUPDATEOS                     0x000000B6
+#define PRODUCT_CLOUDE                              0x000000B7
+#define PRODUCT_IOTOS                               0x000000B9
+#define PRODUCT_CLOUDEN                             0x000000BA
+#define PRODUCT_IOTEDGEOS                           0x000000BB
+#define PRODUCT_IOTENTERPRISE                       0x000000BC
+#define PRODUCT_LITE                                0x000000BD
+#define PRODUCT_IOTENTERPRISES                      0x000000BF
+#define PRODUCT_XBOX_SYSTEMOS                       0x000000C0
+#define PRODUCT_XBOX_GAMEOS                         0x000000C2
+#define PRODUCT_XBOX_ERAOS                          0x000000C3
+#define PRODUCT_XBOX_DURANGOHOSTOS                  0x000000C4
+#define PRODUCT_XBOX_SCARLETTHOSTOS                 0x000000C5
+#define PRODUCT_XBOX_KEYSTONE                       0x000000C6
+#define PRODUCT_AZURE_SERVER_CLOUDHOST              0x000000C7
+#define PRODUCT_AZURE_SERVER_CLOUDMOS               0x000000C8
+#define PRODUCT_CLOUDEDITIONN                       0x000000CA
+#define PRODUCT_CLOUDEDITION                        0x000000CB
+#define PRODUCT_AZURESTACKHCI_SERVER_CORE           0x00000196
+#define PRODUCT_DATACENTER_SERVER_AZURE_EDITION     0x00000197
+#define PRODUCT_DATACENTER_SERVER_CORE_AZURE_EDITION 0x00000198
+
 #define PRODUCT_UNLICENSED                          0xABCDABCD
+
+// ChatGPT...
+#define PRODUCT_ENTERPRISE_G                        0x00000067
+#define PRODUCT_PROFESSIONAL_WORKSTATION            0x000000B5
+#define PRODUCT_PROFESSIONAL_WORKSTATION_N          0x000000B6
 
 #define SM_TABLETPC                                         86
 #define SM_MEDIACENTER                                      87

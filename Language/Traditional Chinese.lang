@@ -859,7 +859,7 @@ F2=主機讀取
 F4=平均抹除次數
 F5=最大抹除次數
 F6=總計抹除次數
-[SmartNVMe] ;Added 6.7.0
+[SmartNVMe] ;Added 9.7.0
 01=嚴重警告
 02=綜合溫度
 03=可用備用
@@ -875,6 +875,20 @@ F6=總計抹除次數
 0D=不安全關機
 0E=介質和資料完整性錯誤
 0F=錯誤資訊記錄項目數
+10=Warning Composite Temperature Time
+11=Critical Composite Temperature Time
+12=Temperature Sensor 1
+13=Temperature Sensor 2
+14=Temperature Sensor 3
+15=Temperature Sensor 4
+16=Temperature Sensor 5
+17=Temperature Sensor 6
+18=Temperature Sensor 7
+19=Temperature Sensor 8
+1A=Thermal Management Temperature 1 Transition Count
+1B=Thermal Management Temperature 2 Transition Count
+1C=Total Time For Thermal Management Temperature 1
+1D=Total Time For Thermal Management Temperature 2
 
 [SmartRealtek] ;Added by Realtek
 01=原始值錯誤率

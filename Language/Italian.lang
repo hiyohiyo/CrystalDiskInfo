@@ -868,7 +868,7 @@ F4=Media cancellazioni
 F5=Max cancellazioni
 F6=Totale cancellazioni
 
-[SmartNVMe] ;Added 6.7.0
+[SmartNVMe] ;Added 9.7.0
 01=Avviso critico
 02=Temperatura composita
 03=Riserva disponibile
@@ -884,6 +884,20 @@ F6=Totale cancellazioni
 0D=Spegnimenti non protetti
 0E=Errori integrità supporto e dati
 0F=Elementi registro eventi informazione errore
+10=Warning Composite Temperature Time
+11=Critical Composite Temperature Time
+12=Temperature Sensor 1
+13=Temperature Sensor 2
+14=Temperature Sensor 3
+15=Temperature Sensor 4
+16=Temperature Sensor 5
+17=Temperature Sensor 6
+18=Temperature Sensor 7
+19=Temperature Sensor 8
+1A=Thermal Management Temperature 1 Transition Count
+1B=Thermal Management Temperature 2 Transition Count
+1C=Total Time For Thermal Management Temperature 1
+1D=Total Time For Thermal Management Temperature 2
 
 [SmartRealtek] ;Added by Realtek
 01=Tasso errore RAW

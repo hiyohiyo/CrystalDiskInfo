@@ -870,7 +870,7 @@ F4=Nombre moyen d'effacements
 F5=Nombre d'effacements maximum
 F6=Nombre total d'effacements
 
-[SmartNVMe] ;Added 6.7.0
+[SmartNVMe] ;Added 9.7.0
 01=Avertissement critique
 02=Température composite
 03=Cellules de rechange disponibles
@@ -886,6 +886,20 @@ F6=Nombre total d'effacements
 0D=Arrêts dangereux
 0E=Erreurs d'intégrité des médias et des données
 0F=Nombre d'entrées du journal d'informations sur les erreurs
+10=Warning Composite Temperature Time
+11=Critical Composite Temperature Time
+12=Temperature Sensor 1
+13=Temperature Sensor 2
+14=Temperature Sensor 3
+15=Temperature Sensor 4
+16=Temperature Sensor 5
+17=Temperature Sensor 6
+18=Temperature Sensor 7
+19=Temperature Sensor 8
+1A=Thermal Management Temperature 1 Transition Count
+1B=Thermal Management Temperature 2 Transition Count
+1C=Total Time For Thermal Management Temperature 1
+1D=Total Time For Thermal Management Temperature 2
 
 [SmartRealtek] ;Added by Realtek
 01=Taux d'erreurs de données brute
