@@ -1845,6 +1845,8 @@ public:
 		INT					PowerOnStartRawValue{};
 		DWORD				PowerOnCount{};
 		INT					Temperature{};
+		INT					TemperatureNVMe[8]{};
+
 		double				TemperatureMultiplier{};
 		DWORD				NominalMediaRotationRate{};
 //		double				Speed;

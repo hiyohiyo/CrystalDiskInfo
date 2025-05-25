@@ -47,6 +47,7 @@ BOOL IsNT3();
 BOOL IsNT4();
 BOOL IsWin9x();
 BOOL IsWin95();
+BOOL IsWin95First();
 BOOL IsPC98();
 BOOL IsNT51orlater();
 BOOL IsRunningOnWine();

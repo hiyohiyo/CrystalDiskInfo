@@ -290,7 +290,12 @@ BOOL IsFMTOWNS()
 			return FALSE;
 		}
 
-		if (! IsWin9x())
+		if (! IsWin95First())
+		{
+			return FALSE;
+		}
+
+		if (GetUserDefaultLCID() != 0x0411) // Japanese
 		{
 			return FALSE;
 		}

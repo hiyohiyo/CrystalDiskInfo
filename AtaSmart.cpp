@@ -92,6 +92,10 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 	}
 
 	static SMART_ATTRIBUTE attribute[MAX_DISK][MAX_ATTRIBUTE] = {0};
+	for (int j = 0; j < 8; j++)
+	{
+		vars[i].TemperatureNVMe[j] =  -1000;
+	}
 
 	if (vars[i].DiskVendorId == SSD_VENDOR_NVME)
 	{
@@ -129,6 +133,15 @@ DWORD CAtaSmart::UpdateSmartInfo(DWORD i)
 			if (vars[i].Temperature == -273 || vars[i].Temperature > 200)
 			{
 				vars[i].Temperature = -1000;
+			}
+
+			for(int j = 0; j < 8; j++)
+			{
+				vars[i].TemperatureNVMe[j] = vars[i].SmartReadData[200 + j * 2 + 1] * 256 + vars[i].SmartReadData[200 + j * 2] - 273;
+				if (vars[i].TemperatureNVMe[j] == -273 || vars[i].TemperatureNVMe[j] > 200)
+				{
+					vars[i].TemperatureNVMe[j] = -1000;
+				}
 			}
 
 			vars[i].Life = 100 - vars[i].SmartReadData[0x05];
@@ -7918,7 +7931,7 @@ BOOL CAtaSmart::GetSmartAttributeNVMeRealtek9220DP(INT physicalDriveId, INT scsi
 		}
 	}
 	
-	return TRUE;
+	return rtn;
 }
 
 BOOL CAtaSmart::GetSmartAttributeNVMeRealtek(INT physicalDriveId, INT scsiPort, INT scsiTargetId, ATA_SMART_INFO* asi)

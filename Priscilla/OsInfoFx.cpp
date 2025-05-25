@@ -543,6 +543,28 @@ BOOL IsWin95()
 	return b;
 }
 
+BOOL IsWin95First()
+{
+	static BOOL b = -1;
+
+	if (b == -1)
+	{
+		b = FALSE;
+
+		OSVERSIONINFO osvi = { 0 };
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS
+			&& osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0 && osvi.dwBuildNumber <= 950)
+		{
+			b = TRUE;
+		}
+	}
+
+	return b;
+}
+
 BOOL IsPC98()
 {
 	static BOOL b = -1;
@@ -752,11 +774,14 @@ void GetOsName(CString& osFullName, CString& name, CString& version, CString& ar
 	// Windows 11/Server 2025
 	CString osNameWmiBackup = osNameWmi;
 	CString osNameWmiMajorVersion = osNameWmi;
+	osNameWmiMajorVersion.Replace(_T("(R)"), _T(""));
 	osNameWmiMajorVersion.Replace(_T("Microsoft "), _T(""));
 	osNameWmiMajorVersion.Replace(_T("Windows "), _T(""));
 	osNameWmiMajorVersion.Replace(_T("Server "), _T(""));
 
-	if (_ttoi(osNameWmiMajorVersion) <= 11 || _ttoi(osNameWmiMajorVersion) <= 2025)
+	int majorVersion = _ttoi(osNameWmiMajorVersion);
+
+	if ((3 <= majorVersion && majorVersion <= 11) || (2000 <= majorVersion && majorVersion <= 2025))
 	{
 		osNameWmi = _T("");
 	}
@@ -1346,7 +1371,9 @@ void GetOsNameWmi(CString& osName)
 								name.Replace(_T("™"), _T(""));
 								name.Replace(_T("®"), _T(""));
 #endif
+								name.Replace(_T("(R)"), _T(""));
 								name.Replace(_T("Microsoft "), _T(""));
+								
 								name.Trim();
 							}
 							VariantInit(&pVal);

@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Marián Hikaník, Ján Kinčeš, Maxix
-VERSION=9.3.0
+VERSION=9.6.3
 
 [Language]
 LANGUAGE=Slovensky
@@ -212,19 +212,19 @@ ENABLED=Zapnuté
 DISABLED=Vypnuté
 
 ;9.0.0
-DRIVE_SORT_METHOD=Drive Sort Method
-PHYSICAL_DRIVE_ID=Physical Drive ID
-DRIVE_LETTER=Drive Letter
-DRIVE_MENU_NUMBER=Display Number of Drives
+DRIVE_SORT_METHOD=Spôsob zoraďovania jednotiek
+PHYSICAL_DRIVE_ID=ID fyzickej jednotky
+DRIVE_LETTER=Písmeno jednotky
+DRIVE_MENU_NUMBER=Zobraziť počet jednotiek
 
 ;9.2.0
-VOICE=Voice
+VOICE=Hlas
 
 ;9.3.0
-STARTUP_VOICE=Startup Voice
+STARTUP_VOICE=Hlas pri spustení
 
 ;9.5.0
-HIDE_RAID_VOLUME=Hide &RAID Volume
+HIDE_RAID_VOLUME=Skryť jednotku &RAID
 
 [Message]
 DETECT_UNIT_POWER_ON_HOURS=Detekcia hodín napájania (vyžaduje cca 130 sekúnd)
@@ -351,9 +351,9 @@ F1=Celkový počet zápisov host.
 F2=Celkový počet čítaní hostiteľa
 
 ;Updated 9.5.0
-17=Helium Condition Lower
-18=Helium Condition Upper
-1B=MAMR Health Monitor
+17=Nižší stav hélia
+18=Vyšší stav hélia
+1B=Sledovanie stavu MAMR
 
 [SmartSsd]
 01=Miera chybných čítaní
@@ -881,7 +881,7 @@ F4=Priemerný počet vymazaní
 F5=Max. počet vymazaní
 F6=Počet úplných vymazaní
 
-[SmartNVMe] ;Added 9.7.0
+[SmartNVMe] ;Added 6.7.0
 01=Kritické varovanie
 02=Teplota kompoz.
 03=Dostupná náhrada
@@ -897,20 +897,6 @@ F6=Počet úplných vymazaní
 0D=Nebezpečné vypnutia
 0E=Chyby integrity média a dát
 0F=Počet vykonaných záznamov informácií o chybách
-10=Warning Composite Temperature Time
-11=Critical Composite Temperature Time
-12=Temperature Sensor 1
-13=Temperature Sensor 2
-14=Temperature Sensor 3
-15=Temperature Sensor 4
-16=Temperature Sensor 5
-17=Temperature Sensor 6
-18=Temperature Sensor 7
-19=Temperature Sensor 8
-1A=Thermal Management Temperature 1 Transition Count
-1B=Thermal Management Temperature 2 Transition Count
-1C=Total Time For Thermal Management Temperature 1
-1D=Total Time For Thermal Management Temperature 2
 
 [SmartRealtek] ;Added by Realtek
 01=Miera chýb nespracovaných dát
@@ -1741,18 +1727,18 @@ A7=Režim ochrany SSD
 EA=Jednoúrovňová bunka (SLC) - zápis NAND
 
 [SmartAdataIndustrial] ;Added 9.3.1
-09=Power-On hours Count
-0C=Drive Power Cycle Count
-A7=SSD Protect Mode
-A8=SATA PHY Error Count
-A9=Bad Block Count
-AD=Erase Count
-AF=Bad Cluster Table Count
-B4=Spare block count left
-C0=Unexpected Power Loss Count
-C2=Temperature
-E7=SSD life left
-E9=Flash Write Sector Count
-EA=Flash Read Sector Count
-F1=Write Sector Count
-F2=Read Sector Count
+09=Počet hodín napájania
+0C=Počet cyklov napájania zariadenia
+A7=Režim ochrany SSD
+A8=Počet chýb SATA PHY
+A9=Počet zlých blokov
+AD=Počet vymazaní
+AF=Počet tabuliek pre zlý klaster
+B4=Zostávajúci počet náhradných blokov
+C0=Počet neočakávaných strát napájania
+C2=Teplota
+E7=Zostávajúca životnosť SSD
+E9=Zápis do flash - počet sektorov
+EA=Čítanie z flash - počet sektorov
+F1=Zápis - počet sektorov
+F2=Čítanie - počet sektorov

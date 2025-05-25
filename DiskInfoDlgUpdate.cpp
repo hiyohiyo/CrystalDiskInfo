@@ -1178,6 +1178,33 @@ BOOL CDiskInfoDlg::ChangeDisk(DWORD i)
 	}
 	m_CtrlTemperature.ReloadImage(IP(className), 1);
 
+	///
+	CString temperatureTooltip;
+	CString temperatureTemp;
+	CString temperatureIndex;
+	for (int j = 0; j < 8; j++)
+	{
+		if (m_Ata.vars[i].TemperatureNVMe[j] > -270)
+		{
+			if (m_bFahrenheit)
+			{
+				temperatureTemp.Format(_T("%d °F"), m_Ata.vars[i].TemperatureNVMe[j] * 9 / 5 + 32);
+			}
+			else
+			{
+				temperatureTemp.Format(_T("%d °C"), m_Ata.vars[i].TemperatureNVMe[j]);
+			}
+
+			temperatureIndex.Format(_T("%d"), j + 12);
+			temperatureTooltip += i18n(_T("SmartNVMe"), temperatureIndex);
+			temperatureTooltip += _T(": ");
+			temperatureTooltip += temperatureTemp;
+			temperatureTooltip += _T("\r\n");
+		}		
+	}
+
+	m_CtrlTemperature.SetToolTipText(temperatureTooltip);
+
 	logicalDriveInfo = GetLogicalDriveInfo(i);
 	//	if(preLogicalDriveInfo.Compare(logicalDriveInfo) != 0)
 	{
