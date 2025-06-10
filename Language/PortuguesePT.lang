@@ -276,7 +276,7 @@ APPLY=Aplicar
 DEFAULT=Predefinição
 
 [Smart]
-UNKNOWN=Desconhecido
+UNKNOWN=Unknown
 VENDOR_SPECIFIC=Vendor Specific
 01=Read Error Rate
 02=Throughput Performance
@@ -289,8 +289,13 @@ VENDOR_SPECIFIC=Vendor Specific
 09=Power-On Hours
 0A=Spin Retry Count
 0B=Recalibration Retries
-0C=Device Power Cycle Count
+0C=Power Cycle Count
 0D=Soft Read Error Rate stab
+16=Current Helium Level
+B8=End-to-End Error
+BB=Reported Uncorrectable Errors
+BC=Command Timeout
+BD=High Fly Writes
 BE=Airflow Temperature
 BF=G-Sense Error Rate
 C0=Power-off Retract Count
@@ -326,11 +331,6 @@ E6=GMR Head Amplitude
 E7=Temperature
 F0=Head Flying Hours
 FA=Read Error Retry Rate
-;Added 3.0
-B8=End-to-End Error
-BB=Reported Uncorrectable Errors
-BC=Command Timeout
-BD=High Fly Writes
 FE=Free Fall Protection
 
 ;Updated 5.4.0
@@ -354,7 +354,7 @@ F2=Total Host Reads
 09=Power-On Hours
 0A=Spin Retry Count
 0B=Recalibration Retries
-0C=Device Power Cycle Count
+0C=Power Cycle Count
 0D=Soft Read Error Rate stab
 C0=Unsafe Shutdown Count
 C2=Temperature
@@ -376,6 +376,7 @@ BB=Total Erase Count
 09=Power-On Hours
 0C=Power Cycle Count
 B8=Initial Bad Block Count
+C2=Temperature
 C3=Program Failure Block Count
 C4=Erase Failure Block Count
 C5=Read Failure Block Count
@@ -394,7 +395,7 @@ D1=Remaining Drive Life
 
 [SmartJMicron60x]
 09=Power-On Hours
-0C=Device Power Cycle Count
+0C=Power Cycle Count
 C2=Temperature
 E5=Halt System ID, Flash ID
 E8=Firmware Version Information
@@ -408,41 +409,32 @@ EB=Good Block Count, System Block Count
 05=Re-Allocated Sector Count
 09=Power-On Hours Count
 0C=Power Cycle Count
-C0=Unsafe Shutdown Count
-E1=Host Writes
-E8=Available Reserved Space
-E9=Media Wearout Indicator
-B8=End to End Error Detection Count
-
-;Updated 4.1
 AA=Available Reserved Space
 AB=Program Fail Count
 AC=Erase Fail Count
-BB=Uncorrectable Error Count
-
-;Updated 4.3
 AE=Unexpected Power Loss
+AF=Power Loss Protection Failure
+B7=SATA Downshift Count
+B8=End to End Error Detection Count
+BB=Uncorrectable Error Count
+BE=Temperature
+C0=Unsafe Shutdown Count
+C2=Temperature
+C5=Pending Sector Count
+C7=CRC Error Count
+E1=Host Writes
 E2=Timed Workload Media Wear
 E3=Timed Workload Host Read/Write Ratio
 E4=Timed Workload Timer
+E8=Available Reserved Space
+E9=Media Wearout Indicator
+EA=Thermal Throttle Status
 F1=Total LBAs Written
 F2=Total LBAs Read
+F3=Total NAND Writes
 F9=Total NAND Writes
 
-;Updated 5.5.0
-B7=SATA Downshift Count
-BE=Temperature
-C7=CRC Error Count
-
-;Updated 5.6.1
-AF=Power Loss Protection Failure
-C2=Temperature
-C5=Pending Sector Count
-
-;Added 6.6.0
-EA=Thermal Throttle Status
-
-[SmartSamsung]
+[SmartSamsung] ;Updated 6.6
 05=Reallocated Sector Count
 09=Power-on Hours
 0C=Power-on Count
@@ -464,8 +456,8 @@ C7=CRC Error Count
 C9=Super cap Status
 CA=SSD Mode Status
 EB=POR Recovery Count
-F1=Total LBA Written
-F2=Total LBA Read
+F1=Total LBAs Written
+F2=Total LBAs Read
 
 ;Added 6.6
 AA=Unused Reserved Block Count (Chip) 
@@ -476,10 +468,10 @@ AE=Unexpected Power Loss Count
 B8=Error Detection
 E9=Normalized Media Wear-out
 
-[SmartSandForce] ;Updated (3.7.0)
+[SmartSandForce] ;Updated 3.7.0
 01=Raw Read Error Rate
 05=Retired Block Count
-09=Power-on Hours
+09=Power-On Hours
 0C=Power Cycle Count
 0D=Soft Read Error Rate
 64=Gigabytes Erased
@@ -496,17 +488,17 @@ C2=Temperature
 C3=On-the-Fly ECC Uncorrectable Error Count
 C4=Reallocation Event Count
 C6=Uncorrectable Sector Count
-C7=SATA R-Errors (CRC) Error Count
+C7=SATA R-Errors Error Count
 C9=Uncorrectable Soft Read Error Rate
 CC=Soft ECC Correction Rate
-E6=Life Curve Status
+E6=Drive Life Protection Status
 E7=SSD Life Left
 E8=Available Reserved Space
-EB=SuperCap health
+EB=Power Fail Backup Health
 F1=Lifetime Writes from Host
 F2=Lifetime Reads from Host
 
-[SmartJMicron61x] ;Added (3.9)
+[SmartJMicron61x] ;Added 3.9.0
 01=Read Error Rate
 02=Throughput Performance
 03=Spin-Up Time
@@ -566,7 +558,16 @@ F6=Total Host Sector Writes
 F7=Host Program Page Count
 F8=Background Program Page Count
 
-[SmartMicronMU02] ;Updated 6.6.0
+; Updated 8.11.0
+F9=Total Refresh ISP Count
+FA=Total Do RefCal Count
+FB=Total NAND Read Plane Count (Low 4Bytes)
+FC=Total NAND Read Plane Count (High 4Bytes)
+FD=Total Block ReMap Pass Count
+FE=Total Background Scan Over Limit Count
+DF=Total Background Scan
+
+[SmartMicronMU02] ;Updated 8.17.0
 ; RAIN = Redundant Array of Independent NAND
 01=Raw Read Error Rate
 05=Reallocated Sectors Count
@@ -614,10 +615,10 @@ A3=Initial Invalid Blocks
 95=Maximum SLC Erase Count
 96=Minimum SLC Erase Count
 97=Average SLC Erase Count
-A4=Total TLC Erase Count
-A5=Maximum TLC Erase Count
-A6=Minimum TLC Erase Count
-A7=Average TLC Erase Count
+A4=Total NAND Erase Count
+A5=Maximum NAND Erase Count
+A6=Minimum NAND Erase Count
+A7=Average NAND Erase Count
 A9=Percentage Lifetime Remaining
 B5=Program Fail Count
 B6=Erase Fail Count
@@ -625,17 +626,27 @@ C0=Power-off Retract Count
 E8=Available Reserved Space
 F1=Total LBA Write
 F2=Total LBA Read
-F5=Total TLC Write Count
+F5=Total NAND Write Count
 F6=Total SLC Write Count
 F7=RAID Recovery Count
 
-[SmartOcz] ;Added (4.5)
+; Updated 8.10.0
+F9=Total Refresh ISP Count
+FA=Total Do RefCal Count
+FB=Total NAND Read Plane Count (Low 4Bytes)
+FC=Total NAND Read Plane Count (High 4Bytes)
+FD=Total Block ReMap Pass Count
+FE=Total Background Scan Over Limit Count
+DF=Total Background Scan
+
+[SmartOcz] ;Added 4.5.0
 01=Raw Read Error Rate
 03=Spin Up Time
 04=Start Stop Count
 05=Reallocated Sectors Count
 09=Power-On Hours
 0C=Power Cycle Count
+C2=Temperature
 E8=Total Count of Write Sectors
 E9=Remaining Life
 
@@ -663,6 +674,9 @@ FB=NAND Read Count
 ;Updated 6.7.0
 F1=Total Host Writes
 F2=Total Host Reads
+
+;Updated 9.3.1
+F9=Total NAND Writes
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=Read Error Rate
@@ -696,26 +710,31 @@ E9=NAND GB written
 F1=Total Host Writes
 F2=Total Host Reads
 
-[SmartSanDisk] ;Added (5.2.0)
-05=Retired Block Count
-09=Power-On Hours
+[SmartSanDisk] ;Added 5.2.0
+05=Reassigned Block Count
+09=Power On Hours
 0C=Power Cycle Count
 AA=Reserve Block Count
 AB=Program Fail Count
 AC=Erase Fail Count
+AD=Average Write/Erase Count
 AE=Unexpected Power Loss Count
 BB=Reported Uncorrectable Errors
-E8=Remaining Life
+C2=Temperature
+E6=Percent of Total Write/Erase Count
+E8=Spare Blocks Remaining
+EA=Percent of Total Write/Erase Count (BC blocks)
 F1=Total Host Writes
 F2=Total Host Reads
 
-[SmartOczVector] ;Added (5.3.0)
+[SmartOczVector] ;Added 5.3.0
 05=Accumulated Runtime Bad Blocks
 09=Power-On Hours Count
 0C=Power Cycle Count
 AB=Available Over-Provisioned Block Count
 AE=Power Cycle Count (Unplanned)
 BB=Total Uncorrectable NAND Reads
+C2=Temperature
 C3=Total Programming Failures
 C4=Total Erase Failures
 C5=Total Read Failures (Uncorrectable)
@@ -762,8 +781,8 @@ BB=Reported Uncorrectable Errors
 C2=Temperature
 C4=Reallocation Event Count
 E7=SSD Life Left
-F1=Lifetime GB Written
-F2=Lifetime GB Read
+F1=Lifetime Written
+F2=Lifetime Read
 
 [SmartToshiba] ;Added 6.2.0
 01=Read Error Rate
@@ -790,27 +809,39 @@ F1=Total Host Writes
 F2=Total Host Reads
 
 [SmartSanDiskGb] ;Added 6.2.0
-05=Reallocated Block Count
+01=Read Error Rate
+05=Reassigned Block Count
 09=Power On Hours
 0C=Power Cycle Count
-A6=Min W/E Cycle
-A7=Max Bad Block/Die
-A8=Maximum Erase Cycle
+A5=Block Erase Count (SLC)
+A6=Minimum P/E Cycles
+A7=Maximum Bad Blocks per die
+A8=Maximum P/E Cycles
 A9=Total Bad Block
+AA=Grown Bad Blocks
 AB=Program Fail Count
 AC=Erase Fail Count
-AD=Average Erase Cycle
+AD=Average P/E Cycles
 AE=Unexpected Power Loss Count
+B8=End-to-End Error Detection/Correction Count
 BB=Reported Uncorrectable Errors
+BC=Command Timeout Count
 C2=Temperature
+C7=CRC Error Count
 D4=SATA PHY Error
-E6=Percentage Total P/E Count
-E8=Spare Block Remaining
-E9=Total GB Written To NAND
+E6=Media Wearout Indicator
+E7=SSD Life Left
+E8=Available Reserve Space
+E9=NAND GB Written
+EA=NAND GB Written (SLC)
+EE=Media Wearout Indicator (Cycles Remaining)
 F1=Total GB Written
 F2=Total GB Read
+F4=Temperature Throttle Status
+F9=NAND GB Written
 
 [SmartKingston] ;Added 6.6.0
+;https://media.kingston.com/support/downloads/MKP_521_Phison_SMART_attribute.pdf
 01=Read Error Rate
 02=Throughput Performance
 03=Spin Up Time
@@ -901,7 +932,7 @@ E7=Lifetime left
 E8=Available reserved space
 F1=Write life time
 F2=Read life time
-F9=Total GB written to NAND (TLC)
+F9=Total GB written to NAND
 FA=Total GB written to NAND (SLC)
 
 [SmartSKhynix] ; Updated 8.8.0
@@ -944,9 +975,9 @@ F1=Total LBA Written
 F2=Total LBA Read
 FA=Total Number of NAND Read Retries
 
-[SmartKioxia]
+[SmartKioxia] ; Added 8.8.0
 09=Power-On Hours Count
-0C=Device Power Cycle Count
+0C=Power Cycle Count
 A7=SSD Protect Mode
 A8=SATA PHY Error Count
 A9=Bad Block Count
@@ -955,7 +986,7 @@ C0=Unexpected Power Loss Count
 C2=Temperature
 F1=Host Writes
 
-[SmartWdc]
+[SmartWdc] ; Added 8.8.0
 01=Read Error Rate
 05=Reassigned Block Count
 09=Power On Hours
@@ -983,10 +1014,13 @@ EA=NAND GB Written (SLC)
 EE=Media Wearout Indicator (Cycles Remaining)
 F1=Total GB Written
 F2=Total GB Read
+F3=Total NAND Writes
 F4=Temperature Throttle Status
 F9=NAND GB Written
 
 [SmartKingstonSuv]
+; https://media.kingston.com/support/downloads/UV400-SMART-attribute.pdf
+; https://media.kingston.com/support/downloads/UV500_SMART_attribute.pdf
 01=Read Error Rate
 05=Reallocated Sector Count
 09=Power On Hours
@@ -1015,6 +1049,7 @@ F2=Lifetime Host Reads
 FA=Total Number of NAND Read Retries
 
 [SmartKingstonKC600]
+;https://media.kingston.com/support/downloads/KC600-SMART-attribute.pdf
 01=Read Error Rate
 05=Re-Allocated NAND Block Count
 09=Power-On Hours
@@ -1047,6 +1082,7 @@ F2=Total LBAs Read
 F5=Total Media Writes
 
 [SmartKingstonDC500]
+;https://media.kingston.com/support/pdf/MKP_521-7_SMART-DC500_attribute_hr.pdf
 01=Host UNC Error Count
 09=Power on Hours
 0C=Power On / Off Cycle
@@ -1075,6 +1111,7 @@ F5=Max Erase Count
 F6=Total Erase Count
 
 [SmartKingstonSA400]
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/20
 01=Uncorrectable Errors
 09=Power On Hours
 0C=Power Cycles
@@ -1107,8 +1144,8 @@ F6=Total Erase Count
 09=Power On Hours
 0C=Power Cycle Count
 AA=Available Reserved Space
-AB=Program Fail Count(Total)
-AC=Erase Fail Count(Total)
+AB=Program Fail Count (Total)
+AC=Erase Fail Count (Total)
 AD=Average Program/Erase Count
 AE=Unexpected Power Loss Count
 AF=Program Fail count (Worst case)
@@ -1134,6 +1171,7 @@ F2=Total Host Read
 F3=NAND GB Written
 
 [SmartIntelDc]
+;https://github.com/hiyohiyo/CrystalDiskInfo/issues/18
 01=Raw Read Error Count
 05=Reallocated Flash Block Count
 09=Power-On Hours Count
@@ -1158,7 +1196,7 @@ CA=Percentage of Drive Life Used
 E2=Timed Workload - Media Wear
 E3=Timed Workload - Host Read/Write Ratio
 E4=Timed Workload Timer
-EA=Total Host Bytes Read
+EA=Thermal Throttle Status
 EB=Total Host Bytes/Sectors Written
 F1=Total Nand Bytes/Sectors Written
 
@@ -1227,6 +1265,7 @@ F5=Flash Write Sector Count
 09=Power-On Hours
 0A=Spin Retry Count
 0C=Power Cycle Count
+A7=SSD Protect Mode
 A8=SATA PHY Error Count
 AA=Bad Block Count
 AD=Erase Count
@@ -1255,6 +1294,7 @@ E7=SSD Life Left
 F1=Host Writes
 
 [SmartSeagate]
+; https://crystalmark.info/board/c-board.cgi?cmd=one;no=1818;id=#1818
 01=Read Error Rate
 05=Retired Sectors Count
 09=Power On Hours
@@ -1285,6 +1325,7 @@ F2=Lifetime Reads From Host
 FA=Lifetime NAND Read Retries
 
 [SmartSeagateIronWolf]
+; https://www.seagate.com/www-content/manuals/ironwolf-110-ssd/pdf/IronWolf_110_SSD_PM-100841919_B.pdf
 01=Raw Read Error Rate
 05=Reallocated Sector Count
 09=Power On Hours
@@ -1329,7 +1370,7 @@ F2=Total Read
 [SmartMaxiotek] ; Added 8.8.6
 05=Reallocated Sector Count
 09=Power-On Hours
-0C=Drive Power Cycle Count
+0C=Power Cycle Count
 A7=SSD Protect Mode
 A8=PHY Error Count
 A9=Bad Block Count
