@@ -24,8 +24,8 @@ class CAboutDlg : public CDialogFx
 	static const int SIZE_X = 640;
 	static const int SIZE_Y = 660;
 #else
-	static const int SIZE_X = 480;
-	static const int SIZE_Y = 152;
+	static const int SIZE_X = 540;
+	static const int SIZE_Y = 168;
 #endif
 
 public:
@@ -68,4 +68,5 @@ protected:
 	CStaticFx m_CtrlRelease;
 	CStaticFx m_CtrlCopyright1;
 	CStaticFx m_CtrlCopyright2;
+	CStaticFx m_CtrlCopyright3;
 };

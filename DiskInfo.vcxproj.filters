@@ -176,9 +176,6 @@
     <ClInclude Include="HealthDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StorageQuery.h">
       <Filter>Library Files</Filter>
     </ClInclude>

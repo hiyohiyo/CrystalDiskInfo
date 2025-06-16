@@ -60,12 +60,14 @@ END
 //
 // Icon
 //
-
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 #ifdef SUISHO_AOI_SUPPORT
 	IDR_MAINFRAME           ICON                "resA\\DiskInfo.ico"
 	IDI_MINI_ICON           ICON                "resA\\DiskInfo16.ico"
+#elif A1DATA_SUPPORT
+    IDR_MAINFRAME           ICON                "resA1\\DiskInfo.ico"
+    IDI_MINI_ICON           ICON                "resA1\\DiskInfo16.ico"
 #elif MSI_MEI_SUPPORT
     IDR_MAINFRAME           ICON                "resM\\DiskInfo.ico"
     IDI_MINI_ICON           ICON                "resM\\DiskInfo16.ico"
@@ -762,8 +764,9 @@ BEGIN
     PUSHBUTTON      "", IDC_VERSION, 240, 18, 193, 8
     LTEXT           "", IDC_EDITION, 241, 38, 33, 8
     LTEXT           "", IDC_RELEASE, 239, 62, 33, 8
-    LTEXT           "", IDC_COPYRIGHT1, 241, 84, 33, 8
+    LTEXT           "", IDC_COPYRIGHT1, 242, 84, 33, 8
     LTEXT           "", IDC_COPYRIGHT2, 242, 84, 33, 8
+    LTEXT           "", IDC_COPYRIGHT3, 242, 84, 33, 8
     PUSHBUTTON      "", IDC_LICENSE, 239, 110, 33, 8
     PUSHBUTTON      "", IDC_PROJECT_SITE_1, 77, 144, 228, 21
     PUSHBUTTON      "", IDC_PROJECT_SITE_2, 77, 194, 232, 22
@@ -941,27 +944,32 @@ BEGIN
     #ifdef SUISHO_AOI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Aoi Edition"
             VALUE "ProductName", "CrystalDiskInfo Aoi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2023-2025 nijihashi sola"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2023-2025 nijihashi sola"
+
+    #elif A1DATA_SUPPORT
+            VALUE "FileDescription", "CrystalDiskInfo A1Data Edition"
+            VALUE "ProductName", "CrystalDiskInfo A1Data Edition"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2025 A1Data Corp."
 
     #elif MSI_MEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo MSI Mei Mihoshi Edition"
             VALUE "ProductName", "CrystalDiskInfo MSI Mei Mihoshi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2024-2025 Micro-Star INT'L CO., LTD."
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2024-2025 Micro-Star INT'L CO., LTD."
 
     #elif KUREI_KEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Kurei Kei Edition"
             VALUE "ProductName", "CrystalDiskInfo Kurei Kei Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2017-2025 Pronama LLC"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2017-2025 Pronama LLC"
 
     #elif SUISHO_SHIZUKU_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Shizuku Edition"
             VALUE "ProductName", "CrystalDiskInfo Shizuku Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2012-2025 kirino kasumu"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2012-2025 kirino kasumu"
 
     #else
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "ProductName", "CrystalDiskInfo"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo"
+            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc."
     #endif
         END
     END

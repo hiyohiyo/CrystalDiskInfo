@@ -45,8 +45,12 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 
 #ifdef SUISHO_AOI_SUPPORT
 	m_DefaultTheme = L"Aoi";
-	m_RecommendTheme = L"AoiLight";
+	m_RecommendTheme = L"AoiLightAnimalEars~TenmuShinryuusai";
 	m_ThemeKeyName = L"ThemeAoi";
+#elif A1DATA_SUPPORT
+	m_DefaultTheme = L"A1Data";
+	m_RecommendTheme = L"A1Data";
+	m_ThemeKeyName = L"ThemeA1Data";
 #elif MSI_MEI_SUPPORT
 	m_DefaultTheme = L"MSIMei";
 	m_RecommendTheme = L"MSIMei";
@@ -57,7 +61,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_ThemeKeyName = L"ThemeKureiKei";
 #elif SUISHO_SHIZUKU_SUPPORT
 	m_DefaultTheme = L"Shizuku";
-	m_RecommendTheme = L"ShizukuIdol";
+	m_RecommendTheme = L"ShizukuLightAnimalEars~TenmuShinryuusai";
 	m_ThemeKeyName = L"ThemeShizuku";
 #else
 	m_DefaultTheme = L"Default";
@@ -1371,6 +1375,22 @@ void CDiskInfoDlg::UpdateDialogSize()
 	}
 	m_CtrlLife.InitControl             (m_OffsetX, 88, 128, 192, m_ZoomRatio, m_hPal, &m_BkDC, IP(L"SD" + className), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
 	m_CtrlLife.SetHandCursor(TRUE);
+#elif A1DATA_SUPPORT
+	m_CtrlLife.ShowWindow(SW_SHOW);
+	m_CtrlLabelDiskStatus.InitControl(8 + m_OffsetX, 88, 100, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlLabelTemperature.InitControl(8 + m_OffsetX, 184, 100, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+
+	m_CtrlLabelDiskStatus.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+	m_CtrlLabelTemperature.SetMargin(0, 0, 0, 4, m_ZoomRatio);
+
+	m_CtrlLife.InitControl(8 + m_OffsetX, 88, 100, 48, m_ZoomRatio, m_hPal, &m_BkDC, IP(L"A1Data"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
+	m_CtrlLife.SetToolTipText(L"データ復旧、消去のご相談はこちら");
+	m_CtrlDiskStatus.InitControl(8 + m_OffsetX, 144, 100, 60, m_ZoomRatio, m_hPal, &m_BkDC, IP(className), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
+	m_CtrlDiskStatus.SetMargin(4, 0, 4, 0, m_ZoomRatio);
+
+	m_CtrlLabelDiskStatus.ShowWindow(SW_HIDE);
+	m_CtrlLabelTemperature.ShowWindow(SW_HIDE);
+	m_CtrlLife.SetHandCursor(TRUE);
 #else
 	m_CtrlLife.ShowWindow(SW_HIDE);
 	m_CtrlLabelDiskStatus.InitControl  (8 + m_OffsetX,  88, 100, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
@@ -1384,6 +1404,7 @@ void CDiskInfoDlg::UpdateDialogSize()
 #endif
 	m_CtrlDiskStatus.SetHandCursor(TRUE);
 
+
 	if (m_Ata.vars.GetCount() && (m_Ata.vars[m_SelectDisk].IsSmartCorrect || m_Ata.vars[m_SelectDisk].DiskVendorId == m_Ata.SSD_VENDOR_NVME))
 	{
 		className = GetTemperatureClass(m_Ata.vars[m_SelectDisk].Temperature, m_Ata.vars[m_SelectDisk].AlarmTemperature);
@@ -1393,9 +1414,11 @@ void CDiskInfoDlg::UpdateDialogSize()
 		className = _T("temperatureUnknown");
 	}
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_CtrlTemperature.InitControl      (564 + m_OffsetX, 256, 100, 28, m_ZoomRatio, m_hPal, &m_BkDC, IP(className), 1, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE, FALSE);
+	m_CtrlTemperature.InitControl(564 + m_OffsetX, 256, 100, 28, m_ZoomRatio, m_hPal, &m_BkDC, IP(className), 1, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE, FALSE);
+#elif A1DATA_SUPPORT
+	m_CtrlTemperature.InitControl(8 + m_OffsetX, 212, 100, 40, m_ZoomRatio, m_hPal, &m_BkDC, IP(className), 1, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE, FALSE);
 #else
-	m_CtrlTemperature.InitControl      (8 + m_OffsetX, 208, 100, 40, m_ZoomRatio, m_hPal, &m_BkDC, IP(className), 1, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE, FALSE);
+	m_CtrlTemperature.InitControl(8 + m_OffsetX, 208, 100, 40, m_ZoomRatio, m_hPal, &m_BkDC, IP(className), 1, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE, FALSE);
 #endif
 
 	m_CtrlDiskStatus.SetHandCursor(TRUE);
@@ -1513,6 +1536,8 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_List.SetGlassColor(m_Glass, m_GlassAlpha);
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
+	m_List.InitControl(8 + m_OffsetX, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, FALSE);
+#elif A1DATA_SUPPORT
 	m_List.InitControl(8 + m_OffsetX, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, FALSE);
 #else
 	m_List.InitControl(8 + m_OffsetX, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, FALSE);
@@ -2522,6 +2547,7 @@ void CDiskInfoDlg::SetControlFont()
 #else
 	m_CtrlDiskStatus.SetFontEx(m_FontFace, 18, 18, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
 	m_CtrlTemperature.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
+	m_CtrlLife.SetFontEx(m_FontFace, 18, 18, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_NORMAL, m_FontRender);
 #endif
 }
 
@@ -2631,6 +2657,15 @@ void CDiskInfoDlg::OnBnClickedButtonLife()
 
 	AlertSound(id, AS_SET_SOUND_ID);
 	AlertSound(1000, AS_PLAY_SOUND);
+#elif A1DATA_SUPPORT
+	if (GetUserDefaultLCID() == 0x0411)// Japanese
+	{
+		OpenUrl(URL_MAIN_JA);
+	}
+	else // Other Language
+	{
+		OpenUrl(URL_MAIN_EN);
+	}
 #endif
 }
 
@@ -2664,6 +2699,8 @@ BOOL CDiskInfoDlg::CheckThemeEdition(CString name)
 {
 #ifdef SUISHO_AOI_SUPPORT
 	if (name.Find(L"Aoi") == 0) { return TRUE; }
+#elif A1DATA_SUPPORT
+	if (name.Find(L"A1Data") == 0) { return TRUE; }
 #elif MSI_MEI_SUPPORT
 	if (name.Find(L"MSIMei") == 0) { return TRUE; }
 #elif KUREI_KEI_SUPPORT
@@ -2671,7 +2708,7 @@ BOOL CDiskInfoDlg::CheckThemeEdition(CString name)
 #elif SUISHO_SHIZUKU_SUPPORT
 	if (name.Find(L"Shizuku") == 0) { return TRUE; }
 #else
-	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L"Aoi") != 0 && name.Find(L"MSIMei") != 0 && name.Find(L".") != 0) { return TRUE; }
+	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L"Aoi") != 0 && name.Find(L"MSIMei") != 0 && name.Find(L"A1Data") != 0 && name.Find(L".") != 0) { return TRUE; }
 #endif
 
 	return FALSE;

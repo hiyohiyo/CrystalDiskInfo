@@ -19,6 +19,10 @@ Global
 		Release|ARM64 = Release|ARM64
 		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
+		ReleaseA1Data|ARM = ReleaseA1Data|ARM
+		ReleaseA1Data|ARM64 = ReleaseA1Data|ARM64
+		ReleaseA1Data|Win32 = ReleaseA1Data|Win32
+		ReleaseA1Data|x64 = ReleaseA1Data|x64
 		ReleaseAoi|ARM = ReleaseAoi|ARM
 		ReleaseAoi|ARM64 = ReleaseAoi|ARM64
 		ReleaseAoi|Win32 = ReleaseAoi|Win32
@@ -61,6 +65,14 @@ Global
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|Win32.Build.0 = Release|Win32
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|x64.ActiveCfg = Release|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.Release|x64.Build.0 = Release|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseA1Data|ARM.ActiveCfg = ReleaseA1Data|ARM
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseA1Data|ARM.Build.0 = ReleaseA1Data|ARM
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseA1Data|ARM64.ActiveCfg = ReleaseA1Data|ARM64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseA1Data|ARM64.Build.0 = ReleaseA1Data|ARM64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseA1Data|Win32.ActiveCfg = ReleaseA1Data|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseA1Data|Win32.Build.0 = ReleaseA1Data|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseA1Data|x64.ActiveCfg = ReleaseA1Data|x64
+		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseA1Data|x64.Build.0 = ReleaseA1Data|x64
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseAoi|ARM.ActiveCfg = ReleaseAoi|ARM
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseAoi|ARM.Build.0 = ReleaseAoi|ARM
 		{5496C268-D510-449C-8471-DE2B34898C28}.ReleaseAoi|ARM64.ActiveCfg = ReleaseAoi|ARM64

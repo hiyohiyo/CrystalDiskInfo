@@ -79,6 +79,17 @@
 	#else
 	#define PRODUCT_EDITION			_T("Aoi Edition x86")
 	#endif
+#elif A1DATA_SUPPORT
+	#define PRODUCT_SHORT_NAME		_T("CDI A1DE")
+	#ifdef _M_ARM
+	#define PRODUCT_EDITION			_T("A1Data Edition ARM32")
+	#elif _M_ARM64
+	#define PRODUCT_EDITION			_T("A1Data Edition ARM64")
+	#elif _M_X64
+	#define PRODUCT_EDITION			_T("A1Data Edition x64")
+	#else
+	#define PRODUCT_EDITION			_T("A1Data Edition x86")
+	#endif
 #elif MSI_MEI_SUPPORT
 	#define PRODUCT_SHORT_NAME		_T("CDI MMME")
 	#ifdef _M_ARM
@@ -89,7 +100,7 @@
 	#define PRODUCT_EDITION			_T("MSI Mei Mihoshi Edition x64")
 	#else
 	#define PRODUCT_EDITION			_T("MSI Mei Mihoshi Edition x86")
-#endif
+	#endif
 #elif KUREI_KEI_SUPPORT
 	#define PRODUCT_SHORT_NAME		_T("CDI KKE")
 	#ifdef _M_ARM
@@ -125,30 +136,40 @@
 	#endif
 #endif
 
-#define PRODUCT_VERSION				L"9.7.0 Alpha2"
-#define PRODUCT_RELEASE				L"2025/05/25"
-#define PRODUCT_COPY_YEAR			L"2008-2024"
+#define PRODUCT_VERSION				L"9.7.0"
+#define PRODUCT_RELEASE				L"2025/06/16"
+#define PRODUCT_COPY_YEAR			L"2008-2025"
 #define PRODUCT_LICENSE				L"MIT License"
 
 #ifdef SUISHO_AOI_SUPPORT
 #define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2023-2025 nijihashi sola"
+#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
+#define PRODUCT_COPYRIGHT_3			L"© 2023-2025 nijihashi sola"
+
+#elif A1DATA_SUPPORT
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
+#define PRODUCT_COPYRIGHT_3			L"© 2025 A1Data Corp."
 
 #elif MSI_MEI_SUPPORT
 #define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2024-2025 Micro-Star INT'L CO., LTD."
+#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
+#define PRODUCT_COPYRIGHT_3			L"© 2024-2025 Micro-Star INT'L CO., LTD."
 
 #elif KUREI_KEI_SUPPORT
 #define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2017-2025 Pronama LLC"
+#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
+#define PRODUCT_COPYRIGHT_3			L"© 2017-2025 Pronama LLC"
 
 #elif SUISHO_SHIZUKU_SUPPORT
 #define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2012-2025 kirino kasumu"
+#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
+#define PRODUCT_COPYRIGHT_3			L"© 2012-2025 kirino kasumu"
 
 #else
 #define PRODUCT_COPYRIGHT_1			L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2			L""
+#define PRODUCT_COPYRIGHT_2			L"© 2025 CrystalMark Inc."
+#define PRODUCT_COPYRIGHT_3			L""
 #endif
 
 #define DEFAULT_FONT_FACE_1			L"Segoe UI"
@@ -169,6 +190,9 @@
 #ifdef MSI_MEI_SUPPORT
 #define URL_MAIN_JA					L"https://jp.msi.com/"
 #define URL_MAIN_EN 				L"https://www.msi.com/"
+#elif A1DATA_SUPPORT
+#define URL_MAIN_JA					L"https://www.a1d.co.jp/crystaldiskinfo/"
+#define URL_MAIN_EN 				L"https://www.a1d.co.jp/crystaldiskinfo/"
 #elif KUREI_KEI_SUPPORT
 #define URL_MAIN_JA					L"https://pronama.jp/2017/08/04/crystaldiskinfo-kurei-kei-edition-release/"
 #define URL_MAIN_EN 				L"https://pronama.jp/2017/08/04/crystaldiskinfo-kurei-kei-edition-release/"

@@ -6,7 +6,7 @@ VERSION=1.0.12
 [Language]
 LANGUAGE=Português (Brasil)
 CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
-LOCALE_ID=0x0416, 0x0816
+LOCALE_ID=0x0416
 
 [Url]
 WIKIPEDIA_SMART=https://en.wikipedia.org/wiki/Self-Monitoring,_Analysis_and_Reporting_Technology

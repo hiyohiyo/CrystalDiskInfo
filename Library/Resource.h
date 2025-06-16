@@ -734,6 +734,7 @@
 #define IDC_STATIC_VOLUME               1109
 #define IDC_VALUE_VOLUME                1110
 #define IDC_BUTTON_VOICE_HIDE           1111
+#define IDC_COPYRIGHT3                  1112
 
 #define IDC_FONT_FACE_COMBO             1201
 #define IDC_FONT_SCALE_COMBO			1202
