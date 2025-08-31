@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=Alexei PortableApp™, Jan Verheijen, Albert CLAESEN, Luc, Adrien Brysse
-VERSION=7.2.0
+TRANSLATOR=Jan Verheijen, Albert CLAESEN, Luc, Adrien Brysse, Alexei PortableApp™
+VERSION=9.7.0
 
 [Language]
 LANGUAGE=Nederlands
@@ -22,16 +22,16 @@ HIDE_SMART_INFO=&S.M.A.R.T.-informatie verbergen
 HIDE_SERIAL_NUMBER=Serie&nummer verbergen
 SHOW_DRIVE_LETTER=Schijf&letter weergeven
 ADVANCED_DISK_SEARCH=G&avanceerd Schijfzoeken
-EVENT_LOG=&Gebeurtenis Logboek
+EVENT_LOG=&Gebeurtenislogboek
 AAM_APM_CONTROL=AA&M/APM-beheer
 AUTO_AAM_APM_ADAPTION=Auto-AAM/A&PM-aanpassen
-RESIDENT=Toon In Systeemvak (Afsluiten d.m.v. RechtermuisMenu op Pict!)
-STARTUP=Met Windows Starten (n.v.t. Portable)
+RESIDENT=In systeemvak tonen
+STARTUP=Met Windows opstarten (n.v.t. Portable)
 OPEN_DISK_MANAGEMENT=&Schijfbeheer openen
 OPEN_DEVICE_MANAGER=Apparaatbeheer openen
-ADVANCED_FEATURE=Geavanceerde-Functies
+ADVANCED_FEATURE=Geavanceerde functies
 REFRESH=&Vernieuwen
-RESCAN=Her-Scannen
+RESCAN=Herscannen
 DISABLE=&Uitschakelen
 AUTO_REFRESH=&Auto-vernieuwen interval
 AUTO_REFRESH_TARGET=Auto-vernieuwen object
@@ -45,28 +45,28 @@ HELP=&Help
 HELP_WEB=&Help [Web]
 HELP_ABOUT=&Over CrystalDiskInfo
 HELP_ABOUT_SMART=Over &S.M.A.R.T. (Wikipedia) [Web]
-LANGUAGE=Taal 
+LANGUAGE=Taal
 ITEM=&Item
-TEMPERATURE_TYPE=T&emperatuur Type
+TEMPERATURE_TYPE=T&emperatuurtype
 CELSIUS=Celsius (°C)
 FAHRENHEIT=Fahrenheit (°F)
-HEALTH_STATUS_SETTING=&Gezondheid Status Instelling
+HEALTH_STATUS_SETTING=&Gezondheidstoestandinstelling
 
 ;Graph
 OPTION=&Optie
-LEGEND_POSITION=&Legenda Positie
+LEGEND_POSITION=&Legendapositie
 NORTH_WEST=&Noord-West
 NORTH_EAST=Noord-&Oost
 SOUTH_WEST=Zuid-&West
 SOUTH_EAST=&Zuid-Oost
 MAX_PLOT_POINT=&Max plotpunten
 TIME_FORMAT=&Tijdformaat
-PAINT_WEEKEND=Weekend kleuren
+PAINT_WEEKEND=Weekendkleuren
 ALL=&Alles
 
 ;2.7.0
-COPY_OPTION=Kopieer& Optie
-RESIDENT_STYLE=Taakvak st&ijl
+COPY_OPTION=Kopieer&optie
+RESIDENT_STYLE=Taakvakst&ijl
 MINIMIZE=Minimaliseren
 HIDE=Verbergen
 
@@ -76,57 +76,58 @@ AUTO=&Auto
 ATTRIBUTE=&Kenmerk
 
 ;3.5.0
-ASCII_VIEW=ASCII-Weergave
-AUTO_DTECTION=Auto Detectie
-SECOND=Sec.
-MINUTE=Min.
-HOUR=Uur
+ASCII_VIEW=ASCII-weergave
+AUTO_DTECTION=AutoDetectie
+SECOND=sec.
+MINUTE=min.
+HOUR=uur
 
 :3.9.4
-WORKAROUND=Werkomgeving
+WORKAROUND=Tijdelijke oplossing
 
 ;4.0.0
-ALERT_MAIL=Waarschuwing-Mail
-MAIL_SETTINGS=Mail-Instellingen
+ALERT_MAIL=Waarschuwingsmail
+MAIL_SETTINGS=Mail-instellingen
 SMART_IN_ENGLISH=S.M.A.R.T. in het Engels
-FONT_SETTING=Lettertype-Instelling
+FONT_SETTING=Lettertype-instelling
 
 ;5.0.0
-ALERT_FEATURES=Waarschuwing-Functies
-ALARM_HISTORY=Alarm Geschiedenis
-ALERT_SOUND=Waarschuwing-Geluid
-SOUND_SETTINGS=Geluid Instellingen
-GADGET_SUPPORT=Gadget-Ondersteuning
-INSTALL_GADGET=Gadget Installeren
+ALERT_FEATURES=Waarschuwingsfuncties
+ALARM_HISTORY=Alarmgeschiedenis
+ALERT_SOUND=Waarschuwingsgeluid
+SOUND_SETTINGS=Geluidsinstellingen
+GADGET_SUPPORT=Gadget-ondersteuning
+INSTALL_GADGET=Gadget installeren
 ENABLE_AUTO=Inschakelen (Autodetectie)
 ENABLE_ALL=Inschakelen (Alle schijven)
-ENABLE_RAID=Inschakelen (Alleen RAID)
+ENABLE_RAID=Inschakelen (Alleen RAID-volume)
 
 ;6.0.0
-HIDE_NO_SMART_DISK=&Verberg Non-S.M.A.R.T. Schijf
+HIDE_NO_SMART_DISK=Non-S.M.A.R.T.-schijf &verbergen
 GREEN_MODE=&Groene Modus
 
 ;8.6.0
-SAVE_TEXT=Save (&text)
-SAVE_IMAGE=&Save (image)
+SAVE_TEXT=Opslaan (&tekst)
+SAVE_IMAGE=&Opslaan (afbeelding)
 
 ;9.0.0
-DRIVE_SORT_METHOD=Drive Sort Method
-PHYSICAL_DRIVE_ID=Physical Drive ID
-DRIVE_LETTER=Drive Letter
+DRIVE_SORT_METHOD=Schijfsiteermethode
+PHYSICAL_DRIVE_ID=Fysieke schijf-ID
+DRIVE_LETTER=Schijfletter
 
 ;9.2.0
-VOICE=Voice
+VOICE=Stem
 
 ;9.3.0
-STARTUP_VOICE=Startup Voice
+STARTUP_VOICE=Stem bij opstarten
 
 ;9.5.0
 HIDE_RAID_VOLUME=Hide &RAID Volume
+
 [TrayMenu]
 EXIT=Afsluiten
 REFRESH=Vernieuwen
-RESCAN=Her-Scannen
+RESCAN=Herscannen
 ENABLE=Inschakelen
 DISABLE=Uitschakelen
 ENABLE_ALL=Alles inschakelen
@@ -142,15 +143,15 @@ AUTO_REFRESH_TARGET=Auto-vernieuwen object
 AUTO_REFRESH_TARGET_ALL_DISK=Auto-vernieuwen -  Alle schijven
 AUTO_REFRESH_UNTARGET_ALL_DISK=Auto-vernieuwen - Geen schijven
 ALARM_SETTING_TEMPERATURE=Alarminstelling - Temperatuur
-ALARM_SETTING_HEALTH_STATUS=Alarminstelling - Gezondheid Status
-SHOW_MAIN_WINDOW=Hoofdvenster weergeven
-SHOW_TEMPERATURE_ICON=Temperatuur Pictogram weergeven
-SHOW_ALL_TEMPERATURE_ICON=Alle Temperatuur Pictogrammen weergeven
-HIDE_ALL_TEMPERATURE_ICON=Alle Temperatuur Pictogrammen verbergen
+ALARM_SETTING_HEALTH_STATUS=Alarminstelling - Gezondheidstoestand
+SHOW_MAIN_WINDOW=Hoofdvenster tonen
+SHOW_TEMPERATURE_ICON=Temperatuurpictogram tonen
+SHOW_ALL_TEMPERATURE_ICON=Alle temperatuurpictogrammen tonen
+HIDE_ALL_TEMPERATURE_ICON=Alle temperatuurpictogrammen verbergen
 COLLECTIVE_SETTING=Gemeenschappelijke instelling
 GRAPH=Grafiek
 ;Added 3.0
-SHOW_TEMPERATURE_ICON_ONLY=Alleen Temperatuur Pictogram weergeven
+SHOW_TEMPERATURE_ICON_ONLY=Alleen temperatuurpictogram tonen
 
 [DiskStatus]
 GOOD=Goed
@@ -162,9 +163,9 @@ DISK=Schijf
 [Dialog]
 LIST_ID=ID
 LIST_CURRENT=Huidig
-LIST_WORST=Slechtste
+LIST_WORST=Slechtst
 LIST_THRESHOLD=Drempel
-LIST_RAW_VALUES=Raw-Waarden
+LIST_RAW_VALUES=Raw-waarden
 LIST_DESCRIPTION=Omschrijving
 LIST_ATTRIBUTE_NAME=Kenmerk
 
@@ -172,58 +173,58 @@ FIRMWARE=Firmware
 SERIAL_NUMBER=Serienummer
 INTERFACE=Interface
 STANDARD=Standaard
-TRANSFER_MODE=Transfer-Modus
-BUFFER_SIZE=Buffer Grootte
-NV_CACHE_SIZE=NV-Cache Grootte
-ROTATION_RATE=Rotatie Per Minuut
+TRANSFER_MODE=Transfermodus
+BUFFER_SIZE=Buffergrootte
+NV_CACHE_SIZE=NV-cachegrootte
+ROTATION_RATE=Omwentelingssnelheid
 TEMPERATURE=Temperatuur
-POWER_ON_HOURS=Bedrijfs Uren
+POWER_ON_HOURS=Bedrijfsuren
 POWER_ON_COUNT=Inschakelingen
 DRIVE_LETTER=Schijfletter
 FEATURE=Eigenschappen
-HEALTH_STATUS=Gezondheid Status
+HEALTH_STATUS=Gezondheidstoestand
 
 UNKNOWN=onbekend
 POWER_ON_COUNT_UNIT=keer
 POWER_ON_HOURS_UNIT=uren
 POWER_ON_DAYS_UNIT=dagen
-POWER_ON_YEARS_UNIT=jaar
+POWER_ON_YEARS_UNIT=jaren
 
 ;4.3
-TOTAL_HOST_WRITES=Schrijf Acties Totaal
-TOTAL_HOST_READS=Lees Acties Totaal
-TOTAL_NAND_WRITES=NAND-Schrijf Acties
+TOTAL_HOST_WRITES=Totaal aantal schrijfacties
+TOTAL_HOST_READS=Totaal aantal leescties
+TOTAL_NAND_WRITES=Totaal aantal NAND-schrijfacties
 
 ;4.5
-WEAR_LEVELING_COUNT=Slijtage Niveau
+WEAR_LEVELING_COUNT=Slijtageniveauwaarde
 
 ;6.1
 CURRENT_MODE_SUPPORTED_MODE=Huidige Modus | Ondersteunde Modus
-MAJOR_VERSION_MINOR_VERSION=Hoofd Versie | Sub Versie
+MAJOR_VERSION_MINOR_VERSION=Primaire versie | Secundaire versie
 
 ;8.5.0
-FONT_FACE=Font Face
-FONT_SCALE=Font Scale (%)
-DEFAULT=Default
+FONT_FACE=Lettertype
+FONT_SCALE=Lettertype-schaal (%)
+DEFAULT=Standaard
 
 ;8.9.0
-ENABLED=Enabled
-DISABLED=Disabled
+ENABLED=Ingeschakeld
+DISABLED=Uitgeschakeld
 
 [Message]
 DETECT_UNIT_POWER_ON_HOURS=Bepalen van bedrijfsuren (ca. 130 sec. nodig)
 DETECT_DISK=Schijf detecteren
 PLEASE_ENABLE_WMI=WMI(Windows Management Instrumentation) inschakelen
-PLEASE_RESTART_THIS_APPLICATION=Herstart dit programma a.u.b., om de wijzigingen door te voeren
+PLEASE_RESTART_THIS_APPLICATION=Herstart dit programma te effectueren
 DISK_NOT_FOUND=Schijf niet gevonden
 
 [Alarm]
-ALARM_TEMPERATURE=Temperatuur - Alarm
-ALARM_HEALTH_STATUS=Gezondheid Status - Alarm
+ALARM_TEMPERATURE=Alarm-temperatuur
+ALARM_HEALTH_STATUS=Alarm - Gezondheidstoestand
 DEGRADATION=Degradatie
 RECOVERY=Herstellen
 ;3.5.0
-INFO_HEALTH_STATUS=Info - Gezondheid Satus
+INFO_HEALTH_STATUS=Info - Gezondheidstoestand
 
 [Graph]
 PLEASE_SELECT_ITEM=Een item selecteren a.u.b.
@@ -235,12 +236,12 @@ RESET=Terugzetten
 
 [Customize]
 LINE_COLOR=Lijnkleur
-BACKGROUND_IMAGE=Achtergrond Afbeelding
-SUPPORTED_IMAGE_FORMAT=Ondersteund Afbeelding Formaat
+BACKGROUND_IMAGE=Achtergrondafbeelding
+SUPPORTED_IMAGE_FORMAT=Ondersteund beeldformaat
 ALL_FILES=Alle bestanden
 
 ;5.0.0
-SUPPORTED_SOUND_FORMAT=Ondersteunde Geluids Formaat
+SUPPORTED_SOUND_FORMAT=Ondersteund geluidsformaat
 
 [AamApm]
 AAM_LOW=<- Stil (80h)
@@ -249,23 +250,23 @@ AAM_RECOMMEND=Aanbevolen waarde
 APM_LOW=<- Min Vermogen (01h)
 APM_HIGH=Prestatie (FEh) ->
 ;3.5.0
-AUTOMATIC_ACOUSTIC_MANAGEMENT=Automatisch Acoustisch Management (AAM)
-ADVANCED_POWER_MANAGEMENT=Geavanceerd Power Management (APM)
+AUTOMATIC_ACOUSTIC_MANAGEMENT=Automatisch geluidsbeheer (AAM)
+ADVANCED_POWER_MANAGEMENT=Geavanceerd energiebeheer (APM)
 
 [WindowTitle]
 ABOUT=Over CrystalDiskInfo
 GRAPH=Grafisch
 CUSTOMIZE=Aanpassen
-VERSION_INFORMATION=Versie-Informatie
+VERSION_INFORMATION=Versie-informatie
 AAM_APM_CONTROL=AAM/APM-beheer
-HEALTH_STATUS_SETTING=Gezondheid Status Instelling
+HEALTH_STATUS_SETTING=Gezondheidstoestandinstelling
 
 ;5.0.0
-ALARM_HISTORY=Alarm Geschiedenis
-SOUND_SETTINGS=Geluids Instellingen
+ALARM_HISTORY=Alarmgeschiedenis
+SOUND_SETTINGS=Geluidsinstellingen
 
 ;5.1.0
-FONT_SETTING=Lettertype-Instelling
+FONT_SETTING=Lettertype-instelling
 
 [HealthStatus]
 THRESHOLD_OF_CAUTION=Waarschuwingsgrens
@@ -274,69 +275,70 @@ DEFAULT=Standaard
 
 [Smart]
 UNKNOWN=Onbekend
-VENDOR_SPECIFIC=Concrete Leverancier
-01=Lees Fout Factor
-02=Data Doorvoersnelheid
-03=Opstart Tijd
-04=Start/Stop Aantal
-05=Heringedeelde Sectoren
-06=Lees Kanaal Marge
-07=Zoek Fouten Factor
-08=Zoek tijd prestaties
-09=Bedrijfs Uren
-0A=Herstart's
-0B=Herijkingen
-0C=Power Cyclus
-0D=Soft Lees Fout Factor stab
-B8=End-to-End Fout
-BB=Gerapporteerde Niet Corrigeerbare Fouten
-BC=Opdracht Timeout
-BD=High Fly Schrijft
-BE=Luchtstroom Temperatuur
-BF=G-Sensor Fout Factor
-C0=Power-Uit Intrekken
-C1=Laden/Ontladen Cyclus
+VENDOR_SPECIFIC=Specifiek voor de leverancier
+01=Leesfoutpercent
+02=Doorvoersnelheidsprestatie
+03=Opstarttijd
+04=Aantal Start/Stop
+05=Aantal opnieuw toegewezen sectoren
+06=Leeskanaalmarge
+07=Zoekfoutpercentage
+08=Zoekprestatie
+09=Aantal bedrijfsuren
+0A=Aantal herstartpogingen
+0B=Aantal herkalibratiepogingen
+0C=Aantal powercycli
+0D=Stabiliteit van zachte leesfout
+B8=End-to-End-fouten
+BB=Gerapporteerde niet-herstelbare fouten
+BC=Opdracht-time-out
+BD=Hoog-vliegende schrijfbewerkingen
+BE=Luchttemperatuur
+BF=G-Sense-foutpercentage
+C0=Aantal nood-parkeeracties bij uitschakelen
+C1=Aantal laad-/ontlaadcycli
 C2=Temperatuur
-C3=Hardware ECC Hersteld
-C4=Heringedeelde Events
-C5=Huidig Wachtende Sectoren
-C6=Niet Corrigeerbare Sectoren
-C7=UltraDMA CRC Fouten
-C8=Schrijf Fout Factor
-C9=Soft Lees Fout Factor
-CA=Data Adres Markeer Fout
-CB=Run Uit Annuleren
-CC=Soft ECC Correctie
-CD=Warmte Asperity Factor
-CE=Flying Hoogte
-CF=Huidig Spin Hoogte
-D0=Draai Geluid
-D1=Offline Zoek Prestatie
-D3=Trilling Tijdens Schrijven
+C3=Herstelde hardware ECC
+C4=Aantal herverdelingsacties
+C5=Aantal momenteel in behandeling zijnde sectoren
+C6=Aantal niet-herstelbare sectoren
+C7=UltraDMA CRC-fouttelling
+C8=Schrijffoutpercentage
+C9=Zachte leesfoutfrequentie
+CA=Fout in data-adresmarkering
+CB=Annulering bij tekort
+CC=Zachte ECC-correctie
+CD=Thermische asperiteitsgraad
+CE=Kopvlieghoogte
+CF=Hoge stroom bij spin
+D0=Spin-brom
+D1=Offline-zoekprestatie
+D3=Trillingen tijdens schrijven
 D4=Schokken tijdens schrijven
-DC=Schijf Verschuiving
-DD=G-Sensor Fout Factor
-DE=Laad Uren
-DF=Laden /Ontladen Opnieuw Testen
-E0=Laad Wrijving
-E1=Laden/Ontladen Cyclus
-E2=Laad 'In'-Tijd
-E3=Draaimomend Versterk Instelling
-E4=Uitschakel Cyclus
-E6=GMR Koppen Amplitude
+DC=Schijfverschuiving
+DD=G-Sense-foutpercentage
+DE=Aantal geladen uren
+DF=Aantal laad-/ontlaadherpogingen
+E0=Wrijvingsbelasting
+E1=Laad-/ontlaadcyclus-telling
+E2=Laadtijd ‘In’
+E3=Aantal koppelversterkingen
+E4=Uitschakel-parkeercycli
+E6=GMR-kopamplitude
 E7=Temperatuur
-F0=Koppen Flying Uren
-FA=Leesfout Opnieuw Factor
-FE=Vrije Val Bescherming
+F0=Vlieguren van de kop
+FA=Leesfoutherhalingspercentage
+FE=Vrije valbeveiliging
+
 
 ;Updated 5.4.0
-F1=Totaal Host Schrijven
-F2=Totaal Host Lezen
+F1=Totaal Host-schrijfacties
+F2=Totaal Host-Leesacties
 
 ;Updated 9.5.0
-17=Helium Condition Lower
-18=Helium Condition Upper
-1B=MAMR Health Monitor
+17=Ondergrens heliumconditie
+18=Bovengrens heliumconditie
+1B=MAMR Gezondheidsmonitor
 
 [SmartSsd]
 01=Lees Fout Factor
@@ -363,11 +365,11 @@ F2=Host Lees acties (tot.)
 FF=Resterend Levenduur
 
 ;Updated 5.4.0
-F1=Totaal Host Geschreven
-F2=Totaal Host Gelezen
+F1=Totaal Host-schrijfacties
+F2=Totaal Host-leesactie
 
 [SmartMtron]
-BB=Totaal Wissen
+BB=Totaal Wis-acties
 
 [SmartIndilinx]
 01=Lees Fout Factor
@@ -523,7 +525,7 @@ AA=Slecht Block
 AD=Wissen
 
 [SmartMicron] ;Added 4.0.0/ Updated 6.6.0
-; RAIN = Redundant Array of Independent NAND
+; RAIN=Redundant Array of Independent NAND
 01=Raw Lees Fout Factor
 05=Heringedeelde NAND Block's
 09=Bedrijfs Uren

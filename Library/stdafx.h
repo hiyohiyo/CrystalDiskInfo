@@ -136,8 +136,8 @@
 	#endif
 #endif
 
-#define PRODUCT_VERSION				L"9.7.0"
-#define PRODUCT_RELEASE				L"2025/06/16"
+#define PRODUCT_VERSION				L"9.7.2"
+#define PRODUCT_RELEASE				L"2025/08/31"
 #define PRODUCT_COPY_YEAR			L"2008-2025"
 #define PRODUCT_LICENSE				L"MIT License"
 

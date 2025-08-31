@@ -1535,13 +1535,15 @@ void CDiskInfoDlg::UpdateDialogSize()
 	m_List.SetLineColor2(m_ListLine2);
 	m_List.SetGlassColor(m_Glass, m_GlassAlpha);
 
+/*
 #ifdef SUISHO_SHIZUKU_SUPPORT
 	m_List.InitControl(8 + m_OffsetX, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, FALSE);
 #elif A1DATA_SUPPORT
 	m_List.InitControl(8 + m_OffsetX, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, FALSE);
 #else
-	m_List.InitControl(8 + m_OffsetX, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, FALSE);
-#endif
+*/
+	m_List.InitControl(8 + m_OffsetX, SIZE_Y, 672 - 16, (int)(rect.Height() / m_ZoomRatio - SIZE_Y - 8), 672 - 16, 1000 - SIZE_Y - 8, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, FALSE);
+//#endif
 
 	RebuildListHeader(m_SelectDisk, TRUE);
 	UpdateListCtrl(m_SelectDisk);

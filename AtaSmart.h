@@ -325,6 +325,16 @@ public:
 		HOST_READS_WRITES_GB,
 	};
 
+	enum NAND_WRITES_UNIT
+	{
+		NAND_WRITES_UNKNOWN = 0,
+		NAND_WRITES_512B,
+		NAND_WRITES_1MB,
+		NAND_WRITES_16MB,
+		NAND_WRITES_32MB,
+		NAND_WRITES_GB,
+	};
+
 	enum COMMAND_TYPE
 	{
 		CMD_TYPE_UNKNOWN = 0,
@@ -1880,6 +1890,7 @@ public:
 		INTERFACE_TYPE		InterfaceType{};
 		COMMAND_TYPE		CommandType{};
 		HOST_READS_WRITES_UNIT HostReadsWritesUnit{};
+		NAND_WRITES_UNIT NandWritesUnit{};
 
 		DWORD				DiskVendorId{};
 		DWORD				UsbVendorId{};

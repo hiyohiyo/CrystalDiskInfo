@@ -1,8 +1,7 @@
-KR
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
 TRANSLATOR=Lyttiya, Gihun Ham, 로웰
-VERSION=9.6.0
+VERSION=9.7.0
 
 [Language]
 LANGUAGE=한국어
@@ -888,20 +887,20 @@ F6=총 삭제 횟수
 0D=예기치 않은 전원 손실 횟수
 0E=매체/데이터 무결성 오류 횟수
 0F=오류 정보 기록 항목 수
-10=Warning Composite Temperature Time
-11=Critical Composite Temperature Time
-12=Temperature Sensor 1
-13=Temperature Sensor 2
-14=Temperature Sensor 3
-15=Temperature Sensor 4
-16=Temperature Sensor 5
-17=Temperature Sensor 6
-18=Temperature Sensor 7
-19=Temperature Sensor 8
-1A=Thermal Management Temperature 1 Transition Count
-1B=Thermal Management Temperature 2 Transition Count
-1C=Total Time For Thermal Management Temperature 1
-1D=Total Time For Thermal Management Temperature 2
+10=복합 온도 경고 시간
+11=치명적인 복합 온도 시간
+12=온도 센서 1
+13=온도 센서 2
+14=온도 센서 3
+15=온도 센서 4
+16=온도 센서 5
+17=온도 센서 6
+18=온도 센서 7
+19=온도 센서 8
+1A=열 관리 온도 1 전환 횟수
+1B=열 관리 온도 2 전환 횟수
+1C=총 열 관리 온도 시간 1
+1D=총 열 관리 온도 시간 2
 
 [SmartRealtek] ; Added by Realtek
 01=원시 데이터 오류율

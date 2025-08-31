@@ -2695,6 +2695,7 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 
 	asi.InterfaceType = INTERFACE_TYPE_UNKNOWN;
 	asi.HostReadsWritesUnit = HOST_READS_WRITES_UNKNOWN;
+	asi.NandWritesUnit = NAND_WRITES_GB;
 
 	asi.DiskVendorId = VENDOR_UNKNOWN;
 	asi.UsbVendorId = VENDOR_UNKNOWN;
@@ -4278,21 +4279,21 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			if(asi.DiskVendorId == SSD_VENDOR_MTRON)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue;
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
 		case 0xCA:
 			if (asi.DiskVendorId == SSD_VENDOR_MICRON || asi.DiskVendorId == SSD_VENDOR_MICRON_MU03 || asi.DiskVendorId == SSD_VENDOR_INTEL_DC || asi.DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue;
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
 		case 0xD1:
 			if(asi.DiskVendorId == SSD_VENDOR_INDILINX)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue;
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
 		case 0xC9:
@@ -4300,7 +4301,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				int life = -1;
 				life = asi.Attribute[j].CurrentValue;
-				if (life < 0) { life = -1; }
+				if (life <= 0) { life = -1; }
 
 				asi.Life = life;
 			}
@@ -4331,7 +4332,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					life = 100 - asi.Attribute[j].RawValue[1];
 				}
 
-				if (life < 0) { life = -1; }
+				if (life <= 0) { life = -1; }
 
 				asi.Life = life;
 			}
@@ -4339,7 +4340,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			{
 				int life = -1;
 				life = asi.Attribute[j].CurrentValue;
-				if (life < 0) { life = -1; }
+				if (life <= 0) { life = -1; }
 
 				asi.Life = life;
 			}
@@ -4348,7 +4349,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			if(asi.DiskVendorId == SSD_VENDOR_PLEXTOR)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue;
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			else if(asi.DiskVendorId == SSD_VENDOR_OCZ)
 			{
@@ -4369,16 +4370,23 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				{
 					asi.Life = asi.Attribute[j].CurrentValue;
 				}
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			else if (asi.DiskVendorId == SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue;
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
-			else if ((asi.DiskVendorId == SSD_VENDOR_SANDISK || asi.DiskVendorId == SSD_VENDOR_SANDISK_LENOVO) && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
+			else if ((asi.DiskVendorId == SSD_VENDOR_SANDISK || asi.DiskVendorId == SSD_VENDOR_SANDISK_LENOVO || asi.DiskVendorId == SSD_VENDOR_SANDISK_CLOUD) && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
 			{
-				asi.NandWrites = *((INT*)&asi.Attribute[j].RawValue[0]);//(INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
+				if (asi.NandWritesUnit == NAND_WRITES_1MB)
+				{
+					asi.NandWrites = *(INT*)&asi.Attribute[j].RawValue[0] / 1024;
+				}
+				else
+				{
+					asi.NandWrites = *((INT*)&asi.Attribute[j].RawValue[0]);//(INT)(B8toB32(asi.Attribute[j].RawValue[0], asi.Attribute[j].RawValue[1], asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3]));
+				}
 			}
 			else if (asi.DiskVendorId == SSD_VENDOR_PLEXTOR || asi.DiskVendorId == SSD_VENDOR_KINGSTON || asi.DiskVendorId == SSD_VENDOR_WDC || asi.DiskVendorId == SSD_VENDOR_SSSTC || asi.DiskVendorId == SSD_VENDOR_SEAGATE ||  asi.DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC)
 			{
@@ -4673,7 +4681,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			else if (asi.DiskVendorId == SSD_VENDOR_MICRON || asi.DiskVendorId == SSD_VENDOR_MICRON_MU03)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue;
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
 		case 0xF3:
@@ -4727,7 +4735,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 			if (asi.DiskVendorId == SSD_VENDOR_TOSHIBA || asi.DiskVendorId == SSD_VENDOR_KIOXIA)
 			{
 				asi.Life = asi.Attribute[j].CurrentValue - 100;
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
 
@@ -4739,7 +4747,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 					MAKEWORD(asi.Attribute[j].RawValue[2], asi.Attribute[j].RawValue[3])
 					);
 				asi.Life = asi.Attribute[j].CurrentValue;
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
 		case 0xE7:
@@ -4763,7 +4771,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				{
 					asi.Life = asi.Attribute[j].CurrentValue;
 				}
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
 		case 0xA9:
@@ -4781,7 +4789,7 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				{
 					asi.Life = asi.Attribute[j].CurrentValue;
 				}
-				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
 			break;
 		case 0xC6:
@@ -5469,6 +5477,13 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 				asi.DiskVendorId = SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS;
 				asi.SmartKeyName = _T("SmartSanDiskLenovoHelenVenus");
 			}
+			// https://crystalmark.info/board/c-board.cgi?cmd=one;no=3176;id=#3176
+			else if (asi.Model.Find(_T("SD9SB")) >= 0)
+			{
+				asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+				asi.NandWritesUnit = NAND_WRITES_1MB;
+				asi.SmartKeyName = _T("SmartSanDiskGb");
+			}
 			else
 			{
 				asi.DiskVendorId = SSD_VENDOR_SANDISK_LENOVO;
@@ -5959,7 +5974,15 @@ BOOL CAtaSmart::IsSsdPhison(ATA_SMART_INFO& asi)
 
 	if (flagSmartType)
 	{
-		asi.FlagLifeRawValue = TRUE;
+		if (asi.Model.Find(_T("aigo PSSD P6")) == 0)
+		{
+			asi.FlagLifeRawValue = FALSE;
+		}
+		else
+		{
+			asi.FlagLifeRawValue = TRUE;
+		}
+
 		if (asi.FirmwareRev.Find(L"S9") == 0)
 		{
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_1MB;
@@ -6018,6 +6041,34 @@ BOOL CAtaSmart::IsSsdSeagate(ATA_SMART_INFO& asi)
 		flagSmartType = TRUE;
 		asi.SmartKeyName = _T("SmartSeagateIronWolf");
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+		asi.DiskVendorId = SSD_VENDOR_SEAGATE;
+	}
+	else if (
+		   asi.Attribute[0].Id == 0x01
+		&& asi.Attribute[1].Id == 0x09
+		&& asi.Attribute[2].Id == 0x0C
+		&& asi.Attribute[3].Id == 0x10
+		&& asi.Attribute[4].Id == 0x11
+		&& asi.Attribute[5].Id == 0xA8
+		&& asi.Attribute[6].Id == 0xAA
+		&& asi.Attribute[7].Id == 0xAD
+		&& asi.Attribute[8].Id == 0xAE
+		&& asi.Attribute[9].Id == 0xB1
+		&& asi.Attribute[10].Id == 0xC0
+		&& asi.Attribute[11].Id == 0xC2
+		&& asi.Attribute[12].Id == 0xDA
+		&& asi.Attribute[13].Id == 0xE7
+		&& asi.Attribute[14].Id == 0xE8
+		&& asi.Attribute[15].Id == 0xE9
+		&& asi.Attribute[16].Id == 0xEB
+		&& asi.Attribute[17].Id == 0xF1
+		&& asi.Attribute[18].Id == 0xF2
+		)
+	{
+		flagSmartType = TRUE;
+		asi.SmartKeyName = _T("SmartSeagate");
+		asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
+		asi.FlagLifeRawValue = TRUE;
 		asi.DiskVendorId = SSD_VENDOR_SEAGATE;
 	}
 	else if (asi.Model.Find(L"Seagate") == 0
@@ -6085,7 +6136,7 @@ BOOL CAtaSmart::IsSsdMarvell(ATA_SMART_INFO& asi)
 	CString modelUpper = asi.Model;
 	modelUpper.MakeUpper();
 
-	if (modelUpper.Find(L"LEXAR") == 0 && asi.FirmwareRev.Find(L"SN") == 0)
+	if (modelUpper.Find(L"LEXAR") == 0 && ( asi.FirmwareRev.Find(L"SN0") == 0 || asi.FirmwareRev.Find(L"V6") == 0 ))
 	{
 		asi.HostReadsWritesUnit = HOST_READS_WRITES_32MB;
 	}
@@ -11629,8 +11680,8 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				if (asi->DiskVendorId == SSD_VENDOR_SANDISK_HP || asi->DiskVendorId == SSD_VENDOR_SANDISK_HP_VENUS)
 				{
 					int life = -1;
-					if (life < 0 || life > 100) { life = -1; }
 					life = asi->Attribute[j].CurrentValue;
+					if (life <= 0 || life > 100) { life = -1; }
 					asi->Life = life;
 				}
 				break;
@@ -11659,14 +11710,14 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						life = 100 - asi->Attribute[j].RawValue[1];
 					}
 
-					if (life < 0 || life > 100) { life = -1; }
+					if (life <= 0 || life > 100) { life = -1; }
 
 					asi->Life = life;
 				}
 				else if(asi->DiskVendorId == SSD_VENDOR_SANDISK_LENOVO || asi->DiskVendorId == SSD_VENDOR_SANDISK_DELL)
 				{
 					int life = -1;
-					if (life < 0 || life > 100) { life = -1; }
+					if (life <= 0 || life > 100) { life = -1; }
 					life = asi->Attribute[j].CurrentValue;
 					asi->Life = life;
 				}
@@ -11708,7 +11759,14 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 						asi->DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
 					&& asi->HostReadsWritesUnit == HOST_READS_WRITES_GB)
 				{
-					asi->NandWrites = *(INT*)&asi->Attribute[j].RawValue[0];// (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
+					if (asi->NandWritesUnit == NAND_WRITES_1MB)
+					{
+						asi->NandWrites = *(INT*)&asi->Attribute[j].RawValue[0] / 1024;
+					}
+					else
+					{
+						asi->NandWrites = *(INT*)&asi->Attribute[j].RawValue[0];// (INT)B8toB32(asi->Attribute[j].RawValue[0], asi->Attribute[j].RawValue[1], asi->Attribute[j].RawValue[2], asi->Attribute[j].RawValue[3]);
+					}
 				}
 				else if (asi->DiskVendorId == SSD_VENDOR_PLEXTOR || asi->DiskVendorId == SSD_VENDOR_KINGSTON || asi->DiskVendorId == SSD_VENDOR_WDC || asi->DiskVendorId == SSD_VENDOR_SSSTC || asi->DiskVendorId == SSD_VENDOR_SEAGATE || asi->DiskVendorId == SSD_VENDOR_YMTC || asi->DiskVendorId == SSD_VENDOR_SILICONMOTION_CVC)
 				{
