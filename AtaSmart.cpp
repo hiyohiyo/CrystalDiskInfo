@@ -11562,29 +11562,38 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 				// Intel SSD 520 Series and etc...
 				else if (asi->Model.Find(_T("Intel")) == 0)
 				{
-				    CString fw = asi->Firmware;
-				    if (fw == _T("522ABBF0") || fw == _T("520i") || fw == _T("LB3i"))
-				    {
-				        // Special Intel firmwares: attribute 09 is minutes
-				        ULONGLONG minutes = MAKE_UINT48(asi->Attribute[j].RawValue);
-				        rawValue = minutes / 60;
-				    }
-				    else if (
-				        (asi->DetectedTimeUnitType == POWER_ON_MILLI_SECONDS)
-				     || (asi->DetectedTimeUnitType == POWER_ON_HOURS && rawValue >= 0x0DA000)
-				     || (rawValue >= 0x0DA000)
-				    )
-				    {
-				        asi->MeasuredTimeUnitType = POWER_ON_MILLI_SECONDS;
-				        int value = 0; 
-				        rawValue = value = asi->Attribute[j].RawValue[2] * 256 * 256
-				                         + asi->Attribute[j].RawValue[1] * 256
-				                         + asi->Attribute[j].RawValue[0] - 0x0DA753;
-				        if (value < 0)
-				        {
-				            rawValue = 0;
-				        }
-				    }
+					CString fw = asi->FirmwareRev; // check exact field name in ATA_SMART_INFO
+					if (fw.CompareNoCase(_T("522ABBF0")) == 0 ||
+						fw.CompareNoCase(_T("520i")) == 0 ||
+						fw.CompareNoCase(_T("LB3i")) == 0)
+					{
+						// Intel exceptions: attribute 09 is minutes
+						ULONGLONG minutes =
+							((ULONGLONG)asi->Attribute[j].RawValue[5] << 40) |
+							((ULONGLONG)asi->Attribute[j].RawValue[4] << 32) |
+							((ULONGLONG)asi->Attribute[j].RawValue[3] << 24) |
+							((ULONGLONG)asi->Attribute[j].RawValue[2] << 16) |
+							((ULONGLONG)asi->Attribute[j].RawValue[1] << 8) |
+							((ULONGLONG)asi->Attribute[j].RawValue[0]);
+
+						rawValue = (DWORD)(minutes / 60); // hours
+					}
+					else if (
+						(asi->DetectedTimeUnitType == POWER_ON_MILLI_SECONDS)
+						|| (asi->DetectedTimeUnitType == POWER_ON_HOURS && rawValue >= 0x0DA000)
+						|| (rawValue >= 0x0DA000)
+						)
+					{
+						asi->MeasuredTimeUnitType = POWER_ON_MILLI_SECONDS;
+						int value = 0;
+						rawValue = value = asi->Attribute[j].RawValue[2] * 256 * 256
+							+ asi->Attribute[j].RawValue[1] * 256
+							+ asi->Attribute[j].RawValue[0] - 0x0DA753;
+						if (value < 0)
+						{
+							rawValue = 0;
+						}
+					}
 				}
 
 				asi->PowerOnRawValue = rawValue;
