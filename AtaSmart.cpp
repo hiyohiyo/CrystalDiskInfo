@@ -11560,21 +11560,31 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					rawValue = asi->Attribute[j].WorstValue * 256 + asi->Attribute[j].CurrentValue;
 				}
 				// Intel SSD 520 Series and etc...
-				else if (
-					(asi->DetectedTimeUnitType == POWER_ON_MILLI_SECONDS)
-				||  (asi->DetectedTimeUnitType == POWER_ON_HOURS && rawValue >= 0x0DA000)
-				|| (asi->Model.Find(_T("Intel")) == 0 && rawValue >= 0x0DA000)
-				)
+				else if (asi->Model.Find(_T("Intel")) == 0)
 				{
-					asi->MeasuredTimeUnitType = POWER_ON_MILLI_SECONDS;
-					int value = 0; 
-					rawValue = value = asi->Attribute[j].RawValue[2] * 256 * 256
-									 + asi->Attribute[j].RawValue[1] * 256
-									 + asi->Attribute[j].RawValue[0] - 0x0DA753; // https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=560;id=diskinfo#560
-					if(value < 0)
-					{
-						rawValue = 0;
-					}
+				    CString fw = asi->Firmware;
+				    if (fw == _T("522ABBF0") || fw == _T("520i") || fw == _T("LB3i"))
+				    {
+				        // Special Intel firmwares: attribute 09 is minutes
+				        ULONGLONG minutes = MAKE_UINT48(asi->Attribute[j].RawValue);
+				        rawValue = minutes / 60;
+				    }
+				    else if (
+				        (asi->DetectedTimeUnitType == POWER_ON_MILLI_SECONDS)
+				     || (asi->DetectedTimeUnitType == POWER_ON_HOURS && rawValue >= 0x0DA000)
+				     || (rawValue >= 0x0DA000)
+				    )
+				    {
+				        asi->MeasuredTimeUnitType = POWER_ON_MILLI_SECONDS;
+				        int value = 0; 
+				        rawValue = value = asi->Attribute[j].RawValue[2] * 256 * 256
+				                         + asi->Attribute[j].RawValue[1] * 256
+				                         + asi->Attribute[j].RawValue[0] - 0x0DA753;
+				        if (value < 0)
+				        {
+				            rawValue = 0;
+				        }
+				    }
 				}
 
 				asi->PowerOnRawValue = rawValue;
