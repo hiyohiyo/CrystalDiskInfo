@@ -4737,6 +4737,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				asi.Life = asi.Attribute[j].CurrentValue - 100;
 				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
+			if (asi.DiskVendorId == SSD_VENDOR_MICRON || asi.DiskVendorId == SSD_VENDOR_MICRON_MU03)
+			{
+				asi.Life = asi.Attribute[j].CurrentValue;
+				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
+			}
 			break;
 
 		case 0xB1:
