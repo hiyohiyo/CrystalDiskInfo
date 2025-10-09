@@ -4377,6 +4377,11 @@ VOID CAtaSmart::CheckSsdSupport(ATA_SMART_INFO &asi)
 				asi.Life = asi.Attribute[j].CurrentValue;
 				if (asi.Life <= 0 || asi.Life > 100) { asi.Life = -1; }
 			}
+			else if (asi.DiskVendorId == SSD_VENDOR_SAMSUNG && IsSamsungEnterpriseModel(asi.Model))
+			{
+				asi.Life = asi.Attribute[j].CurrentValue;
+				if (asi.Life < 0 || asi.Life > 100) { asi.Life = -1; }
+			}
 			else if ((asi.DiskVendorId == SSD_VENDOR_SANDISK || asi.DiskVendorId == SSD_VENDOR_SANDISK_LENOVO || asi.DiskVendorId == SSD_VENDOR_SANDISK_CLOUD) && asi.HostReadsWritesUnit == HOST_READS_WRITES_GB)
 			{
 				if (asi.NandWritesUnit == NAND_WRITES_1MB)
@@ -5076,6 +5081,31 @@ BOOL CAtaSmart::IsSsdIntel(ATA_SMART_INFO &asi)
 	}
 
 	return (modelUpper.Find(_T("INTEL")) >= 0 || modelUpper.Find(_T("SOLIDIGM")) >= 0 || flagSmartType == TRUE);
+}
+
+
+// Detect Samsung enterprise SATA models by model string.
+// Using CString keeps us header-agnostic (no ref/pointer confusion).
+BOOL CAtaSmart::IsSamsungEnterpriseModel(const CString& model)
+{
+	CString mu = model;
+	mu.MakeUpper();
+
+	// Retail/line names
+	if (mu.Find(L"SM863") >= 0 || mu.Find(L"PM863") >= 0 || mu.Find(L"PM863A") >= 0
+		|| mu.Find(L"SM883") >= 0 || mu.Find(L"PM883") >= 0 || mu.Find(L"SM843T") >= 0
+		|| mu.Find(L"PM853T") >= 0)
+	{
+		return TRUE;
+	}
+
+	// Common OEM codes for those lines (e.g., your MZ7KM... SM863)
+	if (mu.Find(L"MZ7KM") >= 0 || mu.Find(L"MZ7KH") >= 0 || mu.Find(L"MZ7LM") >= 0 || mu.Find(L"MZ7LH") >= 0)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 
@@ -11754,6 +11784,13 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					asi->Life = asi->Attribute[j].CurrentValue;
 					if (asi->Life < 0 || asi->Life > 100) { asi->Life = -1; }
 				}
+				// NEW: Samsung enterprise SATA (Media_Wearout_Indicator normalized value = % life remaining)
+				else if (asi->DiskVendorId == SSD_VENDOR_SAMSUNG && IsSamsungEnterpriseModel(asi->Model))
+				{
+								// Samsung enterprise SATA: ID 0xE9 (233) normalized VALUE = % life remaining.
+								asi->Life = asi->Attribute[j].CurrentValue;
+								if (asi->Life < 0 || asi->Life > 100) { asi->Life = -1; }
+				}
 				else if ((asi->DiskVendorId == SSD_VENDOR_SANDISK ||
 						asi->DiskVendorId == SSD_VENDOR_SANDISK_LENOVO ||
 						asi->DiskVendorId == SSD_VENDOR_SANDISK_CLOUD)
@@ -12469,7 +12506,9 @@ DWORD CAtaSmart::CheckDiskStatus(DWORD i)
 			                                || vars[i].DiskVendorId == SSD_VENDOR_JMICRON || vars[i].DiskVendorId == SSD_VENDOR_MAXIOTEK || vars[i].DiskVendorId == SSD_VENDOR_YMTC || vars[i].DiskVendorId == SSD_VENDOR_SCY || vars[i].DiskVendorId == SSD_VENDOR_RECADATA || vars[i].DiskVendorId == SSD_VENDOR_ADATA_INDUSTRIAL))
 		|| (vars[i].Attribute[j].Id == 0xE8 && vars[i].DiskVendorId == SSD_VENDOR_PLEXTOR)
 		|| (vars[i].Attribute[j].Id == 0xE9 && (vars[i].DiskVendorId == SSD_VENDOR_INTEL || vars[i].DiskVendorId == SSD_VENDOR_OCZ || vars[i].DiskVendorId == SSD_VENDOR_OCZ_VECTOR || vars[i].DiskVendorId == SSD_VENDOR_SKHYNIX))
-		|| (vars[i].Attribute[j].Id == 0xE9 && vars[i].DiskVendorId == SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS)
+		|| (vars[i].Attribute[j].Id == 0xE9 && vars[i].DiskVendorId == SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS) || (vars[i].Attribute[j].Id == 0xE9
+			&& vars[i].DiskVendorId == SSD_VENDOR_SAMSUNG
+			&& IsSamsungEnterpriseModel(vars[i].Model))
 		)
 		{
 			flagUnknown = FALSE;
