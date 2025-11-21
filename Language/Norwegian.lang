@@ -184,8 +184,8 @@ POWER_ON_DAYS_UNIT=dager
 POWER_ON_YEARS_UNIT=år
 
 ;4.3
-TOTAL_HOST_WRITES=Total Host Writes
-TOTAL_HOST_READS=Total Host Reads
+TOTAL_HOST_WRITES=Antall vertsskrivinger
+TOTAL_HOST_READS=Antall vertslesninger
 TOTAL_NAND_WRITES=Total NAND Writes
 
 ;4.5
@@ -324,8 +324,8 @@ BD=High Fly Writes
 FE=Free Fall Protection
 
 ;Updated 5.4.0
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Antall vertsskrivinger
+F2=Antall vertslesninger
 
 ;Updated 9.5.0
 17=Helium Condition Lower
@@ -355,8 +355,8 @@ C6=Uncorrectable Sector Count
 FF=Remaining Life
 
 ;Updated 5.4.0
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Antall vertsskrivinger
+F2=Antall vertslesninger
 
 [SmartMtron]
 BB=Total Erase Count
@@ -651,8 +651,8 @@ E6=Power Loss Protection
 FB=NAND Read Count
 
 ;Updated 6.7.0
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Antall vertsskrivinger
+F2=Antall vertslesninger
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=Read Error Rate
@@ -683,8 +683,8 @@ C6=Uncorrectable Sector Count
 C7=Ultra CRC Error Count
 E8=Available Reserved Space
 E9=NAND GB written
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Antall vertsskrivinger
+F2=Antall vertslesninger
 
 [SmartSanDisk] ;Added (5.2.0)
 05=Retired Block Count
@@ -696,8 +696,8 @@ AC=Erase Fail Count
 AE=Unexpected Power Loss Count
 BB=Reported Uncorrectable Errors
 E8=Remaining Life
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Antall vertsskrivinger
+F2=Antall vertslesninger
 
 [SmartOczVector] ;Added (5.3.0)
 05=Accumulated Runtime Bad Blocks
@@ -717,8 +717,8 @@ E9=Remaining Life
 F9=Total NAND Programming Count
 
 ;Updated 5.5.0
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Antall vertsskrivinger
+F2=Antall vertslesninger
 
 ;Updated 6.6.0
 64=Total Blocks Erased
@@ -776,8 +776,8 @@ C2=Temperatur
 C4=Reallocation Event Count
 C5=Current Pending Sector Count
 C6=Uncorrectable Sector Count
-F1=Total Host Writes
-F2=Total Host Reads
+F1=Antall vertsskrivinger
+F2=Antall vertslesninger
 
 [SmartSanDiskGb] ;Added 6.2.0
 05=Reallocated Block Count
@@ -1119,7 +1119,7 @@ E5=Power Loss Protection Failure
 E7=Percentage Lifetime Remaining
 E8=Available Reserved Space 
 E9=NAND GB Written
-F1=Total Host Write
+F1=Antall vertsskrivinger
 F2=Total Host Read 
 F3=NAND GB Written
 
