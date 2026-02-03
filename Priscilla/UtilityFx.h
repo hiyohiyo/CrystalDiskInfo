@@ -33,6 +33,57 @@ ULONG64 B8toB64(BYTE b0, BYTE b1 = 0, BYTE b2 = 0, BYTE b3 = 0, BYTE b4 = 0, BYT
 DWORD B8toB32(BYTE b0, BYTE b1 = 0, BYTE b2 = 0, BYTE b3 = 0);
 void SplitCString(const CString& str, const CString& delimiter, CStringArray& arr);
 
+
+// ---------------------------------------------------------
+// 20260123: Safe for unaligned/page-boundary (Using memcpy for atomic-like MOV) >>>
+
+#ifndef NODISCARD
+  #if (defined(__cplusplus) && __cplusplus >= 201703L) || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)
+    #define NODISCARD [[nodiscard]]
+  #elif defined(_MSC_VER) && (_MSC_VER >= 1700)
+    #define NODISCARD _Check_return_
+  #else
+    #define NODISCARD
+  #endif
+#endif
+
+// SAL annotation support
+#ifndef _In_reads_
+  #ifdef _MSC_VER
+    #include <sal.h>
+  #endif
+  //without SAL
+  #ifndef _In_reads_
+    #define _In_reads_(s)
+  #endif
+#endif
+
+/* 8byte(le) to ULONG64 (Safe for unaligned/page-boundary) */
+NODISCARD ULONG64 B8toB64le_ptr(_In_reads_(8) const BYTE* v) noexcept;
+/* 4byte(le) to DWORD (Safe for unaligned/page-boundary) */
+NODISCARD DWORD B8toB32le_ptr(_In_reads_(4) const BYTE* v) noexcept;
+/* 4byte(le) to INT (Controlled sign extension) */
+NODISCARD INT B8toINTle(_In_reads_(4) const BYTE* v) noexcept;
+/* 2byte(le) to USHORT (Safe for unaligned/page-boundary) */
+NODISCARD USHORT B8toB16le_ptr(_In_reads_(2) const BYTE* v) noexcept;
+/* 2byte(le) to signed SHORT (Controlled sign extension) */
+NODISCARD SHORT B8toSHORTle_ptr(_In_reads_(2) const BYTE* v) noexcept;
+/* 6byte(le) to ULONG64 (Safe for page-boundary) */
+NODISCARD ULONG64 B8toB64le(const BYTE(&v)[6]) noexcept;
+/* 6byte(le) to DWORD (Safe for page-boundary) */
+NODISCARD DWORD B8toB32le(const BYTE(&v)[6]) noexcept;
+/* 6byte(le) to INT (Controlled sign extension) */
+NODISCARD INT B8toINTle(const BYTE(&v)[6]) noexcept;
+/* 6byte(le) to USHORT (Safe for page-boundary) */
+NODISCARD USHORT B8toB16le(const BYTE(&v)[6]) noexcept;
+
+
+// 20260123: Safe for unaligned/page-boundary <<<
+// ---------------------------------------------------------
+
+
+
+
 ////------------------------------------------------
 //   .ini support function
 ////------------------------------------------------

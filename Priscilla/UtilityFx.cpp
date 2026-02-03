@@ -270,6 +270,75 @@ void SplitCString(const CString& str, const CString& delimiter, CStringArray& ar
 	}
 }
 
+
+
+
+// ---------------------------------------------------------
+// 20260123: Safe for unaligned/page-boundary (Using memcpy for atomic-like MOV) >>>
+
+// Environment Validation (Compile-time) >
+static_assert(sizeof(USHORT) == 2, "! (sizeof(USHORT) == 2)");
+static_assert(sizeof(INT) == 4, "! (sizeof(INT) == 4)");
+static_assert(sizeof(DWORD) == 4, "! (sizeof(DWORD) == 4)");
+static_assert(sizeof(ULONG64) == 8, "! (sizeof(ULONG64) == 8)");
+
+// Boundary-Safe Loaders >
+
+NODISCARD ULONG64 B8toB64le_ptr(_In_reads_(8) const BYTE* v) noexcept {
+	ULONG64 u64;
+	::memcpy(&u64, v, sizeof(u64));
+	return u64;
+}
+NODISCARD DWORD B8toB32le_ptr(_In_reads_(4) const BYTE* v) noexcept {
+	return ((static_cast<DWORD>(v[0]))
+		| (static_cast<DWORD>(v[1]) << 8)
+		| (static_cast<DWORD>(v[2]) << 16)
+		| (static_cast<DWORD>(v[3]) << 24));
+}
+NODISCARD INT B8toINTle_ptr(_In_reads_(4) const BYTE* v) noexcept {
+	return static_cast<INT>((static_cast<DWORD>(v[0]))
+		| (static_cast<DWORD>(v[1]) << 8)
+		| (static_cast<DWORD>(v[2]) << 16)
+		| (static_cast<DWORD>(v[3]) << 24));
+}
+NODISCARD USHORT B8toB16le_ptr(_In_reads_(2) const BYTE* v) noexcept {
+	return static_cast<USHORT>((static_cast<USHORT>(v[0]))
+		| (static_cast<USHORT>(v[1]) << 8));
+}
+NODISCARD SHORT B8toSHORTle_ptr(_In_reads_(2) const BYTE* v) noexcept {
+	return static_cast<SHORT>((static_cast<USHORT>(v[0]))
+		| (static_cast<USHORT>(v[1]) << 8));
+}
+NODISCARD ULONG64 B8toB64le(const BYTE(&v)[6]) noexcept {
+	return ((static_cast<ULONG64>(v[0]))
+		| (static_cast<ULONG64>(v[1]) << 8)
+		| (static_cast<ULONG64>(v[2]) << 16)
+		| (static_cast<ULONG64>(v[3]) << 24)
+		| (static_cast<ULONG64>(v[4]) << 32)
+		| (static_cast<ULONG64>(v[5]) << 40));
+}
+NODISCARD DWORD B8toB32le(const BYTE(&v)[6]) noexcept {
+	return ((static_cast<DWORD>(v[0]))
+		| (static_cast<DWORD>(v[1]) << 8)
+		| (static_cast<DWORD>(v[2]) << 16)
+		| (static_cast<DWORD>(v[3]) << 24));
+}
+NODISCARD INT B8toINTle(const BYTE(&v)[6]) noexcept {
+	return static_cast<INT>((static_cast<DWORD>(v[0]))
+		| (static_cast<DWORD>(v[1]) << 8)
+		| (static_cast<DWORD>(v[2]) << 16)
+		| (static_cast<DWORD>(v[3]) << 24));
+}
+NODISCARD USHORT B8toB16le(const BYTE(&v)[6]) noexcept {
+	return ((static_cast<USHORT>(v[0]))
+		| (static_cast<USHORT>(v[1]) << 8));
+}
+
+// 20260123: Safe for unaligned/page-boundary <<<
+// ---------------------------------------------------------
+
+
+
 ////------------------------------------------------
 //   .ini support function
 ////------------------------------------------------
