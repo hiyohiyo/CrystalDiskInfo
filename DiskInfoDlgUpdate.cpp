@@ -468,7 +468,8 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			// Temperature
 			else if (m_Ata.vars[i].Attribute[j].Id == 0xC2)
 			{
-				if (m_Ata.vars[i].Attribute[j].CurrentValue >= m_Ata.vars[i].AlarmTemperature) {
+				WORD iTemp = (MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]));
+				if (iTemp >= m_Ata.vars[i].AlarmTemperature) {
 					if (flag)
 					{
 						m_List.SetItem(k, 0, mask, _T(""), ICON_CAUTION + m_bGreenMode, 0, 0, 0, 0);
