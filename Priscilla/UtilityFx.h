@@ -63,7 +63,7 @@ NODISCARD ULONG64 B8toB64le_ptr(_In_reads_(8) const BYTE* v) noexcept;
 /* 4byte(le) to DWORD (Safe for unaligned/page-boundary) */
 NODISCARD DWORD B8toB32le_ptr(_In_reads_(4) const BYTE* v) noexcept;
 /* 4byte(le) to INT (Controlled sign extension) */
-NODISCARD INT B8toINTle(_In_reads_(4) const BYTE* v) noexcept;
+NODISCARD INT B8toINTle_ptr(_In_reads_(4) const BYTE* v) noexcept;
 /* 2byte(le) to USHORT (Safe for unaligned/page-boundary) */
 NODISCARD USHORT B8toB16le_ptr(_In_reads_(2) const BYTE* v) noexcept;
 /* 2byte(le) to signed SHORT (Controlled sign extension) */
