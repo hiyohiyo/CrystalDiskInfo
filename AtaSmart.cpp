@@ -932,6 +932,7 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 
 					SAFE_RELEASE(pCOMDev);
 				}
+				SAFE_RELEASE(pEnumCOMDevs);
 			}
 			catch (...)
 			{
@@ -2011,15 +2012,15 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				DebugPrint(_T("EX:Drive Letter Mapping"));
 			}
 		*/
-safeRelease:
+		}
+	safeRelease:
 
-			SAFE_RELEASE(pCOMDev);
-			SAFE_RELEASE(pEnumCOMDevs);
-			SAFE_RELEASE(pEnumCOMDevs2);
-			SAFE_RELEASE(pIWbemServices);
+		SAFE_RELEASE(pCOMDev);
+		SAFE_RELEASE(pEnumCOMDevs);
+		SAFE_RELEASE(pEnumCOMDevs2);
+		SAFE_RELEASE(pIWbemServices);
 		//	CoUninitialize();
 		//  DebugPrint(_T("OK:CoUninitialize()"));
-		}
 	}
 	else
 	{

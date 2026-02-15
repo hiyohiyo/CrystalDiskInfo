@@ -53,6 +53,7 @@ CString GetStringValueFromQuery(IWbemServices* pIWbemServices, const CString que
 					VariantClear(&pVal);
 				}
 				VariantInit(&pVal);
+				SAFE_RELEASE(pCOMDev);
 			}
 		}
 	}
@@ -61,7 +62,6 @@ CString GetStringValueFromQuery(IWbemServices* pIWbemServices, const CString que
 		result = L"";
 	}
 
-	SAFE_RELEASE(pCOMDev);
 	SAFE_RELEASE(pEnumCOMDevs);
 	return result;
 }
@@ -177,6 +177,7 @@ SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 
 		++CurrentDevice;
 	} while (LastResult);
+	SetupDiDestroyDeviceInfoList(ClassDeviceInformations);
 
 	return ConvertOSResult(OSLevelResult);
 }
