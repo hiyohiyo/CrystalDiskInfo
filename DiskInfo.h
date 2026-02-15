@@ -40,6 +40,8 @@
 
 #ifdef SUISHO_AOI_SUPPORT
 	#define PROJECT_COPYRIGHT   L"AoiCopyright"
+#elif A1DATA_ERIKA_SUPPORT
+	#define PROJECT_COPYRIGHT   L""
 #elif MSI_MEI_SUPPORT
 	#define PROJECT_COPYRIGHT   L"Copyright"
 #elif KUREI_KEI_SUPPORT

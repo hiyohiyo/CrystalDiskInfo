@@ -192,9 +192,9 @@ POWER_ON_DAYS_UNIT=天
 POWER_ON_YEARS_UNIT=年
 
 ;4.3
-TOTAL_HOST_WRITES=對 SSD 累計寫入
-TOTAL_HOST_READS=對 SSD 累計讀取
-TOTAL_NAND_WRITES=NAND 累計寫入
+TOTAL_HOST_WRITES=SSD 總寫入量
+TOTAL_HOST_READS=SSD 總讀取量
+TOTAL_NAND_WRITES=NAND 總寫入量
 
 ;4.5
 WEAR_LEVELING_COUNT=顆粒平均擦寫次數
@@ -333,8 +333,8 @@ F0=磁頭飛行時間
 FA=讀取錯誤重試率
 FE=自由跌落保護
 ;Updated 5.4.0
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 
 
 ;Updated 9.5.0
@@ -365,8 +365,8 @@ C6=無法校正的磁區計數
 FF=剩餘壽命
 
 ;Updated 5.4.0
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 [SmartMtron]
 BB=抹除次數總計
 
@@ -421,7 +421,7 @@ C0=不安全關機次數
 C2=硬碟溫度
 C5=等候重定的磁區計數
 C7=高速傳輸模式錯誤次數
-E1=對 SSD 累計寫入
+E1=SSD 寫入量
 E2=一定時間內的磨損比例
 E3=讀寫比例
 E4=單次測試時間
@@ -664,10 +664,10 @@ DE=RAID 復原次數
 E6=電源中斷保護
 FB=NAND 讀取次數
 ;Updated 6.7.0
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 ;Updated 9.3.1
-F9=總計 NAND 寫入
+F9=NAND 總寫入量
 
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=底層資料讀取錯誤率
@@ -698,8 +698,8 @@ C6=無法校正的磁區總數
 C7=Ultra 高速傳輸模式錯誤次數
 E8=可用的保留空間
 E9=NAND GB 已寫入
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 
 [SmartSanDisk] ;Added 5.2.0
 05=已淘汰區塊數
@@ -715,8 +715,8 @@ C2=外殼溫度
 E6=寫入/抹除次數總計百分比
 E8=剩餘壽命
 EA=寫入/抹除次數總計百分比 (BC 區塊)
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 
 [SmartOczVector] ;Added 5.3.0
 05=累計執行階段損壞磁區
@@ -729,16 +729,16 @@ C2=外殼溫度
 C3=規劃失敗累計
 C4=抹除失敗累計
 C5=讀取失敗累計(無法校正)
-C6=對 SSD 讀取
-C7=對 SSD 寫入
+C6=SSD 讀取量
+C7=SSD 寫入量
 D0=平均抹除次數
 D2=SATA 高速傳輸模式錯誤次數
 E9=剩餘壽命
 F9=NAND 規劃次數累計
 
 ;Updated 5.5.0
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 
 ;Updated 6.6.0
 64=總計區塊已抹除
@@ -795,8 +795,8 @@ C2=硬碟溫度
 C4=重定位事件計數
 C5=等候重定的磁區計數
 C6=無法校正的磁區計數
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 
 [SmartSanDiskGb] ;Added 6.2.0
 01=底層資料讀取錯誤率
@@ -959,8 +959,8 @@ D4=Phy 錯誤次數
 E7=SSD 壽命剩下
 E9=SSD 壽命剩下
 EA=NAND 已寫入
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 FA=NAND 讀取重試次數總數
 [SmartKioxia] ; Added 8.8.0
 09=總通電時間
@@ -971,7 +971,7 @@ A9=損壞區塊數
 AD=抹除次數 (使用者資料)
 C0=未預期的電源中斷次數
 C2=硬碟溫度
-F1=對 SSD 累計寫入
+F1=SSD 寫入量
 
 [SmartWdc] ; Added 8.8.0
 01=底層資料讀取錯誤率
@@ -1238,8 +1238,8 @@ C5=等候重定的磁區計數
 C6=無法校正的錯誤次數離線
 C7=Ultra DMA 高速傳輸模式錯誤次數
 E8=可用的保留空間
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=SSD 總寫入量
+F2=SSD 總讀取量
 F5=Flash 寫入磁區計數
 
 [SmartJMicron66x]
@@ -1264,8 +1264,8 @@ C5=等候重定的磁區計數
 E7=磁碟壽命
 E9=寫入磁區計數 (NAND)
 F0=磁性寫頭
-F1=對 SSD 累計寫入
-F2=對 SSD 累計讀取
+F1=LBA(邏輯區塊定址)寫入總數
+F2=LBA(邏輯區塊定址)讀取總數
 
 [SmartPhison]
 01=底層資料讀取錯誤率
@@ -1278,7 +1278,7 @@ C0=未預期的電源中斷次數
 C2=硬碟溫度
 DA=CRC 錯誤數
 E7=SSD 壽命剩下
-F1=對 SSD 累計寫入
+F1=SSD 寫入量
 
 [SmartSeagate]
 ; https://crystalmark.info/board/c-board.cgi?cmd=one;no=1818;id=#1818

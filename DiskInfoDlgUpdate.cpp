@@ -2601,7 +2601,6 @@ void CDiskInfoDlg::SaveSmartInfo(DWORD i)
 
 	AlarmHealthStatus(i, dir, disk);
 
-
 	// Computer Name
 	// 
 	DWORD length = 256;

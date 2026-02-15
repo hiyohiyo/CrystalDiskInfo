@@ -1,7 +1,7 @@
 [Information]
 ; (Latest Translator, First Translator, Second Translator ...)
-TRANSLATOR=Hrant Ohanyan
-VERSION=8.9.0
+TRANSLATOR=Hrant Ohanyan »»» http://haysoft.org
+VERSION==9.6.0
 
 [Language]
 LANGUAGE=Armenian 
@@ -27,8 +27,8 @@ AAM_APM_CONTROL=AA&M/APM-ի կառավար
 AUTO_AAM_APM_ADAPTION=AAM/A&PM-ի ինքնակարգավորում
 RESIDENT=Գոր&ծակալ
 STARTUP=&Ինքնամեկնարկ
-OPEN_DISK_MANAGEMENT=Բացել "&Հիշասարքի կառավարումը"
-OPEN_DEVICE_MANAGER=Բացել "&Սարքի կառավարիչը"
+OPEN_DISK_MANAGEMENT=Բացել «&Հիշասարքի կառավարումը»
+OPEN_DEVICE_MANAGER=Բացել «&Սարքի կառավարիչը»
 ADVANCED_FEATURE=Ընդլայնված &կարգավորումներ
 REFRESH=&Թարմացնել
 RESCAN=Վեր&ստուգել
@@ -111,18 +111,19 @@ SAVE_TEXT=Պահպանել (&text)
 SAVE_IMAGE=&Պահպանել (image)
 
 ;9.0.0
-DRIVE_SORT_METHOD=Drive Sort Method
-PHYSICAL_DRIVE_ID=Physical Drive ID
-DRIVE_LETTER=Drive Letter
+DRIVE_SORT_METHOD=Հիշասարքի տեսակավորման մեթոդ
+PHYSICAL_DRIVE_ID=Ֆիզիկական սարքի ID
+DRIVE_LETTER=Սարքի տառը
+DRIVE_MENU_NUMBER=Ցուցադրել սարքերի քանակը
 
 ;9.2.0
-VOICE=Voice
+VOICE=Ձայն
 
 ;9.3.0
-STARTUP_VOICE=Startup Voice
+STARTUP_VOICE=Մեկնարկի ձայն
 
 ;9.5.0
-HIDE_RAID_VOLUME=Hide &RAID Volume
+HIDE_RAID_VOLUME=Թաքցնել &RAID հատորը
 [TrayMenu]
 EXIT=Փակել
 REFRESH=Թարմացնել
@@ -153,32 +154,32 @@ GRAPH=Գծագիր
 SHOW_TEMPERATURE_ICON_ONLY=Ցուցադրել միայն ջերմաստիճանի ցուցիչը
 
 [DiskStatus]
-GOOD=Լավ է
+GOOD=Լավ
 CAUTION=Տագնապ
-BAD=Վատ է
-UNKNOWN=Հայտնի չէ
+BAD=Վատ
+UNKNOWN=Անհայտ
 DISK=Հիշասարք
 
 [Dialog]
 LIST_ID=ID
 LIST_CURRENT=Ընթացիկ
-LIST_WORST=Վատագույնը
-LIST_THRESHOLD=Շեմը
+LIST_WORST=Վատագույն
+LIST_THRESHOLD=Շեմ
 LIST_RAW_VALUES=Hex արժեքը
 ;LIST_DESCRIPTION=Նկարագրություն
-LIST_ATTRIBUTE_NAME=Հատկանիշի անունը
+LIST_ATTRIBUTE_NAME=Հատկանիշի անուն
 
-FIRMWARE=Ներդրիչի տարբերակ
+FIRMWARE=Ներդրիչի տարբ.
 SERIAL_NUMBER=Հերթական համար
 INTERFACE=Միջերես
-STANDARD=Ստանդարտը
+STANDARD=Ստանդարտ
 TRANSFER_MODE=Տվյալների փոխանց.
 BUFFER_SIZE=Պահնակի չափը
 NV_CACHE_SIZE=NV շտեմի չափ
 ROTATION_RATE=Պտույտի արագ.
-TEMPERATURE=Ջերմաստիճանը
-POWER_ON_HOURS=Աշխատ. ժամանակը
-POWER_ON_COUNT=Միացումների քանակը
+TEMPERATURE=Ջերմաստիճան
+POWER_ON_HOURS=Աշխատաժամանակ
+POWER_ON_COUNT=Միացումների քանակ
 DRIVE_LETTER=Հիշասարքի տառը
 FEATURE=Ընտրանքներ
 HEALTH_STATUS=Տեխ. վիճակը՝
@@ -190,9 +191,9 @@ POWER_ON_DAYS_UNIT=օր
 POWER_ON_YEARS_UNIT=տարի
 
 ;4.3
-TOTAL_HOST_WRITES=Ընդամենը հոսթ գրառումներ
-TOTAL_HOST_READS=Ընդամենը հոսթ ընթերցումներ
-TOTAL_NAND_WRITES=Ընդամենը NAND գրառումներ
+TOTAL_HOST_WRITES=Հոսթ գրառումներ
+TOTAL_HOST_READS=Հոսթ ընթերցումներ
+TOTAL_NAND_WRITES=NAND գրառումներ
 
 ;4.5
 WEAR_LEVELING_COUNT=Wear Leveling-ի կիրառում
@@ -205,14 +206,15 @@ MAJOR_VERSION_MINOR_VERSION=Հիմնական տարբերակ | Երկրորդա
 FONT_FACE=Տառատեսակ
 FONT_SCALE=Տառատեսակի չափը (%)
 DEFAULT=Սկզբնադիր
+OK=Լավ
 ;8.9.0
 ENABLED=Միացված
 DISABLED=Անջատված
 
 [Message]
-DETECT_UNIT_POWER_ON_HOURS=Հիշասարքների աշխատանքի ժամանակը (կպահանջվի 130 վ.)
+DETECT_UNIT_POWER_ON_HOURS=Հայտնաբերում է «Աշխատանքի ժամանակը» միավորը (կպահանջվի մոտ. 130 վ.)
 DETECT_DISK=Հիշասարքի հայտնաբերում
-PLEASE_ENABLE_WMI=Միացրեքլ WMI-ը (Windows Management Instrumentation)
+PLEASE_ENABLE_WMI=Միացրեք WMI-ը (Windows Management Instrumentation)
 PLEASE_RESTART_THIS_APPLICATION=Վերաբացեք ծրագիրը
 DISK_NOT_FOUND=Հիշասարքը չի գտնվել
 
@@ -243,17 +245,17 @@ SUPPORTED_SOUND_FORMAT=Ձայնի աջակցվող տեսակներ
 
 [AamApm]
 AAM_LOW=<- Լուռ (80h)
-AAM_HIGH=Արդյունավետություն (FEh) ->
+AAM_HIGH=Արտադրողականություն (FEh) ->
 AAM_RECOMMEND=Հանձնարարելի արժեք
 APM_LOW=<- Տնտեսող (01h)
-APM_HIGH=Արդյունավետություն (FEh) ->
+APM_HIGH=Արտադրողականություն (FEh) ->
 ;3.5.0
 AUTOMATIC_ACOUSTIC_MANAGEMENT=Աղմուկի ինքնաշխատ կառավարում (AAM)
 ADVANCED_POWER_MANAGEMENT=Սնուցման ինքնաշխատ կառավարում (APM)
 
 [WindowTitle]
 ABOUT=CrystalDiskInfo ծրագրի մասին
-GRAPH=Գրաֆ
+GRAPH=Գրաֆիկ
 CUSTOMIZE=Կարգավորումներ
 VERSION_INFORMATION=Տարբերակ
 AAM_APM_CONTROL=AAM/APM-ի կառավարում
@@ -574,6 +576,13 @@ F7=Host Program Page Count
 F8=Background Program Page Count
 
 [SmartMicronMU02] ;Updated 6.6.0
+F9=Total Refresh ISP Count
+FA=Total Do RefCal Count
+FB=Total NAND Read Plane Count (Low 4Bytes)
+FC=Total NAND Read Plane Count (High 4Bytes)
+FD=Total Block ReMap Pass Count
+FE=Total Background Scan Over Limit Count
+DF=Total Background Scan
 ; RAIN = Redundant Array of Independent NAND
 01=Raw Read Error Rate
 05=Reallocated Sectors Count
@@ -672,6 +681,8 @@ FB=NAND Read Count
 F1=Total Host Writes
 F2=Total Host Reads
 
+;Updated 9.3.1
+F9=Total NAND Writes
 [SmartPlextor] ;Added (5.1.0)/Updated (5.4.0)
 01=Read Error Rate
 05=Reallocated Sectors Count
@@ -1008,6 +1019,7 @@ EA=NAND GB Written (SLC)
 EE=Media Wearout Indicator (Cycles Remaining)
 F1=Total GB Written
 F2=Total GB Read
+F3=Total NAND Writes
 F4=Temperature Throttle Status
 F9=NAND GB Written
 

@@ -79,6 +79,17 @@
 	#else
 	#define PRODUCT_EDITION			_T("Aoi Edition x86")
 	#endif
+#elif A1DATA_ERIKA_SUPPORT
+	#define PRODUCT_SHORT_NAME		_T("CDI A1DEE")
+	#ifdef _M_ARM
+	#define PRODUCT_EDITION			_T("A1Data Erika Edition ARM32")
+	#elif _M_ARM64
+	#define PRODUCT_EDITION			_T("A1Data Erika Edition ARM64")
+	#elif _M_X64
+	#define PRODUCT_EDITION			_T("A1Data Erika Edition x64")
+	#else
+	#define PRODUCT_EDITION			_T("A1Data Erika Edition x86")
+#endif
 #elif A1DATA_SUPPORT
 	#define PRODUCT_SHORT_NAME		_T("CDI A1DE")
 	#ifdef _M_ARM
@@ -136,39 +147,44 @@
 	#endif
 #endif
 
-#define PRODUCT_VERSION				L"9.7.2"
-#define PRODUCT_RELEASE				L"2025/08/31"
+#define PRODUCT_VERSION				L"9.8.0"
+#define PRODUCT_RELEASE				L"2026/02/15"
 #define PRODUCT_COPY_YEAR			L"2008-2025"
 #define PRODUCT_LICENSE				L"MIT License"
 
 #ifdef SUISHO_AOI_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
-#define PRODUCT_COPYRIGHT_3			L"© 2023-2025 nijihashi sola"
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2026 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2023-2026 nijihashi sola"
+#define PRODUCT_COPYRIGHT_3			L""
+
+#elif A1DATA_ERIKA_SUPPORT
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2026 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2026 A1Data Corp."
+#define PRODUCT_COPYRIGHT_3			L""
 
 #elif A1DATA_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
-#define PRODUCT_COPYRIGHT_3			L"© 2025 A1Data Corp."
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2026 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2025-2026 A1Data Corp."
+#define PRODUCT_COPYRIGHT_3			L""
 
 #elif MSI_MEI_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
-#define PRODUCT_COPYRIGHT_3			L"© 2024-2025 Micro-Star INT'L CO., LTD."
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2026 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2024-2026 Micro-Star INT'L CO., LTD."
+#define PRODUCT_COPYRIGHT_3			L""
 
 #elif KUREI_KEI_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
-#define PRODUCT_COPYRIGHT_3			L"© 2017-2025 Pronama LLC"
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2026 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2017-2026 Pronama LLC"
+#define PRODUCT_COPYRIGHT_3			L""
 
 #elif SUISHO_SHIZUKU_SUPPORT
-#define PRODUCT_COPYRIGHT_1         L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2         L"© 2025 CrystalMark Inc."
-#define PRODUCT_COPYRIGHT_3			L"© 2012-2025 kirino kasumu"
+#define PRODUCT_COPYRIGHT_1         L"© 2008-2026 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2         L"© 2012-2026 kirino kasumu"
+#define PRODUCT_COPYRIGHT_3			L""
 
 #else
-#define PRODUCT_COPYRIGHT_1			L"© 2008-2025 hiyohiyo"
-#define PRODUCT_COPYRIGHT_2			L"© 2025 CrystalMark Inc."
+#define PRODUCT_COPYRIGHT_1			L"© 2008-2026 hiyohiyo"
+#define PRODUCT_COPYRIGHT_2			L""
 #define PRODUCT_COPYRIGHT_3			L""
 #endif
 
@@ -190,6 +206,9 @@
 #ifdef MSI_MEI_SUPPORT
 #define URL_MAIN_JA					L"https://jp.msi.com/"
 #define URL_MAIN_EN 				L"https://www.msi.com/"
+#elif A1DATA_ERIKA_SUPPORT
+#define URL_MAIN_JA					L"https://www.a1d.co.jp/crystaldiskinfo/"
+#define URL_MAIN_EN 				L"https://www.a1d.co.jp/crystaldiskinfo/"
 #elif A1DATA_SUPPORT
 #define URL_MAIN_JA					L"https://www.a1d.co.jp/crystaldiskinfo/"
 #define URL_MAIN_EN 				L"https://www.a1d.co.jp/crystaldiskinfo/"
@@ -218,6 +237,13 @@
 #define URL_PROJECT_SITE_3	        L"https://instagram.com/kotomi_wicke?igshid=OGQ5ZDc2ODk2ZA=="
 #define URL_PROJECT_SITE_4			L"https://twitter.com/bellche"
 #define URL_PROJECT_SITE_5			L""
+
+#elif A1DATA_ERIKA_SUPPORT
+#define	URL_PROJECT_SITE_1		    L"https://www.a1d.co.jp/crystaldiskinfo/"
+#define URL_PROJECT_SITE_2		    L"https://www.a1d.co.jp/crystaldiskinfo/"
+#define URL_PROJECT_SITE_3	        L"https://www.a1d.co.jp/crystaldiskinfo/"
+#define URL_PROJECT_SITE_4			L"https://www.a1d.co.jp/crystaldiskinfo/"
+#define URL_PROJECT_SITE_5			L"https://www.a1d.co.jp/crystaldiskinfo/"
 
 #elif MSI_MEI_SUPPORT
 #define	URL_PROJECT_SITE_1		    L"https://jp.msi.com/Landing/mihoshimei/nb"

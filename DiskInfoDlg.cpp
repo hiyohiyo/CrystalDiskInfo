@@ -51,6 +51,10 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 	m_DefaultTheme = L"A1Data";
 	m_RecommendTheme = L"A1Data";
 	m_ThemeKeyName = L"ThemeA1Data";
+#elif A1DATA_ERIKA_SUPPORT
+	m_DefaultTheme = L"A1DataErika";
+	m_RecommendTheme = L"A1DataErika";
+	m_ThemeKeyName = L"ThemeA1DataErika";
 #elif MSI_MEI_SUPPORT
 	m_DefaultTheme = L"MSIMei";
 	m_RecommendTheme = L"MSIMei";
@@ -238,6 +242,8 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 
 #ifdef SUISHO_AOI_SUPPORT
 	m_BackgroundName = L"AoiBackground";
+#elif A1DATA_ERIKA_SUPPORT
+	m_BackgroundName = L"Background";
 #elif MSI_MEI_SUPPORT
 	m_BackgroundName = L"Background";
 #elif KUREI_KEI_SUPPORT
@@ -1260,6 +1266,12 @@ void CDiskInfoDlg::UpdateDialogSize()
 		m_OffsetX = 0;
 		positionX = SIZE_X - OFFSET_X;
 	}
+
+#ifdef A1DATA_ERIKA_SUPPORT
+	m_CtrlVoice.ShowWindow(SW_HIDE);
+	m_CtrlVoiceHide.ShowWindow(SW_HIDE);
+	m_CtrlCopyright.ShowWindow(SW_HIDE);
+#else
 	m_CtrlVoice.InitControl(positionX, 48, OFFSET_X, m_SizeY - 24 - 48, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlVoiceHide.InitControl(positionX, 0, OFFSET_X, 48, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlVoice.SetHandCursor();
@@ -1286,6 +1298,8 @@ void CDiskInfoDlg::UpdateDialogSize()
 	}
 	
 	m_CtrlCopyright.SetHandCursor();
+#endif
+
 #else
 	m_CtrlVoice.ShowWindow(SW_HIDE);
 	m_CtrlVoiceHide.ShowWindow(SW_HIDE);
@@ -1374,7 +1388,9 @@ void CDiskInfoDlg::UpdateDialogSize()
 		className += L"100";
 	}
 	m_CtrlLife.InitControl             (m_OffsetX, 88, 128, 192, m_ZoomRatio, m_hPal, &m_BkDC, IP(L"SD" + className), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
+#ifndef A1DATA_ERIKA_SUPPORT
 	m_CtrlLife.SetHandCursor(TRUE);
+#endif
 #elif A1DATA_SUPPORT
 	m_CtrlLife.ShowWindow(SW_SHOW);
 	m_CtrlLabelDiskStatus.InitControl(8 + m_OffsetX, 88, 100, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
@@ -2027,6 +2043,10 @@ BOOL CDiskInfoDlg::AlertSound(DWORD eventId, DWORD mode)
 		}
 	}
 	soundId = 0;
+
+	////////
+	// m_Toast.Show(IP(L"Logo"), 30000, TRUE, 255, 16, 200, 250, L"https://example.com/alert?id=12345");
+
 
 	return TRUE;
 }
@@ -2701,6 +2721,8 @@ BOOL CDiskInfoDlg::CheckThemeEdition(CString name)
 {
 #ifdef SUISHO_AOI_SUPPORT
 	if (name.Find(L"Aoi") == 0) { return TRUE; }
+#elif A1DATA_ERIKA_SUPPORT
+	if (name.Find(L"A1DataErika") == 0) { return TRUE; }
 #elif A1DATA_SUPPORT
 	if (name.Find(L"A1Data") == 0) { return TRUE; }
 #elif MSI_MEI_SUPPORT
@@ -2710,7 +2732,7 @@ BOOL CDiskInfoDlg::CheckThemeEdition(CString name)
 #elif SUISHO_SHIZUKU_SUPPORT
 	if (name.Find(L"Shizuku") == 0) { return TRUE; }
 #else
-	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L"Aoi") != 0 && name.Find(L"MSIMei") != 0 && name.Find(L"A1Data") != 0 && name.Find(L".") != 0) { return TRUE; }
+	if (name.Find(L"Shizuku") != 0 && name.Find(L"KureiKei") != 0 && name.Find(L"Aoi") != 0 && name.Find(L"MSIMei") != 0 && name.Find(L"A1DataErika") != 0 && name.Find(L"A1Data") != 0 && name.Find(L".") != 0) { return TRUE; }
 #endif
 
 	return FALSE;

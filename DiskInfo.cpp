@@ -240,6 +240,8 @@ BOOL CDiskInfoApp::InitInstance()
 		m_VoicePath.Format(_T("%s\\%s"), tmp, AOI_VOICE_EN_PATH);
 	}
 
+#elif A1DATA_ERIKA_SUPPORT
+	m_VoicePath = _T("");
 #elif MSI_MEI_SUPPORT
 	m_VoicePath.Format(_T("%s\\%s"), tmp, MSI_MEI_VOICE_PATH);
 #elif KUREI_KEI_SUPPORT

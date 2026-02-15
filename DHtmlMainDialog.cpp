@@ -76,6 +76,8 @@ void CDHtmlMainDialog::InitThemeLang()
 	{
 	#ifdef SUISHO_AOI_SUPPORT
 		GetPrivateProfileStringFx(_T("Setting"), _T("ThemeAoi"), _T("default"), str, 256, m_Ini);
+	#elif A1DATA_ERIKA_SUPPORT
+		GetPrivateProfileStringFx(_T("Setting"), _T("ThemeA1DataErika"), _T("default"), str, 256, m_Ini);
 	#elif MSI_MEI_SUPPORT
 		GetPrivateProfileStringFx(_T("Setting"), _T("ThemeMSIMei"), _T("default"), str, 256, m_Ini);
 	#elif KUREI_KEI_SUPPORT
@@ -381,6 +383,8 @@ void CDHtmlMainDialog::ChangeTheme(CString ThemeName)
 
 #ifdef SUISHO_AOI_SUPPORT
 	WritePrivateProfileStringFx(_T("Setting"), _T("ThemeAoi"), ThemeName.GetString(), m_Ini);
+#elif A1DATA_ERIKA_SUPPORT
+	WritePrivateProfileStringFx(_T("Setting"), _T("ThemeA1DataErika"), ThemeName.GetString(), m_Ini);
 #elif MSI_MEI_SUPPORT
 	WritePrivateProfileStringFx(_T("Setting"), _T("ThemeMSIMei"), ThemeName.GetString(), m_Ini);
 #elif KUREI_KEI_SUPPORT

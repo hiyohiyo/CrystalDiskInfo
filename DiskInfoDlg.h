@@ -23,6 +23,8 @@
 #include "ListCtrlFx.h"
 #include "OsInfoFx.h"
 
+// #include "ImageToast.h"
+
 #include <Dbt.h>
 
 #define REGISTRY_PATH _T("software\\Crystal Dew World\\CrystalDiskInfo")
@@ -716,4 +718,6 @@ public:
 	afx_msg void OnBnClickedButtonLife();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 //	afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct);
+
+//	CImageToast m_Toast;
 };

@@ -31,6 +31,8 @@ CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
 
 #ifdef SUISHO_AOI_SUPPORT
 	m_BackgroundName = L"AoiAbout";
+#elif A1DATA_ERIKA_SUPPORT
+	m_BackgroundName = L"About";
 #elif MSI_MEI_SUPPORT
 	m_BackgroundName = L"About";
 #elif KUREI_KEI_SUPPORT
@@ -139,6 +141,15 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlLogo.InitControl(32, 496, 128, 144, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlSecretVoice.InitControl(364, 264, 44, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 
+#elif A1DATA_ERIKA_SUPPORT
+	m_CtrlProjectSite1.InitControl(24, 460, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite2.InitControl(168, 604, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite3.InitControl(332, 604, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite4.InitControl(20, 20, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite5.InitControl(464, 604, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlLogo.InitControl(420, 32, 128, 128, m_ZoomRatio, m_hPal, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE, FALSE);
+	m_CtrlSecretVoice.InitControl(392, 240, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+
 #elif MSI_MEI_SUPPORT
 	m_CtrlProjectSite1.InitControl(24, 460, 348, 128, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlProjectSite2.InitControl(168, 604, 36, 24, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
@@ -209,6 +220,15 @@ void CAboutDlg::UpdateDialogSize()
 //	m_CtrlLicense.InitControl(160, 136, 364, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode, FALSE);
 
 	m_CtrlLicense.ShowWindow(SW_HIDE);
+
+#elif A1DATA_ERIKA_SUPPORT
+	m_CtrlVersion.InitControl(340, 204 - 32, 288, 28, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlEdition.InitControl(340, 232 - 32, 288, 28, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlRelease.InitControl(340, 268 - 32, 288, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlCopyright1.InitControl(340, 288 - 32, 288, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlCopyright2.InitControl(340, 308 - 32, 288, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlCopyright3.InitControl(340, 328 - 32, 288, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlLicense.InitControl(340, 0, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 
 #elif MSI_MEI_SUPPORT
 	m_CtrlVersion.InitControl(0, 204, 288, 28, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);

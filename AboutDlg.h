@@ -17,6 +17,9 @@ class CAboutDlg : public CDialogFx
 #ifdef SUISHO_AOI_SUPPORT
 	static const int SIZE_X = 640;
 	static const int SIZE_Y = 660;
+#elif A1DATA_ERIKA_SUPPORT
+	static const int SIZE_X = 640;
+	static const int SIZE_Y = 640;
 #elif MSI_MEI_SUPPORT
 	static const int SIZE_X = 640;
 	static const int SIZE_Y = 640;

@@ -68,6 +68,9 @@ END
 #elif A1DATA_SUPPORT
     IDR_MAINFRAME           ICON                "resA1\\DiskInfo.ico"
     IDI_MINI_ICON           ICON                "resA1\\DiskInfo16.ico"
+#elif A1DATA_ERIKA_SUPPORT
+    IDR_MAINFRAME           ICON                "resA1E\\DiskInfo.ico"
+    IDI_MINI_ICON           ICON                "resA1E\\DiskInfo16.ico"
 #elif MSI_MEI_SUPPORT
     IDR_MAINFRAME           ICON                "resM\\DiskInfo.ico"
     IDI_MINI_ICON           ICON                "resM\\DiskInfo16.ico"
@@ -914,8 +917,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 7, 2, 0
- PRODUCTVERSION 9, 7, 2, 0
+ FILEVERSION 9, 8, 0, 0
+ PRODUCTVERSION 9, 8, 0, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -930,46 +933,47 @@ BEGIN
     BEGIN
         BLOCK "080003a4"
         BEGIN
-#ifdef MSI_MEI_SUPPORT
             VALUE "Comments", "https://crystalmark.info/"
-#else
-            VALUE "Comments", "https://crystalmark.info/ MIT License"
-#endif
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.7.2.0"
-            VALUE "ProductVersion", "9.7.2.0"
+            VALUE "FileVersion", "9.8.0.0"
+            VALUE "ProductVersion", "9.8.0.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 
     #ifdef SUISHO_AOI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Aoi Edition"
             VALUE "ProductName", "CrystalDiskInfo Aoi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2023-2025 nijihashi sola"
+            VALUE "LegalCopyright", "(C) 2008-2026 hiyohiyo, (C) 2023-2026 nijihashi sola"
 
     #elif A1DATA_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo A1Data Edition"
             VALUE "ProductName", "CrystalDiskInfo A1Data Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2025 A1Data Corp."
+            VALUE "LegalCopyright", "(C) 2008-2026 hiyohiyo, (C) 2025-2026 A1Data Corp."
+
+    #elif A1DATA_ERIKA_SUPPORT
+            VALUE "FileDescription", "CrystalDiskInfo A1Data Erika Edition"
+            VALUE "ProductName", "CrystalDiskInfo A1Data Erika Edition"
+            VALUE "LegalCopyright", "(C) 2008-2026 hiyohiyo, (C) 2026 A1Data Corp."
 
     #elif MSI_MEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo MSI Mei Mihoshi Edition"
             VALUE "ProductName", "CrystalDiskInfo MSI Mei Mihoshi Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2024-2025 Micro-Star INT'L CO., LTD."
+            VALUE "LegalCopyright", "(C) 2008-2026 hiyohiyo, (C) 2024-2026 Micro-Star INT'L CO., LTD."
 
     #elif KUREI_KEI_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Kurei Kei Edition"
             VALUE "ProductName", "CrystalDiskInfo Kurei Kei Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2017-2025 Pronama LLC"
+            VALUE "LegalCopyright", "(C) 2008-2026 hiyohiyo, (C) 2017-2026 Pronama LLC"
 
     #elif SUISHO_SHIZUKU_SUPPORT
             VALUE "FileDescription", "CrystalDiskInfo Shizuku Edition"
             VALUE "ProductName", "CrystalDiskInfo Shizuku Edition"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc., (C) 2012-2025 kirino kasumu"
+            VALUE "LegalCopyright", "(C) 2008-2026 hiyohiyo, (C) 2012-2026 kirino kasumu"
 
     #else
             VALUE "FileDescription", "CrystalDiskInfo"
             VALUE "ProductName", "CrystalDiskInfo"
-            VALUE "LegalCopyright", "(C) 2008-2025 hiyohiyo, (C) 2025 CrystalMark Inc."
+            VALUE "LegalCopyright", "(C) 2008-2026 hiyohiyo"
     #endif
         END
     END
@@ -1301,9 +1305,9 @@ BEGIN
             MENUITEM "English, [English]", ID_VOICE_ENGLISH
             MENUITEM "“ú–{Œê, [Japanese]", ID_VOICE_JAPANESE
         END
-#endif 
-#ifdef SUISHO_SHIZUKU_SUPPORT
-        MENUITEM "Startup Voice",               ID_STARTUP_VOICE
+#elif A1DATA_ERIKA_SUPPORT
+#elif SUISHO_SHIZUKU_SUPPORT
+       MENUITEM "Startup Voice", ID_STARTUP_VOICE
 #endif 
 
         MENUITEM "S.M.A.R.T. in English",       ID_SMART_ENGLISH
