@@ -1,6 +1,12 @@
-#include "stdafx.h" // または stdafx.h
+/*---------------------------------------------------------------------------*/
+//       Author : hiyohiyo
+//         Mail : hiyohiyo@crystalmark.info
+//          Web : https://crystalmark.info/
+//      License : MIT License
+/*---------------------------------------------------------------------------*/
+
+#include "stdafx.h"
 #include "ImageToast.h"
-#include <shellscalingapi.h>
 
 #ifndef CMK_MIN
 #define CMK_MIN(a,b) (( (a) < (b) ) ? (a) : (b))
@@ -39,13 +45,13 @@ BOOL CImageToast::OnEraseBkgnd(CDC* /*pDC*/) { return TRUE; }
 
 void CImageToast::OnLButtonDown(UINT, CPoint)
 {
-    OpenUrlIfAny();   // ★ 左クリックでURLを開く
+    OpenUrlIfAny();
     BeginClose(FALSE);
 }
 
 void CImageToast::OnRButtonDown(UINT, CPoint)
 {
-    BeginClose(FALSE); // 右クリックは閉じるだけ
+    BeginClose(FALSE);
 }
 
 void CImageToast::OnKeyDown(UINT, UINT, UINT)
@@ -86,7 +92,6 @@ static BOOL CreateARGBDIB(HDC hdc, int w, int h, HBITMAP& outBmp, void** outBits
 
 BOOL CImageToast::LoadPngToDIB(LPCWSTR path)
 {
-    // ここでは GDI+ が既に初期化されている前提
     Gdiplus::Bitmap bmp(path);
     if (bmp.GetLastStatus() != Gdiplus::Ok) return FALSE;
 
@@ -103,17 +108,14 @@ BOOL CImageToast::LoadPngToDIB(LPCWSTR path)
         return FALSE;
     }
 
-    // hbmp を選択したメモリDCを作り、そこから Graphics を生成する
     HDC hdcMem = ::CreateCompatibleDC(hdcScreen);
     HGDIOBJ oldBmp = ::SelectObject(hdcMem, hbmp);
 
     {
         Gdiplus::Graphics g(hdcMem);
-        g.SetCompositingMode(Gdiplus::CompositingModeSourceCopy); // アルファをそのままコピー
-        // 透明で初期化（任意：PNGより小さい描画などの保険）
+        g.SetCompositingMode(Gdiplus::CompositingModeSourceCopy);
         Gdiplus::SolidBrush clearBrush(Gdiplus::Color(0, 0, 0, 0));
         g.FillRectangle(&clearBrush, 0, 0, w, h);
-        // PNGを転送
         g.DrawImage(&bmp, 0, 0, w, h);
     }
 
@@ -229,7 +231,7 @@ BOOL CImageToast::Show(LPCWSTR pngPath, UINT showMillis, BOOL enableFade, BYTE m
     m_curAlpha   = enableFade ? 0 : maxAlpha;
     m_closing    = FALSE;
     m_opened     = FALSE;
-    m_url        = (urlToOpen ? urlToOpen : L""); // ★
+    m_url        = (urlToOpen ? urlToOpen : L"");
 
     if (!EnsureWindowCreated()) return FALSE;
     if (!LoadPngToDIB(m_pngPath)) {
@@ -256,7 +258,6 @@ void CImageToast::CloseNow()
     BeginClose(FALSE);
 }
 
-// ★ URL起動本体（多重起動防止）
 void CImageToast::OpenUrlIfAny()
 {
     if (m_opened) return;
@@ -264,7 +265,5 @@ void CImageToast::OpenUrlIfAny()
 
     m_opened = TRUE;
 
-    // 既定ブラウザで開く（http/https/file/mailto 等に対応）
-    // 戻り値 >32 で成功。失敗時でも UI は閉じます。
     ::ShellExecuteW(nullptr, L"open", m_url, nullptr, nullptr, SW_SHOWNORMAL);
 }
