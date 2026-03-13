@@ -339,11 +339,17 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			}
 			else if (m_Ata.vars[i].Attribute[j].Id == 0x02)
 			{
+				/*
 				if ((MAKEWORD(m_Ata.vars[i].Attribute[1].RawValue[0], m_Ata.vars[i].Attribute[1].RawValue[1]) - 273) >= m_Ata.vars[i].AlarmTemperature)
 				{
 					icon = ICON_BAD;
 				}
 				else if ((MAKEWORD(m_Ata.vars[i].Attribute[1].RawValue[0], m_Ata.vars[i].Attribute[1].RawValue[1]) - 273) == m_Ata.vars[i].AlarmTemperature)
+				{
+					icon = ICON_CAUTION;
+				}
+				*/
+				if ((MAKEWORD(m_Ata.vars[i].Attribute[1].RawValue[0], m_Ata.vars[i].Attribute[1].RawValue[1]) - 273) >= m_Ata.vars[i].AlarmTemperature)
 				{
 					icon = ICON_CAUTION;
 				}
@@ -462,13 +468,26 @@ BOOL CDiskInfoDlg::UpdateListCtrl(DWORD i)
 			// Temperature
 			else if (m_Ata.vars[i].Attribute[j].Id == 0xC2)
 			{
-				if (flag)
-				{
-					m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
+				WORD iTemp = (MAKEWORD(m_Ata.vars[i].Attribute[j].RawValue[0], m_Ata.vars[i].Attribute[j].RawValue[1]));
+				if (iTemp >= m_Ata.vars[i].AlarmTemperature) {
+					if (flag)
+					{
+						m_List.SetItem(k, 0, mask, _T(""), ICON_CAUTION + m_bGreenMode, 0, 0, 0, 0);
+					}
+					else
+					{
+						m_List.InsertItem(k, _T(""), ICON_CAUTION + m_bGreenMode);
+					}
 				}
-				else
-				{
-					m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
+				else {
+					if (flag)
+					{
+						m_List.SetItem(k, 0, mask, _T(""), ICON_GOOD + m_bGreenMode, 0, 0, 0, 0);
+					}
+					else
+					{
+						m_List.InsertItem(k, _T(""), ICON_GOOD + m_bGreenMode);
+					}
 				}
 			}
 			// End-to-End Error
