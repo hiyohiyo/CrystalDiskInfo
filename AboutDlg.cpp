@@ -133,13 +133,13 @@ void CAboutDlg::UpdateDialogSize()
 #endif
 
 #ifdef SUISHO_AOI_SUPPORT
-	m_CtrlProjectSite1.InitControl(184, 516, 148, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
-	m_CtrlProjectSite2.InitControl(244, 548, 108, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
-	m_CtrlProjectSite3.InitControl(232, 564, 180, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
-	m_CtrlProjectSite4.InitControl(244, 584, 120, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite1.InitControl(68, 436, 180, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite2.InitControl(104, 476, 132, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite3.InitControl(100, 496, 204, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlProjectSite4.InitControl(108, 520, 140, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 	m_CtrlProjectSite5.InitControl(0, 0, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
-	m_CtrlLogo.InitControl(32, 496, 128, 144, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
-	m_CtrlSecretVoice.InitControl(364, 264, 44, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlLogo.InitControl(96, 632, 184, 16, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
+	m_CtrlSecretVoice.InitControl(408, 200, 32, 20, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
 
 #elif A1DATA_ERIKA_SUPPORT
 	m_CtrlProjectSite1.InitControl(24, 460, 0, 0, m_ZoomRatio, m_hPal, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, FALSE, FALSE, FALSE);
