@@ -2212,4 +2212,5 @@ protected:
 	BOOL GetSmartThresholdAMD_RC2(INT diskNum, ATA_SMART_INFO* asi);
 	// +AMD_RC2 <<<<<<<<
 #endif
+	static BOOL IsSamsungEnterpriseModel(const CString& model);
 };
