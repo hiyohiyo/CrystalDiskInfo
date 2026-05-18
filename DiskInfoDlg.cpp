@@ -255,7 +255,7 @@ CDiskInfoDlg::CDiskInfoDlg(CWnd* pParent /*=NULL*/, BOOL flagStartupExit)
 #endif
 
 #ifdef SUISHO_SHIZUKU_SUPPORT
-	m_hVoice = LoadLibrary(m_VoicePath);
+	m_hVoice = LoadLibraryEx(m_VoicePath, NULL, LOAD_LIBRARY_AS_DATAFILE);
 	if (m_hVoice != NULL)
 	{
 		DebugPrint(L"m_hVoice != NULL");

@@ -1736,7 +1736,7 @@ void CDiskInfoDlg::OnVoiceEnglish()
 	if (m_hVoice != NULL)
 	{
 		FreeLibrary(m_hVoice);
-		m_hVoice = LoadLibrary(m_VoicePath);
+		m_hVoice = LoadLibraryEx(m_VoicePath, NULL, LOAD_LIBRARY_AS_DATAFILE);
 	}
 }
 
@@ -1762,7 +1762,7 @@ void CDiskInfoDlg::OnVoiceJapanese()
 	if (m_hVoice != NULL)
 	{
 		FreeLibrary(m_hVoice);
-		m_hVoice = LoadLibrary(m_VoicePath);
+		m_hVoice = LoadLibraryEx(m_VoicePath, NULL, LOAD_LIBRARY_AS_DATAFILE);
 	}
 }
 #endif

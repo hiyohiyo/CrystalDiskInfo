@@ -59,6 +59,12 @@ static BOOL RunAsRestart();
 // CDiskInfoApp initialization
 BOOL CDiskInfoApp::InitInstance()
 {
+	// Remove current directory from DLL search order to prevent DLL hijacking
+	typedef BOOL(WINAPI* PFN_SetDllDirectory)(LPCTSTR);
+	PFN_SetDllDirectory pfnSetDllDirectory = (PFN_SetDllDirectory)GetProcAddress(
+		GetModuleHandle(_T("kernel32")), "SetDllDirectoryW");
+	if (pfnSetDllDirectory) { pfnSetDllDirectory(_T("")); }
+
 	BOOL flagEarthlight = FALSE;
 	BOOL flagStartupExit = FALSE;
 	m_bCopyExit = FALSE;
