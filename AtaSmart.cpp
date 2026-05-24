@@ -2520,6 +2520,12 @@ VOID CAtaSmart::Init(BOOL useWmi, BOOL advancedDiskSearch, PBOOL flagChangeDisk,
 				{
 					/// PCI Vendor ID for Samsung = 0x144D
 					if (model.Find(_T("SAMSUNG")) >= 0 && vars[i].IdentifyDevice.N.PCIeVID != 0x144D) { flagFake = TRUE; }
+
+					/// PCI Vendor ID for SanDisk/WD = 0x15B7
+					if (model.Find(_T("SANDISK")) >= 0 && vars[i].IdentifyDevice.N.PCIeVID != 0x15B7) { flagFake = TRUE; }
+
+					/// PCI Vendor ID for WD (Western Digital) = 0x15B7
+					if ((model.Find(_T("WDC ")) == 0 || model.Find(_T("WD ")) == 0) && vars[i].IdentifyDevice.N.PCIeVID != 0x15B7) { flagFake = TRUE; }
 				}
 
 				if (flagFake)
