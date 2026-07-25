@@ -1,0 +1,141 @@
+[Information]
+TRANSLATOR=Zo
+VERSION=8.0.0
+
+[Language]
+LANGUAGE=Croatian
+CHARACTER_CODE=Unicode (UTF-16, LE, w/ BOM)
+LOCALE_ID=0x041A
+
+[Url]
+WIKIPEDIA_SMART=https://hr.wikipedia.org/wiki/S.M.A.R.T.
+
+[Menu]
+FILE=&Datoteka
+CUSTOMIZE=&Prilagodi
+EXIT=&Izlaz
+EDIT=&Uredi
+COPY=&Kopiraj
+FUNCTION=F&unkcije
+HIDE_SMART_INFO=Sakrij info o &S.M.A.R.T
+HIDE_SERIAL_NUMBER=Sakrij serijski &broj
+SHOW_DRIVE_LETTER=Prikaži slovo &pogona
+ADVANCED_DISK_SEARCH=Napredno &pretraživanje diska
+EVENT_LOG=Zapisnik &događaja
+AAM_APM_CONTROL=Upravljanje bukom/potrošnjom diska
+AUTO_AAM_APM_ADAPTION=Automatska prilagodba buke/potrošnje diska
+RESIDENT=Re&zidentno
+STARTUP=&Pokretanje s Windowsima
+OPEN_DISK_MANAGEMENT=Otvori "&Upravljanje diskovima"
+OPEN_DEVICE_MANAGER=Otvori "Upravitelj &uređaja"
+ADVANCED_FEATURE=Napredne &postavke
+REFRESH=O&svježi
+RESCAN=Ponovno zk&ontroliraj
+DISABLE=&Onemogući
+AUTO_REFRESH=Automatsko o&svježavanje
+AUTO_REFRESH_TARGET=Automatsko osvježavanje i odabir
+AUTO_REFRESH_TARGET_ALL_DISK=Automatsko osvježavanje - Od&aberi sve diskove
+AUTO_REFRESH_UNTARGET_ALL_DISK=Automatsko osvježavanje - &Poništi odabir svih diskova
+WAIT_TIME_AT_STARTUP=Vrijeme &čekanja pri pokretanju
+GRAPH=&Grafikon
+THEME=&Tema
+DISK=&Disk
+HELP=&Pomoć
+HELP_WEB=&Pomoć [Web]
+HELP_ABOUT=&O programu CrystalDiskInfo
+HELP_ABOUT_SMART=O tehnologiji &S.M.A.R.T. (Wikipedia) [Web]
+LANGUAGE=&Jezik
+ITEM=&Stavka
+TEMPERATURE_TYPE=Tip &temperature
+CELSIUS=u stupnjevima Celzija (°C)
+FAHRENHEIT=u stupnjevima Fahrenheita (°F)
+HEALTH_STATUS_SETTING=Postavke &stanja diska
+
+[TrayMenu]
+EXIT=Izlaz
+REFRESH=Osvježi
+RESCAN=Ponovno provjeri
+ENABLE=Uključi
+DISABLE=Isključi
+ENABLE_ALL=Uključi sve
+DISABLE_ALL=Isključi sve
+AUTO_REFRESH=Automatsko osvježavanje
+SHOW_MAIN_WINDOW=Prikaži glavni prozor
+SHOW_TEMPERATURE_ICON=Prikaži ikonu temperature
+SHOW_ALL_TEMPERATURE_ICON=Prikaži sve ikone temperature
+HIDE_ALL_TEMPERATURE_ICON=Sakrij sve ikone temperature
+GRAPH=Grafikon
+
+[DiskStatus]
+GOOD=Dobro
+CAUTION=Oprez
+BAD=Loše
+UNKNOWN=Nepoznato
+DISK=Disk
+
+[Dialog]
+LIST_ID=ID
+LIST_CURRENT=Trenutna vrijednost
+LIST_WORST=Najgora vrijednost
+LIST_THRESHOLD=Prag (Granica)
+LIST_RAW_VALUES=Sirove vrijednosti (RAW)
+LIST_ATTRIBUTE_NAME=Naziv parametra
+
+FIRMWARE=Firmware
+SERIAL_NUMBER=Serijski broj
+INTERFACE=Sučelje
+STANDARD=Standard
+TRANSFER_MODE=Način prijenosa
+BUFFER_SIZE=Međuspremnik (Buffer)
+NV_CACHE_SIZE=NV Cache memorija
+ROTATION_RATE=Brzina okretaja
+TEMPERATURE=Temperatura :
+POWER_ON_HOURS=Radnih sati
+POWER_ON_COUNT=Broj uključivanja
+DRIVE_LETTER=Slova pogona
+FEATURE=Podržane značajke
+HEALTH_STATUS=Stav diska :
+
+UNKNOWN=Nepoznato
+POWER_ON_COUNT_UNIT=puta
+POWER_ON_HOURS_UNIT=sati
+POWER_ON_DAYS_UNIT=dana
+
+TOTAL_HOST_WRITES=Ukupno zapisano
+TOTAL_HOST_READS=Ukupno pročitano
+TOTAL_NAND_WRITES=Ukupno NAND zapisano
+WEAR_LEVELING_COUNT=Indeks istrošenosti (Wear Leveling)
+CURRENT_MODE_SUPPORTED_MODE=Trenutni način | Podržani način
+MAJOR_VERSION_MINOR_VERSION=Glavna verzija | Sporedna verzija
+
+[Message]
+DISK_NOT_FOUND=Disk nije pronađen
+
+[Alarm]
+ALARM_TEMPERATURE=Alarm - temperatura
+ALARM_HEALTH_STATUS=Alarm - stanje diska
+DEGRADATION=Degradacija
+RECOVERY=Obnova
+INFO_HEALTH_STATUS=Info - Status zdravlja
+
+[Graph]
+PLEASE_SELECT_ITEM=Odaberi stavku
+ACTUAL_VALUE=Aktuálna vrijednost
+NORMALIZED_VALUE=Normalizirana vrijednost
+RESET=Ponovno postavi
+
+[WindowTitle]
+ABOUT=O programu CrystalDiskInfo
+GRAPH=Grafikon
+CUSTOMIZE=Prilagodi
+VERSION_INFORMATION=Informacije o verziji
+AAM_APM_CONTROL=Upravljanje AAM/APM
+HEALTH_STATUS_SETTING=Postavke stanja diska
+ALARM_HISTORY=Povijest upozorenja
+SOUND_SETTINGS=Postavke zvuka
+FONT_SETTING=Postavke fonta
+
+[HealthStatus]
+THRESHOLD_OF_CAUTION=Granica upozorenja
+APPLY=Primijeni
+DEFAULT=Zadano

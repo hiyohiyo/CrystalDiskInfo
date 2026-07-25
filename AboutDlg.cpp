@@ -96,6 +96,9 @@ BOOL CAboutDlg::OnInitDialog()
 
 	CenterWindow();
 	ShowWindow(SW_SHOW);
+
+	m_bInitializing = FALSE;
+
 	return TRUE;
 }
 

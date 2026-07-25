@@ -134,6 +134,8 @@ BOOL CHealthDlg::OnInitDialog()
 		m_CtrlDefault.EnableWindow(FALSE);
 	}
 
+	m_bInitializing = FALSE;
+
 	return TRUE;
 }
 

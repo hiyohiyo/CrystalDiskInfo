@@ -125,6 +125,9 @@ BOOL CSettingDlg::OnInitDialog()
 		m_CtrlEnableApm.EnableWindow(FALSE);
 		m_CtrlDisableApm.EnableWindow(FALSE);
 	}
+
+	m_bInitializing = FALSE;
+
 	return TRUE;
 }
 
