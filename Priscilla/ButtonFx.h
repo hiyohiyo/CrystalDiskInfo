@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <afxtempl.h>
-
 #include "ImageFx.h"
 
 class CButtonFx : public CButton
@@ -30,6 +28,7 @@ public:
 	void SetGlassColor(COLORREF glassColor, BYTE glassAlpha);
 	void SetMeter(BOOL bMeter, double meterRatio);
 	void SetLabelUnit(CString label, CString unit);
+	void SetLabelShort(CString label);
 	void SetLabelUnitFormat(UINT labelFormat, UINT unitFormat);
 	void SetTextFormat(UINT format);
 
@@ -78,6 +77,7 @@ protected:
 	// Control
 	int m_X;
 	int m_Y;
+	double m_ZoomRatio;
 	CSize m_CtrlSize;
 	CRect m_Margin;
 	int m_RenderMode;
@@ -88,6 +88,7 @@ protected:
 	HPALETTE m_hPal;
 
 	CString m_Label;
+	CString m_LabelShort;
 	CString m_Unit;
 
 	UINT m_TextFormat;

@@ -100,6 +100,7 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
+	m_ZoomRatio = zoomRatio;
 	m_CtrlSize.cx = (int)(width * zoomRatio + 0.5);
 	m_CtrlSize.cy = (int)(height * zoomRatio + 0.5);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
@@ -280,6 +281,11 @@ void CButtonFx::SetLabelUnit(CString label, CString unit)
 {
 	m_Label = label;
 	m_Unit = unit;
+}
+
+void CButtonFx::SetLabelShort(CString label)
+{
+	m_LabelShort = label;
 }
 
 void CButtonFx::SetLabelUnitFormat(UINT labelFormat, UINT unitFormat)
@@ -583,6 +589,7 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 	}
 
 	drawDC->SetBkMode(TRANSPARENT);
+
 	CRect rect = (CRect)(lpDrawItemStruct->rcItem);
 	rect.top += m_Margin.top;
 	rect.left += m_Margin.left;
@@ -590,11 +597,13 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 	rect.right -= m_Margin.right;
 
 	HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
+
 	CArray<CString, CString> arr;
 	arr.RemoveAll();
 
 	CString resToken;
 	int curPos = 0;
+
 	resToken = title.Tokenize(_T("\r\n"), curPos);
 	while (resToken != _T(""))
 	{
@@ -602,7 +611,6 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 		resToken = title.Tokenize(_T("\r\n"), curPos);
 	}
 
-	CSize extent;
 	if ((m_RenderMode & OwnerDrawTransparent) && m_bDarkMode)
 	{
 		SetTextColor(drawDC->m_hDC, RGB(255, 255, 255));
@@ -612,44 +620,118 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 		SetTextColor(drawDC->m_hDC, m_TextColor);
 	}
 
-	if (m_bMeter && rect.Width() < extent.cx)
-	{
-		title.Replace(_T(","), _T("."));
-		int score = _tstoi((LPCTSTR)title);
-		title.Format(_T("%d"), score);
-		extent = drawDC->GetTextExtent(title);
-	}
-
 	if (!m_Label.IsEmpty() && m_TextFormat != BS_CENTER)
 	{
-		drawDC->DrawText(title, title.GetLength(), rect, m_TextFormat);
-		drawDC->SelectObject(oldFont);
+		drawDC->DrawText(
+			title,
+			title.GetLength(),
+			rect,
+			m_TextFormat
+		);
 
+		drawDC->SelectObject(oldFont);
 		oldFont = drawDC->SelectObject(m_FontToolTip);
-		drawDC->DrawText(m_Label, m_Label.GetLength(), rect, m_LabelFormat);
-		drawDC->DrawText(m_Unit, m_Unit.GetLength(), rect, m_UnitFormat);
+
+		CRect labelRect = rect;
+		CRect unitRect = rect;
+
+		//
+		// Reserve the right-side area for m_Unit.
+		//
+		if (!m_Unit.IsEmpty())
+		{
+			CSize unitSize = drawDC->GetTextExtent(m_Unit);
+
+			// 8px at 100%
+			const int gap = (int)(8 * m_ZoomRatio);
+
+			unitRect.left = unitRect.right - unitSize.cx;
+			labelRect.right = unitRect.left - gap;
+		}
+
+		//
+		// Select full or short label.
+		//
+		CString label = m_Label;
+
+		if (labelRect.Width() > 0)
+		{
+			CSize labelSize = drawDC->GetTextExtent(label);
+
+			if (labelSize.cx > labelRect.Width()
+				&& !m_LabelShort.IsEmpty())
+			{
+				label = m_LabelShort;
+			}
+
+			//
+			// DT_END_ELLIPSIS is the final fallback when
+			// even m_LabelShort does not fit.
+			//
+			drawDC->DrawText(
+				label,
+				label.GetLength(),
+				labelRect,
+				m_LabelFormat | DT_SINGLELINE | DT_END_ELLIPSIS
+			);
+		}
+
+		//
+		// m_Unit always has priority over m_Label.
+		//
+		if (!m_Unit.IsEmpty())
+		{
+			drawDC->DrawText(
+				m_Unit,
+				m_Unit.GetLength(),
+				unitRect,
+				m_UnitFormat | DT_SINGLELINE
+			);
+		}
 	}
 	else if (!m_Label.IsEmpty())
 	{
-		drawDC->DrawText(title, title.GetLength(), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-		drawDC->SelectObject(oldFont);
+		drawDC->DrawText(
+			title,
+			title.GetLength(),
+			rect,
+			DT_CENTER | DT_VCENTER | DT_SINGLELINE
+		);
 
+		drawDC->SelectObject(oldFont);
 		oldFont = drawDC->SelectObject(m_FontToolTip);
-		drawDC->DrawText(m_Label, m_Label.GetLength(), rect, m_LabelFormat);
-		drawDC->DrawText(m_Unit, m_Unit.GetLength(), rect, m_UnitFormat);
+
+		drawDC->DrawText(
+			m_Label,
+			m_Label.GetLength(),
+			rect,
+			m_LabelFormat
+		);
+
+		drawDC->DrawText(
+			m_Unit,
+			m_Unit.GetLength(),
+			rect,
+			m_UnitFormat
+		);
 	}
 	else
 	{
 		for (int i = 0; i < arr.GetCount(); i++)
 		{
 			CRect r;
-			r.top = rect.top + (LONG)(((double)rect.Height()) / arr.GetCount() * i);
-			r.bottom = rect.top + (LONG)(((double)rect.Height()) / arr.GetCount() * (i + 1.0));
+
+			r.top = rect.top
+				+ (LONG)(((double)rect.Height()) / arr.GetCount() * i);
+
+			r.bottom = rect.top
+				+ (LONG)(((double)rect.Height()) / arr.GetCount() * (i + 1.0));
+
 			r.left = rect.left;
 			r.right = rect.right;
 
-			CRect rectI;
-			HGDIOBJ oldFont = drawDC->SelectObject(m_Font);
+			HGDIOBJ oldFont2 = drawDC->SelectObject(m_Font);
+
 			if ((m_RenderMode & OwnerDrawTransparent) && m_bDarkMode)
 			{
 				SetTextColor(drawDC->m_hDC, RGB(255, 255, 255));
@@ -658,24 +740,40 @@ void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 			{
 				SetTextColor(drawDC->m_hDC, m_TextColor);
 			}
-			GetTextExtentPoint32(drawDC->m_hDC, arr.GetAt(i), arr.GetAt(i).GetLength() + 1, &extent);
 
 			if (m_TextAlign == BS_LEFT)
 			{
-				drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+				drawDC->DrawText(
+					arr.GetAt(i),
+					arr.GetAt(i).GetLength(),
+					r,
+					DT_LEFT | DT_VCENTER | DT_SINGLELINE
+				);
 			}
 			else if (m_TextAlign == BS_RIGHT)
 			{
-				drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
+				drawDC->DrawText(
+					arr.GetAt(i),
+					arr.GetAt(i).GetLength(),
+					r,
+					DT_RIGHT | DT_VCENTER | DT_SINGLELINE
+				);
 			}
 			else
 			{
-				drawDC->DrawText(arr.GetAt(i), arr.GetAt(i).GetLength(), r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+				drawDC->DrawText(
+					arr.GetAt(i),
+					arr.GetAt(i).GetLength(),
+					r,
+					DT_CENTER | DT_VCENTER | DT_SINGLELINE
+				);
 			}
 
-			drawDC->SelectObject(oldFont);
+			drawDC->SelectObject(oldFont2);
 		}
 	}
+
+	drawDC->SelectObject(oldFont);
 }
 
 //------------------------------------------------

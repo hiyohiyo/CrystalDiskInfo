@@ -2936,9 +2936,9 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.CurrentTransferMode = L"---";
 		asi.MaxTransferMode = L"----";
 
-		     if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0002) { asi.MaxTransferMode = L"SATA/150"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
+		     if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 3) { asi.CurrentTransferMode = L"SATA/600"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 2) { asi.CurrentTransferMode = L"SATA/300"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 1) { asi.CurrentTransferMode = L"SATA/150"; }
 	}
 	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMB39X)
 	{
@@ -2948,9 +2948,9 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.CurrentTransferMode = L"---";
 		asi.MaxTransferMode = L"----";
 
-		if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0002) { asi.MaxTransferMode = L"SATA/150"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
+		     if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 3) { asi.CurrentTransferMode = L"SATA/600"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 2) { asi.CurrentTransferMode = L"SATA/300"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 1) { asi.CurrentTransferMode = L"SATA/150"; }
 	}
 	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586_40)
 	{
@@ -2959,10 +2959,6 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.Interface = L"USB (JMicron JMS586 NewFW)";
 		asi.CurrentTransferMode = L"---";
 		asi.MaxTransferMode = L"----";
-
-		if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0002) { asi.MaxTransferMode = L"SATA/150"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
 	}
 	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS586_20)
 	{
@@ -2971,10 +2967,6 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.Interface = L"USB (JMicron JMS586)";
 		asi.CurrentTransferMode = L"---";
 		asi.MaxTransferMode = L"----";
-
-		if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0002) { asi.MaxTransferMode = L"SATA/150"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
 	}
 	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS59X)
 	{
@@ -2984,9 +2976,9 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.CurrentTransferMode = L"---";
 		asi.MaxTransferMode = L"----";
 
-		if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0002) { asi.MaxTransferMode = L"SATA/150"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0004) { asi.MaxTransferMode = L"SATA/300"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities & 0x0008) { asi.MaxTransferMode = L"SATA/600"; }
+		     if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 3) { asi.CurrentTransferMode = L"SATA/600"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 2) { asi.CurrentTransferMode = L"SATA/300"; }
+		else if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 1) { asi.CurrentTransferMode = L"SATA/150"; }
 	}
 #endif
 	else {
@@ -5563,21 +5555,24 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 {
 	BOOL flagSmartType = FALSE;
 
+	CString modelUpper = asi.Model;
+	modelUpper.MakeUpper();
+
 	// 2013/10/7
 	// https://crystalmark.info/bbs/c-board.cgi?cmd=one;no=1425;id=diskinfo#1425
 	// 2020/07/25
 	// 
-	if (asi.Model.Find(_T("SanDisk")) >= 0 || asi.Model.Find(_T("SD Ultra")) >=0 || asi.Model.Find(_T("SDLF1")) >= 0)
+	if (modelUpper.Find(_T("SANDISK")) >= 0 || modelUpper.Find(_T("SD ULTRA")) >=0 || modelUpper.Find(_T("SDLF1")) >= 0)
 	{
 		asi.DiskVendorId = SSD_VENDOR_SANDISK; // Default Vendor ID for SanDisk
 		flagSmartType = TRUE;
 
 		if (
-			  (asi.Model.Find(_T("X600")) >= 0 && asi.Model.Find(_T("2280")) >= 0) // https://crystalmark.info/board/c-board.cgi?cmd=one;no=2123;id=#2123
-			|| asi.Model.Find(_T("X400")) >= 0
-			|| asi.Model.Find(_T("X300")) >= 0
-			|| asi.Model.Find(_T("X110")) >= 0
-			|| asi.Model.Find(_T("SD5")) >= 0
+			  (modelUpper.Find(_T("X600")) >= 0 && modelUpper.Find(_T("2280")) >= 0) // https://crystalmark.info/board/c-board.cgi?cmd=one;no=2123;id=#2123
+			|| modelUpper.Find(_T("X400")) >= 0
+			|| modelUpper.Find(_T("X300")) >= 0
+			|| modelUpper.Find(_T("X110")) >= 0
+			|| modelUpper.Find(_T("SD5")) >= 0
 			)
 		{
 			if (asi.Attribute[2].Id == 0xAF || asi.Attribute[3].Id == 0xAF)
@@ -5592,17 +5587,17 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
 
 		}
-		else if (asi.Model.Find(_T("Z400")) >= 0)
+		else if (modelUpper.Find(_T("Z400")) >= 0)
 		{
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 			asi.SmartKeyName = _T("SmartSanDiskDell");
 		}
 		// 2022/04/24
 		// https://osdn.net/projects/crystaldiskinfo/ticket/44354
-		else if (asi.Model.Find(_T("1006")) > 0) // HP OEM
+		else if (modelUpper.Find(_T("1006")) > 0) // HP OEM
 		{
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_16MB;
-			if (asi.Model.Find(_T("8U")) > 0)
+			if (modelUpper.Find(_T("8U")) > 0)
 			{
 				asi.DiskVendorId = SSD_VENDOR_SANDISK_HP_VENUS;
 				asi.SmartKeyName = _T("SmartSanDiskHpVenus");
@@ -5613,17 +5608,17 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 				asi.SmartKeyName = _T("SmartSanDiskHp");
 			}
 		}
-		else if (asi.Model.Find(_T("G1001")) >= 0) // Lenovo OEM
+		else if (modelUpper.Find(_T("G1001")) >= 0) // Lenovo OEM
 		{
 			asi.FlagLifeSanDiskLenovo = TRUE;
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
-			if (asi.Model.Find(_T("6S")) > 0 || asi.Model.Find(_T("7S")) > 0 || asi.Model.Find(_T("8U")) > 0)
+			if (modelUpper.Find(_T("6S")) > 0 || modelUpper.Find(_T("7S")) > 0 || modelUpper.Find(_T("8U")) > 0)
 			{
 				asi.DiskVendorId = SSD_VENDOR_SANDISK_LENOVO_HELEN_VENUS;
 				asi.SmartKeyName = _T("SmartSanDiskLenovoHelenVenus");
 			}
 			// https://crystalmark.info/board/c-board.cgi?cmd=one;no=3176;id=#3176
-			else if (asi.Model.Find(_T("SD9SB")) >= 0)
+			else if (modelUpper.Find(_T("SD9SB")) >= 0)
 			{
 				asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 				asi.NandWritesUnit = NAND_WRITES_1MB;
@@ -5635,26 +5630,26 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 				asi.SmartKeyName = _T("SmartSanDiskLenovo");
 			}			
 		}
-		else if (asi.Model.Find(_T("G1012")) >= 0 || asi.Model.Find(_T("Z400s 2.5")) >= 0) // DELL OEM
+		else if (modelUpper.Find(_T("G1012")) >= 0 || modelUpper.Find(_T("Z400S 2.5")) >= 0) // DELL OEM
 		{
 			asi.DiskVendorId = SSD_VENDOR_SANDISK_DELL;
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_GB;
 			asi.SmartKeyName = _T("SmartSanDiskDell");
 		}
-		else if (asi.Model.Find(_T("SSD P4")) >= 0)
+		else if (modelUpper.Find(_T("SSD P4")) >= 0)
 		{
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
 			asi.FlagLifeSanDiskUsbMemory = TRUE; // No Life Report
 			asi.SmartKeyName = _T("SmartSanDisk");
 		}
-		else if (asi.Model.Find(_T("iSSD P4")) >= 0)
+		else if (modelUpper.Find(_T("ISSD P4")) >= 0)
 		{
 			asi.HostReadsWritesUnit = HOST_READS_WRITES_512B;
 			asi.SmartKeyName = _T("SmartSanDiskGb");
 		}
 		else if (
-		   asi.Model.Find(_T("SDSSDP")) >= 0
-		|| asi.Model.Find(_T("SDSSDRC")) >= 0 
+		   modelUpper.Find(_T("SDSSDP")) >= 0
+		|| modelUpper.Find(_T("SDSSDRC")) >= 0 
 		)
 		{
 			asi.FlagLifeSanDisk0_1 = TRUE;
@@ -5662,11 +5657,11 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 			asi.SmartKeyName = _T("SmartSanDisk");
 		}
 		else if (
-		   asi.Model.Find(_T("SSD U100")) >= 0
-		|| asi.Model.Find(_T("SSD U110")) >= 0
-		|| asi.Model.Find(_T("SSD i100")) >= 0
-		|| asi.Model.Find(_T("SSD i110")) >= 0
-		|| asi.Model.Find(_T("pSSD")) >= 0
+		   modelUpper.Find(_T("SSD U100")) >= 0
+		|| modelUpper.Find(_T("SSD U110")) >= 0
+		|| modelUpper.Find(_T("SSD I100")) >= 0
+		|| modelUpper.Find(_T("SSD I110")) >= 0
+		|| modelUpper.Find(_T("PSSD")) >= 0
 			)
 		{
 			asi.FlagLifeSanDiskUsbMemory = TRUE;
@@ -5675,11 +5670,11 @@ BOOL CAtaSmart::IsSsdSanDisk(ATA_SMART_INFO &asi)
 		}
 		else if (
 			// CloudSpeed ECO Gen II Eco SSD
-			asi.Model.Find(_T("SDLF1CRR-")) >= 0
-			|| asi.Model.Find(_T("SDLF1DAR-")) >= 0
+			modelUpper.Find(_T("SDLF1CRR-")) >= 0
+			|| modelUpper.Find(_T("SDLF1DAR-")) >= 0
 			// CloudSpeed ECO Gen II Ultra SSD
-			|| asi.Model.Find(_T("SDLF1CRM-")) >= 0
-			|| asi.Model.Find(_T("SDLF1DAM-")) >= 0
+			|| modelUpper.Find(_T("SDLF1CRM-")) >= 0
+			|| modelUpper.Find(_T("SDLF1DAM-")) >= 0
 			)
 		{
 			asi.DiskVendorId = SSD_VENDOR_SANDISK_CLOUD;
@@ -11757,7 +11752,7 @@ BOOL CAtaSmart::FillSmartData(ATA_SMART_INFO* asi)
 					rawValue = asi->Attribute[j].WorstValue * 256 + asi->Attribute[j].CurrentValue;
 				}
 				// Intel SSD 520 Series and etc...
-				else if (asi->Model.Find(_T("Intel")) == 0)
+				else if (asi->Model.Find(_T("Intel")) == 0 || asi->Model.Find(_T("INTEL")) == 0)
 				{
 					CString fw = asi->FirmwareRev; // check exact field name in ATA_SMART_INFO
 					if (fw.CompareNoCase(_T("522ABBF0")) == 0 ||

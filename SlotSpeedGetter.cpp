@@ -124,6 +124,163 @@ SlotMaxCurrSpeed ConvertOSResult(const OSSlotMaxCurrSpeed OSLevelResult)
 	return result;
 }
 
+static BOOL GetPciUInt32Property(
+	FN_SetupDiGetDeviceProperty GetDeviceProperty,
+	HDEVINFO DeviceInfoSet,
+	PSP_DEVINFO_DATA DeviceInfoData,
+	const DEVPROPKEY& PropertyKey,
+	BYTE& Result)
+{
+	Result = 0;
+
+	if (GetDeviceProperty == nullptr ||
+		DeviceInfoSet == INVALID_HANDLE_VALUE ||
+		DeviceInfoData == nullptr)
+	{
+		return FALSE;
+	}
+
+	DEVPROPTYPE PropertyType = DEVPROP_TYPE_EMPTY;
+	ULONG PropertyValue = 0;
+	DWORD RequiredSize = 0;
+
+	const BOOL Success = GetDeviceProperty(
+		DeviceInfoSet,
+		DeviceInfoData,
+		&PropertyKey,
+		&PropertyType,
+		reinterpret_cast<PBYTE>(&PropertyValue),
+		sizeof(PropertyValue),
+		&RequiredSize,
+		0);
+
+	if (!Success)
+	{
+		return FALSE;
+	}
+
+	if (PropertyType != DEVPROP_TYPE_UINT32 ||
+		RequiredSize != sizeof(PropertyValue))
+	{
+		return FALSE;
+	}
+
+	if (PropertyValue > 0xFF)
+	{
+		return FALSE;
+	}
+
+	Result = static_cast<BYTE>(PropertyValue);
+	return TRUE;
+}
+
+SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
+{
+	OSSlotMaxCurrSpeed OSLevelResult{};
+
+	if (DeviceID.IsEmpty())
+	{
+		return ConvertOSResult(OSLevelResult);
+	}
+
+	const GUID SCSIAdapterGUID = GUID_DEVCLASS_SCSIADAPTER;
+
+	HDEVINFO ClassDeviceInformations = SetupDiGetClassDevs(
+		&SCSIAdapterGUID,
+		nullptr,
+		nullptr,
+		DIGCF_PRESENT);
+
+	if (ClassDeviceInformations == INVALID_HANDLE_VALUE)
+	{
+		return ConvertOSResult(OSLevelResult);
+	}
+
+	const HMODULE SetupApiModule =
+		GetModuleHandle(TEXT("setupapi.dll"));
+
+	FN_SetupDiGetDeviceProperty GetDeviceProperty = nullptr;
+
+	if (SetupApiModule != nullptr)
+	{
+		GetDeviceProperty =
+			reinterpret_cast<FN_SetupDiGetDeviceProperty>(
+				GetProcAddress(
+					SetupApiModule,
+					"SetupDiGetDevicePropertyW"));
+	}
+
+	if (GetDeviceProperty != nullptr)
+	{
+		for (DWORD CurrentDevice = 0;; ++CurrentDevice)
+		{
+			SP_DEVINFO_DATA DeviceInfoData{};
+			DeviceInfoData.cbSize = sizeof(DeviceInfoData);
+
+			if (!SetupDiEnumDeviceInfo(
+				ClassDeviceInformations,
+				CurrentDevice,
+				&DeviceInfoData))
+			{
+				break;
+			}
+
+			TCHAR DeviceIDBuffer[MAX_DEVICE_ID_LEN]{};
+
+			const CONFIGRET ConfigResult = CM_Get_Device_ID(
+				DeviceInfoData.DevInst,
+				DeviceIDBuffer,
+				_countof(DeviceIDBuffer),
+				0);
+
+			if (ConfigResult != CR_SUCCESS)
+			{
+				continue;
+			}
+
+			if (DeviceID.CompareNoCase(DeviceIDBuffer) != 0)
+			{
+				continue;
+			}
+
+			GetPciUInt32Property(
+				GetDeviceProperty,
+				ClassDeviceInformations,
+				&DeviceInfoData,
+				DEVPKEY_PciDevice_MaxLinkWidth,
+				OSLevelResult.Maximum.LinkWidth);
+
+			GetPciUInt32Property(
+				GetDeviceProperty,
+				ClassDeviceInformations,
+				&DeviceInfoData,
+				DEVPKEY_PciDevice_MaxLinkSpeed,
+				OSLevelResult.Maximum.SpecVersion);
+
+			GetPciUInt32Property(
+				GetDeviceProperty,
+				ClassDeviceInformations,
+				&DeviceInfoData,
+				DEVPKEY_PciDevice_CurrentLinkWidth,
+				OSLevelResult.Current.LinkWidth);
+
+			GetPciUInt32Property(
+				GetDeviceProperty,
+				ClassDeviceInformations,
+				&DeviceInfoData,
+				DEVPKEY_PciDevice_CurrentLinkSpeed,
+				OSLevelResult.Current.SpecVersion);
+
+			break;
+		}
+	}
+
+	SetupDiDestroyDeviceInfoList(ClassDeviceInformations);
+
+	return ConvertOSResult(OSLevelResult);
+}
+
+/*
 SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 {
 	DWORD CurrentDevice = 0;
@@ -188,6 +345,7 @@ SlotMaxCurrSpeed GetSlotMaxCurrSpeedFromDeviceID(const CString DeviceID)
 
 	return ConvertOSResult(OSLevelResult);
 }
+*/
 
 SlotMaxCurrSpeed GetPCIeSlotSpeed(const INT physicalDriveId, const BOOL IsKernelVerEqualOrOver6)
 {

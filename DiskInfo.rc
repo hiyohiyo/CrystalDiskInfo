@@ -917,8 +917,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 9, 9, 2, 0
- PRODUCTVERSION 9, 9, 2, 0
+ FILEVERSION 9, 9, 3, 0
+ PRODUCTVERSION 9, 9, 3, 0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -935,8 +935,8 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/"
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "9.9.2.0"
-            VALUE "ProductVersion", "9.9.2.0"
+            VALUE "FileVersion", "9.9.3.0"
+            VALUE "ProductVersion", "9.9.3.0"
             VALUE "OriginalFilename", "DiskInfo.exe"
             VALUE "InternalName", "DiskInfo.exe"
 
@@ -1239,27 +1239,27 @@ BEGIN
                 MENUITEM "Enable (Access All Disks)",   ID_CSMI_ENABLE_ALL
                 MENUITEM "Disable",                     ID_CSMI_DISABLE
             END
-            MENUITEM "AMD RAIDXpert2 (AMD_RC2t7)", ID_AMD_RC2T7
-			MENUITEM "MegaRAID", ID_MEGA_RAID
-            MENUITEM "Intel VROC", ID_INTEL_VROC
+            MENUITEM "AMD RAIDXpert2 (AMD_RC2t7)",      ID_AMD_RC2T7
+			MENUITEM "MegaRAID",                        ID_MEGA_RAID
+            MENUITEM "Intel VROC",                      ID_INTEL_VROC
 
             MENUITEM SEPARATOR
-            MENUITEM "Gadget Support",              ID_GADGET_SUPPORT
-//            MENUITEM "Install Gadget",              ID_INSTALL_GADGET
+            MENUITEM "Gadget Support",                  ID_GADGET_SUPPORT
+//            MENUITEM "Install Gadget",                ID_INSTALL_GADGET
             MENUITEM SEPARATOR
-            MENUITEM "Hide S.M.A.R.T. Information", ID_HIDE_SMART_INFO
-            MENUITEM "Hide No S.M.A.R.T. Disk",     ID_HIDE_NO_SMART_DISK
-            MENUITEM "Hide RAID Volume",            ID_HIDE_RAID_VOLUME
+            MENUITEM "Hide S.M.A.R.T. Information",     ID_HIDE_SMART_INFO
+            MENUITEM "Hide No S.M.A.R.T. Disk",         ID_HIDE_NO_SMART_DISK
+            MENUITEM "Hide RAID Volume",                ID_HIDE_RAID_VOLUME
         END
         POPUP "Workaround"
         BEGIN
             MENUITEM "[Firmware Bug] SAMSUNG HD155UI/HD204UI", ID_WORKAROUND_HD204UI
-            MENUITEM "[IE Bug] IE8 Mode",           ID_WORKAROUND_IE8MODE
+            MENUITEM "[IE Bug] IE8 Mode",                      ID_WORKAROUND_IE8MODE
             MENUITEM "[Ignore] (C4) Reallocation Event Count", ID_WORKAROUND_IGNORE_C4
         END
         MENUITEM SEPARATOR
-        MENUITEM "Open ""Disk Management""",    ID_OPEN_DISK_MANAGEMENT
-        MENUITEM "Open ""Device Manager""",     ID_OPEN_DEVICE_MANAGER
+        MENUITEM "Open ""Disk Management""",            ID_OPEN_DISK_MANAGEMENT
+        MENUITEM "Open ""Device Manager""",             ID_OPEN_DEVICE_MANAGER
     END
     POPUP "&Theme"
     BEGIN
@@ -1273,9 +1273,9 @@ BEGIN
             MENUITEM "300%",                        ID_ZOOM_300
             MENUITEM "Auto",                        ID_ZOOM_AUTO
         END
-        MENUITEM "Green Mode",                  ID_GREEN_MODE
-//        MENUITEM "Disable Dark Mode",           ID_DISABLE_DARK_MODE
-        MENUITEM "Font Setting",                ID_FONT_SETTING
+        MENUITEM "Green Mode",                      ID_GREEN_MODE
+//        MENUITEM "Disable Dark Mode",             ID_DISABLE_DARK_MODE
+        MENUITEM "Font Setting",                    ID_FONT_SETTING
         MENUITEM SEPARATOR
     END
     POPUP "&Disk"
