@@ -6508,6 +6508,13 @@ BOOL CAtaSmart::GetDiskInfo(INT physicalDriveId, INT scsiPort, INT scsiTargetId,
 							DebugPrint(debug);
 							return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SCSI_MINIPORT, &identify, siliconImageType, NULL, pnpDeviceId);
 						}
+						// SATA disks behind a SAS HBA (e.g. Broadcom SAS38xx) may only answer ATA commands through SAT
+						else if (DoIdentifyDeviceSat(physicalDriveId, 0xA0, &identify, CMD_TYPE_SAT))
+						{
+							debug.Format(_T("AddDisk(%d, %d, %d) - SAT"), physicalDriveId, scsiPort, scsiTargetId);
+							DebugPrint(debug);
+							return AddDisk(physicalDriveId, scsiPort, scsiTargetId, scsiBus, 0xA0, CMD_TYPE_SAT, &identify, siliconImageType, NULL, pnpDeviceId);
+						}
 						else
 						{
 							return FALSE;
