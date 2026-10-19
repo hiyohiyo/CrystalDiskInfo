@@ -171,14 +171,14 @@ LIST_ATTRIBUTE_NAME=Danh sách tên thuộc tính
 
 FIRMWARE=Firmware
 SERIAL_NUMBER=Số Sê-ri
-INTERFACE=Chuẩn giao tiếp (Interface)
+INTERFACE=Chuẩn giao tiếp
 STANDARD=Tiêu chuẩn
 TRANSFER_MODE=Chế độ truyền dữ liệu
 BUFFER_SIZE=Dung lượng bộ nhớ đệm
 NV_CACHE_SIZE=Dung lượng bộ nhớ đệm NV
 ROTATION_RATE=Tốc độ quay
 TEMPERATURE=Nhiệt độ
-POWER_ON_HOURS=Tổng thời gian hoạt động
+POWER_ON_HOURS=Thời gian hoạt động
 POWER_ON_COUNT=Số lần khởi động
 DRIVE_LETTER=Ký tự ổ đĩa
 FEATURE=Tính năng
@@ -191,9 +191,9 @@ POWER_ON_DAYS_UNIT=ngày
 POWER_ON_YEARS_UNIT=năm
 
 ;4.3
-TOTAL_HOST_WRITES=Tổng lượng ghi của HOST
-TOTAL_HOST_READS=Tổng lượng đọc của HOST
-TOTAL_NAND_WRITES=Tổng lượng ghi vào NAND
+TOTAL_HOST_WRITES=Dung lượng đã ghi
+TOTAL_HOST_READS=Dung lượng đã đọc
+TOTAL_NAND_WRITES=Total NAND Writes
 
 ;4.5
 WEAR_LEVELING_COUNT=Mức độ hao mòn (tính theo số lần ghi/xóa trung bình trên từng cell NAND)
