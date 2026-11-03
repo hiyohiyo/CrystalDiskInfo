@@ -2968,20 +2968,16 @@ BOOL CAtaSmart::AddDisk(INT physicalDriveId, INT scsiPort, INT scsiTargetId, INT
 		asi.CurrentTransferMode = L"---";
 		asi.MaxTransferMode = L"----";
 	}
-	/*
 	else if (commandType == COMMAND_TYPE::CMD_TYPE_JMS59X)
 	{
-		asi.Major = 0;
-		asi.IsSmartSupported = TRUE;
+		asi.Major = GetAtaMajorVersion(identify->A.MajorVersion, asi.MajorVersion);
+		GetAtaMinorVersion(identify->A.MinorVersion, asi.MinorVersion);
+		asi.TransferModeType = GetTransferMode(identify->A.MultiWordDma, identify->A.SerialAtaCapabilities,
+			identify->A.SerialAtaAdditionalCapabilities,
+			identify->A.UltraDmaMode, asi.CurrentTransferMode, asi.MaxTransferMode,
+			asi.Interface, &asi.InterfaceType);
 		asi.Interface = L"USB (JMicron JMS59X)";
-		asi.CurrentTransferMode = L"---";
-		asi.MaxTransferMode = L"----";
-
-		     if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 3) { asi.CurrentTransferMode = L"SATA/600"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 2) { asi.CurrentTransferMode = L"SATA/300"; }
-		else if (asi.IdentifyDevice.A.SerialAtaCapabilities >> 1 == 1) { asi.CurrentTransferMode = L"SATA/150"; }
-	}
-	*/
+	}	
 #endif
 	else {
 		// +AMD_RC2 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
