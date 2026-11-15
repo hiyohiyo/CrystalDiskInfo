@@ -505,8 +505,8 @@ protected:
 
 	struct NVME_IDENTIFY_DEVICE
 	{
-		WORD		PCIeSubSysVID;
 		WORD		PCIeVID;
+		WORD		PCIeSubSysVID;
 		CHAR		SerialNumber[20];
 		CHAR		Model[40];
 		CHAR		FirmwareRev[8];
