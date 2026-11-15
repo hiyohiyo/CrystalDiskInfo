@@ -1,6 +1,7 @@
 English | [Japanese](./README.ja.md) | [Chinese (Simplified)](./README.sc.md)
 
 # CrystalDiskInfo
+[![Featured on AppWK](https://appwk.cn/badges/featured-dark.svg)](https://appwk.cn/apps/crystaldiskinfo)
 
 ## Overview
 CrystalDiskInfo is a disk information tool.
