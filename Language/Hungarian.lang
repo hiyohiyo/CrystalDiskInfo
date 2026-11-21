@@ -152,6 +152,8 @@ GRAPH=Grafikon
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Csak a hőmérsékleti ikont mutassa
 
+SHOW_COMBINED_TEMPERATURE_ICON=Kombinált ikon
+
 [DiskStatus]
 GOOD=Jó
 CAUTION=Figyelmeztetés

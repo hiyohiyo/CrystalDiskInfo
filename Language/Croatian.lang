@@ -66,6 +66,8 @@ SHOW_ALL_TEMPERATURE_ICON=Prikaži sve ikone temperature
 HIDE_ALL_TEMPERATURE_ICON=Sakrij sve ikone temperature
 GRAPH=Grafikon
 
+SHOW_COMBINED_TEMPERATURE_ICON=Objedinjena ikona
+
 [DiskStatus]
 GOOD=Dobro
 CAUTION=Oprez

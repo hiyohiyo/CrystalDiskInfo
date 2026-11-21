@@ -140,6 +140,7 @@ HIDE_ALL_TEMPERATURE_ICON=Alle Temperatursymbole ausblenden
 COLLECTIVE_SETTING=Gemeinsame Einstellungen
 GRAPH=Diagramm
 SHOW_TEMPERATURE_ICON_ONLY=Nur das Temperatursymbol anzeigen
+SHOW_COMBINED_TEMPERATURE_ICON=Kombiniertes Symbol
 
 [DiskStatus]
 GOOD=Gut

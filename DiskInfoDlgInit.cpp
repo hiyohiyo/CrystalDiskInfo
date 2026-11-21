@@ -38,6 +38,7 @@ BOOL CDiskInfoDlg::OnInitDialog()
 
 	InitThemeLang();
 	InitMenu();
+    m_bCombinedTemperatureIcon = GetPrivateProfileInt(_T("Setting"), _T("CombinedTemperatureIcon"), 0, m_Ini);
 //	ChangeTheme(m_CurrentTheme);
 	UpdateThemeInfo();
 //	ChangeLang(m_CurrentLang);

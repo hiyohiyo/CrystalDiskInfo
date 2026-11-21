@@ -152,6 +152,8 @@ GRAPH=Графік
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Показувати тільки іконку температури
 
+SHOW_COMBINED_TEMPERATURE_ICON=Об’єднаний значок
+
 [DiskStatus]
 GOOD=Добрий
 CAUTION=Застереження!

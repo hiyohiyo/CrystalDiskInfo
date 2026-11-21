@@ -153,6 +153,8 @@ GRAPH=Graf
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Vis kun temperaturikon
 
+SHOW_COMBINED_TEMPERATURE_ICON=Kombineret ikon
+
 [DiskStatus]
 GOOD=God
 CAUTION=Advarsel

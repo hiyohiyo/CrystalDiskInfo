@@ -153,6 +153,8 @@ GRAPH=مخطط بياني
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=إظهار أيقونة الحرارة فقط
 
+SHOW_COMBINED_TEMPERATURE_ICON=أيقونة موحدة
+
 [DiskStatus]
 GOOD=جيدة
 CAUTION=تحذير

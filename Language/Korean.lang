@@ -154,6 +154,8 @@ GRAPH=그래프
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=온도 아이콘만 표시
 
+SHOW_COMBINED_TEMPERATURE_ICON=통합 아이콘
+
 [DiskStatus]
 GOOD=좋음
 CAUTION=주의

@@ -146,6 +146,8 @@ GRAPH=Gráfica
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Mostrar só icona de temperatura
 
+SHOW_COMBINED_TEMPERATURE_ICON=Icona combinada
+
 [DiskStatus]
 GOOD=Bo
 CAUTION=Risco

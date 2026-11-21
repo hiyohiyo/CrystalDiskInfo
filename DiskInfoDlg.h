@@ -36,6 +36,7 @@ enum
 	MY_EXIT = (WM_APP + 0x1100),
 	MY_SHOW_MAIN_DIALOG,
 	MY_SHOW_TEMPERATURE_ICON_ONLY,
+	MY_SHOW_COMBINED_TEMPERATURE_ICON,
 	MY_PLAY_ALERT_SOUND,
 };
 
@@ -229,6 +230,7 @@ protected:
 	BOOL m_bDumpSmartReadData{};
 	BOOL m_bDumpSmartReadThreshold{};
 	BOOL m_bShowTemperatureIconOnly{};
+	BOOL m_bCombinedTemperatureIcon{};
 	BOOL m_bAsciiView{};
 	BOOL m_bSmartEnglish{};
 	BOOL m_bGadget{};
@@ -308,6 +310,7 @@ protected:
 	void CheckStartup();
 	void AutoAamApmAdaption();
 	void ShowTemperatureIconOnly();
+	void ShowCombinedTemperatureIcon();
 
 	void SetControlFont();
 	virtual void SetClientSize(int sizeX, int sizeY, double zoomRatio);
@@ -349,6 +352,7 @@ protected:
 	void CheckTrayTemperatureIcon();
 	void UpdateTrayTemperatureIcon(BOOL flagForce);
 	void UpdateToolTip();
+	void UpdateCombinedTemperatureIcon();
 	BOOL IsTemperatureIconExist();
 
 	void TaskTrayRightMenu(DWORD index);

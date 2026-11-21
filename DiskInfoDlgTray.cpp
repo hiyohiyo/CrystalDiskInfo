@@ -205,7 +205,7 @@ LRESULT CDiskInfoDlg::OnTaskbarCreated(WPARAM, LPARAM)
 {
 	if(m_bResident)
 	{
-		for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+		for(int i = 0; !m_bCombinedTemperatureIcon && i < m_Ata.vars.GetCount(); i++)
 		{
 			if(m_bTrayTemperatureIcon[i])
 			{
@@ -614,6 +614,12 @@ void CDiskInfoDlg::CreateMainMenu(DWORD index)
 	menuInfo.wID = MY_SHOW_TEMPERATURE_ICON_ONLY;
 	InsertMenuItem(m_hMenu, -1, TRUE, &menuInfo);
 
+	menuInfo.fState = m_bCombinedTemperatureIcon ? MFS_CHECKED : MFS_UNCHECKED;
+	cstr = i18n(_T("TrayMenu"), _T("SHOW_COMBINED_TEMPERATURE_ICON"));
+	menuInfo.dwTypeData = (LPWSTR)cstr.GetString();
+	menuInfo.wID = MY_SHOW_COMBINED_TEMPERATURE_ICON;
+	InsertMenuItem(m_hMenu, -1, TRUE, &menuInfo);
+
 	if(m_bResidentMinimize)
 	{
 		if(! IsIconic())
@@ -744,6 +750,12 @@ BOOL CDiskInfoDlg::ModifyTemperatureIcon(DWORD i)
 
 void CDiskInfoDlg::CheckTrayTemperatureIcon()
 {
+	if(m_bCombinedTemperatureIcon)
+	{
+		UpdateCombinedTemperatureIcon();
+		UpdateToolTip();
+		return;
+	}
 	for(int i = (int)m_Ata.vars.GetCount() - 1; i >= 0; i--)
 	{
 		if(GetPrivateProfileIntFx(_T("TemperatureIcon"), m_Ata.vars[i].ModelSerial, 1, m_Ini))
@@ -773,6 +785,87 @@ void CDiskInfoDlg::UpdateTrayTemperatureIcon(BOOL flagForce)
 			ModifyTemperatureIcon(i);
 		}
 	}
+	if(m_bCombinedTemperatureIcon)
+	{
+		UpdateCombinedTemperatureIcon();
+	}
+}
+
+void CDiskInfoDlg::UpdateCombinedTemperatureIcon()
+{
+	if(!m_bResident || !m_bTrayMainIcon)
+	{
+		return;
+	}
+
+	INT maxTemperature = -300;
+	BOOL temperatureAlarm = FALSE;
+	DWORD worstStatus = CAtaSmart::DISK_STATUS_GOOD;
+	int worstStatusRank = 0;
+	for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+	{
+		if(m_Ata.vars[i].Temperature > maxTemperature)
+		{
+			maxTemperature = m_Ata.vars[i].Temperature;
+			temperatureAlarm = m_Ata.vars[i].Temperature >= m_Ata.vars[i].AlarmTemperature;
+		}
+		else if(m_Ata.vars[i].Temperature == maxTemperature
+			&& m_Ata.vars[i].Temperature >= m_Ata.vars[i].AlarmTemperature)
+		{
+			temperatureAlarm = TRUE;
+		}
+
+		int statusRank = 0;
+		switch(m_Ata.vars[i].DiskStatus)
+		{
+		case CAtaSmart::DISK_STATUS_BAD: statusRank = 3; break;
+		case CAtaSmart::DISK_STATUS_CAUTION: statusRank = 2; break;
+		case CAtaSmart::DISK_STATUS_UNKNOWN: statusRank = 1; break;
+		default: break;
+		}
+		if(statusRank > worstStatusRank)
+		{
+			worstStatusRank = statusRank;
+			worstStatus = m_Ata.vars[i].DiskStatus;
+		}
+	}
+
+	HICON icon = m_hIconMini;
+	CString tip;
+	CString diskStatus = GetDiskStatus(worstStatus);
+	if(maxTemperature > 0)
+	{
+		INT temperatureOffset = 0;
+		if(temperatureAlarm || worstStatus == CAtaSmart::DISK_STATUS_BAD || worstStatus == CAtaSmart::DISK_STATUS_CAUTION)
+		{
+			temperatureOffset = 200;
+		}
+		else if(m_bGreenMode)
+		{
+			temperatureOffset = 100;
+		}
+		int temperatureIconIndex = temperatureOffset + (maxTemperature > 99 ? 99 : maxTemperature);
+		if(m_hTempIcon[m_bFahrenheit][temperatureIconIndex] == NULL)
+		{
+			m_hTempIcon[m_bFahrenheit][temperatureIconIndex] = (HICON)::LoadImageW(AfxGetInstanceHandle(),
+				MAKEINTRESOURCE(IDI_TEMP_00 + m_bFahrenheit * 300 + temperatureIconIndex), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
+		}
+		icon = m_hTempIcon[m_bFahrenheit][temperatureIconIndex];
+		if(m_bFahrenheit)
+		{
+			tip.Format(_T("Max temperature: %d F [%s]"), maxTemperature * 9 / 5 + 32, diskStatus.GetString());
+		}
+		else
+		{
+			tip.Format(_T("Max temperature: %d C [%s]"), maxTemperature, diskStatus.GetString());
+		}
+	}
+	else
+	{
+		tip.Format(_T("[%s]"), diskStatus.GetString());
+	}
+
+	ModifyTaskTray(gRegIconId, icon, tip);
 }
 
 void CDiskInfoDlg::UpdateToolTip()
@@ -863,11 +956,18 @@ void CDiskInfoDlg::UpdateToolTip()
 		}	
 
 		ModifyTaskTrayTip(gRegIconId, m_StatusTip);
-		for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+		if(m_bCombinedTemperatureIcon)
 		{
-			if(m_bTrayTemperatureIcon[i])
+			UpdateCombinedTemperatureIcon();
+		}
+		else
+		{
+			for(int i = 0; i < m_Ata.vars.GetCount(); i++)
 			{
-				ModifyTemperatureIcon(i);
+				if(m_bTrayTemperatureIcon[i])
+				{
+					ModifyTemperatureIcon(i);
+				}
 			}
 		}
 	}
@@ -888,7 +988,7 @@ void CDiskInfoDlg::CheckResident()
 		m_bResident = TRUE;
 		CheckTrayTemperatureIcon();
 
-		if(! m_bShowTemperatureIconOnly || ! IsTemperatureIconExist())
+		if(m_bCombinedTemperatureIcon || !m_bShowTemperatureIconOnly || !IsTemperatureIconExist())
 		{
 			AddTrayMainIcon();
 		}
@@ -902,6 +1002,7 @@ void CDiskInfoDlg::CheckResident()
 				}
 			}
 		}
+		UpdateToolTip();
 
 		CMenu *menu = GetMenu();
 		menu->CheckMenuItem(ID_RESIDENT, MF_CHECKED);
@@ -942,9 +1043,47 @@ void CDiskInfoDlg::OnResident()
 		WritePrivateProfileStringFx(_T("Setting"), _T("Resident"), _T("1"), m_Ini);
 		CheckTrayTemperatureIcon();
 
-		if(! m_bShowTemperatureIconOnly || ! IsTemperatureIconExist())
+		if(m_bCombinedTemperatureIcon || !m_bShowTemperatureIconOnly || !IsTemperatureIconExist())
 		{
 			AddTrayMainIcon();
+		}
+		UpdateToolTip();
+	}
+}
+
+void CDiskInfoDlg::ShowCombinedTemperatureIcon()
+{
+	m_bCombinedTemperatureIcon = !m_bCombinedTemperatureIcon;
+	WritePrivateProfileStringFx(_T("Setting"), _T("CombinedTemperatureIcon"), m_bCombinedTemperatureIcon ? _T("1") : _T("0"), m_Ini);
+
+	if(!m_bResident)
+	{
+		return;
+	}
+
+	if(m_bCombinedTemperatureIcon)
+	{
+		for(int i = 0; i < m_Ata.vars.GetCount(); i++)
+		{
+			RemoveTemperatureIcon(i);
+		}
+		AddTrayMainIcon();
+		UpdateToolTip();
+	}
+	else
+	{
+		CheckTrayTemperatureIcon();
+		if(m_bShowTemperatureIconOnly && IsTemperatureIconExist())
+		{
+			RemoveTrayMainIcon();
+		}
+		else
+		{
+			AddTrayMainIcon();
+		}
+		if(m_bTrayMainIcon)
+		{
+			ModifyTaskTray(gRegIconId, m_hIconMini, m_StatusTip);
 		}
 	}
 }

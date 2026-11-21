@@ -153,6 +153,8 @@ GRAPH=Grafik
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Show Temperature Icon Only
 
+SHOW_COMBINED_TEMPERATURE_ICON=Kombinerad ikon
+
 [DiskStatus]
 GOOD=Bra
 CAUTION=Varning
