@@ -153,6 +153,8 @@ GRAPH=Biểu đồ
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Chỉ hiển thị biểu tượng nhiệt độ
 
+SHOW_COMBINED_TEMPERATURE_ICON=Biểu tượng kết hợp
+
 [DiskStatus]
 GOOD=Tốt
 CAUTION=Cảnh báo

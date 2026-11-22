@@ -154,6 +154,8 @@ GRAPH=Аграфик
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Иаарԥшлатәуп атемпература адыргаҷқәа мацара
 
+SHOW_COMBINED_TEMPERATURE_ICON=Combined icon
+
 [DiskStatus]
 GOOD=Ибзиоуп
 CAUTION=Агәаҽанҵара!

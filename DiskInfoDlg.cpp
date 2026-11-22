@@ -984,6 +984,10 @@ BOOL CDiskInfoDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
 		ShowTemperatureIconOnly();
 	}
+    else if(wParam == MY_SHOW_COMBINED_TEMPERATURE_ICON)
+	{
+		ShowCombinedTemperatureIcon();
+	}
 	else if(wParam == (WPARAM)SHOW_GRAPH_BASE + CAtaSmart::MAX_DISK)
 	{
 		ShowGraphDlg(-1); // Using "GraphHideDisk" option

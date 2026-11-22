@@ -155,6 +155,8 @@ GRAPH=نمودار
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=نشان‌دادن تنها درجه حرارت
 
+SHOW_COMBINED_TEMPERATURE_ICON=نماد ترکیبی
+
 [DiskStatus]
 GOOD=خوب
 CAUTION=احتیاط

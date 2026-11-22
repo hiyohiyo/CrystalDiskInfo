@@ -154,6 +154,8 @@ GRAPH=ग्राफ़
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=केवल तापमान आइकन दिखाएँ
 
+SHOW_COMBINED_TEMPERATURE_ICON=संयुक्त आइकन
+
 [DiskStatus]
 GOOD=अच्छा
 CAUTION=चेतावनी

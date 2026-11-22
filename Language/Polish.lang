@@ -152,6 +152,8 @@ GRAPH=Wykres
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Pokaż tylko ikonę temperatury
 
+SHOW_COMBINED_TEMPERATURE_ICON=Ikona łączona
+
 [DiskStatus]
 GOOD=dobry
 CAUTION=uwaga

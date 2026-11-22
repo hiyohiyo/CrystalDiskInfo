@@ -152,6 +152,8 @@ GRAPH=Grapiko
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Ipakita ang icon ng temperatura lamang
 
+SHOW_COMBINED_TEMPERATURE_ICON=Pinagsamang icon
+
 [DiskStatus]
 GOOD=Mabuti
 CAUTION=Pag-iingat

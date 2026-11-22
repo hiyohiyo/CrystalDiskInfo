@@ -151,6 +151,8 @@ GRAPH=Γράφημα
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Εμφάνιση μόνο εικονιδίων θερμοκρασίας
 
+SHOW_COMBINED_TEMPERATURE_ICON=Συνδυασμένο εικονίδιο
+
 [DiskStatus]
 GOOD=Καλή
 CAUTION=Προσοχή

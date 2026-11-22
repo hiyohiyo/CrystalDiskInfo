@@ -141,6 +141,8 @@ COLLECTIVE_SETTING=Ryhmäasetukset
 GRAPH=Kuvaajat
 SHOW_TEMPERATURE_ICON_ONLY=Näytä vain lämpötilakuvake
 
+SHOW_COMBINED_TEMPERATURE_ICON=Yhdistelmäkuvake
+
 [DiskStatus]
 GOOD=Hyvä
 CAUTION=Varoitus

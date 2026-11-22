@@ -153,6 +153,8 @@ GRAPH=Grafic
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Afișează doar iconița pentru temperatură
 
+SHOW_COMBINED_TEMPERATURE_ICON=Pictogramă combinată
+
 [DiskStatus]
 GOOD=Bun
 CAUTION=Atenție

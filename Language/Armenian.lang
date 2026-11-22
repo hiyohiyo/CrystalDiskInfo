@@ -153,6 +153,8 @@ GRAPH=Գծագիր
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=Ցուցադրել միայն ջերմաստիճանի ցուցիչը
 
+SHOW_COMBINED_TEMPERATURE_ICON=Համակցված պատկերակ
+
 [DiskStatus]
 GOOD=Լավ
 CAUTION=Տագնապ

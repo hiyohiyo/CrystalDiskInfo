@@ -155,6 +155,8 @@ GRAPH=גרף
 ;Added 3.0
 SHOW_TEMPERATURE_ICON_ONLY=הצג אייקון טמפרטורה בלבד
 
+SHOW_COMBINED_TEMPERATURE_ICON=סמל משולב
+
 [DiskStatus]
 GOOD=תקין
 CAUTION=זהירות
